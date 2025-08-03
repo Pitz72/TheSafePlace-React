@@ -454,6 +454,15 @@ body {
   font-family: 'IBM Plex Mono', var(--font-ibm-pc-fallback-5), var(--font-ibm-pc-fallback-6), var(--font-ibm-pc-fallback-final);
 }
 
+/* Utility per nascondere la scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 
 /* ===== THEME OVERRIDES ===== */
