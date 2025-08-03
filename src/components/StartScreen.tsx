@@ -39,7 +39,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-dim text-lg mb-6 tracking-wider glow-phosphor-dim">
-          v0.2.9 - True Commander
+          v0.3.0 - A Letter by Me, My Son
         </p>
         
         {/* Menu Items Testuali */}

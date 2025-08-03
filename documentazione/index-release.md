@@ -4,6 +4,14 @@ Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo
 
 ---
 
+### v0.3.0 - "A Letter by Me, My Son"
+- **Refactoring Pagine Informative:** Le pagine di Istruzioni e Storia sono state rilavorate per utilizzare un sistema di scrolling verticale personalizzato, eliminando la precedente logica di paginazione.
+- **Correzione Bug Critici:** Risolto un bug che impediva la visualizzazione del testo nelle pagine Istruzioni e Storia.
+- **Correzione Dati di Gioco:** Aggiornata la legenda della mappa nelle istruzioni per corrispondere ai simboli di gioco effettivi.
+- **Miglioramento UI:** La scrollbar nativa del browser è stata nascosta nelle pagine informative per mantenere l'estetica del gioco.
+
+---
+
 ### v0.2.9 - "True Commander"
 - **Gestore Comandi Unificato:** Centralizzato il controllo di tutti gli input da tastiera in un unico gestore (`useKeyboardCommands`) per eliminare conflitti tra schermate.
 - **Risposta ai Comandi Migliorata:** Risolto il bug che richiedeva pressioni multiple dei tasti per navigare tra menu e pagine informative.

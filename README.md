@@ -1,4 +1,4 @@
-# The Safe Place v0.2.6 "My backpack has numbers on it"
+# The Safe Place v0.3.0 "A Letter by Me, My Son"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -107,27 +107,22 @@ TSP/
 - [x] **v0.2.4**: Premium Look ✅ RILASCIATA E CONSOLIDATA
 - [x] **v0.2.5**: my special little items ✅ RILASCIATA E CONSOLIDATA
 - [x] **v0.2.6**: My backpack has numbers on it ✅ RILASCIATA E CONSOLIDATA
+- [x] **v0.3.0**: Refactoring Pagine Info e Correzione Bug ✅ RILASCIATA E CONSOLIDATA
 - [ ] **v0.1.6**: Sistema Audio Avanzato
-- [ ] **v0.3.0**: Sistema di movimento e mappa avanzato
-- [ ] **v0.3.0**: Sistema inventario e oggetti
-- [ ] **v0.4.0**: Sistema combattimento
+- [ ] **v0.4.0**: Sistema di movimento e mappa avanzato
+- [ ] **v0.5.0**: Sistema inventario e oggetti
+- [ ] **v0.6.0**: Sistema combattimento
 - [ ] **v1.0.0**: Gioco completo
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.2.6 "My backpack has numbers on it" (Rilasciata e Consolidata)** - Inventario Numerato & UI Migliorata:
-- ✅ **Migrazione Tailwind Completa**: 100% dei componenti migrati a Tailwind CSS
-- ✅ **Componenti Ottimizzati**: CharacterSheetPopup, GameJournal, CharacterCreationPopup, StoryScreen
-- ✅ **CSS Cleanup**: Rimosse 15+ classi obsolete (.panel-title, .button-*, .text-phosphor-*, etc.)
-- ✅ **Effetti CRT Uniformi**: Applicazione consistente degli effetti CRT su tutti i componenti
-- ✅ **Performance Migliorata**: CSS ridotto e ottimizzato, build più veloce
-- ✅ **Manutenibilità**: Codice più pulito e consistente con utilities Tailwind
-- ✅ **Configurazione Avanzata**: Palette colori phosphor completa in tailwind.config.js
-- ✅ **Utilities Personalizzate**: Glow effects, CRT effects, animazioni integrate
-- ✅ **Sistema Stabile**: Nessun errore, funzionalità mantenute, HMR attivo
-- ✅ **Documentazione Aggiornata**: Roadmap completa, changelog dettagliato
-- ✅ **Testing Completo**: Validazione funzionalità, performance, accessibilità
-- ✅ **Build Consolidata**: Release stabile con migrazione Tailwind completamente funzionante
+**The Safe Place v0.3.0 "A Letter by Me, My Son" (Rilasciata e Consolidata)** - Refactoring Pagine Info e Correzione Bug:
+- ✅ **Refactoring Robusto**: Il componente delle pagine informative è stato riscritto per usare uno scrolling verticale personalizzato, eliminando la fragile logica di paginazione.
+- ✅ **Bug Critici Risolti**: Corretto il bug che rendeva invisibile il testo nelle pagine Istruzioni e Storia.
+- ✅ **Dati di Gioco Corretti**: La legenda della mappa nelle Istruzioni ora mostra i simboli corretti.
+- ✅ **UI Coerente**: La scrollbar del browser è stata eliminata per non rompere l'immersione estetica.
+- ✅ **Documentazione Aggiornata**: Creati tutti i documenti di release per la v0.3.0, inclusi changelog e documento di anti-regressione.
+- ✅ **Versione Consolidata**: Tutti i file del progetto sono stati allineati alla versione 0.3.0.
 
 ### 🛠️ Sviluppo
 
@@ -148,6 +143,13 @@ npm run preview      # Preview build
 ### 📄 Licenza
 
 Progetto privato - Tutti i diritti riservati
+
+### 🆕 Novità v0.3.0 "A Letter by Me, My Son"
+
+#### 📖 Pagine Informative Stabili e Corrette
+- **Scrolling Verticale**: Le pagine Istruzioni e Storia ora utilizzano un sistema di scrolling verticale (tasti W/S o Frecce Su/Giù) al posto della paginazione.
+- **Testo Visibile**: Risolto il bug critico che impediva la visualizzazione del contenuto testuale in queste schermate.
+- **Legenda Corretta**: La legenda della mappa nelle istruzioni è stata aggiornata per riflettere i simboli di gioco reali, eliminando una fonte di confusione per il giocatore.
 
 ### 🆕 Novità v0.2.6 "My backpack has numbers on it"
 
