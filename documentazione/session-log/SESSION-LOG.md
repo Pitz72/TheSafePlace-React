@@ -2,6 +2,48 @@
 
 Log dettagliato delle sessioni di sviluppo e delle modifiche apportate al progetto.
 
+## Sessione 2025-08-03 - Refactoring, Consolidamento v0.3.0 e Analisi Incidente Popup
+
+### Obiettivo
+Refactoring delle pagine informative, consolidamento della versione 0.3.0, refactoring della pagina Opzioni e analisi approfondita di un bug critico di visibilità dei popup.
+
+### Attività Completate
+- ✅ **Refactoring Pagine Info (`InstructionsScreen`, `StoryScreen`):**
+  - Sostituito il sistema di paginazione con uno scrolling verticale personalizzato.
+  - Corretta la legenda della mappa e risolto un bug di rendering del testo.
+- ✅ **Consolidamento Versione 0.3.0 "A Letter by Me, My Son":**
+  - Aggiornato `package.json` e la versione in-game a 0.3.0.
+  - Creati i documenti `CHANGELOG-v0.3.0.md` e `ANTI-REGRESSIONE-v0.3.0.md`.
+  - Aggiornati i file `CHANGELOG.md`, `index-release.md` e `README.md`.
+- ✅ **Refactoring `OptionsScreen`:**
+  - Semplificato il layout visivo rimuovendo i bordi interni delle opzioni.
+  - Riscritto il sistema di navigazione da tastiera, passando da una logica complessa a due stati a un sistema unificato più semplice e robusto.
+- ✅ **Gestione Incidente Layout Popup:**
+  - Identificato un bug critico di visibilità dei popup dopo un refactoring architetturale.
+  - Eseguita un'analisi approfondita della causa radice (conflitto di Stacking Context CSS dovuto alla proprietà `transform`).
+  - Ricercata e identificata la soluzione standard (React Portals).
+  - Creato un documento di post-mortem dettagliato sull'incidente: `documentazione/incidenti/POST-MORTEM-2025-08-03-LAYOUT-POPUP.md`.
+  - Ripristinato il codice a uno stato stabile intermedio per future correzioni.
+
+### File Modificati / Creati
+- `src/components/InstructionsScreen.tsx`
+- `src/components/StoryScreen.tsx`
+- `src/components/PaginatedInfoPage.tsx`
+- `src/components/OptionsScreen.tsx`
+- `package.json`
+- `README.md`
+- `documentazione/changelog/CHANGELOG.md`
+- `documentazione/index-release.md`
+- `documentazione/changelog/CHANGELOG-v0.3.0.md` (Creato)
+- `documentazione/anti-regressione/ANTI-REGRESSIONE-v0.3.0-A-LETTER-BY-ME-MY-SON.md` (Creato)
+- `documentazione/incidenti/POST-MORTEM-2025-08-03-LAYOUT-POPUP.md` (Creato)
+- *File ripristinati allo stato precedente:* `App.tsx`, `BasePopup.tsx`, etc.
+
+### Stato
+**COMPLETATA** - Sessione di refactoring e analisi conclusa. Il repository è stato ripristinato a uno stato stabile ma con il bug dei popup ancora da risolvere nella prossima sessione.
+
+---
+
 ## Sessione 2025-01-15 - Consolidamento v0.1.1 "Colored markers for the map"
 
 ### Obiettivo

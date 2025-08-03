@@ -146,6 +146,7 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  z-index: 1; /* Assicura che stia sotto i popup con z-index più alto */
   background: radial-gradient(
     ellipse at center,
     var(--phosphor-bg-soft) 0%,
