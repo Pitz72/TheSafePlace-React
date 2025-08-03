@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface BasePopupProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ const BasePopup: React.FC<BasePopupProps> = ({
   children, 
   className = '' 
 }) => {
+  const popupRoot = document.getElementById('popup-root');
+
   // Gestione tasto ESC
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -25,7 +28,6 @@ const BasePopup: React.FC<BasePopupProps> = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscKey);
-      // Previeni scroll del body quando il popup è aperto
       document.body.style.overflow = 'hidden';
     }
 
@@ -35,11 +37,11 @@ const BasePopup: React.FC<BasePopupProps> = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !popupRoot) return null;
 
-  return (
+  return createPortal(
     <div 
-      className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center crt-screen scan-lines"
+      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center crt-screen scan-lines"
       onClick={onClose}
     >
       {/* Effetti CRT avanzati */}
@@ -74,7 +76,8 @@ const BasePopup: React.FC<BasePopupProps> = ({
           [ESC] Chiudi
         </div>
       </div>
-    </div>
+    </div>,
+    popupRoot
   );
 };
 
