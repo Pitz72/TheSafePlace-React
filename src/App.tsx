@@ -237,18 +237,6 @@ const GameContent = () => {
                 </>  
               )}
               
-              {/* Character Sheet Popup */}
-              <CharacterSheetPopup 
-                isOpen={isCharacterSheetOpen} 
-                onClose={toggleCharacterSheet} 
-              />
-              
-              {/* Character Creation Popup */}
-              <CharacterCreationPopup 
-                isOpen={showCharacterCreation} 
-                onClose={skipCharacterCreation} 
-              />
-
             </>
           )}
           
@@ -258,14 +246,37 @@ const GameContent = () => {
   );
 };
 
+// Nuovo componente che può accedere al contesto
+const AppUI = () => {
+  const {
+    isCharacterSheetOpen, toggleCharacterSheet,
+    showCharacterCreation, skipCharacterCreation
+  } = useGameContext();
+
+  return (
+    <>
+      <GameLogic />
+      <GameContent />
+
+      {/* I popup vengono renderizzati qui fuori dal contenitore principale
+          per evitare conflitti con gli stili del contenitore (es. transform, overflow) */}
+      <InventoryPopup />
+      <CharacterSheetPopup
+        isOpen={isCharacterSheetOpen}
+        onClose={toggleCharacterSheet}
+      />
+      <CharacterCreationPopup
+        isOpen={showCharacterCreation}
+        onClose={skipCharacterCreation}
+      />
+    </>
+  );
+};
+
 function App() {
   return (
     <GameProvider>
-      <GameLogic />
-      <GameContent />
-      {/* Il popup dell'inventario viene renderizzato qui fuori dal contenitore principale
-          per evitare conflitti con gli stili del contenitore (es. transform) */}
-      <InventoryPopup />
+      <AppUI />
     </GameProvider>
   );
 }

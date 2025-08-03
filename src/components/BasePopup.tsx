@@ -39,7 +39,7 @@ const BasePopup: React.FC<BasePopupProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black flex items-center justify-center crt-screen scan-lines"
+      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center crt-screen scan-lines"
       onClick={onClose}
     >
       {/* Effetti CRT avanzati */}
