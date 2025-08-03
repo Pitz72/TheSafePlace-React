@@ -1,0 +1,80 @@
+/* App.css - Stili specifici per il componente App */
+
+/* Container principale */
+.app-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stili per il contenuto del gioco */
+.game-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Stili per i pulsanti */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Stili per il testo informativo */
+.info-text {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Responsive Behavior per Container Scaling System */
+
+/* Grid system per mappa */
+.grid-cols-20 {
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+}
+
+.grid-rows-15 {
+  grid-template-rows: repeat(15, minmax(0, 1fr));
+}
+
+/* Layout enhancement per pannello inferiore */
+.game-layout-enhanced {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.game-layout-enhanced .flex-1 {
+  flex: 1;
+}
+
+.game-layout-enhanced .h-1\/4 {
+  height: 25%;
+}
+
+/* Text uniform size - esclusi i titoli */
+.text-uniform {
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+/* Media queries rimosse - scaling gestito dinamicamente da useGameScale hook */
+
+/* Rimosse media queries mobile e tablet - gioco keyboard-only desktop */
+
+/* Smooth transitions per tutti i cambiamenti responsive */
+.game-container,
+.panel,
+.panel-title,
+.text-sm,
+.text-xs,
+aside {
+  transition: all 0.3s ease-out;
+}

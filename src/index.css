@@ -1,0 +1,519 @@
+/* Import IBM Plex Mono - Font IBM PC/MS-DOS Compatibile */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tema globale fosfori verdi anni '80 - CSS Nativo */
+:root {
+  /* Font IBM PC/MS-DOS Compatibile - Sistema Avanzato */
+  --font-ibm-pc: 'IBM Plex Mono', 'Courier New', 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', 'DejaVu Sans Mono', monospace;
+  --font-ibm-pc-fallback-1: 'Courier New';
+  --font-ibm-pc-fallback-2: 'Consolas';
+  --font-ibm-pc-fallback-3: 'Monaco';
+  --font-ibm-pc-fallback-4: 'Menlo';
+  --font-ibm-pc-fallback-5: 'Ubuntu Mono';
+  --font-ibm-pc-fallback-6: 'DejaVu Sans Mono';
+  --font-ibm-pc-fallback-final: monospace;
+  --font-ibm-pc-weight-normal: 400;
+  --font-ibm-pc-weight-bold: 600;
+  --font-ibm-pc-letter-spacing: 0.02em;
+  --font-ibm-pc-line-height: 1.25;
+  --font-ibm-pc-size-base: 0.875rem;
+  --font-ibm-pc-size-small: 0.75rem;
+  --font-ibm-pc-size-large: 1rem;
+  
+  /* Colori Fosfori Ultra-Realistici - Sistema Avanzato */
+  --phosphor-primary: #4EA162;
+  --phosphor-primary-bright: #5BB672;
+  --phosphor-primary-dim: #3D8A4F;
+  --phosphor-primary-faded: #2A6B3A;
+  
+  --phosphor-dim: #336940;
+  --phosphor-dim-bright: #3F7A4D;
+  --phosphor-dim-dark: #2A5A35;
+  
+  --phosphor-bright: #79ED95;
+  --phosphor-bright-intense: #8AFFA6;
+  --phosphor-bright-soft: #6CDB87;
+  
+  --phosphor-glow: #7FC892;
+  --phosphor-glow-intense: #90D9A3;
+  --phosphor-glow-soft: #6EB77F;
+  
+  --phosphor-highlight: #7FC892;
+  --phosphor-accent: #5FCF7A;
+  --phosphor-accent-bright: #6EDF89;
+  
+  /* Sfondi e Pannelli - Gradazioni Realistiche */
+  --phosphor-bg: #000000;
+  --phosphor-bg-soft: #0A0A0A;
+  --phosphor-bg-panel: #111111;
+  --phosphor-bg-panel-bright: #1A1A1A;
+  --phosphor-bg-panel-dark: #0D0D0D;
+  
+  /* Bordi e Contorni - Varianti */
+  --phosphor-border: #4EA162;
+  --phosphor-border-bright: #5BB672;
+  --phosphor-border-dim: #22462A;
+  --phosphor-border-soft: #3A5A42;
+  
+  /* Colori Stato - Sistema Avanzato */
+  --phosphor-danger: #FF4444;
+  --phosphor-danger-bright: #FF6666;
+  --phosphor-danger-dim: #CC3333;
+  
+  --phosphor-warning: #FFAA00;
+  --phosphor-warning-bright: #FFCC33;
+  --phosphor-warning-dim: #CC8800;
+  
+  /* Colori Mappa - Gradazioni Realistiche */
+  --phosphor-plains: #60BF77;
+  --phosphor-plains-bright: #6DCC84;
+  --phosphor-plains-dim: #53A868;
+  
+  --phosphor-forest: #336940;
+  --phosphor-forest-bright: #3F7A4D;
+  --phosphor-forest-dim: #2A5A35;
+  
+  --phosphor-mountain: #52705A;
+  --phosphor-mountain-bright: #5E7C66;
+  --phosphor-mountain-dim: #46644E;
+  
+  --phosphor-water: #008888;
+  --phosphor-water-bright: #009999;
+  --phosphor-water-dim: #007777;
+  
+  --phosphor-ruin: #5F996E;
+  --phosphor-ruin-bright: #6BA77A;
+  --phosphor-ruin-dim: #538B62;
+  
+  --phosphor-special: #AAAA00;
+  --phosphor-special-bright: #BBBB11;
+  --phosphor-special-dim: #999900;
+  
+
+  
+  /* Colore testo notturno */
+  --phosphor-night-blue: #00BFFF;
+  
+  /* Colori messaggi diario - v0.1.5 "The Living Journal" */
+  --journal-welcome: #FFD700;     /* Giallo acceso per benvenuto */
+  --journal-standard: var(--phosphor-primary); /* Verde standard */
+  --journal-river: var(--phosphor-water);      /* Blu acqua per fiumi */
+  --journal-warning: #FFA500;     /* Arancione per avvertimenti */
+  --journal-ambiance: var(--phosphor-dim);     /* Verde scuro per atmosfera */
+  
+  /* Container System - Preparazione */
+  --game-width: 1920px;
+  --game-height: 1080px;
+  --scale-ratio: 1;
+}
+
+/* Controlla la scala globale di tutti i font definiti in rem */
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 115%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--phosphor-bg);
+  color: var(--phosphor-primary);
+  font-family: var(--font-ibm-pc);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Game Container System */
+.game-container-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at center,
+    var(--phosphor-bg-soft) 0%,
+    var(--phosphor-bg) 70%,
+    var(--phosphor-bg) 100%
+  );
+}
+
+.game-container {
+  width: var(--game-width);
+  height: var(--game-height);
+  transform: scale(var(--scale-ratio));
+  transform-origin: center center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: calc(var(--game-width) * -0.5);
+  margin-top: calc(var(--game-height) * -0.5);
+  transition: transform 0.3s ease-out;
+  background: linear-gradient(
+    135deg,
+    var(--phosphor-bg-panel-dark) 0%,
+    var(--phosphor-bg-panel) 50%,
+    var(--phosphor-bg-panel-bright) 100%
+  );
+  border: 2px solid var(--phosphor-border);
+  box-shadow: 
+    0 0 20px rgba(78, 161, 98, 0.3),
+    0 0 40px rgba(78, 161, 98, 0.1),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  animation: crt-warmup 3s ease-out, crt-flicker 4s ease-in-out infinite 3s;
+  
+  /* Curvatura schermo CRT */
+  border-radius: 2.5em;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 2;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+/* Classe per testo notturno */
+.text-phosphor-night-blue {
+  color: var(--phosphor-night-blue);
+}
+
+/* CRT Warm-up Animation */
+@keyframes crt-warmup {
+  0% {
+    opacity: 0.1;
+    filter: brightness(0.2) contrast(0.6) saturate(0.8);
+    transform: scale(var(--scale-ratio)) scale(0.9, 0.7);
+  }
+  20% {
+    opacity: 0.3;
+    filter: brightness(0.4) contrast(0.7) saturate(0.85);
+    transform: scale(var(--scale-ratio)) scale(0.95, 0.8);
+  }
+  40% {
+    opacity: 0.8;
+    filter: brightness(0.7) contrast(0.9) saturate(0.9);
+    transform: scale(var(--scale-ratio)) scale(1.02, 1.02);
+  }
+  60% {
+    opacity: 1;
+    filter: brightness(1) contrast(1) saturate(1);
+    transform: scale(var(--scale-ratio)) scale(1, 1);
+  }
+  75% {
+    opacity: 0.98;
+    filter: brightness(0.95) contrast(1) saturate(1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1) saturate(1);
+  }
+}
+
+/* Player Animation */
+@keyframes player-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+    text-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor;
+  }
+}
+
+/* Player Blinking Animation - v0.1.3 */
+@keyframes player-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* CRT Flicker Animation */
+@keyframes crt-flicker {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  1% {
+    opacity: 0.98;
+    filter: brightness(0.98) contrast(0.98);
+  }
+  2% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    opacity: 0.99;
+    filter: brightness(0.99) contrast(0.99);
+  }
+  51% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+}
+
+
+
+/* Phosphor Glow Effects - Sistema Avanzato */
+.game-container * {
+  font-family: 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+  text-shadow: 
+    0 0 2px var(--phosphor-primary),
+    0 0 4px var(--phosphor-primary),
+    0 0 6px var(--phosphor-primary);
+  animation: phosphor-decay 0.5s ease-out;
+}
+
+/* Phosphor Decay Animation */
+@keyframes phosphor-decay {
+  0% {
+    text-shadow: 
+      0 0 4px var(--phosphor-primary),
+      0 0 8px var(--phosphor-primary),
+      0 0 12px var(--phosphor-primary);
+  }
+  100% {
+    text-shadow: 
+      0 0 2px var(--phosphor-primary),
+      0 0 4px var(--phosphor-primary),
+      0 0 6px var(--phosphor-primary);
+  }
+}
+
+/* Componenti base per il tema fosfori - Sistema Avanzato */
+.panel {
+  background: linear-gradient(
+    135deg,
+    var(--phosphor-bg-panel-dark) 0%,
+    var(--phosphor-bg-panel) 50%,
+    var(--phosphor-bg-panel-bright) 100%
+  );
+  border: 1px solid var(--phosphor-border);
+  padding: 1rem;
+  border-radius: 0;
+  position: relative;
+  z-index: 5;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.3),
+    0 0 5px rgba(78, 161, 98, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+  animation: panel-warmup 2s ease-out 1s both;
+}
+
+/* Panel Warm-up */
+@keyframes panel-warmup {
+  0% {
+    opacity: 0.3;
+    filter: brightness(0.5);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* NOTA: Classe .panel-title rimossa - ora utilizzata utility Tailwind */
+/* Sostituita con: text-phosphor-bright font-mono text-lg font-bold uppercase */
+
+/* NOTA: Classi .button-primary e .button-secondary rimosse */
+/* Ora utilizzate utilities Tailwind con componenti personalizzati */
+
+/* NOTA: Classe .text-glow rimossa - ora utilizzata utility Tailwind animate-glow */
+
+@keyframes glow {
+  0% { 
+    text-shadow: 
+      0 0 5px var(--phosphor-primary), 
+      0 0 10px var(--phosphor-primary), 
+      0 0 15px var(--phosphor-primary),
+      0 0 20px var(--phosphor-primary);
+  }
+  100% { 
+    text-shadow: 
+      0 0 10px var(--phosphor-bright-intense), 
+      0 0 20px var(--phosphor-bright-intense), 
+      0 0 30px var(--phosphor-bright-intense),
+      0 0 40px var(--phosphor-bright-intense);
+  }
+}
+
+/* NOTA: Classi text-phosphor-*, bg-phosphor-*, border-phosphor-* rimosse */
+/* Ora utilizzate le utilities Tailwind: text-phosphor-primary, text-phosphor-bright, etc. */
+/* Definite in tailwind.config.js nella sezione colors.phosphor */
+
+/* Classi colori diario - v0.1.5 "The Living Journal" */
+.journal-welcome { 
+  color: var(--journal-welcome) !important; 
+  text-shadow: 
+    0 0 4px var(--journal-welcome),
+    0 0 8px var(--journal-welcome) !important;
+}
+.journal-standard { 
+  color: var(--journal-standard) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-standard),
+    0 0 6px var(--journal-standard) !important;
+}
+.journal-river { 
+  color: var(--journal-river) !important; 
+  text-shadow: 
+    0 0 4px var(--journal-river),
+    0 0 8px var(--journal-river) !important;
+}
+.journal-warning { 
+  color: var(--journal-warning) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-warning),
+    0 0 6px var(--journal-warning) !important;
+}
+.journal-ambiance { 
+  color: var(--journal-ambiance) !important; 
+  text-shadow: 
+    0 0 2px var(--journal-ambiance),
+    0 0 4px var(--journal-ambiance) !important;
+}
+
+/* Text uniform size - esclusi i titoli */
+.text-uniform {
+  font-size: var(--font-ibm-pc-size-base);
+  line-height: var(--font-ibm-pc-line-height);
+  font-family: var(--font-ibm-pc);
+  font-weight: var(--font-ibm-pc-weight-normal);
+  letter-spacing: var(--font-ibm-pc-letter-spacing);
+}
+
+/* Font IBM PC Autentico */
+.font-ibm-pc {
+  font-family: var(--font-ibm-pc);
+  font-weight: var(--font-ibm-pc-weight-normal);
+  letter-spacing: var(--font-ibm-pc-letter-spacing);
+  line-height: var(--font-ibm-pc-line-height);
+}
+
+/* Font IBM PC Varianti */
+.font-ibm-pc-bold {
+  font-family: var(--font-ibm-pc);
+  font-weight: var(--font-ibm-pc-weight-bold);
+  letter-spacing: var(--font-ibm-pc-letter-spacing);
+}
+
+.font-ibm-pc-small {
+  font-family: var(--font-ibm-pc);
+  font-size: var(--font-ibm-pc-size-small);
+  font-weight: var(--font-ibm-pc-weight-normal);
+  letter-spacing: var(--font-ibm-pc-letter-spacing);
+}
+
+.font-ibm-pc-large {
+  font-family: var(--font-ibm-pc);
+  font-size: var(--font-ibm-pc-size-large);
+  font-weight: var(--font-ibm-pc-weight-normal);
+  letter-spacing: var(--font-ibm-pc-letter-spacing);
+}
+
+/* Fallback System per Browser Compatibility */
+.font-ibm-pc-fallback {
+  font-family: var(--font-ibm-pc);
+}
+
+/* Fallback specifici per browser */
+.font-ibm-pc-windows {
+  font-family: 'IBM Plex Mono', var(--font-ibm-pc-fallback-1), var(--font-ibm-pc-fallback-2), var(--font-ibm-pc-fallback-final);
+}
+
+.font-ibm-pc-mac {
+  font-family: 'IBM Plex Mono', var(--font-ibm-pc-fallback-3), var(--font-ibm-pc-fallback-4), var(--font-ibm-pc-fallback-final);
+}
+
+.font-ibm-pc-linux {
+  font-family: 'IBM Plex Mono', var(--font-ibm-pc-fallback-5), var(--font-ibm-pc-fallback-6), var(--font-ibm-pc-fallback-final);
+}
+
+
+
+/* ===== THEME OVERRIDES ===== */
+
+/* NO EFFECTS THEME - Disabilita tutti gli effetti CRT */
+.theme-no-effects .game-container::before,
+.theme-no-effects .game-container::after,
+.theme-no-effects .game-container .crt-noise,
+.theme-no-effects .game-container .crt-gradient-overlay {
+  display: none !important;
+}
+
+.theme-no-effects .game-container {
+  filter: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+.theme-no-effects * {
+  text-shadow: none !important;
+  animation: none !important;
+}
+
+.theme-no-effects .panel {
+  background: var(--phosphor-bg-panel) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  animation: none !important;
+}
+
+/* HIGH CONTRAST THEME - Colori ad alto contrasto */
+.theme-high-contrast {
+  --phosphor-primary: #00ff00;
+  --phosphor-primary-bright: #66ff66;
+  --phosphor-primary-dim: #00cc00;
+  --phosphor-dim: #009900;
+  --phosphor-dim-bright: #00bb00;
+  --phosphor-bright: #88ff88;
+  --phosphor-bright-intense: #aaffaa;
+  --phosphor-glow: #ccffcc;
+  --phosphor-highlight: #ffffff;
+  --phosphor-accent: #ffff00;
+  --phosphor-bg: #000000;
+  --phosphor-bg-panel: #001100;
+  --phosphor-bg-panel-dark: #000800;
+  --phosphor-bg-panel-bright: #002200;
+  --phosphor-border: #00ff00;
+  --phosphor-border-dim: #00aa00;
+  --phosphor-danger: #ff0000;
+  --phosphor-danger-bright: #ff6666;
+  --phosphor-warning: #ffff00;
+  --phosphor-warning-bright: #ffff88;
+}
+
+.theme-high-contrast * {
+  text-shadow: 
+    0 0 1px currentColor,
+    0 0 2px currentColor !important;
+}
+
+.theme-high-contrast .panel {
+  border: 2px solid var(--phosphor-primary) !important;
+  background: var(--phosphor-bg-panel) !important;
+}

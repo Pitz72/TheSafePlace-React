@@ -1,0 +1,58 @@
+# Indice delle Versioni del Gioco - The Safe Place
+
+Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo delle modifiche principali introdotte in ciascuna.
+
+---
+
+### v0.2.9 - "True Commander"
+- **Gestore Comandi Unificato:** Centralizzato il controllo di tutti gli input da tastiera in un unico gestore (`useKeyboardCommands`) per eliminare conflitti tra schermate.
+- **Risposta ai Comandi Migliorata:** Risolto il bug che richiedeva pressioni multiple dei tasti per navigare tra menu e pagine informative.
+- **Architettura a Prova di Futuro:** I componenti UI sono stati resi "puri", semplificando l'aggiunta di nuove funzionalità e la manutenzione.
+- **Correzioni di Bug Critici:** Eliminati i conflitti di input e risolti problemi di paginazione nei testi lunghi.
+
+---
+
+### v0.2.6 - "My backpack has numbers on it"
+- **Inventario Numerato:** Ogni slot dell'inventario è ora numerato per una più rapida identificazione e gestione degli oggetti.
+- **UI Zaino Ridisegnata:** L'interfaccia dello zaino è stata migliorata per una maggiore chiarezza e coerenza con il tema CRT.
+- **Correzioni Minori:** Risolti bug relativi alla visualizzazione degli oggetti e all'interazione con l'inventario.
+
+---
+
+### v0.2.5 - "My Special Little Items"
+- **Effetti CRT Premium Migliorati:** Aggiunti nuovi effetti di post-processing per simulare in modo più fedele un monitor a fosfori verdi, inclusi `scanlines` più sottili e un `flicker` più realistico.
+- **Look Premium per l'Interfaccia:** L'intera UI è stata rivista per adottare uno stile più coerente e immersivo.
+- **Correzione Bug di Visualizzazione:** Risolti problemi di rendering del testo e degli elementi UI su diverse risoluzioni.
+
+---
+
+### v0.2.1 - "My Little Terminal"
+- **Infrastruttura di Caricamento Dati:** Implementato un sistema per caricare dati di gioco (mappe, oggetti, ecc.) da file esterni.
+- **Effetti CRT Iniziali:** Introdotti i primi effetti visivi per emulare l'aspetto di un terminale vintage.
+- **Migrazione a Tailwind CSS:** Iniziata la transizione da CSS standard a Tailwind CSS per una gestione più efficiente degli stili.
+
+---
+
+### v0.2.0 - "Rules are Rules"
+- **Motore delle Regole di Gioco:** Implementato il nucleo delle meccaniche di gioco, incluse le regole per il movimento, l'interazione e il combattimento (base).
+- **Architettura a Componenti:** Suddivisione dell'applicazione in componenti React riutilizzabili.
+- **Gestione dello Stato con Zustand:** Adottato Zustand per una gestione dello stato globale semplice e potente.
+
+---
+
+### v0.1.4 - "The Blue Hour"
+- **Sistema di Illuminazione e Orario:** Introdotto un ciclo giorno/notte di base che influenza la visibilità sulla mappa.
+- **Atmosfera Visiva:** Miglioramenti grafici per creare un'atmosfera più cupa e post-apocalittica.
+
+---
+
+### v0.0.6 - "Pillars of Proportion"
+- **Layout Adattivo:** L'interfaccia di gioco ora si adatta correttamente a diverse dimensioni dello schermo, mantenendo le proporzioni corrette.
+- **Centratura Globale:** Tutti gli elementi dell'interfaccia sono stati centrati correttamente.
+
+---
+
+### v0.0.1 - "Foundation"
+- **Setup Iniziale del Progetto:** Creazione del progetto con Vite, React e TypeScript.
+- **Struttura di Base delle Cartelle:** Definita l'organizzazione iniziale del codice sorgente.
+- **Componente Mappa Iniziale:** Creato il primo componente per la visualizzazione della mappa di gioco.

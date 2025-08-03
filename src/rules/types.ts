@@ -1,0 +1,65 @@
+// Rules System Types - D&D Style Character System
+// Parte del progetto "Rules are Rules" v0.2.0
+
+import type { IInventorySlot } from '../interfaces/items';
+
+/**
+ * Statistiche primarie del personaggio "Ultimo"
+ * Basate su sistema D&D con range 3-18
+ */
+export interface ICharacterStats {
+  potenza: number;      // Forza fisica (STR)
+  agilita: number;      // Destrezza e velocità (DEX)
+  vigore: number;       // Costituzione e resistenza (CON)
+  percezione: number;   // Saggezza e intuizione (WIS)
+  adattamento: number;  // Intelligenza e problem solving (INT)
+  carisma: number;      // Presenza e leadership (CHA)
+}
+
+/**
+ * Scheda completa del personaggio
+ */
+export interface ICharacterSheet {
+  name: string;
+  stats: ICharacterStats;
+  level: number;
+  maxHP: number;
+  currentHP: number;
+  baseAC: number;
+  carryCapacity: number;
+  inventory: (IInventorySlot | null)[];
+}
+
+/**
+ * Risultato di un skill check
+ */
+export interface ISkillCheckResult {
+  success: boolean;
+  roll: number;
+  modifier: number;
+  total: number;
+  difficulty: number;
+}
+
+/**
+ * Difficoltà standard per skill check
+ */
+export enum SkillDifficulty {
+  FACILE = 10,
+  MEDIO = 15,
+  DIFFICILE = 20
+}
+
+/**
+ * Tipi di abilità per skill check
+ */
+export type AbilityType = keyof ICharacterStats;
+
+/**
+ * Risultato del danno (per fiumi, combattimenti futuri, etc.)
+ */
+export interface IDamageResult {
+  damage: number;
+  type: string;
+  description: string;
+}

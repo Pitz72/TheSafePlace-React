@@ -1,0 +1,10 @@
+{
+  "QUEST_001": {
+    "id": "QUEST_001",
+    "name": "Mappa strappata",
+    "description": "Un pezzo di una mappa che sembra condurre a un luogo importante.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "AMMO_001": {
+    "id": "AMMO_001",
+    "name": "Munizioni 9mm",
+    "description": "Una scatola di munizioni per pistole 9mm.",
+    "type": "ammo",
+    "weight": 0.5,
+    "value": 10
+  }
+}

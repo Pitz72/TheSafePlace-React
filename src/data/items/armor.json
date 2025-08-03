@@ -1,0 +1,11 @@
+{
+  "ARMOR_001": {
+    "id": "ARMOR_001",
+    "name": "Giubbotto di pelle",
+    "description": "Un semplice giubbotto di pelle che offre una protezione minima.",
+    "type": "armor",
+    "weight": 5,
+    "value": 20,
+    "armorClass": 1
+  }
+}
