@@ -7,6 +7,11 @@ import { useGameContext } from './hooks/useGameContext';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
 
+// Importa le nuove schermate
+import CharacterCreationScreen from './components/CharacterCreationScreen';
+import CharacterSheetScreen from './components/CharacterSheetScreen';
+import InventoryScreen from './components/InventoryScreen';
+
 // Funzione per mappare i caratteri della mappa ai nomi dei luoghi - v0.1.3
 const getTileDescription = (char: string): string => {
   switch (char) {
@@ -29,10 +34,7 @@ import OptionsScreen from './components/OptionsScreen';
 import MapViewport from './components/MapViewport';
 import Player from './components/Player';
 import GameJournal from './components/GameJournal';
-import CharacterSheetPopup from './components/CharacterSheetPopup';
-import CharacterCreationPopup from './components/CharacterCreationPopup';
 import InventoryPanel from './components/InventoryPanel';
-import InventoryPopup from './components/InventoryPopup';
 
 // Componente "headless" per inizializzare la logica di gioco globale
 const GameLogic = () => {
@@ -44,9 +46,7 @@ const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
   const {
     isMapLoading, initializeGame, playerPosition, mapData, timeState,
-    characterSheet, getModifier, isCharacterSheetOpen, toggleCharacterSheet,
-    showCharacterCreation, skipCharacterCreation, isInventoryOpen,
-    currentScreen, setCurrentScreen
+    characterSheet, getModifier, currentScreen
   } = useGameContext();
   
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
@@ -120,27 +120,18 @@ const GameContent = () => {
         
         {/* Container principale */}
         <div className="h-full flex flex-col">
-          {/* Menu Screens */}
-          {currentScreen === 'menu' && (
-            <StartScreen />
-          )}
+          {/* Schermate a schermo intero */}
+          {currentScreen === 'menu' && <StartScreen />}
+          {currentScreen === 'instructions' && <InstructionsScreen />}
+          {currentScreen === 'story' && <StoryScreen />}
+          {currentScreen === 'options' && <OptionsScreen />}
+          {currentScreen === 'characterCreation' && <CharacterCreationScreen />}
+          {currentScreen === 'characterSheet' && <CharacterSheetScreen />}
+          {currentScreen === 'inventory' && <InventoryScreen />}
           
-          {currentScreen === 'instructions' && (
-            <InstructionsScreen />
-          )}
-          
-          {currentScreen === 'story' && (
-            <StoryScreen />
-          )}
-          
-          {currentScreen === 'options' && (
-            <OptionsScreen />
-          )}
-          
-          {/* Game Screen */}
+          {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
             <>
-              {/* Schermata di caricamento */}
               {isMapLoading ? (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
@@ -149,123 +140,104 @@ const GameContent = () => {
                   </div>
                 </div>
               ) : (
-                <>
-                  {/* Contenuto principale */}
-                  <main className="flex-1 flex flex-col">
-                {/* Righe superiori (3 colonne) */}
-                <div className="flex-1 flex">
-                  {/* Colonna sinistra */}
-                  <aside className="w-1/4 border-r border-phosphor-border">
-                    <div className="panel h-full">
-                                             <h2 className="panel-title">SOPRAVVIVENZA</h2>
-                       <ul className="space-y-2 text-uniform">
-                         <li>HP: <span className="text-phosphor-bright">{characterSheet.currentHP}</span>/<span className="text-phosphor-bright">{characterSheet.maxHP}</span></li>
-                         <li>Sazietà: <span className="text-phosphor-bright">100</span>/<span className="text-phosphor-bright">100</span></li>
-                         <li>Idratazione: <span className="text-phosphor-bright">100</span>/<span className="text-phosphor-bright">100</span></li>
-                         <li>Status: <span className={characterSheet.currentHP <= 0 ? 'text-phosphor-danger' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'text-phosphor-danger' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'text-phosphor-warning' : 'text-phosphor-bright'}>{characterSheet.currentHP <= 0 ? 'Morto' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'Critico' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'Ferito' : 'Normale'}</span></li>
-                       </ul>
-                      
-                                             <InventoryPanel />
-                    </div>
-                  </aside>
-
-                  {/* Colonna centrale */}
-                  <section className="flex-1 flex flex-col">
-                    <div className="panel flex-1 m-4 flex flex-col">
-                      <h2 className="panel-title">MAPPA DEL MONDO</h2>
-                      <div className="flex-1 relative min-h-0">
-                        <MapViewport className="absolute inset-0" />
-                        <Player />
+                <main className="flex-1 flex flex-col">
+                  <div className="flex-1 flex">
+                    {/* Colonna sinistra */}
+                    <aside className="w-1/4 border-r border-phosphor-border">
+                      <div className="panel h-full">
+                        <h2 className="panel-title">SOPRAVVIVENZA</h2>
+                        <ul className="space-y-2 text-uniform">
+                          <li>HP: <span className="text-phosphor-bright">{characterSheet.currentHP}</span>/<span className="text-phosphor-bright">{characterSheet.maxHP}</span></li>
+                          <li>Sazietà: <span className="text-phosphor-bright">100</span>/<span className="text-phosphor-bright">100</span></li>
+                          <li>Idratazione: <span className="text-phosphor-bright">100</span>/<span className="text-phosphor-bright">100</span></li>
+                          <li>Status: <span className={characterSheet.currentHP <= 0 ? 'text-phosphor-danger' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'text-phosphor-danger' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'text-phosphor-warning' : 'text-phosphor-bright'}>{characterSheet.currentHP <= 0 ? 'Morto' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'Critico' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'Ferito' : 'Normale'}</span></li>
+                        </ul>
+                        <InventoryPanel />
                       </div>
-                      <div className="text-center mt-2 text-xs">
-                        <span style={{color: 'rgb(192, 192, 192)'}}>C</span> = Città{' '}
-                        <span className="text-phosphor-forest">F</span> = Foresta{' '}
-                        <span className="text-phosphor-water">~</span> = Acqua{' '}
-                        <span style={{color: 'rgb(101, 67, 33)'}}>M</span> = Montagna{' '}
-                        <span style={{color: '#ffff00'}}>R</span> = Rifugio{' '}
-                        <span style={{color: '#00ff00'}}>S/E</span> = Start/End
+                    </aside>
+
+                    {/* Colonna centrale */}
+                    <section className="flex-1 flex flex-col">
+                      <div className="panel flex-1 m-4 flex flex-col">
+                        <h2 className="panel-title">MAPPA DEL MONDO</h2>
+                        <div className="flex-1 relative min-h-0">
+                          <MapViewport className="absolute inset-0" />
+                          <Player />
+                        </div>
+                        <div className="text-center mt-2 text-xs">
+                          <span style={{color: 'rgb(192, 192, 192)'}}>C</span> = Città{' '}
+                          <span className="text-phosphor-forest">F</span> = Foresta{' '}
+                          <span className="text-phosphor-water">~</span> = Acqua{' '}
+                          <span style={{color: 'rgb(101, 67, 33)'}}>M</span> = Montagna{' '}
+                          <span style={{color: '#ffff00'}}>R</span> = Rifugio{' '}
+                          <span style={{color: '#00ff00'}}>S/E</span> = Start/End
+                        </div>
                       </div>
-                    </div>
-                  </section>
+                    </section>
 
-                                     {/* Colonna destra */}
-                   <aside className="w-1/4 border-l border-phosphor-border">
-                    <div className="panel h-full">
-                                             <h2 className="panel-title">INFORMAZIONI</h2>
-                       <ul className="space-y-2 text-uniform">
-                         <li>Posizione: (<span className="text-phosphor-bright">{playerPosition.x}</span>, <span className="text-phosphor-bright">{playerPosition.y}</span>)</li>
-                         <li>Luogo: <span className="text-phosphor-bright">{currentLocation}</span></li>
-                         <li>Ora: <span className={`font-bold ${timeState.isDay ? 'text-phosphor-bright' : 'text-phosphor-night-blue'}`}>{formattedTime}</span> <span className={`font-bold ${timeState.isDay ? 'text-phosphor-bright' : 'text-phosphor-night-blue'}`}>Giorno {timeState.day}</span></li>
-                       </ul>
-                       
-                       <h2 className="panel-title mt-6">STATISTICHE</h2>
-                       <div className="space-y-1 text-uniform">
-                         <div>Potenza: <span className="text-phosphor-bright">{characterSheet.stats.potenza}</span> <span className="text-phosphor-dim">({getModifier('potenza') >= 0 ? '+' : ''}{getModifier('potenza')})</span></div>
-                         <div>Agilità: <span className="text-phosphor-bright">{characterSheet.stats.agilita}</span> <span className="text-phosphor-dim">({getModifier('agilita') >= 0 ? '+' : ''}{getModifier('agilita')})</span></div>
-                         <div>Vigore: <span className="text-phosphor-bright">{characterSheet.stats.vigore}</span> <span className="text-phosphor-dim">({getModifier('vigore') >= 0 ? '+' : ''}{getModifier('vigore')})</span></div>
-                         <div>Percezione: <span className="text-phosphor-bright">{characterSheet.stats.percezione}</span> <span className="text-phosphor-dim">({getModifier('percezione') >= 0 ? '+' : ''}{getModifier('percezione')})</span></div>
-                         <div>Adattamento: <span className="text-phosphor-bright">{characterSheet.stats.adattamento}</span> <span className="text-phosphor-dim">({getModifier('adattamento') >= 0 ? '+' : ''}{getModifier('adattamento')})</span></div>
-                         <div>Carisma: <span className="text-phosphor-bright">{characterSheet.stats.carisma}</span> <span className="text-phosphor-dim">({getModifier('carisma') >= 0 ? '+' : ''}{getModifier('carisma')})</span></div>
-                       </div>
-                       
-                       <h2 className="panel-title mt-6">EQUIPAGGIAMENTO</h2>
-                       <div className="space-y-1 text-uniform">
-                         <div>ARMA: <span className="text-phosphor-bright">Nessuna</span></div>
-                         <div>ARMATURA: <span className="text-phosphor-bright">Nessuna</span></div>
-                       </div>
-                       
-                       <h2 className="panel-title mt-6">COMANDI</h2>
-                       <div className="space-y-1 text-uniform">
-                         <div>[<strong className="text-phosphor-bright">WASD</strong>] Movimento</div>
-                         <div>[<strong className="text-phosphor-bright">I</strong>]nventario</div>
-                         <div>[<strong className="text-phosphor-bright">R</strong>]iposa</div>
-                         <div>[<strong className="text-phosphor-bright">L</strong>]ivella Personaggio</div>
-                         <div>[<strong className="text-phosphor-bright">S</strong>]alva</div>
-                         <div>[<strong className="text-phosphor-bright">C</strong>]arica</div>
-                         <div>[<strong className="text-phosphor-bright">ESC</strong>] Menu</div>
-                         <div>[<strong className="text-phosphor-bright">TAB</strong>] Scheda Personaggio</div>
-                       </div>
-                    </div>
-                  </aside>
-                </div>
-
-                {/* Pannello inferiore - Diario di viaggio */}
-                <div className="h-1/4 border-t border-phosphor-border">
-                  <GameJournal />
-                </div>
-              </main>
-                </>  
+                    {/* Colonna destra */}
+                    <aside className="w-1/4 border-l border-phosphor-border">
+                      <div className="panel h-full">
+                        <h2 className="panel-title">INFORMAZIONI</h2>
+                        <ul className="space-y-2 text-uniform">
+                          <li>Posizione: (<span className="text-phosphor-bright">{playerPosition.x}</span>, <span className="text-phosphor-bright">{playerPosition.y}</span>)</li>
+                          <li>Luogo: <span className="text-phosphor-bright">{currentLocation}</span></li>
+                          <li>Ora: <span className={`font-bold ${timeState.isDay ? 'text-phosphor-bright' : 'text-phosphor-night-blue'}`}>{formattedTime}</span> <span className={`font-bold ${timeState.isDay ? 'text-phosphor-bright' : 'text-phosphor-night-blue'}`}>Giorno {timeState.day}</span></li>
+                        </ul>
+                        <h2 className="panel-title mt-6">STATISTICHE</h2>
+                        <div className="space-y-1 text-uniform">
+                          <div>Potenza: <span className="text-phosphor-bright">{characterSheet.stats.potenza}</span> <span className="text-phosphor-dim">({getModifier('potenza') >= 0 ? '+' : ''}{getModifier('potenza')})</span></div>
+                          <div>Agilità: <span className="text-phosphor-bright">{characterSheet.stats.agilita}</span> <span className="text-phosphor-dim">({getModifier('agilita') >= 0 ? '+' : ''}{getModifier('agilita')})</span></div>
+                          <div>Vigore: <span className="text-phosphor-bright">{characterSheet.stats.vigore}</span> <span className="text-phosphor-dim">({getModifier('vigore') >= 0 ? '+' : ''}{getModifier('vigore')})</span></div>
+                          <div>Percezione: <span className="text-phosphor-bright">{characterSheet.stats.percezione}</span> <span className="text-phosphor-dim">({getModifier('percezione') >= 0 ? '+' : ''}{getModifier('percezione')})</span></div>
+                          <div>Adattamento: <span className="text-phosphor-bright">{characterSheet.stats.adattamento}</span> <span className="text-phosphor-dim">({getModifier('adattamento') >= 0 ? '+' : ''}{getModifier('adattamento')})</span></div>
+                          <div>Carisma: <span className="text-phosphor-bright">{characterSheet.stats.carisma}</span> <span className="text-phosphor-dim">({getModifier('carisma') >= 0 ? '+' : ''}{getModifier('carisma')})</span></div>
+                        </div>
+                        <h2 className="panel-title mt-6">EQUIPAGGIAMENTO</h2>
+                        <div className="space-y-1 text-uniform">
+                          <div>ARMA: <span className="text-phosphor-bright">Nessuna</span></div>
+                          <div>ARMATURA: <span className="text-phosphor-bright">Nessuna</span></div>
+                        </div>
+                        <h2 className="panel-title mt-6">COMANDI</h2>
+                        <div className="space-y-1 text-uniform">
+                          <div>[<strong className="text-phosphor-bright">WASD</strong>] Movimento</div>
+                          <div>[<strong className="text-phosphor-bright">I</strong>]nventario</div>
+                          <div>[<strong className="text-phosphor-bright">R</strong>]iposa</div>
+                          <div>[<strong className="text-phosphor-bright">L</strong>]ivella Personaggio</div>
+                          <div>[<strong className="text-phosphor-bright">S</strong>]alva</div>
+                          <div>[<strong className="text-phosphor-bright">C</strong>]arica</div>
+                          <div>[<strong className="text-phosphor-bright">ESC</strong>] Menu</div>
+                          <div>[<strong className="text-phosphor-bright">TAB</strong>] Scheda Personaggio</div>
+                        </div>
+                      </div>
+                    </aside>
+                  </div>
+                  <div className="h-1/4 border-t border-phosphor-border">
+                    <GameJournal />
+                  </div>
+                </main>
               )}
-              
-              {/* Character Sheet Popup */}
-              <CharacterSheetPopup 
-                isOpen={isCharacterSheetOpen} 
-                onClose={toggleCharacterSheet} 
-              />
-              
-              {/* Character Creation Popup */}
-              <CharacterCreationPopup 
-                isOpen={showCharacterCreation} 
-                onClose={skipCharacterCreation} 
-              />
-
             </>
           )}
-          
         </div>
       </div>
     </div>
   );
 };
 
+const AppUI = () => {
+  return (
+    <>
+      <GameLogic />
+      <GameContent />
+    </>
+  );
+};
+
 function App() {
   return (
     <GameProvider>
-      <GameLogic />
-      <GameContent />
-      {/* Il popup dell'inventario viene renderizzato qui fuori dal contenitore principale
-          per evitare conflitti con gli stili del contenitore (es. transform) */}
-      <InventoryPopup />
+      <AppUI />
     </GameProvider>
   );
 }

@@ -11,29 +11,23 @@ export const useKeyboardCommands = () => {
   const {
     // State
     currentScreen,
-    isInventoryOpen,
-    isCharacterSheetOpen,
-    showCharacterCreation,
     playerPosition,
     mapData,
     menuSelectedIndex,
 
     // Actions
     setCurrentScreen,
+    goBack,
     setMenuSelectedIndex,
     handleNewGame,
     handleLoadGame,
     handleStory,
     handleInstructions,
     handleOptions,
-    handleBackToMenu,
     handleExit,
-    toggleCharacterSheet,
-    skipCharacterCreation,
     shortRest,
     setSelectedInventoryIndex,
     useItem,
-    setIsInventoryOpen,
     updatePlayerPosition,
     addLogEntry,
     updateBiome,
@@ -124,50 +118,48 @@ export const useKeyboardCommands = () => {
       case 'story':
       case 'instructions':
       case 'options':
-        if (event.key.toLowerCase() === 'escape' || event.key.toLowerCase() === 'b') {
-          handleBackToMenu();
+      case 'characterSheet':
+        if (event.key.toLowerCase() === 'escape' || event.key.toLowerCase() === 'b' || event.key.toLowerCase() === 'tab') {
+          goBack();
+        }
+        break;
+
+      case 'inventory':
+        switch (event.key.toLowerCase()) {
+          case 'i': case 'escape': goBack(); break;
+          case 'w': case 'arrowup': setSelectedInventoryIndex(p => (p > 0 ? p - 1 : 9)); break;
+          case 's': case 'arrowdown': setSelectedInventoryIndex(p => (p < 9 ? p + 1 : 0)); break;
+          case '1': case '2': case '3': case '4': case '5':
+          case '6': case '7': case '8': case '9': case '0':
+            const slotIndex = event.key === '0' ? 9 : parseInt(event.key) - 1;
+            useItem(slotIndex);
+            break;
+        }
+        break;
+
+      case 'characterCreation':
+        if (event.key.toLowerCase() === 'escape' || event.code === 'Space') {
+          setCurrentScreen('game');
         }
         break;
 
       case 'game':
-        if (isInventoryOpen) {
-          switch (event.key.toLowerCase()) {
-            case 'i': case 'escape': setIsInventoryOpen(false); break;
-            case 'w': case 'arrowup': setSelectedInventoryIndex(p => (p > 0 ? p - 1 : 9)); break;
-            case 's': case 'arrowdown': setSelectedInventoryIndex(p => (p < 9 ? p + 1 : 0)); break;
-            case '1': case '2': case '3': case '4': case '5':
-            case '6': case '7': case '8': case '9': case '0':
-              const slotIndex = event.key === '0' ? 9 : parseInt(event.key) - 1;
-              useItem(slotIndex);
-              break;
-          }
-        } else if (isCharacterSheetOpen) {
-          if (event.key.toLowerCase() === 'tab' || event.key.toLowerCase() === 'escape') {
-            toggleCharacterSheet();
-          }
-        } else if (showCharacterCreation) {
-          if (event.key.toLowerCase() === 'escape') {
-            skipCharacterCreation();
-          }
-        } else {
-          switch (event.key.toLowerCase()) {
-            case 'w': case 'arrowup': handlePlayerMove(0, -1); break;
-            case 's': case 'arrowdown': handlePlayerMove(0, 1); break;
-            case 'a': case 'arrowleft': handlePlayerMove(-1, 0); break;
-            case 'd': case 'arrowright': handlePlayerMove(1, 0); break;
-            case 'i': setIsInventoryOpen(true); break;
-            case 'r': shortRest(); break;
-            case 'tab': toggleCharacterSheet(); break;
-          }
+        switch (event.key.toLowerCase()) {
+          case 'w': case 'arrowup': handlePlayerMove(0, -1); break;
+          case 's': case 'arrowdown': handlePlayerMove(0, 1); break;
+          case 'a': case 'arrowleft': handlePlayerMove(-1, 0); break;
+          case 'd': case 'arrowright': handlePlayerMove(1, 0); break;
+          case 'i': setCurrentScreen('inventory'); break;
+          case 'r': shortRest(); break;
+          case 'tab': setCurrentScreen('characterSheet'); break;
+          case 'escape': setCurrentScreen('menu'); break;
         }
         break;
     }
   }, [
-    currentScreen, menuSelectedIndex,
-    isInventoryOpen, isCharacterSheetOpen, showCharacterCreation,
-    handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit, handleBackToMenu,
-    setIsInventoryOpen, toggleCharacterSheet, skipCharacterCreation,
-    setSelectedInventoryIndex, useItem, handlePlayerMove, shortRest, setMenuSelectedIndex
+    currentScreen, menuSelectedIndex, handlePlayerMove, shortRest, setCurrentScreen, goBack,
+    handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit,
+    setSelectedInventoryIndex, useItem, setMenuSelectedIndex
   ]);
 
   useEffect(() => {

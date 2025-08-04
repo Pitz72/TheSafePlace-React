@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG } from '../data/MessageArchive';
 import { createTestCharacter } from '../rules/characterGenerator';
 import { calculateShortRestHealing, isDead } from '../rules/mechanics';
-import type { GameState, TimeState } from '../interfaces/gameState';
+import type { GameState, TimeState, Screen } from '../interfaces/gameState';
 import type { IItem } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
 import type { LogEntry } from '../data/MessageArchive';
@@ -36,18 +36,31 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     isDay: true,
   });
   const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter);
-  const [isCharacterSheetOpen, setIsCharacterSheetOpen] = useState(false);
   const [lastShortRestTime, setLastShortRestTime] = useState<{ day: number; time: number } | null>(null);
-  const [showCharacterCreation, setShowCharacterCreation] = useState(false);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [currentBiome, setCurrentBiome] = useState<string | null>(null);
   const [items, setItems] = useState<Record<string, IItem>>({});
   const [selectedInventoryIndex, setSelectedInventoryIndex] = useState(0);
-  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'menu' | 'game' | 'instructions' | 'story' | 'options'>('menu');
+  const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
+  const [previousScreen, setPreviousScreen] = useState<Screen | null>(null);
   const [menuSelectedIndex, setMenuSelectedIndex] = useState(0);
 
-  // --- Funzioni di Logica e Azioni ---
+  // --- Funzioni di Navigazione e Logica -- -
+
+  const navigateTo = useCallback((screen: Screen) => {
+    setPreviousScreen(currentScreen);
+    setCurrentScreen(screen);
+  }, [currentScreen]);
+
+  const goBack = useCallback(() => {
+    if (previousScreen) {
+      setCurrentScreen(previousScreen);
+      setPreviousScreen(null); // Resetta per evitare loop
+    } else {
+      setCurrentScreen('menu'); // Fallback di sicurezza
+    }
+  }, [previousScreen]);
+
 
   const formatTime = useCallback((timeMinutes: number): string => {
     const hours = Math.floor(timeMinutes / 60);
@@ -67,7 +80,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       context,
     };
     setLogEntries(prev => [...prev, newEntry].slice(-JOURNAL_CONFIG.MAX_ENTRIES));
-  }, [formatTime]);
+  }, [formatTime, timeState.currentTime]);
 
   const initializeGame = useCallback(async () => {
     try {
@@ -87,7 +100,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       setPlayerPosition(startPos.x !== -1 ? startPos : { x: 75, y: 75 });
       
       setIsMapLoading(false);
-      setShowCharacterCreation(true);
+      // Non mostrare più il popup, la navigazione gestirà la schermata
       addLogEntry('GAME_START');
     } catch (error) {
       console.error("Initialization failed:", error);
@@ -169,9 +182,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     advanceTime(60);
   }, [characterSheet.currentHP, updateHP, addLogEntry, advanceTime]);
 
-  const toggleCharacterSheet = useCallback(() => setIsCharacterSheetOpen(prev => !prev), []);
-  const skipCharacterCreation = useCallback(() => setShowCharacterCreation(false), []);
-
   const updateBiome = useCallback((newBiome: string) => {
     if (newBiome !== currentBiome) {
       setCurrentBiome(newBiome);
@@ -192,13 +202,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     }
   }, [characterSheet.inventory, items, addLogEntry]);
 
-  // --- Menu Handlers ---
-  const handleNewGame = useCallback(() => setCurrentScreen('game'), []);
-  const handleLoadGame = useCallback(() => setCurrentScreen('game'), []); // Placeholder
-  const handleStory = useCallback(() => setCurrentScreen('story'), []);
-  const handleInstructions = useCallback(() => setCurrentScreen('instructions'), []);
-  const handleOptions = useCallback(() => setCurrentScreen('options'), []);
-  const handleBackToMenu = useCallback(() => setCurrentScreen('menu'), []);
+  // --- Menu Handlers -- -
+  const handleNewGame = useCallback(() => navigateTo('characterCreation'), [navigateTo]);
+  const handleLoadGame = useCallback(() => navigateTo('game'), [navigateTo]); // Placeholder
+  const handleStory = useCallback(() => navigateTo('story'), [navigateTo]);
+  const handleInstructions = useCallback(() => navigateTo('instructions'), [navigateTo]);
+  const handleOptions = useCallback(() => navigateTo('options'), [navigateTo]);
+  const handleBackToMenu = useCallback(() => navigateTo('menu'), [navigateTo]);
   const handleExit = useCallback(() => console.log('Exit action placeholder'), []);
 
 
@@ -210,16 +220,14 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     cameraPosition,
     timeState,
     characterSheet,
-    isCharacterSheetOpen,
     lastShortRestTime,
-    showCharacterCreation,
     logEntries,
     currentBiome,
     items,
     selectedInventoryIndex,
-    isInventoryOpen,
     currentScreen,
-    setCurrentScreen,
+    setCurrentScreen: navigateTo, // Espone la nuova funzione di navigazione
+    goBack,
     menuSelectedIndex,
     setMenuSelectedIndex,
     handleNewGame,
@@ -236,14 +244,11 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     updateHP,
     performAbilityCheck,
     getModifier,
-    toggleCharacterSheet,
     shortRest,
-    skipCharacterCreation,
     addLogEntry,
     updateBiome,
     setSelectedInventoryIndex,
     useItem,
-    setIsInventoryOpen,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

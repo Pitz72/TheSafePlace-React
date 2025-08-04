@@ -9,6 +9,8 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory';
+
 export interface GameState {
   // Map state
   mapData: string[];
@@ -23,13 +25,11 @@ export interface GameState {
   // Time state
   timeState: TimeState;
   
-  // Character state - v0.2.0 Rules are Rules
+  // Character state
   characterSheet: ICharacterSheet;
-  isCharacterSheetOpen: boolean;
   lastShortRestTime: { day: number; time: number } | null;
-  showCharacterCreation: boolean;
   
-  // Journal state - v0.1.5
+  // Journal state
   logEntries: LogEntry[];
   currentBiome: string | null;
 
@@ -37,6 +37,8 @@ export interface GameState {
   items: Record<string, IItem>;
   selectedInventoryIndex: number;
 
+  // UI state
+  currentScreen: Screen;
   
   // Actions
   initializeGame: () => Promise<void>;
@@ -44,24 +46,19 @@ export interface GameState {
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   advanceTime: (minutes?: number) => void;
   
-  // Character actions - v0.2.0 Rules are Rules
+  // Character actions
   updateHP: (amount: number) => void;
   performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => boolean;
   getModifier: (ability: keyof ICharacterSheet['stats']) => number;
-  toggleCharacterSheet: () => void;
   shortRest: () => void;
-  skipCharacterCreation: () => void;
   
-  // Journal actions - v0.1.5
+  // Journal actions
   addLogEntry: (type: MessageType, context?: Record<string, any>) => void;
   updateBiome: (newBiome: string) => void;
 
-  // UI state
-  currentScreen: 'menu' | 'game' | 'instructions' | 'story' | 'options';
-  isInventoryOpen: boolean;
-
   // UI actions
-  setCurrentScreen: React.Dispatch<React.SetStateAction<'menu' | 'game' | 'instructions' | 'story' | 'options'>>;
+  setCurrentScreen: (screen: Screen) => void;
+  goBack: () => void;
   menuSelectedIndex: number;
   setMenuSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   handleNewGame: () => void;
@@ -73,5 +70,4 @@ export interface GameState {
   handleExit: () => void;
   setSelectedInventoryIndex: React.Dispatch<React.SetStateAction<number>>;
   useItem: (slotIndex: number) => void;
-  setIsInventoryOpen: (isOpen: boolean | ((prev: boolean) => boolean)) => void;
 }
