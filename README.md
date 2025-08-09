@@ -1,4 +1,4 @@
-# The Safe Place v0.3.1 "Everything has its place"
+# The Safe Place v0.3.2 "Size Matters"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -56,6 +56,7 @@ TSP/
 
 - [x] **v0.0.1 - v0.3.0**: Funzionalità di base, interfaccia, sistemi di gioco e correzioni.
 - [x] **v0.3.1**: Refactoring architetturale da Popup a Schermate Dedicate. ✅ **RILASCIATA E CONSOLIDATA**
+- [x] **v0.3.2**: Correzione dimensioni font e ottimizzazione leggibilità testo. ✅ **RILASCIATA E CONSOLIDATA**
 - [ ] **v0.4.0**: Sistema di movimento e mappa avanzato
 - [ ] **v0.5.0**: Sistema inventario e oggetti (effetti e utilizzo)
 - [ ] **v0.6.0**: Sistema combattimento
@@ -63,12 +64,12 @@ TSP/
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.3.1 "Everything has its place" (Rilasciata e Consolidata)** - Refactoring Architetturale a Schermate Dedicate:
-- ✅ **Architettura Robusta**: Abbandonato il fragile sistema di popup in favore di schermate di stato dedicate, eliminando i conflitti di rendering.
-- ✅ **Coerenza Tematica**: L'interfaccia ora rispecchia fedelmente il comportamento delle applicazioni a terminale degli anni '80, migliorando l'immersività.
-- ✅ **Logica Semplificata**: Il codice per la gestione dello stato (`GameContext`) e dei comandi (`useKeyboardCommands`) è stato significativamente semplificato e reso più manutenibile.
-- ✅ **Flusso di Gioco Corretto**: La navigazione tra menu, creazione personaggio, gioco, inventario e scheda personaggio è fluida e gestita interamente tramite un sistema di stati di schermata.
-- ✅ **Documentazione Aggiornata**: Creati tutti i documenti di release per la v0.3.1, inclusi changelog e documento di anti-regressione.
+**The Safe Place v0.3.2 "Size Matters" (Rilasciata e Consolidata)** - Correzione Dimensioni Font e Ottimizzazione Leggibilità:
+- ✅ **Font Leggibili**: Risolto definitivamente il problema delle dimensioni del testo nella schermata di creazione personaggio con bypass di `PaginatedInfoPage` e uso di dimensioni in pixel.
+- ✅ **Layout Dedicato**: Creata una versione specializzata del layout per la creazione personaggio che previene la doppia scalatura del testo.
+- ✅ **Dimensioni Ottimizzate**: Font calibrati per la migliore leggibilità (47px titolo, 38px passi, 16px hint, 13px hint secondario, 11px comandi piè pagina).
+- ✅ **Coerenza con StartScreen**: L'esperienza di font matching ora è allineata tra menu principale e creazione personaggio.
+- ✅ **Test e Validazione**: Testato tramite hot module reload e preview per confermare la corretta visualizzazione delle dimensioni.
 
 ### 🛠️ Sviluppo
 

@@ -10,13 +10,13 @@ const CharacterCreationScreen: React.FC = () => {
   const creationSteps = [
     { text: 'Generazione personaggio "Ultimo"...', duration: 1000 },
     { text: 'Lancio dadi per le statistiche...', duration: 1500 },
-    { text: `🎲 Potenza: ${characterSheet.stats.potenza}`, duration: 800 },
-    { text: `🎲 Agilità: ${characterSheet.stats.agilita}`, duration: 800 },
-    { text: `🎲 Adattamento: ${characterSheet.stats.adattamento}`, duration: 800 },
-    { text: `🎲 Vigore: ${characterSheet.stats.vigore}`, duration: 800 },
-    { text: `🎲 Percezione: ${characterSheet.stats.percezione}`, duration: 800 },
-    { text: `🎲 Carisma: ${characterSheet.stats.carisma}`, duration: 800 },
-    { text: `✅ Personaggio "${characterSheet.name}" creato!`, duration: 1200 }
+    { text: `[■] Potenza: ${characterSheet.stats.potenza}`, duration: 800 },
+    { text: `[■] Agilità: ${characterSheet.stats.agilita}`, duration: 800 },
+    { text: `[■] Adattamento: ${characterSheet.stats.adattamento}`, duration: 800 },
+    { text: `[■] Vigore: ${characterSheet.stats.vigore}`, duration: 800 },
+    { text: `[■] Percezione: ${characterSheet.stats.percezione}`, duration: 800 },
+    { text: `[■] Carisma: ${characterSheet.stats.carisma}`, duration: 800 },
+    { text: `>>> Personaggio "${characterSheet.name.replace(' (Test)', '')}" creato!`, duration: 1200 }
   ];
 
   const handleConfirm = () => {
@@ -57,40 +57,53 @@ const CharacterCreationScreen: React.FC = () => {
   }, [isAnimating, handleConfirm]);
 
   return (
-    <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-primary">
-      <div className="w-full max-w-4xl text-center">
-        <h2 className="text-5xl font-bold mb-8 font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
+    <div className="h-full flex items-center justify-center p-8">
+      <div className="w-full text-center">
+        {/* Titolo */}
+        <h2
+          className="text-phosphor-bright font-bold mb-10 font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow"
+          style={{ fontSize: '47px' }}
+        >
           CREAZIONE PERSONAGGIO
         </h2>
-        
-        <div className="bg-gray-900 bg-opacity-90 border border-phosphor-bright rounded-lg p-8 min-h-[300px] flex flex-col justify-center glow-phosphor-dim animate-pulse mb-8">
-          <div className="space-y-4">
-            {creationSteps.slice(0, currentStep + 1).map((step, index) => (
-              <div 
-                key={index}
-                className={`text-2xl font-mono tracking-wider ${
-                  index === currentStep 
-                    ? 'text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-glow' 
-                    : 'text-phosphor-primary glow-phosphor-primary animate-pulse'
-                }`}
-              >
-                {step.text}
-              </div>
-            ))}
+
+        {/* Box contenuto (senza riduzioni di scala aggiuntive) */}
+        <div className="flex justify-center">
+          <div className="w-[85%] max-w-[1400px] mx-auto">
+            <div className="text-left mx-auto text-phosphor-primary font-mono tracking-wide leading-relaxed space-y-4">
+              {creationSteps.slice(0, currentStep + 1).map((step, index) => (
+                <div
+                  key={index}
+                  className={`${index === currentStep
+                    ? 'text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-glow'
+                    : 'text-phosphor-primary glow-phosphor-primary animate-pulse'} animate-flicker`}
+                  style={{ fontSize: '38px' }}
+                >
+                  {step.text}
+                </div>
+              ))}
+
+              {/* Hints */}
+              {!isAnimating && (
+                <div className="mt-8 text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
+                  Premi [ENTER] per iniziare l'avventura
+                </div>
+              )}
+              {isAnimating && showSkipHint && (
+                <div className="mt-4 text-phosphor-dim animate-pulse" style={{ fontSize: '13px' }}>
+                  Premi [SPAZIO] per saltare
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {!isAnimating && (
-          <div className="text-2xl text-phosphor-bright font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-pulse">
-            Premi [ENTER] per iniziare l'avventura
+        {/* Footer comandi base (piccolo, come nel menu) */}
+        <div className="text-center mt-10">
+          <div className="text-phosphor-dim font-mono tracking-wider animate-pulse" style={{ fontSize: '11px' }}>
+            [↑] Su  [↓] Giù  [ESC] Indietro
           </div>
-        )}
-
-        {isAnimating && showSkipHint && (
-          <div className="text-lg text-phosphor-dim font-mono tracking-wider animate-pulse">
-            Premi [SPAZIO] per saltare
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

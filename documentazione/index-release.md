@@ -4,6 +4,13 @@ Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo
 
 ---
 
+### v0.3.2 - "Size Matters"
+- Migliorata la leggibilità del testo nella schermata di Creazione del Personaggio tramite layout dedicato e dimensioni in pixel per prevenire doppia scalatura.
+- Coerenza visiva ripristinata tra menu principale e creazione personaggio.
+- Documento di anti-regressione creato per prevenire futuri regressi.
+
+---
+
 ### v0.3.0 - "A Letter by Me, My Son"
 - **Refactoring Pagine Informative:** Le pagine di Istruzioni e Storia sono state rilavorate per utilizzare un sistema di scrolling verticale personalizzato, eliminando la precedente logica di paginazione.
 - **Correzione Bug Critici:** Risolto un bug che impediva la visualizzazione del testo nelle pagine Istruzioni e Storia.

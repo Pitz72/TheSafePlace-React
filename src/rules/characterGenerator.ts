@@ -2,7 +2,7 @@
 // Parte del progetto "Rules are Rules" v0.2.0
 
 import type { ICharacterStats, ICharacterSheet } from './types';
-import { calculateModifier, calculateMaxHP, calculateBaseAC, calculateCarryCapacity } from './mechanics';
+import { calculateMaxHP, calculateBaseAC, calculateCarryCapacity } from './mechanics';
 import type { IInventorySlot } from '../interfaces/items';
 
 /**
@@ -75,7 +75,7 @@ export function createTestCharacter(values?: Partial<ICharacterStats>): ICharact
   startingInventory[4] = { itemId: 'ARMOR_001', quantity: 1 }; // 1x Giubbotto di pelle
   
   return {
-    name: "Ultimo (Test)",
+    name: "Ultimo",
     stats,
     level: 1, // Inizia al livello 1
     maxHP,
