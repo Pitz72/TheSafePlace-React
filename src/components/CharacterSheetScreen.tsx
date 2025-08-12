@@ -1,6 +1,6 @@
 /**
  * CharacterSheetScreen.tsx — Scheda personaggio (UI stabile)
- * Linee guida dimensioni (v0.3.2 "Size Matters"):
+ * Linee guida dimensioni (v0.3.5 "The Survival Game"):
  * - H2 titolo: text-5xl; H3 sezioni: text-3xl; Valori: text-2xl
  * - Mantieni contrasto e glow per valori chiave (HP, CA, Peso)
  * - Layout 2 colonne: non comprimere sotto max-w-6xl senza test leggibilità

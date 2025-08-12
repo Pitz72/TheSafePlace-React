@@ -8,7 +8,7 @@ interface PaginatedInfoPageProps {
 
 /**
  * PaginatedInfoPage.tsx — Template semplice con SCORRIMENTO (usato da Istruzioni/Storia)
- * v0.3.2 "Size Matters": non è il template avanzato; per UI standard usare UniversalInfoPage.
+ * v0.3.5 "The Survival Game": non è il template avanzato; per UI standard usare UniversalInfoPage.
  *
  * Regole per FUTURI aggiustamenti dimensioni:
  * - Contenitore: w-[85%] h-[60vh] con p-8 — se cambi, verifica che SCROLL_AMOUNT resti adeguato

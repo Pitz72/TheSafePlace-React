@@ -4,6 +4,13 @@ Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo
 
 ---
 
+### v0.3.5 - "The Survival Game"
+- **Correzione Bug Critico:** Risolto un loop di re-inizializzazione che causava crash e instabilità del gioco.
+- **Miglioramento Stabilità:** Rafforzata la gestione dello stato per prevenire race condition e loop di rendering.
+- **Consolidamento Architettura:** Centralizzata la logica di inizializzazione del gioco per un avvio più pulito e controllato.
+
+---
+
 ### v0.3.2 - "Size Matters"
 - Migliorata la leggibilità del testo nella schermata di Creazione del Personaggio tramite layout dedicato e dimensioni in pixel per prevenire doppia scalatura.
 - Coerenza visiva ripristinata tra menu principale e creazione personaggio.

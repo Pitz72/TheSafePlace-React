@@ -44,7 +44,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-dim text-lg mb-6 tracking-wider glow-phosphor-dim">
-          v0.3.2 - Size Matters
+          v0.3.5 - The Survival Game
         </p>
         
         {/* Menu Items Testuali */}

@@ -1,6 +1,6 @@
 /**
  * UniversalInfoPage.tsx — TEMPLATE BASE per pagine informative
- * Versione di riferimento: v0.3.2 "Size Matters"
+ * Versione di riferimento: v0.3.5 "The Survival Game"
  *
  * Linee guida per FUTURE MODIFICHE alle dimensioni testo e layout:
  * - Invarianti UI (NON modificare salvo nuova major/minor esplicita):
@@ -13,7 +13,7 @@
  *   c) Algoritmo di pagination smart: lineHeight, paragraphSpacing, stima chars/line
  * - Se aumenti/diminuisci il font:
  *   • Aggiorna SIA le classi di stile SIA i parametri usati in calculateSmartPages()
- *   • Esegui i test di anti-regressione "Size Matters" su leggibilità e overflow
+ *   • Esegui i test di anti-regressione su leggibilità e overflow
  */
 import React, { useState, useEffect } from 'react';
 

@@ -1,6 +1,6 @@
 /**
  * InventoryScreen.tsx — Layout a 2 colonne (UI stabile)
- * Linee guida dimensioni (coerenti con v0.3.2 "Size Matters"):
+ * Linee guida dimensioni (coerenti con v0.3.5 "The Survival Game"):
  * - Titoli: H2 5xl, H3 3xl — se riduci, mantieni gerarchie visive
  * - Liste: text-2xl; Dettagli: text-xl/2xl — verificare overflow su 1366x768
  * - Box: max-w-6xl + gap-8 — non ridurre senza verificare leggibilità

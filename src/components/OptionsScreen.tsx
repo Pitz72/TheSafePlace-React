@@ -1,6 +1,6 @@
 /**
  * OptionsScreen.tsx — Schermata Opzioni
- * Linee guida dimensioni (v0.3.2 "Size Matters"):
+ * Linee guida dimensioni (v0.3.5 "The Survival Game"):
  * - Gerarchia titoli: sezioni [VIDEO/AUDIO/ALTRO] h2 text-2xl; voci navigazione text-2xl
  * - Stato selezionato: mantiene glow/phosphor per accessibilità e focus visivo
  * - Contenitori: p-6, bg-opacity-90 — non ridurre senza testare leggibilità
