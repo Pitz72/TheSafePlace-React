@@ -85,11 +85,6 @@ const GameContent = () => {
   React.useEffect(() => {
     runAllResolutionTests();
   }, []);
-  
-  // Inizializza il gioco una sola volta all'avvio
-  React.useEffect(() => {
-    initializeGame();
-  }, [initializeGame]);
 
   // Performance monitoring
   React.useEffect(() => {
