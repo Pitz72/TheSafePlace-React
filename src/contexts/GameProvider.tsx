@@ -24,6 +24,12 @@ const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
 const DEFAULT_TIME_ADVANCE = 30;
 
+// Dev-only logger
+const IS_DEV = import.meta.env.MODE === 'development';
+const dbg = (...args: any[]) => {
+  if (IS_DEV) console.debug('[GameProvider]', ...args);
+};
+
 export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   // Tutti gli stati sono definiti qui, seguendo l'interfaccia GameState
   const [mapData, setMapData] = useState<string[]>([]);
@@ -36,7 +42,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     isDay: true,
   });
   const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter);
-  const [lastShortRestTime, setLastShortRestTime] = useState<{ day: number; time: number } | null>(null);
+  const [lastShortRestTime] = useState<{ day: number; time: number } | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [currentBiome, setCurrentBiome] = useState<string | null>(null);
   const [items, setItems] = useState<Record<string, IItem>>({});
@@ -101,7 +107,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       
       setIsMapLoading(false);
       // Non mostrare più il popup, la navigazione gestirà la schermata
-      addLogEntry('GAME_START');
+      addLogEntry(MessageType.GAME_START);
     } catch (error) {
       console.error("Initialization failed:", error);
       setIsMapLoading(false);
@@ -127,25 +133,48 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   }, []);
 
   const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
+    dbg('setPlayerPosition', { from: playerPosition, to: newPosition });
     setPlayerPosition(newPosition);
     advanceTime();
-  }, [advanceTime]);
+  }, [advanceTime, playerPosition]);
   
   const calculateCameraPosition = useCallback((playerPos: { x: number; y: number }, viewportSize: { width: number; height: number }) => {
-    const idealScrollX = (playerPos.x * CHAR_WIDTH) - (viewportSize.width / 2);
-    const idealScrollY = (playerPos.y * CHAR_HEIGHT) - (viewportSize.height / 2);
+    // Arrotondamento stabile per evitare micro-variazioni
+    const viewportWidth = Math.round(viewportSize.width);
+    const viewportHeight = Math.round(viewportSize.height);
+    
+    const idealScrollX = (playerPos.x * CHAR_WIDTH) - (viewportWidth / 2);
+    const idealScrollY = (playerPos.y * CHAR_HEIGHT) - (viewportHeight / 2);
     const mapWidth = mapData[0]?.length || 0;
     const mapHeight = mapData.length;
-    const maxScrollX = Math.max(0, (mapWidth * CHAR_WIDTH) - viewportSize.width);
-    const maxScrollY = Math.max(0, (mapHeight * CHAR_HEIGHT) - viewportSize.height);
-    return {
-      x: Math.max(0, Math.min(idealScrollX, maxScrollX)),
-      y: Math.max(0, Math.min(idealScrollY, maxScrollY)),
+    const maxScrollX = Math.max(0, (mapWidth * CHAR_WIDTH) - viewportWidth);
+    const maxScrollY = Math.max(0, (mapHeight * CHAR_HEIGHT) - viewportHeight);
+    
+    const next = {
+      x: Math.round(Math.max(0, Math.min(idealScrollX, maxScrollX))),
+      y: Math.round(Math.max(0, Math.min(idealScrollY, maxScrollY))),
     };
+    dbg('calculateCameraPosition', { playerPos, viewportSize: { width: viewportWidth, height: viewportHeight }, ideal: { x: idealScrollX, y: idealScrollY }, clamped: next, map: { w: mapWidth, h: mapHeight } });
+    // Arrotondamento finale per stabilità
+    return next;
   }, [mapData]);
 
   const updateCameraPosition = useCallback((viewportSize: { width: number; height: number }) => {
-    setCameraPosition(calculateCameraPosition(playerPosition, viewportSize));
+    // Guard: evita aggiornamenti se dimensioni non cambiano significativamente
+    const roundedWidth = Math.round(viewportSize.width);
+    const roundedHeight = Math.round(viewportSize.height);
+    
+    const newCameraPos = calculateCameraPosition(playerPosition, { width: roundedWidth, height: roundedHeight });
+    
+    // Solo aggiorna se la posizione camera cambia effettivamente
+    setCameraPosition(prev => {
+      if (prev.x === newCameraPos.x && prev.y === newCameraPos.y) {
+        dbg('camera unchanged (skip setState)', { prev });
+        return prev; // Nessun cambio, evita re-render
+      }
+      dbg('setCameraPosition', { from: prev, to: newCameraPos });
+      return newCameraPos;
+    });
   }, [playerPosition, calculateCameraPosition]);
 
   const updateHP = useCallback((amount: number) => {
@@ -165,39 +194,39 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     const total = roll + modifier;
     const success = total >= difficulty;
     if (addToJournal) {
-      addLogEntry(success ? (successMessageType || 'SKILL_CHECK_SUCCESS') : 'SKILL_CHECK_FAILURE', { ability, roll, modifier, total, difficulty });
+      addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, { ability, roll, modifier, total, difficulty });
     }
     return success;
   }, [getModifier, addLogEntry]);
 
   const shortRest = useCallback(() => {
     if (isDead(characterSheet.currentHP)) {
-      addLogEntry('REST_BLOCKED', { reason: 'sei morto' });
+      addLogEntry(MessageType.REST_BLOCKED, { reason: 'sei morto' });
       return;
     }
     // Simple cooldown, can be improved later
     const healingAmount = calculateShortRestHealing();
     updateHP(healingAmount);
-    addLogEntry('HP_RECOVERY', { healingAmount });
+    addLogEntry(MessageType.HP_RECOVERY, { healingAmount });
     advanceTime(60);
   }, [characterSheet.currentHP, updateHP, addLogEntry, advanceTime]);
 
   const updateBiome = useCallback((newBiome: string) => {
     if (newBiome !== currentBiome) {
       setCurrentBiome(newBiome);
-      addLogEntry('BIOME_ENTER', { biome: newBiome });
+      addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
     }
   }, [currentBiome, addLogEntry]);
 
   const useItem = useCallback((slotIndex: number) => {
     const itemStack = characterSheet.inventory[slotIndex];
     if (!itemStack) {
-      addLogEntry('ACTION_FAIL', { action: 'usare un oggetto', reason: 'lo slot è vuoto' });
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'lo slot è vuoto' });
       return;
     }
     const item = items[itemStack.itemId];
     if (item) {
-      addLogEntry('ACTION_SUCCESS', { action: `usa ${item.name}` });
+      addLogEntry(MessageType.ACTION_SUCCESS, { action: `usa ${item.name}` });
       // Future logic for item effects goes here
     }
   }, [characterSheet.inventory, items, addLogEntry]);

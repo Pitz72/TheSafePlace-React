@@ -6,15 +6,28 @@ interface PaginatedInfoPageProps {
   content: React.ReactNode[];
 }
 
+/**
+ * PaginatedInfoPage.tsx — Template semplice con SCORRIMENTO (usato da Istruzioni/Storia)
+ * v0.3.2 "Size Matters": non è il template avanzato; per UI standard usare UniversalInfoPage.
+ *
+ * Regole per FUTURI aggiustamenti dimensioni:
+ * - Contenitore: w-[85%] h-[60vh] con p-8 — se cambi, verifica che SCROLL_AMOUNT resti adeguato
+ * - Tipografia: attualmente "text-7xl" (molto grande). Per coerenza con template unificato
+ *   considera text-[28px] + leading-relaxed + mb-4. In tal caso, riduci SCROLL_AMOUNT (es. 32)
+ * - Interazione: W/↑ e S/↓ per scorrere, ESC/B per tornare indietro (invarianti)
+ */
 const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content }) => {
   const { handleBackToMenu } = useGameContext();
   const contentBoxRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const SCROLL_AMOUNT = 50; // Pixels to scroll on each key press
+  const SCROLL_AMOUNT = 50; // Pixel per step di scroll — regola insieme al font-size effettivo
 
-  // Effect for keyboard-driven scrolling and ESC
+  // Scorrimento tastiera + ESC — non cambiare mappatura tasti senza aggiornare le istruzioni UI
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      const gameKeys = ['w','arrowup','s','arrowdown','escape','b'];
+      if (!gameKeys.includes(key)) return; // Non bloccare altri tasti (DevTools)
       event.preventDefault();
       const contentBox = contentBoxRef.current;
       if (!contentBox) return;
@@ -42,7 +55,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleBackToMenu]);
 
-  // Effect to apply the scroll position
+  // Applica la posizione di scroll calcolata
   useEffect(() => {
     if (contentBoxRef.current) {
       contentBoxRef.current.scrollTop = scrollTop;
@@ -61,6 +74,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
             ref={contentBoxRef}
             className="bg-gray-900 bg-opacity-80 rounded-lg shadow-lg w-[85%] mx-auto p-8 glow-phosphor-dim h-[60vh] overflow-y-auto no-scrollbar"
           >
+            {/* PUNTO DI REGOLAZIONE TIPOGRAFIA: text-7xl => valuta text-[28px] + leading-relaxed + mb-4 per coerenza */}
             <div className="text-green-300 leading-relaxed space-y-8 font-mono tracking-wide text-7xl">
               {content}
             </div>

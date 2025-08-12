@@ -6,6 +6,12 @@ interface MovementState {
   isExitingRiver: boolean;
 }
 
+// Dev-only logger
+const IS_DEV = import.meta.env.MODE === 'development';
+const dbg = (...args: any[]) => {
+  if (IS_DEV) console.debug('[useKeyboardCommands]', ...args);
+};
+
 // Hook unificato per la gestione di tutti i comandi da tastiera
 export const useKeyboardCommands = () => {
   const {
@@ -58,27 +64,43 @@ export const useKeyboardCommands = () => {
     const nextY = currentY + deltaY;
 
     const nextTerrain = getTerrainAt(nextX, nextY);
+    dbg('move request', {
+      from: { x: currentX, y: currentY },
+      delta: { dx: deltaX, dy: deltaY },
+      to: { x: nextX, y: nextY },
+      nextTerrain,
+      exitingRiverFlag: movementState.isExitingRiver,
+    });
+
     if (nextTerrain === 'M') {
+      dbg('blocked: mountain tile at target', { to: { x: nextX, y: nextY } });
       addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
       return;
     }
 
-    if (!isValidPosition(nextX, nextY)) return;
+    if (!isValidPosition(nextX, nextY)) {
+      dbg('blocked: invalid map position', { to: { x: nextX, y: nextY } });
+      return;
+    }
 
     const currentTerrain = getTerrainAt(currentX, currentY);
     if (currentTerrain === '~' && movementState.isExitingRiver) {
+      dbg('river exit lock: skipping extra move from river tile', { currentTerrain });
       setMovementState({ isExitingRiver: false });
       return;
     }
 
+    dbg('updatePlayerPosition ->', { x: nextX, y: nextY });
     updatePlayerPosition({ x: nextX, y: nextY });
     updateBiome(nextTerrain);
 
     if (nextTerrain === '~') {
       setMovementState({ isExitingRiver: true });
       const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
+      dbg('river check', { success });
       if (!success) {
         const damage = Math.floor(Math.random() * 4) + 1;
+        dbg('river damage', { damage });
         updateHP(-damage);
       }
     } else {
@@ -97,6 +119,18 @@ export const useKeyboardCommands = () => {
     if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
       return;
     }
+    
+    // Previeni solo per i tasti del gioco, non per DevTools (F12, Ctrl+Shift+I, etc.)
+    const gameKeys = ['w', 's', 'a', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 
+                      'enter', 'escape', 'tab', 'i', 'r', 'b', 'space', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    const key = event.key.toLowerCase();
+    const isGameKey = gameKeys.includes(key) || gameKeys.includes(event.code.toLowerCase());
+    
+    if (!isGameKey) {
+      return; // Lascia passare DevTools e altri comandi del browser
+    }
+    
+    dbg('keydown', { key: event.key, code: event.code, currentScreen });
     event.preventDefault();
 
     switch (currentScreen) {

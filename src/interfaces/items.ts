@@ -34,12 +34,15 @@ export enum ItemEffect {
 /**
  * Interfaccia di base per ogni oggetto nel gioco.
  * Questa è la "scheda di identità" canonica per tutti gli oggetti.
+ *
+ * Nota: i database JSON utilizzano stringhe liberamente (es. type: "weapon", effect: "satiety").
+ * Per compatibilità, consentiamo sia i valori dell'enum sia stringhe generiche.
  */
 export interface IItem {
   id: string;
   name: string;
   description: string;
-  type: ItemType;
+  type: ItemType | string; // Compatibilità con JSON (es. "weapon", "unique")
   rarity?: Rarity; // Opzionale, non tutti gli oggetti hanno una rarità definita
   weight?: number; // Opzionale
   value?: number; // Opzionale
@@ -47,8 +50,8 @@ export interface IItem {
   quantity?: number; // Aggiunto per gestire le quantità direttamente nell'oggetto
 
   // Campi specifici per tipo
-  effect?: ItemEffect; // Effetto primario dell'oggetto
-  effectValue?: string; // Valore dell'effetto (es. '1d8+2' o '10')
+  effect?: ItemEffect | string; // Compatibilità con JSON (es. "satiety", "hydration")
+  effectValue?: string | number; // Alcuni JSON usano numeri
   durability?: number;
   damage?: string;
   armor?: number;

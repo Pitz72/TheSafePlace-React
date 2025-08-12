@@ -1,3 +1,14 @@
+/**
+ * CharacterCreationScreen.tsx — Schermata dedicata (UI/UX consolidata v0.3.2 "Size Matters")
+ *
+ * Regole per future modifiche alle DIMENSIONI (font/spaziature):
+ * - Invarianti: struttura full-screen, titolo grande centrato, box contenuto w-[85%] max-w-[1400px]
+ * - Font principali:
+ *   • Titolo: 47px
+ *   • Step testo: 38px (verificato leggibile su 1366x768 e superiori)
+ *   • Hint enter: 16px — Hint skip: 13px — Footer: 11px
+ * - Se cambi questi valori: aggiorna l'anti-regressione v0.3.2 e verifica overflow/troncamenti.
+ */
 import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 

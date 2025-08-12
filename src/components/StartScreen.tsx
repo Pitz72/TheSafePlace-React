@@ -1,3 +1,8 @@
+/**
+ * StartScreen.tsx — Menu iniziale
+ * Regole tipografiche (v0.3.2): Titolo 100px, menu text-[2.4rem], autore text-xl, versione text-lg
+ * Invarianti: logo max-w-[34%]/max-h-[34vh], glow CRT, mappatura scorciatoie [N/C/I/T/O/E]
+ */
 import React from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 

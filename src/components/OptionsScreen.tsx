@@ -1,11 +1,17 @@
+/**
+ * OptionsScreen.tsx — Schermata Opzioni
+ * Linee guida dimensioni (v0.3.2 "Size Matters"):
+ * - Gerarchia titoli: sezioni [VIDEO/AUDIO/ALTRO] h2 text-2xl; voci navigazione text-2xl
+ * - Stato selezionato: mantiene glow/phosphor per accessibilità e focus visivo
+ * - Contenitori: p-6, bg-opacity-90 — non ridurre senza testare leggibilità
+ * - Interazione tastiera: mappatura frecce/enter/back invarianti (definite negli handler)
+ */
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSettingsStore } from '../stores/settingsStore';
 
 interface OptionsScreenProps {
   onBack: () => void;
 }
-
-type VideoMode = 'standard' | 'no-effects' | 'high-contrast';
 
 interface NavItem {
   id: string;
@@ -70,8 +76,10 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      event.preventDefault();
       const key = event.key.toLowerCase();
+      const gameKeys = ['escape','backspace','b','arrowup','w','arrowdown','s','enter',' '];
+      if (!gameKeys.includes(key)) return; // Non bloccare altri tasti (DevTools)
+      event.preventDefault();
 
       switch (key) {
         case 'escape':

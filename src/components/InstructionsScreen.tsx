@@ -1,3 +1,8 @@
+/**
+ * InstructionsScreen.tsx — Istruzioni gioco
+ * Usa il template semplice PaginatedInfoPage (scorrimento). In futuro, se migri a UniversalInfoPage,
+ * aggiorna tipografia a text-[28px] + leading-relaxed + mb-4 e rivedi la paginazione.
+ */
 import React from 'react';
 import PaginatedInfoPage from './PaginatedInfoPage';
 

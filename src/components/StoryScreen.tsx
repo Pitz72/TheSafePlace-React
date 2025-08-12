@@ -1,3 +1,8 @@
+/**
+ * StoryScreen.tsx — Introduzione alla storia
+ * Usa PaginatedInfoPage (scorrimento). Se in futuro migri a UniversalInfoPage,
+ * allinea la tipografia a text-[28px] + leading-relaxed + mb-4 e rivedi la paginazione.
+ */
 import React from 'react';
 import PaginatedInfoPage from './PaginatedInfoPage';
 

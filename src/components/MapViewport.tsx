@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 
 interface MapViewportProps {
   className?: string;
 }
+
+// Dev-only logger
+const IS_DEV = import.meta.env.MODE === 'development';
+const dbg = (...args: any[]) => {
+  if (IS_DEV) console.debug('[MapViewport]', ...args);
+};
 
 // Mappatura caratteri mappa -> colori specifici
 const TILE_COLORS: Record<string, string> = {
@@ -36,6 +42,11 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   // Viewport virtualization - dimensioni viewport
   const [viewportWidth, setViewportWidth] = useState(800);
   const [viewportHeight, setViewportHeight] = useState(600);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  // Cache dimensioni per evitare update ripetuti
+  const lastSizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+  // Cache dipendenze per capire cosa innesca l'update camera
+  const lastDepsRef = useRef<{ w: number; h: number; px: number; py: number }>({ w: 0, h: 0, px: -1, py: -1 });
   
   // Configurazione rendering - AUMENTATO DEL 100% PER MAGGIORE SFIDA
   const CHAR_WIDTH = 25.6; // Larghezza carattere in pixel (8 * 3.2 = +220%)
@@ -43,10 +54,59 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   const VISIBLE_COLS = Math.ceil(viewportWidth / CHAR_WIDTH) + 2; // +2 per buffer
   const VISIBLE_ROWS = Math.ceil(viewportHeight / CHAR_HEIGHT) + 2; // +2 per buffer
 
+  useEffect(() => {
+    dbg('init metrics', { CHAR_WIDTH, CHAR_HEIGHT });
+  }, []);
+
+  // Aggiorna dimensioni viewport in modo stabile (senza ref callback che cambia ogni render)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const updateSize = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (lastSizeRef.current.w !== w || lastSizeRef.current.h !== h) {
+        dbg('resize observed', { from: { ...lastSizeRef.current }, to: { w, h } });
+      }
+      if (lastSizeRef.current.w !== w) setViewportWidth(w);
+      if (lastSizeRef.current.h !== h) setViewportHeight(h);
+      lastSizeRef.current = { w, h };
+    };
+
+    // Primo calcolo immediato
+    updateSize();
+
+    // Osserva cambiamenti reali di dimensione del contenitore
+    const ro = new ResizeObserver(() => updateSize());
+    ro.observe(el);
+
+    return () => {
+      ro.disconnect();
+    };
+  }, []);
+
   // Aggiornamento camera quando cambiano le dimensioni del viewport o la posizione del player
   useEffect(() => {
     if (viewportWidth > 0 && viewportHeight > 0 && !isMapLoading) {
-      updateCameraPosition({ width: viewportWidth, height: viewportHeight });
+      const w = Math.round(viewportWidth);
+      const h = Math.round(viewportHeight);
+      const causes: string[] = [];
+      if (lastDepsRef.current.w !== viewportWidth) causes.push('viewportWidth');
+      if (lastDepsRef.current.h !== viewportHeight) causes.push('viewportHeight');
+      if (lastDepsRef.current.px !== playerPosition.x) causes.push('playerX');
+      if (lastDepsRef.current.py !== playerPosition.y) causes.push('playerY');
+
+      dbg('updateCameraPosition()', {
+        raw: { width: viewportWidth, height: viewportHeight },
+        rounded: { width: w, height: h },
+        playerPosition,
+        cameraPosition,
+        causes
+      });
+
+      updateCameraPosition({ width: w, height: h });
+      lastDepsRef.current = { w: viewportWidth, h: viewportHeight, px: playerPosition.x, py: playerPosition.y };
     }
   }, [viewportWidth, viewportHeight, playerPosition, isMapLoading, updateCameraPosition]);
 
@@ -116,17 +176,20 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   const endRow = Math.min(mapData.length, startRow + VISIBLE_ROWS);
   const startCol = Math.max(0, Math.floor(cameraPosition.x / CHAR_WIDTH));
   const endCol = Math.min(150, startCol + VISIBLE_COLS); // 150 = larghezza mappa
+
+  useEffect(() => {
+    dbg('cameraPosition changed', {
+      cameraPosition,
+      window: { startRow, endRow, startCol, endCol },
+      visible: { cols: VISIBLE_COLS, rows: VISIBLE_ROWS }
+    });
+  }, [cameraPosition, VISIBLE_COLS, VISIBLE_ROWS, startRow, endRow, startCol, endCol]);
   
   // Rendering principale mappa con viewport virtualization
   return (
     <div 
       className={`overflow-hidden relative h-full bg-gray-900 bg-opacity-80 border border-phosphor-bright crt-screen scan-lines animate-crt-flicker glow-phosphor-dim ${className}`}
-      ref={(el) => {
-        if (el) {
-          setViewportWidth(el.clientWidth);
-          setViewportHeight(el.clientHeight);
-        }
-      }}
+      ref={containerRef}
     >
       <style>{`
         .map-container::-webkit-scrollbar {

@@ -1,3 +1,11 @@
+/**
+ * InventoryScreen.tsx — Layout a 2 colonne (UI stabile)
+ * Linee guida dimensioni (coerenti con v0.3.2 "Size Matters"):
+ * - Titoli: H2 5xl, H3 3xl — se riduci, mantieni gerarchie visive
+ * - Liste: text-2xl; Dettagli: text-xl/2xl — verificare overflow su 1366x768
+ * - Box: max-w-6xl + gap-8 — non ridurre senza verificare leggibilità
+ * - Interazione: [↑↓] selezione, [1-9] usa, [ESC]/[I] chiudi — invarianti
+ */
 import React, { useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 
@@ -31,11 +39,12 @@ const InventoryScreen: React.FC = () => {
           <ul className="space-y-2 text-2xl">
             {characterSheet.inventory.map((itemStack, index) => {
               const item = itemStack ? items[itemStack.itemId] : null;
+              const label = itemStack && item ? `${item.name} (x${itemStack.quantity})` : '[Vuoto]';
               return (
                 <li 
                   key={index} 
                   className={`p-2 rounded transition-colors duration-200 ${selectedInventoryIndex === index ? 'bg-phosphor-bright text-black font-bold' : 'text-phosphor-dim'}`}>
-                  {index + 1}. {item ? `${item.name} (x${itemStack.quantity})` : '[Vuoto]'}
+                  {index + 1}. {label}
                 </li>
               );
             })}

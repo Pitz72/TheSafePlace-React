@@ -1,3 +1,11 @@
+/**
+ * CharacterSheetScreen.tsx — Scheda personaggio (UI stabile)
+ * Linee guida dimensioni (v0.3.2 "Size Matters"):
+ * - H2 titolo: text-5xl; H3 sezioni: text-3xl; Valori: text-2xl
+ * - Mantieni contrasto e glow per valori chiave (HP, CA, Peso)
+ * - Layout 2 colonne: non comprimere sotto max-w-6xl senza test leggibilità
+ * - Interazione: [ESC]/[TAB] per uscire — invarianti
+ */
 import React, { useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 
@@ -23,7 +31,10 @@ const CharacterSheetScreen: React.FC = () => {
     );
   }
 
-  const armorClass = 10 + getModifier('agilita');
+  // Tipi sicuri per le chiavi delle statistiche
+  const statKeys = Object.keys(characterSheet.stats) as Array<keyof typeof characterSheet.stats>;
+
+  const armorClass = 10 + getModifier('agilita' as keyof typeof characterSheet.stats);
   const carryCapacity = characterSheet.stats.potenza * 10;
 
   return (
@@ -39,11 +50,11 @@ const CharacterSheetScreen: React.FC = () => {
               STATISTICHE PRIMARIE
             </h3>
             <div className="space-y-4 text-2xl tracking-wider">
-              {Object.entries(characterSheet.stats).map(([stat, value]) => (
-                <div key={stat} className="flex justify-between">
+              {statKeys.map((stat) => (
+                <div key={stat as string} className="flex justify-between">
                   <span className="capitalize">{stat}:</span>
                   <span className="text-phosphor-bright font-bold glow-phosphor-primary text-shadow-phosphor-bright animate-pulse">
-                    {value} ({getModifier(stat as keyof ICharacterSheet['stats']) >= 0 ? '+' : ''}{getModifier(stat as keyof ICharacterSheet['stats'])})
+                    {characterSheet.stats[stat]} ({getModifier(stat) >= 0 ? '+' : ''}{getModifier(stat)})
                   </span>
                 </div>
               ))}
@@ -60,7 +71,7 @@ const CharacterSheetScreen: React.FC = () => {
             <div className="space-y-4 text-2xl tracking-wider">
               <div className="flex justify-between">
                 <span>Punti Vita:</span>
-                <span className={`font-bold ${characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'text-phosphor-danger' : 'text-phosphor-bright'}`}>
+                <span className={`${characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'text-phosphor-danger' : 'text-phosphor-bright'} font-bold`}>
                   {characterSheet.currentHP}/{characterSheet.maxHP}
                 </span>
               </div>
