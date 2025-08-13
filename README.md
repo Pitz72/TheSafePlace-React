@@ -1,4 +1,4 @@
-# The Safe Place v0.3.5 "The Survival Game"
+# The Safe Place v0.3.8 "I Don't Need Glasses to Read"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -6,10 +6,11 @@
 
 ### 🌟 Caratteristiche Principali
 
+- **Leggibilità Ottimizzata**: Testo narrativo ingrandito del 75% e interfacce del 60% per massima accessibilità e comfort visivo.
 - **Architettura a Schermate Dedicate**: Sistema di navigazione robusto che sostituisce i popup per una maggiore coerenza tematica e stabilità tecnica.
 - **Flusso di Gioco Immersivo**: Creazione del personaggio, inventario e scheda personaggio gestiti come schermate a sé stanti, in puro stile terminale anni '80.
-- **Schermata Opzioni Completa**: Navigazione keyboard-only con tre modalità video.
-- **Sistema Temi Avanzato**: Standard CRT, Senza Effetti, Altissimo Contrasto.
+- **Schermata Opzioni Completa**: Navigazione keyboard-only con tre modalità video e testo ingrandito proporzionalmente.
+- **Sistema Temi Avanzato**: Standard CRT, Senza Effetti, Altissimo Contrasto con supporto completo per testi ingranditi.
 - **Keyboard Navigation Completa**: Controllo totale tramite tastiera per un'esperienza autentica.
 - **Architettura Moderna**: React 18 + TypeScript + TailwindCSS + Vite.
 

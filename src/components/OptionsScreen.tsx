@@ -120,7 +120,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
 
     return (
       <div className={`border border-phosphor-500 p-6 bg-gray-800 bg-opacity-90 glow-phosphor-dim animate-pulse`}>
-        <h2 className={`text-2xl font-bold mb-4 font-mono tracking-wider ${
+        <h2 className={`text-[160%] font-bold mb-4 font-mono tracking-wider ${
           isSectionSelected ? 'text-phosphor-300 glow-phosphor-bright text-shadow-phosphor-bright animate-glow' : 'text-phosphor-500 glow-phosphor-dim'
         }`}>
           [{section.toUpperCase()}] {title}
@@ -133,7 +133,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
             return (
               <div
                 key={item.id}
-                className={`p-4 transition-all duration-200 cursor-pointer text-center font-mono tracking-wider text-2xl ${
+                className={`p-4 transition-all duration-200 cursor-pointer text-center font-mono tracking-wider text-[160%] ${
                   isSelected ? 'bg-gray-700 bg-opacity-80 text-phosphor-300 font-bold glow-phosphor-bright text-shadow-phosphor-bright animate-glow' :
           isActive ? 'bg-gray-600 bg-opacity-70 text-phosphor-500 font-bold glow-phosphor-primary' :
           'text-phosphor-500 hover:bg-gray-800 hover:glow-phosphor-dim'
@@ -145,7 +145,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
                   {isActive && <span className="ml-2 text-phosphor-300 animate-pulse glow-phosphor-bright">●</span>}
                   {isSelected && <span className="text-phosphor-300 ml-2 animate-pulse">◄</span>}
                 </div>
-                <div className={`text-lg font-mono ${isSelected ? 'text-phosphor-400 glow-phosphor-primary animate-pulse' : 'text-phosphor-700'}`}>
+                <div className={`text-[120%] font-mono ${isSelected ? 'text-phosphor-400 glow-phosphor-primary animate-pulse' : 'text-phosphor-700'}`}>
                   {item.description}
                 </div>
               </div>
@@ -163,7 +163,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
           <h1 className="text-phosphor-400 font-bold mb-2 text-6xl glow-phosphor-bright text-shadow-phosphor-bright animate-glow font-mono tracking-wider">
             ═══ IMPOSTAZIONI ═══
           </h1>
-          <p className="text-phosphor-500 text-lg mb-6 font-mono animate-pulse glow-phosphor-dim">
+          <p className="text-phosphor-500 text-[120%] mb-6 font-mono animate-pulse glow-phosphor-dim">
             Configura le opzioni di gioco
           </p>
         </div>
@@ -175,10 +175,10 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
         </div>
 
         <div className="p-4 border border-phosphor-600 bg-gray-800 bg-opacity-90 glow-phosphor-dim animate-pulse">
-          <h3 className="text-lg font-bold text-phosphor-500 mb-2 font-mono tracking-wider glow-phosphor-primary">CONTROLLI:</h3>
+          <h3 className="text-[120%] font-bold text-phosphor-500 mb-2 font-mono tracking-wider glow-phosphor-primary">CONTROLLI:</h3>
           <div className="text-center space-y-1">
-            <div className="text-phosphor-700 text-base font-mono animate-pulse">↑↓/W/S - Naviga • ENTER/SPAZIO - Seleziona • V/A/O - Vai a sezione</div>
-          <div className="text-phosphor-700 text-base font-mono animate-pulse">1/2/3 - Modalità video • ESC/B - Esci</div>
+            <div className="text-phosphor-700 text-[105%] font-mono animate-pulse">↑↓/W/S - Naviga • ENTER/SPAZIO - Seleziona • V/A/O - Vai a sezione</div>
+          <div className="text-phosphor-700 text-[105%] font-mono animate-pulse">1/2/3 - Modalità video • ESC/B - Esci</div>
           </div>
         </div>
       </div>

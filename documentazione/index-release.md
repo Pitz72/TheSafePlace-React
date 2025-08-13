@@ -4,6 +4,14 @@ Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo
 
 ---
 
+### v0.3.8 - "I Don't Need Glasses to Read"
+- **Miglioramenti Significativi di Leggibilità:** Ingrandimento del testo narrativo del 75% (InstructionsScreen e StoryScreen) e del testo delle interfacce del 60% proporzionale (OptionsScreen).
+- **Accessibilità Potenziata:** Tutti i testi del gioco sono ora più grandi e confortevoli da leggere, con interlinea migliorata per il contenuto narrativo.
+- **Spaziatura Ottimizzata:** Aumentato lo spazio tra contenuto e controlli di navigazione per eliminare l'effetto "attaccato".
+- **Standard Tipografici Consolidati:** Stabiliti standard per future implementazioni con +75% per contenuto narrativo e +60% proporzionale per interfacce.
+
+---
+
 ### v0.3.5 - "The Survival Game"
 - **Correzione Bug Critico:** Risolto un loop di re-inizializzazione che causava crash e instabilità del gioco.
 - **Miglioramento Stabilità:** Rafforzata la gestione dello stato per prevenire race condition e loop di rendering.

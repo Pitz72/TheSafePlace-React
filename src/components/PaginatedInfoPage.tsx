@@ -69,7 +69,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
           {title}
         </h2>
 
-        <div className="flex justify-center mb-8 -mt-8">
+        <div className="flex justify-center mb-16 -mt-8">
           <div
             ref={contentBoxRef}
             className="bg-gray-900 bg-opacity-80 rounded-lg shadow-lg w-[85%] mx-auto p-8 glow-phosphor-dim h-[60vh] overflow-y-auto no-scrollbar"
