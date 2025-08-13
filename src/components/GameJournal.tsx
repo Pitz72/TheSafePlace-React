@@ -30,15 +30,15 @@ const GameJournal: React.FC = () => {
       case MessageType.AMBIANCE_RANDOM:
         return 'journal-ambiance';
       case MessageType.SKILL_CHECK_SUCCESS:
-        return 'text-phosphor-bright';
+        return 'text-phosphor-400';
       case MessageType.SKILL_CHECK_FAILURE:
-        return 'text-phosphor-danger';
+        return 'text-red-400';
       case MessageType.SKILL_CHECK_RIVER_SUCCESS:
         return 'journal-river';
       case MessageType.HP_RECOVERY:
-        return 'text-phosphor-bright'; // Verde per guarigione
+        return 'text-phosphor-400'; // Verde per guarigione
       case MessageType.HP_DAMAGE:
-        return 'text-phosphor-danger'; // Rosso per danni
+        return 'text-red-400'; // Rosso per danni
       case MessageType.CHARACTER_CREATION:
         return 'text-phosphor-accent'; // Blu per creazione personaggio
       case MessageType.BIOME_ENTER:
@@ -50,13 +50,13 @@ const GameJournal: React.FC = () => {
 
   
   return (
-    <div className="h-full flex flex-col bg-gray-900 bg-opacity-80 border border-phosphor-bright rounded-lg overflow-hidden crt-screen scan-lines animate-crt-flicker glow-phosphor-dim">
+    <div className="h-full flex flex-col bg-gray-900 bg-opacity-80 border border-phosphor-400 rounded-lg overflow-hidden crt-screen scan-lines animate-crt-flicker glow-phosphor-dim">
       {/* Header del diario */}
-      <div className="bg-gray-800 bg-opacity-90 border-b border-phosphor-bright p-3 glow-phosphor-primary">
-        <h3 className="text-phosphor-bright text-lg font-bold text-center font-mono tracking-wider text-shadow-phosphor-bright animate-glow">
+      <div className="bg-gray-800 bg-opacity-90 border-b border-phosphor-400 p-3 glow-phosphor-primary">
+        <h3 className="text-phosphor-400 text-lg font-bold text-center font-mono tracking-wider text-shadow-phosphor-bright animate-glow">
           DIARIO DI VIAGGIO
         </h3>
-        <div className="text-phosphor-dim text-xs text-center mt-1 animate-pulse">
+        <div className="text-phosphor-700 text-xs text-center mt-1 animate-pulse">
           {logEntries.length} {logEntries.length === 1 ? 'voce' : 'voci'}
         </div>
       </div>
@@ -71,10 +71,10 @@ const GameJournal: React.FC = () => {
           // Stato vuoto
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
-              <div className="text-phosphor-dim italic font-mono animate-pulse text-shadow-phosphor-dim">
+              <div className="text-phosphor-700 italic font-mono animate-pulse text-shadow-phosphor-dim">
                 Il tuo viaggio inizierà presto...
               </div>
-              <div className="text-phosphor-dim text-xs mt-2 font-mono animate-pulse">
+              <div className="text-phosphor-700 text-xs mt-2 font-mono animate-pulse">
                 Le tue avventure saranno registrate qui
               </div>
             </div>

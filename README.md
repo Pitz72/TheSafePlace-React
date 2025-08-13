@@ -1,4 +1,4 @@
-# The Safe Place v0.3.2 "Size Matters"
+# The Safe Place v0.3.5 "The Survival Game"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -57,6 +57,7 @@ TSP/
 - [x] **v0.0.1 - v0.3.0**: Funzionalità di base, interfaccia, sistemi di gioco e correzioni.
 - [x] **v0.3.1**: Refactoring architetturale da Popup a Schermate Dedicate. ✅ **RILASCIATA E CONSOLIDATA**
 - [x] **v0.3.2**: Correzione dimensioni font e ottimizzazione leggibilità testo. ✅ **RILASCIATA E CONSOLIDATA**
+- [ ] **v0.3.5**: Correzione bug critico di re-inizializzazione e consolidamento versione. ✅ **IN CORSO**
 - [ ] **v0.4.0**: Sistema di movimento e mappa avanzato
 - [ ] **v0.5.0**: Sistema inventario e oggetti (effetti e utilizzo)
 - [ ] **v0.6.0**: Sistema combattimento
@@ -64,12 +65,10 @@ TSP/
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.3.2 "Size Matters" (Rilasciata e Consolidata)** - Correzione Dimensioni Font e Ottimizzazione Leggibilità:
-- ✅ **Font Leggibili**: Risolto definitivamente il problema delle dimensioni del testo nella schermata di creazione personaggio con bypass di `PaginatedInfoPage` e uso di dimensioni in pixel.
-- ✅ **Layout Dedicato**: Creata una versione specializzata del layout per la creazione personaggio che previene la doppia scalatura del testo.
-- ✅ **Dimensioni Ottimizzate**: Font calibrati per la migliore leggibilità (47px titolo, 38px passi, 16px hint, 13px hint secondario, 11px comandi piè pagina).
-- ✅ **Coerenza con StartScreen**: L'esperienza di font matching ora è allineata tra menu principale e creazione personaggio.
-- ✅ **Test e Validazione**: Testato tramite hot module reload e preview per confermare la corretta visualizzazione delle dimensioni.
+**The Safe Place v0.3.5 "The Survival Game" (In Corso)** - Correzione Bug Critico e Consolidamento:
+- ✅ **Bug Loop di Gioco Risolto**: Corretto un problema critico che causava la re-inizializzazione del gioco ad ogni mossa del giocatore, risolvendo log duplicati e problemi di layout della mappa.
+- ✅ **Stabilità del Gioco**: Migliorata la stabilità generale dell'applicazione attraverso la correzione di una catena di dipendenze instabili nel `GameProvider`.
+- ✅ **Logica di Inizializzazione Unificata**: Rimossa una chiamata di inizializzazione ridondante per garantire che il gioco si avvii in modo pulito e controllato una sola volta.
 
 ### 🛠️ Sviluppo
 

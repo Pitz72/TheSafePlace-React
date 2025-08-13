@@ -1,6 +1,6 @@
 /**
  * UniversalInfoPage.tsx — TEMPLATE BASE per pagine informative
- * Versione di riferimento: v0.3.2 "Size Matters"
+ * Versione di riferimento: v0.3.7 "Tailwind Omologation"
  *
  * Linee guida per FUTURE MODIFICHE alle dimensioni testo e layout:
  * - Invarianti UI (NON modificare salvo nuova major/minor esplicita):
@@ -13,7 +13,7 @@
  *   c) Algoritmo di pagination smart: lineHeight, paragraphSpacing, stima chars/line
  * - Se aumenti/diminuisci il font:
  *   • Aggiorna SIA le classi di stile SIA i parametri usati in calculateSmartPages()
- *   • Esegui i test di anti-regressione "Size Matters" su leggibilità e overflow
+ *   • Esegui i test di anti-regressione su leggibilità e overflow
  */
 import React, { useState, useEffect } from 'react';
 
@@ -145,9 +145,9 @@ const UniversalInfoPage: React.FC<UniversalInfoPageProps> = ({
   const currentPageContent = smartPages[currentPage] || [];
 
   return (
-    <div className="h-screen w-screen bg-black text-phosphor-bright font-mono relative crt-screen scan-lines animate-crt-flicker">
+    <div className="h-screen w-screen bg-black text-phosphor-400 font-mono relative crt-screen scan-lines animate-crt-flicker">
       {/* Frame CRT — NON modificare senza nuova decisione di design */}
-      <div className="absolute inset-4 border-2 border-phosphor-bright rounded-lg glow-phosphor">
+      <div className="absolute inset-4 border-2 border-phosphor-400 rounded-lg glow-phosphor">
         
         {/* Titolo — se cambi dimensione, aggiorna gli allineamenti verticali */}
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
@@ -157,19 +157,19 @@ const UniversalInfoPage: React.FC<UniversalInfoPageProps> = ({
         </div>
 
         {/* Text Box — proporzioni fisse come da screenshot di riferimento */}
-        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 w-[85%] h-[65%] border border-phosphor-bright bg-phosphor-bg bg-opacity-30 glow-phosphor">
+        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 w-[85%] h-[65%] border border-phosphor-400 bg-phosphor-950 bg-opacity-30 glow-phosphor">
           <div className="p-6 h-full overflow-hidden">
             {currentPageContent.slice(0, visibleParagraphs).map((paragraph, index) => {
               // Legenda mappa: il font resta coerente a text-[28px]
               if (showLegend && paragraph.includes('Leggenda mappa:')) {
                 return (
                   <p key={index} className="text-[28px] leading-relaxed mb-4 glow-phosphor animate-flicker">
-                    <span className="text-phosphor-bright glow-phosphor-bright">Leggenda mappa: </span>
+                    <span className="text-phosphor-400 glow-phosphor-bright">Leggenda mappa: </span>
                     {legendItems.map((item, itemIndex) => (
                       <span key={itemIndex}>
                         <span className={`${item.colorClass} glow-phosphor-bright`}>{item.symbol}</span>
-                        <span className="text-phosphor-bright glow-phosphor-bright"> = {item.description}</span>
-                        {itemIndex < legendItems.length - 1 && <span className="text-phosphor-bright glow-phosphor-bright"> • </span>}
+                        <span className="text-phosphor-400 glow-phosphor-bright"> = {item.description}</span>
+                        {itemIndex < legendItems.length - 1 && <span className="text-phosphor-400 glow-phosphor-bright"> • </span>}
                       </span>
                     ))}
                   </p>
@@ -178,7 +178,7 @@ const UniversalInfoPage: React.FC<UniversalInfoPageProps> = ({
               
               // Paragrafi standard — per cambiare dimensione, intervieni qui E in calculateSmartPages()
               return (
-                <p key={index} className="text-[28px] leading-relaxed mb-4 text-phosphor-bright glow-phosphor animate-flicker">
+                <p key={index} className="text-[28px] leading-relaxed mb-4 text-phosphor-400 glow-phosphor animate-flicker">
                   {paragraph}
                 </p>
               );
@@ -189,11 +189,11 @@ const UniversalInfoPage: React.FC<UniversalInfoPageProps> = ({
         {/* Comandi navigazione — posizione fissa */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center space-y-2">
           {totalPages > 1 && (
-            <div className="text-xl text-phosphor-bright glow-phosphor-bright animate-phosphor-pulse">
+            <div className="text-xl text-phosphor-400 glow-phosphor-bright animate-phosphor-pulse">
               Pagina {currentPage + 1} di {totalPages} [←] Precedente [→] Successiva
             </div>
           )}
-          <div className="text-lg text-phosphor-bright glow-phosphor-bright">
+          <div className="text-lg text-phosphor-400 glow-phosphor-bright">
             {showBackButton && (
               <div className="animate-pulse">
                 Premere [ESC], [BACKSPACE] o [B] per tornare al menu

@@ -1,5 +1,5 @@
 /**
- * CharacterCreationScreen.tsx — Schermata dedicata (UI/UX consolidata v0.3.2 "Size Matters")
+ * CharacterCreationScreen.tsx — Schermata dedicata (UI/UX consolidata v0.3.7 "Tailwind Omologation")
  *
  * Regole per future modifiche alle DIMENSIONI (font/spaziature):
  * - Invarianti: struttura full-screen, titolo grande centrato, box contenuto w-[85%] max-w-[1400px]
@@ -7,7 +7,7 @@
  *   • Titolo: 47px
  *   • Step testo: 38px (verificato leggibile su 1366x768 e superiori)
  *   • Hint enter: 16px — Hint skip: 13px — Footer: 11px
- * - Se cambi questi valori: aggiorna l'anti-regressione v0.3.2 e verifica overflow/troncamenti.
+ * - Se cambi questi valori: aggiorna l'anti-regressione e verifica overflow/troncamenti.
  */
 import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
@@ -81,13 +81,13 @@ const CharacterCreationScreen: React.FC = () => {
         {/* Box contenuto (senza riduzioni di scala aggiuntive) */}
         <div className="flex justify-center">
           <div className="w-[85%] max-w-[1400px] mx-auto">
-            <div className="text-left mx-auto text-phosphor-primary font-mono tracking-wide leading-relaxed space-y-4">
+            <div className="text-left mx-auto text-phosphor-500 font-mono tracking-wide leading-relaxed space-y-4">
               {creationSteps.slice(0, currentStep + 1).map((step, index) => (
                 <div
                   key={index}
                   className={`${index === currentStep
-                    ? 'text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-glow'
-                    : 'text-phosphor-primary glow-phosphor-primary animate-pulse'} animate-flicker`}
+                    ? 'text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-glow'
+                    : 'text-phosphor-500 glow-phosphor-primary animate-pulse'} animate-flicker`}
                   style={{ fontSize: '38px' }}
                 >
                   {step.text}
@@ -96,12 +96,12 @@ const CharacterCreationScreen: React.FC = () => {
 
               {/* Hints */}
               {!isAnimating && (
-                <div className="mt-8 text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
+                <div className="mt-8 text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
                   Premi [ENTER] per iniziare l'avventura
                 </div>
               )}
               {isAnimating && showSkipHint && (
-                <div className="mt-4 text-phosphor-dim animate-pulse" style={{ fontSize: '13px' }}>
+                <div className="mt-4 text-phosphor-700 animate-pulse" style={{ fontSize: '13px' }}>
                   Premi [SPAZIO] per saltare
                 </div>
               )}
@@ -111,7 +111,7 @@ const CharacterCreationScreen: React.FC = () => {
 
         {/* Footer comandi base (piccolo, come nel menu) */}
         <div className="text-center mt-10">
-          <div className="text-phosphor-dim font-mono tracking-wider animate-pulse" style={{ fontSize: '11px' }}>
+          <div className="text-phosphor-700 font-mono tracking-wider animate-pulse" style={{ fontSize: '11px' }}>
             [↑] Su  [↓] Giù  [ESC] Indietro
           </div>
         </div>

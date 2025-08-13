@@ -31,8 +31,9 @@ Esiste una forte discrepanza tra il file di configurazione di Tailwind CSS e il 
 
 2.  **Font Monospace:**
     -   **Documentazione:** Specifica l'uso del font `IBM Plex Mono` come carattere primario per mantenere l'estetica "retrocomputazionale". Questo font è correttamente importato in `src/index.css`.
-    -   **Codice:** La configurazione `fontFamily` in `tailwind.config.js` imposta la classe `font-mono` per usare `'Courier New', 'Courier', 'monospace'`.
-    -   **Impatto:** Qualsiasi utility di Tailwind (`font-mono`) applicherà il font sbagliato (`Courier New`) invece di quello previsto (`IBM Plex Mono`). Questo compromette un elemento chiave dell'identità visiva del progetto.
+    -   **Codice:** ~~La configurazione `fontFamily` in `tailwind.config.js` imposta la classe `font-mono` per usare `'Courier New', 'Courier', 'monospace'`.~~ **[RISOLTO 2025-01-25]** Configurazione corretta a `IBM Plex Mono`.
+    -   **Impatto:** ~~Qualsiasi utility di Tailwind (`font-mono`) applicherà il font sbagliato (`Courier New`) invece di quello previsto (`IBM Plex Mono`). Questo compromette un elemento chiave dell'identità visiva del progetto.~~ **[RISOLTO]** Font correttamente applicato.
+    -   **Nota Estetica:** IBM Plex Mono risulta troppo "stondato" per l'autentica estetica PC anni 80. Da valutare font alternativi più squadrati/bitmap per futura implementazione.
 
 ---
 

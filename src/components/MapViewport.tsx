@@ -136,10 +136,10 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   if (isMapLoading) {
     return (
       <div className={`flex items-center justify-center h-full ${className} crt-screen scan-lines`}>
-        <div className="text-phosphor-primary animate-pulse glow-phosphor-primary">
+        <div className="text-phosphor-500 animate-pulse glow-phosphor-primary">
           <div className="text-center">
             <div className="text-lg mb-2 font-mono tracking-wider text-shadow-phosphor-bright animate-glow">⚡ CARICAMENTO MAPPA ⚡</div>
-            <div className="text-sm text-phosphor-dim font-mono animate-pulse">Inizializzazione sistema cartografico...</div>
+            <div className="text-sm text-phosphor-700 font-mono animate-pulse">Inizializzazione sistema cartografico...</div>
           </div>
         </div>
       </div>
@@ -149,10 +149,10 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   if (error) {
     return (
       <div className={`flex items-center justify-center h-full ${className} crt-screen scan-lines`}>
-        <div className="text-phosphor-danger text-center glow-phosphor-danger">
+        <div className="text-red-400 text-center glow-phosphor-danger">
           <div className="text-lg mb-2 font-mono tracking-wider text-shadow-phosphor-danger animate-glow">⚠ ERRORE MAPPA ⚠</div>
-          <div className="text-sm text-phosphor-dim font-mono">{error}</div>
-          <div className="text-xs text-phosphor-dim mt-2 font-mono animate-pulse">
+          <div className="text-sm text-phosphor-700 font-mono">{error}</div>
+          <div className="text-xs text-phosphor-700 mt-2 font-mono animate-pulse">
             Verificare presenza file /public/map.txt
           </div>
         </div>
@@ -165,7 +165,7 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
       <div className={`flex items-center justify-center h-full ${className} crt-screen scan-lines`}>
         <div className="text-yellow-400 text-center glow-phosphor-bright">
           <div className="text-lg mb-2 font-mono tracking-wider text-shadow-phosphor-bright animate-glow">⚠ MAPPA VUOTA ⚠</div>
-          <div className="text-sm text-phosphor-dim font-mono animate-pulse">Nessun dato cartografico disponibile</div>
+          <div className="text-sm text-phosphor-700 font-mono animate-pulse">Nessun dato cartografico disponibile</div>
         </div>
       </div>
     );
@@ -188,7 +188,7 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   // Rendering principale mappa con viewport virtualization
   return (
     <div 
-      className={`overflow-hidden relative h-full bg-gray-900 bg-opacity-80 border border-phosphor-bright crt-screen scan-lines animate-crt-flicker glow-phosphor-dim ${className}`}
+      className={`overflow-hidden relative h-full bg-gray-900 bg-opacity-80 border border-phosphor-400 crt-screen scan-lines animate-crt-flicker glow-phosphor-dim ${className}`}
       ref={containerRef}
     >
       <style>{`
@@ -256,7 +256,7 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
       </div>
       
       {/* Info debug con viewport virtualization */}
-      <div className="absolute bottom-2 right-2 text-xs text-phosphor-dim bg-gray-800 bg-opacity-90 border border-phosphor-bright px-2 py-1 rounded opacity-75 font-mono glow-phosphor-dim animate-pulse">
+      <div className="absolute bottom-2 right-2 text-xs text-phosphor-700 bg-gray-800 bg-opacity-90 border border-phosphor-400 px-2 py-1 rounded opacity-75 font-mono glow-phosphor-dim animate-pulse">
         <div>Viewport: {viewportWidth}x{viewportHeight}</div>
         <div>Visibili: {VISIBLE_COLS}x{VISIBLE_ROWS}</div>
         <div>Rendering: {(endRow - startRow) * (endCol - startCol)} elementi</div>

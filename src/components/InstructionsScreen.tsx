@@ -8,14 +8,14 @@ import PaginatedInfoPage from './PaginatedInfoPage';
 
 const InstructionsScreen: React.FC = () => {
   const legendItems = [
-    { symbol: "@", description: "Giocatore", colorClass: "text-phosphor-bright" },
-    { symbol: "C", description: "Città", colorClass: "text-phosphor-bright" },
-    { symbol: "F", description: "Foresta", colorClass: "text-phosphor-forest" },
-    { symbol: "~", description: "Acqua", colorClass: "text-phosphor-water" },
-    { symbol: "M", description: "Montagna", colorClass: "text-phosphor-mountain" },
-    { symbol: "R", description: "Rifugio", colorClass: "text-phosphor-bright" },
-    { symbol: "S", description: "Start", colorClass: "text-phosphor-special" },
-    { symbol: "E", description: "End", colorClass: "text-phosphor-special" }
+    { symbol: "@", description: "Giocatore", colorClass: "text-phosphor-400" },
+    { symbol: "C", description: "Città", colorClass: "text-phosphor-400" },
+    { symbol: "F", description: "Foresta", colorClass: "text-green-600" },
+     { symbol: "~", description: "Acqua", colorClass: "text-blue-400" },
+     { symbol: "M", description: "Montagna", colorClass: "text-gray-400" },
+    { symbol: "R", description: "Rifugio", colorClass: "text-phosphor-400" },
+    { symbol: "S", description: "Start", colorClass: "text-phosphor-300" },
+    { symbol: "E", description: "End", colorClass: "text-phosphor-300" }
   ];
 
   const content = [
@@ -31,8 +31,8 @@ const InstructionsScreen: React.FC = () => {
       <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4 text-2xl">
         {legendItems.map((item) => (
           <div key={item.symbol} className="flex items-center">
-            <span className={`${item.colorClass} glow-phosphor-bright w-8 text-center`}>{item.symbol}</span>
-            <span className="text-phosphor-bright glow-phosphor-bright">= {item.description}</span>
+            <span className={`${item.colorClass} w-8 text-center`}>{item.symbol}</span>
+            <span className="text-phosphor-400">= {item.description}</span>
           </div>
         ))}
       </div>

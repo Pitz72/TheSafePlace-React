@@ -13,39 +13,21 @@ export default {
       colors: {
         // Tema fosfori verdi anni '80
         phosphor: {
-          // Colori principali
-          primary: '#4EA162',      // Verde principale fosfori
-          dim: '#336940',          // Verde scuro testo secondario
-          bright: '#79ED95',       // Verde chiaro accenti
-          highlight: '#7FC892',    // Verde highlight
-          
-          // Colori di sfondo
-          bg: '#000000',           // Sfondo nero
-          panel: '#111111',        // Sfondo pannelli
-          overlay: 'rgba(8, 17, 11, 0.95)', // Overlay verde scuro
-          
-          // Colori bordi
-          border: '#4EA162',       // Bordo principale
-          'border-dim': '#22462A', // Bordo secondario
-          
-          // Colori stato
-          danger: '#FF4444',       // Rosso pericolo
-          warning: '#FFAA00',      // Arancione avviso
-          
-          // Colori mappa (derivati dal verde)
-          plains: '#60BF77',       // Pianura
-          forest: '#336940',       // Foresta
-          mountain: '#52705A',     // Montagna
-          water: '#008888',        // Acqua (ciano)
-          ruin: '#5F996E',         // Rovine
-          special: '#AAAA00',      // Speciale (giallo)
-          
-          // Colore per testo notturno
-          'night-blue': '#00BFFF', // Blu acceso per la notte
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16'
         }
       },
       fontFamily: {
-        'mono': ['Courier New', 'Courier', 'monospace'],
+        'mono': ['IBM Plex Mono', 'monospace'],
       },
       animation: {
         'scan': 'scan 3s linear infinite',

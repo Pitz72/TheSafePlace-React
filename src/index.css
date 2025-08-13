@@ -5,6 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force IBM Plex Mono as default font for all elements */
+* {
+  font-family: 'IBM Plex Mono', 'Courier New', 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', 'DejaVu Sans Mono', monospace !important;
+}
+
 /* Tema globale fosfori verdi anni '80 - CSS Nativo */
 :root {
   /* Font IBM PC/MS-DOS Compatibile - Sistema Avanzato */
@@ -24,76 +29,23 @@
   --font-ibm-pc-size-small: 0.75rem;
   --font-ibm-pc-size-large: 1rem;
   
-  /* Colori Fosfori Ultra-Realistici - Sistema Avanzato */
-  --phosphor-primary: #4EA162;
-  --phosphor-primary-bright: #5BB672;
-  --phosphor-primary-dim: #3D8A4F;
-  --phosphor-primary-faded: #2A6B3A;
+  /* Colori Fosfori - Mappatura da scala numerica Tailwind */
+  --phosphor-primary: #22c55e;     /* phosphor-500 */
+  --phosphor-dim: #15803d;         /* phosphor-700 */
+  --phosphor-bright-intense: #4ade80; /* phosphor-400 */
   
-  --phosphor-dim: #336940;
-  --phosphor-dim-bright: #3F7A4D;
-  --phosphor-dim-dark: #2A5A35;
-  
-  --phosphor-bright: #79ED95;
-  --phosphor-bright-intense: #8AFFA6;
-  --phosphor-bright-soft: #6CDB87;
-  
-  --phosphor-glow: #7FC892;
-  --phosphor-glow-intense: #90D9A3;
-  --phosphor-glow-soft: #6EB77F;
-  
-  --phosphor-highlight: #7FC892;
-  --phosphor-accent: #5FCF7A;
-  --phosphor-accent-bright: #6EDF89;
-  
-  /* Sfondi e Pannelli - Gradazioni Realistiche */
+  /* Sfondi e Pannelli */
   --phosphor-bg: #000000;
   --phosphor-bg-soft: #0A0A0A;
   --phosphor-bg-panel: #111111;
   --phosphor-bg-panel-bright: #1A1A1A;
   --phosphor-bg-panel-dark: #0D0D0D;
   
-  /* Bordi e Contorni - Varianti */
-  --phosphor-border: #4EA162;
-  --phosphor-border-bright: #5BB672;
-  --phosphor-border-dim: #22462A;
-  --phosphor-border-soft: #3A5A42;
+  /* Bordi */
+  --phosphor-border: #22c55e;      /* phosphor-500 */
   
-  /* Colori Stato - Sistema Avanzato */
-  --phosphor-danger: #FF4444;
-  --phosphor-danger-bright: #FF6666;
-  --phosphor-danger-dim: #CC3333;
-  
-  --phosphor-warning: #FFAA00;
-  --phosphor-warning-bright: #FFCC33;
-  --phosphor-warning-dim: #CC8800;
-  
-  /* Colori Mappa - Gradazioni Realistiche */
-  --phosphor-plains: #60BF77;
-  --phosphor-plains-bright: #6DCC84;
-  --phosphor-plains-dim: #53A868;
-  
-  --phosphor-forest: #336940;
-  --phosphor-forest-bright: #3F7A4D;
-  --phosphor-forest-dim: #2A5A35;
-  
-  --phosphor-mountain: #52705A;
-  --phosphor-mountain-bright: #5E7C66;
-  --phosphor-mountain-dim: #46644E;
-  
+  /* Colori Mappa - Mantenuti per compatibilità */
   --phosphor-water: #008888;
-  --phosphor-water-bright: #009999;
-  --phosphor-water-dim: #007777;
-  
-  --phosphor-ruin: #5F996E;
-  --phosphor-ruin-bright: #6BA77A;
-  --phosphor-ruin-dim: #538B62;
-  
-  --phosphor-special: #AAAA00;
-  --phosphor-special-bright: #BBBB11;
-  --phosphor-special-dim: #999900;
-  
-
   
   /* Colore testo notturno */
   --phosphor-night-blue: #00BFFF;

@@ -33,18 +33,18 @@ const StartScreen: React.FC = () => {
         />
         
         {/* Titolo */}
-        <h1 className="text-phosphor-bright font-bold mb-1 text-shadow-phosphor-bright animate-glow tracking-wider" style={{ fontSize: '100px' }}>
+        <h1 className="text-phosphor-400 font-bold mb-1 text-shadow-phosphor-bright animate-glow tracking-wider" style={{ fontSize: '100px' }}>
           THE SAFE PLACE
         </h1>
         
         {/* Autore */}
-        <p className="text-phosphor-primary text-xl mb-1 -mt-2 text-shadow-phosphor-primary animate-pulse">
+        <p className="text-phosphor-500 text-xl mb-1 -mt-2 text-shadow-phosphor-primary animate-pulse">
           un gioco di Simone Pizzi
         </p>
         
         {/* Versione */}
-        <p className="text-phosphor-dim text-lg mb-6 tracking-wider glow-phosphor-dim">
-          v0.3.2 - Size Matters
+        <p className="text-phosphor-700 text-lg mb-6 tracking-wider glow-phosphor-dim">
+          v0.3.7 - Tailwind Omologation
         </p>
         
         {/* Menu Items Testuali */}
@@ -54,18 +54,18 @@ const StartScreen: React.FC = () => {
               key={item.key}
               className={`text-center cursor-pointer transition-all duration-200 text-[2.4rem] px-4 py-2 rounded-lg ${
                 menuSelectedIndex === index
-                  ? 'text-phosphor-bright font-black text-shadow-phosphor-bright animate-glow glow-phosphor-bright bg-phosphor-highlight bg-opacity-40 border-2 border-phosphor-bright' 
-                  : 'text-phosphor-primary glow-phosphor-primary hover:text-phosphor-bright hover:glow-phosphor-bright'
+                  ? 'text-phosphor-400 font-black text-shadow-phosphor-bright animate-glow glow-phosphor-bright bg-phosphor-300 bg-opacity-40 border-2 border-phosphor-400' 
+                  : 'text-phosphor-500 glow-phosphor-primary hover:text-phosphor-400 hover:glow-phosphor-bright'
               }`}
               onClick={item.action}
             >
-              <span className="text-phosphor-bright animate-pulse">[{item.key}]</span> {item.label}
+              <span className="text-phosphor-400 animate-pulse">[{item.key}]</span> {item.label}
             </div>
           ))}
         </div>
         
         {/* Footer */}
-        <div className="text-phosphor-dim text-base leading-relaxed mx-auto glow-phosphor-dim animate-pulse">
+        <div className="text-phosphor-700 text-base leading-relaxed mx-auto glow-phosphor-dim animate-pulse">
           <p className="mb-2 text-shadow-phosphor-dim">
             Questo GDR Testuale in stile retrocomputazionale è una sperimentazione di cooperazione diretta tra umano designer non programmatore e i modelli LLM tramite Cursor.
           </p>

@@ -8,7 +8,7 @@ interface PaginatedInfoPageProps {
 
 /**
  * PaginatedInfoPage.tsx — Template semplice con SCORRIMENTO (usato da Istruzioni/Storia)
- * v0.3.2 "Size Matters": non è il template avanzato; per UI standard usare UniversalInfoPage.
+ * v0.3.7 "Tailwind Omologation": non è il template avanzato; per UI standard usare UniversalInfoPage.
  *
  * Regole per FUTURI aggiustamenti dimensioni:
  * - Contenitore: w-[85%] h-[60vh] con p-8 — se cambi, verifica che SCROLL_AMOUNT resti adeguato
@@ -65,7 +65,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full">
-        <h2 className="text-green-400 text-5xl font-bold mb-8 text-center font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
+        <h2 className="text-phosphor-400 text-5xl font-bold mb-8 text-center font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
           {title}
         </h2>
 
@@ -75,17 +75,17 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
             className="bg-gray-900 bg-opacity-80 rounded-lg shadow-lg w-[85%] mx-auto p-8 glow-phosphor-dim h-[60vh] overflow-y-auto no-scrollbar"
           >
             {/* PUNTO DI REGOLAZIONE TIPOGRAFIA: text-7xl => valuta text-[28px] + leading-relaxed + mb-4 per coerenza */}
-            <div className="text-green-300 leading-relaxed space-y-8 font-mono tracking-wide text-7xl">
+            <div className="text-phosphor-700 leading-relaxed space-y-8 font-mono tracking-wide text-7xl">
               {content}
             </div>
           </div>
         </div>
 
         <div className="text-center mb-4">
-          <div className="text-green-500 text-lg font-mono tracking-wider glow-phosphor-dim animate-pulse">
-            <span className="text-green-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↑]</span> Su |
-            <span className="text-green-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↓]</span> Giù |
-            <span className="text-green-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[ESC]</span> Indietro
+          <div className="text-phosphor-500 text-lg font-mono tracking-wider glow-phosphor-dim animate-pulse">
+            <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↑]</span> Su |
+            <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↓]</span> Giù |
+            <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[ESC]</span> Indietro
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import PaginatedInfoPage from './PaginatedInfoPage';
 
 const StoryScreen: React.FC = () => {
   const content = [
-    <p key="s1"><strong className="text-green-400 text-5xl font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">L'Eco del Silenzio</strong></p>,
+    <p key="s1"><strong className="text-phosphor-400 text-5xl font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">L'Eco del Silenzio</strong></p>,
     <p key="s2">Il mondo che Ultimo conosceva era fatto di sussurri e acciaio freddo, di lezioni impartite da un padre con occhi stanchi ma mani salde. Diciassette anni vissuti all'ombra di una catastrofe che aveva inghiottito il passato, lasciando solo echi distorti: la "Guerra Inespressa", il "Grande Silenzio".</p>,
     <p key="s3">Della madre, Ultimo conservava solo un calore sbiadito nel petto, un nome quasi dimenticato. Il "prima" era una favola raccontata a bassa voce, un sogno di cieli azzurri e città luminose, così diverso dai grigiori malati e dalle rovine scheletriche che ora graffiavano l'orizzonte dell'Europa Centrale.</p>,
     <p key="s4">Suo padre gli aveva insegnato a leggere i segni del vento carico di polveri tossiche, a distinguere il fruscio di una bestia mutata da quello innocuo delle lamiere contorte, a trovare acqua dove sembrava esserci solo aridità. Ogni giorno era una lezione di sopravvivenza, ogni notte un monito sulla fragilità della vita.</p>,

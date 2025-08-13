@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useState, useCallback, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG } from '../data/MessageArchive';
 import { createTestCharacter } from '../rules/characterGenerator';
@@ -41,6 +41,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     day: 1,
     isDay: true,
   });
+
+  // Usiamo un ref per accedere a timeState senza creare dipendenze nei callback
+  const timeStateRef = useRef(timeState);
+  useEffect(() => {
+    timeStateRef.current = timeState;
+  }, [timeState]);
+
   const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter);
   const [lastShortRestTime] = useState<{ day: number; time: number } | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
@@ -80,13 +87,14 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
     const newEntry: LogEntry = {
       id: `${Date.now()}-${Math.random()}`,
-      timestamp: formatTime(timeState.currentTime),
+      // Accede al tempo corrente tramite ref per non creare una dipendenza di rendering
+      timestamp: formatTime(timeStateRef.current.currentTime),
       message,
       type,
       context,
     };
     setLogEntries(prev => [...prev, newEntry].slice(-JOURNAL_CONFIG.MAX_ENTRIES));
-  }, [formatTime, timeState.currentTime]);
+  }, [formatTime]);
 
   const initializeGame = useCallback(async () => {
     try {

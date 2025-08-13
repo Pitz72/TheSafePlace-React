@@ -34,7 +34,7 @@ const Player: React.FC<PlayerProps> = ({ className = '' }) => {
       }}
     >
       <span 
-        className="text-phosphor-bright glow-phosphor-bright text-shadow-phosphor-bright animate-glow"
+        className="text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-glow"
         style={{
           animation: 'player-blink 1.2s ease-in-out infinite'
         }}
