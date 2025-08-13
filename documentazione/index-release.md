@@ -4,6 +4,15 @@ Questo documento elenca tutte le versioni rilasciate del gioco, con un riepilogo
 
 ---
 
+### v0.4.0 - "Journal Bug Fix"
+- **Risoluzione Bug Critico:** Risolto definitivamente il bug di collasso progressivo del Game Journal che causava il restringimento dell'interfaccia durante l'uso.
+- **Layout Stabile:** Implementate dimensioni fisse (h-[280px]) per garantire stabilità e prevedibilità del layout del journal.
+- **Scrollbar Integrata:** Scrollbar nascosta ma completamente funzionale per un'estetica pulita e integrata con il tema retro.
+- **Interfaccia Pulita:** Rimosso footer con versione dal Game Journal per focalizzare l'attenzione sul contenuto.
+- **Versioning Sincronizzato:** Aggiornamento coerente di package.json, StartScreen e README alla versione 0.4.0.
+
+---
+
 ### v0.3.8 - "I Don't Need Glasses to Read"
 - **Miglioramenti Significativi di Leggibilità:** Ingrandimento del testo narrativo del 75% (InstructionsScreen e StoryScreen) e del testo delle interfacce del 60% proporzionale (OptionsScreen).
 - **Accessibilità Potenziata:** Tutti i testi del gioco sono ora più grandi e confortevoli da leggere, con interlinea migliorata per il contenuto narrativo.

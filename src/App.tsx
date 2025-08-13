@@ -209,7 +209,7 @@ const GameContent = () => {
                       </div>
                     </aside>
                   </div>
-                  <div className="h-1/4 border-t border-phosphor-600">
+                  <div className="h-[280px] border-t border-phosphor-600">
                     <GameJournal />
                   </div>
                 </main>

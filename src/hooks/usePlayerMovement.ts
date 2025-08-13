@@ -84,6 +84,9 @@ export const usePlayerMovement = () => {
       console.log('🌊 Giocatore entra in un fiume: eseguendo skill check Agilità');
       setMovementState({ isExitingRiver: true });
       
+      // Messaggio fiume come specificato nel manuale
+      addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
+      
       // Skill check Agilità vs Difficoltà Media (15) con messaggio azzurro per successo
       const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
       

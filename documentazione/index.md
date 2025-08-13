@@ -1,6 +1,6 @@
 # Indice della Documentazione
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.3.9 "Consistency is Key".
+Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.4.0 "Journal Bug Fix".
 
 ## 📋 Documenti Principali
 
@@ -14,11 +14,11 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.3.9 "Consistency is Key" (CONSOLIDATA E IMMUTABILE)
+- **Versione Corrente**: v0.4.0 "Journal Bug Fix" (CONSOLIDATA E IMMUTABILE)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.3.9 Consistency is Key](./anti-regressione/ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md)
-- **Ultimo Changelog**: [v0.3.9](./changelog/CHANGELOG-v0.3.9.md)
-- **Ultimo Commit**: [v0.3.9 Consistency is Key](./commit/COMMIT-v0.3.9-CONSISTENCY-IS-KEY.md)
+- **Anti-Regressione**: [v0.4.0 Journal Bug Fix](./anti-regressione/ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md)
+- **Ultimo Changelog**: [v0.4.0](./changelog/CHANGELOG-v0.4.0.md)
+- **Ultimo Commit**: [v0.4.0 Journal Bug Fix](./commit/COMMIT-v0.4.0-JOURNAL-BUG-FIX.md)
 
 ---
 

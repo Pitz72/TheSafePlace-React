@@ -1,4 +1,4 @@
-# The Safe Place v0.3.9 "Consistency is Key"
+# The Safe Place v0.4.0 "Journal Bug Fix"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 

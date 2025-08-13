@@ -1,5 +1,5 @@
 /**
- * GameJournal.tsx - v0.1.5 "The Living Journal"
+ * GameJournal.tsx
  * 
  * Componente UI per la visualizzazione del Diario di Gioco Dinamico e Narrativo.
  * Mostra le voci del diario con colori categorizzati e auto-scroll.
@@ -27,12 +27,18 @@ const GameJournal: React.FC = () => {
         return 'journal-welcome';
       case MessageType.MOVEMENT_FAIL_MOUNTAIN:
         return 'journal-warning';
+      case MessageType.MOVEMENT_ACTION_RIVER:
+        return 'journal-river'; // Azzurro per azioni fiume
       case MessageType.AMBIANCE_RANDOM:
         return 'journal-ambiance';
       case MessageType.SKILL_CHECK_SUCCESS:
         return 'text-phosphor-400';
       case MessageType.SKILL_CHECK_FAILURE:
         return 'text-red-400';
+      case MessageType.ACTION_SUCCESS:
+        return 'text-phosphor-400'; // Verde per azioni riuscite
+      case MessageType.ACTION_FAIL:
+        return 'text-red-400'; // Rosso per azioni fallite
       case MessageType.SKILL_CHECK_RIVER_SUCCESS:
         return 'journal-river';
       case MessageType.HP_RECOVERY:
@@ -41,13 +47,13 @@ const GameJournal: React.FC = () => {
         return 'text-red-400'; // Rosso per danni
       case MessageType.CHARACTER_CREATION:
         return 'text-phosphor-accent'; // Blu per creazione personaggio
+      case MessageType.REST_BLOCKED:
+        return 'text-yellow-400'; // Giallo per riposo bloccato
       case MessageType.BIOME_ENTER:
       default:
         return 'journal-standard';
     }
   };
-  
-
   
   return (
     <div className="h-full flex flex-col bg-gray-900 bg-opacity-80 border border-phosphor-400 rounded-lg overflow-hidden crt-screen scan-lines animate-crt-flicker glow-phosphor-dim">
@@ -64,7 +70,7 @@ const GameJournal: React.FC = () => {
       {/* Contenuto del diario */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-3 space-y-2 text-sm leading-relaxed min-h-[200px] glow-phosphor-dim"
+        className="flex-1 overflow-y-auto p-3 space-y-2 text-sm leading-relaxed glow-phosphor-dim scrollbar-hidden"
         style={{ scrollBehavior: 'smooth' }}
       >
         {logEntries.length === 0 ? (
@@ -112,13 +118,6 @@ const GameJournal: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-      
-      {/* Footer con informazioni */}
-      <div className="bg-gray-800 bg-opacity-90 border-t border-phosphor-bright p-2 glow-phosphor-dim">
-        <div className="text-phosphor-dim text-xs text-center font-mono animate-pulse">
-          v0.1.5 "The Living Journal"
-        </div>
       </div>
     </div>
   );

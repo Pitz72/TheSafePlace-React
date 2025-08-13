@@ -104,6 +104,14 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Il tuo corpo non ha ancora bisogno di riposo.",
     "Troppo presto per riposare di nuovo. Devi aspettare.",
   ],
+  [MessageType.SKILL_CHECK_SUCCESS]: [
+    "L'azione è stata completata con successo.",
+    "Tutto procede secondo i piani."
+  ],
+  [MessageType.SKILL_CHECK_FAILURE]: [
+    "L'azione non è riuscita come previsto.",
+    "Qualcosa è andato storto."
+  ],
   [MessageType.SKILL_CHECK_RIVER_SUCCESS]: [
     "Con un balzo agile, superi il fiume senza bagnarti i piedi.",
     "Attraversi il corso d'acqua con sorprendente destrezza."

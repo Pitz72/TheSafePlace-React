@@ -490,3 +490,13 @@ body {
   border: 2px solid var(--phosphor-primary) !important;
   background: var(--phosphor-bg-panel) !important;
 }
+
+/* Scrollbar nascosta per il diario */
+.scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* WebKit */
+}

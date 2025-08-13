@@ -222,7 +222,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const updateBiome = useCallback((newBiome: string) => {
     if (newBiome !== currentBiome) {
       setCurrentBiome(newBiome);
-      addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+      // CRITICO: Messaggio automatico cambio bioma con timeout
+      setTimeout(() => {
+        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+      }, 0);
     }
   }, [currentBiome, addLogEntry]);
 
