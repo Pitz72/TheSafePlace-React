@@ -1,4 +1,4 @@
-# The Safe Place v0.3.8 "I Don't Need Glasses to Read"
+# The Safe Place v0.3.9 "Consistency is Key"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -6,6 +6,8 @@
 
 ### 🌟 Caratteristiche Principali
 
+- **Animazioni Ottimizzate**: Effetto phosphor-decay velocizzato (0.2s) per maggiore reattività e fluidità dell'interfaccia.
+- **Spaziatura Migliorata**: Layout ottimizzato nella schermata di creazione personaggio per una migliore leggibilità.
 - **Leggibilità Ottimizzata**: Testo narrativo ingrandito del 75% e interfacce del 60% per massima accessibilità e comfort visivo.
 - **Architettura a Schermate Dedicate**: Sistema di navigazione robusto che sostituisce i popup per una maggiore coerenza tematica e stabilità tecnica.
 - **Flusso di Gioco Immersivo**: Creazione del personaggio, inventario e scheda personaggio gestiti come schermate a sé stanti, in puro stile terminale anni '80.

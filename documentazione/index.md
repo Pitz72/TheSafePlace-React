@@ -1,6 +1,6 @@
 # Indice della Documentazione
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.3.5 "The Survival Game".
+Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.3.9 "Consistency is Key".
 
 ## 📋 Documenti Principali
 
@@ -14,21 +14,22 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.3.5 "The Survival Game"
+- **Versione Corrente**: v0.3.9 "Consistency is Key" (CONSOLIDATA E IMMUTABILE)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.3.5 The Survival Game](./anti-regressione/ANTI-REGRESSIONE-v0.3.5-THE-SURVIVAL-GAME.md)
-- **Ultimo Changelog**: [v0.3.5](./changelog/CHANGELOG-v0.3.5.md)
+- **Anti-Regressione**: [v0.3.9 Consistency is Key](./anti-regressione/ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md)
+- **Ultimo Changelog**: [v0.3.9](./changelog/CHANGELOG-v0.3.9.md)
+- **Ultimo Commit**: [v0.3.9 Consistency is Key](./commit/COMMIT-v0.3.9-CONSISTENCY-IS-KEY.md)
 
 ---
 
 ## 📂 Sezioni della Documentazione
 
-### 🛡️ [Anti-Regressione](./anti-regressione/) (27 documenti)
+### 🛡️ [Anti-Regressione](./anti-regressione/) (28 documenti)
 
 Documenti di protezione che definiscono baseline immutabili e procedure di test per prevenire regressioni. Include:
-- **Documenti v0.0.x - v0.3.5**: Protezioni progressive per ogni versione
+- **Documenti v0.0.x - v0.3.9**: Protezioni progressive per ogni versione
 - **Protezioni Speciali**: FINALE, BASEPOPUP
-- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.3.5-THE-SURVIVAL-GAME.md](./anti-regressione/ANTI-REGRESSIONE-v0.3.5-THE-SURVIVAL-GAME.md)
+- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md](./anti-regressione/ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md) (CONSOLIDATO E IMMUTABILE)
 
 ### 📦 [Archivio](./archivio/) (9 documenti)
 
@@ -37,17 +38,19 @@ Documenti completati, roadmap concluse e analisi storiche:
 - Analisi estetiche e correzioni TypeScript
 - Roadmap migrate e documenti obsoleti
 
-### 📝 [Changelog](./changelog/) (17 documenti)
+### 📝 [Changelog](./changelog/) (18 documenti)
 
 Storico completo delle modifiche per ogni versione:
 - **Changelog Generale**: [CHANGELOG.md](./changelog/CHANGELOG.md)
-- **Versioni Specifiche**: v0.0.1 → v0.3.5
-- **Ultimo**: [CHANGELOG-v0.3.5.md](./changelog/CHANGELOG-v0.3.5.md)
+- **Versioni Specifiche**: v0.0.1 → v0.3.9
+- **Ultimo**: [CHANGELOG-v0.3.9.md](./changelog/CHANGELOG-v0.3.9.md) (CONSOLIDATO E IMMUTABILE)
 
-### 🔧 [Commit](./commit/) (1 documento)
+### 🔧 [Commit](./commit/) (3 documenti)
 
 Documentazione specifica per commit importanti:
 - [COMMIT-v0.3.2-SIZE-MATTERS.md](./commit/COMMIT-v0.3.2-SIZE-MATTERS.md)
+- [COMMIT-v0.3.8-I-DONT-NEED-GLASSES-TO-READ.md](./commit/COMMIT-v0.3.8-I-DONT-NEED-GLASSES-TO-READ.md)
+- [COMMIT-v0.3.9-CONSISTENCY-IS-KEY.md](./commit/COMMIT-v0.3.9-CONSISTENCY-IS-KEY.md) (CONSOLIDATO E IMMUTABILE)
 
 ### 📋 [DSAR](./dsar/) (2 documenti)
 

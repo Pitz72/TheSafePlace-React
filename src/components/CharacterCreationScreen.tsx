@@ -110,7 +110,7 @@ const CharacterCreationScreen: React.FC = () => {
         </div>
 
         {/* Footer comandi base (piccolo, come nel menu) */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-16">
           <div className="text-phosphor-700 font-mono tracking-wider animate-pulse" style={{ fontSize: '11px' }}>
             [↑] Su  [↓] Giù  [ESC] Indietro
           </div>

@@ -155,6 +155,11 @@ body {
   }
 }
 
+/* Disabilita animazione warmup per interfaccia di gioco */
+.game-container.no-warmup {
+  animation: crt-flicker 4s ease-in-out infinite;
+}
+
 /* Classe per testo notturno */
 .text-phosphor-night-blue {
   color: var(--phosphor-night-blue);
@@ -245,7 +250,7 @@ body {
     0 0 2px var(--phosphor-primary),
     0 0 4px var(--phosphor-primary),
     0 0 6px var(--phosphor-primary);
-  animation: phosphor-decay 0.5s ease-out;
+  animation: phosphor-decay 0.2s ease-out;
 }
 
 /* Phosphor Decay Animation */

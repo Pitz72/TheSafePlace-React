@@ -4,6 +4,7 @@ import { useGameScale } from './hooks/useGameScale';
 import { useKeyboardCommands } from './hooks/useKeyboardCommands';
 import { GameProvider } from './contexts/GameProvider';
 import { useGameContext } from './hooks/useGameContext';
+import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
 
@@ -48,6 +49,7 @@ const GameContent = () => {
     isMapLoading, playerPosition, mapData, timeState,
     characterSheet, getModifier, currentScreen, setCurrentScreen
   } = useGameContext();
+  const { videoMode } = useSettingsStore();
   
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
   const getCurrentTile = (): string => {
@@ -109,7 +111,7 @@ const GameContent = () => {
   // Render based on current screen
   return (
     <div className="game-container-wrapper">
-      <div className="game-container">
+      <div className={`game-container ${currentScreen === 'game' && videoMode !== 'no-effects' ? 'no-warmup' : ''}`}>
         {/* CRT Effects Overlays */}
           <div className="crt-premium-overlay"></div>
         
