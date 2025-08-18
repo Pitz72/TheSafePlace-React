@@ -6,6 +6,7 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 
 ### 🔒 Documenti Fondamentali
 - [**Patto tra Operatore Umano e LLM**](./000%20Patto%20tra%20Operatore%20Umano%20e%20Modello%20Linguistico%20di%20Grandi%20Dimensioni%20(LLM)%20per%20lo%20Sviluppo%20Sicuro.md) - Protocollo operativo assoluto
+- [**Indice Consolidato Post-Refactoring**](./INDICE-DOCUMENTAZIONE-CONSOLIDATO.md) - **NUOVO** - Indice completo post-refactoring 2025-08-18
 - [**Indice delle Release**](./index-release.md) - Panoramica versioni rilasciate
 
 ### 🎮 Documentazione di Gioco
