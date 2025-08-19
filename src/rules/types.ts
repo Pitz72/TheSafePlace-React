@@ -17,6 +17,23 @@ export interface ICharacterStats {
 }
 
 /**
+ * Slot di equipaggiamento
+ */
+export interface IEquipmentSlot {
+  itemId: string | null;
+  slotType: 'weapon' | 'armor' | 'accessory';
+}
+
+/**
+ * Equipaggiamento del personaggio
+ */
+export interface IEquipment {
+  weapon: IEquipmentSlot;
+  armor: IEquipmentSlot;
+  accessory: IEquipmentSlot;
+}
+
+/**
  * Scheda completa del personaggio
  */
 export interface ICharacterSheet {
@@ -28,6 +45,12 @@ export interface ICharacterSheet {
   baseAC: number;
   carryCapacity: number;
   inventory: (IInventorySlot | null)[];
+  equipment: IEquipment;
+  experience: {
+    currentXP: number;
+    xpForNextLevel: number;
+    canLevelUp: boolean;
+  };
 }
 
 /**

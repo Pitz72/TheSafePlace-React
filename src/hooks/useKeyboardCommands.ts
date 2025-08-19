@@ -96,12 +96,24 @@ export const useKeyboardCommands = () => {
 
     if (nextTerrain === '~') {
       setMovementState({ isExitingRiver: true });
-      const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
+      
+      // Messaggio di azione fiume (sempre mostrato)
+      addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
+      
+      // Skill check Agilità per attraversamento
+      const success = performAbilityCheck('agilita', 15, false); // Non aggiungere messaggio automatico
       dbg('river check', { success });
-      if (!success) {
+      
+      if (success) {
+        // Successo: messaggio specifico per fiume
+        addLogEntry(MessageType.SKILL_CHECK_RIVER_SUCCESS);
+      } else {
+        // Fallimento: messaggio di fallimento + danno
+        addLogEntry(MessageType.SKILL_CHECK_FAILURE);
         const damage = Math.floor(Math.random() * 4) + 1;
         dbg('river damage', { damage });
         updateHP(-damage);
+        addLogEntry(MessageType.HP_DAMAGE, { damage });
       }
     } else {
       setMovementState({ isExitingRiver: false });
@@ -170,6 +182,12 @@ export const useKeyboardCommands = () => {
             break;
         }
         break;
+          
+      case 'levelUp':
+        switch (event.key.toLowerCase()) {
+          case 'l': case 'escape': goBack(); break;
+        }
+        break;
 
       case 'characterCreation':
         if (event.key.toLowerCase() === 'escape' || event.code === 'Space') {
@@ -184,6 +202,7 @@ export const useKeyboardCommands = () => {
           case 'a': case 'arrowleft': handlePlayerMove(-1, 0); break;
           case 'd': case 'arrowright': handlePlayerMove(1, 0); break;
           case 'i': setCurrentScreen('inventory'); break;
+          case 'l': setCurrentScreen('levelUp'); break;
           case 'r': shortRest(); break;
           case 'tab': setCurrentScreen('characterSheet'); break;
           case 'escape': setCurrentScreen('menu'); break;

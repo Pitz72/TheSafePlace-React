@@ -4,6 +4,8 @@
 import type { ICharacterStats, ICharacterSheet } from './types';
 import { calculateMaxHP, calculateBaseAC, calculateCarryCapacity } from './mechanics';
 import type { IInventorySlot } from '../interfaces/items';
+import { initializePortions } from '../utils/portionSystem';
+import { itemDatabase } from '../data/items/itemDatabase';
 
 /**
  * Genera una singola statistica usando il metodo "4d6 drop lowest"
@@ -51,7 +53,12 @@ export function createCharacter(): ICharacterSheet {
     currentHP: maxHP, // Inizia con HP pieni
     baseAC: calculateBaseAC(stats.agilita),
     carryCapacity: calculateCarryCapacity(stats.potenza),
-    inventory: Array<IInventorySlot | null>(10).fill(null)
+    inventory: Array<IInventorySlot | null>(10).fill(null),
+    equipment: {
+      weapon: { itemId: null, slotType: 'weapon' },
+      armor: { itemId: null, slotType: 'armor' },
+      accessory: { itemId: null, slotType: 'accessory' }
+    }
   };
 }
 
@@ -67,12 +74,21 @@ export function createTestCharacter(values?: Partial<ICharacterStats>): ICharact
 
   const startingInventory: (IInventorySlot | null)[] = Array(10).fill(null);
 
-  // Popolamento inventario con oggetti di partenza corretti
-  startingInventory[0] = { itemId: 'CONS_002', quantity: 2 }; // 2x Acqua
-  startingInventory[1] = { itemId: 'CONS_001', quantity: 2 }; // 2x Cibo
-  startingInventory[2] = { itemId: 'CONS_003', quantity: 2 }; // 2x Bende
-  startingInventory[3] = { itemId: 'WEAP_001', quantity: 1 }; // 1x Coltello
-  startingInventory[4] = { itemId: 'ARMOR_001', quantity: 1 }; // 1x Giubbotto di pelle
+  // Popolamento inventario con oggetti di partenza usando sistema porzioni
+  const startingItems = [
+    { itemId: 'CONS_002', quantity: 2 }, // 2x Acqua
+    { itemId: 'CONS_001', quantity: 2 }, // 2x Cibo
+    { itemId: 'CONS_003', quantity: 2 }, // 2x Bende
+    { itemId: 'WEAP_001', quantity: 1 }, // 1x Coltello
+    { itemId: 'ARMOR_001', quantity: 1 } // 1x Giubbotto di pelle
+  ];
+  
+  startingItems.forEach((itemData, index) => {
+    const item = itemDatabase[itemData.itemId];
+    if (item) {
+      startingInventory[index] = initializePortions(item, itemData.quantity);
+    }
+  });
   
   return {
     name: "Ultimo",
@@ -82,6 +98,16 @@ export function createTestCharacter(values?: Partial<ICharacterStats>): ICharact
     currentHP: maxHP,
     baseAC: calculateBaseAC(stats.agilita),
     carryCapacity: calculateCarryCapacity(stats.potenza),
-    inventory: startingInventory
+    inventory: startingInventory,
+    equipment: {
+      weapon: { itemId: null, slotType: 'weapon' },
+      armor: { itemId: null, slotType: 'armor' },
+      accessory: { itemId: null, slotType: 'accessory' }
+    },
+    experience: {
+      currentXP: 0,
+      xpForNextLevel: 100, // XP necessari per livello 2
+      canLevelUp: false
+    }
   };
 }

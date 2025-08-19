@@ -23,33 +23,76 @@ const GameJournal: React.FC = () => {
   // Determina la classe CSS per il colore del messaggio
   const getMessageClass = (type: MessageType): string => {
     switch (type) {
+      // Sistema base
       case MessageType.GAME_START:
         return 'journal-welcome';
+      case MessageType.BIOME_ENTER:
+        return 'journal-standard';
+      case MessageType.AMBIANCE_RANDOM:
+        return 'journal-ambiance';
+
+      // Movimento e terreno
       case MessageType.MOVEMENT_FAIL_MOUNTAIN:
         return 'journal-warning';
       case MessageType.MOVEMENT_ACTION_RIVER:
-        return 'journal-river'; // Azzurro per azioni fiume
-      case MessageType.AMBIANCE_RANDOM:
-        return 'journal-ambiance';
+        return 'journal-river';
+      case MessageType.MOVEMENT_SUCCESS:
+        return 'journal-success';
+
+      // Skill checks
       case MessageType.SKILL_CHECK_SUCCESS:
-        return 'text-phosphor-400';
+        return 'journal-success';
       case MessageType.SKILL_CHECK_FAILURE:
-        return 'text-red-400';
-      case MessageType.ACTION_SUCCESS:
-        return 'text-phosphor-400'; // Verde per azioni riuscite
-      case MessageType.ACTION_FAIL:
-        return 'text-red-400'; // Rosso per azioni fallite
+        return 'journal-failure';
       case MessageType.SKILL_CHECK_RIVER_SUCCESS:
         return 'journal-river';
+
+      // Salute e riposo
       case MessageType.HP_RECOVERY:
-        return 'text-phosphor-400'; // Verde per guarigione
+        return 'journal-hp-recovery';
       case MessageType.HP_DAMAGE:
-        return 'text-red-400'; // Rosso per danni
-      case MessageType.CHARACTER_CREATION:
-        return 'text-phosphor-accent'; // Blu per creazione personaggio
+        return 'journal-hp-damage';
       case MessageType.REST_BLOCKED:
-        return 'text-yellow-400'; // Giallo per riposo bloccato
-      case MessageType.BIOME_ENTER:
+        return 'journal-warning';
+      case MessageType.REST_SUCCESS:
+        return 'journal-rest';
+
+      // Azioni generiche
+      case MessageType.ACTION_SUCCESS:
+        return 'journal-success';
+      case MessageType.ACTION_FAIL:
+        return 'journal-failure';
+
+      // Sistema personaggio
+      case MessageType.CHARACTER_CREATION:
+        return 'journal-welcome';
+      case MessageType.LEVEL_UP:
+        return 'journal-welcome';
+
+      // Inventario e oggetti
+      case MessageType.ITEM_FOUND:
+        return 'journal-item';
+      case MessageType.ITEM_USED:
+        return 'journal-item';
+      case MessageType.INVENTORY_FULL:
+        return 'journal-warning';
+
+      // Sistema tempo
+      case MessageType.TIME_DAWN:
+        return 'journal-time-dawn';
+      case MessageType.TIME_DUSK:
+        return 'journal-time-dusk';
+      case MessageType.TIME_MIDNIGHT:
+        return 'journal-time-night';
+
+      // Eventi speciali
+      case MessageType.DISCOVERY:
+        return 'journal-discovery';
+      case MessageType.DANGER:
+        return 'journal-danger';
+      case MessageType.MYSTERY:
+        return 'journal-mystery';
+
       default:
         return 'journal-standard';
     }

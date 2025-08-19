@@ -7,7 +7,10 @@
     "weight": 0.5,
     "value": 5,
     "effect": "satiety",
-    "effectValue": 25
+    "effectValue": 25,
+    "portionsPerUnit": 4,
+    "portionEffect": 6,
+    "portionSize": "boccone"
   },
   "CONS_002": {
     "id": "CONS_002",
@@ -17,7 +20,10 @@
     "weight": 1,
     "value": 3,
     "effect": "hydration",
-    "effectValue": 25
+    "effectValue": 25,
+    "portionsPerUnit": 5,
+    "portionEffect": 5,
+    "portionSize": "sorso"
   },
   "CONS_003": {
     "id": "CONS_003",
@@ -27,6 +33,9 @@
     "weight": 0.1,
     "value": 10,
     "effect": "heal",
-    "effectValue": 10
+    "effectValue": 10,
+    "portionsPerUnit": 2,
+    "portionEffect": 5,
+    "portionSize": "applicazione"
   }
 }

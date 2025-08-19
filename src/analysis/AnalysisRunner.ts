@@ -113,7 +113,7 @@ export class AnalysisRunner {
   /**
    * Load project files for analysis
    */
-  private async loadProjectFiles(config: AnalysisConfig): Promise<Map<string, string>> {
+  private async loadProjectFiles(_config: AnalysisConfig): Promise<Map<string, string>> {
     try {
       // Use FileSystemReader to load real files
       const fileReader = new FileSystemReader();

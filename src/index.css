@@ -50,12 +50,38 @@
   /* Colore testo notturno */
   --phosphor-night-blue: #00BFFF;
   
-  /* Colori messaggi diario - v0.1.5 "The Living Journal" */
+  /* Colori messaggi diario - v0.4.1 "Enhanced Colors" */
   --journal-welcome: #FFD700;     /* Giallo acceso per benvenuto */
   --journal-standard: var(--phosphor-primary); /* Verde standard */
   --journal-river: var(--phosphor-water);      /* Blu acqua per fiumi */
   --journal-warning: #FFA500;     /* Arancione per avvertimenti */
   --journal-ambiance: var(--phosphor-dim);     /* Verde scuro per atmosfera */
+  --journal-success: #00FF7F;     /* Verde brillante per successi */
+  --journal-failure: #FF4444;     /* Rosso per fallimenti */
+  --journal-hp-recovery: #32CD32; /* Verde lime per guarigione */
+  --journal-hp-damage: #DC143C;   /* Rosso cremisi per danni */
+  --journal-rest: #87CEEB;        /* Azzurro per riposo */
+  --journal-item: #FFD700;        /* Oro per oggetti */
+  --journal-time-dawn: #FFA500;   /* Arancione alba */
+  --journal-time-dusk: #4169E1;   /* Blu royal tramonto */
+  --journal-time-night: #191970;  /* Blu notte */
+  --journal-discovery: #FF69B4;   /* Rosa per scoperte */
+  --journal-danger: #FF0000;      /* Rosso puro per pericoli */
+  --journal-mystery: #9370DB;     /* Viola per misteri */
+  
+  /* Colori oggetti inventario - v0.4.1 "Enhanced Item Colors" */
+  --item-weapon: #FF4444;         /* Rosso brillante per armi */
+  --item-armor: #4169E1;          /* Blu royal per armature */
+  --item-consumable: #00FF7F;     /* Verde spring per consumabili */
+  --item-quest: #FFD700;          /* Oro per oggetti quest */
+  --item-crafting: #DA70D6;       /* Orchidea per crafting */
+  --item-unique: #FF1493;         /* Rosa profondo per oggetti unici */
+  --item-potion: #00FFFF;         /* Ciano per pozioni */
+  --item-common: #D3D3D3;         /* Grigio chiaro per comuni */
+  --item-uncommon: #ADFF2F;       /* Verde giallo per non comuni */
+  --item-rare: #1E90FF;           /* Blu dodger per rari */
+  --item-epic: #8A2BE2;           /* Viola blu per epici */
+  --item-legendary: #FF8C00;      /* Arancione scuro per leggendari */
   
   /* Container System - Preparazione */
   --game-width: 1920px;
@@ -330,7 +356,7 @@ body {
 /* Ora utilizzate le utilities Tailwind: text-phosphor-primary, text-phosphor-bright, etc. */
 /* Definite in tailwind.config.js nella sezione colors.phosphor */
 
-/* Classi colori diario - v0.1.5 "The Living Journal" */
+/* Classi colori diario - v0.4.1 "Enhanced Colors" */
 .journal-welcome { 
   color: var(--journal-welcome) !important; 
   text-shadow: 
@@ -360,6 +386,152 @@ body {
   text-shadow: 
     0 0 2px var(--journal-ambiance),
     0 0 4px var(--journal-ambiance) !important;
+}
+.journal-success { 
+  color: var(--journal-success) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-success),
+    0 0 6px var(--journal-success) !important;
+}
+.journal-failure { 
+  color: var(--journal-failure) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-failure),
+    0 0 6px var(--journal-failure) !important;
+}
+.journal-hp-recovery { 
+  color: var(--journal-hp-recovery) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-hp-recovery),
+    0 0 6px var(--journal-hp-recovery) !important;
+}
+.journal-hp-damage { 
+  color: var(--journal-hp-damage) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-hp-damage),
+    0 0 6px var(--journal-hp-damage) !important;
+}
+.journal-rest { 
+  color: var(--journal-rest) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-rest),
+    0 0 6px var(--journal-rest) !important;
+}
+.journal-item { 
+  color: var(--journal-item) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-item),
+    0 0 6px var(--journal-item) !important;
+}
+.journal-time-dawn { 
+  color: var(--journal-time-dawn) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-time-dawn),
+    0 0 6px var(--journal-time-dawn) !important;
+}
+.journal-time-dusk { 
+  color: var(--journal-time-dusk) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-time-dusk),
+    0 0 6px var(--journal-time-dusk) !important;
+}
+.journal-time-night { 
+  color: var(--journal-time-night) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-time-night),
+    0 0 6px var(--journal-time-night) !important;
+}
+.journal-discovery { 
+  color: var(--journal-discovery) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-discovery),
+    0 0 6px var(--journal-discovery) !important;
+}
+.journal-danger { 
+  color: var(--journal-danger) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-danger),
+    0 0 6px var(--journal-danger) !important;
+}
+.journal-mystery { 
+  color: var(--journal-mystery) !important; 
+  text-shadow: 
+    0 0 3px var(--journal-mystery),
+    0 0 6px var(--journal-mystery) !important;
+}
+
+/* Classi colori oggetti inventario - v0.4.1 "Item Colors" */
+.item-weapon { 
+  color: var(--item-weapon) !important; 
+  text-shadow: 
+    0 0 3px var(--item-weapon),
+    0 0 6px var(--item-weapon) !important;
+}
+.item-armor { 
+  color: var(--item-armor) !important; 
+  text-shadow: 
+    0 0 3px var(--item-armor),
+    0 0 6px var(--item-armor) !important;
+}
+.item-consumable { 
+  color: var(--item-consumable) !important; 
+  text-shadow: 
+    0 0 3px var(--item-consumable),
+    0 0 6px var(--item-consumable) !important;
+}
+.item-quest { 
+  color: var(--item-quest) !important; 
+  text-shadow: 
+    0 0 3px var(--item-quest),
+    0 0 6px var(--item-quest) !important;
+}
+.item-crafting { 
+  color: var(--item-crafting) !important; 
+  text-shadow: 
+    0 0 3px var(--item-crafting),
+    0 0 6px var(--item-crafting) !important;
+}
+.item-unique { 
+  color: var(--item-unique) !important; 
+  text-shadow: 
+    0 0 3px var(--item-unique),
+    0 0 6px var(--item-unique) !important;
+}
+.item-potion { 
+  color: var(--item-potion) !important; 
+  text-shadow: 
+    0 0 3px var(--item-potion),
+    0 0 6px var(--item-potion) !important;
+}
+.item-common { 
+  color: var(--item-common) !important; 
+  text-shadow: 
+    0 0 2px var(--item-common),
+    0 0 4px var(--item-common) !important;
+}
+.item-uncommon { 
+  color: var(--item-uncommon) !important; 
+  text-shadow: 
+    0 0 3px var(--item-uncommon),
+    0 0 6px var(--item-uncommon) !important;
+}
+.item-rare { 
+  color: var(--item-rare) !important; 
+  text-shadow: 
+    0 0 4px var(--item-rare),
+    0 0 8px var(--item-rare) !important;
+}
+.item-epic { 
+  color: var(--item-epic) !important; 
+  text-shadow: 
+    0 0 4px var(--item-epic),
+    0 0 8px var(--item-epic) !important;
+}
+.item-legendary { 
+  color: var(--item-legendary) !important; 
+  text-shadow: 
+    0 0 5px var(--item-legendary),
+    0 0 10px var(--item-legendary) !important;
 }
 
 /* Text uniform size - esclusi i titoli */
@@ -499,4 +671,18 @@ body {
 
 .scrollbar-hidden::-webkit-scrollbar {
   display: none; /* WebKit */
+}
+
+/* Utilità per inventario - v0.4.1 "Enhanced Selection" */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+.scale-105 {
+  transform: scale(1.05);
+}
+
+/* Ombra personalizzata per selezione inventario */
+.shadow-phosphor-400\/50 {
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.5);
 }

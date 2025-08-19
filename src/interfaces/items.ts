@@ -56,6 +56,11 @@ export interface IItem {
   damage?: string;
   armor?: number;
   slot?: string;
+  
+  // Sistema porzioni per consumabili - v0.4.1
+  portionsPerUnit?: number; // Quante porzioni contiene una unità
+  portionEffect?: number;   // Effetto per singola porzione
+  portionSize?: string;     // Descrizione dimensione porzione (es. "sorso", "boccone")
 }
 
 /**
@@ -65,5 +70,26 @@ export interface IItem {
 export interface IInventorySlot {
   itemId: string;      // ID dell'oggetto nello slot
   quantity: number;    // Quantità dell'oggetto
-  portions?: number;   // Numero di porzioni (per consumabili)
+  portions?: number;   // Numero di porzioni rimanenti (per consumabili)
+}
+
+/**
+ * Interfaccia specifica per oggetti consumabili con sistema porzioni
+ */
+export interface IConsumableItem extends IItem {
+  portionsPerUnit: number;  // Porzioni per unità (obbligatorio per consumabili)
+  portionEffect: number;    // Effetto per porzione (obbligatorio)
+  portionSize: string;      // Descrizione porzione (es. "sorso", "boccone")
+}
+
+/**
+ * Risultato del consumo di una porzione
+ */
+export interface IPortionConsumptionResult {
+  success: boolean;
+  portionsRemaining: number;
+  unitsRemaining: number;
+  effectApplied: number;
+  message: string;
+  itemConsumed: boolean; // True se l'oggetto è stato completamente consumato
 }

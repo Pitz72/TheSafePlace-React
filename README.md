@@ -1,4 +1,4 @@
-# The Safe Place v0.4.1 "The Best Synchronization"
+# The Safe Place v0.4.2 "LevelUp and Miscellaneous"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -62,14 +62,15 @@ TSP/
 - [x] **v0.3.2**: Correzione dimensioni font e ottimizzazione leggibilità testo. ✅ **COMPLETATA**
 - [x] **v0.3.5**: Correzione bug critico di re-inizializzazione e consolidamento versione. ✅ **COMPLETATA**
 - [x] **v0.4.0**: Journal Bug Fix e sincronizzazione documentazione. ✅ **COMPLETATA**
-- [x] **v0.4.1**: The Best Synchronization - Sistema di analisi automatica e consolidamento perfetto. ✅ **ATTIVA**
+- [x] **v0.4.1**: The Best Synchronization - Sistema di analisi automatica e consolidamento perfetto. ✅ **COMPLETATA**
+- [x] **v0.4.2**: LevelUp and Miscellaneous - Sistema progressione personaggio e inventario avanzato. ✅ **ATTIVA**
 - [ ] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo)
 - [ ] **v0.6.0**: Sistema combattimento e meccaniche avanzate
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.4.1 "The Best Synchronization" (ATTIVA)** - Sistema di Analisi Automatica e Sincronizzazione Perfetta:
+**The Safe Place v0.4.2 "LevelUp and Miscellaneous" (ATTIVA)** - Sistema RPG Completo con Progressione Personaggio:
 - ✅ **Bug Journal Risolto**: Corretto il problema di collasso del Game Journal con dimensioni fisse
 - ✅ **Sincronizzazione Documentazione**: Implementato sistema di analisi automatica per monitorare allineamento codice-documentazione
 - ✅ **Refactoring Architetturale**: Rimosso doppio GameProvider e pulito codice obsoleto
@@ -90,9 +91,22 @@ npm run preview      # Preview build
 
 Progetto privato - Tutti i diritti riservati
 
-### 🆕 Novità v0.4.1 "The Best Synchronization"
+### 🆕 Novità v0.4.2 "LevelUp and Miscellaneous"
 
-#### 🐛 Correzioni Critiche e Sincronizzazione
+#### 🆙 Sistema Level Up Completo
+- **Progressione D&D-style** con 9 opzioni di upgrade bilanciate
+- **Sistema esperienza** con requisiti XP progressivi
+- **UI professionale** con layout a 3 colonne e anteprima in tempo reale
+- **Navigazione keyboard** completa con tasti dedicati
+- **Abilità speciali** sbloccate ai livelli avanzati
+
+#### 🎒 Inventario Avanzato
+- **Opzioni oggetti intelligenti** (USE/EQUIP/EXAMINE/DROP)
+- **Sistema equipaggiamento** con slot arma/armatura
+- **Sistema porzioni** per consumabili realistici
+- **Interfaccia ottimizzata** con navigazione migliorata
+
+#### 🎨 Esperienza Utente Migliorata
 - **Bug Journal Risolto**: Corretto il problema di collasso progressivo del Game Journal con implementazione di dimensioni fisse (`h-[280px]`).
 - **Sincronizzazione Documentazione**: Implementato sistema di analisi automatica per monitorare allineamento codice-documentazione con framework completo.
 - **Refactoring Architetturale**: Rimosso doppio GameProvider e eliminati riferimenti obsoleti per architettura più pulita.

@@ -31,12 +31,12 @@ const InventoryPanel: React.FC = () => {
           const isSelected = index === selectedInventoryIndex;
           return (
             <div key={index} className={`flex items-center p-1 rounded ${isSelected ? 'bg-gray-700' : ''}`}>
-              <span className="mr-2 text-gray-500 w-8 flex-shrink-0">{isSelected ? '>' : ''} [{index === 9 ? 0 : index + 1}]</span>
+
               {item && slot ? (
                 <div className="flex-grow">
                   <span className={getItemColor(item)}>{item.name}</span>
-                  <span className="text-gray-400 ml-2">x{slot.quantity}</span>
-                  {slot.portions && <span className="text-yellow-400 ml-2">({slot.portions})</span>}
+                  <span className="text-gray-400 ml-2"> x{slot.quantity}</span>
+                  {slot.portions && <span className="text-yellow-400 ml-1">({slot.portions})</span>}
                 </div>
               ) : (
                 <span className="text-gray-600">- Vuoto -</span>

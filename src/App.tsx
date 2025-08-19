@@ -36,6 +36,7 @@ import MapViewport from './components/MapViewport';
 import Player from './components/Player';
 import GameJournal from './components/GameJournal';
 import InventoryPanel from './components/InventoryPanel';
+import LevelUpScreen from './components/LevelUpScreen';
 
 // Componente "headless" per inizializzare la logica di gioco globale
 const GameLogic = () => {
@@ -47,7 +48,7 @@ const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
   const {
     isMapLoading, playerPosition, mapData, timeState,
-    characterSheet, getModifier, currentScreen, setCurrentScreen
+    characterSheet, getModifier, currentScreen, setCurrentScreen, items
   } = useGameContext();
   const { videoMode } = useSettingsStore();
   
@@ -125,6 +126,7 @@ const GameContent = () => {
           {currentScreen === 'characterCreation' && <CharacterCreationScreen />}
           {currentScreen === 'characterSheet' && <CharacterSheetScreen />}
           {currentScreen === 'inventory' && <InventoryScreen />}
+          {currentScreen === 'levelUp' && <LevelUpScreen />}
           
           {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
@@ -179,7 +181,7 @@ const GameContent = () => {
                         <ul className="space-y-2 text-uniform">
                           <li>Posizione: (<span className="text-phosphor-400">{playerPosition.x}</span>, <span className="text-phosphor-400">{playerPosition.y}</span>)</li>
                           <li>Luogo: <span className="text-phosphor-400">{currentLocation}</span></li>
-                          <li>Ora: <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-blue-400'}`}>{formattedTime}</span> <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-blue-400'}`}>Giorno {timeState.day}</span></li>
+                          <li>Ora: <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-phosphor-night-blue'}`}>{formattedTime}</span> <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-phosphor-night-blue'}`}>Giorno {timeState.day}</span></li>
                         </ul>
                         <h2 className="panel-title mt-6">STATISTICHE</h2>
                         <div className="space-y-1 text-uniform">
@@ -192,8 +194,16 @@ const GameContent = () => {
                         </div>
                         <h2 className="panel-title mt-6">EQUIPAGGIAMENTO</h2>
                         <div className="space-y-1 text-uniform">
-                          <div>ARMA: <span className="text-phosphor-400">Nessuna</span></div>
-                          <div>ARMATURA: <span className="text-phosphor-400">Nessuna</span></div>
+                          <div>ARMA: <span className="text-phosphor-400">
+                            {characterSheet.equipment.weapon.itemId 
+                              ? items[characterSheet.equipment.weapon.itemId]?.name || 'Sconosciuta'
+                              : 'Nessuna'}
+                          </span></div>
+                          <div>ARMATURA: <span className="text-phosphor-400">
+                            {characterSheet.equipment.armor.itemId 
+                              ? items[characterSheet.equipment.armor.itemId]?.name || 'Sconosciuta'
+                              : 'Nessuna'}
+                          </span></div>
                         </div>
                         <h2 className="panel-title mt-6">COMANDI</h2>
                         <div className="space-y-1 text-uniform">

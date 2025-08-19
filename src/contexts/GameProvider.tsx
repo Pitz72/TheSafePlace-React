@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG } from '../data/MessageArchive';
 import { createTestCharacter } from '../rules/characterGenerator';
 import { calculateShortRestHealing, isDead } from '../rules/mechanics';
+import { consumePortion, initializePortions, migrateSlotToPortions, getPortionDescription } from '../utils/portionSystem';
+import { equipItem, canEquipItem } from '../utils/equipmentManager';
 import type { GameState, TimeState, Screen } from '../interfaces/gameState';
 import type { IItem } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
@@ -51,6 +53,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter);
   const [lastShortRestTime] = useState<{ day: number; time: number } | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
+  const [gameInitialized, setGameInitialized] = useState(false);
   const [currentBiome, setCurrentBiome] = useState<string | null>(null);
   const [items, setItems] = useState<Record<string, IItem>>({});
   const [selectedInventoryIndex, setSelectedInventoryIndex] = useState(0);
@@ -97,6 +100,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   }, [formatTime]);
 
   const initializeGame = useCallback(async () => {
+    if (gameInitialized) return; // Previeni inizializzazioni multiple
+    
     try {
       setIsMapLoading(true);
       const response = await fetch('/map.txt');
@@ -114,13 +119,23 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       setPlayerPosition(startPos.x !== -1 ? startPos : { x: 75, y: 75 });
       
       setIsMapLoading(false);
-      // Non mostrare più il popup, la navigazione gestirà la schermata
-      addLogEntry(MessageType.GAME_START);
+      setGameInitialized(true);
+      
+      // Messaggio di benvenuto solo una volta
+      const welcomeMessage = getRandomMessage(MessageType.GAME_START);
+      if (welcomeMessage) {
+        setLogEntries(prev => [...prev, {
+          id: `init-${Date.now()}-${Math.random()}`,
+          type: MessageType.GAME_START,
+          message: welcomeMessage,
+          timestamp: `Giorno 1, 08:00`
+        }]);
+      }
     } catch (error) {
       console.error("Initialization failed:", error);
       setIsMapLoading(false);
     }
-  }, [addLogEntry]);
+  }, [gameInitialized]);
 
   useEffect(() => {
     initializeGame();
@@ -132,13 +147,33 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       const newTotalMinutes = prev.currentTime + minutes;
       const newDay = prev.day + Math.floor(newTotalMinutes / MINUTES_PER_DAY);
       const normalizedTime = newTotalMinutes % MINUTES_PER_DAY;
+      const newIsDay = normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME;
+      
+      // Controlla transizioni temporali per messaggi automatici
+      const oldTime = prev.currentTime;
+      
+      // Alba (06:00)
+      if (oldTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
+        setTimeout(() => addLogEntry(MessageType.TIME_DAWN), 100);
+      }
+      
+      // Tramonto (20:00)
+      if (oldTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
+        setTimeout(() => addLogEntry(MessageType.TIME_DUSK), 100);
+      }
+      
+      // Mezzanotte (00:00)
+      if (oldTime > 0 && normalizedTime === 0) {
+        setTimeout(() => addLogEntry(MessageType.TIME_MIDNIGHT), 100);
+      }
+      
       return {
         currentTime: normalizedTime,
         day: newDay,
-        isDay: normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME,
+        isDay: newIsDay,
       };
     });
-  }, []);
+  }, [addLogEntry]);
 
   const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
     dbg('setPlayerPosition', { from: playerPosition, to: newPosition });
@@ -215,7 +250,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     // Simple cooldown, can be improved later
     const healingAmount = calculateShortRestHealing();
     updateHP(healingAmount);
-    addLogEntry(MessageType.HP_RECOVERY, { healingAmount });
+    addLogEntry(MessageType.REST_SUCCESS, { healingAmount });
     advanceTime(60);
   }, [characterSheet.currentHP, updateHP, addLogEntry, advanceTime]);
 
@@ -235,12 +270,138 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'lo slot è vuoto' });
       return;
     }
+    
     const item = items[itemStack.itemId];
-    if (item) {
-      addLogEntry(MessageType.ACTION_SUCCESS, { action: `usa ${item.name}` });
-      // Future logic for item effects goes here
+    if (!item) {
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'oggetto non trovato' });
+      return;
     }
+    
+    // Migra slot al sistema porzioni se necessario
+    migrateSlotToPortions(item, itemStack);
+    
+    // Consuma una porzione usando il nuovo sistema
+    const result = consumePortion(item, itemStack);
+    
+    if (result.success) {
+      // Aggiorna l'inventario
+      setCharacterSheet(prev => {
+        const newInventory = [...prev.inventory];
+        if (result.itemConsumed) {
+          newInventory[slotIndex] = null; // Rimuovi oggetto completamente consumato
+        } else {
+          newInventory[slotIndex] = itemStack; // Slot già aggiornato da consumePortion
+        }
+        return { ...prev, inventory: newInventory };
+      });
+      
+      // Applica effetti consumabili
+      if (result.effectApplied > 0) {
+        switch (item.effect) {
+          case 'heal':
+            updateHP(result.effectApplied);
+            addLogEntry(MessageType.HP_RECOVERY, { healing: result.effectApplied });
+            break;
+          case 'satiety':
+            // Per ora solo messaggio, in futuro sistema fame
+            addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti sazietà` });
+            break;
+          case 'hydration':
+            // Per ora solo messaggio, in futuro sistema sete
+            addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti idratazione` });
+            break;
+          default:
+            addLogEntry(MessageType.ACTION_SUCCESS, { action: `effetto: ${item.effect}` });
+        }
+      }
+      
+      // Messaggio di successo con descrizione porzione
+      addLogEntry(MessageType.ITEM_USED, { 
+        item: item.name, 
+        message: result.message,
+        effect: result.effectApplied 
+      });
+    } else {
+      addLogEntry(MessageType.ACTION_FAIL, { 
+        action: 'usare un oggetto', 
+        reason: result.message 
+      });
+    }
+  }, [characterSheet.inventory, items, addLogEntry, updateHP]);
+
+  // Equipaggia un oggetto dall'inventario
+  const equipItemFromInventory = useCallback((slotIndex: number) => {
+    const result = equipItem(characterSheet, items, slotIndex);
+    
+    if (result.success) {
+      setCharacterSheet(result.updatedCharacterSheet);
+      addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
+      
+      if (result.unequippedItem) {
+        addLogEntry(MessageType.INVENTORY_CHANGE, { 
+          action: `${result.unequippedItem.item.name} aggiunto all'inventario` 
+        });
+      }
+    } else {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
+    }
+  }, [characterSheet, items, addLogEntry]);
+
+  // Getta un oggetto dall'inventario
+  const dropItem = useCallback((slotIndex: number) => {
+    const slot = characterSheet.inventory[slotIndex];
+    if (!slot) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: 'Nessun oggetto in questo slot.' });
+      return;
+    }
+    
+    const item = items[slot.itemId];
+    if (!item) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: 'Oggetto non trovato.' });
+      return;
+    }
+    
+    // Verifica se è un oggetto importante (quest item)
+    const itemType = typeof item.type === 'string' ? item.type.toLowerCase() : item.type;
+    if (itemType === 'quest') {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: `${item.name} è troppo importante per essere gettato.` });
+      return;
+    }
+    
+    // Rimuovi dall'inventario
+    setCharacterSheet(prev => ({
+      ...prev,
+      inventory: prev.inventory.map((invSlot, index) => 
+        index === slotIndex ? null : invSlot
+      )
+    }));
+    
+    addLogEntry(MessageType.INVENTORY_CHANGE, { action: `Hai gettato ${item.name}.` });
   }, [characterSheet.inventory, items, addLogEntry]);
+
+  // Aggiorna il character sheet (per level up)
+  const updateCharacterSheet = useCallback((newCharacterSheet: ICharacterSheet) => {
+    setCharacterSheet(newCharacterSheet);
+  }, []);
+
+  // Aggiunge esperienza al personaggio
+  const addExperience = useCallback((xpGained: number) => {
+    setCharacterSheet(prev => {
+      const newXP = prev.experience.currentXP + xpGained;
+      const canLevelUp = newXP >= prev.experience.xpForNextLevel && prev.level < 20;
+      
+      return {
+        ...prev,
+        experience: {
+          ...prev.experience,
+          currentXP: newXP,
+          canLevelUp
+        }
+      };
+    });
+    
+    addLogEntry(MessageType.ACTION_SUCCESS, { action: `Hai guadagnato ${xpGained} punti esperienza!` });
+  }, [addLogEntry]);
 
   // --- Menu Handlers -- -
   const handleNewGame = useCallback(() => navigateTo('characterCreation'), [navigateTo]);
@@ -289,6 +450,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     updateBiome,
     setSelectedInventoryIndex,
     useItem,
+    equipItemFromInventory,
+    dropItem,
+    updateCharacterSheet,
+    addExperience,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

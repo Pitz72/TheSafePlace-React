@@ -9,7 +9,7 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp';
 
 export interface GameState {
   // Map state
@@ -70,4 +70,8 @@ export interface GameState {
   handleExit: () => void;
   setSelectedInventoryIndex: React.Dispatch<React.SetStateAction<number>>;
   useItem: (slotIndex: number) => void;
+  equipItemFromInventory: (slotIndex: number) => void;
+  dropItem: (slotIndex: number) => void;
+  updateCharacterSheet: (characterSheet: ICharacterSheet) => void;
+  addExperience: (xpGained: number) => void;
 }
