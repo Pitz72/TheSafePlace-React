@@ -1,7 +1,7 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.4.3",
+  "version": "0.4.4",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi",
   "scripts": {

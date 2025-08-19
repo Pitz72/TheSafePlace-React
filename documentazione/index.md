@@ -1,6 +1,6 @@
 # Indice della Documentazione
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.4.0 "Journal Bug Fix".
+Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.4.4 "Refinement".
 
 ## 📋 Documenti Principali
 
@@ -15,22 +15,23 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.4.3 "Shelter" (ATTIVA)
+- **Versione Corrente**: v0.4.4 "Refinement" (COMPLETATA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.4.3 Shelter](./anti-regressione/ANTI-REGRESSIONE-v0.4.3-SHELTER.md)
-- **Ultimo Changelog**: [v0.4.3](./changelog/CHANGELOG-v0.4.3.md)
-- **Ultimo Commit**: v0.4.3 Shelter (in corso)
+- **Anti-Regressione**: [v0.4.4 Refinement](./anti-regressione/ANTI-REGRESSIONE-v0.4.4-REFINEMENT.md)
+- **Ultimo Changelog**: [v0.4.4](./changelog/CHANGELOG-v0.4.4.md)
+- **Verifica Implementazione**: [v0.4.4](./VERIFICA-IMPLEMENTAZIONE-v0.4.4.md)
+- **Ultimo Commit**: v0.4.4 Refinement (completato)
 
 ---
 
 ## 📂 Sezioni della Documentazione
 
-### 🛡️ [Anti-Regressione](./anti-regressione/) (28 documenti)
+### 🛡️ [Anti-Regressione](./anti-regressione/) (29 documenti)
 
 Documenti di protezione che definiscono baseline immutabili e procedure di test per prevenire regressioni. Include:
-- **Documenti v0.0.x - v0.3.9**: Protezioni progressive per ogni versione
+- **Documenti v0.0.x - v0.4.4**: Protezioni progressive per ogni versione
 - **Protezioni Speciali**: FINALE, BASEPOPUP
-- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md](./anti-regressione/ANTI-REGRESSIONE-v0.3.9-CONSISTENCY-IS-KEY.md) (CONSOLIDATO E IMMUTABILE)
+- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.4.4-REFINEMENT.md](./anti-regressione/ANTI-REGRESSIONE-v0.4.4-REFINEMENT.md) (GAMEPLAY LOOP COMPLETO)
 
 ### 📦 [Archivio](./archivio/) (9 documenti)
 
@@ -39,12 +40,12 @@ Documenti completati, roadmap concluse e analisi storiche:
 - Analisi estetiche e correzioni TypeScript
 - Roadmap migrate e documenti obsoleti
 
-### 📝 [Changelog](./changelog/) (18 documenti)
+### 📝 [Changelog](./changelog/) (19 documenti)
 
 Storico completo delle modifiche per ogni versione:
 - **Changelog Generale**: [CHANGELOG.md](./changelog/CHANGELOG.md)
-- **Versioni Specifiche**: v0.0.1 → v0.3.9
-- **Ultimo**: [CHANGELOG-v0.3.9.md](./changelog/CHANGELOG-v0.3.9.md) (CONSOLIDATO E IMMUTABILE)
+- **Versioni Specifiche**: v0.0.1 → v0.4.4
+- **Ultimo**: [CHANGELOG-v0.4.4.md](./changelog/CHANGELOG-v0.4.4.md) (GAMEPLAY LOOP COMPLETO)
 
 ### 🔧 [Commit](./commit/) (3 documenti)
 
@@ -65,12 +66,12 @@ Report di incidenti tecnici critici con analisi e soluzioni:
 - [INCIDENTE-CENTRATURA-GLOBALE-2025.md](./incidenti/INCIDENTE-CENTRATURA-GLOBALE-2025.md)
 - [INCIDENTE-PLAYER-MOVEMENT-2025.md](./incidenti/INCIDENTE-PLAYER-MOVEMENT-2025.md)
 
-### 🗺️ [Roadmap](./roadmap/) (14 documenti)
+### 🗺️ [Roadmap](./roadmap/) (1 cartella)
 
-Pianificazione sviluppo futuro e roadmap completate:
-- **Attive**: Giocatore e Movimento v0.3.0
-- **Completate**: CRT Premium, Interfaccia, Migrazione TailwindCSS
-- **Pianificate**: Camera Dinamica, Sistema Tempo
+Roadmap di sviluppo:
+- **Attive**: Nessuna (tutte le roadmap completate)
+- **Archiviate**: 14 roadmap completate con successo
+- **Archivio**: [Roadmap Storiche](./roadmap/archivio/) - Tutte le implementazioni completate
 
 ### 📊 [Session Log](./session-log/) (17 documenti)
 
@@ -98,16 +99,16 @@ Log dettagliati delle sessioni di sviluppo e analisi:
 - **COMMIT-**: Documentazione commit specifici
 
 ### 📊 Statistiche Documentazione
-- **Totale Documenti**: ~85 file
+- **Totale Documenti**: ~88 file
 - **Cartelle Organizzate**: 8 sezioni
-- **Versione Documentata**: v0.3.5 "The Survival Game"
+- **Versione Documentata**: v0.4.4 "Refinement"
 - **Baseline Immutabile**: Screen Adaptation v0.1.2
-- **Protezioni Attive**: 27 documenti anti-regressione
+- **Protezioni Attive**: 29 documenti anti-regressione
 - **Root Pulita**: Solo documenti essenziali nella directory principale
 
 ---
 
-*Ultimo aggiornamento: 2025-01-20*  
-*Organizzazione completata: Duplicati rimossi, struttura ottimizzata*
+*Ultimo aggiornamento: 2025-08-19*  
+*v0.4.4 "Refinement": Gameplay Loop Completo implementato*
 
 **Nota**: Questo indice viene mantenuto automaticamente dal sistema LLM secondo il Patto per lo Sviluppo Sicuro.

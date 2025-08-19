@@ -1,4 +1,4 @@
-# The Safe Place v0.4.3 "Shelter"
+# The Safe Place v0.4.4 "Refinement"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -64,19 +64,20 @@ TSP/
 - [x] **v0.4.0**: Journal Bug Fix e sincronizzazione documentazione. ✅ **COMPLETATA**
 - [x] **v0.4.1**: The Best Synchronization - Sistema di analisi automatica e consolidamento perfetto. ✅ **COMPLETATA**
 - [x] **v0.4.2**: LevelUp and Miscellaneous - Sistema progressione personaggio e inventario avanzato. ✅ **COMPLETATA**
-- [x] **v0.4.3**: Shelter - Sistema sopravvivenza completo e rifugi funzionanti. ✅ **ATTIVA**
+- [x] **v0.4.3**: Shelter - Sistema sopravvivenza completo e rifugi funzionanti. ✅ **COMPLETATA**
+- [x] **v0.4.4**: Refinement - Gameplay loop completo con manipolazione oggetti. ✅ **COMPLETATA**
 - [ ] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo)
 - [ ] **v0.6.0**: Sistema combattimento e meccaniche avanzate
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.4.3 "Shelter" (ATTIVA)** - Sistema Sopravvivenza e Rifugi Completo:
-- ✅ **Bug Journal Risolto**: Corretto il problema di collasso del Game Journal con dimensioni fisse
-- ✅ **Sincronizzazione Documentazione**: Implementato sistema di analisi automatica per monitorare allineamento codice-documentazione
-- ✅ **Refactoring Architetturale**: Rimosso doppio GameProvider e pulito codice obsoleto
-- ✅ **Documentazione Consolidata**: Creato indice consolidato e archiviati documenti obsoleti
-- ✅ **Sistema di Analisi**: Implementato framework completo per monitoraggio continuo sincronizzazione
+**The Safe Place v0.4.4 "Refinement" (COMPLETATA)** - Gameplay Loop Completo e Sistema Equipaggiamento:
+- ✅ **Sistema addItem/removeItem**: Manipolazione inventario completa con gestione stackable e slot vuoti
+- ✅ **Sistema Equipaggiamento**: Slot arma/armatura con swap automatico e visualizzazione character sheet
+- ✅ **Rifugi Unici**: Sistema visitedShelters previene investigazioni multiple dello stesso rifugio
+- ✅ **Loot System Bilanciato**: 5 categorie oggetti con probabilità bilanciate (40% consumabili, 20% crafting, 15% armi/armature, 10% medicali)
+- ✅ **Gameplay Loop Funzionale**: Ciclo completo esplorazione → rifugi → loot → equipaggiamento → progressione
 
 ### 🛠️ Sviluppo
 
@@ -92,7 +93,32 @@ npm run preview      # Preview build
 
 Progetto privato - Tutti i diritti riservati
 
-### 🆕 Novità v0.4.3 "Shelter"
+### 🆕 Novità v0.4.4 "Refinement"
+
+#### 🔄 Gameplay Loop Completo
+- **Sistema addItem()**: Aggiunta oggetti all'inventario con gestione stackable e slot vuoti
+- **Sistema removeItem()**: Rimozione oggetti con quantità variabile
+- **Investigazione Rifugi Funzionale**: Trova realmente oggetti casuali (40% successo)
+- **Rifugi Unici**: Sistema visitedShelters previene investigazioni multiple
+
+#### ⚔️ Sistema Equipaggiamento Completo
+- **Slot Equipaggiamento**: equippedWeapon e equippedArmor nel character sheet
+- **Equipaggiamento Automatico**: Swap intelligente tra inventario e equipaggiamento
+- **Visualizzazione**: Sezione dedicata nella schermata personaggio
+- **Integrazione Inventario**: Tasto Enter equipaggia armi/armature automaticamente
+
+#### 🎲 Sistema Loot Bilanciato
+- **Pool Oggetti Categorizzati**: Consumabili (40%), Crafting (20%), Armi (15%), Armature (15%), Medicali (10%)
+- **Quantità Variabili**: Oggetti stackable con quantità 1-3
+- **Feedback Narrativo**: Messaggi dettagliati per ogni tipo di scoperta
+- **Gestione Inventario Pieno**: Avvisi quando non c'è spazio
+
+#### 🏠 Rifugi Migliorati
+- **Visite Uniche**: Ogni rifugio può essere investigato solo una volta
+- **Tracking Posizione**: Sistema coordinate per identificare rifugi visitati
+- **Messaggi Informativi**: Feedback chiaro quando un rifugio è già stato perquisito
+
+### 🆕 Novità Precedenti v0.4.3 "Shelter"
 
 #### 🏠 Sistema Rifugi Completo
 - **Rifugi Automatici**: Entrando in tile 'R' si attivano automaticamente

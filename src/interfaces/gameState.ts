@@ -86,4 +86,6 @@ export interface GameState {
   handleNightConsumption: () => void;
   consumeFood: (amount: number) => void;
   consumeDrink: (amount: number) => void;
+  addItem: (itemId: string, quantity?: number) => boolean;
+  removeItem: (slotIndex: number, quantity?: number) => boolean;
 }

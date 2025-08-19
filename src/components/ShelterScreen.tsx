@@ -7,7 +7,7 @@ import { useGameContext } from '../hooks/useGameContext';
 import { MessageType } from '../data/MessageArchive';
 
 const ShelterScreen: React.FC = () => {
-  const { characterSheet, goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items } = useGameContext();
+  const { characterSheet, goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameContext();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -85,22 +85,52 @@ const ShelterScreen: React.FC = () => {
     const success = performAbilityCheck('percezione', 15, false);
     
     if (success) {
-      // Possibilità di trovare oggetti
+      // Possibilità di trovare oggetti con distribuzione realistica
       const findChance = Math.random();
-      if (findChance < 0.3) {
-        // 30% di trovare qualcosa di utile
-        const foundItems = ['CONS_001', 'CONS_002', 'CONS_003', 'CRAFT_001'];
-        const foundItem = foundItems[Math.floor(Math.random() * foundItems.length)];
-        setSearchResult(`Hai trovato: ${items[foundItem]?.name || 'Oggetto misterioso'}`);
-        addLogEntry(MessageType.ITEM_FOUND, { item: items[foundItem]?.name });
-      } else if (findChance < 0.6) {
+      if (findChance < 0.4) {
+        // 40% di trovare qualcosa di utile
+        const lootTables = {
+          consumables: ['CONS_001', 'CONS_002', 'CONS_003', 'CONS_004'], // 40%
+          crafting: ['CRAFT_001', 'CRAFT_002', 'CRAFT_003'], // 20%
+          weapons: ['WEAP_001', 'WEAP_002'], // 15%
+          armor: ['ARM_001', 'ARM_002'], // 15%
+          medical: ['CONS_005'] // 10%
+        };
+        
+        // Determina categoria oggetto
+        const categoryRoll = Math.random();
+        let category: keyof typeof lootTables;
+        if (categoryRoll < 0.4) category = 'consumables';
+        else if (categoryRoll < 0.6) category = 'crafting';
+        else if (categoryRoll < 0.75) category = 'weapons';
+        else if (categoryRoll < 0.9) category = 'armor';
+        else category = 'medical';
+        
+        const categoryItems = lootTables[category];
+        const foundItemId = categoryItems[Math.floor(Math.random() * categoryItems.length)];
+        const foundItem = items[foundItemId];
+        
+        if (foundItem) {
+          const quantity = foundItem.stackable ? Math.floor(Math.random() * 3) + 1 : 1;
+          const success = addItem(foundItemId, quantity);
+          
+          if (success) {
+            setSearchResult(`La tua attenzione viene ripagata. Trovi: ${foundItem.name}${quantity > 1 ? ` x${quantity}` : ''}`);
+          } else {
+            setSearchResult(`Trovi ${foundItem.name} ma il tuo inventario è pieno!`);
+          }
+        } else {
+          setSearchResult('Trovi qualcosa di interessante, ma non riesci a identificarlo.');
+          addLogEntry(MessageType.DISCOVERY, { discovery: 'oggetto misterioso' });
+        }
+      } else if (findChance < 0.7) {
         // 30% di trovare il rifugio già saccheggiato ma sicuro
         setSearchResult('Il rifugio è già stato saccheggiato, ma sembra sicuro.');
         addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro ma vuoto' });
       } else {
-        // 40% di non trovare nulla di interessante
-        setSearchResult('Non trovi nulla di particolare, solo polvere e detriti.');
-        addLogEntry(MessageType.ACTION_SUCCESS, { action: 'investigazione completa' });
+        // 30% di non trovare nulla di interessante
+        setSearchResult('Dopo un\'attenta ricerca, non trovi nulla di utile. Solo polvere e detriti.');
+        addLogEntry(MessageType.ACTION_SUCCESS, { action: 'investigazione completa senza risultati' });
       }
     } else {
       setSearchResult('La tua ricerca è stata frettolosa e superficiale.');

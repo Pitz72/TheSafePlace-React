@@ -70,6 +70,9 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     thirst: 100,
     lastNightConsumption: { day: 0, consumed: false }
   });
+  
+  // Sistema rifugi visitati
+  const [visitedShelters, setVisitedShelters] = useState<Record<string, boolean>>({});
 
   // --- Funzioni di Navigazione e Logica -- -
 
@@ -365,11 +368,29 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       
       // Gestione speciale per i rifugi (tile 'R')
       if (newBiome === 'R') {
+        const shelterKey = `${playerPosition.x},${playerPosition.y}`;
+        
+        // Controlla se il rifugio è già stato visitato
+        if (visitedShelters[shelterKey]) {
+          setTimeout(() => {
+            addLogEntry(MessageType.DISCOVERY, { 
+              discovery: 'rifugio già perquisito - non c\'è altro da trovare' 
+            });
+          }, 100);
+          return;
+        }
+        
+        // Marca il rifugio come visitato
+        setVisitedShelters(prev => ({
+          ...prev,
+          [shelterKey]: true
+        }));
+        
         if (timeStateRef.current.isDay) {
           // Di giorno: apri schermata rifugio
           setTimeout(() => {
             navigateTo('shelter');
-            addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro' });
+            addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro inesplorato' });
           }, 100);
         } else {
           // Di notte: passa automaticamente al giorno successivo
@@ -444,11 +465,11 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
             addLogEntry(MessageType.HP_RECOVERY, { healing: result.effectApplied });
             break;
           case 'satiety':
-            // Per ora solo messaggio, in futuro sistema fame
+            consumeFood(result.effectApplied);
             addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti sazietà` });
             break;
           case 'hydration':
-            // Per ora solo messaggio, in futuro sistema sete
+            consumeDrink(result.effectApplied);
             addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti idratazione` });
             break;
           default:
@@ -469,6 +490,97 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       });
     }
   }, [characterSheet.inventory, items, addLogEntry, updateHP]);
+
+  // Aggiunge un oggetto all'inventario
+  const addItem = useCallback((itemId: string, quantity: number = 1) => {
+    const item = items[itemId];
+    if (!item) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: `Oggetto ${itemId} non trovato nel database` });
+      return false;
+    }
+
+    setCharacterSheet(prev => {
+      const newInventory = [...prev.inventory];
+      
+      // Cerca slot esistente per oggetti stackable
+      if (item.stackable) {
+        for (let i = 0; i < newInventory.length; i++) {
+          const slot = newInventory[i];
+          if (slot && slot.itemId === itemId) {
+            slot.quantity += quantity;
+            addLogEntry(MessageType.ITEM_FOUND, { 
+              item: item.name, 
+              quantity: quantity,
+              total: slot.quantity 
+            });
+            return { ...prev, inventory: newInventory };
+          }
+        }
+      }
+      
+      // Cerca primo slot vuoto
+      for (let i = 0; i < newInventory.length; i++) {
+        if (!newInventory[i]) {
+          newInventory[i] = {
+            itemId,
+            quantity,
+            portions: item.portions || undefined
+          };
+          addLogEntry(MessageType.ITEM_FOUND, { 
+            item: item.name, 
+            quantity: quantity 
+          });
+          return { ...prev, inventory: newInventory };
+        }
+      }
+      
+      // Inventario pieno
+      addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
+      return prev;
+    });
+    
+    return true;
+  }, [items, addLogEntry]);
+
+  // Rimuove un oggetto dall'inventario
+  const removeItem = useCallback((slotIndex: number, quantity: number = 1) => {
+    const slot = characterSheet.inventory[slotIndex];
+    if (!slot) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: 'Nessun oggetto in questo slot' });
+      return false;
+    }
+    
+    const item = items[slot.itemId];
+    if (!item) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: 'Oggetto non trovato nel database' });
+      return false;
+    }
+    
+    setCharacterSheet(prev => {
+      const newInventory = [...prev.inventory];
+      const currentSlot = newInventory[slotIndex];
+      
+      if (!currentSlot) return prev;
+      
+      if (currentSlot.quantity <= quantity) {
+        // Rimuovi completamente l'oggetto
+        newInventory[slotIndex] = null;
+        addLogEntry(MessageType.ACTION_SUCCESS, { 
+          action: `hai lasciato cadere ${item.name}` 
+        });
+      } else {
+        // Decrementa quantità
+        currentSlot.quantity -= quantity;
+        addLogEntry(MessageType.ACTION_SUCCESS, { 
+          action: `hai lasciato cadere ${quantity}x ${item.name}` 
+        });
+      }
+      
+      return { ...prev, inventory: newInventory };
+    });
+    
+    return true;
+  }, [characterSheet.inventory, items, addLogEntry]);
 
   // Equipaggia un oggetto dall'inventario
   const equipItemFromInventory = useCallback((slotIndex: number) => {
@@ -669,6 +781,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         thirst: Math.min(100, prev.thirst + amount)
       }));
     },
+    addItem,
+    removeItem,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

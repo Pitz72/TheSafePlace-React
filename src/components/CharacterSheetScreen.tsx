@@ -87,6 +87,38 @@ const CharacterSheetScreen: React.FC = () => {
           </div>
           <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
             <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
+              EQUIPAGGIAMENTO
+            </h3>
+            <div className="space-y-3 text-2xl">
+              <div className="flex justify-between">
+                <span>Arma:</span>
+                <span className="text-phosphor-400 font-bold">
+                  {characterSheet.equipment.weapon.itemId 
+                    ? items[characterSheet.equipment.weapon.itemId]?.name || 'Sconosciuta'
+                    : 'Nessuna'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Armatura:</span>
+                <span className="text-phosphor-400 font-bold">
+                  {characterSheet.equipment.armor.itemId 
+                    ? items[characterSheet.equipment.armor.itemId]?.name || 'Sconosciuta'
+                    : 'Nessuna'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Accessorio:</span>
+                <span className="text-phosphor-400 font-bold">
+                  {characterSheet.equipment.accessory.itemId 
+                    ? items[characterSheet.equipment.accessory.itemId]?.name || 'Sconosciuto'
+                    : 'Nessuno'}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
+            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
               INFORMAZIONI
             </h3>
             <div className="text-center">
