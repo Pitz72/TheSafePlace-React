@@ -15,11 +15,11 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.4.0 "Journal Bug Fix" (CONSOLIDATA E IMMUTABILE)
+- **Versione Corrente**: v0.4.3 "Shelter" (ATTIVA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.4.0 Journal Bug Fix](./anti-regressione/ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md)
-- **Ultimo Changelog**: [v0.4.0](./changelog/CHANGELOG-v0.4.0.md)
-- **Ultimo Commit**: [v0.4.0 Journal Bug Fix](./commit/COMMIT-v0.4.0-JOURNAL-BUG-FIX.md)
+- **Anti-Regressione**: [v0.4.3 Shelter](./anti-regressione/ANTI-REGRESSIONE-v0.4.3-SHELTER.md)
+- **Ultimo Changelog**: [v0.4.3](./changelog/CHANGELOG-v0.4.3.md)
+- **Ultimo Commit**: v0.4.3 Shelter (in corso)
 
 ---
 

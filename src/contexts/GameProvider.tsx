@@ -60,6 +60,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
   const [previousScreen, setPreviousScreen] = useState<Screen | null>(null);
   const [menuSelectedIndex, setMenuSelectedIndex] = useState(0);
+  
+  // Sistema per prevenire messaggi duplicati
+  const [lastTimeMessage, setLastTimeMessage] = useState<{type: string, time: number} | null>(null);
+  
+  // Sistema sopravvivenza
+  const [survivalState, setSurvivalState] = useState({
+    hunger: 100,
+    thirst: 100,
+    lastNightConsumption: { day: 0, consumed: false }
+  });
 
   // --- Funzioni di Navigazione e Logica -- -
 
@@ -149,22 +159,47 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       const normalizedTime = newTotalMinutes % MINUTES_PER_DAY;
       const newIsDay = normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME;
       
-      // Controlla transizioni temporali per messaggi automatici
+      // Controlla transizioni temporali per messaggi automatici (con prevenzione duplicati)
       const oldTime = prev.currentTime;
       
       // Alba (06:00)
       if (oldTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
-        setTimeout(() => addLogEntry(MessageType.TIME_DAWN), 100);
+        const messageKey = `dawn_${newDay}`;
+        setLastTimeMessage(current => {
+          if (!current || current.type !== messageKey) {
+            setTimeout(() => addLogEntry(MessageType.TIME_DAWN), 100);
+            return { type: messageKey, time: normalizedTime };
+          }
+          return current;
+        });
       }
       
-      // Tramonto (20:00)
+      // Tramonto (20:00) - Consumo automatico notturno
       if (oldTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
-        setTimeout(() => addLogEntry(MessageType.TIME_DUSK), 100);
+        const messageKey = `dusk_${newDay}`;
+        setLastTimeMessage(current => {
+          if (!current || current.type !== messageKey) {
+            setTimeout(() => {
+              addLogEntry(MessageType.TIME_DUSK);
+              // Consumo automatico di cibo e bevande al tramonto
+              handleNightConsumption();
+            }, 100);
+            return { type: messageKey, time: normalizedTime };
+          }
+          return current;
+        });
       }
       
       // Mezzanotte (00:00)
       if (oldTime > 0 && normalizedTime === 0) {
-        setTimeout(() => addLogEntry(MessageType.TIME_MIDNIGHT), 100);
+        const messageKey = `midnight_${newDay}`;
+        setLastTimeMessage(current => {
+          if (!current || current.type !== messageKey) {
+            setTimeout(() => addLogEntry(MessageType.TIME_MIDNIGHT), 100);
+            return { type: messageKey, time: normalizedTime };
+          }
+          return current;
+        });
       }
       
       return {
@@ -175,11 +210,69 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     });
   }, [addLogEntry]);
 
+  // Aggiorna HP del personaggio
+  const updateHP = useCallback((amount: number) => {
+    setCharacterSheet(prev => ({
+      ...prev,
+      currentHP: Math.max(0, Math.min(prev.maxHP, prev.currentHP + amount)),
+    }));
+  }, []);
+
+  // Aggiunge esperienza al personaggio
+  const addExperience = useCallback((xpGained: number) => {
+    setCharacterSheet(prev => {
+      const newXP = prev.experience.currentXP + xpGained;
+      const canLevelUp = newXP >= prev.experience.xpForNextLevel && prev.level < 20;
+      
+      return {
+        ...prev,
+        experience: {
+          ...prev.experience,
+          currentXP: newXP,
+          canLevelUp
+        }
+      };
+    });
+    
+    addLogEntry(MessageType.ACTION_SUCCESS, { action: `Hai guadagnato ${xpGained} punti esperienza!` });
+  }, [addLogEntry]);
+
   const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
     dbg('setPlayerPosition', { from: playerPosition, to: newPosition });
     setPlayerPosition(newPosition);
+    
+    // Guadagna XP per esplorazione (1-2 XP per passo)
+    const xpGained = Math.floor(Math.random() * 2) + 1;
+    addExperience(xpGained);
+    
+    // Consuma fame e sete gradualmente
+    setSurvivalState(prev => {
+      const hungerLoss = Math.random() * 0.5 + 0.2; // 0.2-0.7 per passo
+      const thirstLoss = Math.random() * 0.8 + 0.3; // 0.3-1.1 per passo
+      
+      const newHunger = Math.max(0, prev.hunger - hungerLoss);
+      const newThirst = Math.max(0, prev.thirst - thirstLoss);
+      
+      // Danno da fame/sete se entrambi sono a 0
+      if (newHunger === 0 && newThirst === 0) {
+        // Ogni 5 passi con fame/sete a 0, perde 1 HP
+        const stepsWithoutFood = Math.floor((100 - newHunger) / 0.5);
+        const stepsWithoutWater = Math.floor((100 - newThirst) / 0.8);
+        if (stepsWithoutFood % 5 === 0 || stepsWithoutWater % 5 === 0) {
+          updateHP(-1);
+          addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
+        }
+      }
+      
+      return {
+        ...prev,
+        hunger: newHunger,
+        thirst: newThirst
+      };
+    });
+    
     advanceTime();
-  }, [advanceTime, playerPosition]);
+  }, [advanceTime, playerPosition, addExperience, updateHP, addLogEntry]);
   
   const calculateCameraPosition = useCallback((playerPos: { x: number; y: number }, viewportSize: { width: number; height: number }) => {
     // Arrotondamento stabile per evitare micro-variazioni
@@ -220,12 +313,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     });
   }, [playerPosition, calculateCameraPosition]);
 
-  const updateHP = useCallback((amount: number) => {
-    setCharacterSheet(prev => ({
-      ...prev,
-      currentHP: Math.max(0, Math.min(prev.maxHP, prev.currentHP + amount)),
-    }));
-  }, []);
+
 
   const getModifier = useCallback((ability: keyof ICharacterSheet['stats']): number => {
     return Math.floor((characterSheet.stats[ability] - 10) / 2);
@@ -236,33 +324,86 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     const roll = Math.floor(Math.random() * 20) + 1;
     const total = roll + modifier;
     const success = total >= difficulty;
+    
+    // XP per skill check
+    if (success) {
+      const xpGained = Math.floor(Math.random() * 6) + 5; // 5-10 XP per successo
+      addExperience(xpGained);
+    } else {
+      const xpGained = Math.floor(Math.random() * 3) + 1; // 1-3 XP per fallimento
+      addExperience(xpGained);
+    }
+    
     if (addToJournal) {
       addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, { ability, roll, modifier, total, difficulty });
     }
     return success;
-  }, [getModifier, addLogEntry]);
+  }, [getModifier, addLogEntry, addExperience]);
 
   const shortRest = useCallback(() => {
     if (isDead(characterSheet.currentHP)) {
       addLogEntry(MessageType.REST_BLOCKED, { reason: 'sei morto' });
       return;
     }
-    // Simple cooldown, can be improved later
-    const healingAmount = calculateShortRestHealing();
+    
+    // Riposo migliorato: recupera quasi tutti gli HP (80-95%)
+    const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
+    const recoveryPercentage = 0.8 + (Math.random() * 0.15); // 80-95%
+    const healingAmount = Math.floor(maxRecovery * recoveryPercentage);
+    
     updateHP(healingAmount);
     addLogEntry(MessageType.REST_SUCCESS, { healingAmount });
-    advanceTime(60);
-  }, [characterSheet.currentHP, updateHP, addLogEntry, advanceTime]);
+    
+    // Il riposo consuma 2-4 ore
+    const restTime = Math.floor(Math.random() * 120) + 120; // 120-240 minuti
+    advanceTime(restTime);
+  }, [characterSheet.currentHP, characterSheet.maxHP, updateHP, addLogEntry, advanceTime]);
 
   const updateBiome = useCallback((newBiome: string) => {
     if (newBiome !== currentBiome) {
       setCurrentBiome(newBiome);
-      // CRITICO: Messaggio automatico cambio bioma con timeout
-      setTimeout(() => {
-        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
-      }, 0);
+      
+      // Gestione speciale per i rifugi (tile 'R')
+      if (newBiome === 'R') {
+        if (timeStateRef.current.isDay) {
+          // Di giorno: apri schermata rifugio
+          setTimeout(() => {
+            navigateTo('shelter');
+            addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro' });
+          }, 100);
+        } else {
+          // Di notte: passa automaticamente al giorno successivo
+          setTimeout(() => {
+            // Consuma cibo e bevande per la notte
+            handleNightConsumption();
+            
+            // Passa al mattino successivo
+            setTimeState(prev => ({
+              currentTime: DAWN_TIME,
+              day: prev.day + 1,
+              isDay: true
+            }));
+            
+            // Recupera 60% degli HP
+            const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
+            const nightHealing = Math.floor(maxRecovery * 0.6);
+            updateHP(nightHealing);
+            
+            addLogEntry(MessageType.REST_SUCCESS, { 
+              healingAmount: nightHealing,
+              location: 'rifugio notturno',
+              newDay: timeStateRef.current.day + 1
+            });
+          }, 100);
+        }
+      } else {
+        // CRITICO: Messaggio automatico cambio bioma con timeout
+        setTimeout(() => {
+          addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+        }, 0);
+      }
     }
-  }, [currentBiome, addLogEntry]);
+  }, [currentBiome, addLogEntry, navigateTo, characterSheet.maxHP, characterSheet.currentHP, updateHP]);
 
   const useItem = useCallback((slotIndex: number) => {
     const itemStack = characterSheet.inventory[slotIndex];
@@ -384,24 +525,84 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     setCharacterSheet(newCharacterSheet);
   }, []);
 
-  // Aggiunge esperienza al personaggio
-  const addExperience = useCallback((xpGained: number) => {
-    setCharacterSheet(prev => {
-      const newXP = prev.experience.currentXP + xpGained;
-      const canLevelUp = newXP >= prev.experience.xpForNextLevel && prev.level < 20;
+
+
+  // Gestisce il consumo notturno di cibo e bevande
+  const handleNightConsumption = useCallback(() => {
+    const currentDay = timeStateRef.current.day;
+    
+    setSurvivalState(prev => {
+      // Evita doppio consumo nello stesso giorno
+      if (prev.lastNightConsumption.day === currentDay && prev.lastNightConsumption.consumed) {
+        return prev;
+      }
+      
+      // Cerca cibo e bevande nell'inventario
+      let foodConsumed = false;
+      let drinkConsumed = false;
+      
+      setCharacterSheet(prevChar => {
+        const newInventory = [...prevChar.inventory];
+        
+        // Cerca e consuma cibo
+        for (let i = 0; i < newInventory.length && !foodConsumed; i++) {
+          const slot = newInventory[i];
+          if (slot && items[slot.itemId]) {
+            const item = items[slot.itemId];
+            if (item.effect === 'satiety' && slot.quantity > 0) {
+              if (slot.quantity > 1) {
+                slot.quantity -= 1;
+              } else {
+                newInventory[i] = null;
+              }
+              foodConsumed = true;
+            }
+          }
+        }
+        
+        // Cerca e consuma bevande
+        for (let i = 0; i < newInventory.length && !drinkConsumed; i++) {
+          const slot = newInventory[i];
+          if (slot && items[slot.itemId]) {
+            const item = items[slot.itemId];
+            if (item.effect === 'hydration' && slot.quantity > 0) {
+              if (slot.quantity > 1) {
+                slot.quantity -= 1;
+              } else {
+                newInventory[i] = null;
+              }
+              drinkConsumed = true;
+            }
+          }
+        }
+        
+        return { ...prevChar, inventory: newInventory };
+      });
+      
+      // Applica penalità se non ha consumato cibo/bevande
+      if (!foodConsumed || !drinkConsumed) {
+        const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
+        updateHP(-penalty);
+        
+        const penaltyReason = !foodConsumed && !drinkConsumed 
+          ? 'mancanza di cibo e acqua durante la notte'
+          : !foodConsumed 
+            ? 'mancanza di cibo durante la notte'
+            : 'mancanza di acqua durante la notte';
+            
+        addLogEntry(MessageType.HP_DAMAGE, { damage: penalty, reason: penaltyReason });
+      } else {
+        addLogEntry(MessageType.ACTION_SUCCESS, { 
+          action: 'hai consumato le razioni notturne necessarie' 
+        });
+      }
       
       return {
         ...prev,
-        experience: {
-          ...prev.experience,
-          currentXP: newXP,
-          canLevelUp
-        }
+        lastNightConsumption: { day: currentDay, consumed: true }
       };
     });
-    
-    addLogEntry(MessageType.ACTION_SUCCESS, { action: `Hai guadagnato ${xpGained} punti esperienza!` });
-  }, [addLogEntry]);
+  }, [items, updateHP, addLogEntry]);
 
   // --- Menu Handlers -- -
   const handleNewGame = useCallback(() => navigateTo('characterCreation'), [navigateTo]);
@@ -422,6 +623,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     timeState,
     characterSheet,
     lastShortRestTime,
+    survivalState,
     logEntries,
     currentBiome,
     items,
@@ -454,6 +656,19 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     dropItem,
     updateCharacterSheet,
     addExperience,
+    handleNightConsumption,
+    consumeFood: (amount: number) => {
+      setSurvivalState(prev => ({
+        ...prev,
+        hunger: Math.min(100, prev.hunger + amount)
+      }));
+    },
+    consumeDrink: (amount: number) => {
+      setSurvivalState(prev => ({
+        ...prev,
+        thirst: Math.min(100, prev.thirst + amount)
+      }));
+    },
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

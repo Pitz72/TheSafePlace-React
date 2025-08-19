@@ -196,6 +196,37 @@ const LevelUpScreen: React.FC = () => {
         {/* Colonna Sinistra: Statistiche Attuali */}
         <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim">
           <h3 className="text-2xl font-bold mb-4 text-center text-phosphor-400">STATISTICHE ATTUALI</h3>
+          
+          {/* Progressi XP */}
+          <div className="mb-6 p-4 bg-gray-800 bg-opacity-50 border border-phosphor-600 rounded">
+            <h4 className="text-phosphor-400 font-bold mb-2">ESPERIENZA</h4>
+            <div className="space-y-1">
+              <div className="flex justify-between">
+                <span className="text-phosphor-300">Livello:</span>
+                <span className="text-phosphor-400">{characterSheet.level}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-phosphor-300">XP Attuali:</span>
+                <span className="text-phosphor-400">{characterSheet.experience.currentXP}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-phosphor-300">XP per Prossimo Livello:</span>
+                <span className="text-phosphor-400">{characterSheet.experience.xpForNextLevel}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-phosphor-300">XP Mancanti:</span>
+                <span className={characterSheet.experience.canLevelUp ? "text-green-400" : "text-yellow-400"}>
+                  {Math.max(0, characterSheet.experience.xpForNextLevel - characterSheet.experience.currentXP)}
+                </span>
+              </div>
+              {characterSheet.experience.canLevelUp && (
+                <div className="text-center mt-2">
+                  <span className="text-green-400 font-bold animate-pulse">✓ PRONTO PER LEVEL UP!</span>
+                </div>
+              )}
+            </div>
+          </div>
+          
           <div className="space-y-2 text-lg">
             <div className="flex justify-between">
               <span>Livello:</span>

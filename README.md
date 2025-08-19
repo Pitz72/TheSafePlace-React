@@ -1,4 +1,4 @@
-# The Safe Place v0.4.2 "LevelUp and Miscellaneous"
+# The Safe Place v0.4.3 "Shelter"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -63,14 +63,15 @@ TSP/
 - [x] **v0.3.5**: Correzione bug critico di re-inizializzazione e consolidamento versione. ✅ **COMPLETATA**
 - [x] **v0.4.0**: Journal Bug Fix e sincronizzazione documentazione. ✅ **COMPLETATA**
 - [x] **v0.4.1**: The Best Synchronization - Sistema di analisi automatica e consolidamento perfetto. ✅ **COMPLETATA**
-- [x] **v0.4.2**: LevelUp and Miscellaneous - Sistema progressione personaggio e inventario avanzato. ✅ **ATTIVA**
+- [x] **v0.4.2**: LevelUp and Miscellaneous - Sistema progressione personaggio e inventario avanzato. ✅ **COMPLETATA**
+- [x] **v0.4.3**: Shelter - Sistema sopravvivenza completo e rifugi funzionanti. ✅ **ATTIVA**
 - [ ] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo)
 - [ ] **v0.6.0**: Sistema combattimento e meccaniche avanzate
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.4.2 "LevelUp and Miscellaneous" (ATTIVA)** - Sistema RPG Completo con Progressione Personaggio:
+**The Safe Place v0.4.3 "Shelter" (ATTIVA)** - Sistema Sopravvivenza e Rifugi Completo:
 - ✅ **Bug Journal Risolto**: Corretto il problema di collasso del Game Journal con dimensioni fisse
 - ✅ **Sincronizzazione Documentazione**: Implementato sistema di analisi automatica per monitorare allineamento codice-documentazione
 - ✅ **Refactoring Architetturale**: Rimosso doppio GameProvider e pulito codice obsoleto
@@ -91,7 +92,32 @@ npm run preview      # Preview build
 
 Progetto privato - Tutti i diritti riservati
 
-### 🆕 Novità v0.4.2 "LevelUp and Miscellaneous"
+### 🆕 Novità v0.4.3 "Shelter"
+
+#### 🏠 Sistema Rifugi Completo
+- **Rifugi Automatici**: Entrando in tile 'R' si attivano automaticamente
+- **Modalità Giorno**: Menu interattivo con riposo, investigazione e banco di lavoro
+- **Modalità Notte**: Passaggio automatico al giorno successivo con recupero HP
+- **Investigazione**: Skill check per trovare oggetti o scoprire lo stato del rifugio
+
+#### 🍖 Sistema Sopravvivenza Realistico
+- **Fame e Sete**: Diminuiscono gradualmente durante l'esplorazione
+- **Consumo Automatico**: Cibo e bevande consumati automaticamente ogni notte
+- **Penalità**: Perdita HP se mancano risorse per il consumo notturno
+- **Indicatori Visivi**: Colori e animazioni per stati critici
+
+#### ⚡ Miglioramenti Sistema XP
+- **XP per Movimento**: 1-2 XP per ogni passo sulla mappa
+- **XP per Skill Check**: 5-10 XP per successo, 1-3 XP per fallimento
+- **Progressione Costante**: Esperienza guadagnata attraverso l'esplorazione
+
+#### 🔧 Correzioni e Ottimizzazioni
+- **Messaggi Duplicati**: Risolti i messaggi temporali e skill check duplicati
+- **Sistema Riposo**: Recupero migliorato (80-95% HP) con consumo tempo realistico
+- **Colori Status**: Corretti i colori degli status di salute (verde/giallo/rosso)
+- **Schermata Level Up**: Sempre accessibile con indicatori XP dettagliati
+
+### 🆕 Novità Precedenti v0.4.2 "LevelUp and Miscellaneous"
 
 #### 🆙 Sistema Level Up Completo
 - **Progressione D&D-style** con 9 opzioni di upgrade bilanciate

@@ -9,7 +9,13 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter';
+
+export interface SurvivalState {
+  hunger: number;
+  thirst: number;
+  lastNightConsumption: { day: number; consumed: boolean };
+}
 
 export interface GameState {
   // Map state
@@ -28,6 +34,9 @@ export interface GameState {
   // Character state
   characterSheet: ICharacterSheet;
   lastShortRestTime: { day: number; time: number } | null;
+  
+  // Survival state
+  survivalState: SurvivalState;
   
   // Journal state
   logEntries: LogEntry[];
@@ -74,4 +83,7 @@ export interface GameState {
   dropItem: (slotIndex: number) => void;
   updateCharacterSheet: (characterSheet: ICharacterSheet) => void;
   addExperience: (xpGained: number) => void;
+  handleNightConsumption: () => void;
+  consumeFood: (amount: number) => void;
+  consumeDrink: (amount: number) => void;
 }
