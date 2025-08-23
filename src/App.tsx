@@ -7,6 +7,7 @@ import { useGameContext } from './hooks/useGameContext';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
+import { GameErrorBoundary } from './utils/errorHandler';
 
 // Importa le nuove schermate
 import CharacterCreationScreen from './components/CharacterCreationScreen';
@@ -213,8 +214,8 @@ const GameContent = () => {
             <div>[<strong className="text-phosphor-400">I</strong>]nventario</div>
             <div>[<strong className="text-phosphor-400">R</strong>]iposa</div>
             <div>[<strong className="text-phosphor-400">L</strong>]ivella Personaggio</div>
-            <div>[<strong className="text-phosphor-400">S</strong>]alva</div>
-            <div>[<strong className="text-phosphor-400">C</strong>]arica</div>
+            <div>[<strong className="text-phosphor-400">F5</strong>] Salvataggio Rapido</div>
+            <div>[<strong className="text-phosphor-400">F9</strong>] Caricamento Rapido</div>
             <div>[<strong className="text-phosphor-400">ESC</strong>] Menu</div>
             <div>[<strong className="text-phosphor-400">TAB</strong>] Scheda Personaggio</div>
                         </div>
@@ -245,9 +246,11 @@ const AppUI = () => {
 
 function App() {
   return (
-    <GameProvider>
-      <AppUI />
-    </GameProvider>
+    <GameErrorBoundary>
+      <GameProvider>
+        <AppUI />
+      </GameProvider>
+    </GameErrorBoundary>
   );
 }
 

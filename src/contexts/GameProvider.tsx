@@ -2,9 +2,10 @@ import React, { createContext, useState, useCallback, useEffect, useRef } from '
 import type { ReactNode } from 'react';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG } from '../data/MessageArchive';
 import { createTestCharacter } from '../rules/characterGenerator';
-import { calculateShortRestHealing, isDead } from '../rules/mechanics';
-import { consumePortion, initializePortions, migrateSlotToPortions, getPortionDescription } from '../utils/portionSystem';
-import { equipItem, canEquipItem } from '../utils/equipmentManager';
+import { isDead } from '../rules/mechanics';
+import { equipItem } from '../utils/equipmentManager';
+import { useSaveSystem, type GameSaveData } from '../utils/saveSystem';
+import { initializeGlobalErrorHandler } from '../utils/errorHandler';
 import type { GameState, TimeState, Screen } from '../interfaces/gameState';
 import type { IItem } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
@@ -33,6 +34,14 @@ const dbg = (...args: any[]) => {
 };
 
 export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
+  // Setup sistema gestione errori globale
+  useEffect(() => {
+    initializeGlobalErrorHandler();
+  }, []);
+  
+  // Hook per sistema di salvataggio
+  const { saveGame, loadGame, getSaveSlots, deleteSave, exportSave, importSave, autoSave } = useSaveSystem();
+
   // Tutti gli stati sono definiti qui, seguendo l'interfaccia GameState
   const [mapData, setMapData] = useState<string[]>([]);
   const [isMapLoading, setIsMapLoading] = useState(true);
@@ -50,7 +59,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     timeStateRef.current = timeState;
   }, [timeState]);
 
-  const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter);
+  const [characterSheet, setCharacterSheet] = useState<ICharacterSheet>(createTestCharacter());
   const [lastShortRestTime] = useState<{ day: number; time: number } | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [gameInitialized, setGameInitialized] = useState(false);
@@ -60,9 +69,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
   const [previousScreen, setPreviousScreen] = useState<Screen | null>(null);
   const [menuSelectedIndex, setMenuSelectedIndex] = useState(0);
-  
-  // Sistema per prevenire messaggi duplicati
-  const [lastTimeMessage, setLastTimeMessage] = useState<{type: string, time: number} | null>(null);
   
   // Sistema sopravvivenza
   const [survivalState, setSurvivalState] = useState({
@@ -167,42 +173,21 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       
       // Alba (06:00)
       if (oldTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
-        const messageKey = `dawn_${newDay}`;
-        setLastTimeMessage(current => {
-          if (!current || current.type !== messageKey) {
-            setTimeout(() => addLogEntry(MessageType.TIME_DAWN), 100);
-            return { type: messageKey, time: normalizedTime };
-          }
-          return current;
-        });
+        setTimeout(() => addLogEntry(MessageType.TIME_DAWN), 100);
       }
       
       // Tramonto (20:00) - Consumo automatico notturno
       if (oldTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
-        const messageKey = `dusk_${newDay}`;
-        setLastTimeMessage(current => {
-          if (!current || current.type !== messageKey) {
-            setTimeout(() => {
-              addLogEntry(MessageType.TIME_DUSK);
-              // Consumo automatico di cibo e bevande al tramonto
-              handleNightConsumption();
-            }, 100);
-            return { type: messageKey, time: normalizedTime };
-          }
-          return current;
-        });
+        setTimeout(() => {
+          addLogEntry(MessageType.TIME_DUSK);
+          // Consumo automatico di cibo e bevande al tramonto
+          handleNightConsumption();
+        }, 100);
       }
       
       // Mezzanotte (00:00)
       if (oldTime > 0 && normalizedTime === 0) {
-        const messageKey = `midnight_${newDay}`;
-        setLastTimeMessage(current => {
-          if (!current || current.type !== messageKey) {
-            setTimeout(() => addLogEntry(MessageType.TIME_MIDNIGHT), 100);
-            return { type: messageKey, time: normalizedTime };
-          }
-          return current;
-        });
+        setTimeout(() => addLogEntry(MessageType.TIME_MIDNIGHT), 100);
       }
       
       return {
@@ -439,57 +424,79 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       return;
     }
     
-    // Migra slot al sistema porzioni se necessario
-    migrateSlotToPortions(item, itemStack);
+    // Controlla se è un oggetto usabile
+    if (!item.effect) {
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'questo oggetto non può essere usato' });
+      return;
+    }
     
-    // Consuma una porzione usando il nuovo sistema
-    const result = consumePortion(item, itemStack);
+    // Consuma l'oggetto
+    let itemConsumed = false;
+    let effectApplied = 0;
     
-    if (result.success) {
+    if (itemStack.quantity > 1) {
+      itemStack.quantity -= 1;
+    } else {
+      itemConsumed = true;
+    }
+    
+    // Determina l'effetto
+    if (item.effect === 'heal') {
+      effectApplied = Math.floor(Math.random() * 6) + 5; // 5-10 HP
+    } else if (item.effect === 'satiety') {
+      effectApplied = Math.floor(Math.random() * 21) + 20; // 20-40 hunger
+    } else if (item.effect === 'hydration') {
+      effectApplied = Math.floor(Math.random() * 21) + 20; // 20-40 thirst
+    }
+    
+    if (effectApplied > 0) {
       // Aggiorna l'inventario
       setCharacterSheet(prev => {
         const newInventory = [...prev.inventory];
-        if (result.itemConsumed) {
+        if (itemConsumed) {
           newInventory[slotIndex] = null; // Rimuovi oggetto completamente consumato
         } else {
-          newInventory[slotIndex] = itemStack; // Slot già aggiornato da consumePortion
+          newInventory[slotIndex] = itemStack; // Slot aggiornato con quantità decrementata
         }
         return { ...prev, inventory: newInventory };
       });
       
       // Applica effetti consumabili
-      if (result.effectApplied > 0) {
-        switch (item.effect) {
-          case 'heal':
-            updateHP(result.effectApplied);
-            addLogEntry(MessageType.HP_RECOVERY, { healing: result.effectApplied });
-            break;
-          case 'satiety':
-            consumeFood(result.effectApplied);
-            addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti sazietà` });
-            break;
-          case 'hydration':
-            consumeDrink(result.effectApplied);
-            addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${result.effectApplied} punti idratazione` });
-            break;
-          default:
-            addLogEntry(MessageType.ACTION_SUCCESS, { action: `effetto: ${item.effect}` });
-        }
+      switch (item.effect) {
+        case 'heal':
+          updateHP(effectApplied);
+          addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied });
+          break;
+        case 'satiety':
+          setSurvivalState(prev => ({
+            ...prev,
+            hunger: Math.min(100, prev.hunger + effectApplied)
+          }));
+          addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${effectApplied} punti sazietà` });
+          break;
+        case 'hydration':
+          setSurvivalState(prev => ({
+            ...prev,
+            thirst: Math.min(100, prev.thirst + effectApplied)
+          }));
+          addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${effectApplied} punti idratazione` });
+          break;
+        default:
+          addLogEntry(MessageType.ACTION_SUCCESS, { action: `effetto: ${item.effect}` });
       }
       
-      // Messaggio di successo con descrizione porzione
+      // Messaggio di successo
       addLogEntry(MessageType.ITEM_USED, { 
         item: item.name, 
-        message: result.message,
-        effect: result.effectApplied 
+        effect: effectApplied 
       });
     } else {
       addLogEntry(MessageType.ACTION_FAIL, { 
         action: 'usare un oggetto', 
-        reason: result.message 
+        reason: 'effetto non applicato' 
       });
     }
-  }, [characterSheet.inventory, items, addLogEntry, updateHP]);
+  }, [characterSheet.inventory, items, addLogEntry, updateHP, setSurvivalState]);
 
   // Aggiunge un oggetto all'inventario
   const addItem = useCallback((itemId: string, quantity: number = 1) => {
@@ -523,8 +530,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         if (!newInventory[i]) {
           newInventory[i] = {
             itemId,
-            quantity,
-            portions: item.portions || undefined
+            quantity
           };
           addLogEntry(MessageType.ITEM_FOUND, { 
             item: item.name, 
@@ -714,11 +720,157 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         lastNightConsumption: { day: currentDay, consumed: true }
       };
     });
-  }, [items, updateHP, addLogEntry]);
+  }, [items, updateHP, addLogEntry, setSurvivalState]);
+
+  // === SISTEMA DI SALVATAGGIO === 
+  // Real save system implementation with correct types
+  
+  // Salva lo stato del gioco corrente
+  const saveCurrentGame = useCallback(async (slot: string): Promise<boolean> => {
+    try {
+      const gameData: GameSaveData = {
+        timeState,
+        playerPosition,
+        currentScreen,
+        currentBiome,
+        visitedShelters,
+        gameFlags: {} // for future use
+      };
+      
+      const success = await saveGame(characterSheet, survivalState, gameData, slot);
+      
+      if (success) {
+        addLogEntry(MessageType.ACTION_SUCCESS, { action: `Gioco salvato nello slot ${slot}` });
+      } else {
+        addLogEntry(MessageType.ACTION_FAIL, { action: 'salvataggio', reason: 'errore durante il salvataggio' });
+      }
+      
+      return success;
+    } catch (error) {
+      console.error('Save failed:', error);
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'salvataggio', reason: 'errore imprevisto' });
+      return false;
+    }
+  }, [characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters, saveGame, addLogEntry]);
+  
+  // Carica uno stato di gioco salvato
+  const loadSavedGame = useCallback(async (slot: string): Promise<boolean> => {
+    try {
+      const saveData = await loadGame(slot);
+      
+      if (!saveData) {
+        addLogEntry(MessageType.ACTION_FAIL, { action: 'caricamento', reason: 'salvataggio non trovato' });
+        return false;
+      }
+      
+      // Ripristina lo stato del personaggio
+      setCharacterSheet(saveData.characterSheet);
+      
+      // Ripristina lo stato di sopravvivenza
+      setSurvivalState(saveData.survivalState);
+      
+      // Ripristina lo stato del gioco
+      setTimeState(saveData.gameData.timeState);
+      setPlayerPosition(saveData.gameData.playerPosition);
+      setCurrentScreen(saveData.gameData.currentScreen);
+      setCurrentBiome(saveData.gameData.currentBiome);
+      
+      // Ripristina rifugi visitati se disponibili
+      if (saveData.gameData.visitedShelters) {
+        setVisitedShelters(saveData.gameData.visitedShelters);
+      }
+      
+      addLogEntry(MessageType.ACTION_SUCCESS, { 
+        action: `Gioco caricato dallo slot ${slot}`,
+        player: saveData.characterSheet.name,
+        level: saveData.characterSheet.level
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Load failed:', error);
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'caricamento', reason: 'errore durante il caricamento' });
+      return false;
+    }
+  }, [loadGame, addLogEntry]);
+  
+  // Auto-salvataggio automatico
+  const performAutoSave = useCallback(async () => {
+    try {
+      const gameData: GameSaveData = {
+        timeState,
+        playerPosition,
+        currentScreen,
+        currentBiome,
+        visitedShelters,
+        gameFlags: {}
+      };
+      
+      await autoSave(characterSheet, survivalState, gameData);
+    } catch (error) {
+      // Auto-save silenzioso - non mostrare errori all'utente
+      console.warn('Auto-save failed:', error);
+    }
+  }, [characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters, autoSave]);
+  
+  // Auto-salvataggio ogni cambiamento significativo
+  useEffect(() => {
+    if (gameInitialized && characterSheet.name) {
+      const timeoutId = setTimeout(performAutoSave, 2000); // Ritardo di 2 secondi
+      return () => clearTimeout(timeoutId);
+    }
+  }, [gameInitialized, characterSheet, timeState, survivalState, performAutoSave]);
+
+  // Real save system functions (replacing placeholders)
+  const realGetSaveSlots = useCallback(() => {
+    return getSaveSlots();
+  }, [getSaveSlots]);
+  
+  const realDeleteSave = useCallback((slot: string): boolean => {
+    return deleteSave(slot);
+  }, [deleteSave]);
+  
+  const realExportSave = useCallback((slot: string): string | null => {
+    return exportSave(slot);
+  }, [exportSave]);
+  
+  const realImportSave = useCallback(async (content: string, slot: string): Promise<boolean> => {
+    try {
+      return await importSave(content, slot);
+    } catch (error) {
+      console.error('Import error:', error);
+      return false;
+    }
+  }, [importSave]);
 
   // --- Menu Handlers -- -
-  const handleNewGame = useCallback(() => navigateTo('characterCreation'), [navigateTo]);
-  const handleLoadGame = useCallback(() => navigateTo('game'), [navigateTo]); // Placeholder
+  const handleNewGame = useCallback(() => {
+    // Reset dello stato per nuovo gioco
+    setCharacterSheet(createTestCharacter());
+    setSurvivalState({ hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } });
+    setTimeState({ currentTime: DAWN_TIME, day: 1, isDay: true });
+    setVisitedShelters({});
+    setLogEntries([]);
+    navigateTo('characterCreation');
+  }, [navigateTo]);
+  
+  const handleLoadGame = useCallback(() => {
+    // TODO: Navigate to load game screen - for now just show available saves
+    const slots = getSaveSlots();
+    const availableSlots = slots.filter(slot => slot.exists && !slot.corrupted);
+    console.log('Available save slots:', availableSlots.map(s => `${s.slot}: ${s.metadata?.playerName} Lv.${s.metadata?.playerLevel}`));
+  }, [getSaveSlots]);
+  
+  // Real quick save/load functions
+  const handleQuickSave = useCallback(async () => {
+    const success = await saveCurrentGame('quicksave');
+    return success;
+  }, [saveCurrentGame]);
+  
+  const handleQuickLoad = useCallback(async () => {
+    const success = await loadSavedGame('quicksave');
+    return success;
+  }, [loadSavedGame]);
   const handleStory = useCallback(() => navigateTo('story'), [navigateTo]);
   const handleInstructions = useCallback(() => navigateTo('instructions'), [navigateTo]);
   const handleOptions = useCallback(() => navigateTo('options'), [navigateTo]);
@@ -783,6 +935,15 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     },
     addItem,
     removeItem,
+    // === FUNZIONI DI SALVATAGGIO (REAL IMPLEMENTATION) ===
+    saveCurrentGame,
+    loadSavedGame,
+    handleQuickSave,
+    handleQuickLoad,
+    getSaveSlots: realGetSaveSlots,
+    deleteSave: realDeleteSave,
+    exportSave: realExportSave,
+    importSave: realImportSave,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

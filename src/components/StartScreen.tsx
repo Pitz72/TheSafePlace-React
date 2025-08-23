@@ -44,7 +44,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-700 text-lg mb-6 tracking-wider glow-phosphor-dim">
-          v0.4.2 - LevelUp and Miscellaneous
+          v0.5.0 - Phoenix
         </p>
         
         {/* Menu Items Testuali */}

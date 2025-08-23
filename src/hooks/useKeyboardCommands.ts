@@ -39,6 +39,9 @@ export const useKeyboardCommands = () => {
     updateBiome,
     performAbilityCheck,
     updateHP,
+    // Save system functions
+    handleQuickSave,
+    handleQuickLoad,
   } = useGameContext();
 
   const [movementState, setMovementState] = useState<MovementState>({
@@ -206,13 +209,23 @@ export const useKeyboardCommands = () => {
           case 'r': shortRest(); break;
           case 'tab': setCurrentScreen('characterSheet'); break;
           case 'escape': setCurrentScreen('menu'); break;
+          // Salvataggio rapido
+          case 'f5': 
+            event.preventDefault();
+            handleQuickSave();
+            break;
+          case 'f9':
+            event.preventDefault();
+            handleQuickLoad();
+            break;
         }
         break;
     }
   }, [
     currentScreen, menuSelectedIndex, handlePlayerMove, shortRest, setCurrentScreen, goBack,
     handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit,
-    setSelectedInventoryIndex, useItem, setMenuSelectedIndex
+    setSelectedInventoryIndex, useItem, setMenuSelectedIndex,
+    handleQuickSave, handleQuickLoad
   ]);
 
   useEffect(() => {

@@ -30,16 +30,12 @@ export default {
           warning: '#FFA500', success: '#00FF7F', failure: '#FF4444',
           'hp-recovery': '#32CD32', 'hp-damage': '#DC143C',
           rest: '#87CEEB', item: '#FFD700', discovery: '#FF69B4',
-          ambiance: '#15803d', danger: '#FF0000', mystery: '#9370DB',
-          'time-dawn': '#FFA500', 'time-dusk': '#4169E1', 'time-night': '#191970'
         },
         
         // Item type colors
         item: {
           weapon: '#FF4444', armor: '#4169E1', consumable: '#00FF7F',
           quest: '#FFD700', crafting: '#DA70D6', rare: '#1E90FF',
-          unique: '#FF1493', potion: '#00FFFF', common: '#D3D3D3',
-          uncommon: '#ADFF2F', epic: '#8A2BE2', legendary: '#FF8C00'
         },
       },
       
@@ -48,20 +44,12 @@ export default {
         'ibm-pc': ['IBM Plex Mono', 'monospace'],
       },
       
-      width: {
-        '80': '20rem',  // 320px
-        '96': '24rem',  // 384px
-      },
-      
       // === ANIMATION SYSTEM ===
       animation: {
         'glow': 'glow 2s ease-in-out infinite alternate',
         'crt-warmup': 'crt-warmup 3s ease-out',
         'crt-flicker': 'crt-flicker 4s ease-in-out infinite',
         'phosphor-pulse': 'phosphor-pulse 3s ease-in-out infinite',
-        'scan': 'scan 3s linear infinite',
-        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'flicker': 'flicker 0.15s ease-in-out infinite alternate',
       },
       
       keyframes: {
@@ -77,18 +65,6 @@ export default {
           '0%': { textShadow: '0 0 3px #4EA162' },
           '50%': { textShadow: '0 0 6px #79ED95, 0 0 12px #79ED95' },
           '100%': { textShadow: '0 0 3px #4EA162' },
-        },
-        scan: {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(100vh)' },
-        },
-        pulse: {
-          '0%, 100%': { opacity: 1 },
-          '50%': { opacity: 0 },
-        },
-        flicker: {
-          '0%': { opacity: 1, textShadow: '0 0 5px #4EA162' },
-          '100%': { opacity: 0.95, textShadow: '0 0 8px #79ED95' },
         }
       },
       
@@ -98,15 +74,6 @@ export default {
         'phosphor-intense': '0 0 20px rgba(34, 197, 94, 0.8)',
         'crt-screen': '0 0 20px rgba(78, 161, 98, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.5)',
       },
-      
-      textShadow: {
-        'phosphor-glow': '0 0 5px #4EA162, 0 0 10px #4EA162',
-        'phosphor-bright': '0 0 8px #79ED95, 0 0 16px #79ED95',
-        'phosphor-intense': '0 0 10px #79ED95, 0 0 20px #79ED95, 0 0 30px #79ED95',
-        'phosphor-dim': '0 0 3px #336940',
-        'phosphor-danger': '0 0 5px #FF4444, 0 0 10px #FF4444',
-        'phosphor-warning': '0 0 5px #FFAA00, 0 0 10px #FFAA00',
-      }
     }
   },
   
@@ -122,26 +89,6 @@ export default {
           boxShadow: '0 0 20px rgba(78, 161, 98, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.5)',
         },
         
-        // === GLOW UTILITIES ===
-        '.glow-phosphor': {
-          textShadow: '0 0 5px #4EA162, 0 0 10px #4EA162',
-        },
-        '.glow-phosphor-bright': {
-          textShadow: '0 0 8px #79ED95, 0 0 16px #79ED95',
-        },
-        '.glow-phosphor-intense': {
-          textShadow: '0 0 10px #79ED95, 0 0 20px #79ED95, 0 0 30px #79ED95',
-        },
-        '.glow-phosphor-dim': {
-          textShadow: '0 0 3px #336940',
-        },
-        '.glow-phosphor-danger': {
-          textShadow: '0 0 5px #FF4444, 0 0 10px #FF4444',
-        },
-        '.glow-phosphor-warning': {
-          textShadow: '0 0 5px #FFAA00, 0 0 10px #FFAA00',
-        },
-        
         // === UTILITY CLASSES ===
         '.no-scrollbar': {
           'scrollbar-width': 'none',
@@ -152,4 +99,4 @@ export default {
       addUtilities(newUtilities)
     }
   ],
-};
+}

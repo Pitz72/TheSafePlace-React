@@ -88,4 +88,14 @@ export interface GameState {
   consumeDrink: (amount: number) => void;
   addItem: (itemId: string, quantity?: number) => boolean;
   removeItem: (slotIndex: number, quantity?: number) => boolean;
+  
+  // Save system actions
+  saveCurrentGame: (slot: string) => Promise<boolean>;
+  loadSavedGame: (slot: string) => Promise<boolean>;
+  handleQuickSave: () => Promise<boolean>;
+  handleQuickLoad: () => Promise<boolean>;
+  getSaveSlots: () => any[];
+  deleteSave: (slot: string) => boolean;
+  exportSave: (slot: string) => string | null;
+  importSave: (content: string, slot: string) => Promise<boolean>;
 }

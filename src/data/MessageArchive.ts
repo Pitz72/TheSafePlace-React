@@ -93,6 +93,7 @@ export enum MessageType {
   ITEM_FOUND = 'ITEM_FOUND',
   ITEM_USED = 'ITEM_USED',
   INVENTORY_FULL = 'INVENTORY_FULL',
+  INVENTORY_CHANGE = 'INVENTORY_CHANGE',
 
   // Sistema tempo
   TIME_DAWN = 'TIME_DAWN',
@@ -305,6 +306,13 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Non puoi portare altro con te.",
     "Il tuo zaino è già al limite.",
     "Devi scegliere cosa tenere e cosa lasciare."
+  ],
+
+  [MessageType.INVENTORY_CHANGE]: [
+    "Il tuo inventario è stato aggiornato.",
+    "Hai sistemato gli oggetti nel tuo zaino.",
+    "Le tue risorse sono cambiate.",
+    "Il contenuto del tuo inventario si è modificato."
   ],
 
   [MessageType.TIME_DAWN]: [
