@@ -37,6 +37,7 @@ import MapViewport from './components/MapViewport';
 import Player from './components/Player';
 import GameJournal from './components/GameJournal';
 import InventoryPanel from './components/InventoryPanel';
+
 import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
 
@@ -147,12 +148,51 @@ const GameContent = () => {
                     {/* Colonna sinistra */}
                     <aside className="w-1/4 border-r border-phosphor-600">
                       <div className="panel h-full">
-                        <h2 className="panel-title">SOPRAVVIVENZA</h2>
+                        <h3 className="panel-title">SOPRAVVIVENZA</h3>
                         <ul className="space-y-2 text-uniform">
-                          <li>HP: <span className="text-phosphor-400">{characterSheet.currentHP}</span>/<span className="text-phosphor-400">{characterSheet.maxHP}</span></li>
-                          <li>Sazietà: <span className={survivalState.hunger <= 0 ? 'text-red-400 animate-pulse' : survivalState.hunger < 25 ? 'text-red-400' : survivalState.hunger < 50 ? 'text-yellow-400' : 'text-phosphor-400'}>{Math.floor(survivalState.hunger)}</span>/<span className="text-phosphor-400">100</span></li>
-                          <li>Idratazione: <span className={survivalState.thirst <= 0 ? 'text-red-400 animate-pulse' : survivalState.thirst < 25 ? 'text-red-400' : survivalState.thirst < 50 ? 'text-yellow-400' : 'text-phosphor-400'}>{Math.floor(survivalState.thirst)}</span>/<span className="text-phosphor-400">100</span></li>
-                          <li>Status: <span className={characterSheet.currentHP <= 0 ? 'text-red-400 animate-pulse' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'text-red-400' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'text-yellow-400' : 'text-green-400'}>{characterSheet.currentHP <= 0 ? 'Morto' : characterSheet.currentHP < characterSheet.maxHP * 0.25 ? 'Critico' : characterSheet.currentHP < characterSheet.maxHP * 0.5 ? 'Ferito' : 'Normale'}</span></li>
+                          <li>
+                            HP: <span className={`${
+                              characterSheet.currentHP <= 0 ? 'text-red-400 animate-pulse' :
+                              (characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' :
+                              (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' :
+                              'text-green-400'
+                            }`}>
+                              {characterSheet.currentHP}
+                            </span>/<span className="text-phosphor-400">{characterSheet.maxHP}</span>
+                          </li>
+                          <li>
+                            Sazietà: <span className={`${
+                              survivalState.hunger <= 0 ? 'text-red-400 animate-pulse' :
+                              survivalState.hunger < 25 ? 'text-red-400' :
+                              survivalState.hunger < 50 ? 'text-yellow-400' :
+                              'text-phosphor-400'
+                            }`}>
+                              {Math.floor(survivalState.hunger)}
+                            </span>/<span className="text-phosphor-400">100</span>
+                          </li>
+                          <li>
+                            Idratazione: <span className={`${
+                              survivalState.thirst <= 0 ? 'text-red-400 animate-pulse' :
+                              survivalState.thirst < 25 ? 'text-red-400' :
+                              survivalState.thirst < 50 ? 'text-yellow-400' :
+                              'text-phosphor-400'
+                            }`}>
+                              {Math.floor(survivalState.thirst)}
+                            </span>/<span className="text-phosphor-400">100</span>
+                          </li>
+                          <li>
+                            Status: <span className={`${
+                              characterSheet.currentHP <= 0 ? 'text-red-400 animate-pulse' :
+                              (characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' :
+                              (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' :
+                              'text-green-400'
+                            }`}>
+                              {characterSheet.currentHP <= 0 ? 'Morto' :
+                               (characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'Critico' :
+                               (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'Ferito' :
+                               'Normale'}
+                            </span>
+                          </li>
                         </ul>
                         <InventoryPanel />
                       </div>

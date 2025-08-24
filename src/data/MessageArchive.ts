@@ -7,12 +7,75 @@ export interface LogEntry {
 }
 
 // Funzione per ottenere un messaggio casuale dal tipo specificato
-export function getRandomMessage(type: MessageType, context?: Record<string, any>): string {
+export function getRandomMessage(type: MessageType, context?: Record<string, any>): string | null {
   const messages = MESSAGE_ARCHIVE[type];
   
   if (!messages) {
     console.warn(`Nessun messaggio trovato per il tipo: ${type}`);
     return 'Un evento misterioso accade nel mondo desolato.';
+  }
+  
+  // Gestione speciale per MessageType che utilizzano parametri specifici dal context
+  if (type === MessageType.ACTION_SUCCESS && context?.action) {
+    return context.action;
+  }
+  
+  if (type === MessageType.ACTION_FAIL && context?.reason) {
+    return `Azione fallita: ${context.reason}`;
+  }
+  
+  if (type === MessageType.DISCOVERY && context?.discovery) {
+    return `Hai scoperto: ${context.discovery}`;
+  }
+  
+  if (type === MessageType.INVENTORY_FULL && context?.item) {
+    return `Non puoi raccogliere ${context.item}: inventario pieno.`;
+  }
+  
+  if (type === MessageType.INVENTORY_CHANGE && context?.action) {
+    return context.action;
+  }
+  
+  if (type === MessageType.REST_SUCCESS && context?.healingAmount) {
+    return `Riposo completato. Hai recuperato ${context.healingAmount} punti vita.`;
+  }
+  
+  if (type === MessageType.REST_BLOCKED && context?.reason) {
+    return `Riposo bloccato: ${context.reason}`;
+  }
+  
+  if (type === MessageType.HP_RECOVERY && context?.healing) {
+    return `Hai recuperato ${context.healing} punti vita.`;
+  }
+  
+  if (type === MessageType.HP_DAMAGE && context?.damage) {
+    const reason = context.reason ? ` (${context.reason})` : '';
+    return `Hai subito ${context.damage} danni${reason}.`;
+  }
+  
+  // Sistema anti-spam per BIOME_ENTER
+  if (type === MessageType.BIOME_ENTER && context?.biome && JOURNAL_CONFIG.BIOME_ANTI_SPAM) {
+    const biomeKey = `${context.biome}`;
+    if (JOURNAL_STATE.visitedBiomes.has(biomeKey)) {
+      return null; // Non mostrare il messaggio se il bioma è già stato visitato
+    }
+    JOURNAL_STATE.visitedBiomes.add(biomeKey);
+  }
+  
+  // Cooldown per AMBIANCE_RANDOM
+  if (type === MessageType.AMBIANCE_RANDOM) {
+    const now = Date.now();
+    if (now - JOURNAL_STATE.lastAmbianceTime < JOURNAL_CONFIG.AMBIANCE_COOLDOWN) {
+      return null; // Non mostrare il messaggio se è ancora in cooldown
+    }
+    JOURNAL_STATE.lastAmbianceTime = now;
+  }
+  
+  // Sequenza GAME_START
+  if (type === MessageType.GAME_START && Array.isArray(messages)) {
+    const message = messages[JOURNAL_STATE.gameStartSequenceIndex];
+    JOURNAL_STATE.gameStartSequenceIndex = (JOURNAL_STATE.gameStartSequenceIndex + 1) % messages.length;
+    return message || messages[0];
   }
   
   // Se i messaggi sono organizzati per bioma (come BIOME_ENTER)
@@ -54,10 +117,26 @@ export function getRandomMessage(type: MessageType, context?: Record<string, any
 }
 
 export const JOURNAL_CONFIG = {
-  MAX_ENTRIES: 100,
+  MAX_ENTRIES: 50,
   WELCOME_DELAY: 1000,
-  AMBIANCE_PROBABILITY: 0.02, // 2% di probabilità per messaggi d'atmosfera
+  AMBIANCE_PROBABILITY: 0.02, // 2% di probabilità per messaggio ambientale
+  AMBIANCE_COOLDOWN: 30000, // 30 secondi per test (era 2 ore: 7200000)
+  BIOME_ANTI_SPAM: true, // Sistema anti-spam per BIOME_ENTER
 };
+
+// Stato globale per il sistema anti-spam e cooldown
+export const JOURNAL_STATE = {
+  visitedBiomes: new Set<string>(), // Biomi già visitati
+  lastAmbianceTime: 0, // Timestamp ultimo messaggio ambientale
+  gameStartSequenceIndex: 0, // Indice per la sequenza GAME_START
+};
+
+// Funzione per resettare lo stato del journal
+export function resetJournalState(): void {
+  JOURNAL_STATE.visitedBiomes.clear();
+  JOURNAL_STATE.lastAmbianceTime = 0;
+  JOURNAL_STATE.gameStartSequenceIndex = 0;
+}
 
 export enum MessageType {
   // Sistema base
@@ -66,20 +145,30 @@ export enum MessageType {
   AMBIANCE_RANDOM = 'AMBIANCE_RANDOM',
 
   // Movimento e terreno
-  MOVEMENT_FAIL_MOUNTAIN = 'MOVEMENT_FAIL_MOUNTAIN',
-  MOVEMENT_ACTION_RIVER = 'MOVEMENT_ACTION_RIVER',
+  MOVEMENT_FAIL_OBSTACLE = 'MOVEMENT_FAIL_OBSTACLE', // Rinominato da MOVEMENT_FAIL_MOUNTAIN per GDD
+  MOVEMENT_FAIL_MOUNTAIN = 'MOVEMENT_FAIL_MOUNTAIN', // Mantenuto per compatibilità
+  ACTION_RIVER_CROSSING = 'ACTION_RIVER_CROSSING', // Nuovo secondo GDD
+  MOVEMENT_ACTION_RIVER = 'MOVEMENT_ACTION_RIVER', // Mantenuto per compatibilità
   MOVEMENT_SUCCESS = 'MOVEMENT_SUCCESS',
+  MOVEMENT_NIGHT_PENALTY = 'MOVEMENT_NIGHT_PENALTY', // Nuovo secondo GDD
 
   // Skill checks
   SKILL_CHECK_SUCCESS = 'SKILL_CHECK_SUCCESS',
   SKILL_CHECK_FAILURE = 'SKILL_CHECK_FAILURE',
   SKILL_CHECK_RIVER_SUCCESS = 'SKILL_CHECK_RIVER_SUCCESS',
+  SKILL_CHECK_RIVER_FAILURE = 'SKILL_CHECK_RIVER_FAILURE', // Nuovo secondo GDD
+  SKILL_CHECK_RIVER_DAMAGE = 'SKILL_CHECK_RIVER_DAMAGE', // Nuovo secondo GDD
+  ACTION_RIVER_EXHAUSTION = 'ACTION_RIVER_EXHAUSTION', // Nuovo secondo GDD
 
   // Salute e riposo
   HP_RECOVERY = 'HP_RECOVERY',
   HP_DAMAGE = 'HP_DAMAGE',
   REST_BLOCKED = 'REST_BLOCKED',
   REST_SUCCESS = 'REST_SUCCESS',
+
+  // Sopravvivenza (nuovi secondo GDD)
+  SURVIVAL_NIGHT_CONSUME = 'SURVIVAL_NIGHT_CONSUME',
+  SURVIVAL_PENALTY = 'SURVIVAL_PENALTY',
 
   // Azioni generiche
   ACTION_SUCCESS = 'ACTION_SUCCESS',
@@ -88,10 +177,18 @@ export enum MessageType {
   // Sistema personaggio
   CHARACTER_CREATION = 'CHARACTER_CREATION',
   LEVEL_UP = 'LEVEL_UP',
+  XP_GAIN = 'XP_GAIN', // Nuovo secondo GDD
+  STAT_INCREASE = 'STAT_INCREASE', // Nuovo secondo GDD
+  STATUS_CHANGE = 'STATUS_CHANGE', // Nuovo secondo GDD
 
-  // Inventario e oggetti
-  ITEM_FOUND = 'ITEM_FOUND',
-  ITEM_USED = 'ITEM_USED',
+  // Inventario e oggetti (aggiornati secondo GDD)
+  INVENTORY_OPEN = 'INVENTORY_OPEN', // Nuovo secondo GDD
+  ITEM_CONSUME = 'ITEM_CONSUME', // Nuovo secondo GDD
+  ITEM_EQUIP = 'ITEM_EQUIP', // Nuovo secondo GDD
+  INVENTORY_ADD = 'INVENTORY_ADD', // Nuovo secondo GDD
+  INVENTORY_REMOVE = 'INVENTORY_REMOVE', // Nuovo secondo GDD
+  ITEM_FOUND = 'ITEM_FOUND', // Mantenuto per compatibilità
+  ITEM_USED = 'ITEM_USED', // Mantenuto per compatibilità
   INVENTORY_FULL = 'INVENTORY_FULL',
   INVENTORY_CHANGE = 'INVENTORY_CHANGE',
 
@@ -108,11 +205,12 @@ export enum MessageType {
 
 export const MESSAGE_ARCHIVE: Record<string, any> = {
   [MessageType.GAME_START]: [
+    "BENVENUTO IN THE SAFE PLACE",
+    "Un mondo post-apocalittico ti aspetta...",
     "La sopravvivenza dipende dalle tue scelte.",
-    "Ogni passo è una decisione. Muoviti con [WASD] o le frecce.",
-    "Il viaggio inizia ora. Che la fortuna ti accompagni.",
-    "Il mondo post-apocalittico si estende davanti a te.",
-    "Ultimo si risveglia in un mondo che non riconosce più.",
+    "Ogni passo è una decisione. Muoviti con i comandi di movimento.",
+    "L'esplorazione e le tue azioni ti renderanno più forte.",
+    "Il viaggio inizia ora. Che la fortuna ti accompagni."
   ],
   [MessageType.BIOME_ENTER]: {
     'F': [
@@ -349,5 +447,102 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Questo luogo nasconde segreti antichi.",
     "Qualcosa di misterioso aleggia nell'aria.",
     "Le risposte che cerchi potrebbero essere qui."
+  ],
+
+  // Nuovi messaggi secondo GDD
+  [MessageType.SURVIVAL_NIGHT_CONSUME]: [
+    "La notte consuma le tue energie. Hai perso 1 punto fame.",
+    "Il freddo notturno ti ha indebolito. -1 Fame.",
+    "Dormire all'aperto ha un prezzo. La tua fame aumenta."
+  ],
+
+  [MessageType.SURVIVAL_PENALTY]: [
+    "La fame ti sta consumando. Le tue forze diminuiscono.",
+    "La sete ti tormenta. Devi trovare dell'acqua presto.",
+    "Il tuo corpo protesta per la mancanza di cibo."
+  ],
+
+  [MessageType.MOVEMENT_FAIL_OBSTACLE]: [
+    "Un ostacolo insormontabile blocca il tuo cammino.",
+    "Non riesci a proseguire in questa direzione.",
+    "Il terreno è troppo difficile da attraversare."
+  ],
+
+  [MessageType.ACTION_RIVER_CROSSING]: [
+    "Ti avvicini cautamente alla riva del fiume.",
+    "L'acqua scorre veloce davanti a te. Serve abilità per attraversare.",
+    "Il fiume rappresenta una sfida. Puoi tentare di attraversarlo."
+  ],
+
+  [MessageType.MOVEMENT_NIGHT_PENALTY]: [
+    "Muoversi di notte è pericoloso e faticoso.",
+    "L'oscurità rende ogni passo più difficile.",
+    "La notte rallenta i tuoi movimenti."
+  ],
+
+  [MessageType.SKILL_CHECK_RIVER_FAILURE]: [
+    "Il tentativo di attraversare il fiume fallisce.",
+    "La corrente è troppo forte. Non riesci ad attraversare.",
+    "Le tue abilità non sono sufficienti per questo fiume."
+  ],
+
+  [MessageType.SKILL_CHECK_RIVER_DAMAGE]: [
+    "La corrente ti trascina. Subisci danni nell'attraversamento.",
+    "L'acqua gelida ti ferisce mentre lotti contro la corrente.",
+    "Il fiume ti punisce per la tua audacia. Perdi energia."
+  ],
+
+  [MessageType.ACTION_RIVER_EXHAUSTION]: [
+    "L'attraversamento del fiume ti ha sfinito completamente.",
+    "Le tue energie sono esaurite dopo la lotta con la corrente.",
+    "Il fiume ha prosciugato le tue forze."
+  ],
+
+  [MessageType.XP_GAIN]: [
+    "Hai acquisito esperienza dalle tue azioni.",
+    "Le sfide superate ti rendono più forte.",
+    "Ogni prova affrontata ti fa crescere."
+  ],
+
+  [MessageType.STAT_INCREASE]: [
+    "Le tue abilità migliorano con l'esperienza.",
+    "Senti di essere diventato più capace.",
+    "Il tuo potenziale si sta manifestando."
+  ],
+
+  [MessageType.STATUS_CHANGE]: [
+    "Il tuo stato è cambiato.",
+    "Qualcosa in te si è modificato.",
+    "Una trasformazione ha avuto luogo."
+  ],
+
+  [MessageType.INVENTORY_OPEN]: [
+    "Controlli il contenuto del tuo zaino.",
+    "Esamini gli oggetti che porti con te.",
+    "Fai un inventario delle tue risorse."
+  ],
+
+  [MessageType.ITEM_CONSUME]: [
+    "Consumi l'oggetto e ne senti gli effetti.",
+    "L'oggetto viene utilizzato e scompare dal tuo inventario.",
+    "Usi l'oggetto per il suo scopo."
+  ],
+
+  [MessageType.ITEM_EQUIP]: [
+    "Equipaggi l'oggetto e ti senti più preparato.",
+    "L'oggetto è ora parte del tuo equipaggiamento.",
+    "Ti prepari indossando l'oggetto."
+  ],
+
+  [MessageType.INVENTORY_ADD]: [
+    "Aggiungi l'oggetto al tuo inventario.",
+    "L'oggetto trova posto nel tuo zaino.",
+    "Raccogli l'oggetto per un uso futuro."
+  ],
+
+  [MessageType.INVENTORY_REMOVE]: [
+    "Rimuovi l'oggetto dal tuo inventario.",
+    "L'oggetto non è più nel tuo zaino.",
+    "Abbandoni l'oggetto."
   ]
 };

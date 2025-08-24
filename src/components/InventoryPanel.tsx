@@ -3,7 +3,7 @@ import { useGameContext } from '../hooks/useGameContext';
 import type { IItem, IInventorySlot } from '../interfaces/items';
 
 const InventoryPanel: React.FC = () => {
-  const { characterSheet, items: itemDatabase, selectedInventoryIndex, isInventoryOpen } = useGameContext();
+  const { characterSheet, items: itemDatabase } = useGameContext();
 
   const { inventory } = characterSheet;
 
@@ -23,23 +23,22 @@ const InventoryPanel: React.FC = () => {
   };
 
   return (
-    <div className={`bg-black bg-opacity-75 p-4 border rounded-lg text-white font-mono transition-all duration-300 ${isInventoryOpen ? 'border-yellow-400 shadow-lg shadow-yellow-400/20' : 'border-gray-700'}`}>
-      <h2 className="text-lg font-bold mb-4 border-b border-gray-600 pb-2">Inventario</h2>
-      <div className="grid grid-cols-1 gap-2">
+    <div className="p-2 border border-gray-700 rounded-lg text-white font-mono">
+      <h2 className="text-lg font-bold mb-2 border-b border-gray-600 pb-1">Inventario</h2>
+      <div className="grid grid-cols-1 gap-1">
         {inventory.map((slot: IInventorySlot | null, index: number) => {
           const item = slot ? itemDatabase[slot.itemId] : null;
-          const isSelected = index === selectedInventoryIndex;
           return (
-            <div key={index} className={`flex items-center p-1 rounded ${isSelected ? 'bg-gray-700' : ''}`}>
+            <div key={index} className="flex items-center py-0.5 rounded">
 
               {item && slot ? (
-                <div className="flex-grow">
+                <div className="flex-grow text-left">
                   <span className={getItemColor(item)}>{item.name}</span>
-                  <span className="text-gray-400 ml-2"> x{slot.quantity}</span>
+                  <span className="text-gray-400 ml-1"> x{slot.quantity}</span>
                   {slot.portions && <span className="text-yellow-400 ml-1">({slot.portions})</span>}
                 </div>
               ) : (
-                <span className="text-gray-600">- Vuoto -</span>
+                <span className="text-gray-600 text-left">- Vuoto -</span>
               )}
             </div>
           );

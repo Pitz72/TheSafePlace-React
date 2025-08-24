@@ -1,4 +1,4 @@
-# The Safe Place v0.4.4 "Refinement"
+# The Safe Place v0.5.2 "Evolution"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 

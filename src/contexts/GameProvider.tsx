@@ -1,6 +1,6 @@
 import React, { createContext, useState, useCallback, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { MessageType, getRandomMessage, JOURNAL_CONFIG } from '../data/MessageArchive';
+import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
 import { createTestCharacter } from '../rules/characterGenerator';
 import { isDead } from '../rules/mechanics';
 import { equipItem } from '../utils/equipmentManager';
@@ -105,6 +105,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
   const addLogEntry = useCallback((type: MessageType, context?: Record<string, any>) => {
     const message = getRandomMessage(type, context);
+    // Se getRandomMessage restituisce null (sistema anti-spam/cooldown), non aggiungere il messaggio
     if (!message) return;
 
     const newEntry: LogEntry = {
@@ -122,6 +123,9 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     if (gameInitialized) return; // Previeni inizializzazioni multiple
     
     try {
+      // Garantisce una tabula rasa per il diario
+      setLogEntries([]);
+      
       setIsMapLoading(true);
       const response = await fetch('/map.txt');
       if (!response.ok) throw new Error('Failed to load map');
@@ -140,21 +144,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       setIsMapLoading(false);
       setGameInitialized(true);
       
-      // Messaggio di benvenuto solo una volta
-      const welcomeMessage = getRandomMessage(MessageType.GAME_START);
-      if (welcomeMessage) {
-        setLogEntries(prev => [...prev, {
-          id: `init-${Date.now()}-${Math.random()}`,
-          type: MessageType.GAME_START,
-          message: welcomeMessage,
-          timestamp: `Giorno 1, 08:00`
-        }]);
-      }
+      // Reset dello stato del journal per nuova partita
+      resetJournalState();
+      
+      // Messaggio di benvenuto tramite sistema standard
+      addLogEntry(MessageType.GAME_START);
     } catch (error) {
       console.error("Initialization failed:", error);
       setIsMapLoading(false);
     }
-  }, [gameInitialized]);
+  }, [gameInitialized, addLogEntry]);
 
   useEffect(() => {
     initializeGame();
@@ -222,7 +221,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       };
     });
     
-    addLogEntry(MessageType.ACTION_SUCCESS, { action: `Hai guadagnato ${xpGained} punti esperienza!` });
+    // XP guadagnato silenziosamente - non mostrare messaggio per evitare spam nel journal
   }, [addLogEntry]);
 
   const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
@@ -403,10 +402,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           }, 100);
         }
       } else {
-        // CRITICO: Messaggio automatico cambio bioma con timeout
-        setTimeout(() => {
-          addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
-        }, 0);
+        // Messaggio automatico cambio bioma sincrono
+        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
       }
     }
   }, [currentBiome, addLogEntry, navigateTo, characterSheet.maxHP, characterSheet.currentHP, updateHP]);
@@ -697,22 +694,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         return { ...prevChar, inventory: newInventory };
       });
       
+      // Sempre mostra il messaggio di consumo notturno secondo GDD
+      addLogEntry(MessageType.SURVIVAL_NIGHT_CONSUME);
+      
       // Applica penalità se non ha consumato cibo/bevande
       if (!foodConsumed || !drinkConsumed) {
         const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
         updateHP(-penalty);
         
-        const penaltyReason = !foodConsumed && !drinkConsumed 
-          ? 'mancanza di cibo e acqua durante la notte'
-          : !foodConsumed 
-            ? 'mancanza di cibo durante la notte'
-            : 'mancanza di acqua durante la notte';
-            
-        addLogEntry(MessageType.HP_DAMAGE, { damage: penalty, reason: penaltyReason });
-      } else {
-        addLogEntry(MessageType.ACTION_SUCCESS, { 
-          action: 'hai consumato le razioni notturne necessarie' 
-        });
+        // Messaggio di penalità secondo GDD
+        addLogEntry(MessageType.SURVIVAL_PENALTY);
       }
       
       return {

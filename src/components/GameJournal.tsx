@@ -68,6 +68,32 @@ const GameJournal: React.FC = () => {
         return 'journal-welcome';
       case MessageType.LEVEL_UP:
         return 'journal-welcome';
+      case MessageType.XP_GAIN:
+        return 'journal-success';
+      case MessageType.STAT_INCREASE:
+        return 'journal-success';
+      case MessageType.STATUS_CHANGE:
+        return 'journal-standard';
+
+      // Sopravvivenza
+      case MessageType.SURVIVAL_NIGHT_CONSUME:
+        return 'journal-warning';
+      case MessageType.SURVIVAL_PENALTY:
+        return 'journal-hp-damage';
+
+      // Movimento avanzato
+      case MessageType.MOVEMENT_FAIL_OBSTACLE:
+        return 'journal-warning';
+      case MessageType.ACTION_RIVER_CROSSING:
+        return 'journal-river';
+      case MessageType.MOVEMENT_NIGHT_PENALTY:
+        return 'journal-warning';
+      case MessageType.SKILL_CHECK_RIVER_FAILURE:
+        return 'journal-failure';
+      case MessageType.SKILL_CHECK_RIVER_DAMAGE:
+        return 'journal-hp-damage';
+      case MessageType.ACTION_RIVER_EXHAUSTION:
+        return 'journal-warning';
 
       // Inventario e oggetti
       case MessageType.ITEM_FOUND:
@@ -76,6 +102,18 @@ const GameJournal: React.FC = () => {
         return 'journal-item';
       case MessageType.INVENTORY_FULL:
         return 'journal-warning';
+      case MessageType.INVENTORY_OPEN:
+        return 'journal-standard';
+      case MessageType.ITEM_CONSUME:
+        return 'journal-item';
+      case MessageType.ITEM_EQUIP:
+        return 'journal-item';
+      case MessageType.INVENTORY_ADD:
+        return 'journal-success';
+      case MessageType.INVENTORY_REMOVE:
+        return 'journal-standard';
+      case MessageType.INVENTORY_CHANGE:
+        return 'journal-standard';
 
       // Sistema tempo
       case MessageType.TIME_DAWN:
@@ -99,21 +137,18 @@ const GameJournal: React.FC = () => {
   };
   
   return (
-    <div className="h-full flex flex-col bg-gray-900 bg-opacity-80 border border-phosphor-400 rounded-lg overflow-hidden crt-screen scan-lines animate-crt-flicker glow-phosphor-dim">
+    <div className="h-full flex flex-col bg-gray-900 bg-opacity-80 border border-phosphor-400 rounded-lg overflow-hidden glow-phosphor-dim">
       {/* Header del diario */}
       <div className="bg-gray-800 bg-opacity-90 border-b border-phosphor-400 p-3 glow-phosphor-primary">
         <h3 className="text-phosphor-400 text-lg font-bold text-center font-mono tracking-wider text-shadow-phosphor-bright animate-glow">
           DIARIO DI VIAGGIO
         </h3>
-        <div className="text-phosphor-700 text-xs text-center mt-1 animate-pulse">
-          {logEntries.length} {logEntries.length === 1 ? 'voce' : 'voci'}
-        </div>
       </div>
       
       {/* Contenuto del diario */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-3 space-y-2 text-sm leading-relaxed glow-phosphor-dim scrollbar-hidden"
+        className="flex-1 overflow-y-auto p-3 space-y-1 text-base leading-snug glow-phosphor-dim scrollbar-hidden"
         style={{ scrollBehavior: 'smooth' }}
       >
         {logEntries.length === 0 ? (
@@ -133,34 +168,21 @@ const GameJournal: React.FC = () => {
           [...logEntries].reverse().map((entry, index) => (
             <div 
               key={entry.id} 
-              className="border-l-2 border-phosphor-bright pl-3 py-2 hover:bg-gray-800 hover:bg-opacity-50 transition-colors duration-200 hover:glow-phosphor-primary"
+              className="border-l-2 border-phosphor-bright pl-3 py-1 hover:bg-gray-800 hover:bg-opacity-50 transition-colors duration-200 hover:glow-phosphor-primary"
             >
               {/* Timestamp e messaggio sulla stessa riga */}
               <div className="flex items-start gap-2">
                 <div className="text-phosphor-dim text-xs font-mono whitespace-nowrap animate-pulse">
                   {entry.timestamp} - 
                 </div>
-                <div className={`${getMessageClass(entry.type)} font-mono leading-relaxed flex-1 text-shadow-phosphor-dim`}>
+                <div className={`${getMessageClass(entry.type)} font-mono leading-snug flex-1 text-shadow-phosphor-dim`}>
                   {entry.message}
                 </div>
               </div>
-              
-              {/* Separatore visivo per la prima voce (più recente) */}
-              {index === 0 && logEntries.length > 1 && (
-                <div className="mt-2 border-t border-phosphor-bright opacity-30 animate-pulse"></div>
-              )}
             </div>
           ))
         )}
-        
-        {/* Indicatore di fine diario */}
-        {logEntries.length > 0 && (
-          <div className="text-center py-2">
-            <div className="text-phosphor-dim text-xs font-mono opacity-50 animate-pulse text-shadow-phosphor-dim">
-              --- FINE DIARIO ---
-            </div>
-          </div>
-        )}
+
       </div>
     </div>
   );
