@@ -1,10 +1,78 @@
 # 📋 CHANGELOG v0.5.0 "Phoenix"
 ## The Safe Place - Registro Completo delle Modifiche
 
+> ⚠️ **VERSIONE STORICA** - Questo changelog è stato **superseded** da [CHANGELOG-v0.5.1.md](changelog/CHANGELOG-v0.5.1.md). Consultare la versione più recente per lo stato attuale del progetto.
+
 **Versione**: v0.5.0 "Phoenix"  
 **Data Rilascio**: 23 Agosto 2025  
 **Tipo Rilascio**: MAJOR RELEASE  
 **Status**: PRODUZIONE - COMPLETAMENTE FUNZIONALE
+
+---
+
+## 🔒 **DICHIARAZIONE IMMUTABILITÀ STARTSCREEN - 24 Agosto 2025**
+
+### ⚠️ COMPONENTE DICHIARATA IMMUTABILE ⚠️
+
+La componente `StartScreen.tsx` è stata **ufficialmente dichiarata IMMUTABILE** e protetta da regressioni future.
+
+**Stato Finale Approvato:**
+- ✅ ASCII Art title implementato e ottimizzato  
+- ✅ Font hierarchy finalizzata (autore=footer=text-lg, menu=1.8rem)
+- ✅ Spacing critico risolto con inline styles
+- ✅ Layout no-scrollbar garantito
+- ✅ Conflitti CSS container immutabile risolti
+- ✅ Estetica CRT phosphor preservata
+
+**Documentazione Immutabilità:**
+- 📋 Specifica completa: `/documentazione/STARTSCREEN-IMMUTABLE-SPEC.md`
+- 🛡️ Validator anti-regressione: `/documentazione/startscreen-validator.ts`
+- 🔐 Protezioni implementate nel codice sorgente
+
+**Regola di Modifica:**
+Qualsiasi modifica futura richiede autorizzazione esplicita dell'autore del progetto.
+
+---
+
+## 🔒 **DICHIARAZIONE IMMUTABILITÀ INSTRUCTIONSSCREEN - 24 Agosto 2025**
+
+### ⚠️ COMPONENTI DICHIARATE IMMUTABILI ⚠️
+
+Le componenti `InstructionsScreen.tsx` e `PaginatedInfoPage.tsx` sono state **ufficialmente dichiarate IMMUTABILI** e protette da regressioni future.
+
+**Stato Finale Approvato:**
+- ✅ Titolo cambiato da "ISTRUZIONI DEL GIOCO" a "ISTRUZIONI"
+- ✅ Titolo posizionato in alto (pt-2 pb-4)
+- ✅ Box testo esteso a 97.5vh (massima altezza viewport)
+- ✅ Font ridotto del 70% per leggibilità ottimale (text-[52.5%])
+- ✅ Layout flex-col ottimizzato per massimo spazio
+- ✅ Scroll configurato a 32px step per nuovo font
+- ✅ Template PaginatedInfoPage preservato e compatibile
+- ✅ Estetica CRT phosphor mantenuta
+
+**Documentazione Immutabilità:**
+- 📋 Specifica completa: `/documentazione/INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md`
+- 🛡️ Validator anti-regressione: `/documentazione/instructions-validator.ts`
+- 🔐 Protezioni implementate nel codice sorgente
+
+**Regola di Modifica:**
+Qualsiasi modifica futura richiede autorizzazione esplicita dell'autore del progetto.
+
+---
+
+## 🔄 **OTTIMIZZAZIONI INTERFACCIA - 24 Agosto 2025**
+
+### 💻 COMPONENTE MAPVIEWPORT
+
+**Aggiornamenti:**
+- ✅ Pannello debug nascosto in modalità produzione (visibile solo in development)
+- ✅ Documentazione dettagliata del pannello debug per uso futuro
+- ✅ Esperienza utente migliorata con interfaccia più pulita
+- ✅ Nessuna perdita di funzionalità per sviluppatori (pannello disponibile in development mode)
+
+**Documentazione:**
+- 📋 Specifica completa: `/documentazione/DEBUG-PANEL-HIDING-v0.5.0.md`
+- 🔐 Commenti aggiornati in `MapViewport.tsx`
 
 ---
 

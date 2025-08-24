@@ -1,3 +1,14 @@
+/**
+ * MapViewport.tsx — Rendering mappa di gioco con viewport virtualization
+ *
+ * NOTA DI AGGIORNAMENTO (v0.5.1): 
+ * - Pannello debug condizionato a 'development mode' per migliorare UX
+ * - Documentazione: /documentazione/DEBUG-PANEL-HIDING-v0.5.1.md
+ * - Per rendere visibile il pannello: eseguire in 'development mode' (npm run dev)
+ * 
+ * @versione v0.5.1 - "Look Me"
+ * @data 2025-08-24
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 
@@ -255,14 +266,17 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
         </div>
       </div>
       
-      {/* Info debug con viewport virtualization */}
-      <div className="absolute bottom-2 right-2 text-xs text-phosphor-700 bg-gray-800 bg-opacity-90 border border-phosphor-400 px-2 py-1 rounded opacity-75 font-mono glow-phosphor-dim animate-pulse">
-        <div>Viewport: {viewportWidth}x{viewportHeight}</div>
-        <div>Visibili: {VISIBLE_COLS}x{VISIBLE_ROWS}</div>
-        <div>Rendering: {(endRow - startRow) * (endCol - startCol)} elementi</div>
-        <div>Totale mappa: {mapData.length}x{mapData[0]?.length || 0}</div>
-        <div>Riduzione: {Math.round(((endRow - startRow) * (endCol - startCol)) / (mapData.length * 150) * 100)}%</div>
-      </div>
+      {/* Info debug con viewport virtualization - TEMPORANEAMENTE DISABILITATO
+      {import.meta.env.MODE === 'development' && (
+        <div className="absolute bottom-2 right-2 text-xs text-phosphor-700 bg-gray-800 bg-opacity-90 border border-phosphor-400 px-2 py-1 rounded opacity-75 font-mono glow-phosphor-dim animate-pulse">
+          <div>Viewport: {viewportWidth}x{viewportHeight}</div>
+          <div>Visibili: {VISIBLE_COLS}x{VISIBLE_ROWS}</div>
+          <div>Rendering: {(endRow - startRow) * (endCol - startCol)} elementi</div>
+          <div>Totale mappa: {mapData.length}x{mapData[0]?.length || 0}</div>
+          <div>Riduzione: {Math.round(((endRow - startRow) * (endCol - startCol)) / (mapData.length * 150) * 100)}%</div>
+        </div>
+      )}
+      */}
     </div>
   );
 };

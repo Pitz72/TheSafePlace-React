@@ -1,7 +1,34 @@
 /**
  * StartScreen.tsx — Menu iniziale
- * Regole tipografiche (v0.3.2): Titolo 100px, menu text-[2.4rem], autore text-xl, versione text-lg
- * Invarianti: logo max-w-[34%]/max-h-[34vh], glow CRT, mappatura scorciatoie [N/C/I/T/O/E]
+ * 
+ * ⚠️  COMPONENTE IMMUTABILE - v0.5.1-Look Me Final ⚠️
+ * 
+ * QUESTA COMPONENTE È CONSIDERATA IMMUTABILE E DEFINITIVA.
+ * Modifiche vietate senza autorizzazione esplicita dell'autore.
+ * 
+ * Documentazione completa: /documentazione/STARTSCREEN-IMMUTABLE-SPEC.md
+ * 
+ * Specifica Layout Finale (NON MODIFICARE):
+ * - ASCII Art: fontSize 0.8rem (inline style per CSS override)
+ * - Autore: text-lg, marginTop 2rem (inline style)
+ * - Versione: text-base, marginBottom 3rem (inline style) 
+ * - Menu: text-[1.8rem] (ottimizzato usabilità)
+ * - Footer: text-lg ENTRAMBI paragrafi (match autore size)
+ * - Spacing: marginTop 3rem, marginBottom 1rem interno (inline styles)
+ * 
+ * Soluzioni Tecniche Critiche:
+ * - Inline styles per spacing: risolve conflitto .game-container override
+ * - Font sizes ottimizzati per viewport senza scrollbar
+ * - Color scheme phosphor CRT preservato
+ * 
+ * Regole tipografiche (v0.5.1-FINAL): 
+ * ASCII 0.8rem, menu text-[1.8rem], autore text-lg, versione text-base, footer text-lg
+ * 
+ * Invarianti: glow CRT, mappatura scorciatoie [N/C/I/T/O/E], no scrollbars
+ * 
+ * Data: 2025-08-24
+ * Autore: Simone Pizzi
+ * Stato: IMMUTABILE ✅
  */
 import React from 'react';
 import { useGameContext } from '../hooks/useGameContext';
@@ -19,40 +46,44 @@ const StartScreen: React.FC = () => {
   ];
 
   return (
-    <div className="h-full flex justify-center overflow-y-auto crt-screen scan-lines"> {/* items-center rimosso per permettere controllo fine delle spaziature verticali e margini tra elementi */}
-      <div className="w-full mx-4 text-center relative pt-16"> {/* pt-16 aggiunto per centratura visiva mantenendo flessibilità sui margini */}
+    <div className="h-full flex items-center justify-center overflow-hidden crt-screen scan-lines">
+      <div className="w-full mx-4 text-center relative">
         {/* Effetti CRT di sfondo */}
         <div className="absolute inset-0 pointer-events-none animate-crt-flicker opacity-10"></div>
         
-        {/* Logo */}
-        {/* TODO: Investigare perché le modifiche ai margini dell'immagine (mb-1, mb-0, mb-4) non hanno effetto visibile */}
-        <img 
-          src="/logo.jpg" 
-          alt="The Safe Place Logo" 
-          className="max-w-[34%] h-auto max-h-[34vh] object-contain mx-auto mb-1 glow-phosphor-dim animate-pulse"
-        />
-        
-        {/* Titolo */}
-        <h1 className="text-phosphor-400 font-bold mb-1 text-shadow-phosphor-bright animate-glow tracking-wider" style={{ fontSize: '100px' }}>
-          THE SAFE PLACE
-        </h1>
+        {/* Titolo ASCII Art */}
+        <div className="text-phosphor-400 font-mono font-bold mb-4 text-shadow-phosphor-bright animate-glow leading-none" style={{ fontSize: '0.8rem' }}>
+          <pre className="whitespace-pre">
+{`████████ ██   ██ ███████     ███████  █████  ███████ ███████ 
+   ██    ██   ██ ██          ██      ██   ██ ██      ██      
+   ██    ███████ █████       ███████ ███████ █████   █████   
+   ██    ██   ██ ██               ██ ██   ██ ██      ██      
+   ██    ██   ██ ███████     ███████ ██   ██ ██      ███████ 
+                                                            
+██████  ██       █████   ██████ ███████                    
+██   ██ ██      ██   ██ ██      ██                         
+██████  ██      ███████ ██      █████                      
+██      ██      ██   ██ ██      ██                         
+██      ███████ ██   ██  ██████ ███████                    `}
+          </pre>
+        </div>
         
         {/* Autore */}
-        <p className="text-phosphor-500 text-xl mb-1 -mt-2 text-shadow-phosphor-primary animate-pulse">
+        <p className="text-phosphor-500 text-lg mb-2 text-shadow-phosphor-primary animate-pulse" style={{ marginTop: '2rem' }}>
           un gioco di Simone Pizzi
         </p>
         
         {/* Versione */}
-        <p className="text-phosphor-700 text-lg mb-6 tracking-wider glow-phosphor-dim">
-          v0.5.0 - Phoenix
+        <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '3rem' }}>
+          v0.5.1 - Look Me
         </p>
         
         {/* Menu Items Testuali */}
-        <div className="space-y-2 mb-8">
+        <div className="space-y-1 mb-4">
           {menuItems.map((item, index) => (
             <div
               key={item.key}
-              className={`text-center cursor-pointer transition-all duration-200 text-[2.4rem] px-4 py-2 rounded-lg ${
+              className={`text-center cursor-pointer transition-all duration-200 text-[1.8rem] px-3 py-1 rounded-lg ${
                 menuSelectedIndex === index
                   ? 'text-phosphor-400 font-black text-shadow-phosphor-bright animate-glow glow-phosphor-bright bg-phosphor-300 bg-opacity-40 border-2 border-phosphor-400' 
                   : 'text-phosphor-500 glow-phosphor-primary hover:text-phosphor-400 hover:glow-phosphor-bright'
@@ -65,12 +96,12 @@ const StartScreen: React.FC = () => {
         </div>
         
         {/* Footer */}
-        <div className="text-phosphor-700 text-base leading-relaxed mx-auto glow-phosphor-dim animate-pulse">
-          <p className="mb-2 text-shadow-phosphor-dim">
-            Questo GDR Testuale in stile retrocomputazionale è una sperimentazione di cooperazione diretta tra umano designer non programmatore e i modelli LLM tramite Cursor.
+        <div className="text-phosphor-700 text-lg leading-relaxed mx-auto glow-phosphor-dim animate-pulse" style={{ marginTop: '3rem' }}>
+          <p className="text-shadow-phosphor-dim text-lg" style={{ marginBottom: '1rem' }}>
+            GDR Retrocomputazionale - Cooperazione umano-AI
           </p>
-          <p className="text-shadow-phosphor-dim">
-            Il progetto è un (C) di Runtime Radio.
+          <p className="text-shadow-phosphor-dim text-lg">
+            (C) Runtime Radio
           </p>
         </div>
       </div>
