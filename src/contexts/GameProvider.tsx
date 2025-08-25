@@ -279,42 +279,36 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     navigateTo('event'); // Naviga alla nuova schermata evento
   }, [eventDatabase, seenEventIds, currentEvent, navigateTo]);
 
-  const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
-    dbg('setPlayerPosition', { from: playerPosition, to: newPosition });
+  const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }, newBiome: string) => {
     setPlayerPosition(newPosition);
     
-    // Guadagna XP per esplorazione (1-2 XP per passo)
+    if (newBiome !== currentBiome) {
+      setCurrentBiome(newBiome);
+      if (newBiome !== 'R') {
+        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+      }
+    }
+
+    const EVENT_CHANCE = 0.15;
+    if (newBiome !== '.' && newBiome !== 'R' && Math.random() < EVENT_CHANCE) {
+      setTimeout(() => triggerEvent(newBiome), 150);
+    }
+
     const xpGained = Math.floor(Math.random() * 2) + 1;
     addExperience(xpGained);
     
-    // Consuma fame e sete gradualmente
     setSurvivalState(prev => {
-      const hungerLoss = Math.random() * 0.5 + 0.2; // 0.2-0.7 per passo
-      const thirstLoss = Math.random() * 0.8 + 0.3; // 0.3-1.1 per passo
-      
-      const newHunger = Math.max(0, prev.hunger - hungerLoss);
-      const newThirst = Math.max(0, prev.thirst - thirstLoss);
-      
-      // Danno da fame/sete se entrambi sono a 0
-      if (newHunger === 0 && newThirst === 0) {
-        // Ogni 5 passi con fame/sete a 0, perde 1 HP
-        const stepsWithoutFood = Math.floor((100 - newHunger) / 0.5);
-        const stepsWithoutWater = Math.floor((100 - newThirst) / 0.8);
-        if (stepsWithoutFood % 5 === 0 || stepsWithoutWater % 5 === 0) {
-          updateHP(-1);
-          addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
-        }
-      }
-      
+      const hungerLoss = Math.random() * 0.5 + 0.2;
+      const thirstLoss = Math.random() * 0.8 + 0.3;
       return {
         ...prev,
-        hunger: newHunger,
-        thirst: newThirst
+        hunger: Math.max(0, prev.hunger - hungerLoss),
+        thirst: Math.max(0, prev.thirst - thirstLoss)
       };
     });
     
     advanceTime();
-  }, [advanceTime, playerPosition, addExperience, updateHP, addLogEntry]);
+  }, [currentBiome, addLogEntry, advanceTime, addExperience, triggerEvent]);
   
   const calculateCameraPosition = useCallback((playerPos: { x: number; y: number }, viewportSize: { width: number; height: number }) => {
     // Arrotondamento stabile per evitare micro-variazioni
@@ -402,72 +396,146 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     advanceTime(restTime);
   }, [characterSheet.currentHP, characterSheet.maxHP, updateHP, addLogEntry, advanceTime]);
 
-  const updateBiome = useCallback((newBiome: string) => {
-    if (newBiome !== currentBiome) {
-      setCurrentBiome(newBiome);
+  // Gestisce il consumo notturno di cibo e bevande
+  const handleNightConsumption = useCallback(() => {
+    const currentDay = timeStateRef.current.day;
+    
+    setSurvivalState(prev => {
+      // Evita doppio consumo nello stesso giorno
+      if (prev.lastNightConsumption.day === currentDay && prev.lastNightConsumption.consumed) {
+        return prev;
+      }
       
-      if (newBiome === 'R') {
-        const shelterKey = `${playerPosition.x},${playerPosition.y}`;
+      // Cerca cibo e bevande nell'inventario
+      let foodConsumed = false;
+      let drinkConsumed = false;
+      
+      setCharacterSheet(prevChar => {
+        const newInventory = [...prevChar.inventory];
         
-        // Controlla se il rifugio è già stato visitato
-        if (visitedShelters[shelterKey]) {
-          setTimeout(() => {
-            addLogEntry(MessageType.DISCOVERY, { 
-              discovery: 'rifugio già perquisito - non c\'è altro da trovare' 
-            });
-          }, 100);
-          return;
+        // Cerca e consuma cibo
+        for (let i = 0; i < newInventory.length && !foodConsumed; i++) {
+          const slot = newInventory[i];
+          if (slot && items[slot.itemId]) {
+            const item = items[slot.itemId];
+            if (item.effect === 'satiety' && slot.quantity > 0) {
+              // Sistema di porzioni per consumo notturno
+              if (item.portionsPerUnit && item.portionEffect) {
+                let currentPortions = slot.portions ?? item.portionsPerUnit;
+                currentPortions -= 1;
+                
+                if (currentPortions > 0) {
+                  // Aggiorna solo le porzioni
+                  slot.portions = currentPortions;
+                } else {
+                  // Le porzioni sono finite, consuma un'unità
+                  slot.quantity -= 1;
+                  if (slot.quantity > 0) {
+                    // Resetta le porzioni per la prossima unità
+                    slot.portions = item.portionsPerUnit;
+                  } else {
+                    // Rimuovi l'oggetto dall'inventario
+                    newInventory[i] = null;
+                  }
+                }
+              } else {
+                // Logica esistente per oggetti senza porzioni
+                if (slot.quantity > 1) {
+                  slot.quantity -= 1;
+                } else {
+                  newInventory[i] = null;
+                }
+              }
+              foodConsumed = true;
+            }
+          }
         }
         
-        // Marca il rifugio come visitato
-        setVisitedShelters(prev => ({
-          ...prev,
-          [shelterKey]: true
-        }));
-        
-        if (timeStateRef.current.isDay) {
-          // Di giorno: apri schermata rifugio
-          setTimeout(() => {
-            navigateTo('shelter');
-            addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro inesplorato' });
-          }, 100);
-        } else {
-          // Di notte: passa automaticamente al giorno successivo
-          setTimeout(() => {
-            // Consuma cibo e bevande per la notte
-            handleNightConsumption();
-            
-            // Passa al mattino successivo
-            setTimeState(prev => ({
-              currentTime: DAWN_TIME,
-              day: prev.day + 1,
-              isDay: true
-            }));
-            
-            // Recupera 60% degli HP
-            const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
-            const nightHealing = Math.floor(maxRecovery * 0.6);
-            updateHP(nightHealing);
-            
-            addLogEntry(MessageType.REST_SUCCESS, { 
-              healingAmount: nightHealing,
-              location: 'rifugio notturno',
-              newDay: timeStateRef.current.day + 1
-            });
-          }, 100);
+        // Cerca e consuma bevande
+        for (let i = 0; i < newInventory.length && !drinkConsumed; i++) {
+          const slot = newInventory[i];
+          if (slot && items[slot.itemId]) {
+            const item = items[slot.itemId];
+            if (item.effect === 'hydration' && slot.quantity > 0) {
+              // Sistema di porzioni per consumo notturno
+              if (item.portionsPerUnit && item.portionEffect) {
+                let currentPortions = slot.portions ?? item.portionsPerUnit;
+                currentPortions -= 1;
+                
+                if (currentPortions > 0) {
+                  // Aggiorna solo le porzioni
+                  slot.portions = currentPortions;
+                } else {
+                  // Le porzioni sono finite, consuma un'unità
+                  slot.quantity -= 1;
+                  if (slot.quantity > 0) {
+                    // Resetta le porzioni per la prossima unità
+                    slot.portions = item.portionsPerUnit;
+                  } else {
+                    // Rimuovi l'oggetto dall'inventario
+                    newInventory[i] = null;
+                  }
+                }
+              } else {
+                // Logica esistente per oggetti senza porzioni
+                if (slot.quantity > 1) {
+                  slot.quantity -= 1;
+                } else {
+                  newInventory[i] = null;
+                }
+              }
+              drinkConsumed = true;
+            }
+          }
         }
-      } else {
-        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+        
+        return { ...prevChar, inventory: newInventory };
+      });
+      
+      // Sempre mostra il messaggio di consumo notturno secondo GDD
+      addLogEntry(MessageType.SURVIVAL_NIGHT_CONSUME);
+      
+      // Applica penalità se non ha consumato cibo/bevande
+      if (!foodConsumed || !drinkConsumed) {
+        const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
+        updateHP(-penalty);
+        
+        // Messaggio di penalità secondo GDD
+        addLogEntry(MessageType.SURVIVAL_PENALTY);
+      }
+      
+      return {
+        ...prev,
+        lastNightConsumption: { day: currentDay, consumed: true }
+      };
+    });
+  }, [items, updateHP, addLogEntry, setSurvivalState]);
 
-        // --- LOGICA DI INNESCO EVENTO (POSIZIONE CORRETTA) ---
-        const EVENT_CHANCE = 0.15; // 15% di probabilità
-        if (newBiome !== '.' && Math.random() < EVENT_CHANCE) {
-          setTimeout(() => triggerEvent(newBiome), 100); // Piccolo ritardo per coerenza UI
-        }
-        // ----------------------------------------------------
+  const updateBiome = useCallback((newBiome: string) => {
+    if (newBiome === 'R') {
+      const shelterKey = `${playerPosition.x},${playerPosition.y}`;
+      if (visitedShelters[shelterKey]) {
+        setTimeout(() => addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio già perquisito - non c\'è altro da trovare' }), 100);
+        return;
+      }
+      setVisitedShelters(prev => ({ ...prev, [shelterKey]: true }));
+      if (timeStateRef.current.isDay) {
+        setTimeout(() => {
+          navigateTo('shelter');
+          addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro inesplorato' });
+        }, 100);
+      } else {
+        setTimeout(() => {
+          handleNightConsumption();
+          setTimeState(prev => ({ currentTime: DAWN_TIME, day: prev.day + 1, isDay: true }));
+          const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
+          const nightHealing = Math.floor(maxRecovery * 0.6);
+          updateHP(nightHealing);
+          addLogEntry(MessageType.REST_SUCCESS, { healingAmount: nightHealing, location: 'rifugio notturno', newDay: timeStateRef.current.day + 1 });
+        }, 100);
       }
     }
-  }, [currentBiome, addLogEntry, navigateTo, characterSheet.maxHP, characterSheet.currentHP, updateHP, triggerEvent]);
+  }, [playerPosition, visitedShelters, timeStateRef, characterSheet.maxHP, characterSheet.currentHP, navigateTo, handleNightConsumption, updateHP, addLogEntry]);
 
 
 
@@ -733,120 +801,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
 
 
-  // Gestisce il consumo notturno di cibo e bevande
-  const handleNightConsumption = useCallback(() => {
-    const currentDay = timeStateRef.current.day;
-    
-    setSurvivalState(prev => {
-      // Evita doppio consumo nello stesso giorno
-      if (prev.lastNightConsumption.day === currentDay && prev.lastNightConsumption.consumed) {
-        return prev;
-      }
-      
-      // Cerca cibo e bevande nell'inventario
-      let foodConsumed = false;
-      let drinkConsumed = false;
-      
-      setCharacterSheet(prevChar => {
-        const newInventory = [...prevChar.inventory];
-        
-        // Cerca e consuma cibo
-        for (let i = 0; i < newInventory.length && !foodConsumed; i++) {
-          const slot = newInventory[i];
-          if (slot && items[slot.itemId]) {
-            const item = items[slot.itemId];
-            if (item.effect === 'satiety' && slot.quantity > 0) {
-              // Sistema di porzioni per consumo notturno
-              if (item.portionsPerUnit && item.portionEffect) {
-                let currentPortions = slot.portions ?? item.portionsPerUnit;
-                currentPortions -= 1;
-                
-                if (currentPortions > 0) {
-                  // Aggiorna solo le porzioni
-                  slot.portions = currentPortions;
-                } else {
-                  // Le porzioni sono finite, consuma un'unità
-                  slot.quantity -= 1;
-                  if (slot.quantity > 0) {
-                    // Resetta le porzioni per la prossima unità
-                    slot.portions = item.portionsPerUnit;
-                  } else {
-                    // Rimuovi l'oggetto dall'inventario
-                    newInventory[i] = null;
-                  }
-                }
-              } else {
-                // Logica esistente per oggetti senza porzioni
-                if (slot.quantity > 1) {
-                  slot.quantity -= 1;
-                } else {
-                  newInventory[i] = null;
-                }
-              }
-              foodConsumed = true;
-            }
-          }
-        }
-        
-        // Cerca e consuma bevande
-        for (let i = 0; i < newInventory.length && !drinkConsumed; i++) {
-          const slot = newInventory[i];
-          if (slot && items[slot.itemId]) {
-            const item = items[slot.itemId];
-            if (item.effect === 'hydration' && slot.quantity > 0) {
-              // Sistema di porzioni per consumo notturno
-              if (item.portionsPerUnit && item.portionEffect) {
-                let currentPortions = slot.portions ?? item.portionsPerUnit;
-                currentPortions -= 1;
-                
-                if (currentPortions > 0) {
-                  // Aggiorna solo le porzioni
-                  slot.portions = currentPortions;
-                } else {
-                  // Le porzioni sono finite, consuma un'unità
-                  slot.quantity -= 1;
-                  if (slot.quantity > 0) {
-                    // Resetta le porzioni per la prossima unità
-                    slot.portions = item.portionsPerUnit;
-                  } else {
-                    // Rimuovi l'oggetto dall'inventario
-                    newInventory[i] = null;
-                  }
-                }
-              } else {
-                // Logica esistente per oggetti senza porzioni
-                if (slot.quantity > 1) {
-                  slot.quantity -= 1;
-                } else {
-                  newInventory[i] = null;
-                }
-              }
-              drinkConsumed = true;
-            }
-          }
-        }
-        
-        return { ...prevChar, inventory: newInventory };
-      });
-      
-      // Sempre mostra il messaggio di consumo notturno secondo GDD
-      addLogEntry(MessageType.SURVIVAL_NIGHT_CONSUME);
-      
-      // Applica penalità se non ha consumato cibo/bevande
-      if (!foodConsumed || !drinkConsumed) {
-        const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
-        updateHP(-penalty);
-        
-        // Messaggio di penalità secondo GDD
-        addLogEntry(MessageType.SURVIVAL_PENALTY);
-      }
-      
-      return {
-        ...prev,
-        lastNightConsumption: { day: currentDay, consumed: true }
-      };
-    });
-  }, [items, updateHP, addLogEntry, setSurvivalState]);
+  // Rimossa da qui - spostata prima di updateBiome
 
   // === SISTEMA DI SALVATAGGIO === 
   // Real save system implementation with correct types

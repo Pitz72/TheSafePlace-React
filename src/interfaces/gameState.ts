@@ -67,7 +67,7 @@ export interface GameState {
   
   // Actions
   initializeGame: () => Promise<void>;
-  updatePlayerPosition: (newPosition: { x: number; y: number }) => void;
+  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiome: string) => void;
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   advanceTime: (minutes?: number) => void;
   
