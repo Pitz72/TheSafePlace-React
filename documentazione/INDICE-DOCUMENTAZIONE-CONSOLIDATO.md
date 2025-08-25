@@ -3,7 +3,7 @@
 
 **Stato**: CONSOLIDATO E AGGIORNATO  
 **Ultima Revisione**: 2025-08-18  
-**Versione Attiva**: v0.4.2 "LevelUp and Miscellaneous"
+**Versione Attiva**: v0.5.3 "Important Object Bug Fix"
 
 ---
 
@@ -15,15 +15,16 @@
 - ✅ **[MAPPA-SIMBOLI-E-SIGNIFICATI.md](./MAPPA-SIMBOLI-E-SIGNIFICATI.md)** - Riferimento simboli ATTIVO
 
 ### 🛡️ **Protezioni Anti-Regressione ATTIVE**
+- ✅ **[ANTI-REGRESSION-v0.5.3.md](./anti-regressione/ANTI-REGRESSION-v0.5.3.md)** - PROTEZIONE ATTIVA
 - ✅ **[ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md](./anti-regressione/ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md)** - PROTEZIONE ATTIVA
-- ⚠️ **Tutti gli altri documenti anti-regressione** - OBSOLETI (mantenuti per riferimento storico)
 
 ### 📊 **Baseline Immutabili**
 - ✅ **[DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)** - BASELINE ATTIVA
 - ✅ **[INVENTORY-PANEL-IMMUTABLE-SPEC.md](./INVENTORY-PANEL-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE PANNELLO INVENTARIO v0.5.2
 
 ### 📝 **Changelog Corrente**
-- ✅ **[CHANGELOG-v0.4.2.md](./changelog/CHANGELOG-v0.4.2.md)** - VERSIONE CORRENTE
+- ✅ **[CHANGELOG-v0.5.3.md](./changelog/CHANGELOG-v0.5.3.md)** - VERSIONE CORRENTE
+- ✅ **[CHANGELOG-v0.4.2.md](./changelog/CHANGELOG-v0.4.2.md)** - VERSIONE PRECEDENTE
 - ✅ **[CHANGELOG-v0.4.1.md](./changelog/CHANGELOG-v0.4.1.md)** - VERSIONE PRECEDENTE
 - ✅ **[CHANGELOG-v0.4.0.md](./changelog/CHANGELOG-v0.4.0.md)** - VERSIONE STORICA
 

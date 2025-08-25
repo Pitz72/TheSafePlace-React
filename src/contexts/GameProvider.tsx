@@ -6,7 +6,7 @@ import { isDead } from '../rules/mechanics';
 import { equipItem } from '../utils/equipmentManager';
 import { useSaveSystem, type GameSaveData } from '../utils/saveSystem';
 import { initializeGlobalErrorHandler } from '../utils/errorHandler';
-import type { GameState, TimeState, Screen } from '../interfaces/gameState';
+import type { GameState, TimeState, Screen, AbilityCheckResult } from '../interfaces/gameState';
 import type { IItem } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
 import type { LogEntry } from '../data/MessageArchive';
@@ -306,25 +306,26 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     return Math.floor((characterSheet.stats[ability] - 10) / 2);
   }, [characterSheet.stats]);
 
-  const performAbilityCheck = useCallback((ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal = true, successMessageType?: MessageType): boolean => {
+  const performAbilityCheck = useCallback((ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal = true, successMessageType?: MessageType): AbilityCheckResult => {
     const modifier = getModifier(ability);
     const roll = Math.floor(Math.random() * 20) + 1;
     const total = roll + modifier;
     const success = total >= difficulty;
     
-    // XP per skill check
     if (success) {
-      const xpGained = Math.floor(Math.random() * 6) + 5; // 5-10 XP per successo
+      const xpGained = Math.floor(Math.random() * 6) + 5;
       addExperience(xpGained);
     } else {
-      const xpGained = Math.floor(Math.random() * 3) + 1; // 1-3 XP per fallimento
+      const xpGained = Math.floor(Math.random() * 3) + 1;
       addExperience(xpGained);
     }
+    
+    const result: AbilityCheckResult = { success, roll, modifier, total, difficulty };
     
     if (addToJournal) {
       addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, { ability, roll, modifier, total, difficulty });
     }
-    return success;
+    return result;
   }, [getModifier, addLogEntry, addExperience]);
 
   const shortRest = useCallback(() => {
@@ -490,55 +491,54 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
   }, [characterSheet, items, addLogEntry, updateHP, setSurvivalState]);
 
-  // Aggiunge un oggetto all'inventario
-  const addItem = useCallback((itemId: string, quantity: number = 1) => {
+  const addItem = useCallback((itemId: string, quantity: number = 1): boolean => {
     const item = items[itemId];
     if (!item) {
-      addLogEntry(MessageType.ACTION_FAIL, { reason: `Oggetto ${itemId} non trovato nel database` });
-      return false;
+        addLogEntry(MessageType.ACTION_FAIL, { reason: `Oggetto ${itemId} non trovato nel database` });
+        return false;
     }
 
-    setCharacterSheet(prev => {
-      const newInventory = [...prev.inventory];
-      
-      // Cerca slot esistente per oggetti stackable
-      if (item.stackable) {
+    const newInventory = [...characterSheet.inventory];
+    let itemAdded = false;
+
+    // Cerca slot esistente per oggetti stackable
+    if (item.stackable) {
         for (let i = 0; i < newInventory.length; i++) {
-          const slot = newInventory[i];
-          if (slot && slot.itemId === itemId) {
-            slot.quantity += quantity;
-            addLogEntry(MessageType.ITEM_FOUND, { 
-              item: item.name, 
-              quantity: quantity,
-              total: slot.quantity 
-            });
-            return { ...prev, inventory: newInventory };
-          }
+            const slot = newInventory[i];
+            if (slot && slot.itemId === itemId) {
+                slot.quantity += quantity;
+                addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity: quantity, total: slot.quantity });
+                itemAdded = true;
+                break;
+            }
         }
-      }
-      
-      // Cerca primo slot vuoto
-      for (let i = 0; i < newInventory.length; i++) {
-        if (!newInventory[i]) {
-          newInventory[i] = {
-            itemId,
-            quantity
-          };
-          addLogEntry(MessageType.ITEM_FOUND, { 
-            item: item.name, 
-            quantity: quantity 
-          });
-          return { ...prev, inventory: newInventory };
+    }
+
+    // Se non è stato impilato, cerca il primo slot vuoto
+    if (!itemAdded) {
+        for (let i = 0; i < newInventory.length; i++) {
+            if (!newInventory[i]) {
+                const newItem = {
+                    itemId,
+                    quantity,
+                    portions: item.portionsPerUnit ? item.portionsPerUnit : undefined
+                };
+                newInventory[i] = newItem;
+                addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity: quantity });
+                itemAdded = true;
+                break;
+            }
         }
-      }
-      
-      // Inventario pieno
-      addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
-      return prev;
-    });
+    }
     
-    return true;
-  }, [items, addLogEntry]);
+    if (itemAdded) {
+        setCharacterSheet(prev => ({ ...prev, inventory: newInventory }));
+        return true;
+    } else {
+        addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
+        return false;
+    }
+}, [characterSheet.inventory, items, addLogEntry]);
 
   // Rimuove un oggetto dall'inventario
   const removeItem = useCallback((slotIndex: number, quantity: number = 1) => {

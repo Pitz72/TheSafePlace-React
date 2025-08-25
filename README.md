@@ -1,4 +1,4 @@
-# The Safe Place v0.5.2 "Evolution"
+# The Safe Place v0.5.3 "Important Object Bug Fix"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -92,6 +92,16 @@ npm run preview      # Preview build
 ### 📄 Licenza
 
 Progetto privato - Tutti i diritti riservati
+
+### 🆕 Novità v0.5.3 "Important Object Bug Fix"
+
+Questa versione corregge una serie di bug critici relativi alla gestione degli oggetti e dell'inventario, migliorando significativamente la stabilità del gameplay loop.
+
+#### 🐛 Bug Corretti
+- **Sistema di Porzioni Funzionante**: Ora gli oggetti consumabili vengono usati in porzioni, come da design, invece che in intere unità.
+- **Correzione Aggiunta Oggetti**: Risolto un bug critico che impediva l'aggiunta di oggetti all'inventario anche quando c'era spazio.
+- **Impilamento Oggetti (Stacking)**: Gli oggetti consumabili ora si impilano correttamente nell'inventario.
+- **Trasparenza Skill Check**: I risultati dei test di abilità (es. cercare in un rifugio) ora mostrano i dettagli del tiro, rendendo il gioco più chiaro.
 
 ### 🆕 Novità v0.4.4 "Refinement"
 

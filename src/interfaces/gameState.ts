@@ -3,6 +3,15 @@ import type { MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { IItem } from './items';
 
+// Aggiungi questa interfaccia all'inizio del file
+export interface AbilityCheckResult {
+  success: boolean;
+  roll: number;
+  modifier: number;
+  total: number;
+  difficulty: number;
+}
+
 export interface TimeState {
   currentTime: number; // Minuti dall'inizio del gioco (0-1439, dove 1440 = 24 ore)
   day: number; // Giorno corrente (inizia da 1)
@@ -57,7 +66,7 @@ export interface GameState {
   
   // Character actions
   updateHP: (amount: number) => void;
-  performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => boolean;
+  performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
   getModifier: (ability: keyof ICharacterSheet['stats']) => number;
   shortRest: () => void;
   
