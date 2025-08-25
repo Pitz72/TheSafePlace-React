@@ -262,6 +262,19 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     // XP guadagnato silenziosamente - non mostrare messaggio per evitare spam nel journal
   }, [addLogEntry]);
 
+  // Funzione di mappatura tra simboli della mappa e chiavi del database eventi
+  const getBiomeKeyFromChar = (char: string): string => {
+    switch (char) {
+      case 'C': return 'CITY';
+      case 'F': return 'FOREST';
+      case '.': return 'PLAINS';
+      case 'R': return 'REST_STOP';
+      case '~': return 'RIVER';
+      case 'V': return 'VILLAGE';
+      default: return '';
+    }
+  };
+
   // Attiva un evento casuale basato sul bioma attuale
   const triggerEvent = useCallback((biome: string) => {
     if (!eventDatabase[biome] || currentEvent) return; // Nessun evento per questo bioma o evento già attivo
@@ -279,21 +292,25 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     navigateTo('event'); // Naviga alla nuova schermata evento
   }, [eventDatabase, seenEventIds, currentEvent, navigateTo]);
 
-  const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }, newBiome: string) => {
+  const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }, newBiomeChar: string) => {
     setPlayerPosition(newPosition);
     
-    if (newBiome !== currentBiome) {
-      setCurrentBiome(newBiome);
-      if (newBiome !== 'R') {
-        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+    if (newBiomeChar !== currentBiome) {
+      setCurrentBiome(newBiomeChar);
+      if (newBiomeChar !== 'R') {
+        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeChar });
       }
     }
 
-    const EVENT_CHANCE = 0.15;
-    if (newBiome !== 'R' && Math.random() < EVENT_CHANCE) {
-      setTimeout(() => triggerEvent(newBiome), 150);
-    }
+    // AUMENTIAMO LA PROBABILITÀ PER IL TEST
+    const EVENT_CHANCE = 0.50; // 50% di probabilità
+    
+    const biomeKey = getBiomeKeyFromChar(newBiomeChar);
 
+    if (biomeKey && Math.random() < EVENT_CHANCE) {
+      setTimeout(() => triggerEvent(biomeKey), 150);
+    }
+    
     const xpGained = Math.floor(Math.random() * 2) + 1;
     addExperience(xpGained);
     
@@ -511,8 +528,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     });
   }, [items, updateHP, addLogEntry, setSurvivalState]);
 
-  const updateBiome = useCallback((newBiome: string) => {
-    if (newBiome === 'R') {
+  const updateBiome = useCallback((newBiomeChar: string) => {
+    if (newBiomeChar === 'R') {
       const shelterKey = `${playerPosition.x},${playerPosition.y}`;
       if (visitedShelters[shelterKey]) {
         setTimeout(() => addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio già perquisito - non c\'è altro da trovare' }), 100);

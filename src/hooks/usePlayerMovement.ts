@@ -21,10 +21,16 @@ export const usePlayerMovement = () => {
   }, [mapData]);
 
   const getTerrainAt = useCallback((x: number, y: number): string => {
-    if (y < 0 || y >= mapData.length || x < 0 || !mapData[y] || x >= mapData[y].length) {
-      return '.'; // Ritorna un valore di default sicuro se fuori dai limiti
+    // Controlla prima la validità della riga Y e che la riga esista
+    if (y < 0 || y >= mapData.length || !mapData[y]) {
+      return '.'; // Se la riga è fuori dai limiti o non definita, è una pianura.
     }
-    return mapData[y][x] || '.'; // Ritorna il terreno o un default se la casella è indefinita
+    // Ora che sappiamo che la riga è valida, controlliamo la colonna X
+    if (x < 0 || x >= mapData[y].length) {
+      return '.'; // Se la colonna è fuori dai limiti, è una pianura.
+    }
+    // Se tutto è valido, restituisci il carattere, o '.' come fallback finale.
+    return mapData[y][x] || '.';
   }, [mapData]);
 
   const canMoveToPosition = useCallback((x: number, y: number): boolean => {
