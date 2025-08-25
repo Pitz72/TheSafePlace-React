@@ -290,7 +290,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     }
 
     const EVENT_CHANCE = 0.15;
-    if (newBiome !== '.' && newBiome !== 'R' && Math.random() < EVENT_CHANCE) {
+    if (newBiome !== 'R' && Math.random() < EVENT_CHANCE) {
       setTimeout(() => triggerEvent(newBiome), 150);
     }
 

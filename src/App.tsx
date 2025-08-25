@@ -132,6 +132,7 @@ const GameContent = () => {
           {currentScreen === 'inventory' && <InventoryScreen />}
           {currentScreen === 'levelUp' && <LevelUpScreen />}
           {currentScreen === 'shelter' && <ShelterScreen />}
+          {currentScreen === 'event' && <EventScreen />}
           
           {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
@@ -271,7 +272,6 @@ const GameContent = () => {
             </>
           )}
         </div>
-        <EventScreen />
       </div>
     </div>
   );
