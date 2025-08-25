@@ -1,6 +1,6 @@
 // src/components/EventScreen.tsx
 import React from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 import type { EventChoice } from '../interfaces/events';
 
 /**
@@ -8,7 +8,7 @@ import type { EventChoice } from '../interfaces/events';
  * Appare come overlay quando un evento è attivo.
  */
 const EventScreen: React.FC = () => {
-  const { currentEvent, resolveChoice } = useGameContext();
+  const { currentEvent, resolveChoice } = useGameStore();
 
   // Non renderizzare nulla se non c'è un evento attivo
   if (!currentEvent) {

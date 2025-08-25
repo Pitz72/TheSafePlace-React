@@ -87,8 +87,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   
   // Database degli eventi
   const [eventDatabase, setEventDatabase] = useState<Record<string, GameEvent[]>>({});
-  const [currentEvent, setCurrentEvent] = useState<GameEvent | null>(null);
-  const [seenEventIds, setSeenEventIds] = useState<string[]>([]); // Per non ripetere gli eventi
 
   // --- Funzioni di Navigazione e Logica -- -
 
@@ -263,23 +261,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
   // Funzione di mappatura tra simboli della mappa e chiavi del database eventi
   // Attiva un evento casuale basato sul bioma attuale
-  const triggerEvent = useCallback((biome: string) => {
-    if (!eventDatabase[biome] || currentEvent) return; // Nessun evento per questo bioma o evento già attivo
-
-    const availableEvents = eventDatabase[biome].filter(event => !seenEventIds.includes(event.id));
-
-    if (availableEvents.length === 0) {
-      console.log(`Nessun nuovo evento disponibile per il bioma: ${biome}`);
-      return;
-    }
-
-    const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
-    setCurrentEvent(event);
-    setSeenEventIds(prev => [...prev, event.id]);
-    navigateTo('event'); // Naviga alla nuova schermata evento
-  }, [eventDatabase, seenEventIds, currentEvent, navigateTo]);
-
-
   
   const calculateCameraPosition = useCallback((playerPos: { x: number; y: number }, viewportSize: { width: number; height: number }) => {
     // Arrotondamento stabile per evitare micro-variazioni
@@ -643,37 +624,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     }
 }, [characterSheet.inventory, items, addLogEntry]);
 
-  // Risolve la scelta fatta dal giocatore in un evento
-  const resolveChoice = useCallback((choice: EventChoice) => {
-    if (!currentEvent) return;
 
-    // Esegui lo skill check se presente
-    if (choice.skillCheck) {
-      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
-      if (checkResult.success) {
-        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.successText });
-        if (choice.items_gained) {
-          choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
-        }
-        // Aggiungi altre ricompense qui se necessario
-      } else {
-        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.failureText });
-        if (choice.penalty) {
-          // Applica penalità qui (es. updateHP(-choice.penalty.amount))
-        }
-      }
-    } else {
-      // Scelte senza skill check
-      addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
-      if (choice.items_gained) {
-        choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
-      }
-    }
-
-    // Pulisci l'evento e torna al gioco
-    setCurrentEvent(null);
-    goBack();
-  }, [currentEvent, performAbilityCheck, addItem, addLogEntry, goBack]);
 
   // Rimuove un oggetto dall'inventario
   const removeItem = useCallback((slotIndex: number, quantity: number = 1) => {
@@ -997,9 +948,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     exportSave: realExportSave,
     importSave: realImportSave,
     eventDatabase,
-    currentEvent,
-    triggerEvent,
-    resolveChoice,
+    currentEvent: useGameStore.getState().currentEvent,
+    seenEventIds: useGameStore.getState().seenEventIds,
+    triggerEvent: useGameStore.getState().triggerEvent,
+    resolveChoice: useGameStore.getState().resolveChoice,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

@@ -59,6 +59,7 @@ export interface GameState {
   // Event system
   eventDatabase: Record<string, GameEvent[]>;
   currentEvent: GameEvent | null;
+  seenEventIds: string[];
   triggerEvent: (biome: string) => void;
   resolveChoice: (choice: EventChoice) => void;
 

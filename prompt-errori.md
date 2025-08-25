@@ -1,3 +1,20 @@
+Prompt per IDE LLM - Refactoring (Fase 4): Correzione Tipi e Finalizzazione Migrazione Eventi
+
+Obiettivo: Risolvere tutti gli errori di tipo TypeScript derivanti dalla migrazione della logica degli eventi, completando il refactoring di questo modulo.
+
+Istruzioni Dettagliate:
+
+Azione 1: Aggiorna l'interfaccia GameState
+
+File: src/interfaces/gameState.ts
+Azione: Aggiungi la proprietà seenEventIds all'interfaccia GameState per tenere traccia degli eventi già visti.
+// All'interno dell'interfaccia GameState, aggiungi questa riga dopo currentEvent:
+currentEvent: GameEvent | null;
+seenEventIds: string[]; // <-- AGGIUNGI QUESTA
+Azione 2: Completa e Correggi il gameStore.ts
+
+File: src/stores/gameStore.ts
+Azione: Sostituisci l'intero contenuto del file con questa versione completa e corretta. Include tutte le funzioni (reali e placeholder) necessarie per soddisfare l'interfaccia GameStore e risolve tutti gli errori di tipo.
 import { create } from 'zustand';
 import type { GameState, Screen, AbilityCheckResult } from '../interfaces/gameState';
 import type { GameEvent, EventChoice } from '../interfaces/events';
@@ -84,20 +101,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     goBack();
   },
 
-  navigateTo: (screen: Screen) => set({ currentScreen: screen }),
-  setCurrentScreen: (screen: Screen) => set({ currentScreen: screen }),
-  
-  getBiomeKeyFromChar: (char: string) => {
-    const biomeMap: Record<string, string> = {
-      'F': 'forest',
-      'P': 'plains',
-      'R': 'river',
-      'C': 'city',
-      'V': 'village',
-      'S': 'rest_stop'
-    };
-    return biomeMap[char] || null;
-  },
+  navigateTo: (screen) => set({ currentScreen: screen }),
   
   // --- Funzioni Placeholder ---
   initializeGame: async () => console.warn('initializeGame not migrated yet'),
@@ -138,3 +142,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   exportSave: () => { console.warn('exportSave not migrated yet'); return null; },
   importSave: async () => { console.warn('importSave not migrated yet'); return false; },
 }));
+Azione 3: Pulisci il GameProvider.tsx
+
+File: src/contexts/GameProvider.tsx
+
+Azione: Rimuovi le definizioni di stato e le funzioni che ora vivono nel gameStore. Inoltre, dobbiamo correggere l'oggetto value per non includere più le funzioni migrate.
+
+Rimuovi le seguenti righe di stato:
+const [currentEvent, setCurrentEvent] = useState<GameEvent | null>(null);
+const [seenEventIds, setSeenEventIds] = useState<string[]>([]);
+Rimuovi l'intera funzione triggerEvent.
+Rimuovi l'intera funzione resolveChoice.
+Trova l'oggetto value alla fine del file e rimuovi da esso le seguenti proprietà: currentEvent, triggerEvent, resolveChoice.
+Questo è un intervento massiccio ma necessario. Risolverà gli errori di tipo e ci metterà nella posizione corretta per continuare il refactoring in modo pulito. La prego di applicare queste modifiche. Se ci saranno solo warning minori, potremo ignorarli e procedere al test.
+
