@@ -416,84 +416,79 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     }
     
     const item = items[itemStack.itemId];
-    if (!item) {
-      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'oggetto non trovato' });
+    if (!item || !item.effect) {
+      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'oggetto non valido o non utilizzabile' });
       return;
     }
+
+
     
-    // Controlla se è un oggetto usabile
-    if (!item.effect) {
-      addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'questo oggetto non può essere usato' });
-      return;
-    }
-    
-    // Consuma l'oggetto
-    let itemConsumed = false;
-    let effectApplied = 0;
-    
-    if (itemStack.quantity > 1) {
-      itemStack.quantity -= 1;
-    } else {
-      itemConsumed = true;
-    }
-    
-    // Determina l'effetto
-    if (item.effect === 'heal') {
-      effectApplied = Math.floor(Math.random() * 6) + 5; // 5-10 HP
-    } else if (item.effect === 'satiety') {
-      effectApplied = Math.floor(Math.random() * 21) + 20; // 20-40 hunger
-    } else if (item.effect === 'hydration') {
-      effectApplied = Math.floor(Math.random() * 21) + 20; // 20-40 thirst
-    }
-    
-    if (effectApplied > 0) {
-      // Aggiorna l'inventario
-      setCharacterSheet(prev => {
-        const newInventory = [...prev.inventory];
-        if (itemConsumed) {
-          newInventory[slotIndex] = null; // Rimuovi oggetto completamente consumato
+    setCharacterSheet(prevSheet => {
+      const newInventory = [...prevSheet.inventory];
+      const currentStack = newInventory[slotIndex];
+      if (!currentStack) return prevSheet;
+
+      let effectApplied = 0;
+      let messageContext: Record<string, any> = { item: item.name };
+
+      if (item.portionsPerUnit && item.portionEffect) {
+        let currentPortions = currentStack.portions ?? item.portionsPerUnit;
+        
+        currentPortions -= 1;
+        effectApplied = item.portionEffect;
+        
+        if (currentPortions > 0) {
+          currentStack.portions = currentPortions;
+          messageContext.portion = item.portionSize || 'porzione';
+          messageContext.remaining = currentPortions;
         } else {
-          newInventory[slotIndex] = itemStack; // Slot aggiornato con quantità decrementata
+          currentStack.quantity -= 1;
+          if (currentStack.quantity > 0) {
+            currentStack.portions = item.portionsPerUnit; // Ricarica le porzioni per la nuova unità
+          } else {
+            newInventory[slotIndex] = null; // Rimuovi lo stack
+          }
+          messageContext.portion = 'ultima porzione';
         }
-        return { ...prev, inventory: newInventory };
-      });
-      
-      // Applica effetti consumabili
-      switch (item.effect) {
-        case 'heal':
-          updateHP(effectApplied);
-          addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied });
-          break;
-        case 'satiety':
-          setSurvivalState(prev => ({
-            ...prev,
-            hunger: Math.min(100, prev.hunger + effectApplied)
-          }));
-          addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${effectApplied} punti sazietà` });
-          break;
-        case 'hydration':
-          setSurvivalState(prev => ({
-            ...prev,
-            thirst: Math.min(100, prev.thirst + effectApplied)
-          }));
-          addLogEntry(MessageType.ACTION_SUCCESS, { action: `recuperi ${effectApplied} punti idratazione` });
-          break;
-        default:
-          addLogEntry(MessageType.ACTION_SUCCESS, { action: `effetto: ${item.effect}` });
+
+      } else {
+        // Logica per oggetti senza porzioni (consuma intera unità)
+        effectApplied = Number(item.effectValue) || 0;
+        currentStack.quantity -= 1;
+        if (currentStack.quantity === 0) {
+          newInventory[slotIndex] = null;
+        }
       }
-      
-      // Messaggio di successo
-      addLogEntry(MessageType.ITEM_USED, { 
-        item: item.name, 
-        effect: effectApplied 
-      });
-    } else {
-      addLogEntry(MessageType.ACTION_FAIL, { 
-        action: 'usare un oggetto', 
-        reason: 'effetto non applicato' 
-      });
-    }
-  }, [characterSheet.inventory, items, addLogEntry, updateHP, setSurvivalState]);
+
+      // Applica effetti solo se c'è un effetto da applicare
+      if (effectApplied > 0) {
+        switch (item.effect) {
+          case 'heal':
+            updateHP(effectApplied);
+            addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied });
+            break;
+          case 'satiety':
+            setSurvivalState(prev => ({
+              ...prev,
+              hunger: Math.min(100, prev.hunger + effectApplied)
+            }));
+            break;
+          case 'hydration':
+            setSurvivalState(prev => ({
+              ...prev,
+              thirst: Math.min(100, prev.thirst + effectApplied)
+            }));
+            break;
+        }
+        addLogEntry(MessageType.ITEM_USED, messageContext);
+      } else {
+         addLogEntry(MessageType.ACTION_FAIL, { action: 'usare un oggetto', reason: 'effetto nullo o non applicabile' });
+      }
+
+      return { ...prevSheet, inventory: newInventory };
+    });
+
+  }, [characterSheet, items, addLogEntry, updateHP, setSurvivalState]);
 
   // Aggiunge un oggetto all'inventario
   const addItem = useCallback((itemId: string, quantity: number = 1) => {
@@ -665,10 +660,32 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           if (slot && items[slot.itemId]) {
             const item = items[slot.itemId];
             if (item.effect === 'satiety' && slot.quantity > 0) {
-              if (slot.quantity > 1) {
-                slot.quantity -= 1;
+              // Sistema di porzioni per consumo notturno
+              if (item.portionsPerUnit && item.portionEffect) {
+                let currentPortions = slot.portions ?? item.portionsPerUnit;
+                currentPortions -= 1;
+                
+                if (currentPortions > 0) {
+                  // Aggiorna solo le porzioni
+                  slot.portions = currentPortions;
+                } else {
+                  // Le porzioni sono finite, consuma un'unità
+                  slot.quantity -= 1;
+                  if (slot.quantity > 0) {
+                    // Resetta le porzioni per la prossima unità
+                    slot.portions = item.portionsPerUnit;
+                  } else {
+                    // Rimuovi l'oggetto dall'inventario
+                    newInventory[i] = null;
+                  }
+                }
               } else {
-                newInventory[i] = null;
+                // Logica esistente per oggetti senza porzioni
+                if (slot.quantity > 1) {
+                  slot.quantity -= 1;
+                } else {
+                  newInventory[i] = null;
+                }
               }
               foodConsumed = true;
             }
@@ -681,10 +698,32 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           if (slot && items[slot.itemId]) {
             const item = items[slot.itemId];
             if (item.effect === 'hydration' && slot.quantity > 0) {
-              if (slot.quantity > 1) {
-                slot.quantity -= 1;
+              // Sistema di porzioni per consumo notturno
+              if (item.portionsPerUnit && item.portionEffect) {
+                let currentPortions = slot.portions ?? item.portionsPerUnit;
+                currentPortions -= 1;
+                
+                if (currentPortions > 0) {
+                  // Aggiorna solo le porzioni
+                  slot.portions = currentPortions;
+                } else {
+                  // Le porzioni sono finite, consuma un'unità
+                  slot.quantity -= 1;
+                  if (slot.quantity > 0) {
+                    // Resetta le porzioni per la prossima unità
+                    slot.portions = item.portionsPerUnit;
+                  } else {
+                    // Rimuovi l'oggetto dall'inventario
+                    newInventory[i] = null;
+                  }
+                }
               } else {
-                newInventory[i] = null;
+                // Logica esistente per oggetti senza porzioni
+                if (slot.quantity > 1) {
+                  slot.quantity -= 1;
+                } else {
+                  newInventory[i] = null;
+                }
               }
               drinkConsumed = true;
             }
