@@ -2,6 +2,16 @@ import type { LogEntry } from '../data/MessageArchive';
 import type { MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { IItem } from './items';
+import type { GameEvent, EventChoice } from './events';
+
+// Aggiungi questa interfaccia all'inizio del file
+export interface AbilityCheckResult {
+  success: boolean;
+  roll: number;
+  modifier: number;
+  total: number;
+  difficulty: number;
+}
 
 export interface TimeState {
   currentTime: number; // Minuti dall'inizio del gioco (0-1439, dove 1440 = 24 ore)
@@ -9,7 +19,7 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event';
 
 export interface SurvivalState {
   hunger: number;
@@ -42,22 +52,29 @@ export interface GameState {
   logEntries: LogEntry[];
   currentBiome: string | null;
 
-  // Item state
+  // Inventory state
   items: Record<string, IItem>;
   selectedInventoryIndex: number;
+
+  // Event system
+  eventDatabase: Record<string, GameEvent[]>;
+  currentEvent: GameEvent | null;
+  seenEventIds: string[];
+  triggerEvent: (biome: string) => void;
+  resolveChoice: (choice: EventChoice) => void;
 
   // UI state
   currentScreen: Screen;
   
   // Actions
   initializeGame: () => Promise<void>;
-  updatePlayerPosition: (newPosition: { x: number; y: number }) => void;
+  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiome: string) => void;
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   advanceTime: (minutes?: number) => void;
   
   // Character actions
   updateHP: (amount: number) => void;
-  performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => boolean;
+  performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
   getModifier: (ability: keyof ICharacterSheet['stats']) => number;
   shortRest: () => void;
   

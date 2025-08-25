@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useGameContext } from './useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
 
@@ -8,7 +8,7 @@ interface MovementState {
 }
 
 export const usePlayerMovement = () => {
-  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP } = useGameContext();
+  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP } = useGameStore();
   const [movementState, setMovementState] = useState<MovementState>({
     isExitingRiver: false
   });
@@ -21,9 +21,17 @@ export const usePlayerMovement = () => {
   }, [mapData]);
 
   const getTerrainAt = useCallback((x: number, y: number): string => {
-    if (!isValidPosition(x, y)) return '';
-    return mapData[y][x];
-  }, [mapData, isValidPosition]);
+    // Controlla prima la validità della riga Y e che la riga esista
+    if (y < 0 || y >= mapData.length || !mapData[y]) {
+      return '.'; // Se la riga è fuori dai limiti o non definita, è una pianura.
+    }
+    // Ora che sappiamo che la riga è valida, controlliamo la colonna X
+    if (x < 0 || x >= mapData[y].length) {
+      return '.'; // Se la colonna è fuori dai limiti, è una pianura.
+    }
+    // Se tutto è valido, restituisci il carattere, o '.' come fallback finale.
+    return mapData[y][x] || '.';
+  }, [mapData]);
 
   const canMoveToPosition = useCallback((x: number, y: number): boolean => {
     if (!isValidPosition(x, y)) {
@@ -45,70 +53,42 @@ export const usePlayerMovement = () => {
   }, [isValidPosition, getTerrainAt]);
 
   const handleMovement = useCallback((deltaX: number, deltaY: number) => {
-    if (mapData.length === 0) {
-      console.log('⚠️ Movimento ignorato: mappa non caricata');
-      return;
-    }
+    if (mapData.length === 0) return;
     
-    const currentX = playerPosition.x;
-    const currentY = playerPosition.y;
-    const nextX = currentX + deltaX;
-    const nextY = currentY + deltaY;
+    const nextX = playerPosition.x + deltaX;
+    const nextY = playerPosition.y + deltaY;
     
-    console.log(`🎮 Tentativo movimento: (${currentX}, ${currentY}) → (${nextX}, ${nextY})`);
+    if (!canMoveToPosition(nextX, nextY)) return;
     
-    // Verifica se il giocatore è attualmente su un fiume
-    const currentTerrain = getTerrainAt(currentX, currentY);
-    const isOnRiver = currentTerrain === '~';
-    
-    // Gestione logica "a due turni" per i fiumi
-    if (isOnRiver && movementState.isExitingRiver) {
-      console.log('🌊 Secondo turno su fiume: movimento consumato per uscire');
-      setMovementState({ isExitingRiver: false });
-      return; // Movimento consumato, non aggiornare posizione
-    }
-    
-    // Verifica se può muoversi alla nuova posizione
-    if (!canMoveToPosition(nextX, nextY)) {
-      return; // Movimento bloccato
-    }
-    
-    // Movimento valido - aggiorna posizione
-    updatePlayerPosition({ x: nextX, y: nextY });
-    
-    // Camera si aggiorna automaticamente tramite useEffect in MapViewport
-    
-    // Controlla se il giocatore entra in un fiume
     const nextTerrain = getTerrainAt(nextX, nextY);
+
+    // La logica specifica per i fiumi rimane qui perché è un'azione di movimento speciale
     if (nextTerrain === '~') {
-      console.log('🌊 Giocatore entra in un fiume: eseguendo skill check Agilità');
       setMovementState({ isExitingRiver: true });
-      
-      // Messaggio fiume come specificato nel manuale
       addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
-      
-      // Skill check Agilità vs Difficoltà Media (15) con messaggio azzurro per successo
       const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
-      
-      if (!success) {
-        // Fallimento: subisci 1d4 danni
-        const damage = Math.floor(Math.random() * 4) + 1; // 1d4
-        console.log(`💔 Skill check fallito: subisci ${damage} danni dalla corrente`);
+      if (!success.success) {
+        const damage = Math.floor(Math.random() * 4) + 1;
         updateHP(-damage);
       }
     } else {
       setMovementState({ isExitingRiver: false });
     }
     
-    // Aggiorna bioma per messaggi di ingresso
-    updateBiome(nextTerrain);
+    // Chiama la nuova funzione centralizzata
+    updatePlayerPosition({ x: nextX, y: nextY });
+
+    // Gestisce l'ingresso nei rifugi separatamente
+    if (nextTerrain === 'R') {
+      updateBiome('R');
+    }
     
-    // Messaggio atmosferico casuale (2% probabilità)
+    // Messaggio atmosferico casuale
     if (Math.random() < JOURNAL_CONFIG.AMBIANCE_PROBABILITY) {
       addLogEntry(MessageType.AMBIANCE_RANDOM);
     }
     
-  }, [mapData, playerPosition, updatePlayerPosition, movementState, canMoveToPosition, getTerrainAt, addLogEntry, updateBiome]);
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, updateBiome, addLogEntry]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento

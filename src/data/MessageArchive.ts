@@ -201,6 +201,7 @@ export enum MessageType {
   DISCOVERY = 'DISCOVERY',
   DANGER = 'DANGER',
   MYSTERY = 'MYSTERY',
+  EVENT_CHOICE = 'EVENT_CHOICE', // Per le scelte degli eventi dinamici
 }
 
 export const MESSAGE_ARCHIVE: Record<string, any> = {
@@ -544,5 +545,12 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Rimuovi l'oggetto dal tuo inventario.",
     "L'oggetto non è più nel tuo zaino.",
     "Abbandoni l'oggetto."
+  ],
+
+  [MessageType.EVENT_CHOICE]: [
+    "La tua scelta ha delle conseguenze.",
+    "Decidi di agire secondo il tuo istinto.",
+    "Una decisione che potrebbe cambiare tutto.",
+    "Le tue azioni determinano il tuo destino."
   ]
 };

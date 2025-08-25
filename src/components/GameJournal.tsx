@@ -130,6 +130,8 @@ const GameJournal: React.FC = () => {
         return 'journal-danger';
       case MessageType.MYSTERY:
         return 'journal-mystery';
+      case MessageType.EVENT_CHOICE:
+        return 'journal-success';
 
       default:
         return 'journal-standard';
@@ -165,7 +167,7 @@ const GameJournal: React.FC = () => {
           </div>
         ) : (
           // Voci del diario - ordine invertito (più recenti in alto)
-          [...logEntries].reverse().map((entry, index) => (
+          [...logEntries].reverse().map((entry) => (
             <div 
               key={entry.id} 
               className="border-l-2 border-phosphor-bright pl-3 py-1 hover:bg-gray-800 hover:bg-opacity-50 transition-colors duration-200 hover:glow-phosphor-primary"

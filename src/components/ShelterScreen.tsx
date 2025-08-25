@@ -6,8 +6,9 @@ import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 import { MessageType } from '../data/MessageArchive';
 
+
 const ShelterScreen: React.FC = () => {
-  const { characterSheet, goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameContext();
+  const { goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameContext();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -82,22 +83,22 @@ const ShelterScreen: React.FC = () => {
       return;
     }
 
-    const success = performAbilityCheck('percezione', 15, false);
+    const checkResult = performAbilityCheck('percezione', 15, false);
+    const checkDetails = `Prova di Percezione (CD ${checkResult.difficulty}): ${checkResult.roll} + ${checkResult.modifier} = ${checkResult.total}.`;
     
-    if (success) {
-      // Possibilità di trovare oggetti con distribuzione realistica
+    let outcomeMessage: string;
+
+    if (checkResult.success) {
+      outcomeMessage = `${checkDetails} SUCCESSO.\n`;
       const findChance = Math.random();
       if (findChance < 0.4) {
-        // 40% di trovare qualcosa di utile
         const lootTables = {
-          consumables: ['CONS_001', 'CONS_002', 'CONS_003', 'CONS_004'], // 40%
-          crafting: ['CRAFT_001', 'CRAFT_002', 'CRAFT_003'], // 20%
-          weapons: ['WEAP_001', 'WEAP_002'], // 15%
-          armor: ['ARM_001', 'ARM_002'], // 15%
-          medical: ['CONS_005'] // 10%
+          consumables: ['CONS_001', 'CONS_002', 'CONS_003'],
+          crafting: ['CRAFT_001', 'CRAFT_002'],
+          weapons: ['WEAP_001'],
+          armor: ['ARM_001'],
+          medical: ['CONS_003']
         };
-        
-        // Determina categoria oggetto
         const categoryRoll = Math.random();
         let category: keyof typeof lootTables;
         if (categoryRoll < 0.4) category = 'consumables';
@@ -111,34 +112,27 @@ const ShelterScreen: React.FC = () => {
         const foundItem = items[foundItemId];
         
         if (foundItem) {
-          const quantity = foundItem.stackable ? Math.floor(Math.random() * 3) + 1 : 1;
-          const success = addItem(foundItemId, quantity);
-          
-          if (success) {
-            setSearchResult(`La tua attenzione viene ripagata. Trovi: ${foundItem.name}${quantity > 1 ? ` x${quantity}` : ''}`);
+          const quantity = foundItem.stackable ? (Math.floor(Math.random() * 2) + 1) : 1;
+          const added = addItem(foundItemId, quantity);
+          if (added) {
+            outcomeMessage += `La tua attenzione viene ripagata. Trovi: ${foundItem.name}${quantity > 1 ? ` x${quantity}` : ''}`;
           } else {
-            setSearchResult(`Trovi ${foundItem.name} ma il tuo inventario è pieno!`);
+            outcomeMessage += `Trovi ${foundItem.name}, ma il tuo inventario è pieno!`;
           }
         } else {
-          setSearchResult('Trovi qualcosa di interessante, ma non riesci a identificarlo.');
-          addLogEntry(MessageType.DISCOVERY, { discovery: 'oggetto misterioso' });
+          outcomeMessage += 'Trovi qualcosa di interessante, ma non riesci a identificarlo.';
         }
       } else if (findChance < 0.7) {
-        // 30% di trovare il rifugio già saccheggiato ma sicuro
-        setSearchResult('Il rifugio è già stato saccheggiato, ma sembra sicuro.');
-        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro ma vuoto' });
+        outcomeMessage += 'Il rifugio è già stato saccheggiato, ma sembra sicuro.';
       } else {
-        // 30% di non trovare nulla di interessante
-        setSearchResult('Dopo un\'attenta ricerca, non trovi nulla di utile. Solo polvere e detriti.');
-        addLogEntry(MessageType.ACTION_SUCCESS, { action: 'investigazione completa senza risultati' });
+        outcomeMessage += 'Dopo un\'attenta ricerca, non trovi nulla di utile. Solo polvere e detriti.';
       }
+      addLogEntry(MessageType.SKILL_CHECK_SUCCESS, { action: 'investigazione rifugio' });
     } else {
-      setSearchResult('La tua ricerca è stata frettolosa e superficiale.');
-      addLogEntry(MessageType.SKILL_CHECK_FAILURE, { 
-        ability: 'percezione', 
-        action: 'investigazione rifugio' 
-      });
+      outcomeMessage = `${checkDetails} FALLIMENTO.\nLa tua ricerca è stata frettolosa e superficiale.`;
+      addLogEntry(MessageType.SKILL_CHECK_FAILURE, { ability: 'percezione', action: 'investigazione rifugio' });
     }
+    setSearchResult(outcomeMessage);
   };
 
   const handleWorkbench = () => {

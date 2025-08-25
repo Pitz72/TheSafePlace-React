@@ -4,6 +4,7 @@ import { useGameScale } from './hooks/useGameScale';
 import { useKeyboardCommands } from './hooks/useKeyboardCommands';
 import { GameProvider } from './contexts/GameProvider';
 import { useGameContext } from './hooks/useGameContext';
+import { useGameStore } from './stores/gameStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
@@ -13,6 +14,7 @@ import { GameErrorBoundary } from './utils/errorHandler';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
 import InventoryScreen from './components/InventoryScreen';
+import EventScreen from './components/EventScreen';
 
 // Funzione per mappare i caratteri della mappa ai nomi dei luoghi - v0.1.3
 const getTileDescription = (char: string): string => {
@@ -49,9 +51,10 @@ const GameLogic = () => {
 
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
+  const { currentScreen, playerPosition } = useGameStore();
   const {
-    isMapLoading, playerPosition, mapData, timeState,
-    characterSheet, getModifier, currentScreen, setCurrentScreen, items, survivalState
+    isMapLoading, mapData, timeState,
+    characterSheet, getModifier, items, survivalState
   } = useGameContext();
   const { videoMode } = useSettingsStore();
   
@@ -131,6 +134,7 @@ const GameContent = () => {
           {currentScreen === 'inventory' && <InventoryScreen />}
           {currentScreen === 'levelUp' && <LevelUpScreen />}
           {currentScreen === 'shelter' && <ShelterScreen />}
+          {currentScreen === 'event' && <EventScreen />}
           
           {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
