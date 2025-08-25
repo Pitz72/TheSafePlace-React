@@ -64,10 +64,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
             return false;
         },
         handleQuickSave: async () => {
-            const { characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters } = useGameStore.getState();
-            const success = await saveSystem.autoSave(characterSheet, survivalState, { timeState, playerPosition, currentScreen, currentBiome, visitedShelters, gameFlags: {} });
-            if(success) store.addLogEntry(MessageType.ACTION_SUCCESS, { action: 'Salvataggio rapido' });
-            return success;
+            try {
+                const { characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters } = useGameStore.getState();
+                await saveSystem.autoSave(characterSheet, survivalState, { timeState, playerPosition, currentScreen, currentBiome, visitedShelters, gameFlags: {} });
+                store.addLogEntry(MessageType.ACTION_SUCCESS, { action: 'Salvataggio rapido' });
+                return true;
+            } catch (error) {
+                console.error("Quick save failed:", error);
+                store.addLogEntry(MessageType.ACTION_FAIL, { action: 'Salvataggio rapido', reason: 'errore imprevisto' });
+                return false;
+            }
         },
         handleQuickLoad: async () => {
             const data = await saveSystem.loadGame('autosave');
@@ -153,13 +159,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     importSave: saveSystem.importSave,
 
     // Funzioni che non sono nello store (o non ha senso metterle)
-    updateCameraPosition: (viewportSize) => {
+    updateCameraPosition: (_viewportSize) => {
         // Questa logica può rimanere qui se dipende da elementi del DOM
         // o può essere spostata se diventa puramente basata su stato.
         // Per ora, la lasciamo come no-op per evitare errori.
     },
-    consumeFood: (amount) => store.addLogEntry(MessageType.ACTION_FAIL, { reason: "Funzione deprecata" }),
-    consumeDrink: (amount) => store.addLogEntry(MessageType.ACTION_FAIL, { reason: "Funzione deprecata" }),
+    consumeFood: (_amount) => store.addLogEntry(MessageType.ACTION_FAIL, { reason: "Funzione deprecata" }),
+    consumeDrink: (_amount) => store.addLogEntry(MessageType.ACTION_FAIL, { reason: "Funzione deprecata" }),
 
     // Menu handlers - potrebbero essere spostati o semplificati
     handleNewGame: () => {
