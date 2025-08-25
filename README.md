@@ -1,4 +1,4 @@
-# The Safe Place v0.5.3 "Important Object Bug Fix"
+# The Safe Place v0.5.4 "Event Fail"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 

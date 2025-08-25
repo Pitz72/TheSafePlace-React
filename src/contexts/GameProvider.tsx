@@ -12,6 +12,7 @@ import type { ICharacterSheet } from '../rules/types';
 import type { LogEntry } from '../data/MessageArchive';
 import type { GameEvent, EventChoice } from '../interfaces/events';
 import { itemDatabase } from '../data/items/itemDatabase';
+import { useGameStore } from '../stores/gameStore';
 
 // Il contesto viene creato qui e tipizzato con GameState o undefined
 export const GameContext = createContext<GameState | undefined>(undefined);
@@ -43,10 +44,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   // Hook per sistema di salvataggio
   const { saveGame, loadGame, getSaveSlots, deleteSave, exportSave, importSave, autoSave } = useSaveSystem();
 
+  // Accesso al game store per playerPosition e currentBiome
+  const { playerPosition, currentBiome, updatePlayerPosition } = useGameStore();
+
   // Tutti gli stati sono definiti qui, seguendo l'interfaccia GameState
   const [mapData, setMapData] = useState<string[]>([]);
   const [isMapLoading, setIsMapLoading] = useState(true);
-  const [playerPosition, setPlayerPosition] = useState({ x: -1, y: -1 });
+
   const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 0 });
   const [timeState, setTimeState] = useState<TimeState>({
     currentTime: DAWN_TIME,
@@ -64,7 +68,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [lastShortRestTime] = useState<{ day: number; time: number } | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [gameInitialized, setGameInitialized] = useState(false);
-  const [currentBiome, setCurrentBiome] = useState<string | null>(null);
+
   const [items, setItems] = useState<Record<string, IItem>>({});
   const [selectedInventoryIndex, setSelectedInventoryIndex] = useState(0);
   const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
@@ -140,12 +144,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       const lines = mapText.split('\n').filter(line => line);
       setMapData(lines);
 
-      let startPos = { x: -1, y: -1 };
-      lines.forEach((line, y) => {
-        const x = line.indexOf('S');
-        if (x !== -1) startPos = { x, y };
-      });
-      setPlayerPosition(startPos.x !== -1 ? startPos : { x: 75, y: 75 });
+      // playerPosition ora gestito da gameStore - inizializzazione spostata nel gameStore
       
       setIsMapLoading(false);
       setGameInitialized(true);
@@ -263,18 +262,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   }, [addLogEntry]);
 
   // Funzione di mappatura tra simboli della mappa e chiavi del database eventi
-  const getBiomeKeyFromChar = (char: string): string => {
-    switch (char) {
-      case 'C': return 'CITY';
-      case 'F': return 'FOREST';
-      case '.': return 'PLAINS';
-      case 'R': return 'REST_STOP';
-      case '~': return 'RIVER';
-      case 'V': return 'VILLAGE';
-      default: return '';
-    }
-  };
-
   // Attiva un evento casuale basato sul bioma attuale
   const triggerEvent = useCallback((biome: string) => {
     if (!eventDatabase[biome] || currentEvent) return; // Nessun evento per questo bioma o evento già attivo
@@ -292,40 +279,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     navigateTo('event'); // Naviga alla nuova schermata evento
   }, [eventDatabase, seenEventIds, currentEvent, navigateTo]);
 
-  const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }, newBiomeChar: string) => {
-    setPlayerPosition(newPosition);
-    
-    if (newBiomeChar !== currentBiome) {
-      setCurrentBiome(newBiomeChar);
-      if (newBiomeChar !== 'R') {
-        addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeChar });
-      }
-    }
 
-    // AUMENTIAMO LA PROBABILITÀ PER IL TEST
-    const EVENT_CHANCE = 0.50; // 50% di probabilità
-    
-    const biomeKey = getBiomeKeyFromChar(newBiomeChar);
-
-    if (biomeKey && Math.random() < EVENT_CHANCE) {
-      setTimeout(() => triggerEvent(biomeKey), 150);
-    }
-    
-    const xpGained = Math.floor(Math.random() * 2) + 1;
-    addExperience(xpGained);
-    
-    setSurvivalState(prev => {
-      const hungerLoss = Math.random() * 0.5 + 0.2;
-      const thirstLoss = Math.random() * 0.8 + 0.3;
-      return {
-        ...prev,
-        hunger: Math.max(0, prev.hunger - hungerLoss),
-        thirst: Math.max(0, prev.thirst - thirstLoss)
-      };
-    });
-    
-    advanceTime();
-  }, [currentBiome, addLogEntry, advanceTime, addExperience, triggerEvent]);
   
   const calculateCameraPosition = useCallback((playerPos: { x: number; y: number }, viewportSize: { width: number; height: number }) => {
     // Arrotondamento stabile per evitare micro-variazioni
@@ -364,7 +318,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       dbg('setCameraPosition', { from: prev, to: newCameraPos });
       return newCameraPos;
     });
-  }, [playerPosition, calculateCameraPosition]);
+  }, [calculateCameraPosition]);
 
 
 
@@ -552,7 +506,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         }, 100);
       }
     }
-  }, [playerPosition, visitedShelters, timeStateRef, characterSheet.maxHP, characterSheet.currentHP, navigateTo, handleNightConsumption, updateHP, addLogEntry]);
+  }, [visitedShelters, timeStateRef, characterSheet.maxHP, characterSheet.currentHP, navigateTo, handleNightConsumption, updateHP, addLogEntry]);
 
 
 
@@ -849,7 +803,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       addLogEntry(MessageType.ACTION_FAIL, { action: 'salvataggio', reason: 'errore imprevisto' });
       return false;
     }
-  }, [characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters, saveGame, addLogEntry]);
+  }, [characterSheet, survivalState, timeState, currentScreen, visitedShelters, saveGame, addLogEntry]);
   
   // Carica uno stato di gioco salvato
   const loadSavedGame = useCallback(async (slot: string): Promise<boolean> => {
@@ -869,9 +823,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       
       // Ripristina lo stato del gioco
       setTimeState(saveData.gameData.timeState);
-      setPlayerPosition(saveData.gameData.playerPosition);
       setCurrentScreen(saveData.gameData.currentScreen);
-      setCurrentBiome(saveData.gameData.currentBiome);
+      // playerPosition e currentBiome ora gestiti da gameStore
       
       // Ripristina rifugi visitati se disponibili
       if (saveData.gameData.visitedShelters) {
@@ -909,7 +862,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       // Auto-save silenzioso - non mostrare errori all'utente
       console.warn('Auto-save failed:', error);
     }
-  }, [characterSheet, survivalState, timeState, playerPosition, currentScreen, currentBiome, visitedShelters, autoSave]);
+  }, [characterSheet, survivalState, timeState, currentScreen, visitedShelters, autoSave]);
   
   // Auto-salvataggio ogni cambiamento significativo
   useEffect(() => {
@@ -980,14 +933,14 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const value: GameState = {
     mapData,
     isMapLoading,
-    playerPosition,
+    playerPosition, // dal gameStore
     cameraPosition,
     timeState,
     characterSheet,
     lastShortRestTime,
     survivalState,
     logEntries,
-    currentBiome,
+    currentBiome, // dal gameStore
     items,
     selectedInventoryIndex,
     currentScreen,
@@ -1003,7 +956,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     handleBackToMenu,
     handleExit,
     initializeGame,
-    updatePlayerPosition,
+    updatePlayerPosition, // dal gameStore
+
     updateCameraPosition,
     advanceTime,
     updateHP,

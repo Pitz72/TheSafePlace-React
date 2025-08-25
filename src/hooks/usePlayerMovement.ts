@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useGameContext } from './useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
 
@@ -8,7 +8,7 @@ interface MovementState {
 }
 
 export const usePlayerMovement = () => {
-  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP } = useGameContext();
+  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP } = useGameStore();
   const [movementState, setMovementState] = useState<MovementState>({
     isExitingRiver: false
   });
