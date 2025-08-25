@@ -4,6 +4,7 @@ import { useGameScale } from './hooks/useGameScale';
 import { useKeyboardCommands } from './hooks/useKeyboardCommands';
 import { GameProvider } from './contexts/GameProvider';
 import { useGameContext } from './hooks/useGameContext';
+import { useGameStore } from './stores/gameStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
@@ -50,9 +51,10 @@ const GameLogic = () => {
 
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
+  const { currentScreen, playerPosition } = useGameStore();
   const {
-    isMapLoading, playerPosition, mapData, timeState,
-    characterSheet, getModifier, currentScreen, setCurrentScreen, items, survivalState
+    isMapLoading, mapData, timeState,
+    characterSheet, getModifier, items, survivalState
   } = useGameContext();
   const { videoMode } = useSettingsStore();
   

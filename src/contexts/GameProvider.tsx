@@ -71,7 +71,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
   const [items, setItems] = useState<Record<string, IItem>>({});
   const [selectedInventoryIndex, setSelectedInventoryIndex] = useState(0);
-  const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
   const [previousScreen, setPreviousScreen] = useState<Screen | null>(null);
   const [menuSelectedIndex, setMenuSelectedIndex] = useState(0);
   
@@ -91,16 +90,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   // --- Funzioni di Navigazione e Logica -- -
 
   const navigateTo = useCallback((screen: Screen) => {
-    setPreviousScreen(currentScreen);
-    setCurrentScreen(screen);
-  }, [currentScreen]);
+    setPreviousScreen(useGameStore.getState().currentScreen);
+    useGameStore.getState().setCurrentScreen(screen);
+  }, []);
 
   const goBack = useCallback(() => {
     if (previousScreen) {
-      setCurrentScreen(previousScreen);
+      useGameStore.getState().setCurrentScreen(previousScreen);
       setPreviousScreen(null); // Resetta per evitare loop
     } else {
-      setCurrentScreen('menu'); // Fallback di sicurezza
+      useGameStore.getState().setCurrentScreen('menu'); // Fallback di sicurezza
     }
   }, [previousScreen]);
 
@@ -734,7 +733,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       const gameData: GameSaveData = {
         timeState,
         playerPosition,
-        currentScreen,
+        currentScreen: useGameStore.getState().currentScreen,
         currentBiome,
         visitedShelters,
         gameFlags: {} // for future use
@@ -754,7 +753,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       addLogEntry(MessageType.ACTION_FAIL, { action: 'salvataggio', reason: 'errore imprevisto' });
       return false;
     }
-  }, [characterSheet, survivalState, timeState, currentScreen, visitedShelters, saveGame, addLogEntry]);
+  }, [characterSheet, survivalState, timeState, visitedShelters, saveGame, addLogEntry]);
   
   // Carica uno stato di gioco salvato
   const loadSavedGame = useCallback(async (slot: string): Promise<boolean> => {
@@ -774,7 +773,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       
       // Ripristina lo stato del gioco
       setTimeState(saveData.gameData.timeState);
-      setCurrentScreen(saveData.gameData.currentScreen);
+      useGameStore.getState().setCurrentScreen(saveData.gameData.currentScreen);
       // playerPosition e currentBiome ora gestiti da gameStore
       
       // Ripristina rifugi visitati se disponibili
@@ -802,7 +801,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       const gameData: GameSaveData = {
         timeState,
         playerPosition,
-        currentScreen,
+        currentScreen: useGameStore.getState().currentScreen,
         currentBiome,
         visitedShelters,
         gameFlags: {}
@@ -813,7 +812,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       // Auto-save silenzioso - non mostrare errori all'utente
       console.warn('Auto-save failed:', error);
     }
-  }, [characterSheet, survivalState, timeState, currentScreen, visitedShelters, autoSave]);
+  }, [characterSheet, survivalState, timeState, visitedShelters, autoSave]);
   
   // Auto-salvataggio ogni cambiamento significativo
   useEffect(() => {
@@ -822,6 +821,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       return () => clearTimeout(timeoutId);
     }
   }, [gameInitialized, characterSheet, timeState, survivalState, performAutoSave]);
+
+  // Collegamento delle funzioni del GameProvider al gameStore
+  useEffect(() => {
+    const store = useGameStore.getState();
+    store.setAddLogEntry(addLogEntry);
+    store.setPerformAbilityCheck(performAbilityCheck);
+    store.setAddItem(addItem);
+    store.setGoBack(goBack);
+    store.setEventDatabase(eventDatabase);
+  }, [addLogEntry, performAbilityCheck, addItem, goBack, eventDatabase]);
 
   // Real save system functions (replacing placeholders)
   const realGetSaveSlots = useCallback(() => {
@@ -894,8 +903,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     currentBiome, // dal gameStore
     items,
     selectedInventoryIndex,
-    currentScreen,
-    setCurrentScreen: navigateTo, // Espone la nuova funzione di navigazione
+    currentScreen: useGameStore.getState().currentScreen,
+    setCurrentScreen: useGameStore.getState().setCurrentScreen,
     goBack,
     menuSelectedIndex,
     setMenuSelectedIndex,

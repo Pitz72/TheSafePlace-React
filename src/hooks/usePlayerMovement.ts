@@ -76,7 +76,7 @@ export const usePlayerMovement = () => {
     }
     
     // Chiama la nuova funzione centralizzata
-    updatePlayerPosition({ x: nextX, y: nextY }, nextTerrain);
+    updatePlayerPosition({ x: nextX, y: nextY });
     
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
