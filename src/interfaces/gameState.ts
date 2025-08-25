@@ -2,6 +2,7 @@ import type { LogEntry } from '../data/MessageArchive';
 import type { MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { IItem } from './items';
+import type { GameEvent, EventChoice } from './events';
 
 // Aggiungi questa interfaccia all'inizio del file
 export interface AbilityCheckResult {
@@ -18,7 +19,7 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event';
 
 export interface SurvivalState {
   hunger: number;
@@ -51,9 +52,15 @@ export interface GameState {
   logEntries: LogEntry[];
   currentBiome: string | null;
 
-  // Item state
+  // Inventory state
   items: Record<string, IItem>;
   selectedInventoryIndex: number;
+  
+  // Event system
+  eventDatabase: Record<string, GameEvent[]>;
+  currentEvent: GameEvent | null;
+  triggerEvent: (biome: string) => void;
+  resolveChoice: (choice: EventChoice) => void;
 
   // UI state
   currentScreen: Screen;

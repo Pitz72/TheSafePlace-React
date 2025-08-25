@@ -10,6 +10,7 @@ import type { GameState, TimeState, Screen, AbilityCheckResult } from '../interf
 import type { IItem } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
 import type { LogEntry } from '../data/MessageArchive';
+import type { GameEvent, EventChoice } from '../interfaces/events';
 import { itemDatabase } from '../data/items/itemDatabase';
 
 // Il contesto viene creato qui e tipizzato con GameState o undefined
@@ -79,6 +80,11 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   
   // Sistema rifugi visitati
   const [visitedShelters, setVisitedShelters] = useState<Record<string, boolean>>({});
+  
+  // Database degli eventi
+  const [eventDatabase, setEventDatabase] = useState<Record<string, GameEvent[]>>({});
+  const [currentEvent, setCurrentEvent] = useState<GameEvent | null>(null);
+  const [seenEventIds, setSeenEventIds] = useState<string[]>([]); // Per non ripetere gli eventi
 
   // --- Funzioni di Navigazione e Logica -- -
 
@@ -160,6 +166,38 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     setItems(itemDatabase);
   }, [initializeGame]);
 
+  useEffect(() => {
+    const loadEventDatabase = async () => {
+      const eventFiles = [
+        'city_events.json',
+        'forest_events.json',
+        'plains_events.json',
+        'rest_stop_events.json',
+        'river_events.json',
+        'unique_events.json',
+        'village_events.json'
+      ];
+      const database: Record<string, GameEvent[]> = {};
+
+      for (const file of eventFiles) {
+        try {
+          const response = await fetch(`/events/${file}`);
+          const data = await response.json();
+          // L'array di eventi è la prima (e unica) proprietà dell'oggetto JSON
+          const eventArray = Object.values(data)[0] as GameEvent[];
+          const biomeKey = Object.keys(data)[0];
+          database[biomeKey] = eventArray;
+        } catch (error) {
+          console.error(`Failed to load event file ${file}:`, error);
+        }
+      }
+      setEventDatabase(database);
+      console.log('Event database loaded:', database);
+    };
+
+    loadEventDatabase();
+  }, []); // Esegui solo una volta al montaggio del componente
+
   const advanceTime = useCallback((minutes: number = DEFAULT_TIME_ADVANCE) => {
     setTimeState(prev => {
       const newTotalMinutes = prev.currentTime + minutes;
@@ -223,6 +261,23 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     
     // XP guadagnato silenziosamente - non mostrare messaggio per evitare spam nel journal
   }, [addLogEntry]);
+
+  // Attiva un evento casuale basato sul bioma attuale
+  const triggerEvent = useCallback((biome: string) => {
+    if (!eventDatabase[biome] || currentEvent) return; // Nessun evento per questo bioma o evento già attivo
+
+    const availableEvents = eventDatabase[biome].filter(event => !seenEventIds.includes(event.id));
+
+    if (availableEvents.length === 0) {
+      console.log(`Nessun nuovo evento disponibile per il bioma: ${biome}`);
+      return;
+    }
+
+    const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
+    setCurrentEvent(event);
+    setSeenEventIds(prev => [...prev, event.id]);
+    navigateTo('event'); // Naviga alla nuova schermata evento
+  }, [eventDatabase, seenEventIds, currentEvent, navigateTo]);
 
   const updatePlayerPosition = useCallback((newPosition: { x: number; y: number }) => {
     dbg('setPlayerPosition', { from: playerPosition, to: newPosition });
@@ -351,7 +406,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     if (newBiome !== currentBiome) {
       setCurrentBiome(newBiome);
       
-      // Gestione speciale per i rifugi (tile 'R')
       if (newBiome === 'R') {
         const shelterKey = `${playerPosition.x},${playerPosition.y}`;
         
@@ -403,11 +457,21 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           }, 100);
         }
       } else {
-        // Messaggio automatico cambio bioma sincrono
         addLogEntry(MessageType.BIOME_ENTER, { biome: newBiome });
+
+        // --- LOGICA DI INNESCO EVENTO (POSIZIONE CORRETTA) ---
+        const EVENT_CHANCE = 0.15; // 15% di probabilità
+        if (newBiome !== '.' && Math.random() < EVENT_CHANCE) {
+          setTimeout(() => triggerEvent(newBiome), 100); // Piccolo ritardo per coerenza UI
+        }
+        // ----------------------------------------------------
       }
     }
-  }, [currentBiome, addLogEntry, navigateTo, characterSheet.maxHP, characterSheet.currentHP, updateHP]);
+  }, [currentBiome, addLogEntry, navigateTo, characterSheet.maxHP, characterSheet.currentHP, updateHP, triggerEvent]);
+
+
+
+
 
   const useItem = useCallback((slotIndex: number) => {
     const itemStack = characterSheet.inventory[slotIndex];
@@ -539,6 +603,38 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         return false;
     }
 }, [characterSheet.inventory, items, addLogEntry]);
+
+  // Risolve la scelta fatta dal giocatore in un evento
+  const resolveChoice = useCallback((choice: EventChoice) => {
+    if (!currentEvent) return;
+
+    // Esegui lo skill check se presente
+    if (choice.skillCheck) {
+      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
+      if (checkResult.success) {
+        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.successText });
+        if (choice.items_gained) {
+          choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
+        }
+        // Aggiungi altre ricompense qui se necessario
+      } else {
+        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.failureText });
+        if (choice.penalty) {
+          // Applica penalità qui (es. updateHP(-choice.penalty.amount))
+        }
+      }
+    } else {
+      // Scelte senza skill check
+      addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
+      if (choice.items_gained) {
+        choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
+      }
+    }
+
+    // Pulisci l'evento e torna al gioco
+    setCurrentEvent(null);
+    goBack();
+  }, [currentEvent, performAbilityCheck, addItem, addLogEntry, goBack]);
 
   // Rimuove un oggetto dall'inventario
   const removeItem = useCallback((slotIndex: number, quantity: number = 1) => {
@@ -974,6 +1070,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     deleteSave: realDeleteSave,
     exportSave: realExportSave,
     importSave: realImportSave,
+    eventDatabase,
+    currentEvent,
+    triggerEvent,
+    resolveChoice,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

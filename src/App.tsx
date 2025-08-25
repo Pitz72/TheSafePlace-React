@@ -13,6 +13,7 @@ import { GameErrorBoundary } from './utils/errorHandler';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
 import InventoryScreen from './components/InventoryScreen';
+import EventScreen from './components/EventScreen';
 
 // Funzione per mappare i caratteri della mappa ai nomi dei luoghi - v0.1.3
 const getTileDescription = (char: string): string => {
@@ -270,6 +271,7 @@ const GameContent = () => {
             </>
           )}
         </div>
+        <EventScreen />
       </div>
     </div>
   );
