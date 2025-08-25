@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../hooks/useGameContext';
 import { MessageType } from '../data/MessageArchive';
-import type { AbilityCheckResult } from '../interfaces/gameState';
+
 
 const ShelterScreen: React.FC = () => {
   const { goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameContext();
