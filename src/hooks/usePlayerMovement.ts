@@ -61,7 +61,7 @@ export const usePlayerMovement = () => {
     if (!canMoveToPosition(nextX, nextY)) return;
     
     const nextTerrain = getTerrainAt(nextX, nextY);
-    
+
     // La logica specifica per i fiumi rimane qui perché è un'azione di movimento speciale
     if (nextTerrain === '~') {
       setMovementState({ isExitingRiver: true });
@@ -77,7 +77,7 @@ export const usePlayerMovement = () => {
     
     // Chiama la nuova funzione centralizzata
     updatePlayerPosition({ x: nextX, y: nextY });
-    
+
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
       updateBiome('R');

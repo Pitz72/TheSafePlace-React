@@ -19,7 +19,7 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event' | 'loadGame';
 
 export interface SurvivalState {
   hunger: number;
@@ -48,6 +48,9 @@ export interface GameState {
   // Survival state
   survivalState: SurvivalState;
   
+  // Shelter state
+  visitedShelters: Record<string, boolean>;
+
   // Journal state
   logEntries: LogEntry[];
   currentBiome: string | null;
@@ -55,7 +58,7 @@ export interface GameState {
   // Inventory state
   items: Record<string, IItem>;
   selectedInventoryIndex: number;
-  
+
   // Event system
   eventDatabase: Record<string, GameEvent[]>;
   currentEvent: GameEvent | null;
@@ -86,7 +89,7 @@ export interface GameState {
   setCurrentScreen: (screen: Screen) => void;
   goBack: () => void;
   menuSelectedIndex: number;
-  setMenuSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+  setMenuSelectedIndex: (index: number) => void;
   handleNewGame: () => void;
   handleLoadGame: () => void;
   handleStory: () => void;
@@ -94,7 +97,7 @@ export interface GameState {
   handleOptions: () => void;
   handleBackToMenu: () => void;
   handleExit: () => void;
-  setSelectedInventoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedInventoryIndex: (index: number) => void;
   useItem: (slotIndex: number) => void;
   equipItemFromInventory: (slotIndex: number) => void;
   dropItem: (slotIndex: number) => void;

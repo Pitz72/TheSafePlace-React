@@ -15,7 +15,7 @@
           }
         },
         {
-          "id": "scavenge_choice", 
+          "id": "scavenge_choice",
           "text": "Cerca materiali utili nei dintorni",
           "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
           "successText": "Frugando tra i detriti, trovi alcuni oggetti ancora utilizzabili: una torcia e delle batterie.",

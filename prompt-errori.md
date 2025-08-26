@@ -102,7 +102,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   navigateTo: (screen) => set({ currentScreen: screen }),
-  
+
   // --- Funzioni Placeholder ---
   initializeGame: async () => console.warn('initializeGame not migrated yet'),
   updateCameraPosition: () => console.warn('updateCameraPosition not migrated yet'),
@@ -155,4 +155,3 @@ Rimuovi l'intera funzione triggerEvent.
 Rimuovi l'intera funzione resolveChoice.
 Trova l'oggetto value alla fine del file e rimuovi da esso le seguenti proprietà: currentEvent, triggerEvent, resolveChoice.
 Questo è un intervento massiccio ma necessario. Risolverà gli errori di tipo e ci metterà nella posizione corretta per continuare il refactoring in modo pulito. La prego di applicare queste modifiche. Se ci saranno solo warning minori, potremo ignorarli e procedere al test.
-
