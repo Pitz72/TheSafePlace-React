@@ -2,10 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 
 const CharacterCreationScreen: React.FC = () => {
-  const { characterSheet, setCurrentScreen } = useGameStore(state => ({
-    characterSheet: state.characterSheet,
-    setCurrentScreen: state.setCurrentScreen,
-  }));
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);

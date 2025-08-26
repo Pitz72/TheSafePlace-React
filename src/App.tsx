@@ -47,11 +47,16 @@ import ShelterScreen from './components/ShelterScreen';
 
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
-  const { currentScreen, playerPosition } = useGameStore();
-  const {
-    isMapLoading, mapData, timeState,
-    characterSheet, getModifier, items, survivalState
-  } = useGameStore();
+  const currentScreen = useGameStore(state => state.currentScreen);
+  const playerPosition = useGameStore(state => state.playerPosition);
+  const isMapLoading = useGameStore(state => state.isMapLoading);
+  const mapData = useGameStore(state => state.mapData);
+  const timeState = useGameStore(state => state.timeState);
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const getModifier = useGameStore(state => state.getModifier);
+  const items = useGameStore(state => state.items);
+  const survivalState = useGameStore(state => state.survivalState);
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const { videoMode } = useSettingsStore();
   
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
@@ -203,7 +208,7 @@ const GameContent = () => {
                       <div className="panel flex-1 m-4 flex flex-col">
                         <h2 className="panel-title">MAPPA DEL MONDO</h2>
                         <div className="flex-1 relative min-h-0">
-                          <MapViewport className="absolute inset-0" />
+                          <MapViewport className="absolute inset-0" viewportWidth={viewportWidth} viewportHeight={viewportHeight} />
                           <Player />
                         </div>
                         <div className="text-center mt-2 text-xs">
