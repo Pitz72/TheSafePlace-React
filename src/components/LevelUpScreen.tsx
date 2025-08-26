@@ -3,7 +3,7 @@
  * Sistema D&D-style per miglioramento statistiche e abilità
  */
 import React, { useState, useEffect } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 import { 
   getAvailableLevelUpOptions, 
   createLevelUpPreview, 
@@ -15,7 +15,12 @@ import type { ILevelUpOption } from '../interfaces/levelUp';
 import { MessageType } from '../data/MessageArchive';
 
 const LevelUpScreen: React.FC = () => {
-  const { characterSheet, goBack, addLogEntry, updateCharacterSheet } = useGameContext();
+  const { characterSheet, goBack, addLogEntry, updateCharacterSheet } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    goBack: state.goBack,
+    addLogEntry: state.addLogEntry,
+    updateCharacterSheet: state.updateCharacterSheet,
+  }));
   const [selectedOptions, setSelectedOptions] = useState<ILevelUpOption[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -31,7 +36,7 @@ const LevelUpScreen: React.FC = () => {
         if (showConfirmation) {
           setShowConfirmation(false);
         } else {
-          goBack();
+          goBack(); // Ancora necessario per la logica a due livelli (schermata -> conferma)
         }
         return;
       }

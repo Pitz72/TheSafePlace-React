@@ -8,10 +8,7 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSettingsStore } from '../stores/settingsStore';
-
-interface OptionsScreenProps {
-  onBack: () => void;
-}
+import { useGameStore } from '../stores/gameStore';
 
 interface NavItem {
   id: string;
@@ -23,8 +20,9 @@ interface NavItem {
   isActive?: () => boolean;
 }
 
-const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
+const OptionsScreen: React.FC = () => {
   const { videoMode, audioEnabled, setVideoMode, setAudioEnabled } = useSettingsStore();
+  const goBack = useGameStore(state => state.goBack);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const navMap = useMemo((): NavItem[] => [
@@ -85,7 +83,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
         case 'escape':
         case 'backspace':
         case 'b':
-          onBack();
+          goBack();
           break;
         case 'arrowup':
         case 'w':
@@ -112,7 +110,7 @@ const OptionsScreen: React.FC<OptionsScreenProps> = ({ onBack }) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIndex, navMap, onBack]);
+  }, [selectedIndex, navMap, goBack]);
 
   const renderSection = (section: 'video' | 'audio' | 'other', title: string) => {
     const sectionItems = navMap.filter(item => item.section === section);

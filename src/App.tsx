@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
 import { useGameScale } from './hooks/useGameScale';
-import { useKeyboardCommands } from './hooks/useKeyboardCommands';
 import { GameProvider } from './contexts/GameProvider';
-import { useGameContext } from './hooks/useGameContext';
 import { useGameStore } from './stores/gameStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
@@ -43,19 +41,31 @@ import InventoryPanel from './components/InventoryPanel';
 import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
 
-// Componente "headless" per inizializzare la logica di gioco globale
-const GameLogic = () => {
-  useKeyboardCommands();
-  return null; // Non renderizza nulla
-};
-
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
-  const { currentScreen, playerPosition } = useGameStore();
   const {
-    isMapLoading, mapData, timeState,
-    characterSheet, getModifier, items, survivalState
-  } = useGameContext();
+    currentScreen,
+    playerPosition,
+    isMapLoading,
+    mapData,
+    timeState,
+    characterSheet,
+    getModifier,
+    items,
+    survivalState,
+    setCurrentScreen,
+  } = useGameStore(state => ({
+    currentScreen: state.currentScreen,
+    playerPosition: state.playerPosition,
+    isMapLoading: state.isMapLoading,
+    mapData: state.mapData,
+    timeState: state.timeState,
+    characterSheet: state.characterSheet,
+    getModifier: state.getModifier,
+    items: state.items,
+    survivalState: state.survivalState,
+    setCurrentScreen: state.setCurrentScreen,
+  }));
   const { videoMode } = useSettingsStore();
   
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
@@ -128,7 +138,7 @@ const GameContent = () => {
           {currentScreen === 'menu' && <StartScreen />}
           {currentScreen === 'instructions' && <InstructionsScreen />}
           {currentScreen === 'story' && <StoryScreen />}
-          {currentScreen === 'options' && <OptionsScreen onBack={() => setCurrentScreen('menu')} />}
+          {currentScreen === 'options' && <OptionsScreen />}
           {currentScreen === 'characterCreation' && <CharacterCreationScreen />}
           {currentScreen === 'characterSheet' && <CharacterSheetScreen />}
           {currentScreen === 'inventory' && <InventoryScreen />}
@@ -281,10 +291,7 @@ const GameContent = () => {
 
 const AppUI = () => {
   return (
-    <>
-      <GameLogic />
-      <GameContent />
-    </>
+    <GameContent />
   );
 };
 

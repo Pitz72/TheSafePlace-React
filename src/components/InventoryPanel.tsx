@@ -1,9 +1,12 @@
 import React from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 import type { IItem, IInventorySlot } from '../interfaces/items';
 
 const InventoryPanel: React.FC = () => {
-  const { characterSheet, items: itemDatabase } = useGameContext();
+  const { characterSheet, items: itemDatabase } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    items: state.items,
+  }));
 
   const { inventory } = characterSheet;
 

@@ -75,8 +75,8 @@ export const usePlayerMovement = () => {
       setMovementState({ isExitingRiver: false });
     }
     
-    // Chiama la nuova funzione centralizzata
-    updatePlayerPosition({ x: nextX, y: nextY });
+    // Chiama la nuova funzione centralizzata, passando anche il bioma
+    updatePlayerPosition({ x: nextX, y: nextY }, nextTerrain);
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {

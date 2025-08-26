@@ -1,12 +1,16 @@
 import React from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 interface PlayerProps {
   className?: string;
 }
 
 const Player: React.FC<PlayerProps> = ({ className = '' }) => {
-  const { playerPosition, mapData, cameraPosition } = useGameContext();
+  const { playerPosition, mapData, cameraPosition } = useGameStore(state => ({
+    playerPosition: state.playerPosition,
+    mapData: state.mapData,
+    cameraPosition: state.cameraPosition,
+  }));
   
   // Non renderizzare se la posizione non è valida
   if (playerPosition.x === -1 || playerPosition.y === -1 || mapData.length === 0) {

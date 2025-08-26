@@ -30,11 +30,20 @@
  * Autore: Simone Pizzi
  * Stato: IMMUTABILE ✅
  */
-import React from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import React, { useEffect } from 'react';
+import { useGameStore } from '../stores/gameStore';
 
 const StartScreen: React.FC = () => {
-  const { menuSelectedIndex, handleNewGame, handleLoadGame, handleStory, handleInstructions, handleOptions, handleExit } = useGameContext();
+  const { menuSelectedIndex, setMenuSelectedIndex, handleNewGame, handleLoadGame, handleStory, handleInstructions, handleOptions, handleExit } = useGameStore(state => ({
+    menuSelectedIndex: state.menuSelectedIndex,
+    setMenuSelectedIndex: state.setMenuSelectedIndex,
+    handleNewGame: state.handleNewGame,
+    handleLoadGame: state.handleLoadGame,
+    handleStory: state.handleStory,
+    handleInstructions: state.handleInstructions,
+    handleOptions: state.handleOptions,
+    handleExit: state.handleExit,
+  }));
   
   const menuItems = [
     { key: 'N', label: 'Nuova Partita', action: handleNewGame },
@@ -44,6 +53,28 @@ const StartScreen: React.FC = () => {
     { key: 'O', label: 'Opzioni', action: handleOptions },
     { key: 'E', label: 'Esci', action: handleExit }
   ];
+
+  // Listener per input da tastiera locale a questa schermata
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      if (key === 'arrowup' || key === 'w') {
+        event.preventDefault();
+        setMenuSelectedIndex((prev: number) => (prev > 0 ? prev - 1 : menuItems.length - 1));
+      } else if (key === 'arrowdown' || key === 's') {
+        event.preventDefault();
+        setMenuSelectedIndex((prev: number) => (prev < menuItems.length - 1 ? prev + 1 : 0));
+      } else if (key === 'enter') {
+        event.preventDefault();
+        menuItems[menuSelectedIndex].action();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [menuSelectedIndex, setMenuSelectedIndex, handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit]);
 
   return (
     <div className="h-full flex items-center justify-center overflow-hidden crt-screen scan-lines">

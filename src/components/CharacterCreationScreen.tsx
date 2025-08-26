@@ -10,10 +10,13 @@
  * - Se cambi questi valori: aggiorna l'anti-regressione e verifica overflow/troncamenti.
  */
 import React, { useState, useEffect } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 const CharacterCreationScreen: React.FC = () => {
-  const { characterSheet, setCurrentScreen } = useGameContext();
+  const { characterSheet, setCurrentScreen } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    setCurrentScreen: state.setCurrentScreen,
+  }));
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSkipHint, setShowSkipHint] = useState(false);

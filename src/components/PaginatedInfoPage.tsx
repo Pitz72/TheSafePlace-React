@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 interface PaginatedInfoPageProps {
   title: string;
@@ -39,22 +39,23 @@ interface PaginatedInfoPageProps {
  * Stato: IMMUTABILE ✅
  */
 const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content }) => {
-  const { handleBackToMenu } = useGameContext();
+  const handleBackToMenu = useGameStore(state => state.handleBackToMenu);
   const contentBoxRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const SCROLL_AMOUNT = 32; // Ridotto da 50 a 32 per compensare testo più piccolo (text-2xl invece di text-7xl)
+  const SCROLL_AMOUNT = 32;
 
-  // Scorrimento tastiera + ESC — non cambiare mappatura tasti senza aggiornare le istruzioni UI
+  // Gestisce solo lo scroll. Il goBack è gestito da useKeyboardCommands
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      const gameKeys = ['w','arrowup','s','arrowdown','escape','b'];
-      if (!gameKeys.includes(key)) return; // Non bloccare altri tasti (DevTools)
+      const scrollKeys = ['w', 'arrowup', 's', 'arrowdown'];
+      if (!scrollKeys.includes(key)) return;
+
       event.preventDefault();
       const contentBox = contentBoxRef.current;
       if (!contentBox) return;
 
-      switch (event.key.toLowerCase()) {
+      switch (key) {
         case 'w':
         case 'arrowup':
           setScrollTop(prev => Math.max(0, prev - SCROLL_AMOUNT));
@@ -66,16 +67,12 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
             return Math.min(maxScroll, prev + SCROLL_AMOUNT);
           });
           break;
-        case 'escape':
-        case 'b':
-          handleBackToMenu();
-          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBackToMenu]);
+  }, []);
 
   // Applica la posizione di scroll calcolata
   useEffect(() => {

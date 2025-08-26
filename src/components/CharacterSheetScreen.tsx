@@ -6,22 +6,15 @@
  * - Layout 2 colonne: non comprimere sotto max-w-6xl senza test leggibilità
  * - Interazione: [ESC]/[TAB] per uscire — invarianti
  */
-import React, { useEffect } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import React from 'react';
+import { useGameStore } from '../stores/gameStore';
 
 const CharacterSheetScreen: React.FC = () => {
-  const { characterSheet, getModifier, goBack } = useGameContext();
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' || event.key === 'Tab') {
-        event.preventDefault();
-        goBack();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goBack]);
+  const { characterSheet, getModifier, items } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    getModifier: state.getModifier,
+    items: state.items,
+  }));
 
   if (!characterSheet) {
     return (

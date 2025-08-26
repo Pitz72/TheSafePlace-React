@@ -10,7 +10,7 @@
  * @data 2025-08-24
  */
 import React, { useState, useEffect, useRef } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 interface MapViewportProps {
   className?: string;
@@ -45,7 +45,13 @@ const BLINKING_COLORS = {
 
 const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   // Integrazione con GameContext per camera dinamica
-  const { mapData, isMapLoading, playerPosition, cameraPosition, updateCameraPosition } = useGameContext();
+  const { mapData, isMapLoading, playerPosition, cameraPosition, updateCameraPosition } = useGameStore(state => ({
+    mapData: state.mapData,
+    isMapLoading: state.isMapLoading,
+    playerPosition: state.playerPosition,
+    cameraPosition: state.cameraPosition,
+    updateCameraPosition: state.updateCameraPosition,
+  }));
   
   // Stati locali per viewport
   const [error] = useState<string | null>(null);
