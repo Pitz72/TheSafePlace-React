@@ -1,6 +1,14 @@
 # Requirements Document - Documentation Sync Analysis
 
-## Introduction
+## ⚠️ PROGETTO CANCELLATO - 26 Gennaio 2025
+
+**Motivo:** Problemi originali risolti attraverso evoluzione del workflow spec-driven del progetto.  
+**Dettagli:** Vedere `CANCELLED.md` per analisi completa della decisione.  
+**Stato:** Archiviato per possibile riprogettazione futura quando il progetto raggiungerà stabilità v1.0+
+
+---
+
+## Introduction (STORICO)
 
 Questo documento definisce i requisiti per un'analisi completa della sincronizzazione tra la documentazione del progetto "The Safe Place" e l'implementazione reale del codice. L'obiettivo è identificare discrepanze, inconsistenze e aree dove la documentazione non riflette accuratamente lo stato attuale del progetto.
 

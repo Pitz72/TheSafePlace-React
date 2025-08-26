@@ -1,6 +1,14 @@
 # Design Document - Documentation Sync Analysis
 
-## Overview
+## ⚠️ PROGETTO CANCELLATO - 26 Gennaio 2025
+
+**Motivo:** Problemi originali risolti attraverso evoluzione del workflow spec-driven del progetto.  
+**Dettagli:** Vedere `CANCELLED.md` per analisi completa della decisione.  
+**Stato:** Archiviato per possibile riprogettazione futura quando il progetto raggiungerà stabilità v1.0+
+
+---
+
+## Overview (STORICO)
 
 Questo documento descrive il design per un sistema di analisi completa della sincronizzazione tra la documentazione del progetto "The Safe Place" e l'implementazione reale del codice. Il sistema identificherà discrepanze, inconsistenze e fornirà raccomandazioni per mantenere la documentazione accurata.
 
