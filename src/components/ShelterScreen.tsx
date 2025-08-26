@@ -3,12 +3,20 @@
  * Gestisce le interazioni nei rifugi durante il giorno
  */
 import React, { useState, useEffect } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const { goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameContext();
+  const { goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameStore(state => ({
+    goBack: state.goBack,
+    addLogEntry: state.addLogEntry,
+    performAbilityCheck: state.performAbilityCheck,
+    updateHP: state.updateHP,
+    advanceTime: state.advanceTime,
+    items: state.items,
+    addItem: state.addItem,
+  }));
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -21,12 +29,6 @@ const ShelterScreen: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        goBack();
-        return;
-      }
-
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         setSelectedOption(prev => Math.max(0, prev - 1));

@@ -7,30 +7,47 @@
  * - Interazione: [↑↓] selezione, [1-9] usa, [ESC]/[I] chiudi — invarianti
  */
 import React, { useEffect, useState } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 import { getItemColorClass } from '../utils/itemColors';
 import { getAvailableActions, getDefaultAction, executeItemAction, getDetailedExamination } from '../utils/itemActions';
 import { getPortionDescription, isPortionableItem, getTotalPortions } from '../utils/portionSystem';
 
 const InventoryScreen: React.FC = () => {
-  const { characterSheet, items, selectedInventoryIndex, goBack, useItem, addLogEntry, equipItemFromInventory, dropItem } = useGameContext();
+  const {
+    characterSheet,
+    items,
+    selectedInventoryIndex,
+    goBack,
+    useItem,
+    equipItemFromInventory,
+    dropItem
+  } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    items: state.items,
+    selectedInventoryIndex: state.selectedInventoryIndex,
+    goBack: state.goBack,
+    useItem: state.useItem,
+    equipItemFromInventory: state.equipItemFromInventory,
+    dropItem: state.dropItem,
+  }));
   const [showActions, setShowActions] = useState(false);
   const [examinationText, setExaminationText] = useState<string[] | null>(null);
 
-  // Dichiarazioni prima del useEffect per evitare errori di scope
   const selectedItemStack = selectedInventoryIndex !== null ? characterSheet.inventory[selectedInventoryIndex] : null;
   const selectedItem = selectedItemStack ? items[selectedItemStack.itemId] : null;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' || event.key.toLowerCase() === 'i') {
-        event.preventDefault();
+      // La navigazione base (ESC, I, frecce, numeri) è gestita da useKeyboardCommands.
+      // Questo useEffect gestisce solo la logica contestuale a questa schermata.
+
+      if (event.key === 'Escape') {
         if (showActions || examinationText) {
+          event.preventDefault();
           setShowActions(false);
           setExaminationText(null);
-        } else {
-          goBack();
         }
+        // Il goBack() generale è gestito dall'hook globale
         return;
       }
 
@@ -74,7 +91,7 @@ const InventoryScreen: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goBack, showActions, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, addLogEntry]);
+  }, [goBack, showActions, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, equipItemFromInventory, dropItem]);
 
   const availableActions = selectedItem ? getAvailableActions(selectedItem) : [];
   const defaultAction = selectedItem ? getDefaultAction(selectedItem) : null;

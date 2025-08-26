@@ -1,24 +1,17 @@
-/**
- * CharacterCreationScreen.tsx — Schermata dedicata (UI/UX consolidata v0.3.7 "Tailwind Omologation")
- *
- * Regole per future modifiche alle DIMENSIONI (font/spaziature):
- * - Invarianti: struttura full-screen, titolo grande centrato, box contenuto w-[85%] max-w-[1400px]
- * - Font principali:
- *   • Titolo: 47px
- *   • Step testo: 38px (verificato leggibile su 1366x768 e superiori)
- *   • Hint enter: 16px — Hint skip: 13px — Footer: 11px
- * - Se cambi questi valori: aggiorna l'anti-regressione e verifica overflow/troncamenti.
- */
-import React, { useState, useEffect } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useGameStore } from '../stores/gameStore';
 
 const CharacterCreationScreen: React.FC = () => {
-  const { characterSheet, setCurrentScreen } = useGameContext();
+  const { characterSheet, setCurrentScreen } = useGameStore(state => ({
+    characterSheet: state.characterSheet,
+    setCurrentScreen: state.setCurrentScreen,
+  }));
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSkipHint, setShowSkipHint] = useState(false);
 
-  const creationSteps = [
+  const creationSteps = useMemo(() => [
     { text: 'Generazione personaggio "Ultimo"...', duration: 1000 },
     { text: 'Lancio dadi per le statistiche...', duration: 1500 },
     { text: `[■] Potenza: ${characterSheet.stats.potenza}`, duration: 800 },
@@ -28,11 +21,11 @@ const CharacterCreationScreen: React.FC = () => {
     { text: `[■] Percezione: ${characterSheet.stats.percezione}`, duration: 800 },
     { text: `[■] Carisma: ${characterSheet.stats.carisma}`, duration: 800 },
     { text: `>>> Personaggio "${characterSheet.name.replace(' (Test)', '')}" creato!`, duration: 1200 }
-  ];
+  ], [characterSheet]);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     setCurrentScreen('game');
-  };
+  }, [setCurrentScreen]);
 
   useEffect(() => {
     if (!isAnimating) return;
@@ -40,23 +33,23 @@ const CharacterCreationScreen: React.FC = () => {
     const hintTimer = setTimeout(() => setShowSkipHint(true), 2000);
 
     if (currentStep < creationSteps.length - 1) {
-      const timer = setTimeout(() => setCurrentStep(prev => prev + 1), creationSteps[currentStep].duration);
+      const timer = setTimeout(() => {
+        setCurrentStep(prev => prev + 1);
+      }, creationSteps[currentStep].duration);
       return () => clearTimeout(timer);
     } else {
       setIsAnimating(false);
     }
 
     return () => clearTimeout(hintTimer);
-  }, [currentStep, isAnimating]);
+  }, [currentStep, isAnimating, creationSteps]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Il tasto SPAZIO può saltare l'animazione in qualsiasi momento
       if (event.code === 'Space') {
         event.preventDefault();
         handleConfirm();
       }
-      // Il tasto ENTER funziona solo a fine animazione
       if (!isAnimating && event.key === 'Enter') {
         event.preventDefault();
         handleConfirm();
@@ -64,21 +57,20 @@ const CharacterCreationScreen: React.FC = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isAnimating, handleConfirm]);
 
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full text-center">
-        {/* Titolo */}
         <h2
           className="text-phosphor-bright font-bold mb-10 font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow"
           style={{ fontSize: '47px' }}
         >
           CREAZIONE PERSONAGGIO
         </h2>
-
-        {/* Box contenuto (senza riduzioni di scala aggiuntive) */}
         <div className="flex justify-center">
           <div className="w-[85%] max-w-[1400px] mx-auto">
             <div className="text-left mx-auto text-phosphor-500 font-mono tracking-wide leading-relaxed space-y-4">
@@ -93,8 +85,6 @@ const CharacterCreationScreen: React.FC = () => {
                   {step.text}
                 </div>
               ))}
-
-              {/* Hints */}
               {!isAnimating && (
                 <div className="mt-8 text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
                   Premi [ENTER] per iniziare l'avventura

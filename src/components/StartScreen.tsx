@@ -30,11 +30,18 @@
  * Autore: Simone Pizzi
  * Stato: IMMUTABILE ✅
  */
-import React from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import React, { useEffect } from 'react';
+import { useGameStore } from '../stores/gameStore';
 
 const StartScreen: React.FC = () => {
-  const { menuSelectedIndex, handleNewGame, handleLoadGame, handleStory, handleInstructions, handleOptions, handleExit } = useGameContext();
+  const menuSelectedIndex = useGameStore(state => state.menuSelectedIndex);
+  const setMenuSelectedIndex = useGameStore(state => state.setMenuSelectedIndex);
+  const handleNewGame = useGameStore(state => state.handleNewGame);
+  const handleLoadGame = useGameStore(state => state.handleLoadGame);
+  const handleStory = useGameStore(state => state.handleStory);
+  const handleInstructions = useGameStore(state => state.handleInstructions);
+  const handleOptions = useGameStore(state => state.handleOptions);
+  const handleExit = useGameStore(state => state.handleExit);
   
   const menuItems = [
     { key: 'N', label: 'Nuova Partita', action: handleNewGame },
@@ -44,6 +51,35 @@ const StartScreen: React.FC = () => {
     { key: 'O', label: 'Opzioni', action: handleOptions },
     { key: 'E', label: 'Esci', action: handleExit }
   ];
+
+  // Listener per input da tastiera locale a questa schermata
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      // Ottiene lo stato più recente direttamente dallo store per evitare loop
+      const currentIndex = useGameStore.getState().menuSelectedIndex;
+
+      if (key === 'arrowup' || key === 'w') {
+        event.preventDefault();
+        const newIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+        setMenuSelectedIndex(newIndex);
+      } else if (key === 'arrowdown' || key === 's') {
+        event.preventDefault();
+        const newIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+        setMenuSelectedIndex(newIndex);
+      } else if (key === 'enter') {
+        event.preventDefault();
+        // L'array menuItems è stabile e contiene già le azioni corrette
+        menuItems[currentIndex].action();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+    // L'array di dipendenze ora è stabile e non causerà nuove esecuzioni
+  }, [setMenuSelectedIndex, handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit]);
 
   return (
     <div className="h-full flex items-center justify-center overflow-hidden crt-screen scan-lines">

@@ -10,7 +10,7 @@
  * @data 2025-08-24
  */
 import React, { useState, useEffect, useRef } from 'react';
-import { useGameContext } from '../hooks/useGameContext';
+import { useGameStore } from '../stores/gameStore';
 
 interface MapViewportProps {
   className?: string;
@@ -45,7 +45,13 @@ const BLINKING_COLORS = {
 
 const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   // Integrazione con GameContext per camera dinamica
-  const { mapData, isMapLoading, playerPosition, cameraPosition, updateCameraPosition } = useGameContext();
+  const { mapData, isMapLoading, playerPosition, cameraPosition, updateCameraPosition } = useGameStore(state => ({
+    mapData: state.mapData,
+    isMapLoading: state.isMapLoading,
+    playerPosition: state.playerPosition,
+    cameraPosition: state.cameraPosition,
+    updateCameraPosition: state.updateCameraPosition,
+  }));
   
   // Stati locali per viewport
   const [error] = useState<string | null>(null);
@@ -100,24 +106,31 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '' }) => {
   // Aggiornamento camera quando cambiano le dimensioni del viewport o la posizione del player
   useEffect(() => {
     if (viewportWidth > 0 && viewportHeight > 0 && !isMapLoading) {
-      const w = Math.round(viewportWidth);
-      const h = Math.round(viewportHeight);
-      const causes: string[] = [];
-      if (lastDepsRef.current.w !== viewportWidth) causes.push('viewportWidth');
-      if (lastDepsRef.current.h !== viewportHeight) causes.push('viewportHeight');
-      if (lastDepsRef.current.px !== playerPosition.x) causes.push('playerX');
-      if (lastDepsRef.current.py !== playerPosition.y) causes.push('playerY');
+      // Verifica se la posizione del giocatore o le dimensioni del viewport sono effettivamente cambiate
+      const hasPlayerPositionChanged = lastDepsRef.current.px !== playerPosition.x || lastDepsRef.current.py !== playerPosition.y;
+      const hasViewportSizeChanged = lastDepsRef.current.w !== viewportWidth || lastDepsRef.current.h !== viewportHeight;
+      
+      // Chiama updateCameraPosition solo se qualcosa è effettivamente cambiato
+      if (hasPlayerPositionChanged || hasViewportSizeChanged) {
+        const w = Math.round(viewportWidth);
+        const h = Math.round(viewportHeight);
+        const causes: string[] = [];
+        if (lastDepsRef.current.w !== viewportWidth) causes.push('viewportWidth');
+        if (lastDepsRef.current.h !== viewportHeight) causes.push('viewportHeight');
+        if (lastDepsRef.current.px !== playerPosition.x) causes.push('playerX');
+        if (lastDepsRef.current.py !== playerPosition.y) causes.push('playerY');
 
-      dbg('updateCameraPosition()', {
-        raw: { width: viewportWidth, height: viewportHeight },
-        rounded: { width: w, height: h },
-        playerPosition,
-        cameraPosition,
-        causes
-      });
+        dbg('updateCameraPosition()', {
+          raw: { width: viewportWidth, height: viewportHeight },
+          rounded: { width: w, height: h },
+          playerPosition,
+          cameraPosition,
+          causes
+        });
 
-      updateCameraPosition({ width: w, height: h });
-      lastDepsRef.current = { w: viewportWidth, h: viewportHeight, px: playerPosition.x, py: playerPosition.y };
+        updateCameraPosition({ width: w, height: h });
+        lastDepsRef.current = { w: viewportWidth, h: viewportHeight, px: playerPosition.x, py: playerPosition.y };
+      }
     }
   }, [viewportWidth, viewportHeight, playerPosition, isMapLoading, updateCameraPosition]);
 
