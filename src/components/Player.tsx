@@ -22,7 +22,7 @@ const Player: React.FC<PlayerProps> = ({ className = '' }) => {
 
   return (
     <div 
-      className={`absolute pointer-events-none z-50 font-mono leading-none select-none flex items-center justify-center text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-glow ${className}`} 
+      className={`absolute pointer-events-none z-50 font-mono leading-none select-none text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-glow ${className}`} 
       style={{ 
         left: `${left}px`, 
         top: `${top}px`, 

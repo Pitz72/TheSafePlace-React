@@ -1,20 +1,10 @@
-/**
- * CharacterSheetScreen.tsx — Scheda personaggio (UI stabile)
- * Linee guida dimensioni (v0.3.7 "Tailwind Omologation"):
- * - H2 titolo: text-5xl; H3 sezioni: text-3xl; Valori: text-2xl
- * - Mantieni contrasto e glow per valori chiave (HP, CA, Peso)
- * - Layout 2 colonne: non comprimere sotto max-w-6xl senza test leggibilità
- * - Interazione: [ESC]/[TAB] per uscire — invarianti
- */
 import React from 'react';
 import { useGameStore } from '../stores/gameStore';
 
 const CharacterSheetScreen: React.FC = () => {
-  const { characterSheet, getModifier, items } = useGameStore(state => ({
-    characterSheet: state.characterSheet,
-    getModifier: state.getModifier,
-    items: state.items,
-  }));
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const getModifier = useGameStore(state => state.getModifier);
+  const items = useGameStore(state => state.items);
 
   if (!characterSheet) {
     return (
@@ -24,10 +14,8 @@ const CharacterSheetScreen: React.FC = () => {
     );
   }
 
-  // Tipi sicuri per le chiavi delle statistiche
   const statKeys = Object.keys(characterSheet.stats) as Array<keyof typeof characterSheet.stats>;
-
-  const armorClass = 10 + getModifier('agilita' as keyof typeof characterSheet.stats);
+  const armorClass = 10 + getModifier('agilita');
   const carryCapacity = characterSheet.stats.potenza * 10;
 
   return (
@@ -38,15 +26,13 @@ const CharacterSheetScreen: React.FC = () => {
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Colonna Sinistra */}
         <div className="space-y-6">
-          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
-            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
-              STATISTICHE PRIMARIE
-            </h3>
+          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim">
+            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright">STATISTICHE PRIMARIE</h3>
             <div className="space-y-4 text-2xl tracking-wider">
               {statKeys.map((stat) => (
                 <div key={stat as string} className="flex justify-between">
                   <span className="capitalize">{stat}:</span>
-                  <span className="text-phosphor-400 font-bold glow-phosphor-primary text-shadow-phosphor-bright animate-pulse">
+                  <span className="text-phosphor-400 font-bold">
                     {characterSheet.stats[stat]} ({getModifier(stat) >= 0 ? '+' : ''}{getModifier(stat)})
                   </span>
                 </div>
@@ -57,10 +43,8 @@ const CharacterSheetScreen: React.FC = () => {
 
         {/* Colonna Destra */}
         <div className="space-y-6">
-          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
-            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
-              STATISTICHE DERIVATE
-            </h3>
+          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim">
+            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright">STATISTICHE DERIVATE</h3>
             <div className="space-y-4 text-2xl tracking-wider">
               <div className="flex justify-between">
                 <span>Punti Vita:</span>
@@ -78,50 +62,30 @@ const CharacterSheetScreen: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
-            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
-              EQUIPAGGIAMENTO
-            </h3>
+          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim">
+            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright">EQUIPAGGIAMENTO</h3>
             <div className="space-y-3 text-2xl">
               <div className="flex justify-between">
                 <span>Arma:</span>
                 <span className="text-phosphor-400 font-bold">
-                  {characterSheet.equipment.weapon.itemId 
-                    ? items[characterSheet.equipment.weapon.itemId]?.name || 'Sconosciuta'
+                  {characterSheet.equipment.weapon.itemId && items[characterSheet.equipment.weapon.itemId]
+                    ? items[characterSheet.equipment.weapon.itemId].name
                     : 'Nessuna'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Armatura:</span>
                 <span className="text-phosphor-400 font-bold">
-                  {characterSheet.equipment.armor.itemId 
-                    ? items[characterSheet.equipment.armor.itemId]?.name || 'Sconosciuta'
+                  {characterSheet.equipment.armor.itemId && items[characterSheet.equipment.armor.itemId]
+                    ? items[characterSheet.equipment.armor.itemId].name
                     : 'Nessuna'}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span>Accessorio:</span>
-                <span className="text-phosphor-400 font-bold">
-                  {characterSheet.equipment.accessory.itemId 
-                    ? items[characterSheet.equipment.accessory.itemId]?.name || 'Sconosciuto'
-                    : 'Nessuno'}
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 glow-phosphor-dim animate-pulse">
-            <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
-              INFORMAZIONI
-            </h3>
-            <div className="text-center">
-              <div className="text-4xl text-phosphor-300 font-bold glow-phosphor-bright text-shadow-phosphor-bright animate-glow">{characterSheet.name}</div>
-              <div className="text-2xl text-phosphor-700">Sopravvissuto delle Terre Desolate</div>
             </div>
           </div>
         </div>
       </div>
-      <div className="text-2xl text-phosphor-400 font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-pulse">
+      <div className="text-2xl text-phosphor-400 font-mono tracking-wider glow-phosphor-bright">
         [ESC] o [TAB] per tornare al gioco
       </div>
     </div>
