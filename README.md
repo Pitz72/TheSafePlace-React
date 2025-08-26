@@ -1,27 +1,40 @@
-# The Safe Place v0.6.2 "I Save You"
+# The Safe Place v0.6.3 "It's raining heavily today"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
 **The Safe Place** è un gioco di ruolo roguelike postapocalittico che ricrea l'esperienza visiva di un monitor a fosfori verdi degli anni '80, combinando gameplay testuale con interfaccia moderna React e sistema narrativo avanzato.
 
-### 🌟 Caratteristiche Principali
+### 🌟 Caratteristiche Principali v0.6.3
 
-- **Animazioni Ottimizzate**: Effetto phosphor-decay velocizzato (0.2s) per maggiore reattività e fluidità dell'interfaccia.
-- **Spaziatura Migliorata**: Layout ottimizzato nella schermata di creazione personaggio per una migliore leggibilità.
-- **Leggibilità Ottimizzata**: Testo narrativo ingrandito del 75% e interfacce del 60% per massima accessibilità e comfort visivo.
-- **Architettura a Schermate Dedicate**: Sistema di navigazione robusto che sostituisce i popup per una maggiore coerenza tematica e stabilità tecnica.
-- **Flusso di Gioco Immersivo**: Creazione del personaggio, inventario e scheda personaggio gestiti come schermate a sé stanti, in puro stile terminale anni '80.
-- **Schermata Opzioni Completa**: Navigazione keyboard-only con tre modalità video e testo ingrandito proporzionalmente.
-- **Sistema Temi Avanzato**: Standard CRT, Senza Effetti, Altissimo Contrasto con supporto completo per testi ingranditi.
-- **Keyboard Navigation Completa**: Controllo totale tramite tastiera per un'esperienza autentica.
-- **Architettura Moderna**: React 18 + TypeScript + TailwindCSS + Vite.
+#### 🌧️ Sistema Meteo Dinamico Avanzato
+- **Integrazione Movimento-Meteo**: Il meteo influenza realisticamente il tempo di movimento e il consumo di risorse
+- **Effetti Atmosferici**: Tempeste e pioggia intensa possono causare danni e rallentamenti significativi
+- **Messaggi Immersivi**: Sistema di messaggi atmosferici casuali basati sulle condizioni meteorologiche correnti
+- **Bilanciamento Realistico**: Condizioni estreme richiedono pianificazione strategica del movimento
+
+#### 🏠 Sistema Rifugi Completamente Rivisto
+- **Regole di Accesso Corrette**: Ogni rifugio visitabile solo una volta durante il giorno, sempre accessibile di notte
+- **Investigazione per Sessione**: Sistema di investigazione bilanciato con reset ad ogni nuova sessione di gioco
+- **Persistenza Intelligente**: Stato dei rifugi mantenuto tra visite con messaggi informativi chiari
+- **Testing Completo**: 8 test automatizzati garantiscono la correttezza del sistema
+
+#### 🎮 Miglioramenti Gameplay Core
+- **Eventi Bilanciati**: Probabilità eventi ridotta al 20% per un ritmo di gioco più equilibrato
+- **Feedback Migliorato**: Messaggi chiari e informativi per tutte le azioni del giocatore
+- **Compatibilità Salvataggi**: Migrazione automatica da versioni precedenti con reset intelligente delle investigazioni
+
+#### 🔧 Fondamenta Tecniche Solide
+- **Architettura Estensibile**: Sistema meteo e rifugi pronti per future espansioni
+- **Test Suite Automatizzati**: Copertura completa dei sistemi critici
+- **Performance Ottimizzate**: Nessun impatto negativo sulle prestazioni esistenti
 
 ### 🚀 Tecnologie
 
-- **Frontend**: React 18.3.1 + TypeScript 5.2.2
-- **Build Tool**: Vite 5.3.4 + SWC
-- **Styling**: TailwindCSS 4.1.11 + CSS Custom Properties
-- **State Management**: Zustand 4.5.2
+- **Frontend**: React 18.3.1 + TypeScript 5.7.3
+- **Build Tool**: Vite 6.0.3 + SWC
+- **Styling**: TailwindCSS 3.4.17 + CSS Custom Properties
+- **State Management**: Zustand 5.0.1
+- **Testing**: Jest 29.7.0 + Testing Library
 - **Development**: ESLint + PostCSS + Autoprefixer
 
 ### 📦 Installazione

@@ -181,6 +181,7 @@ export interface GameState {
   updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => void;
   isShelterAccessible: (x: number, y: number) => boolean;
   canInvestigateShelter: (x: number, y: number) => boolean;
+  resetShelterInvestigations: () => void;
   
   // Weather system v0.6.1 actions
   updateWeather: () => void;
@@ -189,6 +190,7 @@ export interface GameState {
   applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects) => number;
   createClearWeather: () => WeatherState;
   getWeatherDescription: (weather: WeatherType) => string;
+  getRandomWeatherMessage: (weather: WeatherType) => string;
   getWeatherPatterns: () => any;
   getTimeBasedWeatherModifiers: (timeState: TimeState) => string;
   selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string) => WeatherType;

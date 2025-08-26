@@ -18,8 +18,18 @@ const ShelterScreen: React.FC = () => {
   const playerPosition = useGameStore(state => state.playerPosition);
   const canInvestigateShelter = useGameStore(state => state.canInvestigateShelter);
   const updateShelterAccess = useGameStore(state => state.updateShelterAccess);
+  const getShelterInfo = useGameStore(state => state.getShelterInfo);
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
+
+  // Controlla se c'è già un risultato di investigazione salvato
+  useEffect(() => {
+    const { x, y } = playerPosition;
+    const shelterInfo = getShelterInfo(x, y);
+    if (shelterInfo && shelterInfo.hasBeenInvestigated && shelterInfo.investigationResults && shelterInfo.investigationResults.length > 0) {
+      setSearchResult(shelterInfo.investigationResults[0]);
+    }
+  }, [playerPosition, getShelterInfo]);
 
   const options = [
     { id: 'rest', name: 'Riposare (2-3 ore)', description: 'Recupera alcuni HP riposando nel rifugio' },
@@ -86,9 +96,9 @@ const ShelterScreen: React.FC = () => {
     // Controlla se l'investigazione è già stata fatta in questa sessione
     if (!canInvestigateShelter(x, y)) {
       addLogEntry(MessageType.ACTION_FAIL, {
-        reason: 'hai già investigato questo rifugio in questa sessione'
+        reason: 'hai già investigato questo rifugio in questa sessione di gioco'
       });
-      setSearchResult('Hai già perquisito accuratamente questo rifugio. Non c\'è altro da trovare per ora.');
+      setSearchResult('Hai già perquisito accuratamente questo rifugio durante questa sessione di gioco. Torna in un\'altra sessione per investigare di nuovo.');
       return;
     }
 

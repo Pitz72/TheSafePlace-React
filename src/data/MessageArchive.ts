@@ -62,6 +62,16 @@ export function getRandomMessage(type: MessageType, context?: Record<string, any
     JOURNAL_STATE.visitedBiomes.add(biomeKey);
   }
   
+  // Gestione messaggi con testo personalizzato (per meteo, eventi speciali, etc.)
+  if (context?.text) {
+    return context.text;
+  }
+  
+  // Gestione messaggi meteo con descrizione
+  if (context?.weather && context?.description) {
+    return context.description;
+  }
+  
   // Cooldown per AMBIANCE_RANDOM
   if (type === MessageType.AMBIANCE_RANDOM) {
     const now = Date.now();

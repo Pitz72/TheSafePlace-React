@@ -13,7 +13,9 @@
   - _Requirements: 2.1, 2.2, 2.3_
 
 
-- [ ] **1.2 Correggere logica accesso rifugi diurni**
+- [x] **1.2 Correggere logica accesso rifugi diurni**
+
+
   - Modificare `updateBiome()` per controllare `shelterAccessState`
   - Implementare regola "una visita diurna per rifugio"
   - Aggiungere messaggio informativo per rifugi inaccessibili
@@ -21,14 +23,18 @@
   - _Requirements: 2.1, 2.4_
 
 
-- [ ] **1.3 Correggere investigazione rifugi**
+- [x] **1.3 Correggere investigazione rifugi**
+
+
   - Modificare `ShelterScreen.tsx` per tracciare investigazioni per sessione
   - Implementare `hasBeenInvestigated` flag temporaneo
   - Prevenire investigazioni multiple nella stessa sessione
   - Aggiungere messaggio per investigazione già completata
   - _Requirements: 2.2, 2.3_
 
-- [ ] **1.4 Testing sistema rifugi corretto**
+- [x] **1.4 Testing sistema rifugi corretto**
+
+
   - Testare scenario: visita diurna → rifugio inaccessibile
   - Testare scenario: investigazione → non ripetibile in sessione
   - Testare scenario: accesso notturno sempre disponibile
@@ -39,7 +45,11 @@
 
 ### 2. Correzione Probabilità Eventi
 
-- [ ] **2.1 Ridurre probabilità eventi da 25% a 20%**
+- [x] **2.1 Ridurre probabilità eventi da 25% a 20%**
+
+
+
+
   - Modificare `EVENT_CHANCE` da 0.25 a 0.20 in `gameStore.ts`
   - Testare frequenza eventi durante gameplay normale
   - Verificare che la riduzione non impatti negativamente l'esperienza
@@ -66,7 +76,9 @@
   - Integrare con ciclo giorno/notte per transizioni realistiche
   - _Requirements: 7.1, 7.3_
 
-- [ ] **3.3 Integrare meteo con movimento**
+- [x] **3.3 Integrare meteo con movimento**
+
+
   - Modificare `updatePlayerPosition()` per applicare modificatori meteo
   - Implementare penalità movimento per maltempo
   - Aggiungere consumo risorse extra durante tempeste
@@ -80,7 +92,10 @@
   - Integrare nel layout principale del gioco
   - _Requirements: 7.3, 7.5_
 
-- [ ] **3.5 Implementare messaggi atmosferici meteo**
+- [x] **3.5 Implementare messaggi atmosferici meteo**
+
+
+
   - Aggiungere messaggi per cambi meteo in `MessageArchive.ts`
 
   - Creare descrizioni immersive per ogni condizione meteo
@@ -125,8 +140,7 @@
   - Aggiornare `performAbilityCheck()` per considerare equipaggiamento
   - _Requirements: 4.4, 4.5_
 
-- [-] **5.3 Migliorare feedback risultati eventi**
-
+- [ ] **5.3 Migliorare feedback risultati eventi**
   - Modificare messaggi journal per mostrare tutti gli effetti ottenuti
   - Aggiungere dettagli su oggetti guadagnati/persi
   - Implementare messaggi per danni/guarigioni da eventi

@@ -154,8 +154,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) get().addLogEntry(MessageType.TIME_DAWN);
     if (oldTimeState.currentTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
-        get().addLogEntry(MessageType.TIME_DUSK);
-        get().handleNightConsumption();
+      get().addLogEntry(MessageType.TIME_DUSK);
+      get().handleNightConsumption();
     }
     if (oldTimeState.currentTime > 0 && normalizedTime === 0) get().addLogEntry(MessageType.TIME_MIDNIGHT);
 
@@ -175,14 +175,14 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Aggiorna meteo prima del movimento
     get().updateWeather();
-    
+
     // Consumo e XP con effetti meteo
     get().addExperience(Math.floor(Math.random() * 2) + 1);
-    
+
     const weatherEffects = get().getWeatherEffects();
     const baseHungerLoss = 0.2;
     const baseThirstLoss = 0.3;
-    
+
     set(state => ({
       survivalState: {
         ...state.survivalState,
@@ -190,20 +190,65 @@ export const useGameStore = create<GameState>((set, get) => ({
         thirst: Math.max(0, state.survivalState.thirst - (baseThirstLoss * weatherEffects.survivalModifier)),
       }
     }));
+
+    // Controllo fame e sete critiche
     if (get().survivalState.hunger <= 0 || get().survivalState.thirst <= 0) {
       get().updateHP(-1);
       get().addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
     }
 
+    // Effetti meteo estremi durante il movimento
+    const { weatherState } = get();
+    if (weatherState.currentWeather === WeatherType.STORM && Math.random() < 0.15) {
+      // 15% di possibilità di subire danni durante una tempesta
+      const stormDamage = Math.floor(Math.random() * 2) + 1; // 1-2 danni
+      get().updateHP(-stormDamage);
+      get().addLogEntry(MessageType.HP_DAMAGE, {
+        damage: stormDamage,
+        reason: 'tempesta violenta',
+        description: 'Venti fortissimi e detriti volanti ti colpiscono mentre ti muovi.'
+      });
+    } else if (weatherState.currentWeather === WeatherType.HEAVY_RAIN && Math.random() < 0.08) {
+      // 8% di possibilità di scivolare durante pioggia intensa
+      const slipDamage = 1;
+      get().updateHP(-slipDamage);
+      get().addLogEntry(MessageType.HP_DAMAGE, {
+        damage: slipDamage,
+        reason: 'terreno scivoloso',
+        description: 'Scivoli sul terreno reso fangoso dalla pioggia intensa.'
+      });
+    }
+
+    // Messaggi atmosferici casuali basati sul meteo (10% di possibilità)
+    if (Math.random() < 0.10) {
+      const { weatherState } = get();
+      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        text: get().getRandomWeatherMessage(weatherState.currentWeather)
+      });
+    }
+
     // Trigger Evento - v0.6.1: ridotto da 25% a 20% + effetti meteo
     const BASE_EVENT_CHANCE = 0.20;
     const adjustedEventChance = BASE_EVENT_CHANCE * weatherEffects.eventProbabilityModifier;
-    
+
     if (newBiomeKey && Math.random() < adjustedEventChance) {
       setTimeout(() => get().triggerEvent(newBiomeKey), 150);
     }
 
-    get().advanceTime(10); // Avanzamento tempo per movimento
+    // Calcola tempo movimento con effetti meteo
+    const baseMovementTime = 10; // minuti base per movimento
+    const adjustedMovementTime = Math.ceil(baseMovementTime / weatherEffects.movementModifier);
+
+    // Messaggio informativo se il meteo rallenta il movimento
+    if (weatherEffects.movementModifier < 1.0) {
+      const { weatherState } = get();
+      const extraTime = adjustedMovementTime - baseMovementTime;
+      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        text: `Il ${get().getWeatherDescription(weatherState.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
+      });
+    }
+
+    get().advanceTime(adjustedMovementTime);
   },
 
   updateCameraPosition: (_viewportSize: { width: number; height: number }) => {
@@ -222,14 +267,14 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   // --- SISTEMA RIFUGI v0.6.1 ---
-  
+
   createShelterKey: (x: number, y: number): string => `${x},${y}`,
-  
+
   getShelterInfo: (x: number, y: number): ShelterAccessInfo | null => {
     const key = get().createShelterKey(x, y);
     return get().shelterAccessState[key] || null;
   },
-  
+
   createShelterInfo: (x: number, y: number): ShelterAccessInfo => {
     const { timeState } = get();
     return {
@@ -241,7 +286,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       investigationResults: []
     };
   },
-  
+
   updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => {
     const key = get().createShelterKey(x, y);
     set(state => ({
@@ -254,82 +299,97 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
     }));
   },
-  
+
   isShelterAccessible: (x: number, y: number): boolean => {
     const shelterInfo = get().getShelterInfo(x, y);
     if (!shelterInfo) return true; // Prima visita sempre permessa
-    
+
     const { timeState } = get();
-    
+
     // Accesso notturno sempre permesso
     if (!timeState.isDay) return true;
-    
+
     // Se è già stato visitato di giorno, non è più accessibile
     return shelterInfo.isAccessible;
   },
-  
+
   canInvestigateShelter: (x: number, y: number): boolean => {
     const shelterInfo = get().getShelterInfo(x, y);
     if (!shelterInfo) return true; // Prima investigazione sempre permessa
-    
+
     // Una sola investigazione per sessione
     return !shelterInfo.hasBeenInvestigated;
   },
 
+  resetShelterInvestigations: () => {
+    // Resetta tutte le investigazioni per una nuova sessione
+    set(state => {
+      const newShelterAccessState = { ...state.shelterAccessState };
+      Object.keys(newShelterAccessState).forEach(key => {
+        newShelterAccessState[key] = {
+          ...newShelterAccessState[key],
+          hasBeenInvestigated: false,
+          investigationResults: []
+        };
+      });
+      return { shelterAccessState: newShelterAccessState };
+    });
+  },
+
   // --- SISTEMA METEO v0.6.1 ---
-  
+
   updateWeather: () => {
     const currentTime = Date.now();
     const { weatherState } = get();
-    
+
     // Controlla se è ora di cambiare il meteo
     if (currentTime >= weatherState.nextWeatherChange) {
       const newWeather = get().generateWeatherChange();
       set({ weatherState: newWeather });
-      
-      // Aggiungi messaggio al journal
-      get().addLogEntry(MessageType.AMBIANCE_RANDOM, { 
+
+      // Aggiungi messaggio al journal con descrizione casuale
+      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
         weather: newWeather.currentWeather,
-        description: get().getWeatherDescription(newWeather.currentWeather)
+        text: get().getRandomWeatherMessage(newWeather.currentWeather)
       });
     }
   },
-  
+
   getWeatherEffects: (): WeatherEffects => {
     return get().weatherState.effects;
   },
-  
+
   generateWeatherChange: (): WeatherState => {
     const { timeState } = get();
-    
+
     // Carica i pattern meteo
     const weatherPatterns = get().getWeatherPatterns();
     const currentWeather = get().weatherState.currentWeather;
-    
+
     // Determina possibili transizioni
     const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
-    
+
     // Applica modificatori temporali
     const timeModifiers = get().getTimeBasedWeatherModifiers(timeState);
-    
+
     // Seleziona nuovo meteo
     const newWeatherType = get().selectWeatherWithModifiers(possibleTransitions, timeModifiers);
     const newPattern = weatherPatterns[newWeatherType];
-    
+
     if (!newPattern) {
       // Fallback a tempo sereno
       return get().createClearWeather();
     }
-    
+
     // Genera intensità casuale nel range
     const [minIntensity, maxIntensity] = newPattern.intensityRange;
     const intensity = Math.floor(Math.random() * (maxIntensity - minIntensity + 1)) + minIntensity;
-    
+
     // Genera durata con variazione ±30%
     const baseDuration = newPattern.averageDuration;
     const variation = baseDuration * 0.3;
     const duration = Math.floor(baseDuration + (Math.random() * variation * 2 - variation));
-    
+
     return {
       currentWeather: newWeatherType,
       intensity,
@@ -338,11 +398,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       effects: { ...newPattern.effects }
     };
   },
-  
+
   applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects): number => {
     const effects = get().getWeatherEffects();
     const modifier = effects[effectType];
-    
+
     if (effectType === 'skillCheckModifier') {
       // Per skill check, è un bonus/penalità additiva
       return baseValue + modifier;
@@ -351,7 +411,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return baseValue * modifier;
     }
   },
-  
+
   // Helper functions per il sistema meteo
   getWeatherPatterns: () => {
     // In una implementazione reale, questo caricherà da weatherPatterns.json
@@ -395,22 +455,22 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
     };
   },
-  
+
   getTimeBasedWeatherModifiers: (timeState: TimeState) => {
     const hour = Math.floor(timeState.currentTime / 60);
-    
+
     if (hour >= 5 && hour < 8) return 'dawn';
     if (hour >= 8 && hour < 18) return 'day';
     if (hour >= 18 && hour < 21) return 'dusk';
     return 'night';
   },
-  
+
   selectWeatherWithModifiers: (possibleTransitions: WeatherType[], _timeModifier: string): WeatherType => {
     // Selezione semplice casuale per ora
     // In futuro, applicherà i modificatori temporali
     return possibleTransitions[Math.floor(Math.random() * possibleTransitions.length)];
   },
-  
+
   createClearWeather: (): WeatherState => ({
     currentWeather: WeatherType.CLEAR,
     intensity: 50,
@@ -423,35 +483,79 @@ export const useGameStore = create<GameState>((set, get) => ({
       eventProbabilityModifier: 1.0
     }
   }),
-  
+
   getWeatherDescription: (weather: WeatherType): string => {
     const descriptions = {
-      [WeatherType.CLEAR]: 'Il cielo si schiarisce e la visibilità migliora.',
-      [WeatherType.LIGHT_RAIN]: 'Inizia a piovigginare leggermente.',
-      [WeatherType.HEAVY_RAIN]: 'La pioggia si intensifica, rendendo difficile il movimento.',
-      [WeatherType.STORM]: 'Una tempesta violenta si abbatte sulla zona.',
-      [WeatherType.FOG]: 'Una nebbia densa avvolge il paesaggio.',
-      [WeatherType.WIND]: 'Un vento forte inizia a soffiare, portando polvere e detriti.'
+      [WeatherType.CLEAR]: 'Il cielo si schiarisce, rivelando un sole pallido che filtra attraverso l\'aria polverosa. La visibilità migliora notevolmente.',
+      [WeatherType.LIGHT_RAIN]: 'Gocce sottili iniziano a cadere dal cielo grigio, creando piccole pozze sul terreno arido. L\'aria si fa più umida.',
+      [WeatherType.HEAVY_RAIN]: 'La pioggia battente trasforma il paesaggio in un mare di fango. Ogni passo diventa una lotta contro gli elementi.',
+      [WeatherType.STORM]: 'Una tempesta furiosa scuote la terra desolata. Lampi illuminano brevemente l\'orizzonte mentre il vento ulula tra le rovine.',
+      [WeatherType.FOG]: 'Una nebbia spettrale avvolge tutto in un manto grigio. Il mondo oltre pochi metri scompare in un\'inquietante foschia.',
+      [WeatherType.WIND]: 'Raffiche violente sollevano nuvole di polvere e detriti, rendendo difficile tenere gli occhi aperti. Il vento porta con sé echi del passato.'
     };
-    return descriptions[weather] || 'Il tempo cambia misteriosamente.';
+    return descriptions[weather] || 'Il tempo cambia in modi che sfidano ogni comprensione, come se la natura stessa fosse stata corrotta.';
+  },
+
+  getRandomWeatherMessage: (weather: WeatherType): string => {
+    const weatherMessages = {
+      [WeatherType.CLEAR]: [
+        'I raggi del sole filtrano attraverso l\'aria, riscaldando leggermente il tuo volto.',
+        'Il cielo sereno offre una tregua dalla desolazione circostante.',
+        'Una brezza leggera porta con sé il profumo di terre lontane.',
+        'La luce del sole rivela dettagli nascosti nel paesaggio.'
+      ],
+      [WeatherType.LIGHT_RAIN]: [
+        'Le gocce di pioggia tamburellano dolcemente sulle superfici metalliche abbandonate.',
+        'L\'umidità nell\'aria porta un senso di rinnovamento in questo mondo arido.',
+        'La pioggia leggera crea riflessi argentei sulle pozzanghere.',
+        'Il suono della pioggia maschera i tuoi passi.'
+      ],
+      [WeatherType.HEAVY_RAIN]: [
+        'La pioggia torrenziale rende il terreno scivoloso e traditore.',
+        'L\'acqua scorre in rivoli lungo i detriti, creando nuovi percorsi.',
+        'Il martellare della pioggia è assordante, coprendo ogni altro suono.',
+        'Ti rifugi momentaneamente sotto una lamiera arrugginita.'
+      ],
+      [WeatherType.STORM]: [
+        'Un fulmine illumina il paesaggio desolato per un istante accecante.',
+        'Il tuono rimbomba tra le rovine come il grido di un gigante ferito.',
+        'Il vento della tempesta minaccia di trascinarti via.',
+        'La furia degli elementi ti ricorda quanto sei piccolo in questo mondo.'
+      ],
+      [WeatherType.FOG]: [
+        'Forme indistinte emergono e scompaiono nella nebbia come fantasmi.',
+        'Il mondo si riduce a pochi metri di visibilità inquietante.',
+        'La nebbia sembra sussurrare segreti che non riesci a comprendere.',
+        'Ogni passo nella foschia è un salto nel vuoto.'
+      ],
+      [WeatherType.WIND]: [
+        'Il vento porta con sé frammenti di carta e foglie secche del passato.',
+        'Le raffiche fanno gemere le strutture metalliche abbandonate.',
+        'Il vento ulula una melodia malinconica tra i rottami.',
+        'Devi lottare contro le raffiche per mantenere l\'equilibrio.'
+      ]
+    };
+
+    const messages = weatherMessages[weather];
+    return messages ? messages[Math.floor(Math.random() * messages.length)] : 'Il tempo si comporta in modo strano.';
   },
 
   // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
-  
+
   attemptRiverCrossing: (): boolean => {
     const { addLogEntry, performAbilityCheck, updateHP, calculateRiverDifficulty } = get();
-    
+
     // Calcola difficoltà basata su meteo e condizioni
     const difficulty = calculateRiverDifficulty();
-    
+
     // Messaggio iniziale
-    addLogEntry(MessageType.AMBIANCE_RANDOM, { 
-      text: 'Ti avvicini alla riva del fiume. La corrente sembra forte...' 
+    addLogEntry(MessageType.AMBIANCE_RANDOM, {
+      text: 'Ti avvicini alla riva del fiume. La corrente sembra forte...'
     });
-    
+
     // Esegui skill check Agilità
     const result = performAbilityCheck('agilita', difficulty, false);
-    
+
     if (result.success) {
       // Successo - attraversamento riuscito
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, {
@@ -467,7 +571,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       // Fallimento - subisci danni
       const damage = Math.floor(Math.random() * 3) + 1; // 1-3 danni
       updateHP(-damage);
-      
+
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, {
         action: 'attraversamento fiume',
         roll: result.roll,
@@ -475,21 +579,21 @@ export const useGameStore = create<GameState>((set, get) => ({
         total: result.total,
         difficulty: difficulty
       });
-      
+
       addLogEntry(MessageType.HP_DAMAGE, {
         damage: damage,
         reason: 'corrente del fiume',
         description: 'La corrente ti trascina e ti sbatte contro le rocce. Riesci a raggiungere l\'altra sponda, ma sei ferito.'
       });
-      
+
       return true; // Attraversamento riuscito ma con danni
     }
   },
-  
+
   calculateRiverDifficulty: (): number => {
     const { weatherState, characterSheet } = get();
     let baseDifficulty = 12; // Difficoltà base moderata
-    
+
     // Modificatori meteo
     switch (weatherState.currentWeather) {
       case WeatherType.LIGHT_RAIN:
@@ -507,7 +611,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       default:
         break;
     }
-    
+
     // Modificatori salute
     const healthPercentage = characterSheet.currentHP / characterSheet.maxHP;
     if (healthPercentage < 0.25) {
@@ -515,10 +619,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     } else if (healthPercentage < 0.5) {
       baseDifficulty += 1; // Ferito
     }
-    
+
     // Modificatori equipaggiamento (placeholder per future implementazioni)
     // TODO: Aggiungere bonus/penalità per equipaggiamento specifico
-    
+
     return Math.min(25, Math.max(8, baseDifficulty)); // Clamp tra 8 e 25
   },
 
@@ -585,7 +689,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const weatherEffects = getWeatherEffects();
     const weatherModifier = weatherEffects.skillCheckModifier;
     const totalModifier = baseModifier + weatherModifier;
-    
+
     const roll = Math.floor(Math.random() * 20) + 1;
     const total = roll + totalModifier;
     const success = total >= difficulty;
@@ -595,14 +699,14 @@ export const useGameStore = create<GameState>((set, get) => ({
     const result: AbilityCheckResult = { success, roll, modifier: totalModifier, total, difficulty };
 
     if (addToJournal) {
-      const context = { 
-        ability, 
-        roll, 
-        modifier: totalModifier, 
-        baseModifier, 
-        weatherModifier, 
-        total, 
-        difficulty 
+      const context = {
+        ability,
+        roll,
+        modifier: totalModifier,
+        baseModifier,
+        weatherModifier,
+        total,
+        difficulty
       };
       addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, context);
     }
@@ -644,22 +748,22 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     const drinkIndex = newInventory.findIndex(slot => slot && items[slot.itemId]?.effect === 'hydration' && slot.quantity > 0);
     if (drinkIndex !== -1) {
-        const slot = newInventory[drinkIndex]!;
-        slot.quantity -= 1;
-        if (slot.quantity === 0) newInventory[drinkIndex] = null;
-        drinkConsumed = true;
+      const slot = newInventory[drinkIndex]!;
+      slot.quantity -= 1;
+      if (slot.quantity === 0) newInventory[drinkIndex] = null;
+      drinkConsumed = true;
     }
 
     addLogEntry(MessageType.SURVIVAL_NIGHT_CONSUME);
     if (!foodConsumed || !drinkConsumed) {
-        const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
-        updateHP(-penalty);
-        addLogEntry(MessageType.SURVIVAL_PENALTY);
+      const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
+      updateHP(-penalty);
+      addLogEntry(MessageType.SURVIVAL_PENALTY);
     }
 
     set(state => ({
-        characterSheet: { ...state.characterSheet, inventory: newInventory },
-        survivalState: { ...state.survivalState, lastNightConsumption: { day: currentDay, consumed: true } }
+      characterSheet: { ...state.characterSheet, inventory: newInventory },
+      survivalState: { ...state.survivalState, lastNightConsumption: { day: currentDay, consumed: true } }
     }));
   },
 
@@ -674,26 +778,26 @@ export const useGameStore = create<GameState>((set, get) => ({
       // I danni sono già stati applicati nella funzione attemptRiverCrossing
       return;
     }
-    
+
     if (newBiomeChar === 'R') {
-      const { 
-        playerPosition, 
-        timeState, 
-        addLogEntry, 
-        setCurrentScreen, 
-        handleNightConsumption, 
-        advanceTime, 
-        characterSheet, 
+      const {
+        playerPosition,
+        timeState,
+        addLogEntry,
+        setCurrentScreen,
+        handleNightConsumption,
+        advanceTime,
+        characterSheet,
         updateHP,
         getShelterInfo,
         createShelterInfo,
         updateShelterAccess,
         isShelterAccessible
       } = get();
-      
+
       const { x, y } = playerPosition;
       let shelterInfo = getShelterInfo(x, y);
-      
+
       // Se è la prima volta che visitiamo questo rifugio, crealo
       if (!shelterInfo) {
         shelterInfo = createShelterInfo(x, y);
@@ -704,36 +808,36 @@ export const useGameStore = create<GameState>((set, get) => ({
           }
         }));
       }
-      
+
       // Controlla accessibilità
       if (!isShelterAccessible(x, y)) {
-        addLogEntry(MessageType.DISCOVERY, { 
-          discovery: 'rifugio già visitato - non più accessibile di giorno' 
+        addLogEntry(MessageType.DISCOVERY, {
+          discovery: 'rifugio già visitato durante il giorno - ora è sigillato. Torna di notte per riposare.'
         });
         return;
       }
-      
+
       if (timeState.isDay) {
         // Visita diurna - marca come non più accessibile per future visite diurne
-        updateShelterAccess(x, y, { 
+        updateShelterAccess(x, y, {
           isAccessible: false,
           dayVisited: timeState.day,
           timeVisited: timeState.currentTime
         });
-        
+
         setCurrentScreen('shelter');
-        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro - puoi riposare e investigare' });
+        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro trovato - puoi riposare e investigare. Ricorda: ogni rifugio può essere visitato solo una volta di giorno!' });
       } else {
         // Visita notturna - riposo automatico (sempre permesso)
         handleNightConsumption();
         const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
         const nightHealing = Math.floor(maxRecovery * 0.6);
         updateHP(nightHealing);
-        addLogEntry(MessageType.REST_SUCCESS, { 
-          healingAmount: nightHealing, 
-          location: 'rifugio notturno' 
+        addLogEntry(MessageType.REST_SUCCESS, {
+          healingAmount: nightHealing,
+          location: 'rifugio notturno'
         });
-        
+
         // Avanza al mattino
         const minutesToDawn = (1440 - timeState.currentTime + DAWN_TIME) % 1440;
         advanceTime(minutesToDawn);
@@ -774,8 +878,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (effectApplied > 0) {
       switch (item.effect) {
         case 'heal': updateHP(effectApplied); addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied }); break;
-        case 'satiety': set(s => ({ survivalState: { ...s.survivalState, hunger: Math.min(100, s.survivalState.hunger + effectApplied) }})); break;
-        case 'hydration': set(s => ({ survivalState: { ...s.survivalState, thirst: Math.min(100, s.survivalState.thirst + effectApplied) }})); break;
+        case 'satiety': set(s => ({ survivalState: { ...s.survivalState, hunger: Math.min(100, s.survivalState.hunger + effectApplied) } })); break;
+        case 'hydration': set(s => ({ survivalState: { ...s.survivalState, thirst: Math.min(100, s.survivalState.thirst + effectApplied) } })); break;
       }
       addLogEntry(MessageType.ITEM_USED, messageContext);
     }
@@ -840,8 +944,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!slot) return;
     const item = items[slot.itemId];
     if (item?.type === 'quest') {
-        addLogEntry(MessageType.ACTION_FAIL, { reason: `${item.name} è troppo importante.` });
-        return;
+      addLogEntry(MessageType.ACTION_FAIL, { reason: `${item.name} è troppo importante.` });
+      return;
     }
     get().removeItem(slotIndex, slot.quantity);
     addLogEntry(MessageType.INVENTORY_CHANGE, { action: `Hai gettato ${item.name}.` });
@@ -850,7 +954,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SAVE/LOAD SYSTEM ---
   saveCurrentGame: async (slot) => {
     const state = get();
-    
+
     try {
       // Mostra notifica di salvataggio in corso
       get().addNotification({
@@ -871,7 +975,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         seenEventIds: state.seenEventIds,
         gameFlags: {} // per future espansioni
       };
-      
+
       const success = await saveSystem.saveGame(
         state.characterSheet,
         state.survivalState,
@@ -886,7 +990,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           message: `Partita salvata nello slot ${slot === 'quicksave' ? 'Salvataggio Rapido' : slot.replace('slot', '')}`,
           duration: 2000
         });
-        
+
         // Aggiungi al journal
         get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
           text: `Partita salvata: ${state.characterSheet.name} - Livello ${state.characterSheet.level}`
@@ -924,7 +1028,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       const saveData = await saveSystem.loadGame(slot);
-      
+
       if (saveData) {
         // Validazione dati salvati
         if (!saveData.characterSheet || !saveData.gameData) {
@@ -946,6 +1050,9 @@ export const useGameStore = create<GameState>((set, get) => ({
           seenEventIds: (saveData.gameData as any).seenEventIds || [],
           notifications: [], // Reset notifiche per nuovo caricamento
         });
+
+        // Resetta le investigazioni per la nuova sessione
+        get().resetShelterInvestigations();
 
         get().addNotification({
           type: 'success',
@@ -972,7 +1079,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     } catch (error) {
       console.error('Load error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
-      
+
       get().addNotification({
         type: 'error',
         title: 'Errore Caricamento',
@@ -986,7 +1093,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   handleQuickSave: async () => {
     return await get().saveCurrentGame('quicksave');
   },
-  
+
   handleQuickLoad: async () => {
     const success = await get().loadSavedGame('quicksave');
     if (success) {
@@ -1007,7 +1114,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       const saveContent = saveSystem.exportSave(slot);
-      
+
       if (!saveContent) {
         get().addNotification({
           type: 'error',
@@ -1022,9 +1129,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       const saveData = JSON.parse(saveContent);
       const characterName = saveData.characterSheet?.name || 'Sconosciuto';
       const level = saveData.characterSheet?.level || 1;
-      
+
       const filename = generateSaveFilename(characterName, level, slot);
-      
+
       downloadFile({
         filename,
         content: saveContent,
@@ -1085,10 +1192,10 @@ export const useGameStore = create<GameState>((set, get) => ({
 
             // Read file content
             const content = await readFileAsText(file);
-            
+
             // Import the save
             const success = await saveSystem.importSave(content, slot);
-            
+
             if (success) {
               // Parse per ottenere informazioni del personaggio
               const saveData = JSON.parse(content);
@@ -1114,7 +1221,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           } catch (error) {
             console.error('Import error:', error);
             const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
-            
+
             get().addNotification({
               type: 'error',
               title: 'Errore Import',
@@ -1141,7 +1248,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
     });
   },
-  
+
   // Recovery function for corrupted saves
   recoverSave: async (slot) => {
     try {
@@ -1153,7 +1260,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       const recoveredData = await saveSystem.recoverSave(slot);
-      
+
       if (recoveredData) {
         get().addNotification({
           type: 'success',
