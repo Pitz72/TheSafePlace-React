@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { useGameScale } from './hooks/useGameScale';
+import { usePlayerMovement } from './hooks/usePlayerMovement';
 
 import { GameProvider } from './contexts/GameProvider';
 
@@ -30,6 +31,63 @@ const getTileDescription = (char: string): string => {
     case 'E': return 'End';
     default: return 'Sconosciuto';
   }
+};
+
+// Componente headless per la gestione degli input nella schermata di gioco
+const GameScreenInputHandler = () => {
+  usePlayerMovement(); // Attiva i comandi di movimento WASD
+
+  // Recupera le azioni necessarie dallo store
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const shortRest = useGameStore(state => state.shortRest);
+  const handleQuickSave = useGameStore(state => state.handleQuickSave);
+  const handleQuickLoad = useGameStore(state => state.handleQuickLoad);
+
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Non intercettare input se l'utente sta scrivendo
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
+      // Gestisce solo i tasti non legati al movimento
+      switch (event.key.toLowerCase()) {
+        case 'i':
+          event.preventDefault();
+          setCurrentScreen('inventory');
+          break;
+        case 'l':
+          event.preventDefault();
+          setCurrentScreen('levelUp');
+          break;
+        case 'r':
+          event.preventDefault();
+          shortRest();
+          break;
+        case 'tab':
+          event.preventDefault();
+          setCurrentScreen('characterSheet');
+          break;
+        case 'escape':
+          event.preventDefault();
+          setCurrentScreen('menu');
+          break;
+        case 'f5':
+          event.preventDefault();
+          handleQuickSave();
+          break;
+        case 'f9':
+          event.preventDefault();
+          handleQuickLoad();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [setCurrentScreen, shortRest, handleQuickSave, handleQuickLoad]); // Dipendenze stabili
+
+  return null; // Questo componente non renderizza nulla
 };
 import StartScreen from './components/StartScreen';
 import InstructionsScreen from './components/InstructionsScreen';
@@ -140,6 +198,7 @@ const GameContent = () => {
           {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
             <>
+              <GameScreenInputHandler />
               {isMapLoading ? (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
