@@ -1,10 +1,10 @@
-# The Safe Place v0.6.3 "It's raining heavily today"
+# The Safe Place v0.6.4 "How hard is it to wade across a river?"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
 **The Safe Place** è un gioco di ruolo roguelike postapocalittico che ricrea l'esperienza visiva di un monitor a fosfori verdi degli anni '80, combinando gameplay testuale con interfaccia moderna React e sistema narrativo avanzato.
 
-### 🌟 Caratteristiche Principali v0.6.3
+### 🌟 Caratteristiche Principali v0.6.4
 
 #### 🌧️ Sistema Meteo Dinamico Avanzato
 - **Integrazione Movimento-Meteo**: Il meteo influenza realisticamente il tempo di movimento e il consumo di risorse
@@ -23,10 +23,18 @@
 - **Feedback Migliorato**: Messaggi chiari e informativi per tutte le azioni del giocatore
 - **Compatibilità Salvataggi**: Migrazione automatica da versioni precedenti con reset intelligente delle investigazioni
 
+#### 🌊 Sistema Attraversamento Fiumi Strategico (NUOVO v0.6.4)
+- **Integrazione Meteo Avanzata**: Condizioni meteorologiche influenzano drasticamente la difficoltà di attraversamento
+- **Modificatori Equipaggiamento**: Corde aiutano, armature pesanti ostacolano, stivali impermeabili proteggono
+- **Danni Dinamici**: Fallimenti causano danni variabili basati su condizioni meteo e equipaggiamento
+- **Feedback Trasparente**: Spiegazioni chiare di tutti i modificatori applicati prima dell'attraversamento
+- **Realismo Tattico**: Attraversare fiumi richiede ora pianificazione strategica e preparazione adeguata
+
 #### 🔧 Fondamenta Tecniche Solide
-- **Architettura Estensibile**: Sistema meteo e rifugi pronti per future espansioni
+- **Architettura Estensibile**: Sistema meteo, rifugi e attraversamento pronti per future espansioni
 - **Test Suite Automatizzati**: Copertura completa dei sistemi critici
 - **Performance Ottimizzate**: Nessun impatto negativo sulle prestazioni esistenti
+- **Compatibilità Garantita**: Retrocompatibilità completa con salvataggi v0.6.3+
 
 ### 🚀 Tecnologie
 

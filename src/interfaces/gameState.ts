@@ -200,4 +200,10 @@ export interface GameState {
   // River crossing system v0.6.1 actions
   attemptRiverCrossing: () => boolean;
   calculateRiverDifficulty: () => number;
+  getRiverCrossingWeatherDescription: () => string;
+  getRiverCrossingSuccessDescription: () => string;
+  getRiverCrossingFailureDescription: (totalDamage: number, hasWeatherDamage: boolean) => string;
+  getRiverCrossingModifierInfo: (finalDifficulty: number) => string | null;
+  calculateEquipmentModifierForRiver: () => number;
+  getEquipmentModifierDescription: () => string[];
 }

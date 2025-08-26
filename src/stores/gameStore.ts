@@ -471,6 +471,231 @@ export const useGameStore = create<GameState>((set, get) => ({
     return possibleTransitions[Math.floor(Math.random() * possibleTransitions.length)];
   },
 
+  // --- FUNZIONI HELPER PER ATTRAVERSAMENTO FIUMI ---
+
+  getRiverCrossingWeatherDescription: (): string => {
+    const { weatherState, timeState } = get();
+    const timePrefix = timeState.isDay ? '' : 'Nell\'oscurità della notte, ';
+    
+    switch (weatherState.currentWeather) {
+      case WeatherType.CLEAR:
+        return `${timePrefix}La corrente sembra gestibile e la visibilità è buona.`;
+      case WeatherType.LIGHT_RAIN:
+        return `${timePrefix}La pioggia leggera rende le rocce scivolose. La corrente appare più forte del normale.`;
+      case WeatherType.HEAVY_RAIN:
+        return `${timePrefix}La pioggia battente gonfia il fiume e riduce drasticamente la visibilità. L'acqua è torbida e minacciosa.`;
+      case WeatherType.STORM:
+        return `${timePrefix}La tempesta rende l'attraversamento estremamente pericoloso. Il fiume è in piena e i detriti vengono trascinati dalla corrente.`;
+      case WeatherType.FOG:
+        return `${timePrefix}La nebbia densa impedisce di valutare correttamente la profondità e la forza della corrente.`;
+      case WeatherType.WIND:
+        return `${timePrefix}Il vento forte crea onde sulla superficie e minaccia di destabilizzarti durante l'attraversamento.`;
+      default:
+        return `${timePrefix}La corrente sembra forte...`;
+    }
+  },
+
+  getRiverCrossingSuccessDescription: (): string => {
+    const { weatherState } = get();
+    
+    switch (weatherState.currentWeather) {
+      case WeatherType.CLEAR:
+        return 'Con movimenti sicuri e calcolati, attraversi il fiume senza difficoltà. La buona visibilità ti ha permesso di scegliere il percorso migliore.';
+      case WeatherType.LIGHT_RAIN:
+        return 'Nonostante le rocce scivolose, mantieni l\'equilibrio e raggiungi l\'altra sponda. La pioggia leggera non è riuscita a fermarti.';
+      case WeatherType.HEAVY_RAIN:
+        return 'Lottando contro la pioggia battente e la corrente gonfia, riesci comunque ad attraversare con determinazione e abilità.';
+      case WeatherType.STORM:
+        return 'In una dimostrazione di coraggio e agilità straordinari, superi la furia della tempesta e raggiungi l\'altra sponda sano e salvo.';
+      case WeatherType.FOG:
+        return 'Procedendo con estrema cautela nella nebbia, riesci a trovare il percorso sicuro e completi l\'attraversamento.';
+      case WeatherType.WIND:
+        return 'Resistendo alle raffiche di vento che minacciano di farti perdere l\'equilibrio, completi l\'attraversamento con successo.';
+      default:
+        return 'Con agilità e determinazione, riesci ad attraversare il fiume senza problemi.';
+    }
+  },
+
+  getRiverCrossingFailureDescription: (totalDamage: number, hasWeatherDamage: boolean): string => {
+    const { weatherState } = get();
+    
+    let baseDescription = '';
+    let weatherExtra = '';
+
+    // Descrizione base del fallimento
+    if (totalDamage <= 2) {
+      baseDescription = 'Scivoli e cadi nell\'acqua, ma riesci a raggiungere l\'altra sponda con solo qualche graffio.';
+    } else if (totalDamage <= 4) {
+      baseDescription = 'La corrente ti trascina e ti sbatte contro le rocce. Raggiungi l\'altra sponda dolorante e bagnato.';
+    } else {
+      baseDescription = 'L\'attraversamento si trasforma in una lotta per la sopravvivenza. Vieni trascinato dalla corrente e subisci gravi contusioni.';
+    }
+
+    // Descrizione extra per danni meteo
+    if (hasWeatherDamage) {
+      switch (weatherState.currentWeather) {
+        case WeatherType.STORM:
+          weatherExtra = ' La tempesta rende tutto più pericoloso: detriti ti colpiscono e il vento ti destabilizza ulteriormente.';
+          break;
+        case WeatherType.HEAVY_RAIN:
+          weatherExtra = ' La pioggia torrenziale ti acceca e rende impossibile valutare i pericoli nascosti.';
+          break;
+        case WeatherType.FOG:
+          weatherExtra = ' La nebbia ti fa perdere l\'orientamento, finendo in una zona più pericolosa del fiume.';
+          break;
+      }
+    }
+
+    return baseDescription + weatherExtra;
+  },
+
+  getRiverCrossingModifierInfo: (finalDifficulty: number): string | null => {
+    const { weatherState, timeState, characterSheet, survivalState } = get();
+    const baseDifficulty = 12;
+    const totalModifier = finalDifficulty - baseDifficulty;
+    
+    if (totalModifier === 0) return null;
+    
+    const modifiers: string[] = [];
+    
+    // Analizza i modificatori principali
+    if (weatherState.currentWeather !== WeatherType.CLEAR) {
+      const weatherName = get().getWeatherDescription(weatherState.currentWeather).split('.')[0];
+      modifiers.push(`condizioni meteo (${weatherName.toLowerCase()})`);
+    }
+    
+    if (!timeState.isDay) {
+      modifiers.push('oscurità notturna');
+    }
+    
+    const healthPercentage = characterSheet.currentHP / characterSheet.maxHP;
+    if (healthPercentage < 0.5) {
+      modifiers.push('ferite');
+    }
+    
+    if (survivalState.hunger < 50 || survivalState.thirst < 50) {
+      modifiers.push('fame/sete');
+    }
+    
+    // Modificatori equipaggiamento
+    const equipmentDescriptions = get().getEquipmentModifierDescription();
+    if (equipmentDescriptions.length > 0) {
+      modifiers.push(`equipaggiamento (${equipmentDescriptions.join(', ')})`);
+    }
+    
+    if (modifiers.length === 0) return null;
+    
+    const difficultyText = totalModifier > 0 ? 'più difficile' : 'più facile';
+    const modifierText = modifiers.join(', ');
+    
+    return `L'attraversamento sarà ${difficultyText} del normale a causa di: ${modifierText}.`;
+  },
+
+  calculateEquipmentModifierForRiver: (): number => {
+    const { characterSheet, items } = get();
+    let modifier = 0;
+    
+    // Analizza equipaggiamento indossato
+    const equipment = characterSheet.equipment;
+    
+    // Armatura - più pesante = più difficile attraversare
+    if (equipment.armor.itemId) {
+      const armor = items[equipment.armor.itemId];
+      if (armor) {
+        // Armature pesanti rendono l'attraversamento più difficile
+        if (armor.name.toLowerCase().includes('pesante') || 
+            armor.name.toLowerCase().includes('piastre') ||
+            armor.name.toLowerCase().includes('maglia')) {
+          modifier += 2; // Penalità per armature pesanti
+        } else if (armor.name.toLowerCase().includes('leggera') ||
+                   armor.name.toLowerCase().includes('cuoio')) {
+          modifier += 0; // Armature leggere neutrali
+        }
+      }
+    }
+    
+    // Armi - armi pesanti a due mani rendono più difficile l'equilibrio
+    if (equipment.weapon.itemId) {
+      const weapon = items[equipment.weapon.itemId];
+      if (weapon) {
+        if (weapon.name.toLowerCase().includes('due mani') ||
+            weapon.name.toLowerCase().includes('martello') ||
+            weapon.name.toLowerCase().includes('ascia grande')) {
+          modifier += 1; // Penalità per armi pesanti
+        }
+      }
+    }
+    
+    // Oggetti utili nell'inventario
+    const inventory = characterSheet.inventory;
+    for (const slot of inventory) {
+      if (slot) {
+        const item = items[slot.itemId];
+        if (item) {
+          // Corda - aiuta nell'attraversamento
+          if (item.name.toLowerCase().includes('corda')) {
+            modifier -= 2; // Bonus significativo
+          }
+          // Stivali impermeabili o simili
+          else if (item.name.toLowerCase().includes('stivali') && 
+                   (item.name.toLowerCase().includes('impermeabili') ||
+                    item.name.toLowerCase().includes('gomma'))) {
+            modifier -= 1; // Bonus per stivali adatti
+          }
+          // Zaino pesante
+          else if (item.name.toLowerCase().includes('zaino') && 
+                   item.name.toLowerCase().includes('grande')) {
+            modifier += 1; // Penalità per peso extra
+          }
+        }
+      }
+    }
+    
+    return modifier;
+  },
+
+  getEquipmentModifierDescription: (): string[] => {
+    const { characterSheet, items } = get();
+    const descriptions: string[] = [];
+    
+    // Analizza equipaggiamento per descrizioni
+    const equipment = characterSheet.equipment;
+    
+    if (equipment.armor.itemId) {
+      const armor = items[equipment.armor.itemId];
+      if (armor && (armor.name.toLowerCase().includes('pesante') || 
+                    armor.name.toLowerCase().includes('piastre'))) {
+        descriptions.push('armatura pesante');
+      }
+    }
+    
+    if (equipment.weapon.itemId) {
+      const weapon = items[equipment.weapon.itemId];
+      if (weapon && (weapon.name.toLowerCase().includes('due mani') ||
+                     weapon.name.toLowerCase().includes('martello'))) {
+        descriptions.push('arma ingombrante');
+      }
+    }
+    
+    // Oggetti utili
+    const inventory = characterSheet.inventory;
+    for (const slot of inventory) {
+      if (slot) {
+        const item = items[slot.itemId];
+        if (item) {
+          if (item.name.toLowerCase().includes('corda')) {
+            descriptions.push('corda (aiuto)');
+          } else if (item.name.toLowerCase().includes('stivali') && 
+                     item.name.toLowerCase().includes('impermeabili')) {
+            descriptions.push('stivali impermeabili (aiuto)');
+          }
+        }
+      }
+    }
+    
+    return descriptions;
+  },
+
   createClearWeather: (): WeatherState => ({
     currentWeather: WeatherType.CLEAR,
     intensity: 50,
@@ -543,34 +768,61 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
 
   attemptRiverCrossing: (): boolean => {
-    const { addLogEntry, performAbilityCheck, updateHP, calculateRiverDifficulty } = get();
+    const { addLogEntry, performAbilityCheck, updateHP, calculateRiverDifficulty, weatherState } = get();
 
     // Calcola difficoltà basata su meteo e condizioni
     const difficulty = calculateRiverDifficulty();
 
-    // Messaggio iniziale
+    // Messaggio iniziale con descrizione delle condizioni
+    const weatherDescription = get().getRiverCrossingWeatherDescription();
     addLogEntry(MessageType.AMBIANCE_RANDOM, {
-      text: 'Ti avvicini alla riva del fiume. La corrente sembra forte...'
+      text: `Ti avvicini alla riva del fiume. ${weatherDescription}`
     });
+
+    // Messaggio informativo sui modificatori applicati
+    const modifierInfo = get().getRiverCrossingModifierInfo(difficulty);
+    if (modifierInfo) {
+      addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        text: modifierInfo
+      });
+    }
 
     // Esegui skill check Agilità
     const result = performAbilityCheck('agilita', difficulty, false);
 
     if (result.success) {
       // Successo - attraversamento riuscito
+      const successDescription = get().getRiverCrossingSuccessDescription();
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, {
         action: 'attraversamento fiume',
         roll: result.roll,
         modifier: result.modifier,
         total: result.total,
         difficulty: difficulty,
-        description: 'Con agilità e determinazione, riesci ad attraversare il fiume senza problemi.'
+        description: successDescription
       });
       return true;
     } else {
-      // Fallimento - subisci danni
-      const damage = Math.floor(Math.random() * 3) + 1; // 1-3 danni
-      updateHP(-damage);
+      // Fallimento - subisci danni variabili basati su meteo
+      let baseDamage = Math.floor(Math.random() * 3) + 1; // 1-3 danni base
+      
+      // Danni extra per condizioni meteo severe
+      let weatherDamage = 0;
+      switch (weatherState.currentWeather) {
+        case WeatherType.STORM:
+          weatherDamage = Math.floor(Math.random() * 2) + 1; // +1-2 danni extra
+          break;
+        case WeatherType.HEAVY_RAIN:
+          weatherDamage = Math.floor(Math.random() * 2); // +0-1 danni extra
+          break;
+        case WeatherType.FOG:
+          // Nebbia può causare danni da disorientamento
+          if (Math.random() < 0.3) weatherDamage = 1;
+          break;
+      }
+
+      const totalDamage = baseDamage + weatherDamage;
+      updateHP(-totalDamage);
 
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, {
         action: 'attraversamento fiume',
@@ -580,10 +832,11 @@ export const useGameStore = create<GameState>((set, get) => ({
         difficulty: difficulty
       });
 
+      const failureDescription = get().getRiverCrossingFailureDescription(totalDamage, weatherDamage > 0);
       addLogEntry(MessageType.HP_DAMAGE, {
-        damage: damage,
-        reason: 'corrente del fiume',
-        description: 'La corrente ti trascina e ti sbatte contro le rocce. Riesci a raggiungere l\'altra sponda, ma sei ferito.'
+        damage: totalDamage,
+        reason: 'attraversamento fiume fallito',
+        description: failureDescription
       });
 
       return true; // Attraversamento riuscito ma con danni
@@ -591,39 +844,69 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   calculateRiverDifficulty: (): number => {
-    const { weatherState, characterSheet } = get();
+    const { weatherState, characterSheet, timeState } = get();
     let baseDifficulty = 12; // Difficoltà base moderata
 
-    // Modificatori meteo
+    // Modificatori meteo avanzati - v0.6.1
     switch (weatherState.currentWeather) {
+      case WeatherType.CLEAR:
+        // Tempo sereno - nessuna penalità, possibile bonus leggero
+        baseDifficulty -= 1;
+        break;
       case WeatherType.LIGHT_RAIN:
-        baseDifficulty += 1;
+        // Pioggia leggera - terreno scivoloso
+        baseDifficulty += 2;
         break;
       case WeatherType.HEAVY_RAIN:
-        baseDifficulty += 3;
+        // Pioggia intensa - corrente più forte, visibilità ridotta
+        baseDifficulty += 4;
         break;
       case WeatherType.STORM:
-        baseDifficulty += 5;
+        // Tempesta - condizioni estremamente pericolose
+        baseDifficulty += 7;
         break;
       case WeatherType.FOG:
-        baseDifficulty += 2; // Visibilità ridotta
+        // Nebbia - visibilità molto ridotta, difficile valutare la corrente
+        baseDifficulty += 3;
         break;
-      default:
+      case WeatherType.WIND:
+        // Vento forte - può destabilizzare durante l'attraversamento
+        baseDifficulty += 2;
         break;
+    }
+
+    // Modificatori intensità meteo
+    const intensityModifier = Math.floor((weatherState.intensity - 50) / 20); // -2 a +2
+    baseDifficulty += intensityModifier;
+
+    // Modificatori temporali - l'attraversamento notturno è più pericoloso
+    if (!timeState.isDay) {
+      baseDifficulty += 3; // Penalità notturna significativa
     }
 
     // Modificatori salute
     const healthPercentage = characterSheet.currentHP / characterSheet.maxHP;
     if (healthPercentage < 0.25) {
-      baseDifficulty += 3; // Molto ferito
+      baseDifficulty += 4; // Molto ferito - penalità aumentata
     } else if (healthPercentage < 0.5) {
-      baseDifficulty += 1; // Ferito
+      baseDifficulty += 2; // Ferito - penalità moderata
+    } else if (healthPercentage < 0.75) {
+      baseDifficulty += 1; // Leggermente ferito
     }
 
-    // Modificatori equipaggiamento (placeholder per future implementazioni)
-    // TODO: Aggiungere bonus/penalità per equipaggiamento specifico
+    // Modificatori sopravvivenza - fame e sete influenzano l'agilità
+    const { survivalState } = get();
+    if (survivalState.hunger < 25 || survivalState.thirst < 25) {
+      baseDifficulty += 3; // Fame/sete critica
+    } else if (survivalState.hunger < 50 || survivalState.thirst < 50) {
+      baseDifficulty += 1; // Fame/sete moderata
+    }
 
-    return Math.min(25, Math.max(8, baseDifficulty)); // Clamp tra 8 e 25
+    // Modificatori equipaggiamento - v0.6.1
+    const equipmentModifier = get().calculateEquipmentModifierForRiver();
+    baseDifficulty += equipmentModifier;
+
+    return Math.min(25, Math.max(6, baseDifficulty)); // Clamp tra 6 e 25
   },
 
   triggerEvent: (biomeKey) => {

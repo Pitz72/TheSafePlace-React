@@ -113,13 +113,20 @@
 
 
 
-- [ ] **4.2 Integrare meteo con attraversamento fiumi**
+- [x] **4.2 Integrare meteo con attraversamento fiumi**
+
+
+
+
   - Applicare penalità skill check durante maltempo
   - Aumentare difficoltà attraversamento con pioggia/tempesta
   - Modificare danni potenziali basati su condizioni meteo
   - _Requirements: 6.4, 7.2_
 
-- [ ] **4.3 Aggiungere modificatori equipaggiamento**
+- [x] **4.3 Aggiungere modificatori equipaggiamento**
+
+
+
   - Implementare bonus agilità da equipaggiamento leggero
   - Aggiungere penalità per equipaggiamento pesante
   - Considerare bonus da oggetti specifici (corde, stivali, etc.)
