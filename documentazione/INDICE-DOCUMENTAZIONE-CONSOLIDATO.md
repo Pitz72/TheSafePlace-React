@@ -10,20 +10,24 @@
 ## 🎯 **DOCUMENTI ATTIVI E CRITICI**
 
 ### 📋 **Documentazione Operativa**
-- ✅ **[Patto LLM](./000%20Patto%20tra%20Operatore%20Umano%20e%20Modello%20Linguistico%20di%20Grandi%20Dimensioni%20(LLM)%20per%20lo%20Sviluppo%20Sicuro.md)** - Protocollo operativo ATTIVO
+- ✅ **[Patto LLM](./dsar/000%20Patto%20tra%20Operatore%20Umano%20e%20Modello%20Linguistico%20di%20Grandi%20Dimensioni%20(LLM)%20per%20lo%20Sviluppo%20Sicuro.md)** - Protocollo operativo ATTIVO
 - ✅ **[README.md](../README.md)** - Documentazione principale AGGIORNATA
-- ✅ **[MAPPA-SIMBOLI-E-SIGNIFICATI.md](./MAPPA-SIMBOLI-E-SIGNIFICATI.md)** - Riferimento simboli ATTIVO
+- ✅ **[MAPPA-SIMBOLI-E-SIGNIFICATI.md](./analisi/MAPPA-SIMBOLI-E-SIGNIFICATI.md)** - Riferimento simboli ATTIVO
 
 ### 🛡️ **Protezioni Anti-Regressione ATTIVE**
+- ✅ **[ANTI-REGRESSION-v0.6.0.md](./anti-regressione/ANTI-REGRESSION-v0.6.0.md)** - PROTEZIONE ATTIVA v0.6.0
 - ✅ **[ANTI-REGRESSION-v0.5.3.md](./anti-regressione/ANTI-REGRESSION-v0.5.3.md)** - PROTEZIONE ATTIVA
 - ✅ **[ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md](./anti-regressione/ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md)** - PROTEZIONE ATTIVA
 
 ### 📊 **Baseline Immutabili**
 - ✅ **[DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)** - BASELINE ATTIVA
-- ✅ **[INVENTORY-PANEL-IMMUTABLE-SPEC.md](./INVENTORY-PANEL-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE PANNELLO INVENTARIO v0.5.2
+- ✅ **[INVENTORY-PANEL-IMMUTABLE-SPEC.md](./dsar/INVENTORY-PANEL-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE PANNELLO INVENTARIO v0.5.2
+- ✅ **[INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md](./dsar/INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA ISTRUZIONI
+- ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog Corrente**
-- ✅ **[CHANGELOG-v0.5.3.md](./changelog/CHANGELOG-v0.5.3.md)** - VERSIONE CORRENTE
+- ✅ **[CHANGELOG-v0.6.0.md](./changelog/CHANGELOG-v0.6.0.md)** - VERSIONE CORRENTE "Lazarus Rising Again"
+- ✅ **[CHANGELOG-v0.5.3.md](./changelog/CHANGELOG-v0.5.3.md)** - VERSIONE PRECEDENTE
 - ✅ **[CHANGELOG-v0.4.2.md](./changelog/CHANGELOG-v0.4.2.md)** - VERSIONE PRECEDENTE
 - ✅ **[CHANGELOG-v0.4.1.md](./changelog/CHANGELOG-v0.4.1.md)** - VERSIONE PRECEDENTE
 - ✅ **[CHANGELOG-v0.4.0.md](./changelog/CHANGELOG-v0.4.0.md)** - VERSIONE STORICA
@@ -31,6 +35,23 @@
 ---
 
 ## 📦 **DOCUMENTI OBSOLETI (RIFERIMENTO STORICO)**
+
+### 🗂️ **Documenti Archiviati (2025-01-30)**
+**Status**: Archiviati durante l'organizzazione documentazione v0.6.0
+**Totale Documenti Archiviati**: 14 documenti
+
+#### Documenti Recentemente Archiviati:
+- `ANTI-REGRESSION-v0.5.2.md` - Anti-regressione v0.5.2 (archiviato)
+- `CHANGELOG-v0.5.2.md` - Changelog v0.5.2 (archiviato)
+- `COMMIT-MESSAGE-v0.3.7.md` - Commit message v0.3.7 (archiviato)
+- `CONSOLIDAMENTO-v0.3.9-CONSISTENCY-IS-KEY.md` - Consolidamento v0.3.9 (archiviato)
+- `CONSOLIDAMENTO-v0.4.0-JOURNAL-BUG-FIX.md` - Consolidamento v0.4.0 (archiviato)
+
+#### Documenti Organizzati nelle Sottocartelle:
+- **Analisi**: 26 documenti spostati in `./analisi/`
+- **DSAR**: 8 documenti spostati in `./dsar/`
+- **Session Log**: 23 documenti spostati in `./session-log/`
+- **Test**: 3 documenti spostati in `./test/`
 
 ### 🗂️ **Anti-Regressione Obsolete**
 **Status**: Mantenuti per riferimento storico, NON più attivi
@@ -142,15 +163,31 @@
 
 ## 📋 **CONVENZIONI POST-REFACTORING**
 
-### **Naming Convention**
-- **Documenti Attivi**: Nome descrittivo + versione corrente
-- **Documenti Obsoleti**: Mantenuti con nome originale per riferimento
-- **Nuovi Documenti**: Seguire pattern `TIPO-vX.Y.Z-NOME-CODICE.md`
+### 🎯 **Struttura Directory Organizzata**
+- **Root**: Solo documenti indice essenziali (`INDICE-DOCUMENTAZIONE-CONSOLIDATO.md`, `index.md`, `index-release.md`)
+- **./analisi/**: 26 documenti di analisi, report e riferimenti
+- **./dsar/**: 8 documenti di specifica immutabile e baseline
+- **./session-log/**: 23 documenti di log sessioni e analisi
+- **./test/**: 3 documenti di validazione e test
+- **./anti-regressione/**: Protezioni versione (30 documenti)
+- **./archivio/**: Documenti obsoleti (14 documenti)
+- **./changelog/**: Log modifiche (20 documenti)
+- **./commit/**: Documentazione commit specifici (2 documenti)
+- **./incidenti/**: Report incidenti critici (2 documenti)
+- **./roadmap/**: Roadmap di sviluppo (1 cartella)
+
+### 📝 **Denominazione File**
+- **DSAR-**: Documenti immutabili baseline
+- **ANTI-REGRESSION-**: Protezioni versione
+- **CHANGELOG-**: Log modifiche
+- **CONSOLIDAMENTO-**: Refactoring completati
+- **ANALISI-**: Documenti di analisi e report
+- **SESSION-LOG-**: Log delle sessioni di sviluppo
 
 ### **Gestione Versioni**
-- **v0.4.0**: Versione corrente ATTIVA
-- **v0.0.x - v0.3.x**: Versioni OBSOLETE (riferimento storico)
-- **v0.5.0+**: Versioni future
+- **v0.6.0**: Versione corrente ATTIVA "Lazarus Rising Again"
+- **v0.0.x - v0.5.x**: Versioni OBSOLETE (riferimento storico)
+- **v0.7.0+**: Versioni future
 
 ### **Processo di Aggiornamento**
 1. Aggiornare documento attivo
