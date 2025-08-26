@@ -52,19 +52,18 @@
 ### 3. Sistema Meteo Completo
 
 
-- [ ] **3.1 Implementare WeatherState nel gameStore**
+- [x] **3.1 Implementare WeatherState nel gameStore**
   - Aggiungere `weatherState: WeatherState` al GameState
   - Creare interfacce `WeatherState`, `WeatherType`, `WeatherEffects`
   - Implementare funzioni `updateWeather()`, `getWeatherEffects()`
   - _Requirements: 7.1, 7.2_
 
 
-- [ ] **3.2 Creare sistema pattern meteo**
+- [x] **3.2 Creare sistema pattern meteo**
   - Creare file `src/data/weather/weatherPatterns.json`
   - Implementare logica transizioni meteo basata su probabilità
   - Aggiungere durata variabile per ogni tipo di meteo
   - Integrare con ciclo giorno/notte per transizioni realistiche
-
   - _Requirements: 7.1, 7.3_
 
 - [ ] **3.3 Integrare meteo con movimento**
@@ -74,13 +73,11 @@
 
   - _Requirements: 7.1, 7.2, 9.1, 9.2_
 
-- [ ] **3.4 Creare componente WeatherDisplay**
+- [x] **3.4 Creare componente WeatherDisplay**
   - Creare `src/components/WeatherDisplay.tsx`
   - Mostrare condizioni meteo attuali nell'interfaccia
   - Aggiungere icone/simboli ASCII per diversi tipi di meteo
   - Integrare nel layout principale del gioco
-
-
   - _Requirements: 7.3, 7.5_
 
 - [ ] **3.5 Implementare messaggi atmosferici meteo**
@@ -93,7 +90,7 @@
 ### 4. Sistema Attraversamento Fiumi Migliorato
 
 
-- [ ] **4.1 Implementare danni per fallimento attraversamento**
+- [x] **4.1 Implementare danni per fallimento attraversamento**
   - Modificare logica attraversamento fiumi in `gameStore.ts`
   - Aggiungere danni 1-3 HP per skill check falliti
   - Creare messaggi descrittivi per danni da fiume
@@ -352,20 +349,84 @@
   - Ottimizzare bottleneck identificati
   - _Requirements: Tutti_
 
+## PROBLEMI IDENTIFICATI - SESSIONE GENNAIO 2025
+
+### 13. Fix Critici Post-Loop Resolution
+
+- [ ] **13.1 Correggere dimensioni mappa**
+  - La mappa non riempie correttamente il suo riquadro
+  - Dovrebbe avere almeno 3-4 righe di visualizzazione in più
+  - Verificare CSS e dimensioni viewport per il rendering della mappa
+  - Testare su diverse risoluzioni per assicurare consistenza
+  - _Priority: HIGH - Impatta visibilità gameplay_
+
+- [ ] **13.2 Migliorare sistema eventi - Skill Check Visibility**
+  - Gli eventi non hanno skill check chiari e visibili
+  - Manca visualizzazione del premio/ricompensa
+  - Manca visualizzazione del danno/penalità
+  - Implementare UI trasparente per mostrare:
+    - Difficoltà del skill check
+    - Modificatori applicati
+    - Risultato del tiro (dado + modificatori)
+    - Conseguenze chiare (premio/danno)
+  - _Priority: HIGH - Impatta comprensione gameplay_
+
+- [ ] **13.3 Fix caricamento partita - Player invisibile**
+  - Quando si carica una partita dal menu, il player non è visibile
+  - Il gioco risulta bloccato dopo il caricamento
+  - Possibile problema di inizializzazione posizione player
+  - Verificare che playerPosition sia correttamente ripristinato
+  - Verificare che la camera sia centrata sul player
+  - Testare sia quick load che load da menu
+  - _Priority: CRITICAL - Blocca gameplay dopo load_
+
+- [ ] **13.4 Migliorare sistema salvataggio rapido (F5)**
+  - F5 mostra popup salvataggio ma manca comando per scegliere slot
+  - Aggiungere tasto [S] o altro per aprire menu selezione slot
+  - Il popup del salvataggio rapido deve avere sfondo opaco
+  - Attualmente si confonde con le scritte sottostanti
+  - Implementare:
+    - Sfondo semi-trasparente scuro per popup
+    - Comando keyboard per selezione slot (es. [S] = Save Menu)
+    - Feedback visivo chiaro per operazione completata
+  - _Priority: MEDIUM - Migliora UX salvataggio_
+
+### 14. Ottimizzazioni UI/UX Post-Fix
+
+- [ ] **14.1 Ottimizzare rendering mappa**
+  - Verificare che la mappa utilizzi tutto lo spazio disponibile
+  - Controllare padding/margin che potrebbero ridurre l'area visibile
+  - Assicurare che il viewport sia calcolato correttamente
+  - Testare responsive design per diverse dimensioni finestra
+
+- [ ] **14.2 Migliorare feedback visivo eventi**
+  - Aggiungere icone o colori per distinguere tipi di skill check
+  - Implementare animazioni per risultati positivi/negativi
+  - Migliorare leggibilità del testo degli eventi
+  - Aggiungere preview delle conseguenze prima della scelta
+
+- [ ] **14.3 Stabilizzare sistema save/load**
+  - Aggiungere validazione robusta per stati di gioco caricati
+  - Implementare recovery automatico per salvataggi parzialmente corrotti
+  - Migliorare feedback durante operazioni di caricamento
+  - Aggiungere logging per debug problemi di caricamento
+
 ## DEPLOYMENT E DOCUMENTAZIONE
 
-### 12. Preparazione Release
+### 15. Preparazione Release v0.6.2+
 
-- [ ] **12.1 Aggiornare documentazione**
-  - Aggiornare README.md con nuove funzionalità
-  - Creare CHANGELOG per v0.6.1
+- [ ] **15.1 Aggiornare documentazione**
+  - Aggiornare README.md con fix implementati
+  - Creare CHANGELOG per v0.6.2 con correzioni loop infinito
   - Aggiornare documentazione anti-regressione
+  - Documentare problemi noti e workaround
   - _Requirements: Tutti_
 
-- [ ] **12.2 Preparare build produzione**
-  - Verificare build ottimizzata
-  - Testare in diversi browser
-  - Preparare note di release
+- [ ] **15.2 Preparare build produzione**
+  - Verificare build ottimizzata post-fix
+  - Testare stabilità in diversi browser
+  - Preparare note di release con fix critici
+  - Validare che tutti i fix siano inclusi nel build
   - _Requirements: Tutti_
 
 ---
