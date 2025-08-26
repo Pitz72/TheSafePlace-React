@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.4.0 - Post Refactoring 2025-08-18
+## The Safe Place v0.6.0 - Lazarus Rising Again
 
 **Stato**: CONSOLIDATO E AGGIORNATO  
-**Ultima Revisione**: 2025-08-18  
-**Versione Attiva**: v0.5.3 "Important Object Bug Fix"
+**Ultima Revisione**: 2025-01-30  
+**Versione Attiva**: v0.6.0 "Lazarus Rising Again"
 
 ---
 

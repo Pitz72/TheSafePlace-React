@@ -13,6 +13,21 @@ const TILE_COLORS: Record<string, string> = {
   'S': '#00ff00', 'E': '#00ff00', ' ': '#336940',
 };
 
+const Player: React.FC<{left: number, top: number, charWidth: number, charHeight: number}> = React.memo(({ left, top, charWidth, charHeight }) => (
+  <div
+    className="absolute pointer-events-none z-10 font-mono leading-none select-none flex items-center justify-center text-phosphor-400 animate-glow"
+    style={{
+      left: `${left}px`,
+      top: `${top}px`,
+      width: `${charWidth}px`,
+      height: `${charHeight}px`,
+      animation: 'player-blink 1.2s ease-in-out infinite'
+    }}
+  >
+    @
+  </div>
+));
+
 const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth, viewportHeight }) => {
   const mapData = useGameStore(state => state.mapData);
   const isMapLoading = useGameStore(state => state.isMapLoading);
@@ -58,20 +73,24 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth
     return <div className={`flex items-center justify-center h-full ${className}`}>CARICAMENTO...</div>;
   }
 
+  const playerLeft = (playerPosition.x * CHAR_WIDTH) - cameraPosition.x;
+  const playerTop = (playerPosition.y * CHAR_HEIGHT) - cameraPosition.y;
+
   return (
     <div className={`overflow-hidden relative h-full bg-gray-900 bg-opacity-80 ${className}`}>
-      <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: -cameraPosition.y, left: -cameraPosition.x }}>
+      <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', fontSize: '38.4px', lineHeight: '1.2' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, fontFamily: 'monospace' }}>
           {mapData.slice(startRow, endRow).map((row, y) => (
             <div key={startRow + y} style={{ position: 'absolute', top: (startRow + y) * CHAR_HEIGHT, whiteSpace: 'pre' }}>
               {row.slice(startCol, endCol).split('').map((char, x) => (
-                <span key={startCol + x} style={{ position: 'absolute', left: (startCol + x) * CHAR_WIDTH, color: getTileColor(char) }}>
+                <span key={startCol + x} style={{ display: 'inline-block', width: CHAR_WIDTH, height: CHAR_HEIGHT, color: getTileColor(char) }}>
                   {char}
                 </span>
               ))}
             </div>
           ))}
         </div>
+        <Player left={playerLeft} top={playerTop} charWidth={CHAR_WIDTH} charHeight={CHAR_HEIGHT} />
       </div>
     </div>
   );

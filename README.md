@@ -1,4 +1,4 @@
-# The Safe Place v0.5.4 "Event Fail"
+# The Safe Place v0.6.0 "Lazarus Rising Again"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -66,18 +66,20 @@ TSP/
 - [x] **v0.4.2**: LevelUp and Miscellaneous - Sistema progressione personaggio e inventario avanzato. ✅ **COMPLETATA**
 - [x] **v0.4.3**: Shelter - Sistema sopravvivenza completo e rifugi funzionanti. ✅ **COMPLETATA**
 - [x] **v0.4.4**: Refinement - Gameplay loop completo con manipolazione oggetti. ✅ **COMPLETATA**
-- [ ] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo)
-- [ ] **v0.6.0**: Sistema combattimento e meccaniche avanzate
+- [x] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo). ✅ **COMPLETATA**
+- [x] **v0.6.0**: Lazarus Rising Again - Refactoring architetturale completo e stabilità. ✅ **COMPLETATA**
+- [ ] **v0.7.0**: Sistema combattimento e meccaniche avanzate
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.4.4 "Refinement" (COMPLETATA)** - Gameplay Loop Completo e Sistema Equipaggiamento:
-- ✅ **Sistema addItem/removeItem**: Manipolazione inventario completa con gestione stackable e slot vuoti
-- ✅ **Sistema Equipaggiamento**: Slot arma/armatura con swap automatico e visualizzazione character sheet
-- ✅ **Rifugi Unici**: Sistema visitedShelters previene investigazioni multiple dello stesso rifugio
-- ✅ **Loot System Bilanciato**: 5 categorie oggetti con probabilità bilanciate (40% consumabili, 20% crafting, 15% armi/armature, 10% medicali)
-- ✅ **Gameplay Loop Funzionale**: Ciclo completo esplorazione → rifugi → loot → equipaggiamento → progressione
+**The Safe Place v0.6.0 "Lazarus Rising Again" (ATTUALE)** - Resurrezione Architettonica e Stabilità Completa:
+- ✅ **Architettura Unificata**: Migrazione completa da Context API a Zustand come unica fonte di verità
+- ✅ **Sistema Eventi Dinamici**: Risolto il bug critico che impediva l'attivazione degli eventi di gioco
+- ✅ **Stabilità Runtime**: Eliminati tutti i loop di rendering infiniti e problemi di "stale state"
+- ✅ **Sistema Input Robusto**: Riprogettazione completa della gestione comandi da tastiera
+- ✅ **Allineamento Visivo**: Correzione del disallineamento del carattere giocatore sulla mappa
+- ✅ **Refactoring Completo**: Aggiornamento di tutti i componenti per la nuova architettura stabile
 
 ### 🛠️ Sviluppo
 
@@ -92,6 +94,34 @@ npm run preview      # Preview build
 ### 📄 Licenza
 
 Progetto privato - Tutti i diritti riservati
+
+### 🆕 Novità v0.6.0 "Lazarus Rising Again"
+
+Questa versione rappresenta una vera e propria **resurrezione** del progetto. The Safe Place si trovava in uno stato critico a causa di un bug architetturale fondamentale che impediva il funzionamento del sistema di eventi dinamici, cuore del gameplay.
+
+#### 🏗️ Grande Refactoring Architetturale
+- **Zustand al Comando**: Lo store gameStore.ts è diventato l'unica fonte di verità per tutto lo stato del gioco
+- **Pensionamento Context API**: Eliminazione completa del sistema GameContext/useGameContext che causava instabilità
+- **Migrazione Componenti**: Aggiornamento di tutti i componenti (App.tsx, MapViewport, etc.) per utilizzare Zustand
+- **Single Source of Truth**: Architettura unificata che garantisce coerenza e stabilità dei dati
+
+#### 🐛 Risoluzione Problemi Critici
+- **Sistema Eventi Dinamici**: Risolto il bug che impediva l'attivazione degli eventi di gioco
+- **Loop Infiniti**: Eliminati tutti gli errori "Maximum update depth exceeded" tramite selettori stabili
+- **Stale State**: Risolto il problema di dati obsoleti che causava malfunzionamenti
+- **Sistema Input**: Riprogettazione completa della gestione comandi da tastiera
+
+#### 🎨 Miglioramenti Visivi e Funzionali
+- **Allineamento Giocatore**: Risolto il disallineamento del carattere @ sulla mappa
+- **Monitor-in-a-Monitor**: Ripristinato l'effetto di margine dello schermo
+- **Gestione Viewport**: Centralizzazione delle dimensioni tramite useGameScale
+- **Stabilità Runtime**: Eliminazione completa dei problemi di rendering
+
+#### ✨ Risultati della Resurrezione
+- ✅ **Bug Originale Risolto**: Sistema di eventi dinamici completamente funzionante
+- ✅ **Architettura Moderna**: Fondamenta stabili e manutenibili per il futuro
+- ✅ **Regressioni Corrette**: Flusso di avvio e comandi da tastiera completamente ripristinati
+- ✅ **Stabilità Garantita**: Zero loop di rendering e comportamenti imprevedibili
 
 ### 🆕 Novità v0.5.3 "Important Object Bug Fix"
 

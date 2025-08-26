@@ -94,7 +94,7 @@ import InstructionsScreen from './components/InstructionsScreen';
 import StoryScreen from './components/StoryScreen';
 import OptionsScreen from './components/OptionsScreen';
 import MapViewport from './components/MapViewport';
-import Player from './components/Player';
+
 import GameJournal from './components/GameJournal';
 import InventoryPanel from './components/InventoryPanel';
 
@@ -268,7 +268,6 @@ const GameContent = () => {
                         <h2 className="panel-title">MAPPA DEL MONDO</h2>
                         <div className="flex-1 relative min-h-0">
                           <MapViewport className="absolute inset-0" viewportWidth={viewportWidth} viewportHeight={viewportHeight} />
-                          <Player />
                         </div>
                         <div className="text-center mt-2 text-xs">
                           <span style={{color: 'rgb(192, 192, 192)'}}>C</span> = Città{' '}

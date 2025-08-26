@@ -1,6 +1,6 @@
 # Indice della Documentazione
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.4.4 "Refinement".
+Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.6.0 "Lazarus Rising Again".
 
 ## 📋 Documenti Principali
 
@@ -15,12 +15,12 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.4.4 "Refinement" (COMPLETATA)
+- **Versione Corrente**: v0.6.0 "Lazarus Rising Again" (COMPLETATA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.4.4 Refinement](./anti-regressione/ANTI-REGRESSIONE-v0.4.4-REFINEMENT.md)
-- **Ultimo Changelog**: [v0.4.4](./changelog/CHANGELOG-v0.4.4.md)
-- **Verifica Implementazione**: [v0.4.4](./VERIFICA-IMPLEMENTAZIONE-v0.4.4.md)
-- **Ultimo Commit**: v0.4.4 Refinement (completato)
+- **Anti-Regressione**: [v0.6.0 Lazarus Rising Again](./anti-regressione/ANTI-REGRESSIONE-v0.6.0-LAZARUS-RISING-AGAIN.md)
+- **Ultimo Changelog**: [v0.6.0](./changelog/CHANGELOG-0.6.0.md)
+- **Verifica Implementazione**: v0.6.0 (refactoring architetturale completo)
+- **Ultimo Commit**: v0.6.0 Lazarus Rising Again (completato)
 
 ---
 
@@ -101,14 +101,14 @@ Log dettagliati delle sessioni di sviluppo e analisi:
 ### 📊 Statistiche Documentazione
 - **Totale Documenti**: ~88 file
 - **Cartelle Organizzate**: 8 sezioni
-- **Versione Documentata**: v0.4.4 "Refinement"
+- **Versione Documentata**: v0.6.0 "Lazarus Rising Again"
 - **Baseline Immutabile**: Screen Adaptation v0.1.2
-- **Protezioni Attive**: 29 documenti anti-regressione
+- **Protezioni Attive**: 30 documenti anti-regressione (incluso v0.6.0)
 - **Root Pulita**: Solo documenti essenziali nella directory principale
 
 ---
 
-*Ultimo aggiornamento: 2025-08-19*  
-*v0.4.4 "Refinement": Gameplay Loop Completo implementato*
+*Ultimo aggiornamento: 2025-01-30*  
+*v0.6.0 "Lazarus Rising Again": Refactoring Architetturale Completo e Resurrezione*
 
 **Nota**: Questo indice viene mantenuto automaticamente dal sistema LLM secondo il Patto per lo Sviluppo Sicuro.
