@@ -8,15 +8,16 @@ import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const { goBack, addLogEntry, performAbilityCheck, updateHP, advanceTime, items, addItem } = useGameStore(state => ({
-    goBack: state.goBack,
-    addLogEntry: state.addLogEntry,
-    performAbilityCheck: state.performAbilityCheck,
-    updateHP: state.updateHP,
-    advanceTime: state.advanceTime,
-    items: state.items,
-    addItem: state.addItem,
-  }));
+  const goBack = useGameStore(state => state.goBack);
+  const addLogEntry = useGameStore(state => state.addLogEntry);
+  const performAbilityCheck = useGameStore(state => state.performAbilityCheck);
+  const updateHP = useGameStore(state => state.updateHP);
+  const advanceTime = useGameStore(state => state.advanceTime);
+  const items = useGameStore(state => state.items);
+  const addItem = useGameStore(state => state.addItem);
+  const playerPosition = useGameStore(state => state.playerPosition);
+  const canInvestigateShelter = useGameStore(state => state.canInvestigateShelter);
+  const updateShelterAccess = useGameStore(state => state.updateShelterAccess);
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -67,27 +68,41 @@ const ShelterScreen: React.FC = () => {
   const handleRest = () => {
     const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
     const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
-    
+
     updateHP(healingAmount);
     advanceTime(restTime);
-    addLogEntry(MessageType.REST_SUCCESS, { 
-      healingAmount, 
+    addLogEntry(MessageType.REST_SUCCESS, {
+      healingAmount,
       location: 'rifugio',
       time: Math.floor(restTime / 60)
     });
-    
+
     goBack();
   };
 
   const handleSearch = () => {
+    const { x, y } = playerPosition;
+
+    // Controlla se l'investigazione è già stata fatta in questa sessione
+    if (!canInvestigateShelter(x, y)) {
+      addLogEntry(MessageType.ACTION_FAIL, {
+        reason: 'hai già investigato questo rifugio in questa sessione'
+      });
+      setSearchResult('Hai già perquisito accuratamente questo rifugio. Non c\'è altro da trovare per ora.');
+      return;
+    }
+
+    // Se c'è già un risultato mostrato, non permettere nuove investigazioni
     if (searchResult) {
-      addLogEntry(MessageType.ACTION_FAIL, { reason: 'hai già investigato questo rifugio' });
+      addLogEntry(MessageType.ACTION_FAIL, {
+        reason: 'investigazione già completata'
+      });
       return;
     }
 
     const checkResult = performAbilityCheck('percezione', 15, false);
     const checkDetails = `Prova di Percezione (CD ${checkResult.difficulty}): ${checkResult.roll} + ${checkResult.modifier} = ${checkResult.total}.`;
-    
+
     let outcomeMessage: string;
 
     if (checkResult.success) {
@@ -108,11 +123,11 @@ const ShelterScreen: React.FC = () => {
         else if (categoryRoll < 0.75) category = 'weapons';
         else if (categoryRoll < 0.9) category = 'armor';
         else category = 'medical';
-        
+
         const categoryItems = lootTables[category];
         const foundItemId = categoryItems[Math.floor(Math.random() * categoryItems.length)];
         const foundItem = items[foundItemId];
-        
+
         if (foundItem) {
           const quantity = foundItem.stackable ? (Math.floor(Math.random() * 2) + 1) : 1;
           const added = addItem(foundItemId, quantity);
@@ -134,12 +149,19 @@ const ShelterScreen: React.FC = () => {
       outcomeMessage = `${checkDetails} FALLIMENTO.\nLa tua ricerca è stata frettolosa e superficiale.`;
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, { ability: 'percezione', action: 'investigazione rifugio' });
     }
+
+    // Marca l'investigazione come completata per questa sessione
+    updateShelterAccess(x, y, {
+      hasBeenInvestigated: true,
+      investigationResults: [outcomeMessage]
+    });
+
     setSearchResult(outcomeMessage);
   };
 
   const handleWorkbench = () => {
-    addLogEntry(MessageType.ACTION_SUCCESS, { 
-      action: 'esamini il banco di lavoro - funzionalità in sviluppo' 
+    addLogEntry(MessageType.ACTION_SUCCESS, {
+      action: 'esamini il banco di lavoro - funzionalità in sviluppo'
     });
     setSearchResult('Il banco di lavoro sembra funzionante, ma non hai ancora le competenze per usarlo.');
   };
@@ -149,7 +171,7 @@ const ShelterScreen: React.FC = () => {
       <h2 className="text-5xl font-bold mb-8 tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
         RIFUGIO SICURO
       </h2>
-      
+
       <div className="w-full max-w-4xl bg-gray-900 bg-opacity-80 border border-phosphor-500 p-8 rounded-lg glow-phosphor-dim">
         <div className="mb-6 text-center text-phosphor-300">
           <p>Hai trovato un rifugio abbandonato. Le pareti offrono protezione dal mondo esterno.</p>
@@ -160,22 +182,19 @@ const ShelterScreen: React.FC = () => {
           {options.map((option, index) => (
             <div
               key={option.id}
-              className={`p-4 rounded border transition-all duration-200 ${
-                index === selectedOption
-                  ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20 glow-phosphor-primary'
-                  : 'border-phosphor-600 hover:border-phosphor-500'
-              }`}
+              className={`p-4 rounded border transition-all duration-200 ${index === selectedOption
+                ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20 glow-phosphor-primary'
+                : 'border-phosphor-600 hover:border-phosphor-500'
+                }`}
             >
               <div className="flex justify-between items-center">
-                <span className={`font-bold ${
-                  index === selectedOption ? 'text-phosphor-200' : 'text-phosphor-400'
-                }`}>
+                <span className={`font-bold ${index === selectedOption ? 'text-phosphor-200' : 'text-phosphor-400'
+                  }`}>
                   {index === selectedOption ? '► ' : '  '}{option.name}
                 </span>
               </div>
-              <p className={`text-sm mt-1 ${
-                index === selectedOption ? 'text-phosphor-300' : 'text-phosphor-600'
-              }`}>
+              <p className={`text-sm mt-1 ${index === selectedOption ? 'text-phosphor-300' : 'text-phosphor-600'
+                }`}>
                 {option.description}
               </p>
             </div>

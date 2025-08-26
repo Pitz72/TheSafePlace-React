@@ -1,13 +1,15 @@
 import { create } from 'zustand';
-import type { GameState, Screen, AbilityCheckResult, TimeState } from '../interfaces/gameState';
-import type { GameEvent, EventChoice } from '../interfaces/events';
+import type { GameState, AbilityCheckResult, TimeState, ShelterAccessInfo, WeatherState, WeatherEffects } from '../interfaces/gameState';
+import { WeatherType } from '../interfaces/gameState';
+
 import { createTestCharacter } from '../rules/characterGenerator';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
 import { itemDatabase } from '../data/items/itemDatabase';
-import type { ICharacterSheet } from '../rules/types';
 import { equipItem } from '../utils/equipmentManager';
 import { isDead } from '../rules/mechanics';
 import { saveSystem } from '../utils/saveSystem';
+import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
+import type { GameEvent } from '../interfaces/events';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -29,10 +31,24 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'menu',
   previousScreen: null,
   menuSelectedIndex: 0,
-  visitedShelters: {},
+  visitedShelters: {}, // Deprecated - mantenuto per compatibilità
+  shelterAccessState: {}, // Nuovo sistema v0.6.1
+  weatherState: {
+    currentWeather: WeatherType.CLEAR,
+    intensity: 50,
+    duration: 240, // 4 ore iniziali
+    nextWeatherChange: Date.now() + (240 * 60 * 1000), // 4 ore da ora
+    effects: {
+      movementModifier: 1.0,
+      survivalModifier: 1.0,
+      skillCheckModifier: 0,
+      eventProbabilityModifier: 1.0
+    }
+  },
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
+  notifications: [],
 
   // --- AZIONI ---
 
@@ -70,7 +86,9 @@ export const useGameStore = create<GameState>((set, get) => ({
         characterSheet: createTestCharacter(), // Resetta il personaggio
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
         timeState: { currentTime: DAWN_TIME, day: 1, isDay: true }, // Resetta tempo
-        visitedShelters: {}, // Resetta rifugi
+        visitedShelters: {}, // Resetta rifugi (deprecated)
+        shelterAccessState: {}, // Resetta nuovo sistema rifugi v0.6.1
+        weatherState: get().createClearWeather(), // Resetta meteo a sereno
         currentScreen: 'menu',
         currentBiome: get().getBiomeKeyFromChar(lines[startPos.y][startPos.x]),
       });
@@ -155,13 +173,21 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     set({ playerPosition: newPosition, currentBiome: newBiomeKey });
 
-    // Consumo e XP
+    // Aggiorna meteo prima del movimento
+    get().updateWeather();
+    
+    // Consumo e XP con effetti meteo
     get().addExperience(Math.floor(Math.random() * 2) + 1);
+    
+    const weatherEffects = get().getWeatherEffects();
+    const baseHungerLoss = 0.2;
+    const baseThirstLoss = 0.3;
+    
     set(state => ({
       survivalState: {
         ...state.survivalState,
-        hunger: Math.max(0, state.survivalState.hunger - 0.2),
-        thirst: Math.max(0, state.survivalState.thirst - 0.3),
+        hunger: Math.max(0, state.survivalState.hunger - (baseHungerLoss * weatherEffects.survivalModifier)),
+        thirst: Math.max(0, state.survivalState.thirst - (baseThirstLoss * weatherEffects.survivalModifier)),
       }
     }));
     if (get().survivalState.hunger <= 0 || get().survivalState.thirst <= 0) {
@@ -169,28 +195,331 @@ export const useGameStore = create<GameState>((set, get) => ({
       get().addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
     }
 
-    // Trigger Evento
-    const EVENT_CHANCE = 0.25;
-    if (newBiomeKey && Math.random() < EVENT_CHANCE) {
+    // Trigger Evento - v0.6.1: ridotto da 25% a 20% + effetti meteo
+    const BASE_EVENT_CHANCE = 0.20;
+    const adjustedEventChance = BASE_EVENT_CHANCE * weatherEffects.eventProbabilityModifier;
+    
+    if (newBiomeKey && Math.random() < adjustedEventChance) {
       setTimeout(() => get().triggerEvent(newBiomeKey), 150);
     }
 
     get().advanceTime(10); // Avanzamento tempo per movimento
   },
 
-  updateCameraPosition: (viewportSize) => {
+  updateCameraPosition: (_viewportSize: { width: number; height: number }) => {
     // This is a placeholder. The actual implementation might be more complex
     // and could be handled in a dedicated hook if it involves DOM measurements.
     // For now, we'll just center it on the player.
     set(state => ({ cameraPosition: state.playerPosition }));
   },
 
-  getBiomeKeyFromChar: (char) => {
+  getBiomeKeyFromChar: (char: string) => {
     const map: Record<string, string> = {
       'C': 'CITY', 'F': 'FOREST', '.': 'PLAINS', '~': 'RIVER',
       'V': 'VILLAGE', 'S': 'SETTLEMENT', 'R': 'REST_STOP',
     };
     return map[char] || 'UNKNOWN';
+  },
+
+  // --- SISTEMA RIFUGI v0.6.1 ---
+  
+  createShelterKey: (x: number, y: number): string => `${x},${y}`,
+  
+  getShelterInfo: (x: number, y: number): ShelterAccessInfo | null => {
+    const key = get().createShelterKey(x, y);
+    return get().shelterAccessState[key] || null;
+  },
+  
+  createShelterInfo: (x: number, y: number): ShelterAccessInfo => {
+    const { timeState } = get();
+    return {
+      coordinates: get().createShelterKey(x, y),
+      dayVisited: timeState.day,
+      timeVisited: timeState.currentTime,
+      hasBeenInvestigated: false,
+      isAccessible: true, // Inizialmente accessibile
+      investigationResults: []
+    };
+  },
+  
+  updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => {
+    const key = get().createShelterKey(x, y);
+    set(state => ({
+      shelterAccessState: {
+        ...state.shelterAccessState,
+        [key]: {
+          ...state.shelterAccessState[key],
+          ...updates
+        }
+      }
+    }));
+  },
+  
+  isShelterAccessible: (x: number, y: number): boolean => {
+    const shelterInfo = get().getShelterInfo(x, y);
+    if (!shelterInfo) return true; // Prima visita sempre permessa
+    
+    const { timeState } = get();
+    
+    // Accesso notturno sempre permesso
+    if (!timeState.isDay) return true;
+    
+    // Se è già stato visitato di giorno, non è più accessibile
+    return shelterInfo.isAccessible;
+  },
+  
+  canInvestigateShelter: (x: number, y: number): boolean => {
+    const shelterInfo = get().getShelterInfo(x, y);
+    if (!shelterInfo) return true; // Prima investigazione sempre permessa
+    
+    // Una sola investigazione per sessione
+    return !shelterInfo.hasBeenInvestigated;
+  },
+
+  // --- SISTEMA METEO v0.6.1 ---
+  
+  updateWeather: () => {
+    const currentTime = Date.now();
+    const { weatherState } = get();
+    
+    // Controlla se è ora di cambiare il meteo
+    if (currentTime >= weatherState.nextWeatherChange) {
+      const newWeather = get().generateWeatherChange();
+      set({ weatherState: newWeather });
+      
+      // Aggiungi messaggio al journal
+      get().addLogEntry(MessageType.AMBIANCE_RANDOM, { 
+        weather: newWeather.currentWeather,
+        description: get().getWeatherDescription(newWeather.currentWeather)
+      });
+    }
+  },
+  
+  getWeatherEffects: (): WeatherEffects => {
+    return get().weatherState.effects;
+  },
+  
+  generateWeatherChange: (): WeatherState => {
+    const { timeState } = get();
+    
+    // Carica i pattern meteo
+    const weatherPatterns = get().getWeatherPatterns();
+    const currentWeather = get().weatherState.currentWeather;
+    
+    // Determina possibili transizioni
+    const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
+    
+    // Applica modificatori temporali
+    const timeModifiers = get().getTimeBasedWeatherModifiers(timeState);
+    
+    // Seleziona nuovo meteo
+    const newWeatherType = get().selectWeatherWithModifiers(possibleTransitions, timeModifiers);
+    const newPattern = weatherPatterns[newWeatherType];
+    
+    if (!newPattern) {
+      // Fallback a tempo sereno
+      return get().createClearWeather();
+    }
+    
+    // Genera intensità casuale nel range
+    const [minIntensity, maxIntensity] = newPattern.intensityRange;
+    const intensity = Math.floor(Math.random() * (maxIntensity - minIntensity + 1)) + minIntensity;
+    
+    // Genera durata con variazione ±30%
+    const baseDuration = newPattern.averageDuration;
+    const variation = baseDuration * 0.3;
+    const duration = Math.floor(baseDuration + (Math.random() * variation * 2 - variation));
+    
+    return {
+      currentWeather: newWeatherType,
+      intensity,
+      duration,
+      nextWeatherChange: Date.now() + (duration * 60 * 1000),
+      effects: { ...newPattern.effects }
+    };
+  },
+  
+  applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects): number => {
+    const effects = get().getWeatherEffects();
+    const modifier = effects[effectType];
+    
+    if (effectType === 'skillCheckModifier') {
+      // Per skill check, è un bonus/penalità additiva
+      return baseValue + modifier;
+    } else {
+      // Per altri effetti, è un moltiplicatore
+      return baseValue * modifier;
+    }
+  },
+  
+  // Helper functions per il sistema meteo
+  getWeatherPatterns: () => {
+    // In una implementazione reale, questo caricherà da weatherPatterns.json
+    // Per ora, ritorna pattern hardcoded
+    return {
+      [WeatherType.CLEAR]: {
+        transitionsTo: [WeatherType.LIGHT_RAIN, WeatherType.FOG, WeatherType.WIND],
+        intensityRange: [20, 60],
+        averageDuration: 240,
+        effects: { movementModifier: 1.0, survivalModifier: 1.0, skillCheckModifier: 0, eventProbabilityModifier: 1.0 }
+      },
+      [WeatherType.LIGHT_RAIN]: {
+        transitionsTo: [WeatherType.CLEAR, WeatherType.HEAVY_RAIN, WeatherType.FOG],
+        intensityRange: [30, 70],
+        averageDuration: 120,
+        effects: { movementModifier: 0.9, survivalModifier: 1.1, skillCheckModifier: -1, eventProbabilityModifier: 0.8 }
+      },
+      [WeatherType.HEAVY_RAIN]: {
+        transitionsTo: [WeatherType.LIGHT_RAIN, WeatherType.STORM, WeatherType.CLEAR],
+        intensityRange: [60, 90],
+        averageDuration: 90,
+        effects: { movementModifier: 0.7, survivalModifier: 1.3, skillCheckModifier: -3, eventProbabilityModifier: 0.6 }
+      },
+      [WeatherType.STORM]: {
+        transitionsTo: [WeatherType.HEAVY_RAIN, WeatherType.WIND, WeatherType.CLEAR],
+        intensityRange: [70, 100],
+        averageDuration: 60,
+        effects: { movementModifier: 0.5, survivalModifier: 1.5, skillCheckModifier: -5, eventProbabilityModifier: 0.4 }
+      },
+      [WeatherType.FOG]: {
+        transitionsTo: [WeatherType.CLEAR, WeatherType.LIGHT_RAIN],
+        intensityRange: [40, 80],
+        averageDuration: 180,
+        effects: { movementModifier: 0.8, survivalModifier: 1.0, skillCheckModifier: -2, eventProbabilityModifier: 1.2 }
+      },
+      [WeatherType.WIND]: {
+        transitionsTo: [WeatherType.CLEAR, WeatherType.STORM],
+        intensityRange: [50, 85],
+        averageDuration: 300,
+        effects: { movementModifier: 0.9, survivalModifier: 1.2, skillCheckModifier: -1, eventProbabilityModifier: 1.1 }
+      }
+    };
+  },
+  
+  getTimeBasedWeatherModifiers: (timeState: TimeState) => {
+    const hour = Math.floor(timeState.currentTime / 60);
+    
+    if (hour >= 5 && hour < 8) return 'dawn';
+    if (hour >= 8 && hour < 18) return 'day';
+    if (hour >= 18 && hour < 21) return 'dusk';
+    return 'night';
+  },
+  
+  selectWeatherWithModifiers: (possibleTransitions: WeatherType[], _timeModifier: string): WeatherType => {
+    // Selezione semplice casuale per ora
+    // In futuro, applicherà i modificatori temporali
+    return possibleTransitions[Math.floor(Math.random() * possibleTransitions.length)];
+  },
+  
+  createClearWeather: (): WeatherState => ({
+    currentWeather: WeatherType.CLEAR,
+    intensity: 50,
+    duration: 240,
+    nextWeatherChange: Date.now() + (240 * 60 * 1000),
+    effects: {
+      movementModifier: 1.0,
+      survivalModifier: 1.0,
+      skillCheckModifier: 0,
+      eventProbabilityModifier: 1.0
+    }
+  }),
+  
+  getWeatherDescription: (weather: WeatherType): string => {
+    const descriptions = {
+      [WeatherType.CLEAR]: 'Il cielo si schiarisce e la visibilità migliora.',
+      [WeatherType.LIGHT_RAIN]: 'Inizia a piovigginare leggermente.',
+      [WeatherType.HEAVY_RAIN]: 'La pioggia si intensifica, rendendo difficile il movimento.',
+      [WeatherType.STORM]: 'Una tempesta violenta si abbatte sulla zona.',
+      [WeatherType.FOG]: 'Una nebbia densa avvolge il paesaggio.',
+      [WeatherType.WIND]: 'Un vento forte inizia a soffiare, portando polvere e detriti.'
+    };
+    return descriptions[weather] || 'Il tempo cambia misteriosamente.';
+  },
+
+  // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
+  
+  attemptRiverCrossing: (): boolean => {
+    const { addLogEntry, performAbilityCheck, updateHP, calculateRiverDifficulty } = get();
+    
+    // Calcola difficoltà basata su meteo e condizioni
+    const difficulty = calculateRiverDifficulty();
+    
+    // Messaggio iniziale
+    addLogEntry(MessageType.AMBIANCE_RANDOM, { 
+      text: 'Ti avvicini alla riva del fiume. La corrente sembra forte...' 
+    });
+    
+    // Esegui skill check Agilità
+    const result = performAbilityCheck('agilita', difficulty, false);
+    
+    if (result.success) {
+      // Successo - attraversamento riuscito
+      addLogEntry(MessageType.SKILL_CHECK_SUCCESS, {
+        action: 'attraversamento fiume',
+        roll: result.roll,
+        modifier: result.modifier,
+        total: result.total,
+        difficulty: difficulty,
+        description: 'Con agilità e determinazione, riesci ad attraversare il fiume senza problemi.'
+      });
+      return true;
+    } else {
+      // Fallimento - subisci danni
+      const damage = Math.floor(Math.random() * 3) + 1; // 1-3 danni
+      updateHP(-damage);
+      
+      addLogEntry(MessageType.SKILL_CHECK_FAILURE, {
+        action: 'attraversamento fiume',
+        roll: result.roll,
+        modifier: result.modifier,
+        total: result.total,
+        difficulty: difficulty
+      });
+      
+      addLogEntry(MessageType.HP_DAMAGE, {
+        damage: damage,
+        reason: 'corrente del fiume',
+        description: 'La corrente ti trascina e ti sbatte contro le rocce. Riesci a raggiungere l\'altra sponda, ma sei ferito.'
+      });
+      
+      return true; // Attraversamento riuscito ma con danni
+    }
+  },
+  
+  calculateRiverDifficulty: (): number => {
+    const { weatherState, characterSheet } = get();
+    let baseDifficulty = 12; // Difficoltà base moderata
+    
+    // Modificatori meteo
+    switch (weatherState.currentWeather) {
+      case WeatherType.LIGHT_RAIN:
+        baseDifficulty += 1;
+        break;
+      case WeatherType.HEAVY_RAIN:
+        baseDifficulty += 3;
+        break;
+      case WeatherType.STORM:
+        baseDifficulty += 5;
+        break;
+      case WeatherType.FOG:
+        baseDifficulty += 2; // Visibilità ridotta
+        break;
+      default:
+        break;
+    }
+    
+    // Modificatori salute
+    const healthPercentage = characterSheet.currentHP / characterSheet.maxHP;
+    if (healthPercentage < 0.25) {
+      baseDifficulty += 3; // Molto ferito
+    } else if (healthPercentage < 0.5) {
+      baseDifficulty += 1; // Ferito
+    }
+    
+    // Modificatori equipaggiamento (placeholder per future implementazioni)
+    // TODO: Aggiungere bonus/penalità per equipaggiamento specifico
+    
+    return Math.min(25, Math.max(8, baseDifficulty)); // Clamp tra 8 e 25
   },
 
   triggerEvent: (biomeKey) => {
@@ -251,18 +580,31 @@ export const useGameStore = create<GameState>((set, get) => ({
   getModifier: (ability) => Math.floor((get().characterSheet.stats[ability] - 10) / 2),
 
   performAbilityCheck: (ability, difficulty, addToJournal = true, successMessageType) => {
-    const { getModifier, addLogEntry, addExperience } = get();
-    const modifier = getModifier(ability);
+    const { getModifier, addLogEntry, addExperience, getWeatherEffects } = get();
+    const baseModifier = getModifier(ability);
+    const weatherEffects = getWeatherEffects();
+    const weatherModifier = weatherEffects.skillCheckModifier;
+    const totalModifier = baseModifier + weatherModifier;
+    
     const roll = Math.floor(Math.random() * 20) + 1;
-    const total = roll + modifier;
+    const total = roll + totalModifier;
     const success = total >= difficulty;
 
     addExperience(success ? 5 : 1);
 
-    const result: AbilityCheckResult = { success, roll, modifier, total, difficulty };
+    const result: AbilityCheckResult = { success, roll, modifier: totalModifier, total, difficulty };
 
     if (addToJournal) {
-      addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, { ability, roll, modifier, total, difficulty });
+      const context = { 
+        ability, 
+        roll, 
+        modifier: totalModifier, 
+        baseModifier, 
+        weatherModifier, 
+        total, 
+        difficulty 
+      };
+      addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, context);
     }
     return result;
   },
@@ -325,25 +667,75 @@ export const useGameStore = create<GameState>((set, get) => ({
   consumeDrink: () => { /* Placeholder */ },
 
   updateBiome: (newBiomeChar) => {
+    // Sistema attraversamento fiumi
+    if (newBiomeChar === '~') {
+      get().attemptRiverCrossing();
+      // Il movimento continua indipendentemente dal successo
+      // I danni sono già stati applicati nella funzione attemptRiverCrossing
+      return;
+    }
+    
     if (newBiomeChar === 'R') {
-      const { playerPosition, visitedShelters, addLogEntry, setCurrentScreen, handleNightConsumption, advanceTime, characterSheet, updateHP } = get();
-      const shelterKey = `${playerPosition.x},${playerPosition.y}`;
-      if (visitedShelters[shelterKey]) {
-        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio già perquisito' });
+      const { 
+        playerPosition, 
+        timeState, 
+        addLogEntry, 
+        setCurrentScreen, 
+        handleNightConsumption, 
+        advanceTime, 
+        characterSheet, 
+        updateHP,
+        getShelterInfo,
+        createShelterInfo,
+        updateShelterAccess,
+        isShelterAccessible
+      } = get();
+      
+      const { x, y } = playerPosition;
+      let shelterInfo = getShelterInfo(x, y);
+      
+      // Se è la prima volta che visitiamo questo rifugio, crealo
+      if (!shelterInfo) {
+        shelterInfo = createShelterInfo(x, y);
+        set(state => ({
+          shelterAccessState: {
+            ...state.shelterAccessState,
+            [shelterInfo!.coordinates]: shelterInfo!
+          }
+        }));
+      }
+      
+      // Controlla accessibilità
+      if (!isShelterAccessible(x, y)) {
+        addLogEntry(MessageType.DISCOVERY, { 
+          discovery: 'rifugio già visitato - non più accessibile di giorno' 
+        });
         return;
       }
-      set(state => ({ visitedShelters: { ...state.visitedShelters, [shelterKey]: true } }));
-
-      if (get().timeState.isDay) {
+      
+      if (timeState.isDay) {
+        // Visita diurna - marca come non più accessibile per future visite diurne
+        updateShelterAccess(x, y, { 
+          isAccessible: false,
+          dayVisited: timeState.day,
+          timeVisited: timeState.currentTime
+        });
+        
         setCurrentScreen('shelter');
-        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro inesplorato' });
+        addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro - puoi riposare e investigare' });
       } else {
+        // Visita notturna - riposo automatico (sempre permesso)
         handleNightConsumption();
         const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
         const nightHealing = Math.floor(maxRecovery * 0.6);
         updateHP(nightHealing);
-        addLogEntry(MessageType.REST_SUCCESS, { healingAmount: nightHealing, location: 'rifugio notturno' });
-        const minutesToDawn = (1440 - get().timeState.currentTime + DAWN_TIME) % 1440;
+        addLogEntry(MessageType.REST_SUCCESS, { 
+          healingAmount: nightHealing, 
+          location: 'rifugio notturno' 
+        });
+        
+        // Avanza al mattino
+        const minutesToDawn = (1440 - timeState.currentTime + DAWN_TIME) % 1440;
         advanceTime(minutesToDawn);
       }
     }
@@ -458,42 +850,353 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SAVE/LOAD SYSTEM ---
   saveCurrentGame: async (slot) => {
     const state = get();
-    const gameData = {
-      characterSheet: state.characterSheet,
-      playerPosition: state.playerPosition,
-      timeState: state.timeState,
-      survivalState: state.survivalState,
-      logEntries: state.logEntries,
-      currentBiome: state.currentBiome,
-      visitedShelters: state.visitedShelters,
-      items: state.items,
-      seenEventIds: state.seenEventIds,
-      lastShortRestTime: state.lastShortRestTime
-    };
-    return await saveSystem.saveGame(slot, gameData);
+    
+    try {
+      // Mostra notifica di salvataggio in corso
+      get().addNotification({
+        type: 'info',
+        title: 'Salvataggio',
+        message: 'Salvataggio in corso...',
+        duration: 1000
+      });
+
+      const gameData = {
+        timeState: state.timeState,
+        playerPosition: state.playerPosition,
+        currentScreen: state.currentScreen,
+        currentBiome: state.currentBiome,
+        visitedShelters: state.visitedShelters,
+        shelterAccessState: state.shelterAccessState, // v0.6.1
+        weatherState: state.weatherState, // v0.6.1
+        seenEventIds: state.seenEventIds,
+        gameFlags: {} // per future espansioni
+      };
+      
+      const success = await saveSystem.saveGame(
+        state.characterSheet,
+        state.survivalState,
+        gameData,
+        slot
+      );
+
+      if (success) {
+        get().addNotification({
+          type: 'success',
+          title: 'Salvataggio Completato',
+          message: `Partita salvata nello slot ${slot === 'quicksave' ? 'Salvataggio Rapido' : slot.replace('slot', '')}`,
+          duration: 2000
+        });
+        
+        // Aggiungi al journal
+        get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+          text: `Partita salvata: ${state.characterSheet.name} - Livello ${state.characterSheet.level}`
+        });
+      } else {
+        get().addNotification({
+          type: 'error',
+          title: 'Errore Salvataggio',
+          message: 'Impossibile salvare la partita. Riprova.',
+          duration: 4000
+        });
+      }
+
+      return success;
+    } catch (error) {
+      console.error('Save error:', error);
+      get().addNotification({
+        type: 'error',
+        title: 'Errore Salvataggio',
+        message: 'Errore durante il salvataggio. Controlla lo spazio disponibile.',
+        duration: 4000
+      });
+      return false;
+    }
   },
 
   loadSavedGame: async (slot) => {
-    const gameData = await saveSystem.loadGame(slot);
-    if (gameData) {
-      set({
-        ...gameData,
-        currentScreen: 'game', // Torna alla schermata di gioco dopo il caricamento
+    try {
+      // Mostra notifica di caricamento in corso
+      get().addNotification({
+        type: 'info',
+        title: 'Caricamento',
+        message: 'Caricamento partita in corso...',
+        duration: 1000
       });
-      return true;
+
+      const saveData = await saveSystem.loadGame(slot);
+      
+      if (saveData) {
+        // Validazione dati salvati
+        if (!saveData.characterSheet || !saveData.gameData) {
+          throw new Error('Dati di salvataggio corrotti o incompleti');
+        }
+
+        // Ricostruisci lo stato del gioco dai dati salvati
+        set({
+          playerPosition: saveData.gameData.playerPosition,
+          timeState: saveData.gameData.timeState,
+          characterSheet: saveData.characterSheet,
+          survivalState: saveData.survivalState,
+          currentBiome: saveData.gameData.currentBiome,
+          visitedShelters: saveData.gameData.visitedShelters,
+          shelterAccessState: (saveData.gameData as any).shelterAccessState || {},
+          weatherState: (saveData.gameData as any).weatherState || get().weatherState,
+          currentScreen: 'game', // Torna alla schermata di gioco dopo il caricamento
+          logEntries: [], // Reset del journal per evitare confusione
+          seenEventIds: (saveData.gameData as any).seenEventIds || [],
+          notifications: [], // Reset notifiche per nuovo caricamento
+        });
+
+        get().addNotification({
+          type: 'success',
+          title: 'Caricamento Completato',
+          message: `Benvenuto/a, ${saveData.characterSheet.name}! Partita caricata con successo.`,
+          duration: 3000
+        });
+
+        // Aggiungi messaggio di benvenuto al journal
+        get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+          text: `Partita caricata: ${saveData.characterSheet.name} - Livello ${saveData.characterSheet.level} - Giorno ${saveData.gameData.timeState.day}`
+        });
+
+        return true;
+      } else {
+        get().addNotification({
+          type: 'error',
+          title: 'Errore Caricamento',
+          message: 'Salvataggio non trovato o corrotto',
+          duration: 4000
+        });
+        return false;
+      }
+    } catch (error) {
+      console.error('Load error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
+      
+      get().addNotification({
+        type: 'error',
+        title: 'Errore Caricamento',
+        message: `Impossibile caricare la partita: ${errorMessage}`,
+        duration: 5000
+      });
+      return false;
     }
-    return false;
   },
 
-  handleQuickSave: () => get().saveCurrentGame('quicksave'),
+  handleQuickSave: async () => {
+    return await get().saveCurrentGame('quicksave');
+  },
+  
   handleQuickLoad: async () => {
     const success = await get().loadSavedGame('quicksave');
-    if (success) get().setCurrentScreen('game');
+    if (success) {
+      get().setCurrentScreen('game');
+    }
     return success;
   },
 
-  getSaveSlots: () => saveSystem.getSaveSlots(),
+  getSaveSlots: () => saveSystem.getSaveSlotInfo(),
   deleteSave: (slot) => saveSystem.deleteSave(slot),
-  exportSave: (slot) => saveSystem.exportSave(slot),
-  importSave: (data, slot) => saveSystem.importSave(data, slot),
+  exportSave: async (slot) => {
+    try {
+      get().addNotification({
+        type: 'info',
+        title: 'Export Salvataggio',
+        message: 'Preparazione export in corso...',
+        duration: 1000
+      });
+
+      const saveContent = saveSystem.exportSave(slot);
+      
+      if (!saveContent) {
+        get().addNotification({
+          type: 'error',
+          title: 'Export Fallito',
+          message: 'Salvataggio non trovato o corrotto',
+          duration: 3000
+        });
+        return null;
+      }
+
+      // Parse per ottenere informazioni del personaggio
+      const saveData = JSON.parse(saveContent);
+      const characterName = saveData.characterSheet?.name || 'Sconosciuto';
+      const level = saveData.characterSheet?.level || 1;
+      
+      const filename = generateSaveFilename(characterName, level, slot);
+      
+      downloadFile({
+        filename,
+        content: saveContent,
+        mimeType: 'application/json'
+      });
+
+      get().addNotification({
+        type: 'success',
+        title: 'Export Completato',
+        message: `Salvataggio esportato come ${filename}`,
+        duration: 4000
+      });
+
+      return saveContent;
+    } catch (error) {
+      console.error('Export error:', error);
+      get().addNotification({
+        type: 'error',
+        title: 'Errore Export',
+        message: 'Errore durante l\'esportazione del salvataggio',
+        duration: 4000
+      });
+      return null;
+    }
+  },
+
+  importSave: async (slot) => {
+    return new Promise<boolean>((resolve) => {
+      try {
+        get().addNotification({
+          type: 'info',
+          title: 'Import Salvataggio',
+          message: 'Seleziona il file da importare...',
+          duration: 2000
+        });
+
+        const input = createFileInput(async (file) => {
+          try {
+            // Validate file
+            const validation = validateSaveFile(file);
+            if (!validation.valid) {
+              get().addNotification({
+                type: 'error',
+                title: 'File Non Valido',
+                message: validation.error || 'File non supportato',
+                duration: 4000
+              });
+              resolve(false);
+              return;
+            }
+
+            get().addNotification({
+              type: 'info',
+              title: 'Import in Corso',
+              message: 'Lettura e validazione file...',
+              duration: 2000
+            });
+
+            // Read file content
+            const content = await readFileAsText(file);
+            
+            // Import the save
+            const success = await saveSystem.importSave(content, slot);
+            
+            if (success) {
+              // Parse per ottenere informazioni del personaggio
+              const saveData = JSON.parse(content);
+              const characterName = saveData.characterSheet?.name || 'Sconosciuto';
+              const level = saveData.characterSheet?.level || 1;
+
+              get().addNotification({
+                type: 'success',
+                title: 'Import Completato',
+                message: `Salvataggio di ${characterName} (Lv.${level}) importato con successo`,
+                duration: 4000
+              });
+            } else {
+              get().addNotification({
+                type: 'error',
+                title: 'Import Fallito',
+                message: 'Salvataggio non valido o corrotto',
+                duration: 4000
+              });
+            }
+
+            resolve(success);
+          } catch (error) {
+            console.error('Import error:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
+            
+            get().addNotification({
+              type: 'error',
+              title: 'Errore Import',
+              message: `Errore durante l'importazione: ${errorMessage}`,
+              duration: 5000
+            });
+            resolve(false);
+          }
+        });
+
+        // Trigger file selection
+        document.body.appendChild(input);
+        input.click();
+        document.body.removeChild(input);
+      } catch (error) {
+        console.error('Import setup error:', error);
+        get().addNotification({
+          type: 'error',
+          title: 'Errore Import',
+          message: 'Impossibile avviare l\'importazione',
+          duration: 4000
+        });
+        resolve(false);
+      }
+    });
+  },
+  
+  // Recovery function for corrupted saves
+  recoverSave: async (slot) => {
+    try {
+      get().addNotification({
+        type: 'info',
+        title: 'Recupero Salvataggio',
+        message: 'Tentativo di recupero in corso...',
+        duration: 2000
+      });
+
+      const recoveredData = await saveSystem.recoverSave(slot);
+      
+      if (recoveredData) {
+        get().addNotification({
+          type: 'success',
+          title: 'Recupero Riuscito',
+          message: 'Salvataggio recuperato con successo! Alcuni dati potrebbero essere stati ripristinati ai valori predefiniti.',
+          duration: 5000
+        });
+        return true;
+      } else {
+        get().addNotification({
+          type: 'error',
+          title: 'Recupero Fallito',
+          message: 'Impossibile recuperare il salvataggio. I dati sono troppo corrotti.',
+          duration: 4000
+        });
+        return false;
+      }
+    } catch (error) {
+      get().addNotification({
+        type: 'error',
+        title: 'Errore Recupero',
+        message: 'Errore durante il tentativo di recupero',
+        duration: 4000
+      });
+      return false;
+    }
+  },
+
+  // --- NOTIFICATION SYSTEM ---
+  addNotification: (notification) => {
+    const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    set(state => ({
+      notifications: [...state.notifications, { ...notification, id }]
+    }));
+  },
+
+  removeNotification: (id) => {
+    set(state => ({
+      notifications: state.notifications.filter(n => n.id !== id)
+    }));
+  },
+
+  clearNotifications: () => {
+    set({ notifications: [] });
+  },
 }));

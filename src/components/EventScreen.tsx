@@ -1,7 +1,7 @@
 // src/components/EventScreen.tsx
 import React from 'react';
 import { useGameStore } from '../stores/gameStore';
-import type { EventChoice } from '../interfaces/events';
+
 
 /**
  * Componente per visualizzare gli eventi dinamici del gioco.

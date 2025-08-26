@@ -27,6 +27,41 @@ export interface SurvivalState {
   lastNightConsumption: { day: number; consumed: boolean };
 }
 
+// Sistema rifugi migliorato - v0.6.1
+export interface ShelterAccessInfo {
+  coordinates: string; // "x,y"
+  dayVisited: number; // giorno della prima visita
+  timeVisited: number; // ora della prima visita
+  hasBeenInvestigated: boolean; // investigazione completata in questa sessione
+  isAccessible: boolean; // false dopo prima visita diurna
+  investigationResults?: string[]; // per debugging e logging
+}
+
+// Sistema meteo - v0.6.1
+export enum WeatherType {
+  CLEAR = 'clear',
+  LIGHT_RAIN = 'light_rain',
+  HEAVY_RAIN = 'heavy_rain',
+  STORM = 'storm',
+  FOG = 'fog',
+  WIND = 'wind'
+}
+
+export interface WeatherEffects {
+  movementModifier: number; // moltiplicatore velocità movimento
+  survivalModifier: number; // consumo risorse extra
+  skillCheckModifier: number; // penalità/bonus skill check
+  eventProbabilityModifier: number; // modifica probabilità eventi
+}
+
+export interface WeatherState {
+  currentWeather: WeatherType;
+  intensity: number; // 0-100 intensità del fenomeno
+  duration: number; // minuti rimanenti
+  nextWeatherChange: number; // timestamp prossimo cambio
+  effects: WeatherEffects;
+}
+
 export interface GameState {
   // Map state
   mapData: string[];
@@ -49,7 +84,11 @@ export interface GameState {
   survivalState: SurvivalState;
   
   // Shelter state
-  visitedShelters: Record<string, boolean>;
+  visitedShelters: Record<string, boolean>; // Deprecated - mantenuto per compatibilità
+  shelterAccessState: Record<string, ShelterAccessInfo>; // Nuovo sistema v0.6.1
+  
+  // Weather state
+  weatherState: WeatherState;
 
   // Journal state
   logEntries: LogEntry[];
@@ -68,6 +107,17 @@ export interface GameState {
 
   // UI state
   currentScreen: Screen;
+  previousScreen: Screen | null;
+  menuSelectedIndex: number;
+  
+  // Notification system
+  notifications: Array<{
+    id: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+    title: string;
+    message: string;
+    duration?: number;
+  }>;
   
   // Actions
   initializeGame: () => Promise<void>;
@@ -88,7 +138,6 @@ export interface GameState {
   // UI actions
   setCurrentScreen: (screen: Screen) => void;
   goBack: () => void;
-  menuSelectedIndex: number;
   setMenuSelectedIndex: (index: number) => void;
   handleNewGame: () => void;
   handleLoadGame: () => void;
@@ -116,6 +165,37 @@ export interface GameState {
   handleQuickLoad: () => Promise<boolean>;
   getSaveSlots: () => any[];
   deleteSave: (slot: string) => boolean;
-  exportSave: (slot: string) => string | null;
-  importSave: (content: string, slot: string) => Promise<boolean>;
+  exportSave: (slot: string) => Promise<string | null>;
+  importSave: (slot: string) => Promise<boolean>;
+  recoverSave: (slot: string) => Promise<boolean>;
+  
+  // Notification system actions
+  addNotification: (notification: Omit<GameState['notifications'][0], 'id'>) => void;
+  removeNotification: (id: string) => void;
+  clearNotifications: () => void;
+  
+  // Shelter system v0.6.1 actions
+  createShelterKey: (x: number, y: number) => string;
+  getShelterInfo: (x: number, y: number) => ShelterAccessInfo | null;
+  createShelterInfo: (x: number, y: number) => ShelterAccessInfo;
+  updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => void;
+  isShelterAccessible: (x: number, y: number) => boolean;
+  canInvestigateShelter: (x: number, y: number) => boolean;
+  
+  // Weather system v0.6.1 actions
+  updateWeather: () => void;
+  getWeatherEffects: () => WeatherEffects;
+  generateWeatherChange: () => WeatherState;
+  applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects) => number;
+  createClearWeather: () => WeatherState;
+  getWeatherDescription: (weather: WeatherType) => string;
+  getWeatherPatterns: () => any;
+  getTimeBasedWeatherModifiers: (timeState: TimeState) => string;
+  selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string) => WeatherType;
+  getBiomeKeyFromChar: (char: string) => string;
+  formatTime: (timeMinutes: number) => string;
+  
+  // River crossing system v0.6.1 actions
+  attemptRiverCrossing: () => boolean;
+  calculateRiverDifficulty: () => number;
 }

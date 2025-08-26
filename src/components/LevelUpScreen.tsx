@@ -15,12 +15,10 @@ import type { ILevelUpOption } from '../interfaces/levelUp';
 import { MessageType } from '../data/MessageArchive';
 
 const LevelUpScreen: React.FC = () => {
-  const { characterSheet, goBack, addLogEntry, updateCharacterSheet } = useGameStore(state => ({
-    characterSheet: state.characterSheet,
-    goBack: state.goBack,
-    addLogEntry: state.addLogEntry,
-    updateCharacterSheet: state.updateCharacterSheet,
-  }));
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const goBack = useGameStore(state => state.goBack);
+  const addLogEntry = useGameStore(state => state.addLogEntry);
+  const updateCharacterSheet = useGameStore(state => state.updateCharacterSheet);
   const [selectedOptions, setSelectedOptions] = useState<ILevelUpOption[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);

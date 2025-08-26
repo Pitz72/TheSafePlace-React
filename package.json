@@ -1,8 +1,8 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.6.0",
-  "codename": "Lazarus Rising Again",
+  "version": "0.6.2",
+  "codename": "I Save You",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D e atmosfera CRT anni '80",
   "author": "TheSafePlace Development Team",

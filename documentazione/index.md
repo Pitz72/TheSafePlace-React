@@ -1,6 +1,6 @@
 # Indice della Documentazione
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.6.0 "Lazarus Rising Again".
+Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.6.2 "I Save You".
 
 ## 📋 Documenti Principali
 
@@ -15,12 +15,12 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./session-log/journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.6.0 "Lazarus Rising Again" (COMPLETATA)
+- **Versione Corrente**: v0.6.2 "I Save You" (COMPLETATA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.6.0 Lazarus Rising Again](./anti-regressione/ANTI-REGRESSION-v0.6.0.md)
-- **Ultimo Changelog**: [v0.6.0](./changelog/CHANGELOG-v0.6.0.md)
-- **Verifica Implementazione**: v0.6.0 (refactoring architetturale completo)
-- **Ultimo Commit**: v0.6.0 Lazarus Rising Again (completato)
+- **Anti-Regressione**: [v0.6.2 I Save You](./anti-regressione/ANTI-REGRESSIONE-v0.6.2.md)
+- **Ultimo Changelog**: [v0.6.2](./changelog/CHANGELOG-v0.6.2.md)
+- **Verifica Implementazione**: v0.6.2 (sistema save/load avanzato e gameplay migliorato)
+- **Ultimo Commit**: v0.6.2 I Save You (completato)
 
 ---
 
@@ -31,7 +31,7 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 Documenti di protezione che definiscono baseline immutabili e procedure di test per prevenire regressioni. Include:
 - **Documenti v0.0.x - v0.6.0**: Protezioni progressive per ogni versione
 - **Protezioni Speciali**: FINALE, BASEPOPUP
-- **Ultimo Attivo**: [ANTI-REGRESSION-v0.6.0.md](./anti-regressione/ANTI-REGRESSION-v0.6.0.md) (LAZARUS RISING AGAIN)
+- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.6.2.md](./anti-regressione/ANTI-REGRESSIONE-v0.6.2.md) (I SAVE YOU)
 
 ### 📊 [Analisi](./analisi/) (26 documenti)
 

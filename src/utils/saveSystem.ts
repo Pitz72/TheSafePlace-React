@@ -3,7 +3,7 @@ import type { TimeState, SurvivalState, Screen } from '../interfaces/gameState';
 
 // Save system constants
 export const SAVE_SLOTS = ['slot1', 'slot2', 'slot3', 'slot4', 'slot5'] as const;
-export const CURRENT_SAVE_VERSION = '0.5.0';
+export const CURRENT_SAVE_VERSION = '0.6.2';
 export const AUTO_SAVE_SLOT = 'autosave';
 export const QUICK_SAVE_SLOT = 'quicksave';
 
@@ -24,6 +24,9 @@ export interface GameSaveData {
   currentScreen: Screen;
   currentBiome: string | null;
   visitedShelters: Record<string, boolean>;
+  shelterAccessState?: Record<string, any>; // v0.6.1 - nuovo sistema rifugi
+  weatherState?: any; // v0.6.1 - sistema meteo
+  seenEventIds?: string[]; // eventi già visti
   gameFlags: Record<string, any>; // for future quest/event tracking
 }
 
@@ -253,6 +256,160 @@ export class SaveSystem {
   }
   
   /**
+   * Attempt to recover a corrupted save by applying fixes
+   */
+  public async recoverSave(slot: string): Promise<SaveData | null> {
+    try {
+      const saveKey = this.getSaveKey(slot);
+      const saveString = localStorage.getItem(saveKey);
+      
+      if (!saveString) {
+        return null;
+      }
+      
+      const rawData = JSON.parse(saveString);
+      
+      // Attempt to fix common corruption issues
+      const recoveredData = this.attemptSaveRecovery(rawData);
+      
+      if (recoveredData) {
+        // Validate the recovered data
+        this.validateSaveData(recoveredData);
+        
+        // Save the recovered version
+        localStorage.setItem(saveKey, JSON.stringify(recoveredData));
+        
+        console.log(`Save recovered for slot ${slot}`);
+        return recoveredData;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Recovery failed:', error);
+      return null;
+    }
+  }
+  
+  /**
+   * Attempt to fix common save corruption issues
+   */
+  private attemptSaveRecovery(rawData: any): SaveData | null {
+    try {
+      // Ensure basic structure exists
+      if (!rawData.characterSheet || !rawData.gameData) {
+        return null;
+      }
+      
+      // Fix missing version
+      if (!rawData.version) {
+        rawData.version = '0.5.0';
+      }
+      
+      // Fix missing timestamp
+      if (!rawData.timestamp) {
+        rawData.timestamp = Date.now();
+      }
+      
+      // Fix character sheet issues
+      const char = rawData.characterSheet;
+      if (char) {
+        // Fix missing or invalid HP
+        if (typeof char.currentHP !== 'number' || char.currentHP < 0) {
+          char.currentHP = Math.max(1, char.maxHP || 10);
+        }
+        if (typeof char.maxHP !== 'number' || char.maxHP < 1) {
+          char.maxHP = Math.max(char.currentHP || 10, 10);
+        }
+        
+        // Fix missing stats
+        const defaultStats = { potenza: 10, agilita: 10, vigore: 10, percezione: 10, adattamento: 10, carisma: 10 };
+        if (!char.stats) {
+          char.stats = defaultStats;
+        } else {
+          Object.keys(defaultStats).forEach(stat => {
+            if (typeof (char.stats as any)[stat] !== 'number') {
+              (char.stats as any)[stat] = (defaultStats as any)[stat];
+            }
+          });
+        }
+        
+        // Fix missing level
+        if (typeof char.level !== 'number' || char.level < 1) {
+          char.level = 1;
+        }
+        
+        // Fix missing name
+        if (!char.name || typeof char.name !== 'string') {
+          char.name = 'Sopravvissuto';
+        }
+      }
+      
+      // Fix game data issues
+      const gameData = rawData.gameData;
+      if (gameData) {
+        // Fix missing time state
+        if (!gameData.timeState) {
+          gameData.timeState = { currentTime: 360, day: 1, isDay: true };
+        } else {
+          if (typeof gameData.timeState.day !== 'number' || gameData.timeState.day < 1) {
+            gameData.timeState.day = 1;
+          }
+          if (typeof gameData.timeState.currentTime !== 'number') {
+            gameData.timeState.currentTime = 360;
+          }
+          if (typeof gameData.timeState.isDay !== 'boolean') {
+            gameData.timeState.isDay = gameData.timeState.currentTime >= 360 && gameData.timeState.currentTime < 1200;
+          }
+        }
+        
+        // Fix missing position
+        if (!gameData.playerPosition) {
+          gameData.playerPosition = { x: 0, y: 0 };
+        }
+        
+        // Fix missing visited shelters
+        if (!gameData.visitedShelters) {
+          gameData.visitedShelters = {};
+        }
+      }
+      
+      // Fix missing survival state
+      if (!rawData.survivalState) {
+        rawData.survivalState = {
+          hunger: 100,
+          thirst: 100,
+          lastNightConsumption: { day: 0, consumed: false }
+        };
+      } else {
+        const survival = rawData.survivalState;
+        if (typeof survival.hunger !== 'number') survival.hunger = 100;
+        if (typeof survival.thirst !== 'number') survival.thirst = 100;
+        if (!survival.lastNightConsumption) {
+          survival.lastNightConsumption = { day: 0, consumed: false };
+        }
+      }
+      
+      // Fix missing metadata
+      if (!rawData.metadata) {
+        rawData.metadata = {
+          playtime: 0,
+          saveCount: 1,
+          lastModified: Date.now(),
+          location: rawData.gameData?.currentBiome || 'unknown',
+          playerName: rawData.characterSheet?.name || 'Sconosciuto',
+          playerLevel: rawData.characterSheet?.level || 1,
+          version: rawData.version || '0.5.0'
+        };
+      }
+      
+      return rawData as SaveData;
+    } catch (error) {
+      console.error('Recovery attempt failed:', error);
+      return null;
+    }
+  }
+  
+  /**
    * Auto-save current game state (doesn't throw on failure)
    */
   public async autoSave(
@@ -324,33 +481,57 @@ export class SaveSystem {
   
   private validateSaveData(saveData: SaveData): void {
     if (!saveData.version) {
-      throw new Error('Missing save version');
+      throw new Error('Versione salvataggio mancante');
     }
     
     if (!saveData.characterSheet || !saveData.gameData) {
-      throw new Error('Missing required save data');
+      throw new Error('Dati di salvataggio incompleti');
     }
     
     if (!saveData.characterSheet.name || saveData.characterSheet.name.length === 0) {
-      throw new Error('Invalid character name');
+      throw new Error('Nome personaggio non valido');
     }
     
     if (saveData.characterSheet.level < 1 || saveData.characterSheet.level > 20) {
-      throw new Error('Invalid character level');
+      throw new Error('Livello personaggio non valido');
+    }
+    
+    // Validate HP
+    if (saveData.characterSheet.currentHP < 0 || saveData.characterSheet.currentHP > saveData.characterSheet.maxHP) {
+      throw new Error('Punti vita non validi');
     }
     
     // Validate stats are in valid range (3-18 for D&D style)
     const stats = saveData.characterSheet.stats;
-    Object.values(stats).forEach(stat => {
-      if (stat < 3 || stat > 18) {
-        throw new Error('Invalid stat value');
+    const statNames = ['potenza', 'agilita', 'vigore', 'percezione', 'adattamento', 'carisma'];
+    
+    statNames.forEach(statName => {
+      const stat = (stats as any)[statName];
+      if (typeof stat !== 'number' || stat < 3 || stat > 18) {
+        throw new Error(`Statistica ${statName} non valida: ${stat}`);
       }
     });
     
     // Validate time state
     const time = saveData.gameData.timeState;
     if (time.day < 1 || time.currentTime < 0 || time.currentTime >= 1440) {
-      throw new Error('Invalid time state');
+      throw new Error('Stato temporale non valido');
+    }
+    
+    // Validate survival state
+    if (saveData.survivalState) {
+      if (saveData.survivalState.hunger < 0 || saveData.survivalState.hunger > 100) {
+        throw new Error('Stato fame non valido');
+      }
+      if (saveData.survivalState.thirst < 0 || saveData.survivalState.thirst > 100) {
+        throw new Error('Stato sete non valido');
+      }
+    }
+    
+    // Validate position
+    const pos = saveData.gameData.playerPosition;
+    if (typeof pos.x !== 'number' || typeof pos.y !== 'number') {
+      throw new Error('Posizione giocatore non valida');
     }
   }
   

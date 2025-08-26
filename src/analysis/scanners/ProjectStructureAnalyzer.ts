@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ProjectStructure, FileInfo, DirectoryNode, DependencyMap } from '../interfaces/ProjectStructure';
+import type { ProjectStructure, FileInfo, DirectoryNode, DependencyMap } from '../interfaces/ProjectStructure';
 
 /**
  * Analyzes project structure by scanning directories and files

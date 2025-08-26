@@ -16,6 +16,8 @@ import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
 import InventoryScreen from './components/InventoryScreen';
 import EventScreen from './components/EventScreen';
+import LoadScreen from './components/LoadScreen';
+import NotificationSystem from './components/NotificationSystem';
 
 // Funzione per mappare i caratteri della mappa ai nomi dei luoghi - v0.1.3
 const getTileDescription = (char: string): string => {
@@ -100,6 +102,7 @@ import InventoryPanel from './components/InventoryPanel';
 
 import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
+import WeatherDisplay from './components/WeatherDisplay';
 
 
 
@@ -115,6 +118,8 @@ const GameContent = () => {
   const items = useGameStore(state => state.items);
   const survivalState = useGameStore(state => state.survivalState);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const notifications = useGameStore(state => state.notifications);
+  const removeNotification = useGameStore(state => state.removeNotification);
   const { videoMode } = useSettingsStore();
   
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
@@ -181,6 +186,12 @@ const GameContent = () => {
         {/* CRT Effects Overlays */}
           <div className="crt-premium-overlay"></div>
         
+        {/* Notification System */}
+        <NotificationSystem 
+          notifications={notifications} 
+          onRemove={removeNotification} 
+        />
+        
         {/* Container principale */}
         <div className="h-full flex flex-col">
           {/* Schermate a schermo intero */}
@@ -194,6 +205,7 @@ const GameContent = () => {
           {currentScreen === 'levelUp' && <LevelUpScreen />}
           {currentScreen === 'shelter' && <ShelterScreen />}
           {currentScreen === 'event' && <EventScreen />}
+          {currentScreen === 'loadGame' && <LoadScreen />}
           
           {/* Schermata di Gioco Principale */}
           {currentScreen === 'game' && (
@@ -289,6 +301,8 @@ const GameContent = () => {
                           <li>Luogo: <span className="text-phosphor-400">{currentLocation}</span></li>
                           <li>Ora: <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-phosphor-night-blue'}`}>{formattedTime}</span> <span className={`font-bold ${timeState.isDay ? 'text-phosphor-400' : 'text-phosphor-night-blue'}`}>Giorno {timeState.day}</span></li>
                         </ul>
+                        <h2 className="panel-title mt-4">METEO</h2>
+                        <WeatherDisplay />
                         <h2 className="panel-title mt-6">STATISTICHE</h2>
                         <div className="space-y-1 text-uniform">
                           <div>Potenza: <span className="text-phosphor-400">{characterSheet.stats.potenza}</span> <span className="text-phosphor-700">({getModifier('potenza') >= 0 ? '+' : ''}{getModifier('potenza')})</span></div>

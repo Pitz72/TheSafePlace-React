@@ -1,4 +1,4 @@
-# The Safe Place v0.6.0 "Lazarus Rising Again"
+# The Safe Place v0.6.2 "I Save You"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
@@ -68,18 +68,19 @@ TSP/
 - [x] **v0.4.4**: Refinement - Gameplay loop completo con manipolazione oggetti. ✅ **COMPLETATA**
 - [x] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo). ✅ **COMPLETATA**
 - [x] **v0.6.0**: Lazarus Rising Again - Refactoring architetturale completo e stabilità. ✅ **COMPLETATA**
+- [x] **v0.6.2**: I Save You - Sistema Save/Load avanzato e miglioramenti gameplay. ✅ **COMPLETATA**
 - [ ] **v0.7.0**: Sistema combattimento e meccaniche avanzate
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.6.0 "Lazarus Rising Again" (ATTUALE)** - Resurrezione Architettonica e Stabilità Completa:
-- ✅ **Architettura Unificata**: Migrazione completa da Context API a Zustand come unica fonte di verità
-- ✅ **Sistema Eventi Dinamici**: Risolto il bug critico che impediva l'attivazione degli eventi di gioco
-- ✅ **Stabilità Runtime**: Eliminati tutti i loop di rendering infiniti e problemi di "stale state"
-- ✅ **Sistema Input Robusto**: Riprogettazione completa della gestione comandi da tastiera
-- ✅ **Allineamento Visivo**: Correzione del disallineamento del carattere giocatore sulla mappa
-- ✅ **Refactoring Completo**: Aggiornamento di tutti i componenti per la nuova architettura stabile
+**The Safe Place v0.6.2 "I Save You" (ATTUALE)** - Sistema Save/Load Avanzato e Gameplay Migliorato:
+- ✅ **Sistema Save/Load Avanzato**: LoadScreen completo con preview dettagliati, export/import, recovery automatico
+- ✅ **Sistema Notifiche**: Feedback elegante per tutte le operazioni con 4 tipi di notifiche
+- ✅ **Sistema Meteo Dinamico**: 6 condizioni meteorologiche con effetti realistici su movimento e skill check
+- ✅ **Attraversamento Fiumi**: Meccaniche con conseguenze reali (1-3 danni HP) e difficoltà dinamica
+- ✅ **Eventi Trasparenti**: Skill check dettagliati con calcoli visibili e modificatori equipaggiamento
+- ✅ **Sistema Rifugi Anti-Exploit**: Regole bilanciate per prevenire abusi con accesso limitato
 
 ### 🛠️ Sviluppo
 
@@ -95,7 +96,40 @@ npm run preview      # Preview build
 
 Progetto privato - Tutti i diritti riservati
 
-### 🆕 Novità v0.6.0 "Lazarus Rising Again"
+### 🆕 Novità v0.6.2 "I Save You"
+
+Questa versione intermedia introduce un sistema di salvataggio e caricamento completamente rinnovato, insieme a significativi miglioramenti ai sistemi di gioco esistenti per un'esperienza più profonda e coinvolgente.
+
+#### 📁 Sistema Save/Load Rivoluzionario
+- **LoadScreen Avanzato**: Interfaccia elegante con preview dettagliati (nome, livello, posizione, tempo gioco)
+- **Sistema Notifiche**: Feedback immediato per tutte le operazioni con animazioni fluide
+- **Export/Import Sicuro**: Backup e condivisione salvataggi con validazione robusta
+- **Recovery Intelligente**: Riparazione automatica salvataggi corrotti con feedback dettagliato
+- **Compatibilità Versioni**: Gestione automatica migrazione tra versioni diverse
+
+#### 🌤️ Sistema Meteo Dinamico
+- **6 Condizioni Meteorologiche**: Sereno, Pioggia Leggera/Intensa, Tempesta, Nebbia, Vento
+- **Effetti Realistici**: Modificatori movimento, skill check e consumo risorse
+- **Transizioni Naturali**: Cambi meteo basati su probabilità e durata variabile
+- **Integrazione Completa**: Influenza su tutti i sistemi di gioco
+
+#### 🌊 Attraversamento Fiumi Pericoloso
+- **Conseguenze Reali**: 1-3 danni HP per skill check falliti
+- **Difficoltà Dinamica**: Modificata da meteo, salute e equipaggiamento
+- **Skill Check Trasparenti**: Calcoli visibili per comprensione meccaniche
+
+#### 🎲 Eventi Completamente Trasparenti
+- **Calcoli Visibili**: "Dado + Stat + Equip + Meteo = Totale vs Difficoltà"
+- **Probabilità Successo**: Percentuale mostrata prima della scelta
+- **Modificatori Equipaggiamento**: Bonus armi/armature negli eventi
+- **Risultati Dettagliati**: Feedback specifico per ogni conseguenza
+
+#### 🏠 Sistema Rifugi Anti-Exploit
+- **Accesso Limitato**: Una visita diurna per rifugio, accesso notturno sempre disponibile
+- **Investigazione Unica**: Una sola investigazione per sessione per rifugio
+- **Stato Persistente**: Tracking completo tra sessioni di gioco
+
+### 🆕 Novità Precedenti v0.6.0 "Lazarus Rising Again"
 
 Questa versione rappresenta una vera e propria **resurrezione** del progetto. The Safe Place si trovava in uno stato critico a causa di un bug architetturale fondamentale che impediva il funzionamento del sistema di eventi dinamici, cuore del gameplay.
 
