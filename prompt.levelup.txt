@@ -1,182 +1,173 @@
-Prompt: Correzione Logica e Input di LevelUpScreen.tsx
-Contesto: Per risolvere il bug per cui le modifiche del level up non vengono applicate e per abilitare i comandi WASD, è necessario riscrivere il componente LevelUpScreen.tsx utilizzando useCallback per stabilizzare le funzioni di gestione e aggiornando la logica di input.
+PROMPT PER IDE LLM: Fix Definitivo di LevelUpScreen.tsx con Selettori Granulari
+Contesto: Il componente LevelUpScreen.tsx soffre di errori di tipo e loop di rendering a causa di un selettore useGameStore scritto in modo errato.
 
-Azione per l'IDE: Sostituisci l'intero contenuto del file src/components/LevelUpScreen.tsx con il seguente codice corretto e completo:
+Obiettivo: Risolvere tutti gli errori e stabilizzare il componente utilizzando selettori granulari e individuali per ogni dato richiesto dallo store, come da best practice di Zustand.
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+Istruzioni Dettagliate:
+
+File da modificare: src/components/LevelUpScreen.tsx
+
+Azione: Sostituisci l'intero contenuto del file con il nuovo codice corretto e pulito qui sotto.
+
+Cancella tutto il contenuto attuale di LevelUpScreen.tsx e sostituiscilo con questo:
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { getAvailableLevelUpOptions, createLevelUpPreview, applyLevelUp, updateCharacterSheetAfterLevelUp, getAvailablePoints } from '../rules/levelUpSystem';
-import type { ILevelUpOption } from '../interfaces/levelUp';
+import { getAvailableLevelUpOptions, applyLevelUpOption } from '../rules/levelUpSystem';
+import type { ICharacterStats } from '../rules/types';
 import { MessageType } from '../data/MessageArchive';
+import type { ILevelUpOption } from '../interfaces/levelUp';
 
 const LevelUpScreen: React.FC = () => {
-  const { characterSheet, goBack, addLogEntry, updateCharacterSheet } = useGameStore(state => ({
-    characterSheet: state.characterSheet,
-    goBack: state.goBack,
-    addLogEntry: state.addLogEntry,
-    updateCharacterSheet: state.updateCharacterSheet,
-  }));
+  // SELETTORI GRANULARI: la soluzione robusta
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const goBack = useGameStore(state => state.goBack);
+  const updateCharacterSheet = useGameStore(state => state.updateCharacterSheet);
+  const addLogEntry = useGameStore(state => state.addLogEntry);
 
-  const [selectedOptions, setSelectedOptions] = useState<ILevelUpOption[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const availableOptions = useMemo(() => getAvailableLevelUpOptions(characterSheet), [characterSheet]);
-  const levelUpState = useMemo(() => createLevelUpPreview(characterSheet, selectedOptions), [characterSheet, selectedOptions]);
-  const totalPoints = useMemo(() => getAvailablePoints(characterSheet), [characterSheet]);
+  
+  const highlightedOption = availableOptions[selectedIndex];
 
-  const handleToggleOption = useCallback((option: ILevelUpOption) => {
-    setSelectedOptions(prevSelected => {
-      const isSelected = prevSelected.some(opt => opt.id === option.id);
-      if (isSelected) {
-        return prevSelected.filter(opt => opt.id !== option.id);
-      }
-      const newTotalCost = prevSelected.reduce((sum, opt) => sum + opt.cost, 0) + option.cost;
-      if (newTotalCost <= totalPoints) {
-        return [...prevSelected, option];
-      }
-      return prevSelected;
-    });
-  }, [totalPoints]);
-
-  const handleConfirmLevelUp = useCallback(() => {
-    const result = applyLevelUp(characterSheet, selectedOptions);
-    if (result.success) {
-      const updatedSheet = updateCharacterSheetAfterLevelUp(characterSheet, result);
-      updateCharacterSheet(updatedSheet);
-      addLogEntry(MessageType.LEVEL_UP, { 
-        level: result.newLevel,
-        statsGained: Object.entries(result.statsGained).map(([stat, value]) => `${stat}: +${value}`).join(', '),
-        hpGained: result.hpGained
-      });
-      if (result.abilitiesGained.length > 0) {
-        result.abilitiesGained.forEach(ability => {
-          addLogEntry(MessageType.ACTION_SUCCESS, { action: `Nuova abilità acquisita: ${ability}` });
+  const previewStats = useMemo(() => {
+    if (!highlightedOption) return characterSheet.stats;
+    const newStats = { ...characterSheet.stats };
+    if (highlightedOption.effects.stats) {
+        Object.entries(highlightedOption.effects.stats).forEach(([stat, value]) => {
+            newStats[stat as keyof ICharacterStats] += value;
         });
-      }
-      goBack();
-    } else {
-      addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
     }
-    setShowConfirmation(false);
-  }, [characterSheet, selectedOptions, updateCharacterSheet, addLogEntry, goBack]);
+    return newStats;
+  }, [characterSheet.stats, highlightedOption]);
 
+  const previewMaxHP = useMemo(() => {
+    if (!highlightedOption || !highlightedOption.effects.maxHP) {
+      return characterSheet.maxHP;
+    }
+    return characterSheet.maxHP + highlightedOption.effects.maxHP;
+  }, [characterSheet.maxHP, highlightedOption]);
+
+  const handleConfirmChoice = useCallback(() => {
+    if (!highlightedOption) return;
+    const updatedCharacterSheet = applyLevelUpOption(characterSheet, highlightedOption);
+    updateCharacterSheet(updatedCharacterSheet);
+    addLogEntry(MessageType.LEVEL_UP, { 
+        level: updatedCharacterSheet.level,
+        text: `Hai scelto di ${highlightedOption.name.toLowerCase()}.`
+    });
+    goBack();
+  }, [characterSheet, highlightedOption, updateCharacterSheet, addLogEntry, goBack]);
+  
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-
       if (key === 'escape') {
         event.preventDefault();
-        if (showConfirmation) setShowConfirmation(false);
-        else goBack();
+        goBack();
         return;
       }
-
-      if (showConfirmation) {
-        if (key === 'enter' || key === 'y') handleConfirmLevelUp();
-        else if (key === 'n') setShowConfirmation(false);
-        return;
+      if (!characterSheet.experience.canLevelUp) return;
+      switch (key) {
+        case 'w':
+        case 'arrowup':
+          event.preventDefault();
+          setSelectedIndex(prev => Math.max(0, prev - 1));
+          break;
+        case 's':
+        case 'arrowdown':
+          event.preventDefault();
+          setSelectedIndex(prev => Math.min(availableOptions.length - 1, prev + 1));
+          break;
+        case 'enter':
+          event.preventDefault();
+          handleConfirmChoice();
+          break;
       }
-
-      if (key === 'arrowup' || key === 'w') setSelectedIndex(prev => Math.max(0, prev - 1));
-      else if (key === 'arrowdown' || key === 's') setSelectedIndex(prev => Math.min(availableOptions.length - 1, prev + 1));
-      else if (key === 'enter' || key === ' ') handleToggleOption(availableOptions[selectedIndex]);
-      else if (key === 'l' && levelUpState.canLevelUp) setShowConfirmation(true);
-      else if (key === 'r') setSelectedOptions([]);
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [availableOptions, selectedIndex, showConfirmation, levelUpState.canLevelUp, goBack, handleToggleOption, handleConfirmLevelUp]);
-
-  // ... (Il resto del codice JSX rimane invariato, può copiarlo dal file esistente)
-  // Per sicurezza, lo includo qui sotto.
-
-  const getStatColor = (statName: string): string => {
-    const currentValue = characterSheet.stats[statName as keyof typeof characterSheet.stats];
-    const previewValue = levelUpState.previewStats[statName as keyof typeof levelUpState.previewStats];
-    if (previewValue > currentValue) return 'text-green-400';
+  }, [selectedIndex, availableOptions, goBack, characterSheet.experience.canLevelUp, handleConfirmChoice]);
+  
+  const getStatColor = (statName: keyof ICharacterStats): string => {
+    if (previewStats[statName] > characterSheet.stats[statName]) {
+      return 'text-green-400 glow-phosphor-bright';
+    }
     return 'text-phosphor-400';
   };
 
-  const isOptionSelected = (option: ILevelUpOption): boolean => selectedOptions.some(opt => opt.id === option.id);
-  const canSelectOption = (option: ILevelUpOption): boolean => {
-    if (isOptionSelected(option)) return true;
-    const currentCost = selectedOptions.reduce((sum, opt) => sum + opt.cost, 0);
-    return currentCost + option.cost <= totalPoints;
-  };
-
-  if (showConfirmation) {
+  if (!characterSheet.experience.canLevelUp) {
     return (
-      <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
-        <div className="max-w-4xl w-full bg-gray-900 bg-opacity-80 border border-phosphor-500 p-8 rounded-lg">
-          <h2 className="text-4xl font-bold mb-6 text-center text-phosphor-400">CONFERMA LEVEL UP</h2>
-          <div className="space-y-4 text-xl">
-            <p className="text-center text-phosphor-300">Sei sicuro di voler applicare questi miglioramenti?</p>
-            <div className="bg-gray-800 bg-opacity-50 p-4 rounded border border-phosphor-600">
-              <h3 className="text-phosphor-400 font-bold mb-2">Miglioramenti:</h3>
-              {selectedOptions.map(option => <div key={option.id}>• {option.name}</div>)}
+        <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
+            <h2 className="text-5xl font-bold mb-8">LEVEL UP</h2>
+            <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80 w-full max-w-4xl text-center">
+                <h3 className="text-2xl font-bold mb-4 text-phosphor-400">PROGRESSO</h3>
+                <p className="text-xl">LIVELLO ATTUALE: {characterSheet.level}</p>
+                <p className="text-xl">ESPERIENZA: {characterSheet.experience.currentXP} / {characterSheet.experience.xpForNextLevel}</p>
+                <p className="text-xl mt-4">Continua a esplorare per diventare più forte.</p>
+                <button onClick={goBack} className="mt-8 bg-gray-700 p-2 text-xl">[ESC] Torna al Gioco</button>
             </div>
-            <div className="mt-8 text-center text-2xl"><p>[<span className="text-green-400">Y</span>] Conferma | [<span className="text-red-400">N</span>] Annulla</p></div>
-          </div>
         </div>
-      </div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
-      <h2 className="text-5xl font-bold mb-8">LEVEL UP</h2>
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        <div className="border p-6">
-          <h3 className="text-2xl font-bold mb-4 text-center">STATISTICHE</h3>
-          <div className="mb-6 p-4 border rounded">
-            <h4 className="font-bold">ESPERIENZA</h4>
-            <div className="flex justify-between"><span>Livello:</span><span>{characterSheet.level}</span></div>
-            <div className="flex justify-between"><span>XP:</span><span>{characterSheet.experience.currentXP} / {characterSheet.experience.xpForNextLevel}</span></div>
-            {characterSheet.experience.canLevelUp && <div className="text-center mt-2 text-green-400 font-bold">✓ PRONTO PER LEVEL UP!</div>}
-          </div>
-          <div className="space-y-2 text-lg">
-            <div className="flex justify-between"><span>Potenza:</span><span className={getStatColor('potenza')}>{levelUpState.previewStats.potenza}</span></div>
-            <div className="flex justify-between"><span>Agilità:</span><span className={getStatColor('agilita')}>{levelUpState.previewStats.agilita}</span></div>
-            <div className="flex justify-between"><span>Vigore:</span><span className={getStatColor('vigore')}>{levelUpState.previewStats.vigore}</span></div>
-            <div className="flex justify-between"><span>Percezione:</span><span className={getStatColor('percezione')}>{levelUpState.previewStats.percezione}</span></div>
-            <div className="flex justify-between"><span>Adattamento:</span><span className={getStatColor('adattamento')}>{levelUpState.previewStats.adattamento}</span></div>
-            <div className="flex justify-between"><span>Carisma:</span><span className={getStatColor('carisma')}>{levelUpState.previewStats.carisma}</span></div>
-            {levelUpState.previewMaxHP > characterSheet.maxHP && <div className="flex justify-between"><span>HP Massimi:</span><span className="text-green-400">{levelUpState.previewMaxHP}</span></div>}
-          </div>
-        </div>
-        <div className="border p-6">
-          <h3 className="text-2xl font-bold mb-4 text-center">MIGLIORAMENTI</h3>
-          <div className="mb-4 text-center"><span>Punti Disponibili: </span><span className="font-bold text-xl">{levelUpState.availablePoints}</span> / {totalPoints}</div>
-          <div className="space-y-2 max-h-96 overflow-y-auto no-scrollbar">
-            {availableOptions.map((option, index) => {
-              const isSelected = isOptionSelected(option);
-              const canSelect = canSelectOption(option);
-              return (
-                <div key={option.id} className={`p-3 rounded border ${index === selectedIndex ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20' : isSelected ? 'border-green-400 bg-green-400 bg-opacity-10' : canSelect ? 'border-phosphor-600' : 'border-gray-600 opacity-50'}`}>
-                  <div className="flex justify-between"><span className={`font-bold ${isSelected ? 'text-green-400' : canSelect ? 'text-phosphor-300' : 'text-gray-500'}`}>{isSelected ? '✓ ' : ''}{option.name}</span><span className="text-sm px-2 py-1 rounded bg-gray-700">{option.cost} pt</span></div>
-                  <p className={`text-sm ${canSelect ? 'text-phosphor-400' : 'text-gray-500'}`}>{option.description}</p>
+    <div className="h-full flex flex-col items-center justify-center p-4 bg-black text-phosphor-500 font-mono">
+        <h2 className="text-5xl font-bold mb-4">SCEGLI UN MIGLIORAMENTO</h2>
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80">
+                <h3 className="text-2xl font-bold mb-4 text-center text-phosphor-400">STATO ATTUALE</h3>
+                <div className="space-y-2 text-xl">
+                    {(Object.keys(characterSheet.stats) as Array<keyof ICharacterStats>).map(stat => (
+                        <div key={stat} className="flex justify-between">
+                            <span className="capitalize">{stat}:</span>
+                            <span>{characterSheet.stats[stat]}</span>
+                        </div>
+                    ))}
+                    <div className="flex justify-between border-t border-phosphor-700 mt-2 pt-2">
+                        <span>HP Massimi:</span>
+                        <span>{characterSheet.maxHP}</span>
+                    </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="border p-6">
-          <h3 className="text-2xl font-bold mb-4 text-center">SELEZIONI</h3>
-          {selectedOptions.length > 0 ? (
-            <div className="space-y-2 mb-6">
-              {selectedOptions.map(option => <div key={option.id} className="bg-green-400 bg-opacity-10 border border-green-400 p-2 rounded flex justify-between"><span className="text-green-400">{option.name}</span><span>{option.cost} pt</span></div>)}
-              <div className="border-t pt-2 mt-4 flex justify-between font-bold"><span>Totale:</span><span>{selectedOptions.reduce((sum, opt) => sum + opt.cost, 0)} pt</span></div>
             </div>
-          ) : <div className="text-center italic mb-6">Nessun miglioramento selezionato</div>}
-          <div className="space-y-4">
-            {levelUpState.canLevelUp && <button className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded" onClick={() => setShowConfirmation(true)}>[L] LEVEL UP!</button>}
-            <button className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded" onClick={() => setSelectedOptions([])} disabled={selectedOptions.length === 0}>[R] Reset</button>
-          </div>
+            <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80">
+                <h3 className="text-2xl font-bold mb-4 text-center text-phosphor-400">OPZIONI</h3>
+                <div className="space-y-2">
+                    {availableOptions.map((option, index) => (
+                        <div key={option.id} className={`p-3 text-xl transition-all duration-150 ${selectedIndex === index ? 'bg-phosphor-400 text-black font-bold' : 'bg-gray-800'}`}>
+                            {option.name}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80">
+                <h3 className="text-2xl font-bold mb-4 text-center text-phosphor-400">ANTEPRIMA</h3>
+                {highlightedOption ? (
+                    <div>
+                        <p className="text-lg mb-4">{highlightedOption.description}</p>
+                        <div className="space-y-2 text-xl">
+                            {(Object.keys(previewStats) as Array<keyof ICharacterStats>).map(stat => (
+                                <div key={stat} className="flex justify-between">
+                                    <span className="capitalize">{stat}:</span>
+                                    <span className={getStatColor(stat)}>
+                                        {characterSheet.stats[stat]} → {previewStats[stat]}
+                                    </span>
+                                </div>
+                            ))}
+                            {previewMaxHP > characterSheet.maxHP && (
+                                <div className="flex justify-between border-t border-phosphor-700 mt-2 pt-2">
+                                    <span>HP Massimi:</span>
+                                    <span className="text-green-400 glow-phosphor-bright">
+                                        {characterSheet.maxHP} → {previewMaxHP}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ) : <p>Nessuna opzione disponibile.</p>}
+            </div>
         </div>
-      </div>
-      <div className="text-2xl text-center">[↑↓/WS] Naviga | [ENTER/SPAZIO] Seleziona | [L] Level Up | [R] Reset | [ESC] Esci</div>
+        <div className="mt-4 text-2xl">[↑↓/WS] Naviga | [Enter] Conferma | [ESC] Annulla</div>
     </div>
   );
 };

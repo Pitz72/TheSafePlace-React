@@ -207,143 +207,48 @@ export function getAvailableLevelUpOptions(characterSheet: ICharacterSheet): ILe
 }
 
 /**
- * Calcola i punti disponibili per il level up
+ * Applica una singola opzione di level up scelta dal giocatore e restituisce la nuova scheda personaggio.
+ * Questa funzione è il cuore del nuovo sistema basato su GDD.
+ * @param characterSheet La scheda personaggio attuale.
+ * @param option L'opzione di miglioramento scelta.
+ * @returns La scheda personaggio aggiornata.
  */
-export function getAvailablePoints(characterSheet: ICharacterSheet): number {
-  return EXPERIENCE_CONFIG.pointsPerLevel;
-}
-
-/**
- * Crea lo stato di preview per il level up
- */
-export function createLevelUpPreview(
-  characterSheet: ICharacterSheet, 
-  selectedOptions: ILevelUpOption[]
-): ILevelUpState {
-  const availablePoints = getAvailablePoints(characterSheet);
-  const usedPoints = selectedOptions.reduce((total, option) => total + option.cost, 0);
-  
-  // Calcola statistiche preview
-  const previewStats = { ...characterSheet.stats };
-  let previewMaxHP = characterSheet.maxHP;
-  
-  selectedOptions.forEach(option => {
-    if (option.effects.stats) {
-      Object.entries(option.effects.stats).forEach(([stat, value]) => {
-        previewStats[stat as keyof ICharacterStats] += value;
-      });
-    }
-    if (option.effects.maxHP) {
-      previewMaxHP += option.effects.maxHP;
-    }
-  });
-  
-  return {
-    availablePoints: availablePoints - usedPoints,
-    selectedOptions,
-    previewStats,
-    previewMaxHP,
-    canLevelUp: usedPoints > 0 && usedPoints <= availablePoints
-  };
-}
-
-/**
- * Applica il level up al personaggio
- */
-export function applyLevelUp(
-  characterSheet: ICharacterSheet, 
-  selectedOptions: ILevelUpOption[]
-): ILevelUpResult {
-  const availablePoints = getAvailablePoints(characterSheet);
-  const usedPoints = selectedOptions.reduce((total, option) => total + option.cost, 0);
-  
-  if (usedPoints > availablePoints) {
-    return {
-      success: false,
-      message: 'Punti insufficienti per questi miglioramenti.',
-      newLevel: characterSheet.level,
-      statsGained: {},
-      hpGained: 0,
-      abilitiesGained: []
-    };
-  }
-  
-  if (usedPoints === 0) {
-    return {
-      success: false,
-      message: 'Seleziona almeno un miglioramento.',
-      newLevel: characterSheet.level,
-      statsGained: {},
-      hpGained: 0,
-      abilitiesGained: []
-    };
-  }
-  
-  // Applica i miglioramenti
-  const newStats = { ...characterSheet.stats };
-  let hpGained = 0;
-  const abilitiesGained: string[] = [];
-  const statsGained: Partial<ICharacterStats> = {};
-  
-  selectedOptions.forEach(option => {
-    if (option.effects.stats) {
-      Object.entries(option.effects.stats).forEach(([stat, value]) => {
-        newStats[stat as keyof ICharacterStats] += value;
-        statsGained[stat as keyof ICharacterStats] = (statsGained[stat as keyof ICharacterStats] || 0) + value;
-      });
-    }
-    if (option.effects.maxHP) {
-      hpGained += option.effects.maxHP;
-    }
-    if (option.effects.abilities) {
-      abilitiesGained.push(...option.effects.abilities);
-    }
-  });
-  
-  const newLevel = characterSheet.level + 1;
-  const newMaxHP = characterSheet.maxHP + hpGained;
-  const newCurrentHP = Math.min(characterSheet.currentHP + hpGained, newMaxHP);
-  
-  // Aggiorna esperienza per il prossimo livello
-  const newXPForNext = calculateXPForNextLevel(newLevel);
-  
-  return {
-    success: true,
-    message: `Congratulazioni! Sei salito al livello ${newLevel}!`,
-    newLevel,
-    statsGained,
-    hpGained,
-    abilitiesGained
-  };
-}
-
-/**
- * Aggiorna il character sheet dopo il level up
- */
-export function updateCharacterSheetAfterLevelUp(
+export function applyLevelUpOption(
   characterSheet: ICharacterSheet,
-  result: ILevelUpResult
+  option: ILevelUpOption
 ): ICharacterSheet {
-  if (!result.success) return characterSheet;
-  
   const newStats = { ...characterSheet.stats };
-  Object.entries(result.statsGained).forEach(([stat, value]) => {
-    newStats[stat as keyof ICharacterStats] += value;
-  });
-  
-  const newMaxHP = characterSheet.maxHP + result.hpGained;
-  const newCurrentHP = Math.min(characterSheet.currentHP + result.hpGained, newMaxHP);
-  
-  return {
+  let newMaxHP = characterSheet.maxHP;
+  const newLevel = characterSheet.level + 1;
+
+  // Applica gli effetti della scelta
+  if (option.effects.stats) {
+    Object.entries(option.effects.stats).forEach(([stat, value]) => {
+      newStats[stat as keyof ICharacterStats] += value;
+    });
+  }
+  if (option.effects.maxHP) {
+    newMaxHP += option.effects.maxHP;
+  }
+  // Nota: La logica per le 'abilities' verrà gestita separatamente.
+
+  // Calcola la nuova esperienza
+  const remainingXP = characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel;
+  const xpForNextLevel = calculateXPForNextLevel(newLevel);
+
+  const updatedCharacterSheet: ICharacterSheet = {
     ...characterSheet,
-    level: result.newLevel,
+    level: newLevel,
     stats: newStats,
     maxHP: newMaxHP,
-    currentHP: newCurrentHP,
+    // Aumenta gli HP attuali di un importo pari all'aumento degli HP massimi, senza superare il nuovo massimo.
+    currentHP: Math.min(newMaxHP, characterSheet.currentHP + (option.effects.maxHP || 0)),
     experience: {
-      currentXP: characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel,
-      xpForNextLevel: calculateXPForNextLevel(result.newLevel),
-      canLevelUp: (characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel) >= calculateXPForNextLevel(result.newLevel)
-    }
+      currentXP: remainingXP,
+      xpForNextLevel: xpForNextLevel,
+      canLevelUp: remainingXP >= xpForNextLevel,
+    },
   };
+
+  return updatedCharacterSheet;
 }
