@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
@@ -122,6 +122,8 @@ const GameContent = () => {
   const removeNotification = useGameStore(state => state.removeNotification);
   const { videoMode } = useSettingsStore();
   
+
+
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
   const getCurrentTile = (): string => {
     if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) {
@@ -278,7 +280,7 @@ const GameContent = () => {
                     <section className="flex-1 flex flex-col">
                       <div className="panel flex-1 m-4 flex flex-col">
                         <h2 className="panel-title">MAPPA DEL MONDO</h2>
-                        <div className="flex-1 relative min-h-0">
+                        <div className="flex-1 relative min-h-0 h-full">
                           <MapViewport className="absolute inset-0" viewportWidth={viewportWidth} viewportHeight={viewportHeight} />
                         </div>
                         <div className="text-center mt-2 text-xs">

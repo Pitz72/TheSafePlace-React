@@ -44,11 +44,12 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
   const [scrollTop, setScrollTop] = useState(0);
   const SCROLL_AMOUNT = 32;
 
+  // Gestisce solo lo scroll. Il goBack è gestito da useKeyboardCommands
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      
-      if (key === 'escape' || key === 'b') {
+
+      if (key === 'escape') {
         event.preventDefault();
         goBack();
         return;
