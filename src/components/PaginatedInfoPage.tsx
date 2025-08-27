@@ -39,15 +39,21 @@ interface PaginatedInfoPageProps {
  * Stato: IMMUTABILE ✅
  */
 const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content }) => {
-  const handleBackToMenu = useGameStore(state => state.handleBackToMenu);
+  const goBack = useGameStore(state => state.goBack);
   const contentBoxRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const SCROLL_AMOUNT = 32;
 
-  // Gestisce solo lo scroll. Il goBack è gestito da useKeyboardCommands
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
+      
+      if (key === 'escape' || key === 'b') {
+        event.preventDefault();
+        goBack();
+        return;
+      }
+
       const scrollKeys = ['w', 'arrowup', 's', 'arrowdown'];
       if (!scrollKeys.includes(key)) return;
 
@@ -72,7 +78,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [goBack]);
 
   // Applica la posizione di scroll calcolata
   useEffect(() => {

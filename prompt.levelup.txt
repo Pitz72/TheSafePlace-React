@@ -1,7 +1,8 @@
-/**
- * LevelUpScreen.tsx — Schermata avanzamento personaggio
- * Sistema D&D-style per miglioramento statistiche e abilità
- */
+Prompt: Correzione Logica e Input di LevelUpScreen.tsx
+Contesto: Per risolvere il bug per cui le modifiche del level up non vengono applicate e per abilitare i comandi WASD, è necessario riscrivere il componente LevelUpScreen.tsx utilizzando useCallback per stabilizzare le funzioni di gestione e aggiornando la logica di input.
+
+Azione per l'IDE: Sostituisci l'intero contenuto del file src/components/LevelUpScreen.tsx con il seguente codice corretto e completo:
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { getAvailableLevelUpOptions, createLevelUpPreview, applyLevelUp, updateCharacterSheetAfterLevelUp, getAvailablePoints } from '../rules/levelUpSystem';
@@ -87,6 +88,9 @@ const LevelUpScreen: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [availableOptions, selectedIndex, showConfirmation, levelUpState.canLevelUp, goBack, handleToggleOption, handleConfirmLevelUp]);
+
+  // ... (Il resto del codice JSX rimane invariato, può copiarlo dal file esistente)
+  // Per sicurezza, lo includo qui sotto.
 
   const getStatColor = (statName: string): string => {
     const currentValue = characterSheet.stats[statName as keyof typeof characterSheet.stats];
