@@ -27,14 +27,35 @@ export interface Penalty {
 }
 
 /**
- * Definisce una ricompensa speciale risultante da una scelta.
+ * Tipi di ricompensa specifici che il giocatore può ottenere.
  */
-export interface Reward {
+type StatBoostReward = {
   type: 'stat_boost';
-  stat: 'stamina'; // Statistica da potenziare
+  stat: 'potenza' | 'agilita' | 'vigore' | 'percezione' | 'adattamento' | 'carisma';
   amount: number;
   duration: 'temporary' | 'permanent';
-}
+};
+
+type XpGainReward = {
+  type: 'xp_gain';
+  amount: number;
+};
+
+type HpGainReward = {
+  type: 'hp_gain';
+  amount: number;
+};
+
+type SpecialReward = {
+  type: 'special';
+  effect: string; // Es. 'reveal_map_area', 'unlock_shelter'
+};
+
+/**
+ * Definisce una ricompensa generica, che può essere di vari tipi.
+ * Questa è un'unione discriminata basata sulla proprietà 'type'.
+ */
+export type Reward = StatBoostReward | XpGainReward | HpGainReward | SpecialReward;
 
 /**
  * Definisce una singola scelta che il giocatore può compiere durante un evento.

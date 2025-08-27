@@ -9,7 +9,7 @@ import { equipItem } from '../utils/equipmentManager';
 import { isDead } from '../rules/mechanics';
 import { saveSystem } from '../utils/saveSystem';
 import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
-import type { GameEvent } from '../interfaces/events';
+import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -948,7 +948,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { addLogEntry, performAbilityCheck, addItem, updateHP, addExperience } = get();
 
     // Funzione helper per applicare un risultato specifico
-    const applyOutcome = (outcome) => {
+    const applyOutcome = (outcome: EventChoice) => {
       if (outcome.items_gained) {
         outcome.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
       }
@@ -972,7 +972,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     };
 
     // Funzione helper per applicare una penalità
-    const applyPenalty = (penalty) => {
+    const applyPenalty = (penalty: Penalty | undefined) => {
       if (!penalty) return;
       switch (penalty.type) {
         case 'damage':
@@ -1402,7 +1402,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
         // Ricostruisci lo stato del gioco dai dati salvati
         set({
-          mapData, // <-- AGGIUNGI QUESTA RIGA
+          mapData,
+          isMapLoading: false, // <-- AGGIUNGI QUESTA RIGA
           playerPosition: saveData.gameData.playerPosition,
           timeState: saveData.gameData.timeState,
           characterSheet: saveData.characterSheet,

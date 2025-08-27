@@ -341,9 +341,9 @@ export function updateCharacterSheetAfterLevelUp(
     maxHP: newMaxHP,
     currentHP: newCurrentHP,
     experience: {
-      currentXP: 0, // Reset XP dopo level up
+      currentXP: characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel,
       xpForNextLevel: calculateXPForNextLevel(result.newLevel),
-      canLevelUp: false
+      canLevelUp: (characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel) >= calculateXPForNextLevel(result.newLevel)
     }
   };
 }

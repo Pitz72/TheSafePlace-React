@@ -3,7 +3,7 @@ import './App.css';
 import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
 
-import { GameProvider } from './contexts/GameProvider';
+
 
 import { useGameStore } from './stores/gameStore';
 import { useSettingsStore } from './stores/settingsStore';
@@ -122,7 +122,17 @@ const GameContent = () => {
   const removeNotification = useGameStore(state => state.removeNotification);
   const { videoMode } = useSettingsStore();
   
-
+  useEffect(() => {
+    const unsubscribe = useGameStore.subscribe(
+      (state, prevState) => {
+        console.log('[Zustand State Change] Lo stato è cambiato.', {
+          newState: JSON.parse(JSON.stringify(state)),
+          previousState: JSON.parse(JSON.stringify(prevState))
+        });
+      }
+    );
+    return unsubscribe;
+  }, []);
 
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
   const getCurrentTile = (): string => {
@@ -361,11 +371,18 @@ const AppUI = () => {
 };
 
 function App() {
+  const initializeGame = useGameStore(state => state.initializeGame);
+  const isMapLoading = useGameStore(state => state.isMapLoading);
+
+  useEffect(() => {
+    if (isMapLoading) {
+      initializeGame();
+    }
+  }, [initializeGame, isMapLoading]);
+
   return (
     <GameErrorBoundary>
-      <GameProvider>
-        <AppUI />
-      </GameProvider>
+      <AppUI />
     </GameErrorBoundary>
   );
 }

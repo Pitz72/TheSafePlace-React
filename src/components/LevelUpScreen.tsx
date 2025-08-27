@@ -23,6 +23,8 @@ const LevelUpScreen: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+
+
   const availableOptions = useMemo(() => getAvailableLevelUpOptions(characterSheet), [characterSheet]);
   const levelUpState = useMemo(() => createLevelUpPreview(characterSheet, selectedOptions), [characterSheet, selectedOptions]);
   const totalPoints = getAvailablePoints(characterSheet);
