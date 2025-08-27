@@ -922,21 +922,66 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   resolveChoice: (choice) => {
     if (!get().currentEvent) return;
-    const { addLogEntry, performAbilityCheck, addItem } = get();
+    const { addLogEntry, performAbilityCheck, addItem, updateHP, addExperience } = get();
+
+    // Funzione helper per applicare un risultato specifico
+    const applyOutcome = (outcome) => {
+      if (outcome.items_gained) {
+        outcome.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
+      }
+      if (outcome.reward) {
+        switch (outcome.reward.type) {
+          case 'xp_gain':
+            if (outcome.reward.amount) {
+              addExperience(outcome.reward.amount);
+              addLogEntry(MessageType.ACTION_SUCCESS, { action: `Guadagni ${outcome.reward.amount} XP.` });
+            }
+            break;
+          case 'hp_gain':
+              if (outcome.reward.amount) {
+              updateHP(outcome.reward.amount);
+              addLogEntry(MessageType.HP_RECOVERY, { healing: outcome.reward.amount });
+            }
+            break;
+          // Aggiungere qui altri tipi di ricompense speciali
+        }
+      }
+    };
+
+    // Funzione helper per applicare una penalità
+    const applyPenalty = (penalty) => {
+      if (!penalty) return;
+      switch (penalty.type) {
+        case 'damage':
+          if (penalty.amount) {
+            updateHP(-penalty.amount);
+            addLogEntry(MessageType.HP_DAMAGE, { damage: penalty.amount, reason: 'le conseguenze di un evento' });
+          }
+          break;
+        // Aggiungere qui altri tipi di penalità
+      }
+    };
 
     if (choice.skillCheck) {
-      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty, false);
+      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty, true); // addToJournal = true
       const resultText = checkResult.success ? choice.successText : choice.failureText;
-      addLogEntry(MessageType.EVENT_CHOICE, { text: `[Prova: ${checkResult.total} vs ${choice.skillCheck.difficulty}] ${resultText}` });
-      if (checkResult.success && choice.items_gained) {
-        choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
+
+      // Aggiungi un log più specifico per l'evento, non usando quello di performAbilityCheck
+      addLogEntry(MessageType.EVENT_CHOICE, { text: resultText });
+
+      if (checkResult.success) {
+        applyOutcome(choice);
+      } else {
+        applyPenalty(choice.penalty);
       }
     } else {
-      if (choice.resultText) addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
-      if (choice.items_gained) {
-        choice.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
+      // Nessun skill check, applica direttamente il risultato
+      if (choice.resultText) {
+        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
       }
+      applyOutcome(choice);
     }
+
     set({ currentEvent: null });
     get().goBack();
   },
@@ -1318,8 +1363,23 @@ export const useGameStore = create<GameState>((set, get) => ({
           throw new Error('Dati di salvataggio corrotti o incompleti');
         }
 
+        // **NUOVA LOGICA: Assicura che la mappa sia caricata**
+        let mapData = get().mapData;
+        if (mapData.length === 0) {
+          try {
+            const response = await fetch('/map.txt');
+            const mapText = await response.text();
+            mapData = mapText.split('\n').filter(line => line);
+          } catch (error) {
+            console.error("Failed to load map data during game load:", error);
+            // Lancia un errore per bloccare il caricamento se la mappa non è disponibile
+            throw new Error('Impossibile caricare i dati della mappa. Caricamento annullato.');
+          }
+        }
+
         // Ricostruisci lo stato del gioco dai dati salvati
         set({
+          mapData, // <-- AGGIUNGI QUESTA RIGA
           playerPosition: saveData.gameData.playerPosition,
           timeState: saveData.gameData.timeState,
           characterSheet: saveData.characterSheet,

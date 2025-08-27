@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
@@ -122,6 +122,25 @@ const GameContent = () => {
   const removeNotification = useGameStore(state => state.removeNotification);
   const { videoMode } = useSettingsStore();
   
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const mapContainer = mapContainerRef.current;
+    if (!mapContainer) return;
+
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+        setMapDimensions({ width, height });
+      }
+    });
+
+    resizeObserver.observe(mapContainer);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
   // Calcola il tile corrente per le informazioni dinamiche - v0.1.3
   const getCurrentTile = (): string => {
     if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) {
@@ -278,8 +297,8 @@ const GameContent = () => {
                     <section className="flex-1 flex flex-col">
                       <div className="panel flex-1 m-4 flex flex-col">
                         <h2 className="panel-title">MAPPA DEL MONDO</h2>
-                        <div className="flex-1 relative min-h-0">
-                          <MapViewport className="absolute inset-0" viewportWidth={viewportWidth} viewportHeight={viewportHeight} />
+                        <div ref={mapContainerRef} className="flex-1 relative min-h-0">
+                          <MapViewport className="absolute inset-0" viewportWidth={mapDimensions.width} viewportHeight={mapDimensions.height} />
                         </div>
                         <div className="text-center mt-2 text-xs">
                           <span style={{color: 'rgb(192, 192, 192)'}}>C</span> = Città{' '}

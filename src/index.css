@@ -614,7 +614,7 @@ body {
 .theme-no-effects .game-container {
   filter: none !important;
   animation: none !important;
-  transform: none !important;
+  /* transform: none !important; <-- RIMOSSO: Causa un bug strutturale disabilitando lo scaling del layout. */
 }
 
 .theme-no-effects * {

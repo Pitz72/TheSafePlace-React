@@ -2,7 +2,7 @@
  * LevelUpScreen.tsx — Schermata avanzamento personaggio
  * Sistema D&D-style per miglioramento statistiche e abilità
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { 
   getAvailableLevelUpOptions, 
@@ -23,8 +23,8 @@ const LevelUpScreen: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const availableOptions = getAvailableLevelUpOptions(characterSheet);
-  const levelUpState = createLevelUpPreview(characterSheet, selectedOptions);
+  const availableOptions = useMemo(() => getAvailableLevelUpOptions(characterSheet), [characterSheet]);
+  const levelUpState = useMemo(() => createLevelUpPreview(characterSheet, selectedOptions), [characterSheet, selectedOptions]);
   const totalPoints = getAvailablePoints(characterSheet);
 
   useEffect(() => {
