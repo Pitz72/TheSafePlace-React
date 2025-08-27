@@ -3,7 +3,6 @@ import { useGameStore } from '../stores/gameStore';
 import { getAvailableLevelUpOptions, applyLevelUpOption } from '../rules/levelUpSystem';
 import type { ICharacterStats } from '../rules/types';
 import { MessageType } from '../data/MessageArchive';
-import type { ILevelUpOption } from '../interfaces/levelUp';
 
 const LevelUpScreen: React.FC = () => {
   // SELETTORI GRANULARI: la soluzione robusta

@@ -111,7 +111,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '3rem' }}>
-          v0.6.0 - Lazarus Rising Again
+          v0.7.0 - Top-Ranking Kid
         </p>
         
         {/* Menu Items Testuali */}

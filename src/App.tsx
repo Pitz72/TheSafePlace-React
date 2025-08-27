@@ -117,7 +117,6 @@ const GameContent = () => {
   const getModifier = useGameStore(state => state.getModifier);
   const items = useGameStore(state => state.items);
   const survivalState = useGameStore(state => state.survivalState);
-  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const notifications = useGameStore(state => state.notifications);
   const removeNotification = useGameStore(state => state.removeNotification);
   const { videoMode } = useSettingsStore();

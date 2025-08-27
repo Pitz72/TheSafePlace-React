@@ -2,7 +2,7 @@
 // Sistema D&D-style per gestione esperienza e miglioramenti
 
 import type { ICharacterSheet, ICharacterStats } from './types';
-import type { ILevelUpOption, ILevelUpState, ILevelUpResult, IExperience } from '../interfaces/levelUp';
+import type { ILevelUpOption } from '../interfaces/levelUp';
 
 /**
  * Configurazione esperienza
@@ -234,7 +234,7 @@ export function applyLevelUpOption(
 
   // Calcola la nuova esperienza
   const remainingXP = characterSheet.experience.currentXP - characterSheet.experience.xpForNextLevel;
-  const xpForNextLevel = calculateXPForNextLevel(newLevel);
+  const xpForNextLevelAfterThis = calculateXPForNextLevel(newLevel);
 
   const updatedCharacterSheet: ICharacterSheet = {
     ...characterSheet,
@@ -245,8 +245,8 @@ export function applyLevelUpOption(
     currentHP: Math.min(newMaxHP, characterSheet.currentHP + (option.effects.maxHP || 0)),
     experience: {
       currentXP: remainingXP,
-      xpForNextLevel: xpForNextLevel,
-      canLevelUp: remainingXP >= xpForNextLevel,
+      xpForNextLevel: xpForNextLevelAfterThis,
+      canLevelUp: remainingXP >= xpForNextLevelAfterThis && newLevel < 20,
     },
   };
 
