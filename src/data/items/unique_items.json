@@ -5,6 +5,7 @@
     "description": "Una bussola che sembra puntare sempre nella stessa direzione, indipendentemente da dove ti trovi.",
     "type": "unique",
     "weight": 0.5,
-    "value": 100
+    "value": 100,
+    "rarity": "Legendary"
   }
 }

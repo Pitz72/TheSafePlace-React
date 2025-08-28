@@ -1,0 +1,3000 @@
+{
+  "timestamp": "2025-08-28T06:21:24.526Z",
+  "summary": {
+    "documentedFeatures": 60,
+    "implementedFeatures": 256,
+    "missingFeatures": 56,
+    "incompleteFeatures": 0,
+    "undocumentedFeatures": 245
+  },
+  "missingFeatures": [
+    {
+      "name": "Caratteristiche Principali v0.6.4",
+      "description": "",
+      "category": "other",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema Meteo Dinamico Avanzato",
+      "description": "",
+      "category": "system",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema Rifugi",
+      "description": "",
+      "category": "system",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Miglioramenti Gameplay Core",
+      "description": "",
+      "category": "gameplay",
+      "priority": "critical",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Fondamenta Tecniche",
+      "description": "",
+      "category": "other",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema Save/Load",
+      "description": "",
+      "category": "system",
+      "priority": "critical",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema Equipaggiamento",
+      "description": "",
+      "category": "system",
+      "priority": "medium",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Gameplay Loop",
+      "description": "",
+      "category": "gameplay",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema Level Up",
+      "description": "",
+      "category": "system",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Inventario Avanzato",
+      "description": "",
+      "category": "other",
+      "priority": "low",
+      "source": "README.md",
+      "status": "documented",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Combat System (v0.5.0)",
+      "description": "Milestone dalla roadmap",
+      "category": "milestone",
+      "priority": "high",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Crafting System (v0.5.1)",
+      "description": "Milestone dalla roadmap",
+      "category": "milestone",
+      "priority": "high",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Dynamic Events (v0.5.2)",
+      "description": "Milestone dalla roadmap",
+      "category": "milestone",
+      "priority": "high",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Save System (v0.5.3)",
+      "description": "Milestone dalla roadmap",
+      "category": "milestone",
+      "priority": "high",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Creare interfacce IEnemy, ICombatStats",
+      "description": "Task 1.1.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Database nemici con statistiche bilanciate",
+      "description": "Task 1.1.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema spawn nemici per terreno",
+      "description": "Task 1.1.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "AI base per comportamenti nemici",
+      "description": "Task 1.1.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema turni combattimento",
+      "description": "Task 1.2.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Calcolo danni armi + modificatori",
+      "description": "Task 1.2.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema difesa e schivata",
+      "description": "Task 1.2.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Opzioni combattimento (attacco, difesa, fuga)",
+      "description": "Task 1.2.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "CombatScreen per interfaccia combattimento",
+      "description": "Task 1.3.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Visualizzazione nemico e statistiche",
+      "description": "Task 1.3.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Animazioni e feedback visivo",
+      "description": "Task 1.3.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Database ricette crafting",
+      "description": "Task 2.1.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema validazione materiali",
+      "description": "Task 2.1.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Logica creazione oggetti",
+      "description": "Task 2.1.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Integrazione banco lavoro rifugi",
+      "description": "Task 2.1.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "CraftingScreen per interfaccia crafting",
+      "description": "Task 2.2.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Lista ricette disponibili",
+      "description": "Task 2.2.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Anteprima materiali necessari",
+      "description": "Task 2.2.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Conferma e creazione oggetti",
+      "description": "Task 2.2.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Database eventi casuali",
+      "description": "Task 3.1.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema probabilità per terreno",
+      "description": "Task 3.1.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Gestione scelte multiple",
+      "description": "Task 3.1.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Conseguenze e reward",
+      "description": "Task 3.1.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema meteo base",
+      "description": "Task 3.2.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Effetti su movimento e sopravvivenza",
+      "description": "Task 3.2.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Messaggi atmosferici contestuali",
+      "description": "Task 3.2.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Integrazione con ciclo giorno/notte",
+      "description": "Task 3.2.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Serializzazione stato completo",
+      "description": "Task 4.1.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Sistema slot multipli",
+      "description": "Task 4.1.2",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Validazione integrità salvataggi",
+      "description": "Task 4.1.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Migrazione versioni salvataggi",
+      "description": "Task 4.1.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "SaveScreen per gestione salvataggi",
+      "description": "Task 4.2.1",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Anteprima slot con statistiche",
+      "description": "Task 4.2.3",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Conferme e validazioni",
+      "description": "Task 4.2.4",
+      "category": "task",
+      "priority": "medium",
+      "status": "planned",
+      "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Eliminazione Scrollbar",
+      "description": "Requisito funzionale DSAR",
+      "category": "requirement",
+      "priority": "critical",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Centraggio Dinamico",
+      "description": "Requisito funzionale DSAR",
+      "category": "requirement",
+      "priority": "critical",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Scaling Preservato",
+      "description": "Requisito funzionale DSAR",
+      "category": "requirement",
+      "priority": "critical",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Effetti CRT Mantenuti",
+      "description": "Requisito funzionale DSAR",
+      "category": "requirement",
+      "priority": "critical",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Performance",
+      "description": "Requisito non funzionale DSAR",
+      "category": "requirement",
+      "priority": "high",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Compatibilità Browser",
+      "description": "Requisito non funzionale DSAR",
+      "category": "requirement",
+      "priority": "high",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Responsività",
+      "description": "Requisito non funzionale DSAR",
+      "category": "requirement",
+      "priority": "high",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    },
+    {
+      "name": "Manutenibilità",
+      "description": "Requisito non funzionale DSAR",
+      "category": "requirement",
+      "priority": "high",
+      "status": "immutable",
+      "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+      "gap": "missing_implementation"
+    }
+  ],
+  "incompleteFeatures": [],
+  "undocumentedFeatures": [
+    {
+      "name": "Componente CharacterCreationScreen",
+      "description": "Componente React implementato in CharacterCreationScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterCreationScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente characterSheet",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente setCurrentScreen",
+      "description": "Componente React implementato in CharacterCreationScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterCreationScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente creationSteps",
+      "description": "Componente React implementato in CharacterCreationScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterCreationScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleConfirm",
+      "description": "Componente React implementato in CharacterCreationScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterCreationScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente hintTimer",
+      "description": "Componente React implementato in CharacterCreationScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterCreationScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente timer",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleKeyDown",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente CharacterSheetScreen",
+      "description": "Componente React implementato in CharacterSheetScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterSheetScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getModifier",
+      "description": "Componente React implementato in CharacterSheetScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterSheetScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente items",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente goBack",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente statKeys",
+      "description": "Componente React implementato in CharacterSheetScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterSheetScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente armorClass",
+      "description": "Componente React implementato in CharacterSheetScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterSheetScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente carryCapacity",
+      "description": "Componente React implementato in CharacterSheetScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/CharacterSheetScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente EventScreen",
+      "description": "Componente React implementato in EventScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/EventScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente GameJournal",
+      "description": "Componente React implementato in GameJournal.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/GameJournal.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente logEntries",
+      "description": "Componente React implementato in GameJournal.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/GameJournal.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente scrollRef",
+      "description": "Componente React implementato in GameJournal.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/GameJournal.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getMessageClass",
+      "description": "Componente React implementato in GameJournal.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/GameJournal.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente InstructionsScreen",
+      "description": "Componente React implementato in InstructionsScreen.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/InstructionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente legendItems",
+      "description": "Componente React implementato in InstructionsScreen.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/InstructionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente content",
+      "description": "Componente React implementato in StoryScreen.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/StoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente InventoryPanel",
+      "description": "Componente React implementato in InventoryPanel.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/InventoryPanel.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente itemDatabase",
+      "description": "Componente React implementato in InventoryPanel.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/InventoryPanel.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getItemColor",
+      "description": "Componente React implementato in InventoryPanel.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/InventoryPanel.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente item",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente InventoryScreen",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente selectedInventoryIndex",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente setSelectedInventoryIndex",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente useItem",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente equipItemFromInventory",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente dropItem",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente selectedItemStack",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente selectedItem",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente actions",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente action",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente availableActions",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente portionDesc",
+      "description": "Componente React implementato in InventoryScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente isSelected",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Sistema useItem",
+      "description": "Funzione useItem implementata",
+      "category": "system",
+      "completeness": "implemented",
+      "source": "components/InventoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente LevelUpScreen",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updateCharacterSheet",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente addLogEntry",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente availableOptions",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente highlightedOption",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente previewStats",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente newStats",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente previewMaxHP",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleConfirmChoice",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updatedCharacterSheet",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getStatColor",
+      "description": "Componente React implementato in LevelUpScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LevelUpScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente LoadingSpinner",
+      "description": "Componente React implementato in LoadingSpinner.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/LoadingSpinner.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente sizeClasses",
+      "description": "Componente React implementato in LoadingSpinner.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/LoadingSpinner.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente textSizeClasses",
+      "description": "Componente React implementato in LoadingSpinner.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/LoadingSpinner.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente loadSavedGame",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getSaveSlots",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente deleteSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente addNotification",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente recoverSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente exportSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente importSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente slots",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente firstValidSlot",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente firstEmptySlot",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente corruptedSlots",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente validSlots",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleKeyPress",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleLoadGame",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente selectedSlot",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente confirmLoad",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente success",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleDeleteSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleConfirmDelete",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updatedSlots",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleRecoverSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleExportSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleImportSave",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente confirmOverwrite",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente formatPlaytime",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente hours",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente mins",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente formatLocation",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente locationMap",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getSlotDisplayName",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente isVersionCompatible",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente compatibleVersions",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getVersionWarning",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente slotToDelete",
+      "description": "Componente React implementato in LoadScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/LoadScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente TILE_COLORS",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente Player",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente MapViewport",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente mapData",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente isMapLoading",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente playerPosition",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente cameraPosition",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updateCameraPosition",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente interval",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente CHAR_WIDTH",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente CHAR_HEIGHT",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente VISIBLE_ROWS",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente VISIBLE_COLS",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente sRow",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente sCol",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getTileColor",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente playerLeft",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente playerTop",
+      "description": "Componente React implementato in MapViewport.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/MapViewport.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente NotificationSystem",
+      "description": "Componente React implementato in NotificationSystem.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/NotificationSystem.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente duration",
+      "description": "Componente React implementato in NotificationSystem.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/NotificationSystem.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getNotificationStyles",
+      "description": "Componente React implementato in NotificationSystem.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/NotificationSystem.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getNotificationIcon",
+      "description": "Componente React implementato in NotificationSystem.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/NotificationSystem.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente OptionsScreen",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente navMap",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente gameKeys",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente targetIndex",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente renderSection",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente sectionItems",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente isSectionSelected",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente isActive",
+      "description": "Componente React implementato in OptionsScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/OptionsScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente PaginatedInfoPage",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente contentBoxRef",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente SCROLL_AMOUNT",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente scrollKeys",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente contentBox",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente maxScroll",
+      "description": "Componente React implementato in PaginatedInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/PaginatedInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente ShelterScreen",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente performAbilityCheck",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updateHP",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente advanceTime",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente addItem",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente canInvestigateShelter",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente updateShelterAccess",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getShelterInfo",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente shelterInfo",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente options",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleOptionSelect",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleRest",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente restTime",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente healingAmount",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleSearch",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente checkResult",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente checkDetails",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente findChance",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente lootTables",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente categoryRoll",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente categoryItems",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente foundItemId",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente foundItem",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente quantity",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente added",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleWorkbench",
+      "description": "Componente React implementato in ShelterScreen.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Sistema addItem",
+      "description": "Funzione addItem implementata",
+      "category": "system",
+      "completeness": "skeleton",
+      "source": "components/ShelterScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente StartScreen",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente menuSelectedIndex",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente setMenuSelectedIndex",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleNewGame",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleStory",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleInstructions",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleOptions",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente handleExit",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente menuItems",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente currentIndex",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente newIndex",
+      "description": "Componente React implementato in StartScreen.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/StartScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente StoryScreen",
+      "description": "Componente React implementato in StoryScreen.tsx",
+      "category": "ui",
+      "completeness": "skeleton",
+      "source": "components/StoryScreen.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente UniversalInfoPage",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente calculateSmartPages",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente allContent",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente screenHeight",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente textBoxHeight",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente lineHeight",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente paragraphSpacing",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente maxLinesPerPage",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente newPages",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente estimatedLines",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente totalPages",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente currentPageContent",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente maxParagraphs",
+      "description": "Componente React implementato in UniversalInfoPage.tsx",
+      "category": "ui",
+      "completeness": "implemented",
+      "source": "components/UniversalInfoPage.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente WeatherDisplay",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente weatherState",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getWeatherIcon",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente icons",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getWeatherName",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente names",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getIntensityColor",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getIntensityDescription",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente formatDuration",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente remainingMinutes",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente getEffectsDescription",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente descriptions",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente penalty",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Componente modifier",
+      "description": "Componente React implementato in WeatherDisplay.tsx",
+      "category": "ui",
+      "completeness": "partial",
+      "source": "components/WeatherDisplay.tsx",
+      "type": "component",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: setCurrentScreen",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: goBack",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: setMenuSelectedIndex",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: setSelectedInventoryIndex",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleNewGame",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleLoadGame",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleStory",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleInstructions",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleOptions",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleBackToMenu",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleExit",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: addLogEntry",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: advanceTime",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updatePlayerPosition",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateCameraPosition",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: getBiomeKeyFromChar",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateShelterAccess",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: resetShelterInvestigations",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateWeather",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: getWeatherPatterns",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: getTimeBasedWeatherModifiers",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: triggerEvent",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: resolveChoice",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateHP",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: addExperience",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateCharacterSheet",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: getModifier",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: performAbilityCheck",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: shortRest",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: handleNightConsumption",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: consumeFood",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: consumeDrink",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: updateBiome",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: useItem",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: addItem",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: removeItem",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: equipItemFromInventory",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: dropItem",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: getSaveSlots",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: deleteSave",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: addNotification",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: removeNotification",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: clearNotifications",
+      "description": "Azione store implementata in gameStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/gameStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: setVideoMode",
+      "description": "Azione store implementata in settingsStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/settingsStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: setAudioEnabled",
+      "description": "Azione store implementata in settingsStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/settingsStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Store Action: resetSettings",
+      "description": "Azione store implementata in settingsStore.ts",
+      "category": "store",
+      "completeness": "implemented",
+      "source": "stores/settingsStore.ts",
+      "type": "store",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Sistema Salvataggio",
+      "description": "Utility implementata in saveSystem.ts",
+      "category": "utility",
+      "completeness": "implemented",
+      "source": "utils/saveSystem.ts",
+      "type": "utility",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database ammo",
+      "description": "1 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/ammo.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database armor",
+      "description": "1 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/armor.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database consumables",
+      "description": "3 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/consumables.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database crafting_materials",
+      "description": "1 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/crafting_materials.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database quest_items",
+      "description": "1 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/quest_items.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database unique_items",
+      "description": "1 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/unique_items.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    },
+    {
+      "name": "Database weapons",
+      "description": "2 oggetti definiti",
+      "category": "data",
+      "completeness": "implemented",
+      "source": "data/items/weapons.json",
+      "type": "data",
+      "gap": "undocumented_implementation"
+    }
+  ],
+  "recommendations": [
+    {
+      "category": "Feature Critiche Mancanti",
+      "items": [
+        "Implementare Miglioramenti Gameplay Core (README.md)",
+        "Implementare Sistema Save/Load (README.md)",
+        "Implementare Eliminazione Scrollbar (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Centraggio Dinamico (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Scaling Preservato (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Effetti CRT Mantenuti (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)"
+      ]
+    },
+    {
+      "category": "Feature Importanti Mancanti",
+      "items": [
+        "Implementare Combat System (v0.5.0) (ROADMAP-GAMEPLAY-LOOP-v0.5.0.md)",
+        "Implementare Crafting System (v0.5.1) (ROADMAP-GAMEPLAY-LOOP-v0.5.0.md)",
+        "Implementare Dynamic Events (v0.5.2) (ROADMAP-GAMEPLAY-LOOP-v0.5.0.md)",
+        "Implementare Save System (v0.5.3) (ROADMAP-GAMEPLAY-LOOP-v0.5.0.md)",
+        "Implementare Performance (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Compatibilità Browser (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Responsività (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)",
+        "Implementare Manutenibilità (DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)"
+      ]
+    },
+    {
+      "category": "Documentazione da Aggiornare",
+      "items": [
+        "Documentare Componente CharacterCreationScreen implementato in components/CharacterCreationScreen.tsx",
+        "Documentare Componente characterSheet implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente setCurrentScreen implementato in components/CharacterCreationScreen.tsx",
+        "Documentare Componente creationSteps implementato in components/CharacterCreationScreen.tsx",
+        "Documentare Componente handleConfirm implementato in components/CharacterCreationScreen.tsx",
+        "Documentare Componente hintTimer implementato in components/CharacterCreationScreen.tsx",
+        "Documentare Componente timer implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente handleKeyDown implementato in components/StartScreen.tsx",
+        "Documentare Componente CharacterSheetScreen implementato in components/CharacterSheetScreen.tsx",
+        "Documentare Componente getModifier implementato in components/CharacterSheetScreen.tsx",
+        "Documentare Componente items implementato in components/ShelterScreen.tsx",
+        "Documentare Componente goBack implementato in components/ShelterScreen.tsx",
+        "Documentare Componente statKeys implementato in components/CharacterSheetScreen.tsx",
+        "Documentare Componente armorClass implementato in components/CharacterSheetScreen.tsx",
+        "Documentare Componente carryCapacity implementato in components/CharacterSheetScreen.tsx",
+        "Documentare Componente EventScreen implementato in components/EventScreen.tsx",
+        "Documentare Componente GameJournal implementato in components/GameJournal.tsx",
+        "Documentare Componente logEntries implementato in components/GameJournal.tsx",
+        "Documentare Componente scrollRef implementato in components/GameJournal.tsx",
+        "Documentare Componente getMessageClass implementato in components/GameJournal.tsx",
+        "Documentare Componente InstructionsScreen implementato in components/InstructionsScreen.tsx",
+        "Documentare Componente legendItems implementato in components/InstructionsScreen.tsx",
+        "Documentare Componente content implementato in components/StoryScreen.tsx",
+        "Documentare Componente InventoryPanel implementato in components/InventoryPanel.tsx",
+        "Documentare Componente itemDatabase implementato in components/InventoryPanel.tsx",
+        "Documentare Componente getItemColor implementato in components/InventoryPanel.tsx",
+        "Documentare Componente item implementato in components/InventoryScreen.tsx",
+        "Documentare Componente InventoryScreen implementato in components/InventoryScreen.tsx",
+        "Documentare Componente selectedInventoryIndex implementato in components/InventoryScreen.tsx",
+        "Documentare Componente setSelectedInventoryIndex implementato in components/InventoryScreen.tsx",
+        "Documentare Componente useItem implementato in components/InventoryScreen.tsx",
+        "Documentare Componente equipItemFromInventory implementato in components/InventoryScreen.tsx",
+        "Documentare Componente dropItem implementato in components/InventoryScreen.tsx",
+        "Documentare Componente selectedItemStack implementato in components/InventoryScreen.tsx",
+        "Documentare Componente selectedItem implementato in components/InventoryScreen.tsx",
+        "Documentare Componente actions implementato in components/InventoryScreen.tsx",
+        "Documentare Componente action implementato in components/InventoryScreen.tsx",
+        "Documentare Componente availableActions implementato in components/InventoryScreen.tsx",
+        "Documentare Componente portionDesc implementato in components/InventoryScreen.tsx",
+        "Documentare Componente isSelected implementato in components/OptionsScreen.tsx",
+        "Documentare Sistema useItem implementato in components/InventoryScreen.tsx",
+        "Documentare Componente LevelUpScreen implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente updateCharacterSheet implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente addLogEntry implementato in components/ShelterScreen.tsx",
+        "Documentare Componente availableOptions implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente highlightedOption implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente previewStats implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente newStats implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente previewMaxHP implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente handleConfirmChoice implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente updatedCharacterSheet implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente getStatColor implementato in components/LevelUpScreen.tsx",
+        "Documentare Componente LoadingSpinner implementato in components/LoadingSpinner.tsx",
+        "Documentare Componente sizeClasses implementato in components/LoadingSpinner.tsx",
+        "Documentare Componente textSizeClasses implementato in components/LoadingSpinner.tsx",
+        "Documentare Componente loadSavedGame implementato in components/LoadScreen.tsx",
+        "Documentare Componente getSaveSlots implementato in components/LoadScreen.tsx",
+        "Documentare Componente deleteSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente addNotification implementato in components/LoadScreen.tsx",
+        "Documentare Componente recoverSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente exportSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente importSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente slots implementato in components/LoadScreen.tsx",
+        "Documentare Componente firstValidSlot implementato in components/LoadScreen.tsx",
+        "Documentare Componente firstEmptySlot implementato in components/LoadScreen.tsx",
+        "Documentare Componente corruptedSlots implementato in components/LoadScreen.tsx",
+        "Documentare Componente validSlots implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleKeyPress implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente handleLoadGame implementato in components/StartScreen.tsx",
+        "Documentare Componente selectedSlot implementato in components/LoadScreen.tsx",
+        "Documentare Componente confirmLoad implementato in components/LoadScreen.tsx",
+        "Documentare Componente success implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleDeleteSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleConfirmDelete implementato in components/LoadScreen.tsx",
+        "Documentare Componente updatedSlots implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleRecoverSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleExportSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente handleImportSave implementato in components/LoadScreen.tsx",
+        "Documentare Componente confirmOverwrite implementato in components/LoadScreen.tsx",
+        "Documentare Componente formatPlaytime implementato in components/LoadScreen.tsx",
+        "Documentare Componente hours implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente mins implementato in components/LoadScreen.tsx",
+        "Documentare Componente formatLocation implementato in components/LoadScreen.tsx",
+        "Documentare Componente locationMap implementato in components/LoadScreen.tsx",
+        "Documentare Componente getSlotDisplayName implementato in components/LoadScreen.tsx",
+        "Documentare Componente isVersionCompatible implementato in components/LoadScreen.tsx",
+        "Documentare Componente compatibleVersions implementato in components/LoadScreen.tsx",
+        "Documentare Componente getVersionWarning implementato in components/LoadScreen.tsx",
+        "Documentare Componente slotToDelete implementato in components/LoadScreen.tsx",
+        "Documentare Componente TILE_COLORS implementato in components/MapViewport.tsx",
+        "Documentare Componente Player implementato in components/MapViewport.tsx",
+        "Documentare Componente MapViewport implementato in components/MapViewport.tsx",
+        "Documentare Componente mapData implementato in components/MapViewport.tsx",
+        "Documentare Componente isMapLoading implementato in components/MapViewport.tsx",
+        "Documentare Componente playerPosition implementato in components/ShelterScreen.tsx",
+        "Documentare Componente cameraPosition implementato in components/MapViewport.tsx",
+        "Documentare Componente updateCameraPosition implementato in components/MapViewport.tsx",
+        "Documentare Componente interval implementato in components/MapViewport.tsx",
+        "Documentare Componente CHAR_WIDTH implementato in components/MapViewport.tsx",
+        "Documentare Componente CHAR_HEIGHT implementato in components/MapViewport.tsx",
+        "Documentare Componente VISIBLE_ROWS implementato in components/MapViewport.tsx",
+        "Documentare Componente VISIBLE_COLS implementato in components/MapViewport.tsx",
+        "Documentare Componente sRow implementato in components/MapViewport.tsx",
+        "Documentare Componente sCol implementato in components/MapViewport.tsx",
+        "Documentare Componente getTileColor implementato in components/MapViewport.tsx",
+        "Documentare Componente playerLeft implementato in components/MapViewport.tsx",
+        "Documentare Componente playerTop implementato in components/MapViewport.tsx",
+        "Documentare Componente NotificationSystem implementato in components/NotificationSystem.tsx",
+        "Documentare Componente duration implementato in components/NotificationSystem.tsx",
+        "Documentare Componente getNotificationStyles implementato in components/NotificationSystem.tsx",
+        "Documentare Componente getNotificationIcon implementato in components/NotificationSystem.tsx",
+        "Documentare Componente OptionsScreen implementato in components/OptionsScreen.tsx",
+        "Documentare Componente navMap implementato in components/OptionsScreen.tsx",
+        "Documentare Componente gameKeys implementato in components/OptionsScreen.tsx",
+        "Documentare Componente targetIndex implementato in components/OptionsScreen.tsx",
+        "Documentare Componente renderSection implementato in components/OptionsScreen.tsx",
+        "Documentare Componente sectionItems implementato in components/OptionsScreen.tsx",
+        "Documentare Componente isSectionSelected implementato in components/OptionsScreen.tsx",
+        "Documentare Componente isActive implementato in components/OptionsScreen.tsx",
+        "Documentare Componente PaginatedInfoPage implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente contentBoxRef implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente SCROLL_AMOUNT implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente scrollKeys implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente contentBox implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente maxScroll implementato in components/PaginatedInfoPage.tsx",
+        "Documentare Componente ShelterScreen implementato in components/ShelterScreen.tsx",
+        "Documentare Componente performAbilityCheck implementato in components/ShelterScreen.tsx",
+        "Documentare Componente updateHP implementato in components/ShelterScreen.tsx",
+        "Documentare Componente advanceTime implementato in components/ShelterScreen.tsx",
+        "Documentare Componente addItem implementato in components/ShelterScreen.tsx",
+        "Documentare Componente canInvestigateShelter implementato in components/ShelterScreen.tsx",
+        "Documentare Componente updateShelterAccess implementato in components/ShelterScreen.tsx",
+        "Documentare Componente getShelterInfo implementato in components/ShelterScreen.tsx",
+        "Documentare Componente shelterInfo implementato in components/ShelterScreen.tsx",
+        "Documentare Componente options implementato in components/ShelterScreen.tsx",
+        "Documentare Componente handleOptionSelect implementato in components/ShelterScreen.tsx",
+        "Documentare Componente handleRest implementato in components/ShelterScreen.tsx",
+        "Documentare Componente restTime implementato in components/ShelterScreen.tsx",
+        "Documentare Componente healingAmount implementato in components/ShelterScreen.tsx",
+        "Documentare Componente handleSearch implementato in components/ShelterScreen.tsx",
+        "Documentare Componente checkResult implementato in components/ShelterScreen.tsx",
+        "Documentare Componente checkDetails implementato in components/ShelterScreen.tsx",
+        "Documentare Componente findChance implementato in components/ShelterScreen.tsx",
+        "Documentare Componente lootTables implementato in components/ShelterScreen.tsx",
+        "Documentare Componente categoryRoll implementato in components/ShelterScreen.tsx",
+        "Documentare Componente categoryItems implementato in components/ShelterScreen.tsx",
+        "Documentare Componente foundItemId implementato in components/ShelterScreen.tsx",
+        "Documentare Componente foundItem implementato in components/ShelterScreen.tsx",
+        "Documentare Componente quantity implementato in components/ShelterScreen.tsx",
+        "Documentare Componente added implementato in components/ShelterScreen.tsx",
+        "Documentare Componente handleWorkbench implementato in components/ShelterScreen.tsx",
+        "Documentare Sistema addItem implementato in components/ShelterScreen.tsx",
+        "Documentare Componente StartScreen implementato in components/StartScreen.tsx",
+        "Documentare Componente menuSelectedIndex implementato in components/StartScreen.tsx",
+        "Documentare Componente setMenuSelectedIndex implementato in components/StartScreen.tsx",
+        "Documentare Componente handleNewGame implementato in components/StartScreen.tsx",
+        "Documentare Componente handleStory implementato in components/StartScreen.tsx",
+        "Documentare Componente handleInstructions implementato in components/StartScreen.tsx",
+        "Documentare Componente handleOptions implementato in components/StartScreen.tsx",
+        "Documentare Componente handleExit implementato in components/StartScreen.tsx",
+        "Documentare Componente menuItems implementato in components/StartScreen.tsx",
+        "Documentare Componente currentIndex implementato in components/StartScreen.tsx",
+        "Documentare Componente newIndex implementato in components/StartScreen.tsx",
+        "Documentare Componente StoryScreen implementato in components/StoryScreen.tsx",
+        "Documentare Componente UniversalInfoPage implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente calculateSmartPages implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente allContent implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente screenHeight implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente textBoxHeight implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente lineHeight implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente paragraphSpacing implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente maxLinesPerPage implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente newPages implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente estimatedLines implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente totalPages implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente currentPageContent implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente maxParagraphs implementato in components/UniversalInfoPage.tsx",
+        "Documentare Componente WeatherDisplay implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente weatherState implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente getWeatherIcon implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente icons implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente getWeatherName implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente names implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente getIntensityColor implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente getIntensityDescription implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente formatDuration implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente remainingMinutes implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente getEffectsDescription implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente descriptions implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente penalty implementato in components/WeatherDisplay.tsx",
+        "Documentare Componente modifier implementato in components/WeatherDisplay.tsx",
+        "Documentare Store Action: setCurrentScreen implementato in stores/gameStore.ts",
+        "Documentare Store Action: goBack implementato in stores/gameStore.ts",
+        "Documentare Store Action: setMenuSelectedIndex implementato in stores/gameStore.ts",
+        "Documentare Store Action: setSelectedInventoryIndex implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleNewGame implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleLoadGame implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleStory implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleInstructions implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleOptions implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleBackToMenu implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleExit implementato in stores/gameStore.ts",
+        "Documentare Store Action: addLogEntry implementato in stores/gameStore.ts",
+        "Documentare Store Action: advanceTime implementato in stores/gameStore.ts",
+        "Documentare Store Action: updatePlayerPosition implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateCameraPosition implementato in stores/gameStore.ts",
+        "Documentare Store Action: getBiomeKeyFromChar implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateShelterAccess implementato in stores/gameStore.ts",
+        "Documentare Store Action: resetShelterInvestigations implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateWeather implementato in stores/gameStore.ts",
+        "Documentare Store Action: getWeatherPatterns implementato in stores/gameStore.ts",
+        "Documentare Store Action: getTimeBasedWeatherModifiers implementato in stores/gameStore.ts",
+        "Documentare Store Action: triggerEvent implementato in stores/gameStore.ts",
+        "Documentare Store Action: resolveChoice implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateHP implementato in stores/gameStore.ts",
+        "Documentare Store Action: addExperience implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateCharacterSheet implementato in stores/gameStore.ts",
+        "Documentare Store Action: getModifier implementato in stores/gameStore.ts",
+        "Documentare Store Action: performAbilityCheck implementato in stores/gameStore.ts",
+        "Documentare Store Action: shortRest implementato in stores/gameStore.ts",
+        "Documentare Store Action: handleNightConsumption implementato in stores/gameStore.ts",
+        "Documentare Store Action: consumeFood implementato in stores/gameStore.ts",
+        "Documentare Store Action: consumeDrink implementato in stores/gameStore.ts",
+        "Documentare Store Action: updateBiome implementato in stores/gameStore.ts",
+        "Documentare Store Action: useItem implementato in stores/gameStore.ts",
+        "Documentare Store Action: addItem implementato in stores/gameStore.ts",
+        "Documentare Store Action: removeItem implementato in stores/gameStore.ts",
+        "Documentare Store Action: equipItemFromInventory implementato in stores/gameStore.ts",
+        "Documentare Store Action: dropItem implementato in stores/gameStore.ts",
+        "Documentare Store Action: getSaveSlots implementato in stores/gameStore.ts",
+        "Documentare Store Action: deleteSave implementato in stores/gameStore.ts",
+        "Documentare Store Action: addNotification implementato in stores/gameStore.ts",
+        "Documentare Store Action: removeNotification implementato in stores/gameStore.ts",
+        "Documentare Store Action: clearNotifications implementato in stores/gameStore.ts",
+        "Documentare Store Action: setVideoMode implementato in stores/settingsStore.ts",
+        "Documentare Store Action: setAudioEnabled implementato in stores/settingsStore.ts",
+        "Documentare Store Action: resetSettings implementato in stores/settingsStore.ts",
+        "Documentare Sistema Salvataggio implementato in utils/saveSystem.ts",
+        "Documentare Database ammo implementato in data/items/ammo.json",
+        "Documentare Database armor implementato in data/items/armor.json",
+        "Documentare Database consumables implementato in data/items/consumables.json",
+        "Documentare Database crafting_materials implementato in data/items/crafting_materials.json",
+        "Documentare Database quest_items implementato in data/items/quest_items.json",
+        "Documentare Database unique_items implementato in data/items/unique_items.json",
+        "Documentare Database weapons implementato in data/items/weapons.json"
+      ]
+    }
+  ]
+}

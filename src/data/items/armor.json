@@ -6,6 +6,7 @@
     "type": "armor",
     "weight": 5,
     "value": 20,
-    "armorClass": 1
+    "armor": 1,
+    "rarity": "Common"
   }
 }

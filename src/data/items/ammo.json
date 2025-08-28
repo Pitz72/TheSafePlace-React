@@ -5,6 +5,8 @@
     "description": "Una scatola di munizioni per pistole 9mm.",
     "type": "ammo",
     "weight": 0.5,
-    "value": 10
+    "value": 10,
+    "stackable": true,
+    "rarity": "Common"
   }
 }

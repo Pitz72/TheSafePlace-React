@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "analysisDate": "2025-01-28",
+    "version": "0.6.4",
+    "codename": "How hard is it to wade across a river?",
+    "analyst": "Kiro AI Assistant",
+    "method": "Manual comprehensive scan"
+  },
+  "summary": {
+    "totalFiles": 400,
+    "totalDirectories": 50,
+    "codeFiles": 100,
+    "documentationFiles": 150,
+    "configFiles": 15,
+    "dataFiles": 30,
+    "assetFiles": 105
+  },
+  "filesByType": {
+    ".md": { "count": 150, "percentage": 37, "category": "documentation" },
+    ".ts": { "count": 70, "percentage": 17, "category": "source" },
+    ".tsx": { "count": 30, "percentage": 8, "category": "source" },
+    ".json": { "count": 30, "percentage": 8, "category": "data" },
+    ".js": { "count": 10, "percentage": 2, "category": "config" },
+    ".css": { "count": 5, "percentage": 1, "category": "styles" },
+    ".svg": { "count": 3, "percentage": 1, "category": "assets" },
+    ".txt": { "count": 2, "percentage": 0, "category": "data" },
+    "other": { "count": 100, "percentage": 25, "category": "misc" }
+  },
+  "directoryStructure": {
+    "src": {
+      "totalFiles": 100,
+      "subdirectories": {
+        "analysis": { "files": 20, "purpose": "Automatic analysis system", "status": "potentially_unused" },
+        "components": { "files": 19, "purpose": "React components", "status": "active" },
+        "data": { "files": 15, "purpose": "Game data", "status": "active" },
+        "hooks": { "files": 2, "purpose": "Custom React hooks", "status": "active" },
+        "interfaces": { "files": 4, "purpose": "TypeScript interfaces", "status": "active" },
+        "rules": { "files": 6, "purpose": "Game rules and mechanics", "status": "active" },
+        "stores": { "files": 2, "purpose": "State management", "status": "active" },
+        "styles": { "files": 2, "purpose": "CSS styles", "status": "active" },
+        "tests": { "files": 1, "purpose": "Formal tests", "status": "active" },
+        "utils": { "files": 20, "purpose": "Utility functions", "status": "active" },
+        "contexts": { "files": 1, "purpose": "React contexts", "status": "potentially_obsolete" }
+      }
+    },
+    "documentazione": {
+      "totalFiles": 150,
+      "subdirectories": {
+        "analisi": { "files": 26, "purpose": "Analysis reports", "status": "active" },
+        "anti-regressione": { "files": 40, "purpose": "Regression protection", "status": "active" },
+        "archivio": { "files": 14, "purpose": "Archived documents", "status": "archived" },
+        "changelog": { "files": 43, "purpose": "Change logs", "status": "active" },
+        "commit": { "files": 5, "purpose": "Commit documentation", "status": "active" },
+        "dsar": { "files": 8, "purpose": "Immutable specifications", "status": "active" },
+        "incidenti": { "files": 3, "purpose": "Incident reports", "status": "active" },
+        "roadmap": { "files": 1, "purpose": "Development roadmap", "status": "active" },
+        "session-log": { "files": 23, "purpose": "Session logs", "status": "active" },
+        "test": { "files": 3, "purpose": "Test files", "status": "active" }
+      }
+    },
+    "public": {
+      "totalFiles": 12,
+      "subdirectories": {
+        "events": { "files": 7, "purpose": "Game events", "status": "active" }
+      }
+    }
+  },
+  "coreFiles": {
+    "application": [
+      { "path": "src/App.tsx", "purpose": "Main application component", "status": "active", "criticality": "high" },
+      { "path": "src/main.tsx", "purpose": "Application entry point", "status": "active", "criticality": "high" },
+      { "path": "index.html", "purpose": "HTML entry point", "status": "active", "criticality": "high" }
+    ],
+    "stateManagement": [
+      { "path": "src/stores/gameStore.ts", "purpose": "Main game state", "status": "active", "criticality": "high" },
+      { "path": "src/stores/settingsStore.ts", "purpose": "Settings state", "status": "active", "criticality": "medium" }
+    ],
+    "gameLogic": [
+      { "path": "src/rules/mechanics.ts", "purpose": "D&D mechanics", "status": "active", "criticality": "high" },
+      { "path": "src/rules/characterGenerator.ts", "purpose": "Character generation", "status": "active", "criticality": "high" },
+      { "path": "src/rules/levelUpSystem.ts", "purpose": "Level up system", "status": "active", "criticality": "medium" }
+    ],
+    "dataFiles": [
+      { "path": "src/data/items/itemDatabase.ts", "purpose": "Item database", "status": "active", "criticality": "high" },
+      { "path": "src/data/MessageArchive.ts", "purpose": "Game messages", "status": "active", "criticality": "high" },
+      { "path": "public/map.txt", "purpose": "Game world map", "status": "active", "criticality": "high" }
+    ]
+  },
+  "issues": [
+    {
+      "id": "DUPLICATE_EVENTS",
+      "severity": "medium",
+      "category": "data_consistency",
+      "description": "Events duplicated in /src/data/events/ and /public/events/",
+      "files": [
+        "src/data/events/*.json",
+        "public/events/*.json"
+      ],
+      "impact": "Potential data inconsistency",
+      "recommendation": "Keep only /public/events/ for runtime loading"
+    },
+    {
+      "id": "UNUSED_ANALYSIS_SYSTEM",
+      "severity": "low",
+      "category": "code_quality",
+      "description": "Analysis system in /src/analysis/ appears unused",
+      "files": ["src/analysis/**/*"],
+      "impact": "Dead code increases complexity",
+      "recommendation": "Remove or integrate into main system"
+    },
+    {
+      "id": "ADHOC_TESTS",
+      "severity": "medium",
+      "category": "testing",
+      "description": "Multiple *Test.ts files in utils instead of formal test suite",
+      "files": [
+        "src/utils/browserTest.ts",
+        "src/utils/colorTest.ts",
+        "src/utils/fontTest.ts",
+        "src/utils/inventoryColorTest.ts",
+        "src/utils/inventorySelectionTest.ts",
+        "src/utils/itemActionsTest.ts",
+        "src/utils/itemOptionsTest.ts",
+        "src/utils/messageSystemTest.ts",
+        "src/utils/mountainMessageTest.ts",
+        "src/utils/portionIntegrationTest.ts",
+        "src/utils/portionSystemTest.ts",
+        "src/utils/readabilityTest.ts",
+        "src/utils/resolutionTest.ts",
+        "src/utils/riverSkillCheckTest.ts"
+      ],
+      "impact": "Fragmented testing, difficult maintenance",
+      "recommendation": "Consolidate into formal Jest test suite"
+    },
+    {
+      "id": "POTENTIAL_ORPHANS",
+      "severity": "low",
+      "category": "code_quality",
+      "description": "Files that may not be referenced",
+      "files": [
+        "src/contexts/GameContext.tsx",
+        "run-analysis.ts",
+        "eventi-GDD.md"
+      ],
+      "impact": "Unused code increases maintenance burden",
+      "recommendation": "Audit and remove if unused"
+    },
+    {
+      "id": "MULTIPLE_CONFIGS",
+      "severity": "low",
+      "category": "configuration",
+      "description": "Multiple configuration files for same tools",
+      "files": [
+        "vite.config.ts",
+        "vite-optimized.config.ts",
+        "tailwind.config.js",
+        "tailwind-enhanced.config.js"
+      ],
+      "impact": "Confusion about which config is active",
+      "recommendation": "Consolidate or clearly document usage"
+    }
+  ],
+  "metrics": {
+    "codeToDocRatio": 0.67,
+    "testCoverage": "unknown",
+    "duplicateFiles": 7,
+    "potentialOrphans": 3,
+    "configComplexity": "medium",
+    "organizationScore": 8.5
+  },
+  "recommendations": {
+    "immediate": [
+      "Resolve event duplication",
+      "Audit orphaned files",
+      "Consolidate ad-hoc tests"
+    ],
+    "shortTerm": [
+      "Document analysis system usage",
+      "Simplify configurations",
+      "Verify Context vs Zustand usage"
+    ],
+    "longTerm": [
+      "Optimize documentation ratio",
+      "Standardize naming conventions",
+      "Implement automated file auditing"
+    ]
+  }
+}

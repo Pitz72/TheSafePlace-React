@@ -1,0 +1,247 @@
+{
+  "task": "8.2",
+  "title": "Analisi feature documentate ma non implementate",
+  "timestamp": "2025-08-28T08:21:24.000Z",
+  "version": "v0.6.4",
+  "status": "completed",
+  "summary": {
+    "documented_features": 60,
+    "implemented_features": 256,
+    "missing_features": 56,
+    "incomplete_features": 0,
+    "undocumented_features": 245,
+    "gap_percentage": 93.3
+  },
+  "critical_missing_features": [
+    {
+      "name": "Sistema Combattimento",
+      "category": "core_gameplay",
+      "priority": "critical",
+      "status": "completely_missing",
+      "planned_version": "v0.5.0",
+      "current_version": "v0.6.4",
+      "components_missing": [
+        "IEnemy interface",
+        "ICombatStats interface", 
+        "Enemy database",
+        "Spawn system",
+        "AI behaviors",
+        "Turn-based combat",
+        "Damage calculation",
+        "Defense system",
+        "CombatScreen UI"
+      ]
+    },
+    {
+      "name": "Sistema Crafting",
+      "category": "core_gameplay", 
+      "priority": "high",
+      "status": "placeholder_only",
+      "planned_version": "v0.5.1",
+      "current_version": "v0.6.4",
+      "components_missing": [
+        "Recipe database",
+        "Material validation",
+        "Crafting logic",
+        "CraftingScreen UI",
+        "Recipe list",
+        "Material preview"
+      ],
+      "current_implementation": "handleWorkbench placeholder in ShelterScreen"
+    },
+    {
+      "name": "Sistema Save/Load Avanzato",
+      "category": "core_system",
+      "priority": "critical", 
+      "status": "partially_implemented",
+      "planned_version": "v0.5.3",
+      "current_version": "v0.6.4",
+      "components_missing": [
+        "SaveScreen UI",
+        "Multiple save slots",
+        "Advanced slot preview",
+        "Save integrity validation"
+      ],
+      "current_implementation": "Basic LoadScreen exists but limited"
+    },
+    {
+      "name": "Sistema Eventi Dinamici",
+      "category": "gameplay",
+      "priority": "medium",
+      "status": "partially_implemented", 
+      "planned_version": "v0.5.2",
+      "current_version": "v0.6.4",
+      "components_missing": [
+        "Rich event database",
+        "Terrain-based probability",
+        "Advanced choice handling",
+        "Complex consequences"
+      ],
+      "current_implementation": "EventScreen exists but limited events"
+    }
+  ],
+  "roadmap_analysis": {
+    "planned_milestones": [
+      {
+        "milestone": "M1: Combat System",
+        "planned_version": "v0.5.0",
+        "current_status": "not_started",
+        "estimated_effort_weeks": "4-6",
+        "blocker": "Missing base interfaces and enemy database"
+      },
+      {
+        "milestone": "M2: Crafting System", 
+        "planned_version": "v0.5.1",
+        "current_status": "placeholder_only",
+        "estimated_effort_weeks": "2-3",
+        "blocker": "Missing recipe database and core logic"
+      },
+      {
+        "milestone": "M3: Dynamic Events",
+        "planned_version": "v0.5.2", 
+        "current_status": "partial",
+        "estimated_effort_weeks": "3-4",
+        "blocker": "Limited event database"
+      },
+      {
+        "milestone": "M4: Save System",
+        "planned_version": "v0.5.3",
+        "current_status": "partial", 
+        "estimated_effort_weeks": "2-3",
+        "blocker": "Missing advanced UI"
+      }
+    ],
+    "version_gap": {
+      "planned_completion": "v0.5.3",
+      "current_version": "v0.6.4", 
+      "gap_description": "Project advanced to v0.6.4 without completing v0.5.x milestones"
+    }
+  },
+  "implemented_but_undocumented": [
+    {
+      "name": "Sistema Notifiche",
+      "component": "NotificationSystem",
+      "description": "Complete notification system not documented"
+    },
+    {
+      "name": "Sistema Errori",
+      "component": "GameErrorBoundary", 
+      "description": "Error handling system implemented"
+    },
+    {
+      "name": "Sistema Performance",
+      "component": "performanceMonitor",
+      "description": "Performance monitoring implemented"
+    },
+    {
+      "name": "Sistema Scale",
+      "component": "useGameScale",
+      "description": "Advanced scaling hook implemented"
+    },
+    {
+      "name": "Sistema Movement", 
+      "component": "usePlayerMovement",
+      "description": "Player movement hook implemented"
+    },
+    {
+      "name": "Sistema Weather",
+      "component": "WeatherDisplay",
+      "description": "Weather system and display implemented"
+    },
+    {
+      "name": "Sistema River Crossing",
+      "component": "River crossing logic",
+      "description": "River crossing mechanics implemented"
+    }
+  ],
+  "critical_issues": [
+    {
+      "issue": "Obsolete Roadmap",
+      "description": "Roadmap v0.5.0 doesn't reflect current state v0.6.4",
+      "impact": "high",
+      "recommendation": "Create realistic v0.7.0 roadmap"
+    },
+    {
+      "issue": "Documentation Misalignment", 
+      "description": "README.md describes unimplemented features as complete",
+      "impact": "high",
+      "recommendation": "Update documentation to reflect real state"
+    },
+    {
+      "issue": "Confused Priorities",
+      "description": "Critical features (combat) not implemented while secondary features are",
+      "impact": "medium", 
+      "recommendation": "Realign priorities with core gameplay needs"
+    }
+  ],
+  "recommendations": {
+    "immediate": [
+      "Update README.md to reflect real v0.6.4 state",
+      "Create realistic v0.7.0 roadmap", 
+      "Document implemented but undocumented features",
+      "Mark missing features as 'Planned' instead of 'Implemented'"
+    ],
+    "short_term": [
+      "Implement Combat System (critical milestone)",
+      "Complete Crafting System (from placeholder to functional)",
+      "Improve Save/Load System (advanced UI)",
+      "Expand Event System (richer database)"
+    ],
+    "long_term": [
+      "Synchronize documentation with each release",
+      "Validate roadmap before version advancement", 
+      "Implement automatic feature tracking",
+      "Create pre-release completeness checklist"
+    ]
+  },
+  "success_metrics": {
+    "documentation_gap": {
+      "current": "93%",
+      "target": "<10%"
+    },
+    "critical_missing_features": {
+      "current": "4 systems",
+      "target": "0 systems"
+    },
+    "documented_implemented_features": {
+      "current": "~30%", 
+      "target": "100%"
+    },
+    "roadmap_accuracy": {
+      "current": "~20%",
+      "target": "100%"
+    }
+  },
+  "next_steps": [
+    {
+      "phase": "Documentation Alignment",
+      "duration": "1-2 weeks",
+      "tasks": [
+        "Update README.md with real v0.6.4 state",
+        "Create corrective changelog for v0.6.4",
+        "Document all implemented but undocumented features",
+        "Clearly mark missing vs implemented features"
+      ]
+    },
+    {
+      "phase": "Roadmap Creation", 
+      "duration": "1 week",
+      "tasks": [
+        "Create realistic v0.7.0 roadmap",
+        "Prioritize missing features by importance",
+        "Estimate effort for each missing feature",
+        "Define achievable milestones"
+      ]
+    },
+    {
+      "phase": "Implementation",
+      "duration": "8-12 weeks", 
+      "tasks": [
+        "Implement Combat System (4-6 weeks)",
+        "Complete Crafting System (2-3 weeks)",
+        "Improve Save/Load System (2-3 weeks)",
+        "Expand Event System (2-3 weeks)"
+      ]
+    }
+  ]
+}

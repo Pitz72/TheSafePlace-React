@@ -11,7 +11,8 @@
     "effectValue": 25,
     "portionsPerUnit": 4,
     "portionEffect": 6,
-    "portionSize": "boccone"
+    "portionSize": "boccone",
+    "rarity": "Common"
   },
   "CONS_002": {
     "id": "CONS_002",
@@ -25,7 +26,8 @@
     "effectValue": 25,
     "portionsPerUnit": 5,
     "portionEffect": 5,
-    "portionSize": "sorso"
+    "portionSize": "sorso",
+    "rarity": "Common"
   },
   "CONS_003": {
     "id": "CONS_003",
@@ -39,6 +41,7 @@
     "effectValue": 10,
     "portionsPerUnit": 2,
     "portionEffect": 5,
-    "portionSize": "applicazione"
+    "portionSize": "applicazione",
+    "rarity": "Common"
   }
 }

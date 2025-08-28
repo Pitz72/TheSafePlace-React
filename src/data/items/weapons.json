@@ -1,4 +1,3 @@
-
 {
   "WEAP_001": {
     "id": "WEAP_001",
@@ -7,7 +6,8 @@
     "type": "weapon",
     "weight": 1,
     "value": 10,
-    "damage": "1d4"
+    "damage": "1d4",
+    "rarity": "Common"
   },
   "WEAP_002": {
     "id": "WEAP_002",
@@ -16,6 +16,7 @@
     "type": "weapon",
     "weight": 3,
     "value": 50,
-    "damage": "1d6"
+    "damage": "1d6",
+    "rarity": "Uncommon"
   }
 }

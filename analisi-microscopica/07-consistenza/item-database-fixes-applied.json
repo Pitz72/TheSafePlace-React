@@ -1,0 +1,99 @@
+{
+  "timestamp": "2025-08-28T05:35:36.030Z",
+  "totalFixes": 12,
+  "fixesByType": {
+    "schema_fix": 1,
+    "stackable_fix": 1,
+    "rarity_implementation": 10
+  },
+  "fixes": [
+    {
+      "type": "schema_fix",
+      "file": "armor.json",
+      "description": "Corretto armorClass -> armor per ARMOR_001",
+      "status": "completed"
+    },
+    {
+      "type": "stackable_fix",
+      "file": "ammo.json",
+      "itemId": "AMMO_001",
+      "description": "Aggiunto stackable: true per AMMO_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "weapons.json",
+      "itemId": "WEAP_001",
+      "description": "Aggiunto rarity: Common per WEAP_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "weapons.json",
+      "itemId": "WEAP_002",
+      "description": "Aggiunto rarity: Uncommon per WEAP_002",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "armor.json",
+      "itemId": "ARMOR_001",
+      "description": "Aggiunto rarity: Common per ARMOR_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "consumables.json",
+      "itemId": "CONS_001",
+      "description": "Aggiunto rarity: Common per CONS_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "consumables.json",
+      "itemId": "CONS_002",
+      "description": "Aggiunto rarity: Common per CONS_002",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "consumables.json",
+      "itemId": "CONS_003",
+      "description": "Aggiunto rarity: Common per CONS_003",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "ammo.json",
+      "itemId": "AMMO_001",
+      "description": "Aggiunto rarity: Common per AMMO_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "crafting_materials.json",
+      "itemId": "CRAFT_001",
+      "description": "Aggiunto rarity: Common per CRAFT_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "quest_items.json",
+      "itemId": "QUEST_001",
+      "description": "Aggiunto rarity: Unique per QUEST_001",
+      "status": "completed"
+    },
+    {
+      "type": "rarity_implementation",
+      "file": "unique_items.json",
+      "itemId": "UNIQUE_001",
+      "description": "Aggiunto rarity: Legendary per UNIQUE_001",
+      "status": "completed"
+    }
+  ],
+  "summary": {
+    "schemaFixes": 1,
+    "stackableFixes": 1,
+    "rarityImplementation": 10
+  }
+}

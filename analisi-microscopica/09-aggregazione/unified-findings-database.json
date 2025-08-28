@@ -1,0 +1,2049 @@
+{
+  "metadata": {
+    "generatedAt": "2025-08-28T06:35:08.619Z",
+    "version": "v0.6.4",
+    "totalFindings": 76,
+    "duplicatesRemoved": 4,
+    "analysisModules": [
+      "Inventario",
+      "Incomplete"
+    ]
+  },
+  "metrics": {
+    "totalFindings": 76,
+    "criticalFindings": 13,
+    "highFindings": 62,
+    "mediumFindings": 1,
+    "lowFindings": 0,
+    "duplicatesRemoved": 4,
+    "categoriesBreakdown": {
+      "general": {
+        "total": 1,
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "feature": {
+        "total": 56,
+        "critical": 6,
+        "high": 50,
+        "medium": 0,
+        "low": 0
+      },
+      "ui": {
+        "total": 19,
+        "critical": 7,
+        "high": 12,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "modulesBreakdown": {
+      "Inventario": {
+        "total": 5,
+        "critical": 0,
+        "high": 0,
+        "medium": 5,
+        "low": 0
+      },
+      "Incomplete": {
+        "total": 75,
+        "critical": 13,
+        "high": 62,
+        "medium": 0,
+        "low": 0
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "inventario_6aa2a799",
+      "module": "Inventario",
+      "source": "file-inventory-data.json",
+      "type": "unknown",
+      "title": "Untitled Finding",
+      "description": "Events duplicated in /src/data/events/ and /public/events/ | Analysis system in /src/analysis/ appears unused | Multiple *Test.ts files in utils instead of formal test suite | Files that may not be referenced | Multiple configuration files for same tools",
+      "severity": "medium",
+      "category": "general",
+      "component": null,
+      "details": {
+        "id": "DUPLICATE_EVENTS",
+        "severity": "medium",
+        "category": "data_consistency",
+        "description": "Events duplicated in /src/data/events/ and /public/events/",
+        "files": [
+          "src/data/events/*.json",
+          "public/events/*.json"
+        ],
+        "impact": "Potential data inconsistency",
+        "recommendation": "Keep only /public/events/ for runtime loading",
+        "consolidated": true,
+        "duplicateCount": 5
+      },
+      "timestamp": "2025-08-28T06:35:08.603Z",
+      "modules": [
+        "Inventario",
+        "Inventario",
+        "Inventario",
+        "Inventario",
+        "Inventario"
+      ],
+      "sources": [
+        "file-inventory-data.json",
+        "file-inventory-data.json",
+        "file-inventory-data.json",
+        "file-inventory-data.json",
+        "file-inventory-data.json"
+      ]
+    },
+    {
+      "id": "incomplete_1f665ea1",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Caratteristiche Principali v0.6.4",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Caratteristiche Principali v0.6.4",
+        "description": "",
+        "category": "other",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1c1656e9",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema Meteo Dinamico Avanzato",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema Meteo Dinamico Avanzato",
+        "description": "",
+        "category": "system",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_2b6d9bfb",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema Rifugi",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema Rifugi",
+        "description": "",
+        "category": "system",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_517a2127",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Miglioramenti Gameplay Core",
+      "description": "",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Miglioramenti Gameplay Core",
+        "description": "",
+        "category": "gameplay",
+        "priority": "critical",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_bcc7b3d",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Fondamenta Tecniche",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Fondamenta Tecniche",
+        "description": "",
+        "category": "other",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_4d8b2a25",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema Save/Load",
+      "description": "",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema Save/Load",
+        "description": "",
+        "category": "system",
+        "priority": "critical",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1e25592b",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema Equipaggiamento",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema Equipaggiamento",
+        "description": "",
+        "category": "system",
+        "priority": "medium",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_27b25d97",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Gameplay Loop",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Gameplay Loop",
+        "description": "",
+        "category": "gameplay",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_21fc2096",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema Level Up",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema Level Up",
+        "description": "",
+        "category": "system",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_693f062",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Inventario Avanzato",
+      "description": "",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Inventario Avanzato",
+        "description": "",
+        "category": "other",
+        "priority": "low",
+        "source": "README.md",
+        "status": "documented",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_3a9acc18",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Combat System (v0.5.0)",
+      "description": "Milestone dalla roadmap",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Combat System (v0.5.0)",
+        "description": "Milestone dalla roadmap",
+        "category": "milestone",
+        "priority": "high",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_151029c5",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Crafting System (v0.5.1)",
+      "description": "Milestone dalla roadmap",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Crafting System (v0.5.1)",
+        "description": "Milestone dalla roadmap",
+        "category": "milestone",
+        "priority": "high",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_4f2789ad",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Dynamic Events (v0.5.2)",
+      "description": "Milestone dalla roadmap",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Dynamic Events (v0.5.2)",
+        "description": "Milestone dalla roadmap",
+        "category": "milestone",
+        "priority": "high",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_427c89c2",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Save System (v0.5.3)",
+      "description": "Milestone dalla roadmap",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Save System (v0.5.3)",
+        "description": "Milestone dalla roadmap",
+        "category": "milestone",
+        "priority": "high",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_63cce026",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Creare interfacce IEnemy, ICombatStats",
+      "description": "Task 1.1.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Creare interfacce IEnemy, ICombatStats",
+        "description": "Task 1.1.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_71333a2",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Database nemici con statistiche bilanciate",
+      "description": "Task 1.1.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Database nemici con statistiche bilanciate",
+        "description": "Task 1.1.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_ab9afa3",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema spawn nemici per terreno",
+      "description": "Task 1.1.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema spawn nemici per terreno",
+        "description": "Task 1.1.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_7cb98b84",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: AI base per comportamenti nemici",
+      "description": "Task 1.1.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "AI base per comportamenti nemici",
+        "description": "Task 1.1.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_28f98621",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema turni combattimento",
+      "description": "Task 1.2.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema turni combattimento",
+        "description": "Task 1.2.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_57f28c0a",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Calcolo danni armi + modificatori",
+      "description": "Task 1.2.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Calcolo danni armi + modificatori",
+        "description": "Task 1.2.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_54317cff",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema difesa e schivata",
+      "description": "Task 1.2.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema difesa e schivata",
+        "description": "Task 1.2.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_63c9e9cc",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Opzioni combattimento (attacco, difesa, fuga)",
+      "description": "Task 1.2.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Opzioni combattimento (attacco, difesa, fuga)",
+        "description": "Task 1.2.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_2f9698b7",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: CombatScreen per interfaccia combattimento",
+      "description": "Task 1.3.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "CombatScreen per interfaccia combattimento",
+        "description": "Task 1.3.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_262dfca7",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Visualizzazione nemico e statistiche",
+      "description": "Task 1.3.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Visualizzazione nemico e statistiche",
+        "description": "Task 1.3.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_6aee8c42",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Animazioni e feedback visivo",
+      "description": "Task 1.3.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Animazioni e feedback visivo",
+        "description": "Task 1.3.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_2fb6e666",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Database ricette crafting",
+      "description": "Task 2.1.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Database ricette crafting",
+        "description": "Task 2.1.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_2d0baa01",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema validazione materiali",
+      "description": "Task 2.1.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema validazione materiali",
+        "description": "Task 2.1.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_6b02aad7",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Logica creazione oggetti",
+      "description": "Task 2.1.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Logica creazione oggetti",
+        "description": "Task 2.1.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_b6b2ac4",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Integrazione banco lavoro rifugi",
+      "description": "Task 2.1.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Integrazione banco lavoro rifugi",
+        "description": "Task 2.1.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_4b7b3a93",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: CraftingScreen per interfaccia crafting",
+      "description": "Task 2.2.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "CraftingScreen per interfaccia crafting",
+        "description": "Task 2.2.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_640f6cda",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Lista ricette disponibili",
+      "description": "Task 2.2.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Lista ricette disponibili",
+        "description": "Task 2.2.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_aee4a17",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Anteprima materiali necessari",
+      "description": "Task 2.2.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Anteprima materiali necessari",
+        "description": "Task 2.2.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_70737102",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Conferma e creazione oggetti",
+      "description": "Task 2.2.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Conferma e creazione oggetti",
+        "description": "Task 2.2.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_591dd9bd",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Database eventi casuali",
+      "description": "Task 3.1.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Database eventi casuali",
+        "description": "Task 3.1.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_5467367b",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema probabilità per terreno",
+      "description": "Task 3.1.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema probabilità per terreno",
+        "description": "Task 3.1.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_78ee9239",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Gestione scelte multiple",
+      "description": "Task 3.1.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Gestione scelte multiple",
+        "description": "Task 3.1.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_245733f7",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Conseguenze e reward",
+      "description": "Task 3.1.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Conseguenze e reward",
+        "description": "Task 3.1.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1f6330de",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema meteo base",
+      "description": "Task 3.2.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema meteo base",
+        "description": "Task 3.2.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_3797faf",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Effetti su movimento e sopravvivenza",
+      "description": "Task 3.2.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Effetti su movimento e sopravvivenza",
+        "description": "Task 3.2.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_6a2842c",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Messaggi atmosferici contestuali",
+      "description": "Task 3.2.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Messaggi atmosferici contestuali",
+        "description": "Task 3.2.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1cf5ac4d",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Integrazione con ciclo giorno/notte",
+      "description": "Task 3.2.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Integrazione con ciclo giorno/notte",
+        "description": "Task 3.2.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_41fadd12",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Serializzazione stato completo",
+      "description": "Task 4.1.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Serializzazione stato completo",
+        "description": "Task 4.1.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_4a411763",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Sistema slot multipli",
+      "description": "Task 4.1.2",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Sistema slot multipli",
+        "description": "Task 4.1.2",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1da0b7fe",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Validazione integrità salvataggi",
+      "description": "Task 4.1.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Validazione integrità salvataggi",
+        "description": "Task 4.1.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_36a1564c",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Migrazione versioni salvataggi",
+      "description": "Task 4.1.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Migrazione versioni salvataggi",
+        "description": "Task 4.1.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_71cac1ce",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: SaveScreen per gestione salvataggi",
+      "description": "Task 4.2.1",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "SaveScreen per gestione salvataggi",
+        "description": "Task 4.2.1",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1996819b",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Anteprima slot con statistiche",
+      "description": "Task 4.2.3",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Anteprima slot con statistiche",
+        "description": "Task 4.2.3",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_50884399",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Conferme e validazioni",
+      "description": "Task 4.2.4",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Conferme e validazioni",
+        "description": "Task 4.2.4",
+        "category": "task",
+        "priority": "medium",
+        "status": "planned",
+        "source": "ROADMAP-GAMEPLAY-LOOP-v0.5.0.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_267a5461",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Eliminazione Scrollbar",
+      "description": "Requisito funzionale DSAR",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Eliminazione Scrollbar",
+        "description": "Requisito funzionale DSAR",
+        "category": "requirement",
+        "priority": "critical",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_7456262e",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Centraggio Dinamico",
+      "description": "Requisito funzionale DSAR",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Centraggio Dinamico",
+        "description": "Requisito funzionale DSAR",
+        "category": "requirement",
+        "priority": "critical",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_2e8749ef",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Scaling Preservato",
+      "description": "Requisito funzionale DSAR",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Scaling Preservato",
+        "description": "Requisito funzionale DSAR",
+        "category": "requirement",
+        "priority": "critical",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_fc6e160",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Effetti CRT Mantenuti",
+      "description": "Requisito funzionale DSAR",
+      "severity": "critical",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Effetti CRT Mantenuti",
+        "description": "Requisito funzionale DSAR",
+        "category": "requirement",
+        "priority": "critical",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_4d695325",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Performance",
+      "description": "Requisito non funzionale DSAR",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Performance",
+        "description": "Requisito non funzionale DSAR",
+        "category": "requirement",
+        "priority": "high",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_5d2c9f56",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Compatibilità Browser",
+      "description": "Requisito non funzionale DSAR",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Compatibilità Browser",
+        "description": "Requisito non funzionale DSAR",
+        "category": "requirement",
+        "priority": "high",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_5a4f60a7",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Responsività",
+      "description": "Requisito non funzionale DSAR",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Responsività",
+        "description": "Requisito non funzionale DSAR",
+        "category": "requirement",
+        "priority": "high",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_1f94ec",
+      "module": "Incomplete",
+      "source": "feature-documentation-gap-analysis.json",
+      "type": "feature_missing",
+      "title": "Feature mancante: Manutenibilità",
+      "description": "Requisito non funzionale DSAR",
+      "severity": "high",
+      "category": "feature",
+      "component": null,
+      "details": {
+        "name": "Manutenibilità",
+        "description": "Requisito non funzionale DSAR",
+        "category": "requirement",
+        "priority": "high",
+        "status": "immutable",
+        "source": "DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md",
+        "gap": "missing_implementation"
+      },
+      "timestamp": "2025-08-28T06:35:08.613Z"
+    },
+    {
+      "id": "incomplete_77be9a37",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: CharacterCreationScreen.tsx",
+      "description": "Completezza: 51.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "CharacterCreationScreen.tsx",
+      "details": {
+        "name": "CharacterCreationScreen.tsx",
+        "type": "screen",
+        "completeness": 0.5142857142857142,
+        "issues": [
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata",
+          "Schermata critica senza gestione errori"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 19,
+        "lineCount": 105,
+        "priority": "critical"
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_3db0f4eb",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: CharacterSheetScreen.tsx",
+      "description": "Completezza: 61.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "CharacterSheetScreen.tsx",
+      "details": {
+        "name": "CharacterSheetScreen.tsx",
+        "type": "screen",
+        "completeness": 0.6142857142857143,
+        "issues": [
+          "Manca hasInstructions nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 14,
+        "lineCount": 103
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_2ef3b529",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: EventScreen.tsx",
+      "description": "Completezza: 32.1%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "EventScreen.tsx",
+      "details": {
+        "name": "EventScreen.tsx",
+        "type": "screen",
+        "completeness": 0.3214285714285714,
+        "issues": [
+          "Manca hasNavigation nella schermata",
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 3,
+        "lineCount": 47
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_16cdc0e8",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: GameJournal.tsx",
+      "description": "Completezza: 54.3%",
+      "severity": "high",
+      "category": "ui",
+      "component": "GameJournal.tsx",
+      "details": {
+        "name": "GameJournal.tsx",
+        "type": "component",
+        "completeness": 0.5428571428571428,
+        "issues": [],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 52,
+        "lineCount": 193
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_10b7b7bc",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: InstructionsScreen.tsx",
+      "description": "Completezza: 25.0%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "InstructionsScreen.tsx",
+      "details": {
+        "name": "InstructionsScreen.tsx",
+        "type": "screen",
+        "completeness": 0.25,
+        "issues": [
+          "Manca hasNavigation nella schermata",
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasTitle nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": false,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 2,
+        "lineCount": 75
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_315eafa5",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: InventoryPanel.tsx",
+      "description": "Completezza: 42.1%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "InventoryPanel.tsx",
+      "details": {
+        "name": "InventoryPanel.tsx",
+        "type": "panel",
+        "completeness": 0.4214285714285714,
+        "issues": [
+          "Pannello manca hasEmptyState",
+          "Pannello manca hasScrolling",
+          "Pannello manca hasInteraction"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 14,
+        "lineCount": 52
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_5e193a95",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: InventoryScreen.tsx",
+      "description": "Completezza: 51.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "InventoryScreen.tsx",
+      "details": {
+        "name": "InventoryScreen.tsx",
+        "type": "screen",
+        "completeness": 0.5142857142857142,
+        "issues": [
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 42,
+        "lineCount": 136
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_49313872",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: LevelUpScreen.tsx",
+      "description": "Completezza: 56.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "LevelUpScreen.tsx",
+      "details": {
+        "name": "LevelUpScreen.tsx",
+        "type": "screen",
+        "completeness": 0.5642857142857143,
+        "issues": [
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 32,
+        "lineCount": 162
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_77660110",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: LoadingSpinner.tsx",
+      "description": "Completezza: 57.1%",
+      "severity": "high",
+      "category": "ui",
+      "component": "LoadingSpinner.tsx",
+      "details": {
+        "name": "LoadingSpinner.tsx",
+        "type": "utility",
+        "completeness": 0.5714285714285714,
+        "issues": [],
+        "features": {
+          "hasState": false,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": true,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 5,
+        "lineCount": 45
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_41d2f245",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: LoadScreen.tsx",
+      "description": "Completezza: 77.9%",
+      "severity": "high",
+      "category": "ui",
+      "component": "LoadScreen.tsx",
+      "details": {
+        "name": "LoadScreen.tsx",
+        "type": "screen",
+        "completeness": 0.7785714285714286,
+        "issues": [
+          "Manca hasInstructions nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": true,
+          "hasLoading": true,
+          "hasValidation": true,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 109,
+        "lineCount": 573,
+        "priority": "critical"
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_4dfa465b",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: MapViewport.tsx",
+      "description": "Completezza: 64.3%",
+      "severity": "high",
+      "category": "ui",
+      "component": "MapViewport.tsx",
+      "details": {
+        "name": "MapViewport.tsx",
+        "type": "component",
+        "completeness": 0.6428571428571428,
+        "issues": [],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 22,
+        "lineCount": 99
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_7f99644d",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: NotificationSystem.tsx",
+      "description": "Completezza: 49.3%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "NotificationSystem.tsx",
+      "details": {
+        "name": "NotificationSystem.tsx",
+        "type": "system",
+        "completeness": 0.4928571428571428,
+        "issues": [
+          "Sistema manca hasConfiguration",
+          "Sistema manca hasCleanup",
+          "Sistema manca hasErrorBoundary"
+        ],
+        "features": {
+          "hasState": false,
+          "hasEffects": true,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": true,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 23,
+        "lineCount": 95
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_78618e2d",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: OptionsScreen.tsx",
+      "description": "Completezza: 51.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "OptionsScreen.tsx",
+      "details": {
+        "name": "OptionsScreen.tsx",
+        "type": "screen",
+        "completeness": 0.5142857142857142,
+        "issues": [
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [
+          {
+            "text": "placeholder",
+            "line": 66,
+            "context": "    {\n      id: 'other_placeholder',\n      label: 'IMPOSTAZIONI AGGIUNTIVE',"
+          }
+        ],
+        "todos": [],
+        "complexity": 37,
+        "lineCount": 187
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_cb96433",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: PaginatedInfoPage.tsx",
+      "description": "Completezza: 71.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "PaginatedInfoPage.tsx",
+      "details": {
+        "name": "PaginatedInfoPage.tsx",
+        "type": "component",
+        "completeness": 0.7142857142857143,
+        "issues": [],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 15,
+        "lineCount": 126
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_215c284c",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: ShelterScreen.tsx",
+      "description": "Completezza: 41.4%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "ShelterScreen.tsx",
+      "details": {
+        "name": "ShelterScreen.tsx",
+        "type": "screen",
+        "completeness": 0.41428571428571426,
+        "issues": [
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [
+          {
+            "text": "placeholder",
+            "line": 37,
+            "context": "    { id: 'search', name: 'Investigare il rifugio', description: 'Cerca oggetti utili o indizi' },\n    { id: 'workbench', name: 'Usare il banco di lavoro', description: 'Crafting e riparazioni (placeholder)' },\n    { id: 'leave', name: 'Lasciare il rifugio', description: 'Torna alla mappa' }"
+          }
+        ],
+        "todos": [],
+        "complexity": 55,
+        "lineCount": 229
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_460d930f",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: StartScreen.tsx",
+      "description": "Completezza: 36.4%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "StartScreen.tsx",
+      "details": {
+        "name": "StartScreen.tsx",
+        "type": "screen",
+        "completeness": 0.3642857142857142,
+        "issues": [
+          "Manca hasNavigation nella schermata",
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasTitle nella schermata",
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata",
+          "Schermata critica senza gestione errori"
+        ],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 16,
+        "lineCount": 148,
+        "priority": "critical"
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_526bba3c",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: StoryScreen.tsx",
+      "description": "Completezza: 20.0%",
+      "severity": "critical",
+      "category": "ui",
+      "component": "StoryScreen.tsx",
+      "details": {
+        "name": "StoryScreen.tsx",
+        "type": "screen",
+        "completeness": 0.19999999999999996,
+        "issues": [
+          "Manca hasNavigation nella schermata",
+          "Manca hasKeyboardNav nella schermata",
+          "Manca hasTitle nella schermata",
+          "Manca hasInstructions nella schermata",
+          "Manca hasErrorStates nella schermata",
+          "Manca hasLoadingStates nella schermata"
+        ],
+        "features": {
+          "hasState": false,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 1,
+        "lineCount": 27
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_43b51a4b",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: UniversalInfoPage.tsx",
+      "description": "Completezza: 71.4%",
+      "severity": "high",
+      "category": "ui",
+      "component": "UniversalInfoPage.tsx",
+      "details": {
+        "name": "UniversalInfoPage.tsx",
+        "type": "component",
+        "completeness": 0.7142857142857143,
+        "issues": [],
+        "features": {
+          "hasState": true,
+          "hasEffects": true,
+          "hasKeyboardHandling": true,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 43,
+        "lineCount": 210
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    },
+    {
+      "id": "incomplete_33b0b181",
+      "module": "Incomplete",
+      "source": "ui-completeness-analysis.json",
+      "type": "ui_incomplete",
+      "title": "Componente incompleto: WeatherDisplay.tsx",
+      "description": "Completezza: 57.1%",
+      "severity": "high",
+      "category": "ui",
+      "component": "WeatherDisplay.tsx",
+      "details": {
+        "name": "WeatherDisplay.tsx",
+        "type": "display",
+        "completeness": 0.5714285714285714,
+        "issues": [],
+        "features": {
+          "hasState": true,
+          "hasEffects": false,
+          "hasKeyboardHandling": false,
+          "hasErrorHandling": false,
+          "hasLoading": false,
+          "hasValidation": false,
+          "hasAccessibility": false
+        },
+        "placeholders": [],
+        "todos": [],
+        "complexity": 29,
+        "lineCount": 106
+      },
+      "timestamp": "2025-08-28T06:35:08.617Z"
+    }
+  ],
+  "categories": {
+    "general": [
+      "inventario_6aa2a799"
+    ],
+    "feature": [
+      "incomplete_1f665ea1",
+      "incomplete_1c1656e9",
+      "incomplete_2b6d9bfb",
+      "incomplete_517a2127",
+      "incomplete_bcc7b3d",
+      "incomplete_4d8b2a25",
+      "incomplete_1e25592b",
+      "incomplete_27b25d97",
+      "incomplete_21fc2096",
+      "incomplete_693f062",
+      "incomplete_3a9acc18",
+      "incomplete_151029c5",
+      "incomplete_4f2789ad",
+      "incomplete_427c89c2",
+      "incomplete_63cce026",
+      "incomplete_71333a2",
+      "incomplete_ab9afa3",
+      "incomplete_7cb98b84",
+      "incomplete_28f98621",
+      "incomplete_57f28c0a",
+      "incomplete_54317cff",
+      "incomplete_63c9e9cc",
+      "incomplete_2f9698b7",
+      "incomplete_262dfca7",
+      "incomplete_6aee8c42",
+      "incomplete_2fb6e666",
+      "incomplete_2d0baa01",
+      "incomplete_6b02aad7",
+      "incomplete_b6b2ac4",
+      "incomplete_4b7b3a93",
+      "incomplete_640f6cda",
+      "incomplete_aee4a17",
+      "incomplete_70737102",
+      "incomplete_591dd9bd",
+      "incomplete_5467367b",
+      "incomplete_78ee9239",
+      "incomplete_245733f7",
+      "incomplete_1f6330de",
+      "incomplete_3797faf",
+      "incomplete_6a2842c",
+      "incomplete_1cf5ac4d",
+      "incomplete_41fadd12",
+      "incomplete_4a411763",
+      "incomplete_1da0b7fe",
+      "incomplete_36a1564c",
+      "incomplete_71cac1ce",
+      "incomplete_1996819b",
+      "incomplete_50884399",
+      "incomplete_267a5461",
+      "incomplete_7456262e",
+      "incomplete_2e8749ef",
+      "incomplete_fc6e160",
+      "incomplete_4d695325",
+      "incomplete_5d2c9f56",
+      "incomplete_5a4f60a7",
+      "incomplete_1f94ec"
+    ],
+    "ui": [
+      "incomplete_77be9a37",
+      "incomplete_3db0f4eb",
+      "incomplete_2ef3b529",
+      "incomplete_16cdc0e8",
+      "incomplete_10b7b7bc",
+      "incomplete_315eafa5",
+      "incomplete_5e193a95",
+      "incomplete_49313872",
+      "incomplete_77660110",
+      "incomplete_41d2f245",
+      "incomplete_4dfa465b",
+      "incomplete_7f99644d",
+      "incomplete_78618e2d",
+      "incomplete_cb96433",
+      "incomplete_215c284c",
+      "incomplete_460d930f",
+      "incomplete_526bba3c",
+      "incomplete_43b51a4b",
+      "incomplete_33b0b181"
+    ]
+  },
+  "duplicates": [
+    {
+      "originalId": "inventario_6aa2a799",
+      "duplicateId": "inventario_6aa2a799",
+      "reason": "Similar title and category"
+    },
+    {
+      "originalId": "inventario_6aa2a799",
+      "duplicateId": "inventario_6aa2a799",
+      "reason": "Similar title and category"
+    },
+    {
+      "originalId": "inventario_6aa2a799",
+      "duplicateId": "inventario_6aa2a799",
+      "reason": "Similar title and category"
+    },
+    {
+      "originalId": "inventario_6aa2a799",
+      "duplicateId": "inventario_6aa2a799",
+      "reason": "Similar title and category"
+    }
+  ]
+}
