@@ -34,7 +34,7 @@ const ShelterScreen: React.FC = () => {
   const options = [
     { id: 'rest', name: 'Riposare (2-3 ore)', description: 'Recupera alcuni HP riposando nel rifugio' },
     { id: 'search', name: 'Investigare il rifugio', description: 'Cerca oggetti utili o indizi' },
-    { id: 'workbench', name: 'Usare il banco di lavoro', description: 'Crafting e riparazioni (placeholder)' },
+    { id: 'workbench', name: '[B]anco di Lavoro', description: 'Crea e migliora oggetti usando i materiali raccolti' },
     { id: 'leave', name: 'Lasciare il rifugio', description: 'Torna alla mappa' }
   ];
 
@@ -201,10 +201,23 @@ const ShelterScreen: React.FC = () => {
   };
 
   const handleWorkbench = () => {
+    // Verifica se il crafting è disponibile (solo nei rifugi)
+    const { x, y } = playerPosition;
+    const currentTile = useGameStore.getState().mapData[y]?.[x];
+    
+    if (currentTile !== 'R') {
+      addLogEntry(MessageType.ACTION_FAIL, {
+        reason: 'il banco di lavoro è disponibile solo nei rifugi sicuri'
+      });
+      return;
+    }
+    
+    // Apri la schermata di crafting
+    setCurrentScreen('crafting');
+    
     addLogEntry(MessageType.ACTION_SUCCESS, {
-      action: 'esamini il banco di lavoro - funzionalità in sviluppo'
+      action: 'ti avvicini al banco di lavoro'
     });
-    setSearchResult('Il banco di lavoro sembra funzionante, ma non hai ancora le competenze per usarlo.');
   };
 
   return (

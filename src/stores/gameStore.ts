@@ -342,6 +342,16 @@ export const useGameStore = create<GameState>((set, get) => ({
     return !shelterInfo.hasBeenInvestigated;
   },
 
+  isPlayerInShelter: (): boolean => {
+    const { playerPosition, mapData } = get();
+    if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) {
+      return false;
+    }
+    
+    const currentTile = mapData[playerPosition.y]?.[playerPosition.x];
+    return currentTile === 'R';
+  },
+
   resetShelterInvestigations: () => {
     // Resetta tutte le investigazioni per una nuova sessione
     set(state => {

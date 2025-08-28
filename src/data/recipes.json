@@ -1,0 +1,348 @@
+{
+  "recipes": [
+    {
+      "id": "sharpened_knife",
+      "resultItemId": "knife_sharp",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Affila un coltello smussato per renderlo più efficace in combattimento.",
+      "components": [
+        {
+          "itemId": "knife_dull",
+          "quantity": 1
+        },
+        {
+          "itemId": "whetstone",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 2
+      },
+      "unlockedByLevel": 2
+    },
+    {
+      "id": "clean_bandages",
+      "resultItemId": "bandages_clean",
+      "resultQuantity": 2,
+      "category": "consumables",
+      "description": "Pulisce e sterilizza bende sporche per renderle sicure da usare.",
+      "components": [
+        {
+          "itemId": "bandages_dirty",
+          "quantity": 2
+        },
+        {
+          "itemId": "alcohol",
+          "quantity": 1
+        }
+      ],
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "simple_trap",
+      "resultItemId": "trap_simple",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Costruisce una trappola semplice per catturare piccoli animali.",
+      "components": [
+        {
+          "itemId": "rope",
+          "quantity": 1
+        },
+        {
+          "itemId": "metal_scrap",
+          "quantity": 2
+        },
+        {
+          "itemId": "wood_plank",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 3
+      },
+      "unlockedByLevel": 3
+    },
+    {
+      "id": "reinforced_armor",
+      "resultItemId": "leather_armor_reinforced",
+      "resultQuantity": 1,
+      "category": "armor",
+      "description": "Rinforza un'armatura di cuoio con piastre metalliche per maggiore protezione.",
+      "components": [
+        {
+          "itemId": "leather_armor",
+          "quantity": 1
+        },
+        {
+          "itemId": "metal_plate",
+          "quantity": 3
+        },
+        {
+          "itemId": "leather_strips",
+          "quantity": 2
+        }
+      ],
+      "skillRequirement": {
+        "skill": "smithing",
+        "level": 4
+      },
+      "unlockedByLevel": 5
+    },
+    {
+      "id": "healing_potion",
+      "resultItemId": "potion_healing",
+      "resultQuantity": 1,
+      "category": "consumables",
+      "description": "Prepara una pozione curativa usando erbe medicinali.",
+      "components": [
+        {
+          "itemId": "herb_healing",
+          "quantity": 3
+        },
+        {
+          "itemId": "water_clean",
+          "quantity": 1
+        },
+        {
+          "itemId": "bottle_empty",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "alchemy",
+        "level": 3
+      },
+      "unlockedByManual": "alchemy_basics"
+    },
+    {
+      "id": "improvised_weapon",
+      "resultItemId": "club_spiked",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Crea un'arma improvvisata attaccando chiodi a un bastone.",
+      "components": [
+        {
+          "itemId": "wood_stick",
+          "quantity": 1
+        },
+        {
+          "itemId": "nails",
+          "quantity": 5
+        },
+        {
+          "itemId": "rope",
+          "quantity": 1
+        }
+      ],
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "fire_starter",
+      "resultItemId": "tinder_box",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Assembla un kit per accendere fuochi rapidamente.",
+      "components": [
+        {
+          "itemId": "flint",
+          "quantity": 1
+        },
+        {
+          "itemId": "steel_piece",
+          "quantity": 1
+        },
+        {
+          "itemId": "dry_tinder",
+          "quantity": 3
+        }
+      ],
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "water_purifier",
+      "resultItemId": "water_filter",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Costruisce un filtro per purificare l'acqua contaminata.",
+      "components": [
+        {
+          "itemId": "cloth_clean",
+          "quantity": 2
+        },
+        {
+          "itemId": "charcoal",
+          "quantity": 3
+        },
+        {
+          "itemId": "container_metal",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "engineering",
+        "level": 2
+      },
+      "unlockedByLevel": 4
+    },
+    {
+      "id": "lockpick_set",
+      "resultItemId": "lockpicks",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Forgia un set di grimaldelli per aprire serrature.",
+      "components": [
+        {
+          "itemId": "wire_thin",
+          "quantity": 3
+        },
+        {
+          "itemId": "metal_file",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "smithing",
+        "level": 2
+      },
+      "unlockedByManual": "thievery_guide"
+    },
+    {
+      "id": "energy_bar",
+      "resultItemId": "food_energy_bar",
+      "resultQuantity": 3,
+      "category": "consumables",
+      "description": "Prepara barrette energetiche nutrienti per lunghi viaggi.",
+      "components": [
+        {
+          "itemId": "nuts_mixed",
+          "quantity": 2
+        },
+        {
+          "itemId": "dried_fruit",
+          "quantity": 2
+        },
+        {
+          "itemId": "honey",
+          "quantity": 1
+        }
+      ],
+      "unlockedByLevel": 2
+    },
+    {
+      "id": "upgrade_knife_reinforced",
+      "type": "upgrade",
+      "resultItemId": "knife_reinforced",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Rinforza un coltello affilato con una lama di metallo per maggiore durabilità.",
+      "components": [
+        {
+          "itemId": "metal_scrap",
+          "quantity": 2
+        },
+        {
+          "itemId": "leather_strips",
+          "quantity": 1
+        }
+      ],
+      "upgradeConfig": {
+        "baseItemId": "knife_sharp",
+        "upgradeLevel": 1,
+        "consumeBaseItem": true,
+        "improvements": {
+          "damageBonus": 2,
+          "durabilityBonus": 50,
+          "specialProperties": ["reinforced"]
+        }
+      },
+      "skillRequirement": {
+        "skill": "smithing",
+        "level": 3
+      },
+      "unlockedByLevel": 4
+    },
+    {
+      "id": "repair_basic_items",
+      "type": "repair",
+      "resultItemId": "repair_kit_used",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Ripara oggetti danneggiati usando un kit di riparazione base.",
+      "components": [
+        {
+          "itemId": "repair_kit",
+          "quantity": 1
+        },
+        {
+          "itemId": "metal_scrap",
+          "quantity": 1
+        }
+      ],
+      "repairConfig": {
+        "repairableTypes": ["weapon", "tool", "armor"],
+        "durabilityRestored": 75,
+        "canFail": true,
+        "successChance": 85
+      },
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 2
+      },
+      "unlockedByLevel": 2
+    },
+    {
+      "id": "dismantle_electronics",
+      "type": "dismantle",
+      "resultItemId": "electronic_parts",
+      "resultQuantity": 3,
+      "category": "materials",
+      "description": "Smantella dispositivi elettronici per recuperare componenti utili.",
+      "components": [
+        {
+          "itemId": "broken_radio",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "engineering",
+        "level": 2
+      },
+      "unlockedByLevel": 3
+    },
+    {
+      "id": "enhance_armor_spikes",
+      "type": "enhancement",
+      "resultItemId": "leather_armor_spiked",
+      "resultQuantity": 1,
+      "category": "armor",
+      "description": "Aggiunge spuntoni a un'armatura di cuoio per infliggere danni ai nemici in mischia.",
+      "components": [
+        {
+          "itemId": "metal_spikes",
+          "quantity": 4
+        },
+        {
+          "itemId": "strong_adhesive",
+          "quantity": 1
+        }
+      ],
+      "upgradeConfig": {
+        "baseItemId": "leather_armor",
+        "upgradeLevel": 1,
+        "consumeBaseItem": true,
+        "improvements": {
+          "specialProperties": ["thorns", "intimidating"]
+        }
+      },
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 4
+      },
+      "unlockedByLevel": 5
+    }
+  ]
+}

@@ -102,6 +102,7 @@ import InventoryPanel from './components/InventoryPanel';
 
 import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
+import CraftingScreen from './components/crafting/CraftingScreen';
 import WeatherDisplay from './components/WeatherDisplay';
 
 
@@ -215,6 +216,7 @@ const GameContent = () => {
           {currentScreen === 'inventory' && <InventoryScreen />}
           {currentScreen === 'levelUp' && <LevelUpScreen />}
           {currentScreen === 'shelter' && <ShelterScreen />}
+          {currentScreen === 'crafting' && <CraftingScreen />}
           {currentScreen === 'event' && <EventScreen />}
           {currentScreen === 'loadGame' && <LoadScreen />}
           

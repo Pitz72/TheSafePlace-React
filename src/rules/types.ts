@@ -51,6 +51,7 @@ export interface ICharacterSheet {
     xpForNextLevel: number;
     canLevelUp: boolean;
   };
+  knownRecipes: string[]; // ID delle ricette conosciute dal giocatore
 }
 
 /**

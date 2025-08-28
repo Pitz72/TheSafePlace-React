@@ -19,7 +19,7 @@ export interface TimeState {
   isDay: boolean; // true se è giorno, false se è notte
 }
 
-export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event' | 'loadGame';
+export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event' | 'loadGame' | 'crafting';
 
 export interface SurvivalState {
   hunger: number;
