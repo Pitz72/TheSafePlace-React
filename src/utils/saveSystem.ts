@@ -23,8 +23,7 @@ export interface GameSaveData {
   playerPosition: { x: number; y: number };
   currentScreen: Screen;
   currentBiome: string | null;
-  visitedShelters: Record<string, boolean>;
-  shelterAccessState?: Record<string, any>; // v0.6.1 - nuovo sistema rifugi
+  shelterAccessState?: Record<string, any>; // v0.6.1 - sistema rifugi
   weatherState?: any; // v0.6.1 - sistema meteo
   seenEventIds?: string[]; // eventi già visti
   gameFlags: Record<string, any>; // for future quest/event tracking
@@ -367,9 +366,9 @@ export class SaveSystem {
           gameData.playerPosition = { x: 0, y: 0 };
         }
         
-        // Fix missing visited shelters
-        if (!gameData.visitedShelters) {
-          gameData.visitedShelters = {};
+        // Fix missing shelter access state
+        if (!gameData.shelterAccessState) {
+          gameData.shelterAccessState = {};
         }
       }
       

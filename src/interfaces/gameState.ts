@@ -84,8 +84,7 @@ export interface GameState {
   survivalState: SurvivalState;
   
   // Shelter state
-  visitedShelters: Record<string, boolean>; // Deprecated - mantenuto per compatibilità
-  shelterAccessState: Record<string, ShelterAccessInfo>; // Nuovo sistema v0.6.1
+  shelterAccessState: Record<string, ShelterAccessInfo>; // Sistema rifugi v0.6.1
   
   // Weather state
   weatherState: WeatherState;

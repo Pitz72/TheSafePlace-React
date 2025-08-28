@@ -1,40 +1,41 @@
-# The Safe Place v0.6.4 "How hard is it to wade across a river?"
+# The Safe Place v0.7.0 "Top-Ranking Kid"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
 **The Safe Place** è un gioco di ruolo roguelike postapocalittico che ricrea l'esperienza visiva di un monitor a fosfori verdi degli anni '80, combinando gameplay testuale con interfaccia moderna React e sistema narrativo avanzato.
 
-### 🌟 Caratteristiche Principali v0.6.4
+### 🌟 Caratteristiche Principali v0.7.0
 
-#### 🌧️ Sistema Meteo Dinamico Avanzato
-- **Integrazione Movimento-Meteo**: Il meteo influenza realisticamente il tempo di movimento e il consumo di risorse
-- **Effetti Atmosferici**: Tempeste e pioggia intensa possono causare danni e rallentamenti significativi
-- **Messaggi Immersivi**: Sistema di messaggi atmosferici casuali basati sulle condizioni meteorologiche correnti
-- **Bilanciamento Realistico**: Condizioni estreme richiedono pianificazione strategica del movimento
+#### 🔧 Stabilizzazione Architetturale Completa
+- **Sistema Zustand Stabilizzato**: Risolti crash e loop infiniti dopo il refactoring architetturale
+- **Gestione Stato Centralizzata**: Eliminazione del vecchio GameProvider che causava reset indesiderati
+- **Performance Ottimizzate**: Sistema di state management unificato e performante
+- **Architettura Solida**: Fondamenta stabili per sviluppi futuri
 
-#### 🏠 Sistema Rifugi Completamente Rivisto
-- **Regole di Accesso Corrette**: Ogni rifugio visitabile solo una volta durante il giorno, sempre accessibile di notte
-- **Investigazione per Sessione**: Sistema di investigazione bilanciato con reset ad ogni nuova sessione di gioco
-- **Persistenza Intelligente**: Stato dei rifugi mantenuto tra visite con messaggi informativi chiari
-- **Testing Completo**: 8 test automatizzati garantiscono la correttezza del sistema
+#### 🎯 Sistema Level Up Completamente Ricostruito
+- **Meccaniche D&D Autentiche**: Sistema fedele alle specifiche del Game Design Document
+- **Multi-Level-Up Innovativo**: Possibilità di salire più livelli consecutivamente in una sessione
+- **9 Opzioni di Potenziamento**: Statistiche base, HP boost, addestramenti specializzati
+- **Progressione Fluida**: Esperienza utente senza interruzioni per level up multipli
+- **Persistenza Garantita**: Stato del personaggio salvato correttamente
 
-#### 🎮 Miglioramenti Gameplay Core
-- **Eventi Bilanciati**: Probabilità eventi ridotta al 20% per un ritmo di gioco più equilibrato
-- **Feedback Migliorato**: Messaggi chiari e informativi per tutte le azioni del giocatore
-- **Compatibilità Salvataggi**: Migrazione automatica da versioni precedenti con reset intelligente delle investigazioni
+#### 🎮 Stabilità UI e Navigazione
+- **Navigazione Corretta**: Tasto ESC funziona correttamente per chiudere schermate
+- **Pannello Impostazioni Riparato**: Bug critico CRT che nascondeva la schermata risolto
+- **Camera di Gioco Restaurata**: Algoritmo di movimento camera recuperato e reimplementato
+- **Transizioni Fluide**: Navigazione tra schermate stabile e senza errori
 
-#### 🌊 Sistema Attraversamento Fiumi Strategico (NUOVO v0.6.4)
-- **Integrazione Meteo Avanzata**: Condizioni meteorologiche influenzano drasticamente la difficoltà di attraversamento
-- **Modificatori Equipaggiamento**: Corde aiutano, armature pesanti ostacolano, stivali impermeabili proteggono
-- **Danni Dinamici**: Fallimenti causano danni variabili basati su condizioni meteo e equipaggiamento
-- **Feedback Trasparente**: Spiegazioni chiare di tutti i modificatori applicati prima dell'attraversamento
-- **Realismo Tattico**: Attraversare fiumi richiede ora pianificazione strategica e preparazione adeguata
+#### 🎲 Sistema Eventi Robusto
+- **Funzione resolveChoice Riscritta**: Gestione corretta di tutte le ricompense e penalità
+- **Meccaniche Bilanciate**: Danno, esperienza, oggetti gestiti correttamente
+- **Feedback Migliorato**: Risultati eventi chiari e informativi
+- **Integrazione Completa**: Eventi collegati correttamente con progressione personaggio
 
-#### 🔧 Fondamenta Tecniche Solide
-- **Architettura Estensibile**: Sistema meteo, rifugi e attraversamento pronti per future espansioni
-- **Test Suite Automatizzati**: Copertura completa dei sistemi critici
-- **Performance Ottimizzate**: Nessun impatto negativo sulle prestazioni esistenti
-- **Compatibilità Garantita**: Retrocompatibilità completa con salvataggi v0.6.3+
+#### 🌧️ Sistemi Precedenti Mantenuti
+- **Sistema Meteo Dinamico**: Integrazione movimento-meteo preservata
+- **Sistema Rifugi**: Regole accesso e investigazione mantenute
+- **Attraversamento Fiumi**: Meccaniche strategiche preservate
+- **Compatibilità Salvataggi**: Retrocompatibilità garantita
 
 ### 🚀 Tecnologie
 
@@ -95,13 +96,13 @@ TSP/
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.6.2 "I Save You" (ATTUALE)** - Sistema Save/Load Avanzato e Gameplay Migliorato:
-- ✅ **Sistema Save/Load Avanzato**: LoadScreen completo con preview dettagliati, export/import, recovery automatico
-- ✅ **Sistema Notifiche**: Feedback elegante per tutte le operazioni con 4 tipi di notifiche
-- ✅ **Sistema Meteo Dinamico**: 6 condizioni meteorologiche con effetti realistici su movimento e skill check
-- ✅ **Attraversamento Fiumi**: Meccaniche con conseguenze reali (1-3 danni HP) e difficoltà dinamica
-- ✅ **Eventi Trasparenti**: Skill check dettagliati con calcoli visibili e modificatori equipaggiamento
-- ✅ **Sistema Rifugi Anti-Exploit**: Regole bilanciate per prevenire abusi con accesso limitato
+**The Safe Place v0.7.0 "Top-Ranking Kid" (ATTUALE)** - Stabilizzazione Completa e Sistema Level Up Ricostruito:
+- ✅ **Stabilità Sistema Zustand**: Crash e loop infiniti completamente risolti
+- ✅ **Sistema Level Up Ricostruito**: Meccaniche D&D complete con multi-level-up
+- ✅ **Navigazione UI Corretta**: Tasto ESC e transizioni schermate funzionanti
+- ✅ **Camera di Gioco Restaurata**: Movimento e centraggio camera completamente riparati
+- ✅ **Sistema Eventi Robusto**: Gestione ricompense e penalità completamente riscritta
+- ✅ **Persistenza Dati Stabile**: Stato personaggio salvato correttamente senza reset
 
 ### 🛠️ Sviluppo
 

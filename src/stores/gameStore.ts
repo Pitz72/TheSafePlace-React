@@ -31,8 +31,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'menu',
   previousScreen: null,
   menuSelectedIndex: 0,
-  visitedShelters: {}, // Deprecated - mantenuto per compatibilità
-  shelterAccessState: {}, // Nuovo sistema v0.6.1
+  shelterAccessState: {}, // Sistema rifugi v0.6.1
   weatherState: {
     currentWeather: WeatherType.CLEAR,
     intensity: 50,
@@ -86,8 +85,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         characterSheet: createTestCharacter(), // Resetta il personaggio
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
         timeState: { currentTime: DAWN_TIME, day: 1, isDay: true }, // Resetta tempo
-        visitedShelters: {}, // Resetta rifugi (deprecated)
-        shelterAccessState: {}, // Resetta nuovo sistema rifugi v0.6.1
+        shelterAccessState: {}, // Resetta sistema rifugi v0.6.1
         weatherState: get().createClearWeather(), // Resetta meteo a sereno
         currentScreen: 'menu',
         currentBiome: get().getBiomeKeyFromChar(lines[startPos.y][startPos.x]),
@@ -488,10 +486,55 @@ export const useGameStore = create<GameState>((set, get) => ({
     return 'night';
   },
 
-  selectWeatherWithModifiers: (possibleTransitions: WeatherType[], _timeModifier: string): WeatherType => {
-    // Selezione semplice casuale per ora
-    // In futuro, applicherà i modificatori temporali
-    return possibleTransitions[Math.floor(Math.random() * possibleTransitions.length)];
+  selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string): WeatherType => {
+    // Applica modificatori temporali per maggiore realismo
+    const timeWeights: Record<string, Record<WeatherType, number>> = {
+      dawn: {
+        [WeatherType.CLEAR]: 1.2,
+        [WeatherType.FOG]: 2.0,
+        [WeatherType.LIGHT_RAIN]: 0.8,
+        [WeatherType.HEAVY_RAIN]: 0.5,
+        [WeatherType.STORM]: 0.3,
+        [WeatherType.WIND]: 1.0
+      },
+      day: {
+        [WeatherType.CLEAR]: 1.5,
+        [WeatherType.FOG]: 0.3,
+        [WeatherType.LIGHT_RAIN]: 1.0,
+        [WeatherType.HEAVY_RAIN]: 0.8,
+        [WeatherType.STORM]: 0.6,
+        [WeatherType.WIND]: 1.3
+      },
+      dusk: {
+        [WeatherType.CLEAR]: 1.0,
+        [WeatherType.FOG]: 1.8,
+        [WeatherType.LIGHT_RAIN]: 1.4,
+        [WeatherType.HEAVY_RAIN]: 1.2,
+        [WeatherType.STORM]: 0.8,
+        [WeatherType.WIND]: 0.9
+      },
+      night: {
+        [WeatherType.CLEAR]: 0.8,
+        [WeatherType.FOG]: 1.1,
+        [WeatherType.LIGHT_RAIN]: 1.3,
+        [WeatherType.HEAVY_RAIN]: 1.6,
+        [WeatherType.STORM]: 2.0,
+        [WeatherType.WIND]: 1.2
+      }
+    };
+
+    const weights = timeWeights[timeModifier] || {};
+    const weightedOptions: WeatherType[] = [];
+    
+    possibleTransitions.forEach(weather => {
+      const weight = weights[weather] || 1.0;
+      const count = Math.max(1, Math.round(weight * 10));
+      for (let i = 0; i < count; i++) {
+        weightedOptions.push(weather);
+      }
+    });
+
+    return weightedOptions[Math.floor(Math.random() * weightedOptions.length)];
   },
 
   // --- FUNZIONI HELPER PER ATTRAVERSAMENTO FIUMI ---
@@ -1320,7 +1363,6 @@ export const useGameStore = create<GameState>((set, get) => ({
         playerPosition: state.playerPosition,
         currentScreen: state.currentScreen,
         currentBiome: state.currentBiome,
-        visitedShelters: state.visitedShelters,
         shelterAccessState: state.shelterAccessState, // v0.6.1
         weatherState: state.weatherState, // v0.6.1
         seenEventIds: state.seenEventIds,
@@ -1409,7 +1451,6 @@ export const useGameStore = create<GameState>((set, get) => ({
           characterSheet: saveData.characterSheet,
           survivalState: saveData.survivalState,
           currentBiome: saveData.gameData.currentBiome,
-          visitedShelters: saveData.gameData.visitedShelters,
           shelterAccessState: (saveData.gameData as any).shelterAccessState || {},
           weatherState: (saveData.gameData as any).weatherState || get().weatherState,
           currentScreen: 'game', // Torna alla schermata di gioco dopo il caricamento

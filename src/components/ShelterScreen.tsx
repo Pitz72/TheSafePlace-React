@@ -121,9 +121,9 @@ const ShelterScreen: React.FC = () => {
       if (findChance < 0.4) {
         const lootTables = {
           consumables: ['CONS_001', 'CONS_002', 'CONS_003'],
-          crafting: ['CRAFT_001', 'CRAFT_002'],
+          crafting: ['CRAFT_001'],
           weapons: ['WEAP_001'],
-          armor: ['ARM_001'],
+          armor: ['ARMOR_001'],
           medical: ['CONS_003']
         };
         const categoryRoll = Math.random();
