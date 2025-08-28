@@ -978,11 +978,30 @@ export const useGameStore = create<GameState>((set, get) => ({
   triggerEvent: (biomeKey) => {
     if (get().currentEvent) return; // Evita di sovrascrivere eventi
     const { eventDatabase, seenEventIds } = get();
-    const availableEvents = (eventDatabase[biomeKey] || []).filter(event => !seenEventIds.includes(event.id));
+    
+    // Prima prova eventi non ancora visti
+    let availableEvents = (eventDatabase[biomeKey] || []).filter(event => 
+      !event.isUnique && !seenEventIds.includes(event.id)
+    );
+    
+    // Se non ci sono eventi non visti, riconsidera tutti gli eventi ripetibili
+    if (availableEvents.length === 0) {
+      availableEvents = (eventDatabase[biomeKey] || []).filter(event => !event.isUnique);
+    }
+    
+    // Se ancora nessun evento disponibile, esci
     if (availableEvents.length === 0) return;
 
     const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
-    set(state => ({ currentEvent: event, seenEventIds: [...state.seenEventIds, event.id] }));
+    
+    // Aggiungi agli eventi visti solo se non è già presente (per eventi ripetibili)
+    set(state => ({ 
+      currentEvent: event, 
+      seenEventIds: state.seenEventIds.includes(event.id) 
+        ? state.seenEventIds 
+        : [...state.seenEventIds, event.id] 
+    }));
+    
     get().setCurrentScreen('event');
   },
 
@@ -995,6 +1014,18 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (outcome.items_gained) {
         outcome.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
       }
+      
+      // Gestione conseguenze rest stop
+      if (outcome.consequences) {
+        if (outcome.consequences.hp) {
+          updateHP(outcome.consequences.hp);
+          addLogEntry(MessageType.HP_RECOVERY, { healing: outcome.consequences.hp });
+        }
+        if (outcome.consequences.narrative_text) {
+          addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.consequences.narrative_text });
+        }
+      }
+      
       if (outcome.reward) {
         switch (outcome.reward.type) {
           case 'xp_gain':
@@ -1046,6 +1077,14 @@ export const useGameStore = create<GameState>((set, get) => ({
         addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
       }
       applyOutcome(choice);
+    }
+
+    // Se è un evento rest stop e la scelta è "riposare", esegui anche il riposo normale
+    const currentEvent = get().currentEvent;
+    if (currentEvent?.biome === 'rest_stop' && choice.id === 'rest_choice') {
+      // Esegui riposo aggiuntivo (tempo)
+      const restTime = Math.floor(Math.random() * 120) + 120; // 120-240 minuti
+      get().advanceTime(restTime);
     }
 
     set({ currentEvent: null });
@@ -1108,11 +1147,23 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   shortRest: () => {
-    const { characterSheet, addLogEntry, updateHP, advanceTime } = get();
+    const { characterSheet, addLogEntry, updateHP, advanceTime, eventDatabase } = get();
     if (isDead(characterSheet.currentHP)) {
       addLogEntry(MessageType.REST_BLOCKED, { reason: 'sei morto' });
       return;
     }
+
+    // 30% possibilità di evento rest stop durante il riposo
+    const restStopEvents = eventDatabase['REST_STOP'] || [];
+    if (restStopEvents.length > 0 && Math.random() < 0.30) {
+      // Attiva evento rest stop casuale
+      const event = restStopEvents[Math.floor(Math.random() * restStopEvents.length)];
+      set({ currentEvent: event });
+      get().setCurrentScreen('event');
+      return; // L'evento gestirà il riposo
+    }
+
+    // Riposo normale senza eventi
     const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
     const recoveryPercentage = 0.8 + (Math.random() * 0.15); // 80-95%
     const healingAmount = Math.floor(maxRecovery * recoveryPercentage);

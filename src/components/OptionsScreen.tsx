@@ -131,10 +131,10 @@ const OptionsScreen: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className={`p-4 transition-all duration-200 cursor-pointer text-center font-mono tracking-wider text-[160%] ${
+                className={`p-4 transition-all duration-200 text-center font-mono tracking-wider text-[160%] ${
                   isSelected ? 'bg-gray-700 bg-opacity-80 text-phosphor-300 font-bold glow-phosphor-bright text-shadow-phosphor-bright animate-glow' :
           isActive ? 'bg-gray-600 bg-opacity-70 text-phosphor-500 font-bold glow-phosphor-primary' :
-          'text-phosphor-500 hover:bg-gray-800 hover:glow-phosphor-dim'
+          'text-phosphor-500'
                 }`}
               >
                 <div className="mb-2">

@@ -111,7 +111,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '3rem' }}>
-          v0.7.0 - Top-Ranking Kid
+          v0.7.1 - River Crossing Master
         </p>
         
         {/* Menu Items Testuali */}
@@ -119,12 +119,11 @@ const StartScreen: React.FC = () => {
           {menuItems.map((item, index) => (
             <div
               key={item.key}
-              className={`text-center cursor-pointer transition-all duration-200 text-[1.8rem] px-3 py-1 rounded-lg ${
+              className={`text-center transition-all duration-200 text-[1.8rem] px-3 py-1 rounded-lg ${
                 menuSelectedIndex === index
                   ? 'text-phosphor-400 font-black text-shadow-phosphor-bright animate-glow glow-phosphor-bright bg-phosphor-300 bg-opacity-40 border-2 border-phosphor-400' 
-                  : 'text-phosphor-500 glow-phosphor-primary hover:text-phosphor-400 hover:glow-phosphor-bright'
+                  : 'text-phosphor-500 glow-phosphor-primary'
               }`}
-              onClick={item.action}
             >
               <span className="text-phosphor-400 animate-pulse">[{item.key}]</span> {item.label}
             </div>

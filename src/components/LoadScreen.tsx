@@ -427,14 +427,13 @@ const LoadScreen: React.FC = () => {
             <div
               key={slot.slot}
               className={`
-                border p-4 transition-colors cursor-pointer
+                border p-4 transition-colors
                 ${index === selectedIndex 
                   ? 'border-phosphor-400 bg-phosphor-900 bg-opacity-30' 
-                  : 'border-phosphor-600 hover:border-phosphor-500'
+                  : 'border-phosphor-600'
                 }
                 ${slot.corrupted ? 'border-red-600 bg-red-900 bg-opacity-10' : ''}
               `}
-              onClick={() => setSelectedIndex(index)}
             >
               <div className="flex justify-between items-start">
                 {/* Slot Info */}
@@ -533,16 +532,9 @@ const LoadScreen: React.FC = () => {
             <div className="text-phosphor-600 mb-6">
               Inizia una nuova partita per creare il tuo primo salvataggio
             </div>
-            <button
-              onClick={() => {
-                // Naviga direttamente alla creazione personaggio
-                const { setCurrentScreen } = useGameStore.getState();
-                setCurrentScreen('characterCreation');
-              }}
-              className="px-6 py-2 border border-phosphor-600 hover:border-phosphor-400 hover:bg-phosphor-900 hover:bg-opacity-30 transition-colors text-phosphor-400"
-            >
+            <div className="px-6 py-2 border border-phosphor-600 text-phosphor-400 text-center">
               [N] Nuova Partita
-            </button>
+            </div>
           </div>
         ) : null}
 

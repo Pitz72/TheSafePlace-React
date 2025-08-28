@@ -58,9 +58,19 @@ type SpecialReward = {
 export type Reward = StatBoostReward | XpGainReward | HpGainReward | SpecialReward;
 
 /**
+ * Definisce le conseguenze specifiche per eventi rest stop.
+ */
+export interface RestStopConsequences {
+  hp?: number; // Recupero HP
+  stamina?: number; // Recupero stamina (futuro)
+  narrative_text?: string; // Testo narrativo
+}
+
+/**
  * Definisce una singola scelta che il giocatore può compiere durante un evento.
  */
 export interface EventChoice {
+  id?: string; // ID della scelta (per rest stop)
   text: string; // Il testo mostrato al giocatore
   skillCheck?: SkillCheck; // Il test di abilità opzionale associato a questa scelta
   successText?: string; // Testo in caso di successo dello skill check
@@ -70,6 +80,7 @@ export interface EventChoice {
   penalty?: Penalty; // La penalità subita
   reward?: Reward; // La ricompensa ottenuta
   actionKey?: 'ignore'; // Chiave per azioni speciali come ignorare l'evento
+  consequences?: RestStopConsequences; // Conseguenze specifiche per rest stop
 }
 
 /**
@@ -80,4 +91,6 @@ export interface GameEvent {
   title: string; // Titolo mostrato nella schermata dell'evento
   description: string; // Descrizione della situazione
   choices: EventChoice[]; // Array delle scelte disponibili per il giocatore
+  isUnique?: boolean; // Se true, l'evento può accadere solo una volta
+  biome?: string; // Bioma specifico per l'evento (per rest stop)
 }

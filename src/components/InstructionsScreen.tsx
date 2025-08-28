@@ -8,16 +8,16 @@
  * 
  * Documentazione completa: /documentazione/INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md
  * 
- * Specifica Layout Finale (NON MODIFICARE):
+ * Specifica Layout Finale (AGGIORNATO):
  * - Titolo: "ISTRUZIONI" (non "ISTRUZIONI DEL GIOCO")
  * - Template: PaginatedInfoPage con box 97.5vh
- * - Font: text-[52.5%] (ridotto 70% per leggibilità)
+ * - Font: text-[175%] (allineato con StoryScreen per consistenza UI)
  * - Layout: flex-col ottimizzato per massimo spazio
- * - Scroll: 32px step per font size attuale
+ * - Scroll: adattato per font size corrente
  * 
  * Soluzioni Tecniche Critiche:
  * - Box esteso a 97.5vh per massima lettura
- * - Font ridotto del 70% da text-[175%] a text-[52.5%]
+ * - Font allineato a text-[175%] per consistenza con StoryScreen
  * - Titolo posizionato in alto con pt-2 pb-4
  * - Template PaginatedInfoPage preservato per compatibilità
  * 
@@ -44,14 +44,14 @@ const InstructionsScreen: React.FC = () => {
   ];
 
   const content = [
-    <p key="i1" className="text-[52.5%] leading-relaxed">Figlio Mio, Ultimo...</p>,
-    <p key="i2" className="text-[52.5%] leading-relaxed">Se stai leggendo queste parole, significa che non sono tornato in tempo, e le scorte che ti ho lasciato stanno per finire. Il mio cuore è pesante, ma non c'è tempo per il dolore adesso. Devi essere forte, come ti ho insegnato. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.</p>,
-    <p key="i3" className="text-[52.5%] leading-relaxed">Ricorda le basi, sempre. La mappa è la tua guida; la E segna la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (o W, A, S, D) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. Vigila sulla tua Condizione – ferite, malanni, veleni – sono nemici silenziosi.</p>,
-    <p key="i4" className="text-[52.5%] leading-relaxed">Il tempo è un fiume crudele, il giorno un breve respiro prima del gelo e dei pericoli della notte. Prima che il sole muoia, cerca un Rifugio ('R'). Lì troverai riposo fino all'alba e, con un po' di fortuna, qualcosa di utile. Esplorali di giorno, ma ricorda che ogni azione costa tempo. Villaggi ('V') e Città ('C') sono rovine piene di echi e pericoli, non fidarti ciecamente del loro apparente riparo notturno.</p>,
-    <p key="i5" className="text-[52.5%] leading-relaxed">Il tuo Inventario è piccolo, riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti direzionali. Premi il numero corrispondente per usare un oggetto.</p>,
-    <p key="i6" className="text-[52.5%] leading-relaxed">La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute; a volte, la saggezza sta nel sapere quando fuggire.</p>,
-    <p key="i7" className="text-[52.5%] leading-relaxed">Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. Con tutto l'amore che un padre può dare, Papà.</p>,
-    <div key="legend" className="text-[52.5%] leading-relaxed">
+    <p key="i1" className="text-[175%] leading-relaxed">Figlio Mio, Ultimo...</p>,
+    <p key="i2" className="text-[175%] leading-relaxed">Se stai leggendo queste parole, significa che non sono tornato in tempo, e le scorte che ti ho lasciato stanno per finire. Il mio cuore è pesante, ma non c'è tempo per il dolore adesso. Devi essere forte, come ti ho insegnato. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.</p>,
+    <p key="i3" className="text-[175%] leading-relaxed">Ricorda le basi, sempre. La mappa è la tua guida; la E segna la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (o W, A, S, D) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. Vigila sulla tua Condizione – ferite, malanni, veleni – sono nemici silenziosi.</p>,
+    <p key="i4" className="text-[175%] leading-relaxed">Il tempo è un fiume crudele, il giorno un breve respiro prima del gelo e dei pericoli della notte. Prima che il sole muoia, cerca un Rifugio ('R'). Lì troverai riposo fino all'alba e, con un po' di fortuna, qualcosa di utile. Esplorali di giorno, ma ricorda che ogni azione costa tempo. Villaggi ('V') e Città ('C') sono rovine piene di echi e pericoli, non fidarti ciecamente del loro apparente riparo notturno.</p>,
+    <p key="i5" className="text-[175%] leading-relaxed">Il tuo Inventario è piccolo, riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti direzionali. Premi il numero corrispondente per usare un oggetto.</p>,
+    <p key="i6" className="text-[175%] leading-relaxed">La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute; a volte, la saggezza sta nel sapere quando fuggire.</p>,
+    <p key="i7" className="text-[175%] leading-relaxed">Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. Con tutto l'amore che un padre può dare, Papà.</p>,
+    <div key="legend" className="text-[175%] leading-relaxed">
       <p>Leggenda mappa:</p>
       <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4 text-xl">
         {legendItems.map((item) => (

@@ -1,12 +1,19 @@
-# The Safe Place v0.7.0 "Top-Ranking Kid"
+# The Safe Place v0.7.1 "River Crossing Master"
 
 ## 🎮 GDR Retrocomputazionale a Fosfori Verdi anni '80
 
 **The Safe Place** è un gioco di ruolo roguelike postapocalittico che ricrea l'esperienza visiva di un monitor a fosfori verdi degli anni '80, combinando gameplay testuale con interfaccia moderna React e sistema narrativo avanzato.
 
-### 🌟 Caratteristiche Principali v0.7.0
+### 🌟 Caratteristiche Principali v0.7.1
 
-#### 🔧 Stabilizzazione Architetturale Completa
+#### 🌊 NOVITÀ v0.7.1 - Ripristino Meccanica Critica
+- **Doppio Movimento Fiumi Ripristinato**: Risolto bug critico che aveva semplificato l'attraversamento dei fiumi
+- **Strategia Temporale Restaurata**: Attraversare fiumi richiede ora 2 turni come da design originale
+- **Meccanica Immersiva**: Primo turno per entrare nel fiume, secondo per completare l'attraversamento
+- **Compatibilità Totale**: Tutti i miglioramenti meteo e skill check preservati
+- **Implementazione Sicura**: Modifiche minimali per evitare regressioni su altri sistemi
+
+#### 🔧 Stabilizzazione Architetturale Completa (v0.7.0)
 - **Sistema Zustand Stabilizzato**: Risolti crash e loop infiniti dopo il refactoring architetturale
 - **Gestione Stato Centralizzata**: Eliminazione del vecchio GameProvider che causava reset indesiderati
 - **Performance Ottimizzate**: Sistema di state management unificato e performante
@@ -91,18 +98,20 @@ TSP/
 - [x] **v0.5.0**: Sistema inventario avanzato e oggetti (effetti e utilizzo). ✅ **COMPLETATA**
 - [x] **v0.6.0**: Lazarus Rising Again - Refactoring architetturale completo e stabilità. ✅ **COMPLETATA**
 - [x] **v0.6.2**: I Save You - Sistema Save/Load avanzato e miglioramenti gameplay. ✅ **COMPLETATA**
-- [ ] **v0.7.0**: Sistema combattimento e meccaniche avanzate
+- [x] **v0.7.0**: Top-Ranking Kid - Stabilizzazione architetturale e sistema level up. ✅ **COMPLETATA**
+- [x] **v0.7.1**: River Crossing Master - Ripristino meccanica doppio movimento fiumi. ✅ **COMPLETATA**
 - [ ] **v1.0.0**: Gioco completo con tutte le funzionalità
 
 ### 🎯 Stato Attuale
 
-**The Safe Place v0.7.0 "Top-Ranking Kid" (ATTUALE)** - Stabilizzazione Completa e Sistema Level Up Ricostruito:
-- ✅ **Stabilità Sistema Zustand**: Crash e loop infiniti completamente risolti
-- ✅ **Sistema Level Up Ricostruito**: Meccaniche D&D complete con multi-level-up
-- ✅ **Navigazione UI Corretta**: Tasto ESC e transizioni schermate funzionanti
-- ✅ **Camera di Gioco Restaurata**: Movimento e centraggio camera completamente riparati
-- ✅ **Sistema Eventi Robusto**: Gestione ricompense e penalità completamente riscritta
-- ✅ **Persistenza Dati Stabile**: Stato personaggio salvato correttamente senza reset
+**The Safe Place v0.7.1 "River Crossing Master" (ATTUALE)** - Ripristino Meccanica Critica:
+- ✅ **Meccanica Doppio Movimento Ripristinata**: Attraversamento fiumi richiede ora 2 turni strategici
+- ✅ **Regressione Critica Risolta**: Identificata e corretta perdita meccanica durante refactoring
+- ✅ **Compatibilità Preservata**: Tutti i sistemi meteo e skill check mantenuti intatti
+- ✅ **Implementazione Sicura**: Modifiche minimali per evitare impatti collaterali
+- ✅ **Stabilità Sistema Zustand**: Crash e loop infiniti completamente risolti (v0.7.0)
+- ✅ **Sistema Level Up Ricostruito**: Meccaniche D&D complete con multi-level-up (v0.7.0)
+- ✅ **Navigazione UI Corretta**: Tasto ESC e transizioni schermate funzionanti (v0.7.0)
 
 ### 🛠️ Sviluppo
 

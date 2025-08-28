@@ -5,12 +5,16 @@ import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
 
 interface MovementState {
   isExitingRiver: boolean;
+  isInRiver: boolean;
+  riverPosition: { x: number; y: number } | null;
 }
 
 export const usePlayerMovement = () => {
-  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP } = useGameStore();
+  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
   const [movementState, setMovementState] = useState<MovementState>({
-    isExitingRiver: false
+    isExitingRiver: false,
+    isInRiver: false,
+    riverPosition: null
   });
 
   const isValidPosition = useCallback((x: number, y: number): boolean => {
@@ -38,9 +42,9 @@ export const usePlayerMovement = () => {
       console.log(`🚫 Movimento bloccato: fuori dai confini (${x}, ${y})`);
       return false;
     }
-    
+
     const terrain = getTerrainAt(x, y);
-    
+
     // Terreno invalicabile: Montagne
     if (terrain === 'M') {
       console.log(`🏔️ Movimento bloccato: montagna a (${x}, ${y})`);
@@ -48,33 +52,47 @@ export const usePlayerMovement = () => {
       addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
       return false;
     }
-    
+
     return true;
   }, [isValidPosition, getTerrainAt]);
 
   const handleMovement = useCallback((deltaX: number, deltaY: number) => {
     if (mapData.length === 0) return;
-    
+
     const nextX = playerPosition.x + deltaX;
     const nextY = playerPosition.y + deltaY;
-    
+
     if (!canMoveToPosition(nextX, nextY)) return;
-    
+
     const nextTerrain = getTerrainAt(nextX, nextY);
 
-    // La logica specifica per i fiumi rimane qui perché è un'azione di movimento speciale
+    // Gestione doppio movimento per fiumi
     if (nextTerrain === '~') {
-      setMovementState({ isExitingRiver: true });
-      addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
-      const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
-      if (!success.success) {
-        const damage = Math.floor(Math.random() * 4) + 1;
-        updateHP(-damage);
+      if (!movementState.isInRiver) {
+        // Prima pressione: entra nel fiume (stato intermedio)
+        setMovementState({
+          isExitingRiver: false,
+          isInRiver: true,
+          riverPosition: { x: nextX, y: nextY }
+        });
+        addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
+        // Primo turno perso - avanza tempo ma non muovere ancora
+        advanceTime(10);
+        return; // Blocca il movimento, richiede seconda pressione
+      } else {
+        // Seconda pressione: completa attraversamento con skill check
+        setMovementState({ isExitingRiver: true, isInRiver: false, riverPosition: null });
+        const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
+        if (!success.success) {
+          const damage = Math.floor(Math.random() * 4) + 1;
+          updateHP(-damage);
+        }
       }
     } else {
-      setMovementState({ isExitingRiver: false });
+      // Reset stato fiume se ci si muove su terreno normale
+      setMovementState({ isExitingRiver: false, isInRiver: false, riverPosition: null });
     }
-    
+
     // Chiama la nuova funzione centralizzata, passando anche il bioma
     updatePlayerPosition({ x: nextX, y: nextY }, nextTerrain);
 
@@ -82,13 +100,13 @@ export const usePlayerMovement = () => {
     if (nextTerrain === 'R') {
       updateBiome('R');
     }
-    
+
     // Messaggio atmosferico casuale
     if (Math.random() < JOURNAL_CONFIG.AMBIANCE_PROBABILITY) {
       addLogEntry(MessageType.AMBIANCE_RANDOM);
     }
-    
-  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, updateBiome, addLogEntry]);
+
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, updateBiome, addLogEntry, advanceTime, movementState]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento
@@ -96,7 +114,7 @@ export const usePlayerMovement = () => {
     if (movementKeys.includes(event.key.toLowerCase())) {
       event.preventDefault();
     }
-    
+
     switch (event.key.toLowerCase()) {
       case 'w':
       case 'arrowup':
@@ -123,7 +141,7 @@ export const usePlayerMovement = () => {
   useEffect(() => {
     // Aggiungi listener per eventi tastiera
     window.addEventListener('keydown', handleKeyPress);
-    
+
     // Cleanup
     return () => {
       window.removeEventListener('keydown', handleKeyPress);

@@ -8,7 +8,7 @@ import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const goBack = useGameStore(state => state.goBack);
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const addLogEntry = useGameStore(state => state.addLogEntry);
   const performAbilityCheck = useGameStore(state => state.performAbilityCheck);
   const updateHP = useGameStore(state => state.updateHP);
@@ -40,23 +40,54 @@ const ShelterScreen: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowUp') {
+      const key = event.key.toLowerCase();
+      
+      // Gestione ESC standardizzata - torna alla mappa di gioco
+      if (key === 'escape' || key === 'b' || key === 'backspace') {
+        event.preventDefault();
+        setCurrentScreen('game');
+        return;
+      }
+
+      // Navigazione con frecce e WASD
+      if (key === 'arrowup' || key === 'w') {
         event.preventDefault();
         setSelectedOption(prev => Math.max(0, prev - 1));
-      } else if (event.key === 'ArrowDown') {
+      } else if (key === 'arrowdown' || key === 's') {
         event.preventDefault();
         setSelectedOption(prev => Math.min(options.length - 1, prev + 1));
       }
 
-      if (event.key === 'Enter') {
+      // Selezione con ENTER
+      if (key === 'enter') {
         event.preventDefault();
         handleOptionSelect(options[selectedOption].id);
+      }
+
+      // Scorciatoie dirette per azioni
+      switch (key) {
+        case 'r':
+          event.preventDefault();
+          handleRest();
+          break;
+        case 'i':
+          event.preventDefault();
+          handleSearch();
+          break;
+        case 'b':
+          event.preventDefault();
+          handleWorkbench();
+          break;
+        case 'l':
+          event.preventDefault();
+          setCurrentScreen('game');
+          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedOption, goBack]);
+  }, [selectedOption, setCurrentScreen]);
 
   const handleOptionSelect = (optionId: string) => {
     switch (optionId) {
@@ -70,7 +101,7 @@ const ShelterScreen: React.FC = () => {
         handleWorkbench();
         break;
       case 'leave':
-        goBack();
+        setCurrentScreen('game');
         break;
     }
   };
@@ -87,7 +118,7 @@ const ShelterScreen: React.FC = () => {
       time: Math.floor(restTime / 60)
     });
 
-    goBack();
+    setCurrentScreen('game');
   };
 
   const handleSearch = () => {
@@ -102,7 +133,7 @@ const ShelterScreen: React.FC = () => {
       return;
     }
 
-    // Se c'è già un risultato mostrato, non permettere nuove investigazioni
+    // ANTI-EXPLOIT: Se c'è già un risultato mostrato, non permettere nuove investigazioni
     if (searchResult) {
       addLogEntry(MessageType.ACTION_FAIL, {
         reason: 'investigazione già completata'
@@ -194,7 +225,7 @@ const ShelterScreen: React.FC = () => {
               key={option.id}
               className={`p-4 rounded border transition-all duration-200 ${index === selectedOption
                 ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20 glow-phosphor-primary'
-                : 'border-phosphor-600 hover:border-phosphor-500'
+                : 'border-phosphor-600'
                 }`}
             >
               <div className="flex justify-between items-center">
@@ -219,7 +250,10 @@ const ShelterScreen: React.FC = () => {
         )}
 
         <div className="text-center text-phosphor-400 font-mono">
-          <p>[↑↓] Naviga | [ENTER] Seleziona | [ESC] Esci</p>
+          <p>[↑↓/W/S] Naviga | [ENTER] Seleziona | [ESC/B] Esci</p>
+          <p className="text-sm text-phosphor-600 mt-1">
+            Scorciatoie: [R]iposa | [I]nvestiga | [B]anco | [L]ascia
+          </p>
         </div>
       </div>
     </div>

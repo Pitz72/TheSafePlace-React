@@ -49,7 +49,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
 
-      if (key === 'escape') {
+      if (key === 'escape' || key === 'b' || key === 'backspace') {
         event.preventDefault();
         goBack();
         return;
@@ -115,7 +115,7 @@ const PaginatedInfoPage: React.FC<PaginatedInfoPageProps> = ({ title, content })
         <div className="text-phosphor-500 text-lg font-mono tracking-wider glow-phosphor-dim animate-pulse">
           <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↑]</span> Su |
           <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[↓]</span> Giù |
-          <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[ESC]</span> Indietro
+          <span className="text-phosphor-400 ml-2 glow-phosphor-bright text-shadow-phosphor-bright">[ESC/B]</span> Indietro
         </div>
       </div>
     </div>
