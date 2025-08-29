@@ -64,7 +64,7 @@ export default {
   // Transform configuration
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
-      tsconfig: 'tsconfig.json'
+      tsconfig: 'tsconfig.test.json'
     }]
   },
   

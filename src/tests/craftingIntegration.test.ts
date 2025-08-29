@@ -9,16 +9,18 @@ import {
   hasInventorySpace, 
   simulateCrafting 
 } from '../utils/craftingUtils';
-import type { Recipe, InventoryItem, CharacterSheet } from '../types/crafting';
+import type { Recipe } from '../types/crafting';
+import type { IInventorySlot } from '../interfaces/items';
+import type { ICharacterSheet } from '../rules/types';
 import { CRAFTING_ERRORS } from '../types/crafting';
 
 // Mock del game store
 const createMockGameStore = () => ({
   characterSheet: {
-    inventory: [] as InventoryItem[],
+    inventory: [] as IInventorySlot[],
     stats: { adattamento: 10, potenza: 8, percezione: 12 },
     knownRecipes: ['test_knife']
-  } as CharacterSheet,
+  } as ICharacterSheet,
   items: {
     'knife_sharp': { name: 'Coltello Affilato' },
     'knife_dull': { name: 'Coltello Smussato' },
@@ -42,7 +44,7 @@ const testRecipe: Recipe = {
 };
 
 // Inventario di test
-const testInventory: InventoryItem[] = [
+const testInventory: IInventorySlot[] = [
   { itemId: 'knife_dull', quantity: 1 },
   { itemId: 'whetstone', quantity: 1 }
 ];
@@ -176,7 +178,7 @@ describe('Crafting Integration', () => {
 
   describe('hasInventorySpace', () => {
     test('dovrebbe rilevare spazio disponibile in slot vuoti', () => {
-      const inventory: InventoryItem[] = [
+      const inventory: IInventorySlot[] = [
         { itemId: 'item1', quantity: 1 },
         null as any, // Slot vuoto
         { itemId: 'item2', quantity: 1 }
@@ -187,7 +189,7 @@ describe('Crafting Integration', () => {
     });
 
     test('dovrebbe rilevare spazio in slot esistenti impilabili', () => {
-      const inventory: InventoryItem[] = [
+      const inventory: IInventorySlot[] = [
         { itemId: 'stackable_item', quantity: 50 }, // Può contenere altri 49
         { itemId: 'other_item', quantity: 1 }
       ];
@@ -197,7 +199,7 @@ describe('Crafting Integration', () => {
     });
 
     test('dovrebbe rilevare mancanza di spazio', () => {
-      const fullInventory: InventoryItem[] = Array(20).fill(null).map((_, i) => ({
+      const fullInventory: IInventorySlot[] = Array(20).fill(null).map((_, i) => ({
         itemId: `item_${i}`,
         quantity: 99
       }));
@@ -207,14 +209,14 @@ describe('Crafting Integration', () => {
     });
 
     test('dovrebbe gestire inventario vuoto', () => {
-      const emptyInventory: InventoryItem[] = [];
+      const emptyInventory: IInventorySlot[] = [];
 
       const hasSpace = hasInventorySpace(emptyInventory, 'new_item', 1, 20);
       expect(hasSpace).toBe(true);
     });
 
     test('dovrebbe considerare limite stack per oggetti esistenti', () => {
-      const inventory: InventoryItem[] = [
+      const inventory: IInventorySlot[] = [
         { itemId: 'full_stack', quantity: 99 } // Stack pieno
       ];
 
@@ -250,7 +252,7 @@ describe('Crafting Integration', () => {
     });
 
     test('dovrebbe rilevare materiali insufficienti', () => {
-      const insufficientInventory: InventoryItem[] = [
+      const insufficientInventory: IInventorySlot[] = [
         { itemId: 'knife_dull', quantity: 1 }
         // Manca whetstone
       ];
@@ -287,7 +289,7 @@ describe('Crafting Integration', () => {
     });
 
     test('dovrebbe generare avvisi per materiali scarsi', () => {
-      const scarceInventory: InventoryItem[] = [
+      const scarceInventory: IInventorySlot[] = [
         { itemId: 'knife_dull', quantity: 1 }, // Esattamente quello che serve
         { itemId: 'whetstone', quantity: 2 }   // Più di quello che serve
       ];
@@ -342,7 +344,7 @@ describe('Crafting Integration', () => {
 
   describe('Edge cases', () => {
     test('dovrebbe gestire inventario con slot null', () => {
-      const inventoryWithNulls: InventoryItem[] = [
+      const inventoryWithNulls: IInventorySlot[] = [
         { itemId: 'knife_dull', quantity: 1 },
         null as any,
         { itemId: 'whetstone', quantity: 1 },

@@ -6,7 +6,8 @@
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import { create } from 'zustand';
 import type { Recipe, CraftingState } from '../types/crafting';
-import type { InventoryItem, CharacterSheet } from '../interfaces/gameState';
+import type { IInventorySlot } from '../interfaces/items';
+import type { ICharacterSheet } from '../rules/types';
 
 // Mock delle utility functions
 jest.mock('../utils/recipeLoader', () => ({
@@ -30,10 +31,10 @@ jest.mock('../utils/craftingUtils', () => ({
 // Mock del game store
 const mockGameStore = {
   characterSheet: {
-    inventory: [] as InventoryItem[],
+    inventory: [] as IInventorySlot[],
     knownRecipes: [] as string[],
     stats: { adattamento: 10, potenza: 8, percezione: 12 }
-  } as CharacterSheet,
+  } as ICharacterSheet,
   items: {},
   addItem: jest.fn(),
   removeItem: jest.fn(),

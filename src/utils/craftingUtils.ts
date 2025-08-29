@@ -14,7 +14,8 @@ import type {
   SkillRequirement
 } from '../types/crafting';
 import { CRAFTING_ERRORS, DEFAULT_CRAFTING_CONFIG } from '../types/crafting';
-import type { InventoryItem, CharacterSheet } from '../interfaces/gameState';
+import type { IInventorySlot } from '../interfaces/items';
+import type { ICharacterSheet } from '../rules/types';
 
 // ===== CONFIGURATION =====
 
@@ -41,7 +42,7 @@ export function getCraftingConfig(): CraftingConfig {
  */
 export function hasRequiredMaterials(
   recipe: Recipe, 
-  inventory: InventoryItem[]
+  inventory: IInventorySlot[]
 ): boolean {
   return recipe.components.every(component => {
     const ownedQuantity = getOwnedQuantity(component.itemId, inventory);
@@ -54,7 +55,7 @@ export function hasRequiredMaterials(
  */
 export function meetsSkillRequirement(
   recipe: Recipe,
-  characterSheet: CharacterSheet
+  characterSheet: ICharacterSheet
 ): boolean {
   if (!recipe.skillRequirement) {
     return true; // Nessun requisito = sempre soddisfatto
@@ -71,8 +72,8 @@ export function meetsSkillRequirement(
  */
 export function canCraftRecipe(
   recipe: Recipe,
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet
 ): boolean {
   return hasRequiredMaterials(recipe, inventory) && 
          meetsSkillRequirement(recipe, characterSheet);
@@ -92,7 +93,7 @@ export function knowsRecipe(recipeId: string, knownRecipeIds: string[]): boolean
  */
 export function getMaterialStatus(
   recipe: Recipe,
-  inventory: InventoryItem[],
+  inventory: IInventorySlot[],
   itemDatabase: Record<string, any>
 ): MaterialStatus[] {
   return recipe.components.map(component => {
@@ -112,7 +113,7 @@ export function getMaterialStatus(
 /**
  * Ottiene la quantità posseduta di un oggetto
  */
-export function getOwnedQuantity(itemId: string, inventory: InventoryItem[]): number {
+export function getOwnedQuantity(itemId: string, inventory: IInventorySlot[]): number {
   const item = inventory.find(slot => slot?.itemId === itemId);
   return item?.quantity || 0;
 }
@@ -164,7 +165,7 @@ export function getAvailableRecipes(
  */
 export function getRecipesWithMaterials(
   recipes: Recipe[],
-  inventory: InventoryItem[]
+  inventory: IInventorySlot[]
 ): { available: Recipe[]; unavailable: Recipe[] } {
   const available: Recipe[] = [];
   const unavailable: Recipe[] = [];
@@ -185,8 +186,8 @@ export function getRecipesWithMaterials(
  */
 export function groupRecipesByAvailability(
   recipes: Recipe[],
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet
 ): {
   craftable: Recipe[];
   missingMaterials: Recipe[];
@@ -221,8 +222,8 @@ export function groupRecipesByAvailability(
  */
 export function getCraftableRecipes(
   recipes: Recipe[],
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet
 ): Recipe[] {
   return recipes.filter(recipe => canCraftRecipe(recipe, inventory, characterSheet));
 }
@@ -232,8 +233,8 @@ export function getCraftableRecipes(
  */
 export function sortRecipesByAvailability(
   recipes: Recipe[],
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet
 ): Recipe[] {
   return [...recipes].sort((a, b) => {
     const aCanCraft = canCraftRecipe(a, inventory, characterSheet);
@@ -276,7 +277,7 @@ export function getRecipesUnlockedByManual(
  * Ottiene il livello di abilità del giocatore
  * TODO: Integrare con il sistema di abilità esistente quando disponibile
  */
-function getPlayerSkillLevel(skill: string, characterSheet: CharacterSheet): number {
+function getPlayerSkillLevel(skill: string, characterSheet: ICharacterSheet): number {
   // Per ora, usiamo le statistiche base come proxy per le abilità
   switch (skill.toLowerCase()) {
     case 'crafting':
@@ -326,8 +327,8 @@ export function createSuccessResult(
  */
 export function validateCraftingAttempt(
   recipe: Recipe,
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet,
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet,
   knownRecipeIds: string[]
 ): string | null {
   // Verifica se la ricetta è conosciuta
@@ -425,7 +426,7 @@ export async function executeCrafting(
  * Verifica se l'inventario ha spazio per l'oggetto risultante
  */
 export function hasInventorySpace(
-  inventory: InventoryItem[],
+  inventory: IInventorySlot[],
   resultItemId: string,
   resultQuantity: number,
   maxSlots: number = 20
@@ -455,8 +456,8 @@ export function hasInventorySpace(
  */
 export function simulateCrafting(
   recipe: Recipe,
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet,
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet,
   knownRecipeIds: string[]
 ): {
   canCraft: boolean;
@@ -517,8 +518,8 @@ export function debugLog(message: string, data?: any): void {
  */
 export function getRecipeDebugInfo(
   recipe: Recipe,
-  inventory: InventoryItem[],
-  characterSheet: CharacterSheet
+  inventory: IInventorySlot[],
+  characterSheet: ICharacterSheet
 ): Record<string, any> {
   return {
     recipeId: recipe.id,
