@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.8.4 - I'm Constantly Tidying Up my Desk
+## The Safe Place v0.8.5 - Crafting Full and Real Integration
 
 **Stato**: CONSOLIDATO E AGGIORNATO  
 **Ultima Revisione**: 2025-08-30  
-**Versione Attiva**: v0.8.4 "I'm Constantly Tidying Up my Desk"
+**Versione Attiva**: v0.8.5 "Crafting Full and Real Integration"
 
 ---
 
@@ -19,7 +19,13 @@
 - ✅ **[Crafting System](./api/crafting-system.md)** - Architettura e implementazione del sistema di crafting
 - ✅ **[Crafting User Guide](./api/crafting-user-guide.md)** - Guida utente per il sistema di crafting
 
+### 🔧 **Documentazione Sistema Crafting v0.8.5**
+- ✅ **[CRAFTING-SYSTEM-GUIDE.md](./crafting-system/CRAFTING-SYSTEM-GUIDE.md)** - Guida completa sistema crafting
+- ✅ **[TROUBLESHOOTING-GUIDE.md](./crafting-system/TROUBLESHOOTING-GUIDE.md)** - Guida troubleshooting e debug
+- ✅ **[Test Suite Documentation](../src/tests/README.md)** - Documentazione suite di test
+
 ### 🛡️ **Protezioni Anti-Regressione ATTIVE**
+- ✅ **[ANTI-REGRESSIONE-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - PROTEZIONE ATTIVA v0.8.5
 - ✅ **[ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - PROTEZIONE ATTIVA v0.8.4
 - ✅ **[ANTI-REGRESSIONE-v0.8.3-CRAFTING-STYLE.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.3-CRAFTING-STYLE.md)** - PROTEZIONE ATTIVA v0.8.3
 - ✅ **[ANTI-REGRESSION-v0.6.0.md](./anti-regressione/ANTI-REGRESSION-v0.6.0.md)** - PROTEZIONE ATTIVA v0.6.0
@@ -32,8 +38,10 @@
 - ✅ **[INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md](./dsar/INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA ISTRUZIONI
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
-### 📝 **Changelog Corrente**
-- ✅ **[CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./changelog/CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - VERSIONE CORRENTE "I'm Constantly Tidying Up my Desk"
+### 📝 **Changelog e Consolidamento Corrente**
+- ✅ **[CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./changelog/CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - VERSIONE CORRENTE "Crafting Full and Real Integration"
+- ✅ **[CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./consolidamento/CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - CONSOLIDAMENTO VERSIONE CORRENTE
+- ✅ **[CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./changelog/CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - VERSIONE PRECEDENTE "I'm Constantly Tidying Up my Desk"
 - ✅ **[CHANGELOG-v0.8.3-CRAFTING-STYLE-OMOLOGATION.md](./changelog/CHANGELOG-v0.8.3-CRAFTING-STYLE-OMOLOGATION.md)** - VERSIONE PRECEDENTE "Crafting Style Omologation"
 - ✅ **[CHANGELOG-v0.8.1.md](./changelog/CHANGELOG-v0.8.1.md)** - VERSIONE PRECEDENTE "Terminal Crafting"
 - ✅ **[CHANGELOG-v0.8.0.md](./changelog/CHANGELOG-v0.8.0.md)** - VERSIONE PRECEDENTE "Crafting System"

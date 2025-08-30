@@ -1,54 +1,292 @@
 {
   "recipes": [
     {
-      "id": "test_recipe_1",
-      "resultItemId": "WEAP_001",
+      "id": "improvised_knife",
+      "resultItemId": "WEAP_KNIFE_IMPROVISED",
       "resultQuantity": 1,
       "category": "weapons",
-      "description": "Crea un coltello da combattimento usando materiali di base.",
+      "description": "Crea un coltello improvvisato legando rottami metallici a un manico di fortuna.",
       "components": [
         {
-          "itemId": "CRAFT_001",
+          "itemId": "CRAFT_METAL_SCRAP",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_CLOTH",
+          "quantity": 1
+        }
+      ],
+      "discoveryMethod": "starter",
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "basic_bandage",
+      "resultItemId": "MED_BANDAGE_BASIC",
+      "resultQuantity": 2,
+      "category": "medical",
+      "description": "Prepara bende di fortuna con stracci puliti per fermare il sanguinamento.",
+      "components": [
+        {
+          "itemId": "CRAFT_CLOTH",
+          "quantity": 2
+        }
+      ],
+      "discoveryMethod": "starter",
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "makeshift_torch",
+      "resultItemId": "TOOL_TORCH_BASIC",
+      "resultQuantity": 1,
+      "category": "tools",
+      "description": "Assembla una torcia improvvisata per illuminare luoghi bui.",
+      "components": [
+        {
+          "itemId": "CRAFT_WOOD",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_CLOTH",
+          "quantity": 1
+        }
+      ],
+      "discoveryMethod": "starter",
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "simple_trap",
+      "resultItemId": "TRAP_SIMPLE",
+      "resultQuantity": 1,
+      "category": "survival",
+      "description": "Costruisci una trappola semplice per catturare piccoli animali.",
+      "components": [
+        {
+          "itemId": "CRAFT_WOOD",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_ROPE",
+          "quantity": 1
+        }
+      ],
+      "discoveryMethod": "starter",
+      "unlockedByLevel": 1
+    },
+    {
+      "id": "reinforced_knife",
+      "resultItemId": "WEAP_KNIFE_REINFORCED",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Migliora un coltello improvvisato con materiali di qualità superiore.",
+      "components": [
+        {
+          "itemId": "WEAP_KNIFE_IMPROVISED",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_STEEL",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_WIRE",
           "quantity": 2
         }
       ],
       "skillRequirement": {
         "skill": "crafting",
-        "level": 1
+        "level": 3
       },
-      "unlockedByLevel": 1
+      "discoveryMethod": "level",
+      "unlockedByLevel": 3
     },
     {
-      "id": "test_recipe_2",
-      "resultItemId": "CONS_001",
-      "resultQuantity": 2,
-      "category": "consumables",
-      "description": "Prepara razioni di cibo usando materiali disponibili.",
+      "id": "makeshift_spear",
+      "resultItemId": "WEAP_SPEAR_MAKESHIFT",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Crea una lancia di fortuna per il combattimento a distanza.",
       "components": [
         {
-          "itemId": "CRAFT_001",
+          "itemId": "CRAFT_WOOD",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_METAL_SCRAP",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_ROPE",
           "quantity": 1
         }
       ],
-      "unlockedByLevel": 1
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 2
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_weapons_basic"
     },
     {
-      "id": "test_recipe_3",
-      "resultItemId": "WEAP_002",
+      "id": "spiked_club",
+      "resultItemId": "WEAP_CLUB_SPIKED",
       "resultQuantity": 1,
       "category": "weapons",
-      "description": "Assembla una pistola 9mm (richiede livello alto).",
+      "description": "Assembla una mazza brutale con chiodi e rottami metallici.",
       "components": [
         {
-          "itemId": "CRAFT_001",
-          "quantity": 5
+          "itemId": "CRAFT_WOOD",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_METAL_SCRAP",
+          "quantity": 3
+        },
+        {
+          "itemId": "CRAFT_WIRE",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 2
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_weapons_basic"
+    },
+    {
+      "id": "simple_sling",
+      "resultItemId": "WEAP_SLING",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Costruisci una fionda silenziosa per la caccia.",
+      "components": [
+        {
+          "itemId": "CRAFT_LEATHER",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_ROPE",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 2
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_weapons_basic"
+    },
+    {
+      "id": "antiseptic_solution",
+      "resultItemId": "MED_ANTISEPTIC",
+      "resultQuantity": 1,
+      "category": "medical",
+      "description": "Prepara una soluzione disinfettante per prevenire infezioni.",
+      "components": [
+        {
+          "itemId": "CRAFT_CHEMICALS",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_CLOTH",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 5
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_medical_basic"
+    },
+    {
+      "id": "improvised_crossbow",
+      "resultItemId": "WEAP_CROSSBOW_IMPROVISED",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Assembla una balestra potente con molle e materiali di recupero.",
+      "components": [
+        {
+          "itemId": "CRAFT_WOOD",
+          "quantity": 3
+        },
+        {
+          "itemId": "CRAFT_STEEL",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_SPRINGS",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_WIRE",
+          "quantity": 3
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 8
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_weapons_advanced"
+    },
+    {
+      "id": "tactical_knife",
+      "resultItemId": "WEAP_KNIFE_TACTICAL",
+      "resultQuantity": 1,
+      "category": "weapons",
+      "description": "Forgia un coltello tattico di qualità militare con materiali premium.",
+      "components": [
+        {
+          "itemId": "CRAFT_STEEL",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_ELECTRONICS",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_CHEMICALS",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_LEATHER",
+          "quantity": 1
+        }
+      ],
+      "skillRequirement": {
+        "skill": "crafting",
+        "level": 12
+      },
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_weapons_expert"
+    },
+    {
+      "id": "suture_kit",
+      "resultItemId": "MED_SUTURE_KIT",
+      "resultQuantity": 1,
+      "category": "medical",
+      "description": "Assembla un kit chirurgico per suturare ferite profonde.",
+      "components": [
+        {
+          "itemId": "CRAFT_MEDICAL_SUPPLIES",
+          "quantity": 2
+        },
+        {
+          "itemId": "CRAFT_WIRE",
+          "quantity": 1
+        },
+        {
+          "itemId": "CRAFT_CHEMICALS",
+          "quantity": 1
         }
       ],
       "skillRequirement": {
         "skill": "crafting",
         "level": 10
       },
-      "unlockedByLevel": 10
+      "discoveryMethod": "manual",
+      "unlockedByManual": "manual_medical_advanced"
     }
   ]
 }

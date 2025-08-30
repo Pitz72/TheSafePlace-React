@@ -1,4 +1,81 @@
 {
+  "WEAP_KNIFE_IMPROVISED": {
+    "id": "WEAP_KNIFE_IMPROVISED",
+    "name": "Coltello improvvisato",
+    "description": "Una lama rudimentale creata legando rottami metallici a un manico di fortuna. Fragile ma meglio di niente.",
+    "type": "weapon",
+    "weight": 0.8,
+    "value": 5,
+    "damage": "1d3",
+    "durability": 50,
+    "rarity": "Common"
+  },
+  "WEAP_KNIFE_REINFORCED": {
+    "id": "WEAP_KNIFE_REINFORCED",
+    "name": "Coltello rinforzato",
+    "description": "Un coltello improvvisato migliorato con materiali di qualità superiore. Più resistente e affilato.",
+    "type": "weapon",
+    "weight": 1.2,
+    "value": 15,
+    "damage": "1d4+1",
+    "durability": 120,
+    "rarity": "Uncommon"
+  },
+  "WEAP_SPEAR_MAKESHIFT": {
+    "id": "WEAP_SPEAR_MAKESHIFT",
+    "name": "Lancia di fortuna",
+    "description": "Un bastone appuntito con una punta metallica legata. Utile per tenere i nemici a distanza.",
+    "type": "weapon",
+    "weight": 2.5,
+    "value": 8,
+    "damage": "1d4",
+    "durability": 80,
+    "rarity": "Common"
+  },
+  "WEAP_CLUB_SPIKED": {
+    "id": "WEAP_CLUB_SPIKED",
+    "name": "Mazza chiodata",
+    "description": "Un pezzo di legno con chiodi e rottami metallici conficcati. Brutale ed efficace.",
+    "type": "weapon",
+    "weight": 3.0,
+    "value": 12,
+    "damage": "1d6",
+    "durability": 100,
+    "rarity": "Common"
+  },
+  "WEAP_SLING": {
+    "id": "WEAP_SLING",
+    "name": "Fionda",
+    "description": "Una semplice fionda fatta di cuoio e corda. Silenziosa e precisa per piccoli bersagli.",
+    "type": "weapon",
+    "weight": 0.3,
+    "value": 6,
+    "damage": "1d2",
+    "durability": 200,
+    "rarity": "Common"
+  },
+  "WEAP_CROSSBOW_IMPROVISED": {
+    "id": "WEAP_CROSSBOW_IMPROVISED",
+    "name": "Balestra improvvisata",
+    "description": "Una balestra assemblata con molle e materiali di recupero. Potente ma lenta da ricaricare.",
+    "type": "weapon",
+    "weight": 4.5,
+    "value": 35,
+    "damage": "1d8",
+    "durability": 150,
+    "rarity": "Rare"
+  },
+  "WEAP_KNIFE_TACTICAL": {
+    "id": "WEAP_KNIFE_TACTICAL",
+    "name": "Coltello tattico",
+    "description": "Un coltello da combattimento di qualità militare, perfettamente bilanciato e affilato come un rasoio.",
+    "type": "weapon",
+    "weight": 1.5,
+    "value": 45,
+    "damage": "1d6+2",
+    "durability": 300,
+    "rarity": "Epic"
+  },
   "WEAP_001": {
     "id": "WEAP_001",
     "name": "Coltello da combattimento",

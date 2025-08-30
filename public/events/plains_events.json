@@ -31,7 +31,7 @@
           "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
           "successText": "Analizzando la struttura, noti un piccolo scomparto nascosto alla base. Dentro, trovi delle bende pulite e un pacchetto di fiammiferi.",
           "failureText": "È solo un ammasso di stracci e paglia fradicia. Mentre frughi, un nido di insetti mutati ti assale, lasciandoti con qualche fastidiosa puntura.",
-          "items_gained": [{ "id": "bandages_clean", "quantity": 1 }, { "id": "matches", "quantity": 1 }],
+          "items_gained": [{ "id": "CRAFT_CLOTH", "quantity": 3 }, { "id": "CRAFT_WOOD", "quantity": 2 }, { "id": "matches", "quantity": 1 }],
           "penalty": { "type": "damage", "amount": 3 }
         },
         {
@@ -51,7 +51,7 @@
           "skillCheck": { "stat": "forza", "difficulty": 13 },
           "successText": "Con uno sforzo immane, riesci a scardinare il bagagliaio. Dentro, trovi dei rottami metallici e una tanica con un po' di carburante.",
           "failureText": "Il meccanismo è saldato dalla ruggine. Non riesci ad aprirlo e lo sforzo ti lascia senza fiato e con una fitta alla schiena.",
-          "items_gained": [{ "id": "scrap_metal", "quantity": 3 }, { "id": "fuel_canister_small", "quantity": 1 }],
+          "items_gained": [{ "id": "CRAFT_METAL_SCRAP", "quantity": 4 }, { "id": "CRAFT_RUBBER", "quantity": 2 }, { "id": "CRAFT_GLASS", "quantity": 2 }, { "id": "fuel_canister_small", "quantity": 1 }],
           "penalty": { "type": "status", "status": "WOUNDED" }
         },
         {

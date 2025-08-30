@@ -1,11 +1,152 @@
 {
-  "CRAFT_001": {
-    "id": "CRAFT_001",
-    "name": "Pezzi di metallo",
-    "description": "Utili per riparare e creare oggetti.",
+  "CRAFT_METAL_SCRAP": {
+    "id": "CRAFT_METAL_SCRAP",
+    "name": "Rottami di metallo",
+    "description": "Pezzi di metallo arrugginito recuperati da veicoli e strutture abbandonate. Utili per creare armi e attrezzi improvvisati.",
+    "type": "crafting",
+    "weight": 0.3,
+    "value": 2,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_CLOTH": {
+    "id": "CRAFT_CLOTH",
+    "name": "Stracci di tessuto",
+    "description": "Pezzi di tessuto strappati da vestiti e tende. Essenziali per bende e legature.",
+    "type": "crafting",
+    "weight": 0.1,
+    "value": 1,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_WOOD": {
+    "id": "CRAFT_WOOD",
+    "name": "Legno di recupero",
+    "description": "Assi e bastoni di legno recuperati da mobili e strutture. Perfetti per manici e supporti.",
+    "type": "crafting",
+    "weight": 0.4,
+    "value": 1,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_ROPE": {
+    "id": "CRAFT_ROPE",
+    "name": "Corda logora",
+    "description": "Corda recuperata da varie fonti. Ancora resistente per legature e trappole semplici.",
     "type": "crafting",
     "weight": 0.2,
+    "value": 3,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_PLASTIC": {
+    "id": "CRAFT_PLASTIC",
+    "name": "Frammenti di plastica",
+    "description": "Pezzi di plastica dura da contenitori e oggetti vari. Utili per riparazioni e isolamento.",
+    "type": "crafting",
+    "weight": 0.1,
     "value": 1,
-    "rarity": "Common"
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_GLASS": {
+    "id": "CRAFT_GLASS",
+    "name": "Schegge di vetro",
+    "description": "Frammenti di vetro affilati. Pericolosi ma utili per lame improvvisate.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 2,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "CRAFT_RUBBER": {
+    "id": "CRAFT_RUBBER",
+    "name": "Gomma di recupero",
+    "description": "Pezzi di gomma da pneumatici e guarnizioni. Ottima per impugnature e sigillature.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 2,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "CRAFT_WIRE": {
+    "id": "CRAFT_WIRE",
+    "name": "Filo metallico",
+    "description": "Filo di rame e acciaio recuperato da impianti elettrici. Essenziale per riparazioni e trappole.",
+    "type": "crafting",
+    "weight": 0.1,
+    "value": 3,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "CRAFT_STEEL": {
+    "id": "CRAFT_STEEL",
+    "name": "Acciaio di qualità",
+    "description": "Pezzi di acciaio in buone condizioni da macchinari industriali. Materiale premium per armi avanzate.",
+    "type": "crafting",
+    "weight": 0.5,
+    "value": 8,
+    "rarity": "Rare",
+    "stackable": true
+  },
+  "CRAFT_ELECTRONICS": {
+    "id": "CRAFT_ELECTRONICS",
+    "name": "Componenti elettronici",
+    "description": "Circuiti, resistenze e microchip recuperati da dispositivi. Necessari per equipaggiamento high-tech.",
+    "type": "crafting",
+    "weight": 0.1,
+    "value": 12,
+    "rarity": "Rare",
+    "stackable": true
+  },
+  "CRAFT_CHEMICALS": {
+    "id": "CRAFT_CHEMICALS",
+    "name": "Sostanze chimiche",
+    "description": "Reagenti chimici da laboratori e ospedali. Pericolosi ma essenziali per medicine avanzate.",
+    "type": "crafting",
+    "weight": 0.3,
+    "value": 15,
+    "rarity": "Epic",
+    "stackable": true
+  },
+  "CRAFT_MEDICAL_SUPPLIES": {
+    "id": "CRAFT_MEDICAL_SUPPLIES",
+    "name": "Forniture mediche",
+    "description": "Materiali sterili e strumenti medici di base. Rari ma fondamentali per cure avanzate.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 20,
+    "rarity": "Epic",
+    "stackable": true
+  },
+  "CRAFT_LEATHER": {
+    "id": "CRAFT_LEATHER",
+    "name": "Cuoio recuperato",
+    "description": "Pezzi di cuoio da giacche, borse e sedili di auto. Perfetto per protezioni e cinghie.",
+    "type": "crafting",
+    "weight": 0.3,
+    "value": 4,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "CRAFT_ADHESIVE": {
+    "id": "CRAFT_ADHESIVE",
+    "name": "Adesivo industriale",
+    "description": "Colla e resine da cantieri e officine. Essenziale per assemblare oggetti complessi.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 6,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "CRAFT_SPRINGS": {
+    "id": "CRAFT_SPRINGS",
+    "name": "Molle metalliche",
+    "description": "Molle di varie dimensioni da macchinari. Utili per meccanismi e trappole avanzate.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 5,
+    "rarity": "Uncommon",
+    "stackable": true
   }
 }

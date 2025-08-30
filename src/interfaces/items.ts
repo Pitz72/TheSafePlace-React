@@ -19,6 +19,7 @@ export enum ItemType {
   ARMOR = 'Armor',
   QUEST = 'Quest',
   CRAFTING = 'Crafting',
+  MANUAL = 'Manual',
   UNIQUE = 'Unique',
 }
 
@@ -92,4 +93,14 @@ export interface IPortionConsumptionResult {
   effectApplied: number;
   message: string;
   itemConsumed: boolean; // True se l'oggetto è stato completamente consumato
+}
+
+/**
+ * Interfaccia specifica per manuali di crafting
+ */
+export interface ICraftingManual extends IItem {
+  type: 'manual';
+  effect: 'unlock_recipes';
+  effectValue: string; // ID del manuale per sbloccare ricette
+  unlocksRecipes: string[]; // Lista delle ricette che sblocca
 }

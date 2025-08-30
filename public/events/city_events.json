@@ -96,6 +96,13 @@
           "items_gained": [{ "id": "mechanic_manual", "quantity": 1 }, { "id": "first_aid_book", "quantity": 1 }]
         },
         {
+          "text": "Fruga nella sezione tecnica",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Nascosto dietro altri libri, trovi un manuale di primo soccorso ancora in buone condizioni!",
+          "failureText": "Solo libri di narrativa e guide turistiche inutili.",
+          "items_gained": [{ "id": "MANUAL_MEDICAL_BASIC", "quantity": 1 }]
+        },
+        {
           "text": "Recupera carta per accendere fuochi",
           "resultText": "Raccogli carta asciutta e di facile combustione.",
           "items_gained": [{ "id": "dry_paper", "quantity": 5 }]
@@ -112,7 +119,7 @@
           "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
           "successText": "Trovi tende, corde e kit multiuso.",
           "failureText": "Gli scaffali sono vuoti o danneggiati.",
-          "items_gained": [{ "id": "tent_small", "quantity": 1 }, { "id": "rope_strong", "quantity": 1 }, { "id": "multitool", "quantity": 1 }]
+          "items_gained": [{ "id": "tent_small", "quantity": 1 }, { "id": "CRAFT_ROPE", "quantity": 2 }, { "id": "CRAFT_CLOTH", "quantity": 3 }, { "id": "multitool", "quantity": 1 }]
         },
         {
           "text": "Controlla il magazzino",
@@ -141,6 +148,13 @@
           "successText": "Recuperi walkie-talkie e documenti con codici utili.",
           "failureText": "Documenti bagnati e inutilizzabili.",
           "items_gained": [{ "id": "walkie_talkie", "quantity": 1 }, { "id": "code_list", "quantity": 1 }]
+        },
+        {
+          "text": "Ispeziona l'ufficio del comandante",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+          "successText": "In una cassaforte aperta trovi un manuale tattico delle forze speciali!",
+          "failureText": "L'ufficio è stato completamente saccheggiato.",
+          "items_gained": [{ "id": "MANUAL_WEAPONS_BASIC", "quantity": 1 }]
         }
       ]
     },
@@ -154,14 +168,14 @@
           "skillCheck": { "stat": "forza", "difficulty": 12 },
           "successText": "Spingi via una scaffalatura e trovi scorte nascoste.",
           "failureText": "Nulla di interessante.",
-          "items_gained": [{ "id": "fuel_canister_small", "quantity": 1 }, { "id": "car_toolkit", "quantity": 1 }]
+          "items_gained": [{ "id": "fuel_canister_small", "quantity": 1 }, { "id": "CRAFT_METAL_SCRAP", "quantity": 3 }, { "id": "CRAFT_RUBBER", "quantity": 2 }]
         },
         {
           "text": "Smonta le pompe",
           "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
           "successText": "Recuperi componenti metallici e guarnizioni.",
           "failureText": "Tutto troppo usurato.",
-          "items_gained": [{ "id": "metal_scrap", "quantity": 4 }, { "id": "rubber_gasket", "quantity": 2 }]
+          "items_gained": [{ "id": "CRAFT_METAL_SCRAP", "quantity": 4 }, { "id": "CRAFT_RUBBER", "quantity": 2 }, { "id": "CRAFT_WIRE", "quantity": 1 }]
         }
       ]
     },
@@ -183,6 +197,13 @@
           "successText": "Recuperi strumenti di precisione e batterie speciali.",
           "failureText": "Molto è stato portato via.",
           "items_gained": [{ "id": "precision_tools", "quantity": 1 }, { "id": "medical_battery", "quantity": 2 }]
+        },
+        {
+          "text": "Cerca nella biblioteca medica",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 15 },
+          "successText": "Tra i libri di medicina trovi un manuale chirurgico avanzato ancora utilizzabile!",
+          "failureText": "I libri sono troppo danneggiati dall'umidità.",
+          "items_gained": [{ "id": "MANUAL_MEDICAL_ADVANCED", "quantity": 1 }]
         }
       ]
     },
@@ -196,7 +217,7 @@
           "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
           "successText": "Trovi microchip, cavi e moduli funzionanti.",
           "failureText": "Tutto troppo danneggiato.",
-          "items_gained": [{ "id": "electronic_parts", "quantity": 5 }, { "id": "copper_wire", "quantity": 3 }]
+          "items_gained": [{ "id": "CRAFT_ELECTRONICS", "quantity": 2 }, { "id": "CRAFT_WIRE", "quantity": 3 }, { "id": "CRAFT_PLASTIC", "quantity": 2 }]
         },
         {
           "text": "Cerca un generatore portatile",
@@ -204,6 +225,34 @@
           "successText": "Sollevi una casseratura pesante e trovi un piccolo generatore.",
           "failureText": "Troppo pesante o rotto.",
           "items_gained": [{ "id": "portable_generator", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_military_bunker",
+      "title": "Bunker Militare Nascosto",
+      "description": "Dietro una porta mimetizzata scopri l'ingresso di un piccolo bunker militare. L'accesso sembra ancora sicuro.",
+      "choices": [
+        {
+          "text": "Esplora con cautela",
+          "skillCheck": { "stat": "agilita", "difficulty": 13 },
+          "successText": "Eviti le trappole e accedi a un deposito con equipaggiamento militare.",
+          "failureText": "Attivi un allarme e devi fuggire rapidamente.",
+          "items_gained": [{ "id": "CRAFT_STEEL", "quantity": 2 }, { "id": "CRAFT_ELECTRONICS", "quantity": 1 }]
+        },
+        {
+          "text": "Cerca documenti classificati",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 16 },
+          "successText": "In una cassaforte aperta trovi manuali tattici di livello militare!",
+          "failureText": "I documenti sono stati distrutti o portati via.",
+          "items_gained": [{ "id": "MANUAL_WEAPONS_ADVANCED", "quantity": 1 }]
+        },
+        {
+          "text": "Controlla l'armamentario",
+          "skillCheck": { "stat": "forza", "difficulty": 14 },
+          "successText": "Forzi un armadietto e trovi munizioni speciali e granate.",
+          "failureText": "Gli armadietti sono sigillati elettronicamente.",
+          "items_gained": [{ "id": "special_ammo", "quantity": 5 }, { "id": "frag_grenade", "quantity": 1 }]
         }
       ]
     },

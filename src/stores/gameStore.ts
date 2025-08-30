@@ -48,6 +48,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentEvent: null,
   seenEventIds: [],
   notifications: [],
+  unlockRecipesCallback: undefined,
 
   // --- AZIONI ---
 
@@ -1314,15 +1315,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   useItem: (slotIndex) => {
     const { characterSheet, items, addLogEntry, updateHP } = get();
     const itemStack = characterSheet.inventory[slotIndex];
-    if (!itemStack) return;
+    if (!itemStack) return false;
     const item = items[itemStack.itemId];
-    if (!item || !item.effect) return;
+    if (!item || !item.effect) return false;
 
     let effectApplied = 0;
     let messageContext: Record<string, any> = { item: item.name };
     const newInventory = [...characterSheet.inventory];
     const currentStack = newInventory[slotIndex];
-    if (!currentStack) return;
+    if (!currentStack) return false;
 
     if (item.portionsPerUnit && item.portionEffect) {
       let currentPortions = currentStack.portions ?? item.portionsPerUnit;
@@ -1341,15 +1342,38 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (currentStack.quantity === 0) newInventory[slotIndex] = null;
     }
 
-    if (effectApplied > 0) {
+    // Gestione effetti speciali per manuali di crafting
+    if (item.effect === 'unlock_recipes') {
+      const manualId = item.effectValue as string;
+      
+      // Chiama la funzione di callback per sbloccare ricette
+      if (get().unlockRecipesCallback) {
+        get().unlockRecipesCallback(manualId);
+      }
+      
+      addLogEntry(MessageType.DISCOVERY, { 
+        discovery: `Hai studiato il ${item.name} e imparato nuove ricette!` 
+      });
+      
+      // Rimuovi il manuale dall'inventario (non stackable, quindi rimuovi 1)
+      currentStack.quantity -= 1;
+      if (currentStack.quantity === 0) newInventory[slotIndex] = null;
+      
+      set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
+      return true;
+      
+    } else if (effectApplied > 0) {
       switch (item.effect) {
         case 'heal': updateHP(effectApplied); addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied }); break;
         case 'satiety': set(s => ({ survivalState: { ...s.survivalState, hunger: Math.min(100, s.survivalState.hunger + effectApplied) } })); break;
         case 'hydration': set(s => ({ survivalState: { ...s.survivalState, thirst: Math.min(100, s.survivalState.thirst + effectApplied) } })); break;
       }
       addLogEntry(MessageType.ITEM_USED, messageContext);
+      set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
+      return true;
     }
-    set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
+    
+    return false;
   },
 
   addItem: (itemId, quantity = 1) => {
@@ -1415,6 +1439,107 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
     get().removeItem(slotIndex, slot.quantity);
     addLogEntry(MessageType.INVENTORY_CHANGE, { action: `Hai gettato ${item.name}.` });
+  },
+
+  consumeItem: (slotIndex) => {
+    const { characterSheet, items, addLogEntry, survivalState } = get();
+    const slot = characterSheet.inventory[slotIndex];
+    if (!slot) return false;
+
+    const item = items[slot.itemId];
+    if (!item || (item.type !== 'consumable' && item.type !== 'Consumable')) {
+      addLogEntry(MessageType.ACTION_FAIL, { reason: 'Questo oggetto non è consumabile.' });
+      return false;
+    }
+
+    // Applica effetto dell'oggetto
+    let effectApplied = false;
+    const effectValue = typeof item.effectValue === 'number' ? item.effectValue : parseInt(item.effectValue as string) || 0;
+
+    switch (item.effect) {
+      case 'heal':
+        const healAmount = effectValue;
+        const oldHP = characterSheet.currentHP;
+        const newHP = Math.min(characterSheet.maxHP, oldHP + healAmount);
+        const actualHeal = newHP - oldHP;
+        
+        if (actualHeal > 0) {
+          get().updateHP(actualHeal);
+          addLogEntry(MessageType.HP_RECOVERY, { 
+            healing: actualHeal, 
+            item: item.name 
+          });
+          effectApplied = true;
+        } else {
+          addLogEntry(MessageType.ACTION_FAIL, { 
+            reason: 'Sei già in piena salute.' 
+          });
+          return false;
+        }
+        break;
+
+      case 'satiety':
+        const hungerRestore = effectValue;
+        const newHunger = Math.min(100, survivalState.hunger + hungerRestore);
+        const actualHungerRestore = newHunger - survivalState.hunger;
+        
+        if (actualHungerRestore > 0) {
+          set(state => ({
+            survivalState: {
+              ...state.survivalState,
+              hunger: newHunger
+            }
+          }));
+          addLogEntry(MessageType.ACTION_SUCCESS, { 
+            action: `Hai consumato ${item.name}. Sazietà ripristinata: +${actualHungerRestore}` 
+          });
+          effectApplied = true;
+        } else {
+          addLogEntry(MessageType.ACTION_FAIL, { 
+            reason: 'Non hai fame al momento.' 
+          });
+          return false;
+        }
+        break;
+
+      case 'hydration':
+        const thirstRestore = effectValue;
+        const newThirst = Math.min(100, survivalState.thirst + thirstRestore);
+        const actualThirstRestore = newThirst - survivalState.thirst;
+        
+        if (actualThirstRestore > 0) {
+          set(state => ({
+            survivalState: {
+              ...state.survivalState,
+              thirst: newThirst
+            }
+          }));
+          addLogEntry(MessageType.ACTION_SUCCESS, { 
+            action: `Hai bevuto ${item.name}. Sete ripristinata: +${actualThirstRestore}` 
+          });
+          effectApplied = true;
+        } else {
+          addLogEntry(MessageType.ACTION_FAIL, { 
+            reason: 'Non hai sete al momento.' 
+          });
+          return false;
+        }
+        break;
+
+      default:
+        addLogEntry(MessageType.ACTION_FAIL, { 
+          reason: `Effetto sconosciuto: ${item.effect}` 
+        });
+        return false;
+    }
+
+    // Se l'effetto è stato applicato, rimuovi l'oggetto
+    if (effectApplied) {
+      get().removeItem(slotIndex, 1);
+      return true;
+    }
+
+    return false;
   },
 
   // --- SAVE/LOAD SYSTEM ---
@@ -1785,5 +1910,10 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   clearNotifications: () => {
     set({ notifications: [] });
+  },
+
+  // Callback system for avoiding circular dependencies
+  setUnlockRecipesCallback: (callback: (manualId: string) => void) => {
+    set({ unlockRecipesCallback: callback });
   },
 }));

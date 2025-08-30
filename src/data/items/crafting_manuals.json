@@ -1,0 +1,80 @@
+{
+  "MANUAL_WEAPONS_BASIC": {
+    "id": "MANUAL_WEAPONS_BASIC",
+    "name": "Manuale: Armi Improvvisate",
+    "description": "Un manuale logoro che spiega come creare armi di fortuna con materiali di scarto. Contiene schemi per coltelli rinforzati, lance e fionde.",
+    "type": "manual",
+    "weight": 0.3,
+    "value": 25,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_basic",
+    "rarity": "Uncommon",
+    "unlocksRecipes": ["reinforced_knife", "makeshift_spear", "sling"]
+  },
+  "MANUAL_MEDICAL_BASIC": {
+    "id": "MANUAL_MEDICAL_BASIC",
+    "name": "Manuale: Primo Soccorso",
+    "description": "Guida pratica per il primo soccorso in situazioni di emergenza. Include tecniche per disinfettare ferite e preparare medicine di base.",
+    "type": "manual",
+    "weight": 0.4,
+    "value": 30,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_medical_basic",
+    "rarity": "Uncommon",
+    "unlocksRecipes": ["antiseptic", "painkiller_basic", "herbal_remedy"]
+  },
+  "MANUAL_WEAPONS_ADVANCED": {
+    "id": "MANUAL_WEAPONS_ADVANCED",
+    "name": "Manuale: Armamenti Avanzati",
+    "description": "Manuale militare che descrive la costruzione di armi più sofisticate. Richiede materiali rari e abilità elevate.",
+    "type": "manual",
+    "weight": 0.5,
+    "value": 75,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_advanced",
+    "rarity": "Rare",
+    "unlocksRecipes": ["tactical_knife", "combat_spear", "crossbow_basic"]
+  },
+  "MANUAL_MEDICAL_ADVANCED": {
+    "id": "MANUAL_MEDICAL_ADVANCED",
+    "name": "Manuale Medico Avanzato",
+    "description": "Testo medico professionale con procedure chirurgiche e preparazione di farmaci complessi. Solo per esperti.",
+    "type": "manual",
+    "weight": 0.8,
+    "value": 100,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_medical_advanced",
+    "rarity": "Rare",
+    "unlocksRecipes": ["suture_kit", "antibiotic", "morphine"]
+  },
+  "MANUAL_WEAPONS_EXPERT": {
+    "id": "MANUAL_WEAPONS_EXPERT",
+    "name": "Manuale: Armamenti Tattici",
+    "description": "Manuale classificato delle forze speciali. Contiene progetti per armi da combattimento di livello militare.",
+    "type": "manual",
+    "weight": 0.6,
+    "value": 150,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_expert",
+    "rarity": "Epic",
+    "unlocksRecipes": ["assault_knife", "tactical_crossbow", "explosive_trap"]
+  },
+  "MANUAL_SURVIVAL_EXPERT": {
+    "id": "MANUAL_SURVIVAL_EXPERT",
+    "name": "Manuale: Sopravvivenza Estrema",
+    "description": "Guida completa per la sopravvivenza in condizioni estreme. Include tecniche avanzate per costruire rifugi e purificare risorse.",
+    "type": "manual",
+    "weight": 0.7,
+    "value": 120,
+    "stackable": false,
+    "effect": "unlock_recipes",
+    "effectValue": "manual_survival_expert",
+    "rarity": "Epic",
+    "unlocksRecipes": ["water_purifier", "advanced_shelter", "emergency_beacon"]
+  }
+}

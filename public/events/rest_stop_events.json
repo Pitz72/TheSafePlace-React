@@ -24,6 +24,14 @@
           "penalty": { "type": "time", "minutes": 30 }
         },
         {
+          "id": "investigate_shelter",
+          "text": "Ispeziona accuratamente il rifugio",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+          "successText": "Sotto una panca trovi un zaino dimenticato con un manuale di sopravvivenza!",
+          "failureText": "Il rifugio è stato già perquisito a fondo da altri sopravvissuti.",
+          "items_gained": [{ "id": "MANUAL_SURVIVAL_EXPERT", "quantity": 1 }]
+        },
+        {
           "id": "ignore_choice",
           "text": "Ignora l'area e prosegui il viaggio",
           "consequences": {

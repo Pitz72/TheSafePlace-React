@@ -30,6 +30,97 @@ import {
 import { useGameStore } from './gameStore';
 import { MessageType } from '../data/MessageArchive';
 import type { IInventorySlot } from '../interfaces/items';
+import { ensureStarterKit, SURVIVOR_STARTER_KIT } from '../rules/characterGenerator';
+
+// ===== SINGLETON RECIPE MANAGER =====
+
+/**
+ * Singleton per gestire il caricamento e la cache delle ricette
+ */
+class RecipeManager {
+  private static instance: RecipeManager;
+  private recipes: Recipe[] = [];
+  private isLoaded = false;
+  private isLoading = false;
+  private loadPromise: Promise<Recipe[]> | null = null;
+  private memoizedCalculations = new Map<string, any>();
+
+  private constructor() {}
+
+  static getInstance(): RecipeManager {
+    if (!RecipeManager.instance) {
+      RecipeManager.instance = new RecipeManager();
+    }
+    return RecipeManager.instance;
+  }
+
+  async getRecipes(): Promise<Recipe[]> {
+    if (this.isLoaded) {
+      return this.recipes;
+    }
+
+    if (this.isLoading && this.loadPromise) {
+      return this.loadPromise;
+    }
+
+    this.isLoading = true;
+    this.loadPromise = this.loadRecipesInternal();
+    
+    try {
+      const recipes = await this.loadPromise;
+      this.recipes = recipes;
+      this.isLoaded = true;
+      this.isLoading = false;
+      return recipes;
+    } catch (error) {
+      this.isLoading = false;
+      this.loadPromise = null;
+      throw error;
+    }
+  }
+
+  private async loadRecipesInternal(): Promise<Recipe[]> {
+    const result = await loadRecipes();
+    if (result.success) {
+      return result.recipes;
+    } else {
+      throw new Error(result.errors.join('; '));
+    }
+  }
+
+  // Memoizzazione per calcoli costosi
+  getMemoized<T>(key: string, calculator: () => T): T {
+    if (this.memoizedCalculations.has(key)) {
+      return this.memoizedCalculations.get(key);
+    }
+    
+    const result = calculator();
+    this.memoizedCalculations.set(key, result);
+    return result;
+  }
+
+  clearMemoization(keyPattern?: string): void {
+    if (keyPattern) {
+      // Rimuovi solo le chiavi che matchano il pattern
+      for (const key of this.memoizedCalculations.keys()) {
+        if (key.includes(keyPattern)) {
+          this.memoizedCalculations.delete(key);
+        }
+      }
+    } else {
+      // Pulisci tutta la cache
+      this.memoizedCalculations.clear();
+    }
+  }
+
+  reset(): void {
+    this.recipes = [];
+    this.isLoaded = false;
+    this.isLoading = false;
+    this.loadPromise = null;
+    this.memoizedCalculations.clear();
+  }
+}
 
 // ===== EXTENDED STATE INTERFACE =====
 
@@ -62,9 +153,19 @@ interface ExtendedCraftingState extends CraftingState {
   // ===== RECIPE UNLOCKING =====
   unlockRecipesByLevel: (level: number) => void;
   unlockRecipesByManual: (manualId: string) => void;
+  unlockStarterRecipes: () => void;
 
   // ===== INTEGRATION =====
   syncWithGameStore: () => void;
+
+  // ===== DEBUG/TESTING =====
+  addManualToInventory: (manualId: string) => boolean;
+  addAllManualsForTesting: () => number;
+  testManualDiscovery: (manualId: string) => boolean;
+
+  // ===== ERROR RECOVERY =====
+  recoverFromCorruptedData: () => boolean;
+  validateCraftingData: () => boolean;
 }
 
 // ===== STORE IMPLEMENTATION =====
@@ -249,33 +350,29 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     // ===== EXTENDED ACTIONS =====
 
     initializeRecipes: async () => {
+      const currentState = get();
+      
+      // Prevenzione doppia inizializzazione usando singleton
+      if (currentState.isLoading || currentState.allRecipes.length > 0) {
+        debugLog('Recipes already loading or loaded, skipping initialization');
+        return;
+      }
+      
       set({ isLoading: true, loadError: null });
-      debugLog('Initializing recipes');
+      debugLog('Initializing recipes using singleton pattern');
 
       try {
-        const result = await loadRecipes();
+        const recipeManager = RecipeManager.getInstance();
+        const recipes = await recipeManager.getRecipes();
 
-        if (result.success) {
-          set({
-            allRecipes: result.recipes,
-            isLoading: false,
-            loadError: null
-          });
+        set({
+          allRecipes: recipes,
+          isLoading: false,
+          loadError: null
+        });
 
-          debugLog(`Recipes initialized: ${result.recipes.length} recipes loaded`);
+        debugLog(`Recipes initialized: ${recipes.length} recipes loaded`);
 
-          // Log warnings se presenti
-          if (result.warnings.length > 0) {
-            console.warn('Recipe loading warnings:', result.warnings);
-          }
-        } else {
-          set({
-            isLoading: false,
-            loadError: result.errors.join('; ')
-          });
-
-          console.error('Failed to load recipes:', result.errors);
-        }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         set({
@@ -284,6 +381,20 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         });
 
         console.error('Recipe initialization error:', error);
+        
+        // Fallback: carica ricette di emergenza se disponibili
+        try {
+          const emergencyRecipes = await loadEmergencyRecipes();
+          if (emergencyRecipes.length > 0) {
+            set({ 
+              allRecipes: emergencyRecipes,
+              loadError: `${errorMessage} (usando ricette di emergenza)`
+            });
+            debugLog('Loaded emergency recipes as fallback');
+          }
+        } catch (fallbackError) {
+          console.error('Failed to load emergency recipes:', fallbackError);
+        }
       }
     },
 
@@ -404,17 +515,69 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           gameStore.characterSheet.knownRecipes = newKnownRecipes;
         }
 
-        // Notifica per ogni ricetta sbloccata
+        // Notifica riassuntiva per il manuale
+        const manualNames: Record<string, string> = {
+          'manual_weapons_basic': 'Armi Improvvisate',
+          'manual_medical_basic': 'Primo Soccorso',
+          'manual_weapons_advanced': 'Armamenti Avanzati',
+          'manual_medical_advanced': 'Medicina Avanzata',
+          'manual_weapons_expert': 'Armamenti Tattici',
+          'manual_survival_expert': 'Sopravvivenza Estrema'
+        };
+
+        const manualName = manualNames[manualId] || 'Manuale Sconosciuto';
+        
+        gameStore.addLogEntry(MessageType.DISCOVERY, {
+          discovery: `Dal manuale "${manualName}" hai imparato ${recipesToUnlock.length} nuove ricette!`
+        });
+
+        // Log dettagliato per debug
         recipesToUnlock.forEach(recipe => {
           const resultItem = gameStore.items[recipe.resultItemId];
           const itemName = resultItem?.name || 'Oggetto Sconosciuto';
-
-          gameStore.addLogEntry(MessageType.DISCOVERY, {
-            discovery: `Dal manuale hai imparato: ${itemName}`
-          });
+          debugLog(`Unlocked recipe: ${recipe.id} -> ${itemName}`);
         });
 
         debugLog(`Unlocked ${recipesToUnlock.length} recipes from manual ${manualId}`);
+      } else {
+        // Nessuna ricetta da sbloccare
+        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
+          reason: 'Questo manuale non contiene ricette che non conosci già.'
+        });
+        debugLog(`No new recipes to unlock from manual ${manualId}`);
+      }
+    },
+
+    // ===== STARTER KIT =====
+
+    unlockStarterRecipes: () => {
+      const gameStore = useGameStore.getState();
+      
+      if (!gameStore.characterSheet) {
+        debugLog('No character sheet available for starter recipes');
+        return;
+      }
+
+      // Assicura che il personaggio abbia lo starter kit
+      const updatedCharacter = ensureStarterKit(gameStore.characterSheet);
+      
+      // Se il personaggio è stato aggiornato, aggiorna il game store
+      if (updatedCharacter !== gameStore.characterSheet) {
+        // Aggiorna il character sheet nel game store
+        gameStore.characterSheet = updatedCharacter;
+        
+        // Sincronizza le ricette conosciute
+        set({ knownRecipeIds: [...updatedCharacter.knownRecipes] });
+        
+        // Notifica nel journal
+        gameStore.addLogEntry(MessageType.DISCOVERY, {
+          discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
+        });
+        
+        debugLog(`Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
+      } else {
+        // Sincronizza comunque le ricette se già presenti
+        get().syncWithGameStore();
       }
     },
 
@@ -422,6 +585,13 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
     syncWithGameStore: () => {
       const gameStore = useGameStore.getState();
+
+      // Registra la callback per sbloccare ricette (evita dipendenze circolari)
+      if (!gameStore.unlockRecipesCallback) {
+        gameStore.setUnlockRecipesCallback((manualId: string) => {
+          get().unlockRecipesByManual(manualId);
+        });
+      }
 
       if (gameStore.characterSheet?.knownRecipes) {
         const currentKnownRecipes = get().knownRecipeIds;
@@ -433,9 +603,180 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           debugLog('Synced known recipes with game store');
         }
       }
+    },
+
+    // ===== DEBUG/TESTING FUNCTIONS =====
+
+    addManualToInventory: (manualId: string) => {
+      const gameStore = useGameStore.getState();
+      const success = gameStore.addItem(manualId, 1);
+      
+      if (success) {
+        debugLog(`Added manual ${manualId} to inventory for testing`);
+        gameStore.addLogEntry(MessageType.ITEM_FOUND, { 
+          item: gameStore.items[manualId]?.name || 'Manuale Sconosciuto',
+          quantity: 1 
+        });
+      } else {
+        debugLog(`Failed to add manual ${manualId} - inventory full`);
+      }
+      
+      return success;
+    },
+
+    // Funzioni di test per tutti i manuali
+    addAllManualsForTesting: () => {
+      const manuals = [
+        'MANUAL_WEAPONS_BASIC',
+        'MANUAL_MEDICAL_BASIC', 
+        'MANUAL_WEAPONS_ADVANCED',
+        'MANUAL_MEDICAL_ADVANCED',
+        'MANUAL_WEAPONS_EXPERT',
+        'MANUAL_SURVIVAL_EXPERT'
+      ];
+      
+      let addedCount = 0;
+      manuals.forEach(manualId => {
+        if (get().addManualToInventory(manualId)) {
+          addedCount++;
+        }
+      });
+      
+      debugLog(`Added ${addedCount}/${manuals.length} manuals for testing`);
+      return addedCount;
+    },
+
+    testManualDiscovery: (manualId: string) => {
+      debugLog(`Testing manual discovery for: ${manualId}`);
+      
+      // Aggiungi il manuale all'inventario
+      const added = get().addManualToInventory(manualId);
+      if (!added) {
+        debugLog('Failed to add manual - inventory full');
+        return false;
+      }
+      
+      // Simula l'uso del manuale
+      const gameStore = useGameStore.getState();
+      const inventory = gameStore.characterSheet.inventory;
+      
+      // Trova il manuale nell'inventario
+      const manualSlotIndex = inventory.findIndex(slot => 
+        slot && slot.itemId === manualId
+      );
+      
+      if (manualSlotIndex !== -1) {
+        // Usa il manuale
+        gameStore.useItem(manualSlotIndex);
+        debugLog(`Manual ${manualId} used successfully`);
+        return true;
+      } else {
+        debugLog(`Manual ${manualId} not found in inventory`);
+        return false;
+      }
+    },
+
+    // ===== ERROR RECOVERY =====
+    recoverFromCorruptedData: () => {
+      const gameStore = useGameStore.getState();
+      
+      try {
+        // Reset crafting store to clean state
+        set({
+          recipes: [],
+          knownRecipeIds: [],
+          selectedRecipe: null,
+          craftingQueue: [],
+          isInitialized: false,
+          loadError: null
+        });
+
+        // Clear corrupted character data
+        if (gameStore.characterSheet) {
+          gameStore.characterSheet.knownRecipes = [];
+          if ((gameStore.characterSheet as any).usedManuals) {
+            (gameStore.characterSheet as any).usedManuals = [];
+          }
+        }
+
+        // Reinitialize system
+        get().initializeCraftingSystem();
+        
+        gameStore.addLogEntry(MessageType.SYSTEM, {
+          message: 'Sistema di crafting ripristinato dopo errore dati corrotti'
+        });
+
+        debugLog('Successfully recovered from corrupted data');
+        return true;
+      } catch (error) {
+        console.error('Failed to recover from corrupted data:', error);
+        return false;
+      }
+    },
+
+    validateCraftingData: () => {
+      const { recipes, knownRecipeIds } = get();
+      const issues: string[] = [];
+
+      // Check for invalid recipes
+      const invalidRecipes = knownRecipeIds.filter(id => 
+        !recipes.find(recipe => recipe.id === id)
+      );
+
+      if (invalidRecipes.length > 0) {
+        issues.push(`Invalid recipe IDs found: ${invalidRecipes.join(', ')}`);
+        
+        // Clean up invalid recipes
+        set({
+          knownRecipeIds: knownRecipeIds.filter(id => 
+            recipes.find(recipe => recipe.id === id)
+          )
+        });
+      }
+
+      // Check for duplicate recipes
+      const duplicates = knownRecipeIds.filter((id, index) => 
+        knownRecipeIds.indexOf(id) !== index
+      );
+
+      if (duplicates.length > 0) {
+        issues.push(`Duplicate recipe IDs found: ${duplicates.join(', ')}`);
+        
+        // Remove duplicates
+        set({
+          knownRecipeIds: [...new Set(knownRecipeIds)]
+        });
+      }
+
+      if (issues.length > 0) {
+        debugLog(`Data validation issues fixed: ${issues.join('; ')}`);
+      }
+
+      return issues.length === 0;
     }
   }))
 );
+
+// ===== EMERGENCY FALLBACK =====
+
+/**
+ * Carica ricette di emergenza in caso di errore nel caricamento principale
+ */
+async function loadEmergencyRecipes(): Promise<Recipe[]> {
+  return [
+    {
+      id: 'emergency_bandage',
+      resultItemId: 'MED_BANDAGE_BASIC',
+      resultQuantity: 1,
+      category: 'medical',
+      description: 'Benda di emergenza per ferite base',
+      components: [
+        { itemId: 'CRAFT_CLOTH', quantity: 1 }
+      ],
+      unlockedByLevel: 1
+    }
+  ];
+}
 
 // ===== STORE INITIALIZATION =====
 

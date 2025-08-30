@@ -117,6 +117,9 @@ export interface GameState {
     message: string;
     duration?: number;
   }>;
+
+  // Callback system for avoiding circular dependencies
+  unlockRecipesCallback?: (manualId: string) => void;
   
   // Actions
   initializeGame: () => Promise<void>;
@@ -146,7 +149,8 @@ export interface GameState {
   handleBackToMenu: () => void;
   handleExit: () => void;
   setSelectedInventoryIndex: (index: number) => void;
-  useItem: (slotIndex: number) => void;
+  useItem: (slotIndex: number) => boolean;
+  consumeItem: (slotIndex: number) => boolean;
   equipItemFromInventory: (slotIndex: number) => void;
   dropItem: (slotIndex: number) => void;
   updateCharacterSheet: (characterSheet: ICharacterSheet) => void;
@@ -172,6 +176,7 @@ export interface GameState {
   addNotification: (notification: Omit<GameState['notifications'][0], 'id'>) => void;
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
+  setUnlockRecipesCallback: (callback: (manualId: string) => void) => void;
   
   // Shelter system v0.6.1 actions
   createShelterKey: (x: number, y: number) => string;

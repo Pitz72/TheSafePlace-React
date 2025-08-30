@@ -7,5 +7,71 @@
     "weight": 0.1,
     "value": 0,
     "rarity": "Unique"
+  },
+  "MANUAL_WEAPONS_BASIC": {
+    "id": "MANUAL_WEAPONS_BASIC",
+    "name": "Manuale: Armi Improvvisate",
+    "description": "Un libretto logoro che spiega come creare armi di base con materiali di recupero. Contiene schemi per lance, mazze e fionde.",
+    "type": "quest",
+    "weight": 0.3,
+    "value": 25,
+    "rarity": "Uncommon",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_basic"
+  },
+  "MANUAL_MEDICAL_BASIC": {
+    "id": "MANUAL_MEDICAL_BASIC", 
+    "name": "Manuale: Primo Soccorso",
+    "description": "Guida medica di base per il trattamento di ferite e la preparazione di disinfettanti. Essenziale per la sopravvivenza.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 30,
+    "rarity": "Uncommon",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_medical_basic"
+  },
+  "MANUAL_WEAPONS_ADVANCED": {
+    "id": "MANUAL_WEAPONS_ADVANCED",
+    "name": "Manuale: Armamenti Avanzati",
+    "description": "Manuale tecnico militare per la costruzione di armi complesse. Richiede materiali di qualità e abilità elevate.",
+    "type": "quest",
+    "weight": 0.4,
+    "value": 75,
+    "rarity": "Rare",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_advanced"
+  },
+  "MANUAL_MEDICAL_ADVANCED": {
+    "id": "MANUAL_MEDICAL_ADVANCED",
+    "name": "Manuale Medico Avanzato",
+    "description": "Testo chirurgico professionale con procedure avanzate. Permette di creare kit medici di qualità ospedaliera.",
+    "type": "quest",
+    "weight": 0.3,
+    "value": 100,
+    "rarity": "Rare",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_medical_advanced"
+  },
+  "MANUAL_WEAPONS_EXPERT": {
+    "id": "MANUAL_WEAPONS_EXPERT",
+    "name": "Manuale: Armamenti Tattici",
+    "description": "Documentazione classificata per equipaggiamento militare d'élite. Contiene segreti per armi di precisione letale.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 200,
+    "rarity": "Epic",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_weapons_expert"
+  },
+  "MANUAL_SURVIVAL_EXPERT": {
+    "id": "MANUAL_SURVIVAL_EXPERT",
+    "name": "Manuale: Sopravvivenza Estrema",
+    "description": "Guida completa per sopravvivere in condizioni apocalittiche. Tecniche avanzate per ogni situazione.",
+    "type": "quest",
+    "weight": 0.4,
+    "value": 150,
+    "rarity": "Epic",
+    "effect": "unlock_recipes",
+    "effectValue": "manual_survival_expert"
   }
 }

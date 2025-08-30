@@ -5,6 +5,7 @@ import ammo from './ammo.json';
 import armor from './armor.json';
 import consumables from './consumables.json';
 import craftingMaterials from './crafting_materials.json';
+import craftingManuals from './crafting_manuals.json';
 import questItems from './quest_items.json';
 import uniqueItems from './unique_items.json';
 
@@ -14,6 +15,7 @@ export const itemDatabase: Record<string, IItem> = {
   ...armor,
   ...consumables,
   ...craftingMaterials,
+  ...craftingManuals,
   ...questItems,
   ...uniqueItems,
 };

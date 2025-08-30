@@ -10,7 +10,7 @@
           "skillCheck": { "stat": "agilita", "difficulty": 12 },
           "successText": "Con movimenti precisi, riesci a disattivare il meccanismo. Ora puoi prenderla per usarla come trappola.",
           "failureText": "Il meccanismo scatta e ti afferra la caviglia. Il dolore è lancinante.",
-          "items_gained": [{ "id": "bear_trap", "quantity": 1 }],
+          "items_gained": [{ "id": "bear_trap", "quantity": 1 }, { "id": "CRAFT_METAL_SCRAP", "quantity": 2 }, { "id": "CRAFT_SPRINGS", "quantity": 1 }],
           "penalty": { "type": "damage", "amount": 20 }
         },
         {
@@ -30,7 +30,7 @@
           "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
           "successText": "All'interno trovi un piccolo magazzino di sopravvivenza: cibo in scatola, acqua pulita e medicine scadute ma ancora utilizzabili.",
           "failureText": "La capanna è stata già saccheggiata tempo fa. Non c'è rimasto nulla di utile, solo polvere e ragnatele.",
-          "items_gained": [{ "id": "canned_food", "quantity": 2 }, { "id": "water_purified", "quantity": 2 }, { "id": "expired_medicine", "quantity": 1 }]
+          "items_gained": [{ "id": "canned_food", "quantity": 2 }, { "id": "water_purified", "quantity": 2 }, { "id": "CRAFT_WOOD", "quantity": 4 }, { "id": "CRAFT_ROPE", "quantity": 2 }, { "id": "CRAFT_CLOTH", "quantity": 2 }]
         },
         {
           "text": "Riposati qui per un po'",
@@ -49,13 +49,13 @@
           "skillCheck": { "stat": "agilita", "difficulty": 11 },
           "successText": "Riesci a infilarti nel tronco e scopri una piccola cavità con dentro un vecchio zaino da sopravvivenza.",
           "failureText": "Ti incastri nel tronco e fai fatica a uscire. Nel processo ti graffi e perdi del tempo prezioso.",
-          "items_gained": [{ "id": "survival_backpack", "quantity": 1 }],
+          "items_gained": [{ "id": "survival_backpack", "quantity": 1 }, { "id": "CRAFT_ROPE", "quantity": 3 }, { "id": "CRAFT_CLOTH", "quantity": 2 }],
           "penalty": { "type": "damage", "amount": 5 }
         },
         {
           "text": "Raccogli legna secca alla base",
           "resultText": "Raccogli una buona quantità di legna secca e ben stagionata. Perfetta per fare fuoco.",
-          "items_gained": [{ "id": "dry_wood", "quantity": 4 }]
+          "items_gained": [{ "id": "CRAFT_WOOD", "quantity": 6 }]
         }
       ]
     },
@@ -88,7 +88,7 @@
           "skillCheck": { "stat": "forza", "difficulty": 10 },
           "successText": "Riesci a tagliare le ragnatele senza problemi. Raccogli anche un po' di filo di ragno, potrebbe essere utile.",
           "failureText": "Il coltello si impiglia nelle ragnatele appiccicose. Mentre lotti per liberarlo, qualcosa di grosso si muove nell'ombra...",
-          "items_gained": [{ "id": "spider_silk", "quantity": 3 }],
+          "items_gained": [{ "id": "CRAFT_ROPE", "quantity": 2 }, { "id": "CRAFT_CLOTH", "quantity": 1 }],
           "penalty": { "type": "damage", "amount": 8 }
         },
         {
