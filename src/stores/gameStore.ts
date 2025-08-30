@@ -225,9 +225,20 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
     }
 
-    // Trigger Evento - v0.6.1: ridotto da 25% a 20% + effetti meteo
-    const BASE_EVENT_CHANCE = 0.20;
-    const adjustedEventChance = BASE_EVENT_CHANCE * weatherEffects.eventProbabilityModifier;
+    // Trigger Evento - v0.8.1: Probabilità differenziate per bioma
+    const BIOME_EVENT_CHANCES: Record<string, number> = {
+      'PLAINS': 0.10,      // 10% = ~1 evento ogni 10 passi (pianura comune)
+      'FOREST': 0.15,      // 15% = maggiore probabilità (bioma più raro)
+      'RIVER': 0.18,       // 18% = eventi fluviali più frequenti
+      'CITY': 0.33,        // 33% = ~1 evento ogni 3 passi (alta densità urbana)
+      'VILLAGE': 0.33,     // 33% = ~1 evento ogni 3 passi (alta densità urbana)
+      'SETTLEMENT': 0.25,  // 25% = insediamenti meno densi delle città
+      'REST_STOP': 0.20,   // 20% = rifugi con eventi moderati
+      'UNKNOWN': 0.05      // 5% = biomi sconosciuti molto rari
+    };
+
+    const baseEventChance = BIOME_EVENT_CHANCES[newBiomeKey] || 0.05;
+    const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
     if (newBiomeKey && Math.random() < adjustedEventChance) {
       setTimeout(() => get().triggerEvent(newBiomeKey), 150);

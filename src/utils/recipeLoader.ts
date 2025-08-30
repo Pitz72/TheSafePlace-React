@@ -248,7 +248,7 @@ export async function loadRecipes(): Promise<RecipeLoadResult> {
     debugLog('Loading recipes from file');
     
     // Carica il file JSON
-    const response = await fetch('/src/data/recipes.json');
+    const response = await fetch('/recipes.json');
     
     if (!response.ok) {
       throw new Error(`Failed to load recipes: ${response.status} ${response.statusText}`);

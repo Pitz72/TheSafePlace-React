@@ -14,9 +14,9 @@
       ],
       "skillRequirement": {
         "skill": "crafting",
-        "level": 2
+        "level": 1
       },
-      "unlockedByLevel": 2
+      "unlockedByLevel": 1
     },
     {
       "id": "test_recipe_2",
@@ -49,8 +49,6 @@
         "level": 10
       },
       "unlockedByLevel": 10
-    },
-
-
+    }
   ]
 }

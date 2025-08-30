@@ -104,6 +104,7 @@ import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
 import CraftingScreen from './components/crafting/CraftingScreen';
 import TerminalCraftingScreen from './components/crafting/TerminalCraftingScreen';
+import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
 import WeatherDisplay from './components/WeatherDisplay';
 
 
@@ -217,7 +218,7 @@ const GameContent = () => {
           {currentScreen === 'inventory' && <InventoryScreen />}
           {currentScreen === 'levelUp' && <LevelUpScreen />}
           {currentScreen === 'shelter' && <ShelterScreen />}
-          {currentScreen === 'crafting' && <TerminalCraftingScreen onExit={() => setCurrentScreen('shelter')} />}
+          {currentScreen === 'crafting' && <CraftingScreenRedesigned onExit={() => setCurrentScreen('shelter')} />}
           {currentScreen === 'event' && <EventScreen />}
           {currentScreen === 'loadGame' && <LoadScreen />}
           

@@ -58,7 +58,13 @@ export function createCharacter(): ICharacterSheet {
       weapon: { itemId: null, slotType: 'weapon' },
       armor: { itemId: null, slotType: 'armor' },
       accessory: { itemId: null, slotType: 'accessory' }
-    }
+    },
+    experience: {
+      currentXP: 0,
+      xpForNextLevel: 100, // XP necessari per livello 2
+      canLevelUp: false
+    },
+    knownRecipes: [] // Inizia senza ricette conosciute
   };
 }
 
@@ -80,7 +86,8 @@ export function createTestCharacter(values?: Partial<ICharacterStats>): ICharact
     { itemId: 'CONS_001', quantity: 2 }, // 2x Cibo
     { itemId: 'CONS_003', quantity: 2 }, // 2x Bende
     { itemId: 'WEAP_001', quantity: 1 }, // 1x Coltello
-    { itemId: 'ARMOR_001', quantity: 1 } // 1x Giubbotto di pelle
+    { itemId: 'ARMOR_001', quantity: 1 }, // 1x Giubbotto di pelle
+    { itemId: 'CRAFT_001', quantity: 10 } // 10x Pezzi di metallo per test crafting
   ];
   
   startingItems.forEach((itemData, index) => {
@@ -108,6 +115,7 @@ export function createTestCharacter(values?: Partial<ICharacterStats>): ICharact
       currentXP: 0,
       xpForNextLevel: 100, // XP necessari per livello 2
       canLevelUp: false
-    }
+    },
+    knownRecipes: [] // Inizia senza ricette conosciute
   };
 }

@@ -7,12 +7,12 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import type { 
-  Recipe, 
+import type {
+  Recipe,
   CraftingState
 } from '../types/crafting';
 import { CRAFTING_ERRORS } from '../types/crafting';
-import { 
+import {
   loadRecipes,
   getRecipeById,
   getRecipeStats
@@ -29,6 +29,7 @@ import {
 
 import { useGameStore } from './gameStore';
 import { MessageType } from '../data/MessageArchive';
+import type { IInventorySlot } from '../interfaces/items';
 
 // ===== EXTENDED STATE INTERFACE =====
 
@@ -39,16 +40,16 @@ interface ExtendedCraftingState extends CraftingState {
   // ===== LOADING STATE =====
   isLoading: boolean;
   loadError: string | null;
-  
+
   // ===== RECIPE MANAGEMENT =====
   initializeRecipes: () => Promise<void>;
   reloadRecipes: () => Promise<void>;
-  
+
   // ===== NAVIGATION =====
   moveSelectionUp: () => void;
   moveSelectionDown: () => void;
   getSelectedRecipe: () => Recipe | null;
-  
+
   // ===== RECIPE OPERATIONS =====
   getRecipeStats: () => Record<string, any>;
   getGroupedRecipes: () => {
@@ -57,7 +58,7 @@ interface ExtendedCraftingState extends CraftingState {
     missingSkills: Recipe[];
     unavailable: Recipe[];
   };
-  
+
   // ===== RECIPE UNLOCKING =====
   unlockRecipesByLevel: (level: number) => void;
   unlockRecipesByManual: (manualId: string) => void;
@@ -79,11 +80,11 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     loadError: null,
 
     // ===== BASIC ACTIONS =====
-    
+
     setSelectedRecipe: (index: number) => {
       const availableRecipes = get().getAvailableRecipes();
       const clampedIndex = Math.max(0, Math.min(index, availableRecipes.length - 1));
-      
+
       set({ selectedRecipeIndex: clampedIndex });
       debugLog(`Selected recipe index: ${clampedIndex}`);
     },
@@ -91,7 +92,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     openCrafting: () => {
       debugLog('Opening crafting screen');
       set({ isOpen: true });
-      
+
       // Sincronizza con il game store quando si apre
       get().syncWithGameStore();
     },
@@ -103,22 +104,22 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
     unlockRecipe: (recipeId: string) => {
       const { knownRecipeIds } = get();
-      
+
       if (!knownRecipeIds.includes(recipeId)) {
         const newKnownRecipes = [...knownRecipeIds, recipeId];
         set({ knownRecipeIds: newKnownRecipes });
-        
+
         // Aggiorna anche il game store
         const gameStore = useGameStore.getState();
         if (gameStore.characterSheet) {
           gameStore.characterSheet.knownRecipes = newKnownRecipes;
         }
-        
+
         // Aggiungi notifica
         gameStore.addLogEntry(MessageType.DISCOVERY, {
           discovery: `Nuova ricetta sbloccata: ${recipeId}`
         });
-        
+
         debugLog(`Recipe unlocked: ${recipeId}`);
       }
     },
@@ -126,23 +127,23 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     craftItem: async (recipeId: string): Promise<boolean> => {
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
-      
+
       debugLog(`Attempting to craft: ${recipeId}`);
-      
+
       // Trova la ricetta
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe) {
         debugLog(`Recipe not found: ${recipeId}`);
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, { 
-          reason: CRAFTING_ERRORS.RECIPE_NOT_FOUND 
+        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
+          reason: CRAFTING_ERRORS.RECIPE_NOT_FOUND
         });
         return false;
       }
 
       // Ottieni stato corrente dal game store
-      const inventory = gameStore.characterSheet?.inventory || [];
+      const inventory = (gameStore.characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
       const characterSheet = gameStore.characterSheet;
-      
+
       if (!characterSheet) {
         debugLog('No character sheet available');
         return false;
@@ -150,9 +151,9 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
       // Valida il tentativo di crafting
       const validationError = validateCraftingAttempt(
-        recipe, 
-        inventory, 
-        characterSheet, 
+        recipe,
+        inventory,
+        characterSheet,
         knownRecipeIds
       );
 
@@ -172,7 +173,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
               const toRemove = Math.min(slot.quantity, component.quantity);
               gameStore.removeItem(i, toRemove);
               component.quantity -= toRemove;
-              
+
               if (component.quantity <= 0) break;
             }
           }
@@ -180,11 +181,11 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
         // Aggiungi oggetto risultante
         const addSuccess = gameStore.addItem(recipe.resultItemId, recipe.resultQuantity);
-        
+
         if (!addSuccess) {
           debugLog('Failed to add crafted item to inventory');
-          gameStore.addLogEntry(MessageType.ACTION_FAIL, { 
-            reason: CRAFTING_ERRORS.INVENTORY_FULL 
+          gameStore.addLogEntry(MessageType.ACTION_FAIL, {
+            reason: CRAFTING_ERRORS.INVENTORY_FULL
           });
           return false;
         }
@@ -208,9 +209,9 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         debugLog(`Crafting failed with error: ${errorMessage}`);
-        
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, { 
-          reason: CRAFTING_ERRORS.UNKNOWN_ERROR 
+
+        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
+          reason: CRAFTING_ERRORS.UNKNOWN_ERROR
         });
         return false;
       }
@@ -226,22 +227,22 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     canCraftRecipe: (recipeId: string) => {
       const { allRecipes } = get();
       const gameStore = useGameStore.getState();
-      
+
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe || !gameStore.characterSheet) return false;
 
-      const inventory = gameStore.characterSheet.inventory || [];
+      const inventory = (gameStore.characterSheet.inventory || []).filter((item): item is IInventorySlot => item !== null);
       return canCraftRecipe(recipe, inventory, gameStore.characterSheet);
     },
 
     getMaterialStatus: (recipeId: string) => {
       const { allRecipes } = get();
       const gameStore = useGameStore.getState();
-      
+
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe || !gameStore.characterSheet) return [];
 
-      const inventory = gameStore.characterSheet.inventory || [];
+      const inventory = (gameStore.characterSheet.inventory || []).filter((item): item is IInventorySlot => item !== null);
       return getMaterialStatus(recipe, inventory, gameStore.items);
     },
 
@@ -253,35 +254,35 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
       try {
         const result = await loadRecipes();
-        
+
         if (result.success) {
-          set({ 
+          set({
             allRecipes: result.recipes,
             isLoading: false,
             loadError: null
           });
-          
+
           debugLog(`Recipes initialized: ${result.recipes.length} recipes loaded`);
-          
+
           // Log warnings se presenti
           if (result.warnings.length > 0) {
             console.warn('Recipe loading warnings:', result.warnings);
           }
         } else {
-          set({ 
+          set({
             isLoading: false,
             loadError: result.errors.join('; ')
           });
-          
+
           console.error('Failed to load recipes:', result.errors);
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        set({ 
+        set({
           isLoading: false,
           loadError: errorMessage
         });
-        
+
         console.error('Recipe initialization error:', error);
       }
     },
@@ -296,33 +297,33 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     moveSelectionUp: () => {
       const { selectedRecipeIndex } = get();
       const availableRecipes = get().getAvailableRecipes();
-      
+
       if (availableRecipes.length === 0) return;
-      
-      const newIndex = selectedRecipeIndex > 0 
-        ? selectedRecipeIndex - 1 
+
+      const newIndex = selectedRecipeIndex > 0
+        ? selectedRecipeIndex - 1
         : availableRecipes.length - 1;
-      
+
       get().setSelectedRecipe(newIndex);
     },
 
     moveSelectionDown: () => {
       const { selectedRecipeIndex } = get();
       const availableRecipes = get().getAvailableRecipes();
-      
+
       if (availableRecipes.length === 0) return;
-      
-      const newIndex = selectedRecipeIndex < availableRecipes.length - 1 
-        ? selectedRecipeIndex + 1 
+
+      const newIndex = selectedRecipeIndex < availableRecipes.length - 1
+        ? selectedRecipeIndex + 1
         : 0;
-      
+
       get().setSelectedRecipe(newIndex);
     },
 
     getSelectedRecipe: () => {
       const { selectedRecipeIndex } = get();
       const availableRecipes = get().getAvailableRecipes();
-      
+
       return availableRecipes[selectedRecipeIndex] || null;
     },
 
@@ -336,7 +337,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     getGroupedRecipes: () => {
       const availableRecipes = get().getAvailableRecipes();
       const gameStore = useGameStore.getState();
-      
+
       if (!gameStore.characterSheet) {
         return {
           craftable: [],
@@ -346,7 +347,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         };
       }
 
-      const inventory = gameStore.characterSheet.inventory || [];
+      const inventory = (gameStore.characterSheet.inventory || []).filter((item): item is IInventorySlot => item !== null);
       return groupRecipesByAvailability(availableRecipes, inventory, gameStore.characterSheet);
     },
 
@@ -355,9 +356,9 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     unlockRecipesByLevel: (level: number) => {
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
-      
-      const recipesToUnlock = allRecipes.filter(recipe => 
-        recipe.unlockedByLevel !== undefined && 
+
+      const recipesToUnlock = allRecipes.filter(recipe =>
+        recipe.unlockedByLevel !== undefined &&
         recipe.unlockedByLevel <= level &&
         !knownRecipeIds.includes(recipe.id)
       );
@@ -375,7 +376,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         recipesToUnlock.forEach(recipe => {
           const resultItem = gameStore.items[recipe.resultItemId];
           const itemName = resultItem?.name || 'Oggetto Sconosciuto';
-          
+
           gameStore.addLogEntry(MessageType.DISCOVERY, {
             discovery: `Nuova ricetta sbloccata: ${itemName}`
           });
@@ -388,8 +389,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     unlockRecipesByManual: (manualId: string) => {
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
-      
-      const recipesToUnlock = allRecipes.filter(recipe => 
+
+      const recipesToUnlock = allRecipes.filter(recipe =>
         recipe.unlockedByManual === manualId &&
         !knownRecipeIds.includes(recipe.id)
       );
@@ -407,7 +408,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         recipesToUnlock.forEach(recipe => {
           const resultItem = gameStore.items[recipe.resultItemId];
           const itemName = resultItem?.name || 'Oggetto Sconosciuto';
-          
+
           gameStore.addLogEntry(MessageType.DISCOVERY, {
             discovery: `Dal manuale hai imparato: ${itemName}`
           });
@@ -421,11 +422,11 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
     syncWithGameStore: () => {
       const gameStore = useGameStore.getState();
-      
+
       if (gameStore.characterSheet?.knownRecipes) {
         const currentKnownRecipes = get().knownRecipeIds;
         const gameStoreRecipes = gameStore.characterSheet.knownRecipes;
-        
+
         // Sincronizza solo se diversi
         if (JSON.stringify(currentKnownRecipes) !== JSON.stringify(gameStoreRecipes)) {
           set({ knownRecipeIds: [...gameStoreRecipes] });
@@ -474,7 +475,7 @@ export function useRecipeState(recipeId: string) {
     const canCraft = recipe ? state.canCraftRecipe(recipeId) : false;
     const materialStatus = recipe ? state.getMaterialStatus(recipeId) : [];
     const isKnown = state.knownRecipeIds.includes(recipeId);
-    
+
     return {
       recipe,
       canCraft,
