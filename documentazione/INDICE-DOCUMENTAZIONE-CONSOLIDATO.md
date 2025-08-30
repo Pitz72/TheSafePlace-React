@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.6.0 - Lazarus Rising Again
+## The Safe Place v0.8.4 - I'm Constantly Tidying Up my Desk
 
 **Stato**: CONSOLIDATO E AGGIORNATO  
-**Ultima Revisione**: 2025-01-30  
-**Versione Attiva**: v0.6.0 "Lazarus Rising Again"
+**Ultima Revisione**: 2025-08-30  
+**Versione Attiva**: v0.8.4 "I'm Constantly Tidying Up my Desk"
 
 ---
 
@@ -14,7 +14,14 @@
 - ✅ **[README.md](../README.md)** - Documentazione principale AGGIORNATA
 - ✅ **[MAPPA-SIMBOLI-E-SIGNIFICATI.md](./analisi/MAPPA-SIMBOLI-E-SIGNIFICATI.md)** - Riferimento simboli ATTIVO
 
+### 📚 **Documentazione API e Sistema**
+- ✅ **[API Documentation](./api/api-documentation.md)** - Riferimento completo API del sistema di crafting
+- ✅ **[Crafting System](./api/crafting-system.md)** - Architettura e implementazione del sistema di crafting
+- ✅ **[Crafting User Guide](./api/crafting-user-guide.md)** - Guida utente per il sistema di crafting
+
 ### 🛡️ **Protezioni Anti-Regressione ATTIVE**
+- ✅ **[ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - PROTEZIONE ATTIVA v0.8.4
+- ✅ **[ANTI-REGRESSIONE-v0.8.3-CRAFTING-STYLE.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.3-CRAFTING-STYLE.md)** - PROTEZIONE ATTIVA v0.8.3
 - ✅ **[ANTI-REGRESSION-v0.6.0.md](./anti-regressione/ANTI-REGRESSION-v0.6.0.md)** - PROTEZIONE ATTIVA v0.6.0
 - ✅ **[ANTI-REGRESSION-v0.5.3.md](./anti-regressione/ANTI-REGRESSION-v0.5.3.md)** - PROTEZIONE ATTIVA
 - ✅ **[ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md](./anti-regressione/ANTI-REGRESSIONE-v0.4.0-JOURNAL-BUG-FIX.md)** - PROTEZIONE ATTIVA
@@ -26,11 +33,11 @@
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog Corrente**
-- ✅ **[CHANGELOG-v0.6.0.md](./changelog/CHANGELOG-v0.6.0.md)** - VERSIONE CORRENTE "Lazarus Rising Again"
-- ✅ **[CHANGELOG-v0.5.3.md](./changelog/CHANGELOG-v0.5.3.md)** - VERSIONE PRECEDENTE
-- ✅ **[CHANGELOG-v0.4.2.md](./changelog/CHANGELOG-v0.4.2.md)** - VERSIONE PRECEDENTE
-- ✅ **[CHANGELOG-v0.4.1.md](./changelog/CHANGELOG-v0.4.1.md)** - VERSIONE PRECEDENTE
-- ✅ **[CHANGELOG-v0.4.0.md](./changelog/CHANGELOG-v0.4.0.md)** - VERSIONE STORICA
+- ✅ **[CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./changelog/CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - VERSIONE CORRENTE "I'm Constantly Tidying Up my Desk"
+- ✅ **[CHANGELOG-v0.8.3-CRAFTING-STYLE-OMOLOGATION.md](./changelog/CHANGELOG-v0.8.3-CRAFTING-STYLE-OMOLOGATION.md)** - VERSIONE PRECEDENTE "Crafting Style Omologation"
+- ✅ **[CHANGELOG-v0.8.1.md](./changelog/CHANGELOG-v0.8.1.md)** - VERSIONE PRECEDENTE "Terminal Crafting"
+- ✅ **[CHANGELOG-v0.8.0.md](./changelog/CHANGELOG-v0.8.0.md)** - VERSIONE PRECEDENTE "Crafting System"
+- ✅ **[CHANGELOG-v0.7.1.md](./changelog/CHANGELOG-v0.7.1.md)** - VERSIONE STORICA "River Crossing"
 
 ---
 
@@ -46,6 +53,17 @@
 - `COMMIT-MESSAGE-v0.3.7.md` - Commit message v0.3.7 (archiviato)
 - `CONSOLIDAMENTO-v0.3.9-CONSISTENCY-IS-KEY.md` - Consolidamento v0.3.9 (archiviato)
 - `CONSOLIDAMENTO-v0.4.0-JOURNAL-BUG-FIX.md` - Consolidamento v0.4.0 (archiviato)
+
+### 📄 **Documenti Root Migrati (2025-08-30)**
+**Status**: Migrati durante la riorganizzazione documentazione v0.8.3
+**Totale Documenti Migrati**: 15 documenti
+
+#### Documenti Recentemente Migrati:
+- **API Documentation**: Spostata da `docs/` a `./api/`
+- **Root Documents**: Spostati dalla root a categorie appropriate
+- **Changelog v0.7.1-v0.8.3**: Consolidati in `./changelog/`
+- **Consolidamento v0.7.1-v0.8.3**: Organizzati in `./consolidamento/`
+- **Roadmap e Analisi**: Categorizzati appropriatamente
 
 #### Documenti Organizzati nelle Sottocartelle:
 - **Analisi**: 26 documenti spostati in `./analisi/`
@@ -185,9 +203,11 @@
 - **SESSION-LOG-**: Log delle sessioni di sviluppo
 
 ### **Gestione Versioni**
-- **v0.6.0**: Versione corrente ATTIVA "Lazarus Rising Again"
+- **v0.8.4**: Versione corrente ATTIVA "I'm Constantly Tidying Up my Desk"
+- **v0.8.0-v0.8.3**: Versioni crafting system e style omologation
+- **v0.7.x**: Versioni river crossing e correzioni
+- **v0.6.0**: Versione storica "Lazarus Rising Again"
 - **v0.0.x - v0.5.x**: Versioni OBSOLETE (riferimento storico)
-- **v0.7.0+**: Versioni future
 
 ### **Processo di Aggiornamento**
 1. Aggiornare documento attivo
@@ -197,5 +217,37 @@
 
 ---
 
-*Indice consolidato generato durante il refactoring del 2025-08-18*  
-*Sistema di sincronizzazione documentazione-codice implementato e operativo*
+## 📁 **STRUTTURA DIRECTORY AGGIORNATA (2025-08-30)**
+
+### 🎯 **Struttura Organizzata Post-Riorganizzazione**
+- **./api/**: Documentazione API e sistema (3 documenti)
+- **./root-docs/**: Documenti generici dalla root (2 documenti)
+- **./analisi/**: 27 documenti di analisi, report e riferimenti
+- **./dsar/**: 8 documenti di specifica immutabile e baseline
+- **./session-log/**: 23 documenti di log sessioni e analisi
+- **./test/**: 3 documenti di validazione e test
+- **./anti-regressione/**: Protezioni versione (45+ documenti)
+- **./archivio/**: Documenti obsoleti (14 documenti)
+- **./changelog/**: Log modifiche (45+ documenti)
+- **./commit/**: Documentazione commit specifici (5 documenti)
+- **./consolidamento/**: Documenti di consolidamento (6+ documenti)
+- **./incidenti/**: Report incidenti critici (4 documenti)
+- **./roadmap/**: Roadmap di sviluppo (3+ documenti)
+- **./versioni/**: Release notes (3 documenti)
+
+### 📋 **Convenzioni Aggiornate**
+- **API-**: Documentazione API e sistema
+- **ROOT-**: Documenti generici dalla root
+- **DSAR-**: Documenti immutabili baseline
+- **ANTI-REGRESSION-**: Protezioni versione
+- **CHANGELOG-**: Log modifiche
+- **CONSOLIDAMENTO-**: Refactoring completati
+- **ANALISI-**: Documenti di analisi e report
+- **SESSION-LOG-**: Log delle sessioni di sviluppo
+- **ROADMAP-**: Piani di sviluppo
+
+---
+
+*Indice consolidato aggiornato durante il consolidamento v0.8.4 del 2025-08-30*  
+*Sistema di migrazione documentazione implementato e operativo*  
+*Versione corrente: v0.8.4 "I'm Constantly Tidying Up my Desk"*

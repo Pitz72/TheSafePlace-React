@@ -1,8 +1,8 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.8.3",
-  "codename": "Crafting Style Omologation",
+  "version": "0.8.4",
+  "codename": "I'm Constantly Tidying Up my Desk",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D e atmosfera CRT anni '80",
   "author": "TheSafePlace Development Team",
@@ -25,7 +25,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "cypress open",
-    "test:e2e:headless": "cypress run"
+    "test:e2e:headless": "cypress run",
+    "migrate-docs": "ts-node scripts/documentation-reorganization/migrate.ts",
+    "migrate-docs:dry-run": "ts-node scripts/documentation-reorganization/migrate.ts --dry-run"
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
