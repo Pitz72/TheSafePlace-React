@@ -67,6 +67,20 @@ const MATERIAL_COLORS = {
 };
 
 const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit }) => {
+  // Validazione della funzione onExit
+  const safeOnExit = useCallback(() => {
+    if (typeof onExit === 'function') {
+      onExit();
+    } else {
+      console.error('CraftingScreen: onExit is not a function');
+      // In caso di emergenza, prova a tornare al menu principale
+      // Questo è più sicuro di window.history.back()
+      if (window.location.hash) {
+        window.location.hash = '#menu';
+      }
+    }
+  }, [onExit]);
+
   // State locale per navigazione
   const [selectedIndex, setSelectedIndex] = useState(0);
   
@@ -197,11 +211,22 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         case 'Escape':
           event.preventDefault();
           try {
-            onExit();
+            safeOnExit();
           } catch (error) {
             console.error('Error during crafting screen exit:', error);
-            // Fallback: prova a tornare alla schermata shelter direttamente
-            window.history.back();
+            // Log dell'errore senza fallback pericoloso
+            // L'onExit dovrebbe sempre funzionare correttamente
+            // Se fallisce, è meglio rimanere nella schermata corrente
+            setCraftingFeedback({
+              message: '⚠️ Errore nell\'uscita - riprova',
+              type: 'error',
+              visible: true
+            });
+            
+            // Nascondi il messaggio dopo 3 secondi
+            setTimeout(() => {
+              setCraftingFeedback(prev => ({ ...prev, visible: false }));
+            }, 3000);
           }
           break;
         case 'w':
@@ -275,7 +300,7 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [selectedRecipe, selectedRecipeStatus, recipesWithStatus.length, onExit, craftingStore]);
+  }, [selectedRecipe, selectedRecipeStatus, recipesWithStatus.length, safeOnExit, craftingStore]);
 
   // Aggiusta l'indice se fuori range (con protezione)
   useEffect(() => {
@@ -508,9 +533,15 @@ const CraftingScreenRedesigned: React.FC<CraftingScreenRedesignedProps> = ({ onE
   const handleError = useCallback((error: Error) => {
     console.error('Critical crafting error, attempting to exit:', error);
     try {
-      onExit();
+      if (typeof onExit === 'function') {
+        onExit();
+      } else {
+        console.error('onExit is not a function, cannot exit safely');
+      }
     } catch (exitError) {
       console.error('Failed to exit crafting screen:', exitError);
+      // Non usare window.history.back() - è pericoloso
+      // Meglio rimanere nella schermata corrente con errore visibile
     }
   }, [onExit]);
 

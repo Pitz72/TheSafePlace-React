@@ -62,6 +62,57 @@ localStorage.setItem('debug-crafting', 'true')
    craftingStore.validateCraftingData()
    ```
 
+### **🚨 CRITICO: Tasto ESC Causa Crash e Cambio Porta (RISOLTO v0.8.5)**
+
+#### **Sintomi**
+- Premendo ESC nella schermata crafting, il gioco crasha
+- La porta del localhost cambia da 5173 a 5176
+- Errori JavaScript troppo veloci per essere copiati
+- Browser si riavvia su porta diversa
+
+#### **Causa Identificata**
+- Fallback pericoloso `window.history.back()` nel gestore errori
+- Conflitto nella gestione degli eventi ESC
+- Mancanza di validazione della funzione `onExit`
+
+#### **Soluzione Implementata** ✅
+1. **Rimosso `window.history.back()`** - Eliminato completamente dal codice
+2. **Implementata `safeOnExit()`** - Funzione con validazione tipo
+3. **Gestione errori sicura** - Feedback utente invece di crash
+4. **Fix setCurrentScreen** - Aggiunto import mancante in App.tsx
+5. **Test di validazione** - Script automatico per verificare la fix
+
+#### **Test Manuale**
+```javascript
+// 1. Apri crafting screen
+// 2. Premi ESC
+// 3. Verifica che torni al shelter senza errori
+// 4. Controlla che la porta rimanga 5173
+```
+
+#### **Test Automatico**
+```javascript
+// Esegui in console browser
+validateEscKeyFix()  // Test completo della fix
+simulateEscKeyPress()  // Simula pressione ESC
+```
+
+#### **Verifica Fix Applicata**
+```javascript
+// Controlla che il codice sia stato aggiornato
+fetch('/src/components/CraftingScreenRedesigned.tsx')
+  .then(r => r.text())
+  .then(code => {
+    const hasHistoryBack = code.includes('window.history.back()')
+    const hasSafeExit = code.includes('safeOnExit')
+    console.log({
+      'Fix Applicata': !hasHistoryBack && hasSafeExit,
+      'window.history.back() Rimosso': !hasHistoryBack,
+      'safeOnExit Implementata': hasSafeExit
+    })
+  })
+```
+
 ---
 
 ## ⚠️ Problemi Comuni

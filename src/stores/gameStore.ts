@@ -263,7 +263,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   updateCameraPosition: (viewportSize: { width: number; height: number }) => {
     const { playerPosition, mapData } = get();
-    
+
     if (!mapData || mapData.length === 0 || !viewportSize || viewportSize.width === 0 || viewportSize.height === 0) {
       return; // Non fare nulla se i dati non sono pronti
     }
@@ -287,7 +287,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     // Applica il "clamping" per mantenere la camera entro i bordi della mappa
     const newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
     const newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
-    
+
     set({ cameraPosition: { x: newCameraX, y: newCameraY } });
   },
 
@@ -359,7 +359,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) {
       return false;
     }
-    
+
     const currentTile = mapData[playerPosition.y]?.[playerPosition.x];
     return currentTile === 'R';
   },
@@ -547,7 +547,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     const weights = timeWeights[timeModifier] || {};
     const weightedOptions: WeatherType[] = [];
-    
+
     possibleTransitions.forEach(weather => {
       const weight = weights[weather] || 1.0;
       const count = Math.max(1, Math.round(weight * 10));
@@ -564,7 +564,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   getRiverCrossingWeatherDescription: (): string => {
     const { weatherState, timeState } = get();
     const timePrefix = timeState.isDay ? '' : 'Nell\'oscurità della notte, ';
-    
+
     switch (weatherState.currentWeather) {
       case WeatherType.CLEAR:
         return `${timePrefix}La corrente sembra gestibile e la visibilità è buona.`;
@@ -585,7 +585,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   getRiverCrossingSuccessDescription: (): string => {
     const { weatherState } = get();
-    
+
     switch (weatherState.currentWeather) {
       case WeatherType.CLEAR:
         return 'Con movimenti sicuri e calcolati, attraversi il fiume senza difficoltà. La buona visibilità ti ha permesso di scegliere il percorso migliore.';
@@ -606,7 +606,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   getRiverCrossingFailureDescription: (totalDamage: number, hasWeatherDamage: boolean): string => {
     const { weatherState } = get();
-    
+
     let baseDescription = '';
     let weatherExtra = '';
 
@@ -641,79 +641,79 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { weatherState, timeState, characterSheet, survivalState } = get();
     const baseDifficulty = 12;
     const totalModifier = finalDifficulty - baseDifficulty;
-    
+
     if (totalModifier === 0) return null;
-    
+
     const modifiers: string[] = [];
-    
+
     // Analizza i modificatori principali
     if (weatherState.currentWeather !== WeatherType.CLEAR) {
       const weatherName = get().getWeatherDescription(weatherState.currentWeather).split('.')[0];
       modifiers.push(`condizioni meteo (${weatherName.toLowerCase()})`);
     }
-    
+
     if (!timeState.isDay) {
       modifiers.push('oscurità notturna');
     }
-    
+
     const healthPercentage = characterSheet.currentHP / characterSheet.maxHP;
     if (healthPercentage < 0.5) {
       modifiers.push('ferite');
     }
-    
+
     if (survivalState.hunger < 50 || survivalState.thirst < 50) {
       modifiers.push('fame/sete');
     }
-    
+
     // Modificatori equipaggiamento
     const equipmentDescriptions = get().getEquipmentModifierDescription();
     if (equipmentDescriptions.length > 0) {
       modifiers.push(`equipaggiamento (${equipmentDescriptions.join(', ')})`);
     }
-    
+
     if (modifiers.length === 0) return null;
-    
+
     const difficultyText = totalModifier > 0 ? 'più difficile' : 'più facile';
     const modifierText = modifiers.join(', ');
-    
+
     return `L'attraversamento sarà ${difficultyText} del normale a causa di: ${modifierText}.`;
   },
 
   calculateEquipmentModifierForRiver: (): number => {
     const { characterSheet, items } = get();
     let modifier = 0;
-    
+
     // Analizza equipaggiamento indossato
     const equipment = characterSheet.equipment;
-    
+
     // Armatura - più pesante = più difficile attraversare
     if (equipment.armor.itemId) {
       const armor = items[equipment.armor.itemId];
       if (armor) {
         // Armature pesanti rendono l'attraversamento più difficile
-        if (armor.name.toLowerCase().includes('pesante') || 
-            armor.name.toLowerCase().includes('piastre') ||
-            armor.name.toLowerCase().includes('maglia')) {
+        if (armor.name.toLowerCase().includes('pesante') ||
+          armor.name.toLowerCase().includes('piastre') ||
+          armor.name.toLowerCase().includes('maglia')) {
           modifier += 2; // Penalità per armature pesanti
         } else if (armor.name.toLowerCase().includes('leggera') ||
-                   armor.name.toLowerCase().includes('cuoio')) {
+          armor.name.toLowerCase().includes('cuoio')) {
           modifier += 0; // Armature leggere neutrali
         }
       }
     }
-    
+
     // Armi - armi pesanti a due mani rendono più difficile l'equilibrio
     if (equipment.weapon.itemId) {
       const weapon = items[equipment.weapon.itemId];
       if (weapon) {
         if (weapon.name.toLowerCase().includes('due mani') ||
-            weapon.name.toLowerCase().includes('martello') ||
-            weapon.name.toLowerCase().includes('ascia grande')) {
+          weapon.name.toLowerCase().includes('martello') ||
+          weapon.name.toLowerCase().includes('ascia grande')) {
           modifier += 1; // Penalità per armi pesanti
         }
       }
     }
-    
+
     // Oggetti utili nell'inventario
     const inventory = characterSheet.inventory;
     for (const slot of inventory) {
@@ -725,46 +725,46 @@ export const useGameStore = create<GameState>((set, get) => ({
             modifier -= 2; // Bonus significativo
           }
           // Stivali impermeabili o simili
-          else if (item.name.toLowerCase().includes('stivali') && 
-                   (item.name.toLowerCase().includes('impermeabili') ||
-                    item.name.toLowerCase().includes('gomma'))) {
+          else if (item.name.toLowerCase().includes('stivali') &&
+            (item.name.toLowerCase().includes('impermeabili') ||
+              item.name.toLowerCase().includes('gomma'))) {
             modifier -= 1; // Bonus per stivali adatti
           }
           // Zaino pesante
-          else if (item.name.toLowerCase().includes('zaino') && 
-                   item.name.toLowerCase().includes('grande')) {
+          else if (item.name.toLowerCase().includes('zaino') &&
+            item.name.toLowerCase().includes('grande')) {
             modifier += 1; // Penalità per peso extra
           }
         }
       }
     }
-    
+
     return modifier;
   },
 
   getEquipmentModifierDescription: (): string[] => {
     const { characterSheet, items } = get();
     const descriptions: string[] = [];
-    
+
     // Analizza equipaggiamento per descrizioni
     const equipment = characterSheet.equipment;
-    
+
     if (equipment.armor.itemId) {
       const armor = items[equipment.armor.itemId];
-      if (armor && (armor.name.toLowerCase().includes('pesante') || 
-                    armor.name.toLowerCase().includes('piastre'))) {
+      if (armor && (armor.name.toLowerCase().includes('pesante') ||
+        armor.name.toLowerCase().includes('piastre'))) {
         descriptions.push('armatura pesante');
       }
     }
-    
+
     if (equipment.weapon.itemId) {
       const weapon = items[equipment.weapon.itemId];
       if (weapon && (weapon.name.toLowerCase().includes('due mani') ||
-                     weapon.name.toLowerCase().includes('martello'))) {
+        weapon.name.toLowerCase().includes('martello'))) {
         descriptions.push('arma ingombrante');
       }
     }
-    
+
     // Oggetti utili
     const inventory = characterSheet.inventory;
     for (const slot of inventory) {
@@ -773,14 +773,14 @@ export const useGameStore = create<GameState>((set, get) => ({
         if (item) {
           if (item.name.toLowerCase().includes('corda')) {
             descriptions.push('corda (aiuto)');
-          } else if (item.name.toLowerCase().includes('stivali') && 
-                     item.name.toLowerCase().includes('impermeabili')) {
+          } else if (item.name.toLowerCase().includes('stivali') &&
+            item.name.toLowerCase().includes('impermeabili')) {
             descriptions.push('stivali impermeabili (aiuto)');
           }
         }
       }
     }
-    
+
     return descriptions;
   },
 
@@ -893,7 +893,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     } else {
       // Fallimento - subisci danni variabili basati su meteo
       let baseDamage = Math.floor(Math.random() * 3) + 1; // 1-3 danni base
-      
+
       // Danni extra per condizioni meteo severe
       let weatherDamage = 0;
       switch (weatherState.currentWeather) {
@@ -1000,30 +1000,30 @@ export const useGameStore = create<GameState>((set, get) => ({
   triggerEvent: (biomeKey) => {
     if (get().currentEvent) return; // Evita di sovrascrivere eventi
     const { eventDatabase, seenEventIds } = get();
-    
+
     // Prima prova eventi non ancora visti
-    let availableEvents = (eventDatabase[biomeKey] || []).filter(event => 
+    let availableEvents = (eventDatabase[biomeKey] || []).filter(event =>
       !event.isUnique && !seenEventIds.includes(event.id)
     );
-    
+
     // Se non ci sono eventi non visti, riconsidera tutti gli eventi ripetibili
     if (availableEvents.length === 0) {
       availableEvents = (eventDatabase[biomeKey] || []).filter(event => !event.isUnique);
     }
-    
+
     // Se ancora nessun evento disponibile, esci
     if (availableEvents.length === 0) return;
 
     const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
-    
+
     // Aggiungi agli eventi visti solo se non è già presente (per eventi ripetibili)
-    set(state => ({ 
-      currentEvent: event, 
-      seenEventIds: state.seenEventIds.includes(event.id) 
-        ? state.seenEventIds 
-        : [...state.seenEventIds, event.id] 
+    set(state => ({
+      currentEvent: event,
+      seenEventIds: state.seenEventIds.includes(event.id)
+        ? state.seenEventIds
+        : [...state.seenEventIds, event.id]
     }));
-    
+
     get().setCurrentScreen('event');
   },
 
@@ -1036,7 +1036,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (outcome.items_gained) {
         outcome.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
       }
-      
+
       // Gestione conseguenze rest stop
       if (outcome.consequences) {
         if (outcome.consequences.hp) {
@@ -1047,7 +1047,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.consequences.narrative_text });
         }
       }
-      
+
       if (outcome.reward) {
         switch (outcome.reward.type) {
           case 'xp_gain':
@@ -1057,7 +1057,7 @@ export const useGameStore = create<GameState>((set, get) => ({
             }
             break;
           case 'hp_gain':
-              if (outcome.reward.amount) {
+            if (outcome.reward.amount) {
               updateHP(outcome.reward.amount);
               addLogEntry(MessageType.HP_RECOVERY, { healing: outcome.reward.amount });
             }
@@ -1345,23 +1345,24 @@ export const useGameStore = create<GameState>((set, get) => ({
     // Gestione effetti speciali per manuali di crafting
     if (item.effect === 'unlock_recipes') {
       const manualId = item.effectValue as string;
-      
+
       // Chiama la funzione di callback per sbloccare ricette
-      if (get().unlockRecipesCallback) {
-        get().unlockRecipesCallback(manualId);
+      const callback = get().unlockRecipesCallback;
+      if (callback && typeof callback === 'function') {
+        callback(manualId);
       }
-      
-      addLogEntry(MessageType.DISCOVERY, { 
-        discovery: `Hai studiato il ${item.name} e imparato nuove ricette!` 
+
+      addLogEntry(MessageType.DISCOVERY, {
+        discovery: `Hai studiato il ${item.name} e imparato nuove ricette!`
       });
-      
+
       // Rimuovi il manuale dall'inventario (non stackable, quindi rimuovi 1)
       currentStack.quantity -= 1;
       if (currentStack.quantity === 0) newInventory[slotIndex] = null;
-      
+
       set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
       return true;
-      
+
     } else if (effectApplied > 0) {
       switch (item.effect) {
         case 'heal': updateHP(effectApplied); addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied }); break;
@@ -1372,7 +1373,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
       return true;
     }
-    
+
     return false;
   },
 
@@ -1462,17 +1463,17 @@ export const useGameStore = create<GameState>((set, get) => ({
         const oldHP = characterSheet.currentHP;
         const newHP = Math.min(characterSheet.maxHP, oldHP + healAmount);
         const actualHeal = newHP - oldHP;
-        
+
         if (actualHeal > 0) {
           get().updateHP(actualHeal);
-          addLogEntry(MessageType.HP_RECOVERY, { 
-            healing: actualHeal, 
-            item: item.name 
+          addLogEntry(MessageType.HP_RECOVERY, {
+            healing: actualHeal,
+            item: item.name
           });
           effectApplied = true;
         } else {
-          addLogEntry(MessageType.ACTION_FAIL, { 
-            reason: 'Sei già in piena salute.' 
+          addLogEntry(MessageType.ACTION_FAIL, {
+            reason: 'Sei già in piena salute.'
           });
           return false;
         }
@@ -1482,7 +1483,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         const hungerRestore = effectValue;
         const newHunger = Math.min(100, survivalState.hunger + hungerRestore);
         const actualHungerRestore = newHunger - survivalState.hunger;
-        
+
         if (actualHungerRestore > 0) {
           set(state => ({
             survivalState: {
@@ -1490,13 +1491,13 @@ export const useGameStore = create<GameState>((set, get) => ({
               hunger: newHunger
             }
           }));
-          addLogEntry(MessageType.ACTION_SUCCESS, { 
-            action: `Hai consumato ${item.name}. Sazietà ripristinata: +${actualHungerRestore}` 
+          addLogEntry(MessageType.ACTION_SUCCESS, {
+            action: `Hai consumato ${item.name}. Sazietà ripristinata: +${actualHungerRestore}`
           });
           effectApplied = true;
         } else {
-          addLogEntry(MessageType.ACTION_FAIL, { 
-            reason: 'Non hai fame al momento.' 
+          addLogEntry(MessageType.ACTION_FAIL, {
+            reason: 'Non hai fame al momento.'
           });
           return false;
         }
@@ -1506,7 +1507,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         const thirstRestore = effectValue;
         const newThirst = Math.min(100, survivalState.thirst + thirstRestore);
         const actualThirstRestore = newThirst - survivalState.thirst;
-        
+
         if (actualThirstRestore > 0) {
           set(state => ({
             survivalState: {
@@ -1514,21 +1515,21 @@ export const useGameStore = create<GameState>((set, get) => ({
               thirst: newThirst
             }
           }));
-          addLogEntry(MessageType.ACTION_SUCCESS, { 
-            action: `Hai bevuto ${item.name}. Sete ripristinata: +${actualThirstRestore}` 
+          addLogEntry(MessageType.ACTION_SUCCESS, {
+            action: `Hai bevuto ${item.name}. Sete ripristinata: +${actualThirstRestore}`
           });
           effectApplied = true;
         } else {
-          addLogEntry(MessageType.ACTION_FAIL, { 
-            reason: 'Non hai sete al momento.' 
+          addLogEntry(MessageType.ACTION_FAIL, {
+            reason: 'Non hai sete al momento.'
           });
           return false;
         }
         break;
 
       default:
-        addLogEntry(MessageType.ACTION_FAIL, { 
-          reason: `Effetto sconosciuto: ${item.effect}` 
+        addLogEntry(MessageType.ACTION_FAIL, {
+          reason: `Effetto sconosciuto: ${item.effect}`
         });
         return false;
     }

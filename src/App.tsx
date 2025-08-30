@@ -112,6 +112,7 @@ import WeatherDisplay from './components/WeatherDisplay';
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
   const currentScreen = useGameStore(state => state.currentScreen);
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const playerPosition = useGameStore(state => state.playerPosition);
   const isMapLoading = useGameStore(state => state.isMapLoading);
   const mapData = useGameStore(state => state.mapData);

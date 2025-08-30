@@ -203,3 +203,18 @@
   - Document loot integration and discovery mechanics
   - Add troubleshooting guide for common crafting issues
   - _Requirements: 5.1, 5.2, 5.5_
+
+- [x] 12. Fix Critical ESC Key Bug 🚨 URGENT ✅ COMPLETED 🎉 SUCCESS
+
+
+
+  - ✅ Removed dangerous window.history.back() fallback that causes port switching
+  - ✅ Implemented safe error handling for onExit function with safeOnExit callback
+  - ✅ Added proper error logging with user feedback without breaking navigation
+  - ✅ Fixed setCurrentScreen ReferenceError in App.tsx
+  - ✅ Resolved TypeScript errors in gameStore.ts
+  - ✅ Created comprehensive test suite for ESC key functionality
+  - ✅ Added validation script: src/tests/esc-key-fix-validation.ts
+  - ✅ Created complete solution chronicle: documentazione/changelog/CRONACA-SOLUZIONE-ESC-KEY-BUG.md
+  - ✅ **VERIFIED WORKING**: ESC key now functions perfectly without crashes
+  - _Requirements: 3.3 - Fix ESC navigation to properly return to shelter screen_
