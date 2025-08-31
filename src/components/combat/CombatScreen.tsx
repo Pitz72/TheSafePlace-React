@@ -9,11 +9,11 @@ import { useCombatStore } from '../../stores/combatStore';
 import { useGameStore } from '../../stores/gameStore';
 
 // Import dei componenti di combattimento
-import { SceneDescription } from './SceneDescription';
-import { CombatStatus } from './CombatStatus';
-import { CombatLog } from './CombatLog';
-import { ActionMenu } from './ActionMenu';
-import { TargetSelector } from './TargetSelector';
+import SceneDescription from './SceneDescription';
+import CombatStatus from './CombatStatus';
+import CombatLog from './CombatLog';
+import ActionMenu from './ActionMenu';
+import TargetSelector from './TargetSelector';
 
 export const CombatScreen: React.FC = () => {
   const combatState = useCombatStore();
