@@ -6,6 +6,7 @@ import { usePlayerMovement } from './hooks/usePlayerMovement';
 
 
 import { useGameStore } from './stores/gameStore';
+import { useCombatStore } from './stores/combatStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
@@ -106,12 +107,14 @@ import CraftingScreen from './components/crafting/CraftingScreen';
 import TerminalCraftingScreen from './components/crafting/TerminalCraftingScreen';
 import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
 import WeatherDisplay from './components/WeatherDisplay';
+import CombatScreen from './components/combat/CombatScreen';
 
 
 
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
   const currentScreen = useGameStore(state => state.currentScreen);
+  const isInCombat = useCombatStore(state => state.isInCombat);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const playerPosition = useGameStore(state => state.playerPosition);
   const isMapLoading = useGameStore(state => state.isMapLoading);
@@ -209,9 +212,14 @@ const GameContent = () => {
         
         {/* Container principale */}
         <div className="h-full flex flex-col">
-          {/* Schermate a schermo intero */}
-          {currentScreen === 'menu' && <StartScreen />}
-          {currentScreen === 'instructions' && <InstructionsScreen />}
+          {/* Schermata di Combattimento (priorità su tutto) */}
+          {isInCombat ? (
+            <CombatScreen />
+          ) : (
+            <>
+              {/* Schermate a schermo intero */}
+              {currentScreen === 'menu' && <StartScreen />}
+              {currentScreen === 'instructions' && <InstructionsScreen />}
           {currentScreen === 'story' && <StoryScreen />}
           {currentScreen === 'options' && <OptionsScreen />}
           {currentScreen === 'characterCreation' && <CharacterCreationScreen />}
@@ -363,6 +371,8 @@ const GameContent = () => {
             </>
           )}
         </div>
+        </>
+      )}
       </div>
     </div>
   );
