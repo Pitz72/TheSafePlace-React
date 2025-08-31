@@ -10,13 +10,15 @@ import { combatEncounters } from '../data/combatEncounters';
 export interface CombatStoreState {
   isActive: boolean;
   currentState: CombatState | null;
+  combatResult: CombatResult | null;
   selectedAction: CombatActionType | null;
   selectedTarget: number | null; // index of the enemy in the enemies array
 
   // --- ACTIONS ---
 
   initiateCombat: (encounterId: string) => void;
-  endCombat: (result: CombatResult) => void;
+  endCombat: (result: Omit<CombatResult, 'xpGained' | 'loot'>) => void;
+  clearCombatResults: () => void;
 
   selectAction: (action: CombatActionType) => void;
   selectTarget: (index: number) => void;
@@ -33,6 +35,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
   // --- INITIAL STATE ---
   isActive: false,
   currentState: null,
+  combatResult: null,
   selectedAction: null,
   selectedTarget: null,
 
@@ -85,16 +88,44 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
   },
 
   endCombat: (result) => {
-    // Here we would handle XP, loot, etc. by calling gameStore actions
-    // For now, just reset the state.
-    console.log('Combattimento terminato:', result);
+    const { currentState } = get();
+    const gameStore = useGameStore.getState();
+    if (!currentState) return;
+
+    let finalResult: CombatResult = { type: result.type };
+
+    if (result.type === 'victory') {
+      let xpGained = 0;
+      const loot: IInventorySlot[] = [];
+
+      currentState.enemies.forEach(enemy => {
+        xpGained += enemy.xpValue || 10;
+        if (Math.random() < 0.5) {
+          loot.push({ itemId: 'scrap_metal', quantity: 1 });
+        }
+      });
+
+      gameStore.addExperience(xpGained);
+      loot.forEach(item => gameStore.addItem(item.itemId, item.quantity));
+
+      finalResult = { ...result, xpGained, loot };
+    }
+
+    console.log('Combattimento terminato:', finalResult);
 
     set({
       isActive: false,
+      combatResult: finalResult,
+    });
+  },
+
+  clearCombatResults: () => {
+    set({
       currentState: null,
+      combatResult: null,
       selectedAction: null,
       selectedTarget: null,
-    }, true); // `true` per sovrascrivere completamente lo stato
+    });
   },
 
   selectAction: (action) => {

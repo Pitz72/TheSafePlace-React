@@ -78,5 +78,12 @@ Questo documento traccia i passaggi implementativi eseguiti per la creazione del
 - **Test di Verifica:** Creato il file `src/tests/CombatScreen.test.tsx` per verificare il corretto rendering e passaggio dei dati della schermata di combattimento.
 - **Aggiornamento Design:** Aggiunte note sulla filosofia degli incontri (rari, evitabili) e sull'esclusione dell'audio al documento di design, come da indicazioni.
 
+### **Fase 7: IA Nemica e Flusso di Combattimento (Task 13)**
+
+- **Logica IA Nemica (`enemyAI.ts`):** Creato un nuovo file per ospitare l'intelligenza artificiale dei nemici. Implementata una logica di base che porta il nemico a scegliere sempre l'azione di attacco.
+- **Turno del Nemico (`combatStore.ts`):** Aggiunta la funzione `executeEnemyTurn` allo store. Questa funzione gestisce il turno di ogni nemico, calcola i risultati degli attacchi contro il giocatore e aggiorna lo stato del combattimento.
+- **Integrazione del Ciclo di Turni:** La funzione `executePlayerAction` è stata aggiornata per chiamare `executeEnemyTurn` al termine del turno del giocatore, creando un ciclo di combattimento completo (Giocatore -> Nemico -> Giocatore).
+- **Test per l'IA:** Aggiunti test specifici in `combatStore.test.ts` per validare il corretto funzionamento del turno nemico e la gestione della sconfitta del giocatore.
+
 ---
 **Stato Attuale:** Implementazione completata. Pronto per il rilascio o la prossima fase di sviluppo.

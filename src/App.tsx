@@ -108,14 +108,23 @@ import TerminalCraftingScreen from './components/crafting/TerminalCraftingScreen
 import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
 import WeatherDisplay from './components/WeatherDisplay';
 import CombatScreen from './components/combat/CombatScreen';
+import PostCombatScreen from './components/combat/PostCombatScreen';
 
 
 
 const GameContent = () => {
   const { scale, viewportWidth, viewportHeight } = useGameScale();
-  const currentScreen = useGameStore(state => state.currentScreen);
-  const isInCombat = useCombatStore(state => state.isInCombat);
-  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const { currentScreen, setCurrentScreen, loadSavedGame, initializeGame } = useGameStore(state => ({
+    currentScreen: state.currentScreen,
+    setCurrentScreen: state.setCurrentScreen,
+    loadSavedGame: state.loadSavedGame,
+    initializeGame: state.initializeGame,
+  }));
+  const { isInCombat, combatResult, clearCombatResults } = useCombatStore(state => ({
+    isInCombat: state.isActive,
+    combatResult: state.combatResult,
+    clearCombatResults: state.clearCombatResults,
+  }));
   const playerPosition = useGameStore(state => state.playerPosition);
   const isMapLoading = useGameStore(state => state.isMapLoading);
   const mapData = useGameStore(state => state.mapData);
@@ -212,8 +221,20 @@ const GameContent = () => {
         
         {/* Container principale */}
         <div className="h-full flex flex-col">
-          {/* Schermata di Combattimento (priorità su tutto) */}
-          {isInCombat ? (
+          {/* Schermata Post-Combattimento (priorità massima) */}
+          {combatResult ? (
+            <PostCombatScreen
+              result={combatResult}
+              xpGained={combatResult.xpGained || 0}
+              loot={combatResult.loot || []}
+              onContinue={() => {
+                clearCombatResults();
+                // Non cambiamo schermata, torniamo semplicemente al gioco
+              }}
+              onLoadGame={() => loadSavedGame('quicksave')}
+              onMainMenu={() => initializeGame()}
+            />
+          ) : isInCombat ? (
             <CombatScreen />
           ) : (
             <>
