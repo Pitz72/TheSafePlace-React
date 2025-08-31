@@ -123,7 +123,7 @@ describe('Crafting Integration', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe(CRAFTING_ERRORS.UNKNOWN_ERROR);
+      expect(result.error).toBe(CRAFTING_ERRORS.INSUFFICIENT_MATERIALS);
     });
 
     test('dovrebbe gestire errori durante rimozione materiali', async () => {

@@ -24,9 +24,7 @@ import {
   validateCraftingAttempt,
   calculateCraftingXP,
   debugLog,
-  groupRecipesByAvailability,
-  meetsSkillRequirement,
-  hasRequiredMaterials
+  groupRecipesByAvailability
 } from '../utils/craftingUtils';
 
 import { useGameStore } from './gameStore';
@@ -260,15 +258,15 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         return failCraft(CRAFTING_ERRORS.NO_CHARACTER);
       }
 
-      // Controlli granulari al posto di validateCraftingAttempt
-      if (!knownRecipeIds.includes(recipeId)) {
-        return failCraft(CRAFTING_ERRORS.RECIPE_NOT_KNOWN);
-      }
-      if (!meetsSkillRequirement(recipe, characterSheet)) {
-        return failCraft(CRAFTING_ERRORS.INSUFFICIENT_SKILL);
-      }
-      if (!hasRequiredMaterials(recipe, inventory)) {
-        return failCraft(CRAFTING_ERRORS.INSUFFICIENT_MATERIALS);
+      const validationError = validateCraftingAttempt(
+        recipe,
+        inventory,
+        characterSheet,
+        knownRecipeIds
+      );
+
+      if (validationError) {
+        return failCraft(validationError);
       }
 
       try {

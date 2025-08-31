@@ -82,6 +82,14 @@ const mockItems = {
     type: 'misc',
     weight: 1.0,
     value: 10
+  },
+  'item_prop_no_desc': {
+    name: 'Oggetto con Prop Senza Desc',
+    properties: [
+      {
+        name: 'Proprietà Senza Descrizione'
+      }
+    ]
   }
 };
 
@@ -480,32 +488,16 @@ describe('ItemPreview Component', () => {
     });
 
     test('dovrebbe gestire proprietà senza descrizione', () => {
-      const itemWithPropertyNoDesc = {
-        ...mockItems.knife_sharp,
-        properties: [
-          {
-            name: 'Proprietà Senza Descrizione'
-          }
-        ]
-      };
-
-      // Mock temporaneo
-      jest.doMock('../stores/gameStore', () => ({
-        useGameStore: () => ({
-          items: {
-            'test_item': itemWithPropertyNoDesc
-          }
-        })
-      }));
-
       render(
         <ItemPreview
-          resultItemId="test_item"
+          resultItemId="item_prop_no_desc"
           resultQuantity={1}
         />
       );
 
       expect(screen.getByText('Proprietà Senza Descrizione')).toBeInTheDocument();
+      // Verifica che il nome dell'oggetto sia renderizzato
+      expect(screen.getByText('Oggetto con Prop Senza Desc')).toBeInTheDocument();
     });
   });
 });

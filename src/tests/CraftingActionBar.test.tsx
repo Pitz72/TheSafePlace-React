@@ -42,7 +42,9 @@ describe('CraftingActionBar Component', () => {
       expect(screen.getByText('Enter')).toBeInTheDocument();
       expect(screen.getByText('ESC')).toBeInTheDocument();
       expect(screen.getByText('Crea')).toBeInTheDocument();
-      expect(screen.getByText('Esci')).toBeInTheDocument();
+      // Cerca il testo 'Esci' che non sia dentro un bottone
+      const keyHint = screen.getAllByText('Esci').find(el => el.tagName.toLowerCase() !== 'button');
+      expect(keyHint).toBeInTheDocument();
     });
   });
 
@@ -162,6 +164,7 @@ describe('CraftingActionBar Component', () => {
     });
 
     test('dovrebbe chiamare onExit quando si clicca il pulsante exit', () => {
+      jest.useFakeTimers();
       render(
         <CraftingActionBar
           canCraft={true}
@@ -173,10 +176,11 @@ describe('CraftingActionBar Component', () => {
       const exitButton = screen.getByRole('button', { name: /Esci/i });
       fireEvent.click(exitButton);
 
-      // Aspetta il delay del feedback visivo
-      setTimeout(() => {
-        expect(mockOnExit).toHaveBeenCalledTimes(1);
-      }, 200);
+      // Avanza i timer per coprire il setTimeout nel componente
+      jest.runAllTimers();
+
+      expect(mockOnExit).toHaveBeenCalledTimes(1);
+      jest.useRealTimers();
     });
   });
 
@@ -228,6 +232,7 @@ describe('CraftingActionBar Component', () => {
     });
 
     test('dovrebbe chiamare onExit quando si preme ESC', () => {
+      jest.useFakeTimers();
       render(
         <CraftingActionBar
           canCraft={true}
@@ -238,10 +243,11 @@ describe('CraftingActionBar Component', () => {
 
       fireEvent.keyDown(window, { key: 'Escape' });
 
-      // Aspetta il delay del feedback visivo
-      setTimeout(() => {
-        expect(mockOnExit).toHaveBeenCalledTimes(1);
-      }, 200);
+      // Avanza i timer
+      jest.runAllTimers();
+
+      expect(mockOnExit).toHaveBeenCalledTimes(1);
+      jest.useRealTimers();
     });
   });
 

@@ -6,6 +6,7 @@
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import { render, screen, fireEvent } from '@testing-library/react';
 import TerminalCraftingScreen from '../components/crafting/TerminalCraftingScreen';
+import { useCraftingStore } from '../stores/craftingStore';
 
 // Mock dei store
 const mockCraftingStore = {
@@ -327,34 +328,29 @@ describe('TerminalCraftingScreen', () => {
   });
 
   test('dovrebbe gestire errori di crafting con messaggi specifici', async () => {
-    const testRecipe = {
-      id: 'test_recipe',
-      resultItemId: 'test_item',
-      resultQuantity: 1,
-      components: [{ itemId: 'material1', quantity: 1 }]
+    // Imposta lo store per avere una ricetta e simulare un errore al craft
+    mockCraftingStore.allRecipes = [{ id: 'r1', resultItemId: 'Test Item', components: [], category: 'test', description: '' }];
+    mockCraftingStore.craftItem.mockImplementation(async () => {
+      // Simula il comportamento reale dello store: imposta lo stato di errore
+      (useCraftingStore as any).setState({ isCrafting: false, craftingError: 'Materiali insufficienti' });
+      return false;
+    });
+    // Sovrascrivi il mock di useCraftingStore per questo test specifico
+    const stateWithRecipes = {
+      ...mockCraftingStore,
+      allRecipes: mockCraftingStore.allRecipes
     };
-
-    mockCraftingStore.getAvailableRecipes.mockReturnValue([testRecipe]);
-    mockCraftingStore.craftItem.mockResolvedValue(false); // Crafting fallisce
-    
-    mockGameStore.items = {
-      test_item: { name: 'Oggetto Test' },
-      material1: { name: 'Materiale Test' }
-    };
-
-    mockGameStore.characterSheet = {
-      inventory: [],
-      stats: { adattamento: 1, potenza: 1, percezione: 1 }
-    };
+    // Non re-mockare la funzione, ma modifica lo stato che il mock globale già usa
+    mockCraftingStore.allRecipes = stateWithRecipes.allRecipes;
+    mockCraftingStore.craftItem = stateWithRecipes.craftItem;
 
     render(<TerminalCraftingScreen onExit={mockOnExit} />);
     
-    // Tenta crafting
-    fireEvent.keyDown(window, { key: 'Enter' });
-    
-    // Dovrebbe mostrare messaggio di errore specifico
-    await screen.findByText(/✗ ERRORE:/);
-    expect(screen.getByText(/Materiali insufficienti/)).toBeInTheDocument();
+    // Tenta di craftare premendo Enter
+    fireEvent.keyDown(document, { key: 'Enter' });
+
+    // Aspetta che il messaggio di errore venga renderizzato
+    expect(await screen.findByText(/✗ ERRORE: Materiali insufficienti/)).toBeInTheDocument();
   });
 
   test('dovrebbe mostrare messaggio quando non ci sono ricette', async () => {
