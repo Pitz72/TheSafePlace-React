@@ -34,10 +34,35 @@ const TerminalCraftingScreen: React.FC<TerminalCraftingScreenProps> = ({ onExit 
   // State
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [filterAvailable, setFilterAvailable] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   // Stores
   const craftingStore = useCraftingStore();
   const gameStore = useGameStore();
+
+  if (craftingStore.isLoading) {
+    return (
+      <div className="fixed inset-0 bg-black text-phosphor-500 font-mono text-lg flex items-center justify-center">
+        <div className="bg-black p-6 border-2 border-phosphor-500 rounded-lg shadow-lg shadow-phosphor-500/20">
+          <pre className="whitespace-pre leading-relaxed tracking-wide">
+            INIZIALIZZAZIONE...
+          </pre>
+        </div>
+      </div>
+    );
+  }
+
+  if (craftingStore.loadError) {
+    return (
+      <div className="fixed inset-0 bg-black text-red-500 font-mono text-lg flex items-center justify-center">
+        <div className="bg-black p-6 border-2 border-red-500 rounded-lg shadow-lg shadow-red-500/20">
+          <pre className="whitespace-pre leading-relaxed tracking-wide">
+            ERRORE DI INIZIALIZZAZIONE: {craftingStore.loadError}
+          </pre>
+        </div>
+      </div>
+    );
+  }
 
   // Computed values
   const allRecipes = craftingStore.allRecipes;
@@ -53,7 +78,22 @@ const TerminalCraftingScreen: React.FC<TerminalCraftingScreenProps> = ({ onExit 
   const selectedRecipe = filteredRecipes[selectedIndex] || null;
 
   // Handlers
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const { isCrafting, craftingError } = useCraftingStore();
+
+  const handleCraft = useCallback(() => {
+    const inventory: IInventorySlot[] = (gameStore.characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
+    if (selectedRecipe && canCraftRecipe(selectedRecipe, inventory, gameStore.characterSheet)) {
+      craftingStore.craftItem(selectedRecipe.id);
+    } else {
+      setFeedbackMessage("✗ ERRORE: Impossibile creare l'oggetto.");
+      setTimeout(() => setFeedbackMessage(null), 2000);
+    }
+  }, [selectedRecipe, gameStore.characterSheet, craftingStore]);
+
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
+    if (feedbackMessage) return; // Blocca input se c'è un messaggio
+
     switch (event.key.toLowerCase()) {
       case 'escape':
         onExit();
@@ -67,25 +107,43 @@ const TerminalCraftingScreen: React.FC<TerminalCraftingScreenProps> = ({ onExit 
         setSelectedIndex(prev => Math.min(filteredRecipes.length - 1, prev + 1));
         break;
       case 'enter':
-        const inventory: IInventorySlot[] = (gameStore.characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
-        if (selectedRecipe && canCraftRecipe(selectedRecipe, inventory, gameStore.characterSheet)) {
-          craftingStore.craftItem(selectedRecipe.id);
-        }
+        handleCraft();
+        break;
+      case 'h':
+        setShowHelp(prev => !prev);
         break;
       case 'f':
         setFilterAvailable(prev => !prev);
         setSelectedIndex(0);
         break;
+      default: {
+        if (!isNaN(parseInt(event.key, 10))) {
+          const num = parseInt(event.key, 10);
+          if (num >= 1 && num <= 9 && num <= filteredRecipes.length) {
+            setSelectedIndex(num - 1);
+          }
+        }
+        break;
+      }
     }
-  }, [selectedRecipe, filteredRecipes.length, onExit, craftingStore, gameStore.items, gameStore.characterSheet]);
+  }, [filteredRecipes.length, onExit, handleCraft, feedbackMessage]);
 
   // Effects
   useEffect(() => {
-    // Inizializza le ricette se non sono già caricate
     if (craftingStore.allRecipes.length === 0) {
       craftingStore.initializeRecipes();
     }
   }, [craftingStore]);
+
+  useEffect(() => {
+    if (isCrafting === false && craftingError) {
+      setFeedbackMessage(`✗ ERRORE: ${craftingError}`);
+      setTimeout(() => {
+        setFeedbackMessage(null);
+        craftingStore.clearCraftingError();
+      }, 2000);
+    }
+  }, [isCrafting, craftingError, craftingStore]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
@@ -184,6 +242,23 @@ const TerminalCraftingScreen: React.FC<TerminalCraftingScreenProps> = ({ onExit 
   };
 
   const renderScreen = () => {
+    if (showHelp) {
+      const lines: string[] = [];
+      lines.push(renderBorder('top'));
+      lines.push(`║${'AIUTO COMANDI'.padStart(39).padEnd(76)}║`);
+      lines.push(renderBorder('separator'));
+      lines.push(`║ W/S, Frecce Su/Giu: Naviga lista ricette`.padEnd(77) + `║`);
+      lines.push(`║ Enter: Crea oggetto selezionato`.padEnd(77) + `║`);
+      lines.push(`║ 1-9: Seleziona ricetta direttamente`.padEnd(77) + `║`);
+      lines.push(`║ F: Filtra ricette craftabili`.padEnd(77) + `║`);
+      lines.push(`║ H: Mostra/Nascondi questo aiuto`.padEnd(77) + `║`);
+      lines.push(`║ ESC: Esci dal terminale`.padEnd(77) + `║`);
+      while (lines.length < 12) {
+        lines.push('║'.padEnd(77) + '║');
+      }
+      lines.push(renderBorder('bottom'));
+      return lines.join('\n');
+    }
     const recipeList = renderRecipeList();
     const recipeDetails = renderRecipeDetails();
     const lines: string[] = [];

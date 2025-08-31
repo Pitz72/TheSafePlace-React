@@ -26,8 +26,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      expect(screen.getByText('Crea Oggetto')).toBeInTheDocument();
-      expect(screen.getByText('Esci')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Crea Oggetto/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Esci/i })).toBeInTheDocument();
     });
 
     test('dovrebbe mostrare comandi tastiera', () => {
@@ -69,7 +69,7 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       expect(craftButton).not.toBeDisabled();
       expect(craftButton).toHaveClass('bg-green-600');
     });
@@ -110,7 +110,7 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       expect(craftButton).toBeDisabled();
       expect(craftButton).toHaveClass('bg-gray-700');
     });
@@ -138,8 +138,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       await waitFor(() => {
         expect(mockOnCraft).toHaveBeenCalledTimes(1);
@@ -155,8 +155,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       expect(mockOnCraft).not.toHaveBeenCalled();
     });
@@ -170,8 +170,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const exitButton = screen.getByText('Esci').closest('button');
-      fireEvent.click(exitButton!);
+      const exitButton = screen.getByRole('button', { name: /Esci/i });
+      fireEvent.click(exitButton);
 
       // Aspetta il delay del feedback visivo
       setTimeout(() => {
@@ -260,8 +260,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       // Dovrebbe mostrare stato processing
       await waitFor(() => {
@@ -283,10 +283,10 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      const exitButton = screen.getByText('Esci').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      const exitButton = screen.getByRole('button', { name: /Esci/i });
       
-      fireEvent.click(craftButton!);
+      fireEvent.click(craftButton);
 
       await waitFor(() => {
         expect(exitButton).toHaveClass('opacity-50', 'cursor-not-allowed');
@@ -310,13 +310,13 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       
       // Primo click
-      fireEvent.click(craftButton!);
+      fireEvent.click(craftButton);
       
       // Secondo click immediato
-      fireEvent.click(craftButton!);
+      fireEvent.click(craftButton);
 
       await waitFor(() => {
         expect(slowMockOnCraft).toHaveBeenCalledTimes(1);
@@ -334,7 +334,7 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       expect(craftButton).toHaveClass('transition-all', 'duration-200');
     });
 
@@ -351,8 +351,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       await waitFor(() => {
         const spinner = document.querySelector('.animate-spin');
@@ -369,7 +369,7 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       expect(craftButton).toHaveClass('hover:bg-green-500');
     });
   });
@@ -384,8 +384,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      const exitButton = screen.getByText('Esci').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      const exitButton = screen.getByRole('button', { name: /Esci/i });
 
       expect(craftButton).toHaveAttribute('aria-label', 'Crea Oggetto');
       expect(exitButton).toHaveAttribute('aria-label', 'Esci');
@@ -400,7 +400,7 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
       expect(craftButton).toBeDisabled();
       expect(craftButton).toHaveAttribute('disabled');
     });
@@ -419,8 +419,8 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith('Crafting action failed:', expect.any(Error));
@@ -440,12 +440,12 @@ describe('CraftingActionBar Component', () => {
         />
       );
 
-      const craftButton = screen.getByText('Crea Oggetto').closest('button');
-      fireEvent.click(craftButton!);
+      const craftButton = screen.getByRole('button', { name: /Crea Oggetto/i });
+      fireEvent.click(craftButton);
 
       // Aspetta che l'errore sia gestito e lo stato ripristinato
       await waitFor(() => {
-        expect(screen.getByText('Crea Oggetto')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Crea Oggetto/i })).toBeInTheDocument();
       }, { timeout: 1000 });
     });
   });

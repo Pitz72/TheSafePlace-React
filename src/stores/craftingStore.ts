@@ -24,7 +24,9 @@ import {
   validateCraftingAttempt,
   calculateCraftingXP,
   debugLog,
-  groupRecipesByAvailability
+  groupRecipesByAvailability,
+  meetsSkillRequirement,
+  hasRequiredMaterials
 } from '../utils/craftingUtils';
 
 import { useGameStore } from './gameStore';
@@ -131,10 +133,13 @@ interface ExtendedCraftingState extends CraftingState {
   // ===== LOADING STATE =====
   isLoading: boolean;
   loadError: string | null;
+  isCrafting: boolean;
+  craftingError: string | null;
 
   // ===== RECIPE MANAGEMENT =====
   initializeRecipes: () => Promise<void>;
   reloadRecipes: () => Promise<void>;
+  clearCraftingError: () => void;
 
   // ===== NAVIGATION =====
   moveSelectionUp: () => void;
@@ -179,8 +184,12 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     knownRecipeIds: [],
     isLoading: false,
     loadError: null,
+    isCrafting: false,
+    craftingError: null,
 
     // ===== BASIC ACTIONS =====
+
+    clearCraftingError: () => set({ craftingError: null }),
 
     setSelectedRecipe: (index: number) => {
       const availableRecipes = get().getAvailableRecipes();
@@ -226,95 +235,75 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     },
 
     craftItem: async (recipeId: string): Promise<boolean> => {
+      set({ isCrafting: true, craftingError: null });
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
 
       debugLog(`Attempting to craft: ${recipeId}`);
 
-      // Trova la ricetta
+      const failCraft = (error: string) => {
+        debugLog(`Crafting failed: ${error}`);
+        set({ isCrafting: false, craftingError: error });
+        gameStore.addLogEntry(MessageType.ACTION_FAIL, { reason: error });
+        return false;
+      };
+
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe) {
-        debugLog(`Recipe not found: ${recipeId}`);
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
-          reason: CRAFTING_ERRORS.RECIPE_NOT_FOUND
-        });
-        return false;
+        return failCraft(CRAFTING_ERRORS.RECIPE_NOT_FOUND);
       }
 
-      // Ottieni stato corrente dal game store
       const inventory = (gameStore.characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
       const characterSheet = gameStore.characterSheet;
 
       if (!characterSheet) {
-        debugLog('No character sheet available');
-        return false;
+        return failCraft(CRAFTING_ERRORS.NO_CHARACTER);
       }
 
-      // Valida il tentativo di crafting
-      const validationError = validateCraftingAttempt(
-        recipe,
-        inventory,
-        characterSheet,
-        knownRecipeIds
-      );
-
-      if (validationError) {
-        debugLog(`Crafting validation failed: ${validationError}`);
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, { reason: validationError });
-        return false;
+      // Controlli granulari al posto di validateCraftingAttempt
+      if (!knownRecipeIds.includes(recipeId)) {
+        return failCraft(CRAFTING_ERRORS.RECIPE_NOT_KNOWN);
+      }
+      if (!meetsSkillRequirement(recipe, characterSheet)) {
+        return failCraft(CRAFTING_ERRORS.INSUFFICIENT_SKILL);
+      }
+      if (!hasRequiredMaterials(recipe, inventory)) {
+        return failCraft(CRAFTING_ERRORS.INSUFFICIENT_MATERIALS);
       }
 
       try {
-        // Rimuovi materiali dall'inventario
+        // Rimuovi materiali
         recipe.components.forEach(component => {
-          // Trova e rimuovi i materiali
-          for (let i = 0; i < inventory.length; i++) {
-            const slot = inventory[i];
-            if (slot && slot.itemId === component.itemId) {
-              const toRemove = Math.min(slot.quantity, component.quantity);
-              gameStore.removeItem(i, toRemove);
-              component.quantity -= toRemove;
-
-              if (component.quantity <= 0) break;
-            }
-          }
+          gameStore.removeItems(component.itemId, component.quantity);
         });
 
         // Aggiungi oggetto risultante
         const addSuccess = gameStore.addItem(recipe.resultItemId, recipe.resultQuantity);
-
         if (!addSuccess) {
-          debugLog('Failed to add crafted item to inventory');
-          gameStore.addLogEntry(MessageType.ACTION_FAIL, {
-            reason: CRAFTING_ERRORS.INVENTORY_FULL
+          // Tenta di ripristinare i materiali
+          recipe.components.forEach(component => {
+            gameStore.addItem(component.itemId, component.quantity);
           });
-          return false;
+          return failCraft(CRAFTING_ERRORS.INVENTORY_FULL);
         }
 
-        // Calcola e assegna XP
         const xpGained = calculateCraftingXP(recipe);
         gameStore.addExperience(xpGained);
 
-        // Ottieni nome oggetto per il messaggio
         const resultItem = gameStore.items[recipe.resultItemId];
         const itemName = resultItem?.name || 'Oggetto Sconosciuto';
 
-        // Messaggio di successo nel journal
         gameStore.addLogEntry(MessageType.ACTION_SUCCESS, {
           action: `Usando il banco di lavoro, hai creato: ${itemName} (x${recipe.resultQuantity}).`
         });
 
         debugLog(`Crafting successful: ${itemName} x${recipe.resultQuantity}, XP gained: ${xpGained}`);
+        set({ isCrafting: false });
         return true;
 
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        debugLog(`Crafting failed with error: ${errorMessage}`);
-
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
-          reason: CRAFTING_ERRORS.UNKNOWN_ERROR
-        });
-        return false;
+        const errorMessage = error instanceof Error ? error.message : CRAFTING_ERRORS.UNKNOWN_ERROR;
+        return failCraft(errorMessage);
       }
     },
 

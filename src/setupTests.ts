@@ -1,19 +1,5 @@
 import '@testing-library/jest-dom';
 
-// Type declarations for jest-dom matchers
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toBeInTheDocument(): R;
-      toHaveClass(className: string): R;
-      toHaveStyle(style: string | Record<string, any>): R;
-      toHaveAttribute(attr: string, value?: string): R;
-      toBeDisabled(): R;
-      toHaveTextContent(text: string): R;
-    }
-  }
-}
-
 // Type declarations for global test utilities
 declare global {
   var createMockPlayer: () => any;

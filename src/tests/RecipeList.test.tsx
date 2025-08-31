@@ -220,8 +220,8 @@ describe('RecipeList Component', () => {
       });
     });
 
-    test('dovrebbe navigare con frecce direzionali', async () => {
-      render(
+    test('dovrebbe navigare in giù con FrecciaGiù', async () => {
+      const { rerender } = render(
         <RecipeList
           recipes={testRecipes}
           selectedIndex={0}
@@ -235,11 +235,39 @@ describe('RecipeList Component', () => {
         expect(mockOnSelectionChange).toHaveBeenCalledWith(1);
       });
 
+      // Simula l'aggiornamento del componente genitore
+      rerender(
+        <RecipeList
+          recipes={testRecipes}
+          selectedIndex={1}
+          onSelectionChange={mockOnSelectionChange}
+        />
+      );
+    });
+
+    test('dovrebbe navigare in su con FrecciaSu', async () => {
+      const { rerender } = render(
+        <RecipeList
+          recipes={testRecipes}
+          selectedIndex={1}
+          onSelectionChange={mockOnSelectionChange}
+        />
+      );
+
       fireEvent.keyDown(window, { key: 'ArrowUp' });
 
       await waitFor(() => {
         expect(mockOnSelectionChange).toHaveBeenCalledWith(0);
       });
+
+      // Simula l'aggiornamento del componente genitore
+      rerender(
+        <RecipeList
+          recipes={testRecipes}
+          selectedIndex={0}
+          onSelectionChange={mockOnSelectionChange}
+        />
+      );
     });
 
     test('dovrebbe fare wrap around alla fine della lista', async () => {

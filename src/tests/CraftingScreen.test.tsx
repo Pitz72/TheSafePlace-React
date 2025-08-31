@@ -14,7 +14,7 @@ jest.mock('../components/crafting/RecipeList', () => ({
 }));
 
 jest.mock('../components/crafting/RecipeDetails', () => ({
-  RecipeDetailsContainer: ({ recipe, materialStatus, meetsSkillRequirement }: any) => (
+  RecipeDetails: ({ recipe, materialStatus, meetsSkillRequirement }: any) => (
     <div data-testid="recipe-details">
       Recipe Details - {recipe?.id || 'none'} - Materials: {materialStatus.length} - Skills: {meetsSkillRequirement.toString()}
     </div>
@@ -22,7 +22,7 @@ jest.mock('../components/crafting/RecipeDetails', () => ({
 }));
 
 jest.mock('../components/crafting/ItemPreview', () => ({
-  ItemPreviewContainer: ({ resultItemId, resultQuantity }: any) => (
+  ItemPreview: ({ resultItemId, resultQuantity }: any) => (
     <div data-testid="item-preview">
       Item Preview - {resultItemId} x{resultQuantity}
     </div>
@@ -30,7 +30,7 @@ jest.mock('../components/crafting/ItemPreview', () => ({
 }));
 
 jest.mock('../components/crafting/CraftingActionBar', () => ({
-  CraftingActionBarContainer: ({ canCraft, onCraft, onExit }: any) => (
+  CraftingActionBar: ({ canCraft, onCraft, onExit }: any) => (
     <div data-testid="action-bar">
       <button onClick={onCraft} disabled={!canCraft}>
         Craft {canCraft ? 'Enabled' : 'Disabled'}
