@@ -391,7 +391,7 @@ const GameContent = () => {
               )}
             </>
           )}
-        </div>
+        </>
       )}
     </div>
   );
