@@ -61,7 +61,8 @@ describe('CombatScreen Component', () => {
 
   beforeEach(() => {
     useCombatStoreMock.mockReturnValue(mockCombatStoreState);
-    useGameStoreMock.mockReturnValue(mockGameStoreState);
+    // Mock l'implementazione per gestire il selettore
+    useGameStoreMock.mockImplementation(selector => selector(mockGameStoreState));
     jest.clearAllMocks();
   });
 
@@ -76,12 +77,14 @@ describe('CombatScreen Component', () => {
   });
 
   test('dovrebbe passare le props corrette ai componenti figli', () => {
-    // Configura i mock specificamente per questo test prima del render
-    useGameStoreMock.mockReturnValue({ characterSheet: { name: 'Eroe' } });
+    // Non c'è bisogno di re-mockare gameStore se il beforeEach è corretto
     useCombatStoreMock.mockReturnValue(mockCombatStoreState);
 
     render(<CombatScreen />);
 
+    // Il mock di CombatStatus si aspetta player.name
+    // CombatScreen passa gameCharacter (che è characterSheet) come prop 'player'
+    // Quindi il mock riceve player={name: 'Eroe'}
     expect(screen.getByTestId('scene-description')).toHaveTextContent('Una battaglia epica!');
     expect(screen.getByTestId('combat-status')).toHaveTextContent('Player: Eroe, Enemies: 1');
     expect(screen.getByTestId('combat-log')).toHaveTextContent('Entries: 1');

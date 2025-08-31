@@ -334,7 +334,7 @@ describe('CraftingScreen Component', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('recipe-details')).toHaveTextContent('Recipe Details - none - Materials: 0 - Skills: true');
-        expect(screen.getByTestId('item-preview')).toHaveTextContent('Item Preview -  x1');
+        expect(screen.getByTestId('item-preview')).toHaveTextContent('Item Preview - x1');
       });
     });
   });
@@ -346,9 +346,9 @@ describe('CraftingScreen Component', () => {
       render(<CraftingScreen onExit={mockOnExit} />);
 
       await waitFor(() => {
-        const recipeListSection = screen.getByTestId('recipe-list').closest('div');
-        const recipeDetailsSection = screen.getByTestId('recipe-details').closest('div');
-        const itemPreviewSection = screen.getByTestId('item-preview').closest('div');
+        const recipeListSection = screen.getByTestId('recipe-list').parentElement;
+        const recipeDetailsSection = screen.getByTestId('recipe-details').parentElement;
+        const itemPreviewSection = screen.getByTestId('item-preview').parentElement;
 
         expect(recipeListSection).toHaveStyle('width: 25%');
         expect(recipeDetailsSection).toHaveStyle('width: 40%');

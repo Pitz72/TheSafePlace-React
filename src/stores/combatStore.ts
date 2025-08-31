@@ -116,6 +116,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
     set({
       isActive: false,
       combatResult: finalResult,
+      currentState: null, // Resetta lo stato del combattimento attivo
     });
   },
 

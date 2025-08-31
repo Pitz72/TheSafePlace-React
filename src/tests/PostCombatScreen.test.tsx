@@ -40,7 +40,9 @@ describe('PostCombatScreen Component', () => {
 
       expect(screen.getByText('VITTORIA')).toBeInTheDocument();
       expect(screen.getByText('Hai sconfitto tutti i nemici.')).toBeInTheDocument();
-      expect(screen.getByText(/Esperienza Guadagnata:/)).toHaveTextContent('75 XP');
+      // Controlla che sia il testo che il valore siano presenti, anche se in elementi diversi
+      expect(screen.getByText(/Esperienza Guadagnata:/)).toBeInTheDocument();
+      expect(screen.getByText(/75 XP/)).toBeInTheDocument();
       expect(screen.getByText('Metallo Ruggine x2')).toBeInTheDocument();
       expect(screen.getByText('Stoffa x1')).toBeInTheDocument();
     });

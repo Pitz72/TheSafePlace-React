@@ -111,7 +111,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '3rem' }}>
-          v0.8.5 - Crafting Full and Real Integration
+          v0.9.0 - Run away, fight, or die.
         </p>
         
         {/* Menu Items Testuali */}

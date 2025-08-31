@@ -418,6 +418,11 @@ export async function executeCrafting(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown crafting error';
     debugLog(`Crafting failed: ${errorMessage}`);
+
+    if (errorMessage === 'Failed to add crafted item to inventory') {
+      return createFailureResult(CRAFTING_ERRORS.INVENTORY_FULL);
+    }
+
     return createFailureResult(CRAFTING_ERRORS.UNKNOWN_ERROR);
   }
 }
