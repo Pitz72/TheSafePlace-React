@@ -55,10 +55,17 @@ describe('Combat Store', () => {
     expect(currentState).toBeNull();
   });
 
+import { combatEncounters } from '../data/combatEncounters';
+
+// ... (resto del file)
+
   describe('initiateCombat', () => {
     it('should set up the initial state correctly', () => {
       const { initiateCombat } = useCombatStore.getState();
-      initiateCombat(encounter);
+      // Aggiungi l'incontro di test al mock
+      combatEncounters[encounter.id] = encounter;
+
+      initiateCombat(encounter.id);
       const state = useCombatStore.getState();
       expect(state.isActive).toBe(true);
       expect(state.currentState).not.toBeNull();
@@ -69,7 +76,8 @@ describe('Combat Store', () => {
 
   describe('executePlayerAction (attack)', () => {
     beforeEach(() => {
-      useCombatStore.getState().initiateCombat(encounter);
+      combatEncounters[encounter.id] = encounter; // Assicura che l'incontro esista
+      useCombatStore.getState().initiateCombat(encounter.id);
       useCombatStore.getState().selectAction('attack');
       useCombatStore.getState().selectTarget(0);
     });
@@ -117,7 +125,8 @@ describe('Combat Store', () => {
 
   it('endCombat should reset the combat state', () => {
     const { initiateCombat, endCombat } = useCombatStore.getState();
-    initiateCombat(encounter);
+    combatEncounters[encounter.id] = encounter; // Assicura che l'incontro esista
+    initiateCombat(encounter.id);
     expect(useCombatStore.getState().isActive).toBe(true);
 
     endCombat({ type: 'victory' });

@@ -1,8 +1,9 @@
 import { create } from 'zustand';
-import type { CombatState, CombatEncounter, CombatResult, CombatActionType, CombatLogEntry } from '../types/combat';
+import type { CombatState, CombatResult, CombatActionType, CombatLogEntry } from '../types/combat';
 import { useGameStore } from './gameStore'; // To get player data
 import { createEnemyCombatant, updateEnemyHealthDescription } from '../utils/enemyUtils';
 import { rollToHit, rollDamage } from '../utils/combatCalculations';
+import { combatEncounters } from '../data/combatEncounters';
 
 // --- STORE INTERFACE ---
 
@@ -14,7 +15,7 @@ export interface CombatStoreState {
 
   // --- ACTIONS ---
 
-  initiateCombat: (encounter: CombatEncounter) => void;
+  initiateCombat: (encounterId: string) => void;
   endCombat: (result: CombatResult) => void;
 
   selectAction: (action: CombatActionType) => void;
@@ -36,23 +37,26 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
 
   // --- ACTIONS ---
 
-  initiateCombat: (encounter) => {
+  initiateCombat: (encounterId) => {
+    const encounter = combatEncounters[encounterId];
+    if (!encounter) {
+      console.error(`Incontro con ID '${encounterId}' non trovato.`);
+      return;
+    }
+
     const { characterSheet, items } = useGameStore.getState();
 
-    // Create player state for combat
     const playerCombatState = {
       hp: characterSheet.currentHP,
       maxHp: characterSheet.maxHP,
-      // AC will be calculated dynamically later
       ac: 10, // Placeholder
-      baseAc: 10, // Placeholder
+      baseAc: 10,
       weapon: items[characterSheet.equipment.weapon.itemId!] || { id: 'unarmed', name: 'Unarmed', type: 'Weapon', damage: '1d2', description: 'A punch' },
       armor: items[characterSheet.equipment.armor.itemId!] || undefined,
       temporaryBonuses: [],
       stats: characterSheet.stats,
     };
 
-    // Create enemy combatant states
     const enemyCombatants = encounter.enemies.map((template, index) =>
       createEnemyCombatant(template, `enemy-${index}-${Date.now()}`)
     );
@@ -69,7 +73,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
     set({
       isActive: true,
       currentState: initialState,
-      selectedAction: 'attack', // Default action
+      selectedAction: 'attack',
       selectedTarget: 0,
     });
 

@@ -498,4 +498,19 @@ const rollEscape = (
 
 ---
 
+## Note di Design Aggiuntive
+
+### Filosofia degli Incontri
+
+Su indicazione del committente, il combattimento in "The Safe Place" deve essere un elemento presente ma non centrale. Il focus del gioco è narrativo. Di conseguenza:
+- **Gli scontri devono essere rari.** Non devono essere un'interruzione costante dell'esplorazione.
+- **La fuga è una vittoria.** Il sistema deve essere bilanciato in modo che la fuga sia un'opzione strategica valida e spesso la più saggia, in linea con gli insegnamenti del padre del protagonista.
+- **Evitabilità:** Laddove possibile, i combattimenti dovrebbero essere evitabili attraverso l'osservazione, l'astuzia o scelte di dialogo, piuttosto che essere incontri casuali e inevitabili.
+
+### Sistema Audio
+
+Su indicazione del committente, l'implementazione di effetti sonori o musica per il sistema di combattimento è **fuori scopo** per la fase di sviluppo attuale. Verrà progettata e implementata in una fase successiva dello sviluppo del gioco.
+
+---
+
 Questo design fornisce una base solida per implementare un sistema di combattimento tattico, trasparente e coinvolgente che si integra perfettamente con l'ecosistema esistente di "The Safe Place".

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { CombatScreen } from '../components/combat/CombatScreen';
@@ -14,7 +14,7 @@ jest.mock('../components/combat/SceneDescription', () => ({
   SceneDescription: ({ description }: { description: string }) => <div data-testid="scene-description">{description}</div>
 }));
 jest.mock('../components/combat/CombatStatus', () => ({
-  CombatStatus: ({ player, enemies }: any) => <div data-testid="combat-status">Player: {player.name}, Enemies: {enemies.length}</div>
+  CombatStatus: ({ player, enemies }: any) => <div data-testid="combat-status">Player: {player?.name || ''}, Enemies: {enemies.length}</div>
 }));
 jest.mock('../components/combat/CombatLog', () => ({
   CombatLog: ({ entries }: any) => <div data-testid="combat-log">Entries: {entries.length}</div>
