@@ -14,7 +14,7 @@ jest.mock('../components/combat/SceneDescription', () => ({
   SceneDescription: ({ description }: { description: string }) => <div data-testid="scene-description">{description}</div>
 }));
 jest.mock('../components/combat/CombatStatus', () => ({
-  CombatStatus: ({ player, enemies }: any) => <div data-testid="combat-status">Player: {player?.name || ''}, Enemies: {enemies.length}</div>
+  CombatStatus: ({ player, enemies }: any) => <div data-testid="combat-status">Player: {player ? player.name : 'N/A'}, Enemies: {enemies.length}</div>
 }));
 jest.mock('../components/combat/CombatLog', () => ({
   CombatLog: ({ entries }: any) => <div data-testid="combat-log">Entries: {entries.length}</div>
@@ -76,6 +76,10 @@ describe('CombatScreen Component', () => {
   });
 
   test('dovrebbe passare le props corrette ai componenti figli', () => {
+    // Configura i mock specificamente per questo test prima del render
+    useGameStoreMock.mockReturnValue({ characterSheet: { name: 'Eroe' } });
+    useCombatStoreMock.mockReturnValue(mockCombatStoreState);
+
     render(<CombatScreen />);
 
     expect(screen.getByTestId('scene-description')).toHaveTextContent('Una battaglia epica!');

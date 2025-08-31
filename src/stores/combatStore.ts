@@ -24,6 +24,7 @@ export interface CombatStoreState {
   addLogEntry: (entry: Omit<CombatLogEntry, 'id' | 'timestamp'>) => void;
 
   executePlayerAction: () => Promise<void>;
+  executeEnemyTurn: () => Promise<void>;
 }
 
 // --- STORE IMPLEMENTATION ---
@@ -93,7 +94,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
       currentState: null,
       selectedAction: null,
       selectedTarget: null,
-    });
+    }, true); // `true` per sovrascrivere completamente lo stato
   },
 
   selectAction: (action) => {
@@ -224,9 +225,70 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         break;
     }
 
-    // After action, transition to enemy turn (simplified for now)
-    set(state => ({
-        currentState: state.currentState ? { ...state.currentState, phase: 'enemy-turn' } : null
-    }));
+    // After action, transition to enemy turn
+    const newState = get().currentState;
+    if (newState && newState.enemies.some(e => e.status === 'alive')) {
+      set({ currentState: { ...newState, phase: 'enemy-turn' } });
+      // Lancia il turno del nemico senza bloccare
+      setTimeout(() => get().executeEnemyTurn(), 100);
+    } else if (newState) {
+      // Tutti i nemici sconfitti
+      get().addLogEntry({ type: 'info', message: 'Vittoria! Tutti i nemici sono stati sconfitti.' });
+      get().endCombat({ type: 'victory' });
+    }
+  },
+
+  executeEnemyTurn: async () => {
+    const { currentState, addLogEntry } = get();
+    if (!currentState || currentState.phase !== 'enemy-turn') return;
+
+    const { enemies, player } = currentState;
+    let playerHp = player.hp;
+
+    for (const enemy of enemies) {
+      if (enemy.status === 'alive' && playerHp > 0) {
+        // Pausa simulata per dare al giocatore il tempo di leggere
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        const attackResult = rollToHit(enemy, player.ac, 'melee'); // Assumiamo melee per ora
+        addLogEntry({
+          type: 'roll',
+          message: `${enemy.name} attacca! Tiro per colpire: ${attackResult.roll} + ${attackResult.attackBonus} = ${attackResult.total} (vs AC ${player.ac})`
+        });
+
+        if (attackResult.isHit) {
+          const damageResult = rollDamage(enemy.damage);
+          playerHp -= damageResult.total;
+
+          addLogEntry({
+            type: 'damage',
+            message: `Colpito! ${enemy.name} ti infligge ${damageResult.total} danni.`
+          });
+
+          // Controlla se il giocatore è stato sconfitto
+          if (playerHp <= 0) {
+            addLogEntry({ type: 'info', message: 'Sei stato sconfitto.' });
+            get().endCombat({ type: 'defeat' });
+            return; // Termina il turno dei nemici
+          }
+        } else {
+          addLogEntry({ type: 'info', message: `${enemy.name} ti manca!` });
+        }
+      }
+    }
+
+    // Alla fine del turno di tutti i nemici, aggiorna lo stato del giocatore e torna al suo turno
+    set(state => {
+      if (!state.currentState) return {};
+      return {
+        currentState: {
+          ...state.currentState,
+          player: { ...state.currentState.player, hp: playerHp },
+          phase: 'player-turn'
+        }
+      };
+    });
+
+    addLogEntry({ type: 'info', message: 'È il tuo turno.' });
   },
 }));

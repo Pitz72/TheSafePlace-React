@@ -2,6 +2,7 @@ import { useCombatStore } from '../stores/combatStore';
 import { useGameStore } from '../stores/gameStore';
 import type { CombatEncounter, EnemyTemplate } from '../types/combat';
 import * as combatCalculations from '../utils/combatCalculations';
+import { combatEncounters } from '../data/combatEncounters';
 
 // Mock dependencies
 jest.mock('../stores/gameStore', () => ({
@@ -55,10 +56,6 @@ describe('Combat Store', () => {
     expect(currentState).toBeNull();
   });
 
-import { combatEncounters } from '../data/combatEncounters';
-
-// ... (resto del file)
-
   describe('initiateCombat', () => {
     it('should set up the initial state correctly', () => {
       const { initiateCombat } = useCombatStore.getState();
@@ -108,18 +105,20 @@ import { combatEncounters } from '../data/combatEncounters';
       expect(state.currentState!.phase).toBe('enemy-turn');
     });
 
-    it('should handle an attack that defeats an enemy', async () => {
+    it('should handle an attack that defeats an enemy and end combat', async () => {
       mockedRollToHit.mockReturnValue({ isHit: true, roll: 20, modifier: 2, total: 22, targetAC: 14 });
       mockedRollDamage.mockReturnValue({ rolls: [10, 10], total: 20 });
 
+      const endCombatSpy = jest.spyOn(useCombatStore.getState(), 'endCombat');
+
       await useCombatStore.getState().executePlayerAction();
 
+      expect(endCombatSpy).toHaveBeenCalledWith({ type: 'victory' });
+
       const state = useCombatStore.getState();
-      const enemy = state.currentState!.enemies[0];
-      expect(enemy.hp).toBe(-2);
-      expect(enemy.status).toBe('dead');
-      expect(state.currentState!.log.some(e => e.message.includes('sconfitto'))).toBe(true);
-      expect(state.currentState!.phase).toBe('enemy-turn');
+      expect(state.isActive).toBe(false);
+
+      endCombatSpy.mockRestore();
     });
   });
 
@@ -134,5 +133,37 @@ import { combatEncounters } from '../data/combatEncounters';
     const state = useCombatStore.getState();
     expect(state.isActive).toBe(false);
     expect(state.currentState).toBeNull();
+  });
+
+  describe('executeEnemyTurn', () => {
+    beforeEach(() => {
+      combatEncounters[encounter.id] = encounter;
+      useCombatStore.getState().initiateCombat(encounter.id);
+      // Forza la fase del turno nemico
+      useCombatStore.setState(state => ({ currentState: { ...state.currentState!, phase: 'enemy-turn' } }));
+    });
+
+    it('should handle a successful enemy attack', async () => {
+      mockedRollToHit.mockReturnValue({ isHit: true, roll: 18, modifier: 4, total: 22, targetAC: 10 });
+      mockedRollDamage.mockReturnValue({ rolls: [4, 2], total: 6 });
+
+      await useCombatStore.getState().executeEnemyTurn();
+
+      const state = useCombatStore.getState();
+      expect(state.currentState!.player.hp).toBe(74); // 80 - 6
+      expect(state.currentState!.log.some(e => e.message.includes('ti infligge 6 danni'))).toBe(true);
+      expect(state.currentState!.phase).toBe('player-turn');
+    });
+
+    it('should handle player defeat', async () => {
+      mockedRollToHit.mockReturnValue({ isHit: true, roll: 20, modifier: 4, total: 24, targetAC: 10 });
+      mockedRollDamage.mockReturnValue({ rolls: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6], total: 90 }); // Danno massiccio
+
+      await useCombatStore.getState().executeEnemyTurn();
+
+      const state = useCombatStore.getState();
+      expect(state.isActive).toBe(false); // Il combattimento dovrebbe terminare
+      expect(state.currentState).toBeNull();
+    });
   });
 });
