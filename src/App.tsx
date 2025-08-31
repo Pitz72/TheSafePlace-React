@@ -4,6 +4,7 @@ import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
 import { useGameStore } from './stores/gameStore';
 import { useCombatStore } from './stores/combatStore';
+import { shallow } from 'zustand/shallow';
 import { useSettingsStore } from './stores/settingsStore';
 import { runAllResolutionTests } from './utils/resolutionTest';
 import { performanceMonitor } from './utils/performanceMonitor';
@@ -74,12 +75,34 @@ const GameScreenInputHandler = () => {
 
 const GameContent = () => {
   const { viewportWidth, viewportHeight } = useGameScale();
-  const { currentScreen, setCurrentScreen, loadSavedGame, initializeGame, playerPosition, isMapLoading, mapData, timeState, characterSheet, getModifier, items, survivalState, notifications, removeNotification } = useGameStore(state => state);
-  const { isInCombat, combatResult, clearCombatResults } = useCombatStore(state => ({
-    isInCombat: state.isActive,
-    combatResult: state.combatResult,
-    clearCombatResults: state.clearCombatResults,
-  }));
+  const { currentScreen, setCurrentScreen, loadSavedGame, initializeGame, playerPosition, isMapLoading, mapData, timeState, characterSheet, getModifier, items, survivalState, notifications, removeNotification } = useGameStore(
+    state => ({
+      currentScreen: state.currentScreen,
+      setCurrentScreen: state.setCurrentScreen,
+      loadSavedGame: state.loadSavedGame,
+      initializeGame: state.initializeGame,
+      playerPosition: state.playerPosition,
+      isMapLoading: state.isMapLoading,
+      mapData: state.mapData,
+      timeState: state.timeState,
+      characterSheet: state.characterSheet,
+      getModifier: state.getModifier,
+      items: state.items,
+      survivalState: state.survivalState,
+      notifications: state.notifications,
+      removeNotification: state.removeNotification,
+    }),
+    shallow
+  );
+
+  const { isInCombat, combatResult, clearCombatResults } = useCombatStore(
+    state => ({
+      isInCombat: state.isActive,
+      combatResult: state.combatResult,
+      clearCombatResults: state.clearCombatResults,
+    }),
+    shallow
+  );
   const { videoMode } = useSettingsStore();
 
   const getCurrentTile = (): string => {
