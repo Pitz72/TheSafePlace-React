@@ -392,9 +392,7 @@ const GameContent = () => {
             </>
           )}
         </div>
-        </>
       )}
-      </div>
     </div>
   );
 };
