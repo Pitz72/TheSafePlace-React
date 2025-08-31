@@ -76,6 +76,7 @@ Questo documento traccia i passaggi implementativi eseguiti per la creazione del
 - **Layout e Connessione Dati:** I singoli componenti UI (`CombatLog`, `CombatStatus`, `ActionMenu`, etc.) sono stati assemblati all'interno di `CombatScreen`. Il componente è stato collegato sia a `combatStore` che a `gameStore` per garantire che tutti i dati vengano visualizzati correttamente.
 - **Integrazione nel Gioco:** Il componente `App.tsx` è stato modificato per renderizzare `CombatScreen` ogni volta che lo stato `isInCombat` del `combatStore` è `true`, integrando di fatto la nuova schermata nel flusso principale dell'applicazione.
 - **Test di Verifica:** Creato il file `src/tests/CombatScreen.test.tsx` per verificare il corretto rendering e passaggio dei dati della schermata di combattimento.
+- **Aggiornamento Design:** Aggiunte note sulla filosofia degli incontri (rari, evitabili) e sull'esclusione dell'audio al documento di design, come da indicazioni.
 
 ---
 **Stato Attuale:** Implementazione completata. Pronto per il rilascio o la prossima fase di sviluppo.
