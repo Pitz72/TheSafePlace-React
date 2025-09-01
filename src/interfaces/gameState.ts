@@ -108,17 +108,6 @@ export interface GameState extends UIState {
   consumeFood: (amount: number) => void;
   consumeDrink: (amount: number) => void;
   
-  // Save system actions
-  saveCurrentGame: (slot: string) => Promise<boolean>;
-  loadSavedGame: (slot: string) => Promise<boolean>;
-  handleQuickSave: () => Promise<boolean>;
-  handleQuickLoad: () => Promise<boolean>;
-  getSaveSlots: () => any[];
-  deleteSave: (slot: string) => boolean;
-  exportSave: (slot: string) => Promise<string | null>;
-  importSave: (slot: string) => Promise<boolean>;
-  recoverSave: (slot: string) => Promise<boolean>;
-  
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => void;
   
   // Shelter system

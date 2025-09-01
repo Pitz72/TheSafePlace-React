@@ -48,20 +48,25 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 
 ### **Task 8: Isolare logica Rifugi in `shelterStore.ts`**
 *Data: 2025-09-01*
+**Stato:** Completato.
+
+---
+
+### **Task 9: Isolare logica di Salvataggio in `saveStore.ts`**
+*Data: 2025-09-01*
 
 **Operazioni:**
-- Creato `shelterStore.ts` per la gestione completa del sistema dei rifugi.
-- Migrata la logica relativa a `shelterAccessState` e tutte le funzioni associate da `gameStore.ts`.
-- Refactoring della funzione `updateBiome` e del sistema di salvataggio/caricamento per interagire correttamente con il nuovo store.
+- Creato `saveStore.ts` per la gestione completa del sistema di salvataggio/caricamento.
+- Migrata tutta la logica relativa da `gameStore.ts`.
+- Il nuovo store ora orchestra il salvataggio e il caricamento interagendo con tutti gli altri store specializzati per aggregare e distribuire i dati.
+- Il `gameStore` è stato definitivamente liberato da questa responsabilità.
 - Eseguiti test di regressione, tutti superati con successo.
 
 **Stato:** Completato.
 
 ---
 
-### **Task 9: Isolare logica di Salvataggio in `saveStore.ts`**
-*Data: Inizio 2025-09-01*
+## **OPERAZIONE DI REFACTORING COMPLETATA**
+*Data: 2025-09-01*
 
-**Obiettivo:** Estrarre tutta la gestione del sistema di salvataggio e caricamento (`saveGame`, `loadGame`, `export`, `import`, etc.) nel suo store dedicato, completando il refactoring.
-
-**Stato:** In corso.
+Tutti gli 8 store specializzati sono stati implementati con successo. Il `gameStore` monolitico è stato smantellato e ora funge da facciata minimale per lo stato residuo. L'architettura è ora modulare, più manutenibile e robusta. Tutti i test di regressione sono stati superati a ogni passaggio, garantendo la stabilità del sistema durante l'intero processo.
