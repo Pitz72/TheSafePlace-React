@@ -42,20 +42,26 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 
 ### **Task 7: Isolare logica Meteo in `weatherStore.ts`**
 *Data: 2025-09-01*
+**Stato:** Completato.
+
+---
+
+### **Task 8: Isolare logica Rifugi in `shelterStore.ts`**
+*Data: 2025-09-01*
 
 **Operazioni:**
-- Creato `weatherStore.ts` per la gestione completa del sistema meteorologico.
-- Migrata la logica relativa a `weatherState` e tutte le funzioni associate da `gameStore.ts`.
-- Refactoring dei componenti e degli altri store (`worldStore`, `gameStore`) per utilizzare il nuovo `weatherStore`.
+- Creato `shelterStore.ts` per la gestione completa del sistema dei rifugi.
+- Migrata la logica relativa a `shelterAccessState` e tutte le funzioni associate da `gameStore.ts`.
+- Refactoring della funzione `updateBiome` e del sistema di salvataggio/caricamento per interagire correttamente con il nuovo store.
 - Eseguiti test di regressione, tutti superati con successo.
 
 **Stato:** Completato.
 
 ---
 
-### **Task 8: Isolare logica Rifugi in `shelterStore.ts`**
+### **Task 9: Isolare logica di Salvataggio in `saveStore.ts`**
 *Data: Inizio 2025-09-01*
 
-**Obiettivo:** Estrarre la gestione dello stato dei rifugi (`shelterAccessState`) nel suo store dedicato.
+**Obiettivo:** Estrarre tutta la gestione del sistema di salvataggio e caricamento (`saveGame`, `loadGame`, `export`, `import`, etc.) nel suo store dedicato, completando il refactoring.
 
 **Stato:** In corso.

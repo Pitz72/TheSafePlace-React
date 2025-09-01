@@ -21,7 +21,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'menu',
   previousScreen: null,
   menuSelectedIndex: 0,
-  shelterAccessState: {}, // Sistema rifugi v0.6.1
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
@@ -52,10 +51,10 @@ export const useGameStore = create<GameState>((set, get) => ({
         database[key] = Object.values(data)[0] as GameEvent[];
       }
 
+      useShelterStore.getState().resetShelters();
       set({
         eventDatabase: database,
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
-        shelterAccessState: {}, // Resetta sistema rifugi v0.6.1
         currentScreen: 'menu',
       });
       get().addLogEntry(MessageType.GAME_START);
@@ -103,86 +102,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       context,
     };
     set(state => ({ logEntries: [...state.logEntries, newEntry].slice(-JOURNAL_CONFIG.MAX_ENTRIES) }));
-  },
-
-  // --- SISTEMA RIFUGI v0.6.1 ---
-
-  createShelterKey: (x: number, y: number): string => `${x},${y}`,
-
-  getShelterInfo: (x: number, y: number): ShelterAccessInfo | null => {
-    const key = get().createShelterKey(x, y);
-    return get().shelterAccessState[key] || null;
-  },
-
-  createShelterInfo: (x: number, y: number): ShelterAccessInfo => {
-    const { timeState } = get();
-    return {
-      coordinates: get().createShelterKey(x, y),
-      dayVisited: timeState.day,
-      timeVisited: timeState.currentTime,
-      hasBeenInvestigated: false,
-      isAccessible: true, // Inizialmente accessibile
-      investigationResults: []
-    };
-  },
-
-  updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => {
-    const key = get().createShelterKey(x, y);
-    set(state => ({
-      shelterAccessState: {
-        ...state.shelterAccessState,
-        [key]: {
-          ...state.shelterAccessState[key],
-          ...updates
-        }
-      }
-    }));
-  },
-
-  isShelterAccessible: (x: number, y: number): boolean => {
-    const shelterInfo = get().getShelterInfo(x, y);
-    if (!shelterInfo) return true; // Prima visita sempre permessa
-
-    const { timeState } = get();
-
-    // Accesso notturno sempre permesso
-    if (!timeState.isDay) return true;
-
-    // Se è già stato visitato di giorno, non è più accessibile
-    return shelterInfo.isAccessible;
-  },
-
-  canInvestigateShelter: (x: number, y: number): boolean => {
-    const shelterInfo = get().getShelterInfo(x, y);
-    if (!shelterInfo) return true; // Prima investigazione sempre permessa
-
-    // Una sola investigazione per sessione
-    return !shelterInfo.hasBeenInvestigated;
-  },
-
-  isPlayerInShelter: (): boolean => {
-    const { playerPosition, mapData } = get();
-    if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) {
-      return false;
-    }
-
-    const currentTile = mapData[playerPosition.y]?.[playerPosition.x];
-    return currentTile === 'R';
-  },
-
-  resetShelterInvestigations: () => {
-    // Resetta tutte le investigazioni per una nuova sessione
-    set(state => {
-      const newShelterAccessState = { ...state.shelterAccessState };
-      Object.keys(newShelterAccessState).forEach(key => {
-        newShelterAccessState[key] = {
-          ...newShelterAccessState[key],
-          hasBeenInvestigated: false,
-          investigationResults: []
-        };
-      });
-      return { shelterAccessState: newShelterAccessState };
-    });
   },
 
 
@@ -814,44 +733,29 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   updateBiome: (newBiomeChar) => {
     const characterStore = useCharacterStore.getState();
+    const shelterStore = useShelterStore.getState();
+    const worldStore = useWorldStore.getState();
+
     // Sistema attraversamento fiumi
     if (newBiomeChar === '~') {
       get().attemptRiverCrossing();
-      // Il movimento continua indipendentemente dal successo
-      // I danni sono già stati applicati nella funzione attemptRiverCrossing
       return;
     }
 
     if (newBiomeChar === 'R') {
-      const {
-        playerPosition,
-        timeState,
-        addLogEntry,
-        setCurrentScreen,
-        handleNightConsumption,
-        advanceTime,
-        getShelterInfo,
-        createShelterInfo,
-        updateShelterAccess,
-        isShelterAccessible
-      } = get();
+      const { playerPosition, timeState, advanceTime } = worldStore;
+      const { addLogEntry, setCurrentScreen, handleNightConsumption } = get();
       const { characterSheet } = characterStore;
+      const { getShelterInfo, createShelterInfo, updateShelterAccess, isShelterAccessible } = shelterStore;
 
       const { x, y } = playerPosition;
       let shelterInfo = getShelterInfo(x, y);
 
-      // Se è la prima volta che visitiamo questo rifugio, crealo
       if (!shelterInfo) {
         shelterInfo = createShelterInfo(x, y);
-        set(state => ({
-          shelterAccessState: {
-            ...state.shelterAccessState,
-            [shelterInfo!.coordinates]: shelterInfo!
-          }
-        }));
+        shelterStore.updateShelterAccess(x, y, shelterInfo);
       }
 
-      // Controlla accessibilità
       if (!isShelterAccessible(x, y)) {
         addLogEntry(MessageType.DISCOVERY, {
           discovery: 'rifugio già visitato durante il giorno - ora è sigillato. Torna di notte per riposare.'
@@ -860,17 +764,14 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
 
       if (timeState.isDay) {
-        // Visita diurna - marca come non più accessibile per future visite diurne
         updateShelterAccess(x, y, {
           isAccessible: false,
           dayVisited: timeState.day,
           timeVisited: timeState.currentTime
         });
-
         setCurrentScreen('shelter');
         addLogEntry(MessageType.DISCOVERY, { discovery: 'rifugio sicuro trovato - puoi riposare e investigare. Ricorda: ogni rifugio può essere visitato solo una volta di giorno!' });
       } else {
-        // Visita notturna - riposo automatico (sempre permesso)
         handleNightConsumption();
         const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
         const nightHealing = Math.floor(maxRecovery * 0.6);
@@ -879,8 +780,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           healingAmount: nightHealing,
           location: 'rifugio notturno'
         });
-
-        // Avanza al mattino
+        const DAWN_TIME = 360;
         const minutesToDawn = (1440 - timeState.currentTime + DAWN_TIME) % 1440;
         advanceTime(minutesToDawn);
       }
@@ -1074,6 +974,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   saveCurrentGame: async (slot) => {
     const state = get();
     const { characterSheet } = useCharacterStore.getState();
+    const { shelterAccessState } = useShelterStore.getState();
+    const worldState = useWorldStore.getState();
 
     try {
       // Mostra notifica di salvataggio in corso
@@ -1085,12 +987,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       const gameData = {
-        timeState: state.timeState,
-        playerPosition: state.playerPosition,
+        timeState: worldState.timeState,
+        playerPosition: worldState.playerPosition,
         currentScreen: state.currentScreen,
-        currentBiome: state.currentBiome,
-        shelterAccessState: state.shelterAccessState, // v0.6.1
-        weatherState: state.weatherState, // v0.6.1
+        currentBiome: worldState.currentBiome,
+        shelterAccessState: shelterAccessState,
         seenEventIds: state.seenEventIds,
         gameFlags: {} // per future espansioni
       };
@@ -1138,6 +1039,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   loadSavedGame: async (slot) => {
     const characterStore = useCharacterStore.getState();
+    const worldStore = useWorldStore.getState();
+    const shelterStore = useShelterStore.getState();
     try {
       // Mostra notifica di caricamento in corso
       get().addNotification({
@@ -1155,33 +1058,21 @@ export const useGameStore = create<GameState>((set, get) => ({
           throw new Error('Dati di salvataggio corrotti o incompleti');
         }
 
-        // **NUOVA LOGICA: Assicura che la mappa sia caricata**
-        let mapData = get().mapData;
-        if (mapData.length === 0) {
-          try {
-            const response = await fetch('/map.txt');
-            const mapText = await response.text();
-            mapData = mapText.split('\n').filter(line => line);
-          } catch (error) {
-            console.error("Failed to load map data during game load:", error);
-            // Lancia un errore per bloccare il caricamento se la mappa non è disponibile
-            throw new Error('Impossibile caricare i dati della mappa. Caricamento annullato.');
-          }
-        }
-
-        // Update character store
+        // Update stores with loaded data
         characterStore.updateCharacterSheet(saveData.characterSheet);
+        worldStore.loadMap().then(() => {
+            worldStore.setState( {
+                playerPosition: saveData.gameData.playerPosition,
+                timeState: saveData.gameData.timeState,
+                currentBiome: saveData.gameData.currentBiome,
+            });
+        });
+        shelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
+
 
         // Ricostruisci lo stato del gioco dai dati salvati
         set({
-          mapData,
-          isMapLoading: false, // <-- AGGIUNGI QUESTA RIGA
-          playerPosition: saveData.gameData.playerPosition,
-          timeState: saveData.gameData.timeState,
           survivalState: saveData.survivalState,
-          currentBiome: saveData.gameData.currentBiome,
-          shelterAccessState: (saveData.gameData as any).shelterAccessState || {},
-          weatherState: (saveData.gameData as any).weatherState || get().weatherState,
           currentScreen: 'game', // Torna alla schermata di gioco dopo il caricamento
           logEntries: [], // Reset del journal per evitare confusione
           seenEventIds: (saveData.gameData as any).seenEventIds || [],
@@ -1189,7 +1080,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         });
 
         // Resetta le investigazioni per la nuova sessione
-        get().resetShelterInvestigations();
+        shelterStore.resetShelterInvestigations();
 
         get().addNotification({
           type: 'success',

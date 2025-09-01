@@ -64,9 +64,6 @@ export interface GameState extends UIState {
   // Survival state
   survivalState: SurvivalState;
   
-  // Shelter state
-  shelterAccessState: Record<string, ShelterAccessInfo>;
-  
   // Journal state
   logEntries: LogEntry[];
 
