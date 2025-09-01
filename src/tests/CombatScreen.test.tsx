@@ -9,22 +9,32 @@ import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { CombatScreen } from '../components/combat/CombatScreen';
 
-// Mock dei componenti figli per isolare CombatScreen
-jest.mock('../components/combat/SceneDescription', () => ({
-  SceneDescription: ({ description }: { description: string }) => <div data-testid="scene-description">{description}</div>
-}));
-jest.mock('../components/combat/CombatStatus', () => ({
-  CombatStatus: ({ player, enemies }: any) => <div data-testid="combat-status">Player: {player ? player.name : 'N/A'}, Enemies: {enemies.length}</div>
-}));
-jest.mock('../components/combat/CombatLog', () => ({
-  CombatLog: ({ entries }: any) => <div data-testid="combat-log">Entries: {entries.length}</div>
-}));
-jest.mock('../components/combat/ActionMenu', () => ({
-  ActionMenu: ({ availableActions }: any) => <div data-testid="action-menu">Actions: {availableActions.length}</div>
-}));
-jest.mock('../components/combat/TargetSelector', () => ({
-  TargetSelector: ({ enemies }: any) => <div data-testid="target-selector">Targets: {enemies.length}</div>
-}));
+// Mock dei componenti figli per isolare CombatScreen (corretti per default export)
+jest.mock('../components/combat/SceneDescription', () => {
+  return function DummySceneDescription({ description }: { description: string }) {
+    return <div data-testid="scene-description">{description}</div>;
+  };
+});
+jest.mock('../components/combat/CombatStatus', () => {
+  return function DummyCombatStatus({ player, enemies }: any) {
+    return <div data-testid="combat-status">Player: {player ? player.name : 'N/A'}, Enemies: {enemies.length}</div>;
+  };
+});
+jest.mock('../components/combat/CombatLog', () => {
+  return function DummyCombatLog({ entries }: any) {
+    return <div data-testid="combat-log">Entries: {entries.length}</div>;
+  };
+});
+jest.mock('../components/combat/ActionMenu', () => {
+  return function DummyActionMenu({ availableActions }: any) {
+    return <div data-testid="action-menu">Actions: {availableActions.length}</div>;
+  };
+});
+jest.mock('../components/combat/TargetSelector', () => {
+  return function DummyTargetSelector({ enemies }: any) {
+    return <div data-testid="target-selector">Targets: {enemies.length}</div>;
+  };
+});
 
 // Mock degli store
 const mockCombatStoreState = {

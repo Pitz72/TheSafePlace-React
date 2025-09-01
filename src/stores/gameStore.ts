@@ -9,7 +9,7 @@ import { equipItem } from '../utils/equipmentManager';
 import { isDead } from '../rules/mechanics';
 import { saveSystem } from '../utils/saveSystem';
 import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
-import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
+import type { GameEvent, EventChoice, Penalty, Reward, ItemReward } from '../interfaces/events';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -47,7 +47,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
-  completedEncounters: [],
   notifications: [],
   unlockRecipesCallback: undefined,
 
@@ -998,72 +997,110 @@ export const useGameStore = create<GameState>((set, get) => ({
     return Math.min(25, Math.max(6, baseDifficulty)); // Clamp tra 6 e 25
   },
 
-  triggerEvent: (event) => {
-    if (get().currentEvent) return; // Evita di sovrascrivere eventi
+  triggerEvent: (biome: string) => {
+    const { currentEvent, eventDatabase, seenEventIds } = get();
+    if (currentEvent) return; // Already in an event
 
-    // Se l'evento ha un ID, segna come visto
-    if (event.id) {
-      set(state => ({
-        seenEventIds: state.seenEventIds.includes(event.id)
-          ? state.seenEventIds
-          : [...state.seenEventIds, event.id]
-      }));
+    const possibleEvents = eventDatabase[biome] || [];
+    if (possibleEvents.length === 0) {
+      return; // No events for this biome
     }
+
+    // Filter out unique events that have already been seen
+    const availableEvents = possibleEvents.filter(event =>
+      !event.isUnique || !seenEventIds.includes(event.id)
+    );
+
+    if (availableEvents.length === 0) {
+      return; // No available events for this biome
+    }
+
+    // Select a random event from the available ones
+    const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
 
     set({ currentEvent: event });
     get().setCurrentScreen('event');
   },
 
-  resolveChoice: (choice) => {
-    const { currentEvent } = get();
+  resolveChoice: (choice: EventChoice) => {
+    const { currentEvent, addLogEntry, performAbilityCheck, updateHP, advanceTime, addItem, addExperience, goBack } = get();
     if (!currentEvent) return;
 
-    const { addLogEntry, performAbilityCheck, updateHP, advanceTime } = get();
-    const combatStore = useCombatStore.getState();
+    let outcomeText = '';
+    let success = true;
 
-    const handleOutcome = (outcome) => {
-      addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.text });
-
-      outcome.actions?.forEach(action => {
-        switch (action.type) {
-          case 'start_combat':
-            combatStore.initiateCombat(action.payload.encounterId);
-            break;
-          case 'advance_time':
-            advanceTime(action.payload.minutes);
-            break;
-          case 'log':
-            addLogEntry(MessageType.AMBIANCE_RANDOM, { text: action.payload.message });
-            break;
-          // Altri tipi di azioni possono essere aggiunti qui
-        }
-      });
-    };
-
-    if (choice.action === 'skill_check' && choice.skill) {
-      const result = performAbilityCheck(choice.skill, choice.difficulty || 10);
-      if (result.success) {
-        handleOutcome(choice.success);
+    // 1. Handle Skill Check if it exists
+    if (choice.skillCheck) {
+      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
+      success = checkResult.success;
+      if (success) {
+        outcomeText = choice.successText || `Hai superato la prova di ${choice.skillCheck.stat}.`;
       } else {
-        handleOutcome(choice.failure);
+        outcomeText = choice.failureText || `Non hai superato la prova di ${choice.skillCheck.stat}.`;
       }
     } else {
-      // Azione immediata
-      handleOutcome(choice.success);
+      // No skill check, it's an automatic success
+      outcomeText = choice.resultText || choice.text;
     }
 
-    // Marca l'incontro come completato se è unico
+    // 2. Log the outcome of the choice
+    if (outcomeText) {
+      addLogEntry(MessageType.EVENT_CHOICE, { text: outcomeText });
+    }
+
+    // 3. Apply penalties on failure
+    if (!success && choice.penalty) {
+      const penalty = choice.penalty;
+      switch (penalty.type) {
+        case 'damage':
+          if (penalty.amount) {
+            updateHP(-penalty.amount);
+            addLogEntry(MessageType.HP_DAMAGE, { damage: penalty.amount, reason: 'conseguenza di un evento' });
+          }
+          break;
+        case 'time':
+          if (penalty.amount) {
+            advanceTime(penalty.amount);
+            addLogEntry(MessageType.AMBIANCE_RANDOM, { text: `Hai perso ${penalty.amount} minuti.` });
+          }
+          break;
+        // Other penalty types can be added here
+      }
+    }
+
+    // 4. Grant rewards on success
+    if (success) {
+      if (choice.items_gained) {
+        choice.items_gained.forEach(itemReward => {
+          addItem(itemReward.id, itemReward.quantity);
+        });
+      }
+      if (choice.reward) {
+        const reward = choice.reward;
+        switch (reward.type) {
+          case 'xp_gain':
+            addExperience(reward.amount);
+            // The addExperience function already logs the XP gain.
+            break;
+          case 'hp_gain':
+            updateHP(reward.amount);
+            addLogEntry(MessageType.HP_RECOVERY, { healing: reward.amount, reason: 'ricompensa evento' });
+            break;
+          // Other reward types can be added here
+        }
+      }
+    }
+
+    // 5. Mark unique event as seen
     if (currentEvent.isUnique) {
       set(state => ({
-        completedEncounters: [...state.completedEncounters, currentEvent.id]
+        seenEventIds: [...state.seenEventIds, currentEvent.id]
       }));
     }
 
+    // 6. Clear current event and go back to the game screen
     set({ currentEvent: null });
-    // Non torna indietro automaticamente, l'azione (es. start_combat) gestirà la transizione
-    if (!get().currentEvent) { // Se non è iniziato un combattimento
-      get().goBack();
-    }
+    goBack();
   },
 
   updateHP: (amount) => set(state => ({
