@@ -1,8 +1,8 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.8.5",
-  "codename": "Crafting Full and Real Integration",
+  "version": "0.9.0",
+  "codename": "Run away, fight, or die.",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D e atmosfera CRT anni '80",
   "author": "TheSafePlace Development Team",

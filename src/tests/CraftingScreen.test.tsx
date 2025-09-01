@@ -3,41 +3,41 @@
  * Verifica integrazione componenti, layout e coordinamento
  */
 
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { CraftingScreen } from '../components/crafting/CraftingScreen';
-
-// Mock dei sotto-componenti
+// Mock dei sotto-componenti che passano props come className, usando forwardRef
 jest.mock('../components/crafting/RecipeList', () => ({
-  RecipeListContainer: () => <div data-testid="recipe-list">Recipe List</div>
+  RecipeListContainer: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="recipe-list" className={props.className} style={props.style}>Recipe List</div>)
 }));
 
 jest.mock('../components/crafting/RecipeDetails', () => ({
-  RecipeDetailsContainer: ({ recipe, materialStatus, meetsSkillRequirement }: any) => (
-    <div data-testid="recipe-details">
+  RecipeDetails: React.forwardRef(({ recipe, materialStatus, meetsSkillRequirement, ...props }: any, ref: any) => (
+    <div ref={ref} data-testid="recipe-details" className={props.className} style={props.style}>
       Recipe Details - {recipe?.id || 'none'} - Materials: {materialStatus.length} - Skills: {meetsSkillRequirement.toString()}
     </div>
-  )
+  ))
 }));
 
 jest.mock('../components/crafting/ItemPreview', () => ({
-  ItemPreviewContainer: ({ resultItemId, resultQuantity }: any) => (
-    <div data-testid="item-preview">
+  ItemPreview: React.forwardRef(({ resultItemId, resultQuantity, ...props }: any, ref: any) => (
+    <div ref={ref} data-testid="item-preview" className={props.className} style={props.style}>
       Item Preview - {resultItemId} x{resultQuantity}
     </div>
-  )
+  ))
 }));
 
 jest.mock('../components/crafting/CraftingActionBar', () => ({
-  CraftingActionBarContainer: ({ canCraft, onCraft, onExit }: any) => (
-    <div data-testid="action-bar">
+  CraftingActionBar: React.forwardRef(({ canCraft, onCraft, onExit, ...props }: any, ref: any) => (
+    <div ref={ref} data-testid="action-bar" className={props.className} style={props.style}>
       <button onClick={onCraft} disabled={!canCraft}>
         Craft {canCraft ? 'Enabled' : 'Disabled'}
       </button>
       <button onClick={onExit}>Exit</button>
     </div>
-  )
+  ))
 }));
 
 // Mock del crafting store
@@ -334,7 +334,7 @@ describe('CraftingScreen Component', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('recipe-details')).toHaveTextContent('Recipe Details - none - Materials: 0 - Skills: true');
-        expect(screen.getByTestId('item-preview')).toHaveTextContent('Item Preview -  x1');
+        expect(screen.getByTestId('item-preview')).toHaveTextContent('Item Preview - x1');
       });
     });
   });
@@ -346,9 +346,9 @@ describe('CraftingScreen Component', () => {
       render(<CraftingScreen onExit={mockOnExit} />);
 
       await waitFor(() => {
-        const recipeListSection = screen.getByTestId('recipe-list').closest('div');
-        const recipeDetailsSection = screen.getByTestId('recipe-details').closest('div');
-        const itemPreviewSection = screen.getByTestId('item-preview').closest('div');
+        const recipeListSection = screen.getByTestId('recipe-list').parentElement;
+        const recipeDetailsSection = screen.getByTestId('recipe-details').parentElement;
+        const itemPreviewSection = screen.getByTestId('item-preview').parentElement;
 
         expect(recipeListSection).toHaveStyle('width: 25%');
         expect(recipeDetailsSection).toHaveStyle('width: 40%');

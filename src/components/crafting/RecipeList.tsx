@@ -28,12 +28,18 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Solo se questo componente è attivo
     if (!recipes.length) return;
+    const key = event.key;
 
-    if (KEYBOARD_CONFIG.MOVE_UP.includes(event.key as any)) {
+    // Aggiungiamo esplicitamente i tasti freccia per garantire il funzionamento
+    // indipendentemente dalla configurazione esterna.
+    const moveUpKeys = [...KEYBOARD_CONFIG.MOVE_UP, 'ArrowUp'];
+    const moveDownKeys = [...KEYBOARD_CONFIG.MOVE_DOWN, 'ArrowDown'];
+
+    if (moveUpKeys.includes(key)) {
       event.preventDefault();
       const newIndex = selectedIndex > 0 ? selectedIndex - 1 : recipes.length - 1;
       onSelectionChange(newIndex);
-    } else if (KEYBOARD_CONFIG.MOVE_DOWN.includes(event.key as any)) {
+    } else if (moveDownKeys.includes(key)) {
       event.preventDefault();
       const newIndex = selectedIndex < recipes.length - 1 ? selectedIndex + 1 : 0;
       onSelectionChange(newIndex);

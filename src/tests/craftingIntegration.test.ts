@@ -123,14 +123,16 @@ describe('Crafting Integration', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe(CRAFTING_ERRORS.UNKNOWN_ERROR);
+      expect(result.error).toBe(CRAFTING_ERRORS.INVENTORY_FULL);
     });
 
     test('dovrebbe gestire errori durante rimozione materiali', async () => {
-      mockGameStore.characterSheet.inventory = [
-        { itemId: 'knife_dull', quantity: 1 },
-        { itemId: 'whetstone', quantity: 0 } // Quantità insufficiente
-      ];
+      // Inizia con materiali sufficienti
+      mockGameStore.characterSheet.inventory = [...testInventory];
+      // Simula un errore imprevisto durante la rimozione
+      mockGameStore.removeItem.mockImplementation(() => {
+        throw new Error('Database connection lost');
+      });
 
       const result = await executeCrafting(
         testRecipe, 
@@ -140,6 +142,8 @@ describe('Crafting Integration', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(CRAFTING_ERRORS.UNKNOWN_ERROR);
+      // L'oggetto non dovrebbe essere aggiunto se la rimozione fallisce
+      expect(mockGameStore.addItem).not.toHaveBeenCalled();
     });
 
     test('dovrebbe fallire se nessun character sheet', async () => {

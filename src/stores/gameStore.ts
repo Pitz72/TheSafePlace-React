@@ -47,6 +47,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
+  completedEncounters: [],
   notifications: [],
   unlockRecipesCallback: undefined,
 
@@ -997,120 +998,72 @@ export const useGameStore = create<GameState>((set, get) => ({
     return Math.min(25, Math.max(6, baseDifficulty)); // Clamp tra 6 e 25
   },
 
-  triggerEvent: (biomeKey) => {
+  triggerEvent: (event) => {
     if (get().currentEvent) return; // Evita di sovrascrivere eventi
-    const { eventDatabase, seenEventIds } = get();
 
-    // Prima prova eventi non ancora visti
-    let availableEvents = (eventDatabase[biomeKey] || []).filter(event =>
-      !event.isUnique && !seenEventIds.includes(event.id)
-    );
-
-    // Se non ci sono eventi non visti, riconsidera tutti gli eventi ripetibili
-    if (availableEvents.length === 0) {
-      availableEvents = (eventDatabase[biomeKey] || []).filter(event => !event.isUnique);
+    // Se l'evento ha un ID, segna come visto
+    if (event.id) {
+      set(state => ({
+        seenEventIds: state.seenEventIds.includes(event.id)
+          ? state.seenEventIds
+          : [...state.seenEventIds, event.id]
+      }));
     }
 
-    // Se ancora nessun evento disponibile, esci
-    if (availableEvents.length === 0) return;
-
-    const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
-
-    // Aggiungi agli eventi visti solo se non è già presente (per eventi ripetibili)
-    set(state => ({
-      currentEvent: event,
-      seenEventIds: state.seenEventIds.includes(event.id)
-        ? state.seenEventIds
-        : [...state.seenEventIds, event.id]
-    }));
-
+    set({ currentEvent: event });
     get().setCurrentScreen('event');
   },
 
   resolveChoice: (choice) => {
-    if (!get().currentEvent) return;
-    const { addLogEntry, performAbilityCheck, addItem, updateHP, addExperience } = get();
+    const { currentEvent } = get();
+    if (!currentEvent) return;
 
-    // Funzione helper per applicare un risultato specifico
-    const applyOutcome = (outcome: EventChoice) => {
-      if (outcome.items_gained) {
-        outcome.items_gained.forEach(reward => addItem(reward.id, reward.quantity));
-      }
+    const { addLogEntry, performAbilityCheck, updateHP, advanceTime } = get();
+    const combatStore = useCombatStore.getState();
 
-      // Gestione conseguenze rest stop
-      if (outcome.consequences) {
-        if (outcome.consequences.hp) {
-          updateHP(outcome.consequences.hp);
-          addLogEntry(MessageType.HP_RECOVERY, { healing: outcome.consequences.hp });
-        }
-        if (outcome.consequences.narrative_text) {
-          addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.consequences.narrative_text });
-        }
-      }
+    const handleOutcome = (outcome) => {
+      addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.text });
 
-      if (outcome.reward) {
-        switch (outcome.reward.type) {
-          case 'xp_gain':
-            if (outcome.reward.amount) {
-              addExperience(outcome.reward.amount);
-              addLogEntry(MessageType.ACTION_SUCCESS, { action: `Guadagni ${outcome.reward.amount} XP.` });
-            }
+      outcome.actions?.forEach(action => {
+        switch (action.type) {
+          case 'start_combat':
+            combatStore.initiateCombat(action.payload.encounterId);
             break;
-          case 'hp_gain':
-            if (outcome.reward.amount) {
-              updateHP(outcome.reward.amount);
-              addLogEntry(MessageType.HP_RECOVERY, { healing: outcome.reward.amount });
-            }
+          case 'advance_time':
+            advanceTime(action.payload.minutes);
             break;
-          // Aggiungere qui altri tipi di ricompense speciali
+          case 'log':
+            addLogEntry(MessageType.AMBIANCE_RANDOM, { text: action.payload.message });
+            break;
+          // Altri tipi di azioni possono essere aggiunti qui
         }
-      }
+      });
     };
 
-    // Funzione helper per applicare una penalità
-    const applyPenalty = (penalty: Penalty | undefined) => {
-      if (!penalty) return;
-      switch (penalty.type) {
-        case 'damage':
-          if (penalty.amount) {
-            updateHP(-penalty.amount);
-            addLogEntry(MessageType.HP_DAMAGE, { damage: penalty.amount, reason: 'le conseguenze di un evento' });
-          }
-          break;
-        // Aggiungere qui altri tipi di penalità
-      }
-    };
-
-    if (choice.skillCheck) {
-      const checkResult = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty, true); // addToJournal = true
-      const resultText = checkResult.success ? choice.successText : choice.failureText;
-
-      // Aggiungi un log più specifico per l'evento, non usando quello di performAbilityCheck
-      addLogEntry(MessageType.EVENT_CHOICE, { text: resultText });
-
-      if (checkResult.success) {
-        applyOutcome(choice);
+    if (choice.action === 'skill_check' && choice.skill) {
+      const result = performAbilityCheck(choice.skill, choice.difficulty || 10);
+      if (result.success) {
+        handleOutcome(choice.success);
       } else {
-        applyPenalty(choice.penalty);
+        handleOutcome(choice.failure);
       }
     } else {
-      // Nessun skill check, applica direttamente il risultato
-      if (choice.resultText) {
-        addLogEntry(MessageType.EVENT_CHOICE, { text: choice.resultText });
-      }
-      applyOutcome(choice);
+      // Azione immediata
+      handleOutcome(choice.success);
     }
 
-    // Se è un evento rest stop e la scelta è "riposare", esegui anche il riposo normale
-    const currentEvent = get().currentEvent;
-    if (currentEvent?.biome === 'rest_stop' && choice.id === 'rest_choice') {
-      // Esegui riposo aggiuntivo (tempo)
-      const restTime = Math.floor(Math.random() * 120) + 120; // 120-240 minuti
-      get().advanceTime(restTime);
+    // Marca l'incontro come completato se è unico
+    if (currentEvent.isUnique) {
+      set(state => ({
+        completedEncounters: [...state.completedEncounters, currentEvent.id]
+      }));
     }
 
     set({ currentEvent: null });
-    get().goBack();
+    // Non torna indietro automaticamente, l'azione (es. start_combat) gestirà la transizione
+    if (!get().currentEvent) { // Se non è iniziato un combattimento
+      get().goBack();
+    }
   },
 
   updateHP: (amount) => set(state => ({

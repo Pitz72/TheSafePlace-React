@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { checkForEncounter } from '../utils/encounterUtils';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
 
@@ -105,6 +106,9 @@ export const usePlayerMovement = () => {
     if (Math.random() < JOURNAL_CONFIG.AMBIANCE_PROBABILITY) {
       addLogEntry(MessageType.AMBIANCE_RANDOM);
     }
+
+    // Controlla se il movimento ha attivato un incontro
+    checkForEncounter(nextX, nextY);
 
   }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, updateBiome, addLogEntry, advanceTime, movementState]);
 
