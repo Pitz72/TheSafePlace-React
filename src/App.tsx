@@ -75,25 +75,23 @@ const GameScreenInputHandler = () => {
 
 const GameContent = () => {
   const { viewportWidth, viewportHeight } = useGameScale();
-  const { currentScreen, setCurrentScreen, loadSavedGame, initializeGame, playerPosition, isMapLoading, mapData, timeState, characterSheet, getModifier, items, survivalState, notifications, removeNotification } = useGameStore(
-    state => ({
-      currentScreen: state.currentScreen,
-      setCurrentScreen: state.setCurrentScreen,
-      loadSavedGame: state.loadSavedGame,
-      initializeGame: state.initializeGame,
-      playerPosition: state.playerPosition,
-      isMapLoading: state.isMapLoading,
-      mapData: state.mapData,
-      timeState: state.timeState,
-      characterSheet: state.characterSheet,
-      getModifier: state.getModifier,
-      items: state.items,
-      survivalState: state.survivalState,
-      notifications: state.notifications,
-      removeNotification: state.removeNotification,
-    }),
-    shallow
-  );
+  // Optimized selectors to prevent re-render loops
+  const currentScreen = useGameStore(state => state.currentScreen);
+  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const loadSavedGame = useGameStore(state => state.loadSavedGame);
+  const initializeGame = useGameStore(state => state.initializeGame);
+  const isMapLoading = useGameStore(state => state.isMapLoading);
+  const removeNotification = useGameStore(state => state.removeNotification);
+
+  // Selectors for objects and arrays use shallow comparison
+  const playerPosition = useGameStore(state => state.playerPosition, shallow);
+  const mapData = useGameStore(state => state.mapData, shallow);
+  const timeState = useGameStore(state => state.timeState, shallow);
+  const characterSheet = useGameStore(state => state.characterSheet, shallow);
+  const items = useGameStore(state => state.items, shallow);
+  const survivalState = useGameStore(state => state.survivalState, shallow);
+  const notifications = useGameStore(state => state.notifications, shallow);
+  const getModifier = useGameStore(state => state.getModifier);
 
   const { isInCombat, combatResult, clearCombatResults } = useCombatStore(
     state => ({

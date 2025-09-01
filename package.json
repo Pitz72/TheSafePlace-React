@@ -7,7 +7,16 @@
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D e atmosfera CRT anni '80",
   "author": "TheSafePlace Development Team",
   "license": "MIT",
-  "keywords": ["game", "rpg", "typescript", "react", "retro", "crt", "survival", "d&d"],
+  "keywords": [
+    "game",
+    "rpg",
+    "typescript",
+    "react",
+    "retro",
+    "crt",
+    "survival",
+    "d&d"
+  ],
   "homepage": "https://github.com/TheSafePlace-React",
   "repository": {
     "type": "git",
@@ -57,7 +66,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.3",
     "vite": "^6.0.3"
   }
 }
