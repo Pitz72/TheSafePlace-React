@@ -22,18 +22,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   previousScreen: null,
   menuSelectedIndex: 0,
   shelterAccessState: {}, // Sistema rifugi v0.6.1
-  weatherState: {
-    currentWeather: WeatherType.CLEAR,
-    intensity: 50,
-    duration: 240, // 4 ore iniziali
-    nextWeatherChange: Date.now() + (240 * 60 * 1000), // 4 ore da ora
-    effects: {
-      movementModifier: 1.0,
-      survivalModifier: 1.0,
-      skillCheckModifier: 0,
-      eventProbabilityModifier: 1.0
-    }
-  },
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
@@ -68,7 +56,6 @@ export const useGameStore = create<GameState>((set, get) => ({
         eventDatabase: database,
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
         shelterAccessState: {}, // Resetta sistema rifugi v0.6.1
-        weatherState: get().createClearWeather(), // Resetta meteo a sereno
         currentScreen: 'menu',
       });
       get().addLogEntry(MessageType.GAME_START);
@@ -198,193 +185,15 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
-  // --- SISTEMA METEO v0.6.1 ---
-
-  updateWeather: () => {
-    const currentTime = Date.now();
-    const { weatherState } = get();
-
-    // Controlla se è ora di cambiare il meteo
-    if (currentTime >= weatherState.nextWeatherChange) {
-      const newWeather = get().generateWeatherChange();
-      set({ weatherState: newWeather });
-
-      // Aggiungi messaggio al journal con descrizione casuale
-      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
-        weather: newWeather.currentWeather,
-        text: get().getRandomWeatherMessage(newWeather.currentWeather)
-      });
-    }
-  },
-
-  getWeatherEffects: (): WeatherEffects => {
-    return get().weatherState.effects;
-  },
-
-  generateWeatherChange: (): WeatherState => {
-    const { timeState } = get();
-
-    // Carica i pattern meteo
-    const weatherPatterns = get().getWeatherPatterns();
-    const currentWeather = get().weatherState.currentWeather;
-
-    // Determina possibili transizioni
-    const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
-
-    // Applica modificatori temporali
-    const timeModifiers = get().getTimeBasedWeatherModifiers(timeState);
-
-    // Seleziona nuovo meteo
-    const newWeatherType = get().selectWeatherWithModifiers(possibleTransitions, timeModifiers);
-    const newPattern = weatherPatterns[newWeatherType];
-
-    if (!newPattern) {
-      // Fallback a tempo sereno
-      return get().createClearWeather();
-    }
-
-    // Genera intensità casuale nel range
-    const [minIntensity, maxIntensity] = newPattern.intensityRange;
-    const intensity = Math.floor(Math.random() * (maxIntensity - minIntensity + 1)) + minIntensity;
-
-    // Genera durata con variazione ±30%
-    const baseDuration = newPattern.averageDuration;
-    const variation = baseDuration * 0.3;
-    const duration = Math.floor(baseDuration + (Math.random() * variation * 2 - variation));
-
-    return {
-      currentWeather: newWeatherType,
-      intensity,
-      duration,
-      nextWeatherChange: Date.now() + (duration * 60 * 1000),
-      effects: { ...newPattern.effects }
-    };
-  },
-
-  applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects): number => {
-    const effects = get().getWeatherEffects();
-    const modifier = effects[effectType];
-
-    if (effectType === 'skillCheckModifier') {
-      // Per skill check, è un bonus/penalità additiva
-      return baseValue + modifier;
-    } else {
-      // Per altri effetti, è un moltiplicatore
-      return baseValue * modifier;
-    }
-  },
-
-  // Helper functions per il sistema meteo
-  getWeatherPatterns: () => {
-    // In una implementazione reale, questo caricherà da weatherPatterns.json
-    // Per ora, ritorna pattern hardcoded
-    return {
-      [WeatherType.CLEAR]: {
-        transitionsTo: [WeatherType.LIGHT_RAIN, WeatherType.FOG, WeatherType.WIND],
-        intensityRange: [20, 60],
-        averageDuration: 240,
-        effects: { movementModifier: 1.0, survivalModifier: 1.0, skillCheckModifier: 0, eventProbabilityModifier: 1.0 }
-      },
-      [WeatherType.LIGHT_RAIN]: {
-        transitionsTo: [WeatherType.CLEAR, WeatherType.HEAVY_RAIN, WeatherType.FOG],
-        intensityRange: [30, 70],
-        averageDuration: 120,
-        effects: { movementModifier: 0.9, survivalModifier: 1.1, skillCheckModifier: -1, eventProbabilityModifier: 0.8 }
-      },
-      [WeatherType.HEAVY_RAIN]: {
-        transitionsTo: [WeatherType.LIGHT_RAIN, WeatherType.STORM, WeatherType.CLEAR],
-        intensityRange: [60, 90],
-        averageDuration: 90,
-        effects: { movementModifier: 0.7, survivalModifier: 1.3, skillCheckModifier: -3, eventProbabilityModifier: 0.6 }
-      },
-      [WeatherType.STORM]: {
-        transitionsTo: [WeatherType.HEAVY_RAIN, WeatherType.WIND, WeatherType.CLEAR],
-        intensityRange: [70, 100],
-        averageDuration: 60,
-        effects: { movementModifier: 0.5, survivalModifier: 1.5, skillCheckModifier: -5, eventProbabilityModifier: 0.4 }
-      },
-      [WeatherType.FOG]: {
-        transitionsTo: [WeatherType.CLEAR, WeatherType.LIGHT_RAIN],
-        intensityRange: [40, 80],
-        averageDuration: 180,
-        effects: { movementModifier: 0.8, survivalModifier: 1.0, skillCheckModifier: -2, eventProbabilityModifier: 1.2 }
-      },
-      [WeatherType.WIND]: {
-        transitionsTo: [WeatherType.CLEAR, WeatherType.STORM],
-        intensityRange: [50, 85],
-        averageDuration: 300,
-        effects: { movementModifier: 0.9, survivalModifier: 1.2, skillCheckModifier: -1, eventProbabilityModifier: 1.1 }
-      }
-    };
-  },
-
-  getTimeBasedWeatherModifiers: (timeState: TimeState) => {
-    const hour = Math.floor(timeState.currentTime / 60);
-
-    if (hour >= 5 && hour < 8) return 'dawn';
-    if (hour >= 8 && hour < 18) return 'day';
-    if (hour >= 18 && hour < 21) return 'dusk';
-    return 'night';
-  },
-
-  selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string): WeatherType => {
-    // Applica modificatori temporali per maggiore realismo
-    const timeWeights: Record<string, Record<WeatherType, number>> = {
-      dawn: {
-        [WeatherType.CLEAR]: 1.2,
-        [WeatherType.FOG]: 2.0,
-        [WeatherType.LIGHT_RAIN]: 0.8,
-        [WeatherType.HEAVY_RAIN]: 0.5,
-        [WeatherType.STORM]: 0.3,
-        [WeatherType.WIND]: 1.0
-      },
-      day: {
-        [WeatherType.CLEAR]: 1.5,
-        [WeatherType.FOG]: 0.3,
-        [WeatherType.LIGHT_RAIN]: 1.0,
-        [WeatherType.HEAVY_RAIN]: 0.8,
-        [WeatherType.STORM]: 0.6,
-        [WeatherType.WIND]: 1.3
-      },
-      dusk: {
-        [WeatherType.CLEAR]: 1.0,
-        [WeatherType.FOG]: 1.8,
-        [WeatherType.LIGHT_RAIN]: 1.4,
-        [WeatherType.HEAVY_RAIN]: 1.2,
-        [WeatherType.STORM]: 0.8,
-        [WeatherType.WIND]: 0.9
-      },
-      night: {
-        [WeatherType.CLEAR]: 0.8,
-        [WeatherType.FOG]: 1.1,
-        [WeatherType.LIGHT_RAIN]: 1.3,
-        [WeatherType.HEAVY_RAIN]: 1.6,
-        [WeatherType.STORM]: 2.0,
-        [WeatherType.WIND]: 1.2
-      }
-    };
-
-    const weights = timeWeights[timeModifier] || {};
-    const weightedOptions: WeatherType[] = [];
-
-    possibleTransitions.forEach(weather => {
-      const weight = weights[weather] || 1.0;
-      const count = Math.max(1, Math.round(weight * 10));
-      for (let i = 0; i < count; i++) {
-        weightedOptions.push(weather);
-      }
-    });
-
-    return weightedOptions[Math.floor(Math.random() * weightedOptions.length)];
-  },
 
   // --- FUNZIONI HELPER PER ATTRAVERSAMENTO FIUMI ---
 
   getRiverCrossingWeatherDescription: (): string => {
-    const { weatherState, timeState } = get();
+    const { currentWeather } = useWeatherStore.getState();
+    const { timeState } = useWorldStore.getState();
     const timePrefix = timeState.isDay ? '' : 'Nell\'oscurità della notte, ';
 
-    switch (weatherState.currentWeather) {
+    switch (currentWeather) {
       case WeatherType.CLEAR:
         return `${timePrefix}La corrente sembra gestibile e la visibilità è buona.`;
       case WeatherType.LIGHT_RAIN:
@@ -403,9 +212,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getRiverCrossingSuccessDescription: (): string => {
-    const { weatherState } = get();
+    const { currentWeather } = useWeatherStore.getState();
 
-    switch (weatherState.currentWeather) {
+    switch (currentWeather) {
       case WeatherType.CLEAR:
         return 'Con movimenti sicuri e calcolati, attraversi il fiume senza difficoltà. La buona visibilità ti ha permesso di scegliere il percorso migliore.';
       case WeatherType.LIGHT_RAIN:
@@ -424,7 +233,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getRiverCrossingFailureDescription: (totalDamage: number, hasWeatherDamage: boolean): string => {
-    const { weatherState } = get();
+    const { currentWeather } = useWeatherStore.getState();
 
     let baseDescription = '';
     let weatherExtra = '';
@@ -440,7 +249,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Descrizione extra per danni meteo
     if (hasWeatherDamage) {
-      switch (weatherState.currentWeather) {
+      switch (currentWeather) {
         case WeatherType.STORM:
           weatherExtra = ' La tempesta rende tutto più pericoloso: detriti ti colpiscono e il vento ti destabilizza ulteriormente.';
           break;
@@ -457,8 +266,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getRiverCrossingModifierInfo: (finalDifficulty: number): string | null => {
-    const { weatherState, timeState, survivalState } = get();
+    const { survivalState } = get();
     const { characterSheet } = useCharacterStore.getState();
+    const { timeState } = useWorldStore.getState();
+    const weatherStore = useWeatherStore.getState();
     const baseDifficulty = 12;
     const totalModifier = finalDifficulty - baseDifficulty;
 
@@ -467,8 +278,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     const modifiers: string[] = [];
 
     // Analizza i modificatori principali
-    if (weatherState.currentWeather !== WeatherType.CLEAR) {
-      const weatherName = get().getWeatherDescription(weatherState.currentWeather).split('.')[0];
+    if (weatherStore.currentWeather !== WeatherType.CLEAR) {
+      const weatherName = weatherStore.getWeatherDescription(weatherStore.currentWeather).split('.')[0];
       modifiers.push(`condizioni meteo (${weatherName.toLowerCase()})`);
     }
 
@@ -678,8 +489,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
 
   attemptRiverCrossing: (): boolean => {
-    const { addLogEntry, performAbilityCheck, calculateRiverDifficulty, weatherState } = get();
+    const { addLogEntry, performAbilityCheck, calculateRiverDifficulty } = get();
     const characterStore = useCharacterStore.getState();
+    const weatherStore = useWeatherStore.getState();
 
     // Calcola difficoltà basata su meteo e condizioni
     const difficulty = calculateRiverDifficulty();
@@ -719,7 +531,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       // Danni extra per condizioni meteo severe
       let weatherDamage = 0;
-      switch (weatherState.currentWeather) {
+      switch (weatherStore.currentWeather) {
         case WeatherType.STORM:
           weatherDamage = Math.floor(Math.random() * 2) + 1; // +1-2 danni extra
           break;
@@ -755,12 +567,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   calculateRiverDifficulty: (): number => {
-    const { weatherState, timeState } = get();
     const { characterSheet } = useCharacterStore.getState();
+    const { timeState } = useWorldStore.getState();
+    const weatherStore = useWeatherStore.getState();
     let baseDifficulty = 12; // Difficoltà base moderata
 
     // Modificatori meteo avanzati - v0.6.1
-    switch (weatherState.currentWeather) {
+    switch (weatherStore.currentWeather) {
       case WeatherType.CLEAR:
         // Tempo sereno - nessuna penalità, possibile bonus leggero
         baseDifficulty -= 1;
@@ -788,7 +601,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     // Modificatori intensità meteo
-    const intensityModifier = Math.floor((weatherState.intensity - 50) / 20); // -2 a +2
+    const intensityModifier = Math.floor((weatherStore.intensity - 50) / 20); // -2 a +2
     baseDifficulty += intensityModifier;
 
     // Modificatori temporali - l'attraversamento notturno è più pericoloso

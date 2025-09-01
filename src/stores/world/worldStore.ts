@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { TimeState } from '../../interfaces/gameState';
 import { useGameStore } from '../gameStore';
 import { useCharacterStore } from '../character/characterStore';
+import { useWeatherStore } from '../weather/weatherStore';
 import { MessageType } from '../../data/MessageArchive';
 
 const DAWN_TIME = 360; // 06:00
@@ -78,11 +79,12 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
     // Weather, survival, and events are still in gameStore, so we call it.
     // This shows the dependencies we still need to refactor.
-    gameStore.updateWeather();
+    const weatherStore = useWeatherStore.getState();
+    weatherStore.updateWeather();
 
     characterStore.addExperience(Math.floor(Math.random() * 2) + 1);
 
-    const weatherEffects = gameStore.getWeatherEffects();
+    const weatherEffects = weatherStore.getWeatherEffects();
     gameStore.survivalState.hunger = Math.max(0, gameStore.survivalState.hunger - (0.2 * weatherEffects.survivalModifier));
     gameStore.survivalState.thirst = Math.max(0, gameStore.survivalState.thirst - (0.3 * weatherEffects.survivalModifier));
 
@@ -109,7 +111,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     if (weatherEffects.movementModifier < 1.0) {
         const extraTime = adjustedMovementTime - baseMovementTime;
         gameStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
-            text: `Il ${gameStore.getWeatherDescription(gameStore.weatherState.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
+            text: `Il ${weatherStore.getWeatherDescription(weatherStore.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
         });
     }
 

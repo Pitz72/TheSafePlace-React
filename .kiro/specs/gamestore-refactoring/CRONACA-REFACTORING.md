@@ -36,20 +36,26 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 
 ### **Task 6: Isolare logica Eventi in `eventStore.ts`**
 *Data: 2025-09-01*
+**Stato:** Completato.
+
+---
+
+### **Task 7: Isolare logica Meteo in `weatherStore.ts`**
+*Data: 2025-09-01*
 
 **Operazioni:**
-- Creato `eventStore.ts` per la gestione del sistema di eventi.
-- Migrata la logica relativa a `eventDatabase`, `currentEvent`, `seenEventIds`, `triggerEvent`, e `resolveChoice`.
-- Gestite le dipendenze incrociate per la risoluzione delle scelte (che richiedono `characterStore`, `combatStore`, `worldStore` e `gameStore`).
+- Creato `weatherStore.ts` per la gestione completa del sistema meteorologico.
+- Migrata la logica relativa a `weatherState` e tutte le funzioni associate da `gameStore.ts`.
+- Refactoring dei componenti e degli altri store (`worldStore`, `gameStore`) per utilizzare il nuovo `weatherStore`.
 - Eseguiti test di regressione, tutti superati con successo.
 
 **Stato:** Completato.
 
 ---
 
-### **Task 7: Isolare logica Meteo in `weatherStore.ts`**
+### **Task 8: Isolare logica Rifugi in `shelterStore.ts`**
 *Data: Inizio 2025-09-01*
 
-**Obiettivo:** Estrarre tutta la gestione del sistema meteorologico nel suo store dedicato.
+**Obiettivo:** Estrarre la gestione dello stato dei rifugi (`shelterAccessState`) nel suo store dedicato.
 
 **Stato:** In corso.
