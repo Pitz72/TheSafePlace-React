@@ -14,3 +14,16 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 - Corretto un errore di battitura (`eventsStore.ts` -> `eventStore.ts`).
 
 **Stato:** Completato.
+
+---
+
+### **Task 2: Implementare `uiStore.ts`**
+*Data: 2025-09-01*
+
+**Operazioni:**
+- Creato il file `src/stores/ui/uiStore.ts` con stato e azioni dedicate alla UI.
+- Definite le interfacce `Screen`, `Notification`, e `UIState`.
+- Migrata tutta la logica relativa alla UI (gestione schermate, notifiche, indici selezionati) da `gameStore.ts` al nuovo `uiStore.ts`.
+- Rimosse le proprietà e le azioni corrispondenti dal `gameStore.ts` e dall'interfaccia `GameState` per eliminare la duplicazione.
+
+**Stato:** Completato.

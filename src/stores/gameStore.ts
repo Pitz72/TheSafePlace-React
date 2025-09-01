@@ -27,10 +27,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   logEntries: [],
   currentBiome: null,
   items: itemDatabase,
-  selectedInventoryIndex: 0,
-  currentScreen: 'menu',
-  previousScreen: null,
-  menuSelectedIndex: 0,
   shelterAccessState: {}, // Sistema rifugi v0.6.1
   weatherState: {
     currentWeather: WeatherType.CLEAR,
@@ -47,7 +43,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   eventDatabase: {},
   currentEvent: null,
   seenEventIds: [],
-  notifications: [],
   unlockRecipesCallback: undefined,
 
   // --- AZIONI ---
@@ -99,31 +94,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  setCurrentScreen: (screen) => set(state => ({ currentScreen: screen, previousScreen: state.currentScreen })),
-
-  goBack: () => set(state => {
-    if (state.previousScreen) {
-      return { currentScreen: state.previousScreen, previousScreen: null };
-    }
-    return { currentScreen: 'menu' }; // Fallback
-  }),
-
-  setMenuSelectedIndex: (index) => set({ menuSelectedIndex: index }),
-  setSelectedInventoryIndex: (index) => set({ selectedInventoryIndex: index }),
-
-  // --- UI Navigation Actions ---
-  handleNewGame: () => get().setCurrentScreen('characterCreation'),
-  handleLoadGame: () => get().setCurrentScreen('loadGame'),
-  handleStory: () => get().setCurrentScreen('story'),
-  handleInstructions: () => get().setCurrentScreen('instructions'),
-  handleOptions: () => get().setCurrentScreen('options'),
-  handleBackToMenu: () => get().setCurrentScreen('menu'),
-  handleExit: () => {
-    // In a real browser environment, you might want to show a confirmation
-    // For now, we can just log it or go back to the menu.
-    console.log("Exit action triggered");
-    get().setCurrentScreen('menu');
-  },
 
   formatTime: (timeMinutes: number): string => {
     const hours = Math.floor(timeMinutes / 60);
@@ -1885,23 +1855,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  // --- NOTIFICATION SYSTEM ---
-  addNotification: (notification) => {
-    const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
-    set(state => ({
-      notifications: [...state.notifications, { ...notification, id }]
-    }));
-  },
-
-  removeNotification: (id) => {
-    set(state => ({
-      notifications: state.notifications.filter(n => n.id !== id)
-    }));
-  },
-
-  clearNotifications: () => {
-    set({ notifications: [] });
-  },
 
   // Callback system for avoiding circular dependencies
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => {

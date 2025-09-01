@@ -95,7 +95,6 @@ export interface GameState {
 
   // Inventory state
   items: Record<string, IItem>;
-  selectedInventoryIndex: number;
 
   // Event system
   eventDatabase: Record<string, GameEvent[]>;
@@ -103,20 +102,6 @@ export interface GameState {
   seenEventIds: string[];
   triggerEvent: (biome: string) => void;
   resolveChoice: (choice: EventChoice) => void;
-
-  // UI state
-  currentScreen: Screen;
-  previousScreen: Screen | null;
-  menuSelectedIndex: number;
-  
-  // Notification system
-  notifications: Array<{
-    id: string;
-    type: 'success' | 'error' | 'warning' | 'info';
-    title: string;
-    message: string;
-    duration?: number;
-  }>;
 
   // Callback system for avoiding circular dependencies
   unlockRecipesCallback?: (manualId: string) => void;
@@ -137,18 +122,6 @@ export interface GameState {
   addLogEntry: (type: MessageType, context?: Record<string, any>) => void;
   updateBiome: (newBiome: string) => void;
 
-  // UI actions
-  setCurrentScreen: (screen: Screen) => void;
-  goBack: () => void;
-  setMenuSelectedIndex: (index: number) => void;
-  handleNewGame: () => void;
-  handleLoadGame: () => void;
-  handleStory: () => void;
-  handleInstructions: () => void;
-  handleOptions: () => void;
-  handleBackToMenu: () => void;
-  handleExit: () => void;
-  setSelectedInventoryIndex: (index: number) => void;
   useItem: (slotIndex: number) => boolean;
   consumeItem: (slotIndex: number) => boolean;
   equipItemFromInventory: (slotIndex: number) => void;
@@ -172,10 +145,6 @@ export interface GameState {
   importSave: (slot: string) => Promise<boolean>;
   recoverSave: (slot: string) => Promise<boolean>;
   
-  // Notification system actions
-  addNotification: (notification: Omit<GameState['notifications'][0], 'id'>) => void;
-  removeNotification: (id: string) => void;
-  clearNotifications: () => void;
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => void;
   
   // Shelter system v0.6.1 actions
