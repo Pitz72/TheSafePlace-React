@@ -1,12 +1,11 @@
 import React from 'react';
 import { useGameStore } from '../stores/gameStore';
 import type { IItem, IInventorySlot } from '../interfaces/items';
+import { shallow } from 'zustand/shallow';
 
 const InventoryPanel: React.FC = () => {
-  const characterSheet = useGameStore(state => state.characterSheet);
+  const inventory = useGameStore(state => state.characterSheet.inventory, shallow);
   const itemDatabase = useGameStore(state => state.items);
-
-  const { inventory } = characterSheet;
 
   const getItemColor = (item: IItem): string => {
     switch (item.type) {
