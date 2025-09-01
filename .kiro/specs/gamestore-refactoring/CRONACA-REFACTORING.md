@@ -22,18 +22,44 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 
 **Operazioni:**
 - Creato il file `src/stores/ui/uiStore.ts` con stato e azioni dedicate alla UI.
-- Definite le interfacce `Screen`, `Notification`, e `UIState`.
-- Migrata tutta la logica relativa alla UI (gestione schermate, notifiche, indici selezionati) da `gameStore.ts` al nuovo `uiStore.ts`.
-- Aggiornato `gameStore.ts` per agire come una *facade*, riesportando la logica da `uiStore` per mantenere la retrocompatibilità durante il refactoring.
-- Eseguiti test di regressione (`npm test`) per confermare che nessuna funzionalità esistente sia stata compromessa.
+- Migrata tutta la logica relativa alla UI da `gameStore.ts` a `uiStore.ts`.
+- Aggiornato `gameStore.ts` per agire come una *facade*.
+- Eseguiti test di regressione per confermare l'assenza di rotture.
 
 **Stato:** Completato.
 
 ---
 
 ### **Task 3: Migrare logica del Personaggio in `characterStore.ts`**
+*Data: 2025-09-01*
+
+**Operazioni:**
+- Creato `characterStore.ts` per gestire la `characterSheet`.
+- Migrata la logica di gestione di HP, XP, statistiche e abilità da `gameStore.ts`.
+- Refactoring di `gameStore.ts` per utilizzare il nuovo store, mantenendo la coerenza.
+- Eseguiti test di regressione, tutti superati con successo.
+
+**Stato:** Completato.
+
+---
+
+### **Task 4: Isolare logica Inventario in `inventoryStore.ts`**
+*Data: 2025-09-01*
+
+**Operazioni:**
+- Creato `inventoryStore.ts` per gestire le azioni relative all'inventario.
+- Spostate le azioni `addItem`, `removeItem`, e `equipItemFromInventory` da `characterStore.ts` a `inventoryStore.ts`.
+- Il nuovo store agisce come un orchestratore, interagendo con `characterStore` (che detiene lo stato dell'inventario) e `gameStore` (per il logging).
+- Refactoring del codice per utilizzare il nuovo `inventoryStore`.
+- Eseguiti test di regressione, tutti superati con successo.
+
+**Stato:** Completato.
+
+---
+
+### **Task 5: Isolare logica del Mondo in `worldStore.ts`**
 *Data: Inizio 2025-09-01*
 
-**Obiettivo:** Isolare tutta la gestione dello stato del personaggio (scheda, statistiche, PE, vita, modificatori) nel suo store dedicato.
+**Obiettivo:** Migrare la gestione dello stato del mondo di gioco (mappa, posizione giocatore, tempo, bioma) nel suo store dedicato.
 
 **Stato:** In corso.
