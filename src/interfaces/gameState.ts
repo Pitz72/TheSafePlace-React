@@ -74,10 +74,6 @@ export interface GameState extends UIState {
   // Time state
   timeState: TimeState;
   
-  // Character state
-  characterSheet: ICharacterSheet;
-  lastShortRestTime: { day: number; time: number } | null;
-  
   // Survival state
   survivalState: SurvivalState;
   
@@ -110,10 +106,8 @@ export interface GameState extends UIState {
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   advanceTime: (minutes?: number) => void;
   
-  // Character actions
-  updateHP: (amount: number) => void;
+  // Character-related actions (now composite)
   performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
-  getModifier: (ability: keyof ICharacterSheet['stats']) => number;
   shortRest: () => void;
   
   // Journal actions
@@ -129,17 +123,13 @@ export interface GameState extends UIState {
   handleBackToMenu: () => void;
   handleExit: () => void;
 
+  // Item actions that depend on multiple stores
   useItem: (slotIndex: number) => boolean;
   consumeItem: (slotIndex: number) => boolean;
-  equipItemFromInventory: (slotIndex: number) => void;
   dropItem: (slotIndex: number) => void;
-  updateCharacterSheet: (characterSheet: ICharacterSheet) => void;
-  addExperience: (xpGained: number) => void;
   handleNightConsumption: () => void;
   consumeFood: (amount: number) => void;
   consumeDrink: (amount: number) => void;
-  addItem: (itemId: string, quantity?: number) => boolean;
-  removeItem: (slotIndex: number, quantity?: number) => boolean;
   
   // Save system actions
   saveCurrentGame: (slot: string) => Promise<boolean>;

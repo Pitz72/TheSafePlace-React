@@ -2,14 +2,13 @@ import { create } from 'zustand';
 import type { GameState, AbilityCheckResult, TimeState, ShelterAccessInfo, WeatherState, WeatherEffects } from '../interfaces/gameState';
 import { WeatherType } from '../interfaces/gameState';
 
-import { createTestCharacter } from '../rules/characterGenerator';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
 import { itemDatabase } from '../data/items/itemDatabase';
-import { equipItem } from '../utils/equipmentManager';
 import { isDead } from '../rules/mechanics';
 import { saveSystem } from '../utils/saveSystem';
 import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
 import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
+import { useCharacterStore } from './character/characterStore';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -21,8 +20,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerPosition: { x: -1, y: -1 },
   cameraPosition: { x: 0, y: 0 },
   timeState: { currentTime: DAWN_TIME, day: 1, isDay: true },
-  characterSheet: createTestCharacter(),
-  lastShortRestTime: null,
   survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } },
   logEntries: [],
   currentBiome: null,
@@ -58,6 +55,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     resetJournalState();
     set({ logEntries: [] });
+    useCharacterStore.getState().resetCharacter(); // Resetta il personaggio
 
     try {
       const response = await fetch('/map.txt');
@@ -84,7 +82,6 @@ export const useGameStore = create<GameState>((set, get) => ({
         playerPosition: startPos,
         isMapLoading: false,
         eventDatabase: database,
-        characterSheet: createTestCharacter(), // Resetta il personaggio
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
         timeState: { currentTime: DAWN_TIME, day: 1, isDay: true }, // Resetta tempo
         shelterAccessState: {}, // Resetta sistema rifugi v0.6.1
@@ -165,6 +162,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   updatePlayerPosition: (newPosition, newBiomeChar) => {
     const oldBiome = get().currentBiome;
     const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
+    const characterStore = useCharacterStore.getState();
 
     if (newBiomeKey !== oldBiome) {
       get().addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
@@ -177,7 +175,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     get().updateWeather();
 
     // Consumo e XP con effetti meteo
-    get().addExperience(Math.floor(Math.random() * 2) + 1);
+    characterStore.addExperience(Math.floor(Math.random() * 2) + 1);
 
     const weatherEffects = get().getWeatherEffects();
     const baseHungerLoss = 0.2;
@@ -193,7 +191,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Controllo fame e sete critiche
     if (get().survivalState.hunger <= 0 || get().survivalState.thirst <= 0) {
-      get().updateHP(-1);
+      characterStore.updateHP(-1);
       get().addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
     }
 
@@ -202,7 +200,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (weatherState.currentWeather === WeatherType.STORM && Math.random() < 0.15) {
       // 15% di possibilità di subire danni durante una tempesta
       const stormDamage = Math.floor(Math.random() * 2) + 1; // 1-2 danni
-      get().updateHP(-stormDamage);
+      characterStore.updateHP(-stormDamage);
       get().addLogEntry(MessageType.HP_DAMAGE, {
         damage: stormDamage,
         reason: 'tempesta violenta',
@@ -211,7 +209,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     } else if (weatherState.currentWeather === WeatherType.HEAVY_RAIN && Math.random() < 0.08) {
       // 8% di possibilità di scivolare durante pioggia intensa
       const slipDamage = 1;
-      get().updateHP(-slipDamage);
+      characterStore.updateHP(-slipDamage);
       get().addLogEntry(MessageType.HP_DAMAGE, {
         damage: slipDamage,
         reason: 'terreno scivoloso',
@@ -639,7 +637,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getRiverCrossingModifierInfo: (finalDifficulty: number): string | null => {
-    const { weatherState, timeState, characterSheet, survivalState } = get();
+    const { weatherState, timeState, survivalState } = get();
+    const { characterSheet } = useCharacterStore.getState();
     const baseDifficulty = 12;
     const totalModifier = finalDifficulty - baseDifficulty;
 
@@ -681,7 +680,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   calculateEquipmentModifierForRiver: (): number => {
-    const { characterSheet, items } = get();
+    const { characterSheet } = useCharacterStore.getState();
+    const { items } = get();
     let modifier = 0;
 
     // Analizza equipaggiamento indossato
@@ -744,7 +744,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getEquipmentModifierDescription: (): string[] => {
-    const { characterSheet, items } = get();
+    const { characterSheet } = useCharacterStore.getState();
+    const { items } = get();
     const descriptions: string[] = [];
 
     // Analizza equipaggiamento per descrizioni
@@ -857,7 +858,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
 
   attemptRiverCrossing: (): boolean => {
-    const { addLogEntry, performAbilityCheck, updateHP, calculateRiverDifficulty, weatherState } = get();
+    const { addLogEntry, performAbilityCheck, calculateRiverDifficulty, weatherState } = get();
+    const characterStore = useCharacterStore.getState();
 
     // Calcola difficoltà basata su meteo e condizioni
     const difficulty = calculateRiverDifficulty();
@@ -911,7 +913,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
 
       const totalDamage = baseDamage + weatherDamage;
-      updateHP(-totalDamage);
+      characterStore.updateHP(-totalDamage);
 
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, {
         action: 'attraversamento fiume',
@@ -933,7 +935,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   calculateRiverDifficulty: (): number => {
-    const { weatherState, characterSheet, timeState } = get();
+    const { weatherState, timeState } = get();
+    const { characterSheet } = useCharacterStore.getState();
     let baseDifficulty = 12; // Difficoltà base moderata
 
     // Modificatori meteo avanzati - v0.6.1
@@ -1018,7 +1021,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { currentEvent } = get();
     if (!currentEvent) return;
 
-    const { addLogEntry, performAbilityCheck, updateHP, advanceTime } = get();
+    const { addLogEntry, performAbilityCheck, advanceTime } = get();
+    const characterStore = useCharacterStore.getState();
     const combatStore = useCombatStore.getState();
 
     const handleOutcome = (outcome) => {
@@ -1066,34 +1070,14 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  updateHP: (amount) => set(state => ({
-    characterSheet: {
-      ...state.characterSheet,
-      currentHP: Math.max(0, Math.min(state.characterSheet.maxHP, state.characterSheet.currentHP + amount)),
-    }
-  })),
-
-  addExperience: (xpGained) => set(state => {
-    const newXP = state.characterSheet.experience.currentXP + xpGained;
-    return {
-      characterSheet: {
-        ...state.characterSheet,
-        experience: {
-          ...state.characterSheet.experience,
-          currentXP: newXP,
-          canLevelUp: newXP >= state.characterSheet.experience.xpForNextLevel && state.characterSheet.level < 20,
-        }
-      }
-    }
-  }),
-
-  updateCharacterSheet: (newSheet) => set({ characterSheet: newSheet }),
-
-  getModifier: (ability) => Math.floor((get().characterSheet.stats[ability] - 10) / 2),
-
   performAbilityCheck: (ability, difficulty, addToJournal = true, successMessageType) => {
-    const { getModifier, addLogEntry, addExperience, getWeatherEffects } = get();
-    const baseModifier = getModifier(ability);
+    const { addLogEntry, getWeatherEffects } = get();
+    const characterStore = useCharacterStore.getState();
+
+    // Get base modifier from character store
+    const baseModifier = characterStore.getModifier(ability);
+
+    // Get weather effects from game store
     const weatherEffects = getWeatherEffects();
     const weatherModifier = weatherEffects.skillCheckModifier;
     const totalModifier = baseModifier + weatherModifier;
@@ -1102,7 +1086,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const total = roll + totalModifier;
     const success = total >= difficulty;
 
-    addExperience(success ? 5 : 1);
+    characterStore.addExperience(success ? 5 : 1);
 
     const result: AbilityCheckResult = { success, roll, modifier: totalModifier, total, difficulty };
 
@@ -1122,7 +1106,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   shortRest: () => {
-    const { characterSheet, addLogEntry, updateHP, advanceTime, eventDatabase } = get();
+    const { addLogEntry, advanceTime, eventDatabase } = get();
+    const characterStore = useCharacterStore.getState();
+    const { characterSheet } = characterStore;
+
     if (isDead(characterSheet.currentHP)) {
       addLogEntry(MessageType.REST_BLOCKED, { reason: 'sei morto' });
       return;
@@ -1143,7 +1130,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const recoveryPercentage = 0.8 + (Math.random() * 0.15); // 80-95%
     const healingAmount = Math.floor(maxRecovery * recoveryPercentage);
 
-    updateHP(healingAmount);
+    characterStore.updateHP(healingAmount);
     addLogEntry(MessageType.REST_SUCCESS, { healingAmount });
 
     const restTime = Math.floor(Math.random() * 120) + 120; // 120-240 minuti
@@ -1151,7 +1138,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   handleNightConsumption: () => {
-    const { timeState, characterSheet, items, addLogEntry, updateHP } = get();
+    const { timeState, items, addLogEntry } = get();
+    const characterStore = useCharacterStore.getState();
+    const { characterSheet } = characterStore;
     const currentDay = timeState.day;
 
     let foodConsumed = false;
@@ -1177,12 +1166,12 @@ export const useGameStore = create<GameState>((set, get) => ({
     addLogEntry(MessageType.SURVIVAL_NIGHT_CONSUME);
     if (!foodConsumed || !drinkConsumed) {
       const penalty = (!foodConsumed && !drinkConsumed) ? 3 : 1;
-      updateHP(-penalty);
+      characterStore.updateHP(-penalty);
       addLogEntry(MessageType.SURVIVAL_PENALTY);
     }
 
+    characterStore.updateCharacterSheet({ ...characterSheet, inventory: newInventory });
     set(state => ({
-      characterSheet: { ...state.characterSheet, inventory: newInventory },
       survivalState: { ...state.survivalState, lastNightConsumption: { day: currentDay, consumed: true } }
     }));
   },
@@ -1191,6 +1180,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   consumeDrink: () => { /* Placeholder */ },
 
   updateBiome: (newBiomeChar) => {
+    const characterStore = useCharacterStore.getState();
     // Sistema attraversamento fiumi
     if (newBiomeChar === '~') {
       get().attemptRiverCrossing();
@@ -1207,13 +1197,12 @@ export const useGameStore = create<GameState>((set, get) => ({
         setCurrentScreen,
         handleNightConsumption,
         advanceTime,
-        characterSheet,
-        updateHP,
         getShelterInfo,
         createShelterInfo,
         updateShelterAccess,
         isShelterAccessible
       } = get();
+      const { characterSheet } = characterStore;
 
       const { x, y } = playerPosition;
       let shelterInfo = getShelterInfo(x, y);
@@ -1252,7 +1241,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         handleNightConsumption();
         const maxRecovery = characterSheet.maxHP - characterSheet.currentHP;
         const nightHealing = Math.floor(maxRecovery * 0.6);
-        updateHP(nightHealing);
+        characterStore.updateHP(nightHealing);
         addLogEntry(MessageType.REST_SUCCESS, {
           healingAmount: nightHealing,
           location: 'rifugio notturno'
@@ -1266,8 +1255,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   useItem: (slotIndex) => {
-    const { characterSheet, items, addLogEntry, updateHP } = get();
+    const { items, addLogEntry } = get();
+    const characterStore = useCharacterStore.getState();
+    const { characterSheet } = characterStore;
     const itemStack = characterSheet.inventory[slotIndex];
+
     if (!itemStack) return false;
     const item = items[itemStack.itemId];
     if (!item || !item.effect) return false;
@@ -1310,80 +1302,27 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       // Rimuovi il manuale dall'inventario (non stackable, quindi rimuovi 1)
-      currentStack.quantity -= 1;
-      if (currentStack.quantity === 0) newInventory[slotIndex] = null;
-
-      set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
+      characterStore.removeItem(slotIndex, 1);
       return true;
 
     } else if (effectApplied > 0) {
       switch (item.effect) {
-        case 'heal': updateHP(effectApplied); addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied }); break;
+        case 'heal': characterStore.updateHP(effectApplied); addLogEntry(MessageType.HP_RECOVERY, { healing: effectApplied }); break;
         case 'satiety': set(s => ({ survivalState: { ...s.survivalState, hunger: Math.min(100, s.survivalState.hunger + effectApplied) } })); break;
         case 'hydration': set(s => ({ survivalState: { ...s.survivalState, thirst: Math.min(100, s.survivalState.thirst + effectApplied) } })); break;
       }
       addLogEntry(MessageType.ITEM_USED, messageContext);
-      set(state => ({ characterSheet: { ...state.characterSheet, inventory: newInventory } }));
+      characterStore.updateCharacterSheet({ ...characterSheet, inventory: newInventory });
       return true;
     }
 
     return false;
-  },
-
-  addItem: (itemId, quantity = 1) => {
-    const { items, characterSheet, addLogEntry } = get();
-    const item = items[itemId];
-    if (!item) return false;
-    const newInventory = [...characterSheet.inventory];
-    let added = false;
-    if (item.stackable) {
-      const slot = newInventory.find(s => s?.itemId === itemId);
-      if (slot) { slot.quantity += quantity; added = true; }
-    }
-    if (!added) {
-      const emptyIdx = newInventory.findIndex(s => !s);
-      if (emptyIdx !== -1) {
-        newInventory[emptyIdx] = { itemId, quantity, portions: item.portionsPerUnit };
-        added = true;
-      }
-    }
-    if (added) {
-      set({ characterSheet: { ...characterSheet, inventory: newInventory } });
-      addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity });
-      return true;
-    }
-    addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
-    return false;
-  },
-
-  removeItem: (slotIndex, quantity = 1) => {
-    const { characterSheet } = get();
-    const slot = characterSheet.inventory[slotIndex];
-    if (!slot) return false;
-    const newInventory = [...characterSheet.inventory];
-    const currentSlot = newInventory[slotIndex]!;
-    if (currentSlot.quantity <= quantity) {
-      newInventory[slotIndex] = null;
-    } else {
-      currentSlot.quantity -= quantity;
-    }
-    set({ characterSheet: { ...characterSheet, inventory: newInventory } });
-    return true;
-  },
-
-  equipItemFromInventory: (slotIndex) => {
-    const { characterSheet, items, addLogEntry } = get();
-    const result = equipItem(characterSheet, items, slotIndex);
-    if (result.success) {
-      set({ characterSheet: result.updatedCharacterSheet });
-      addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
-    } else {
-      addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
-    }
   },
 
   dropItem: (slotIndex) => {
-    const { characterSheet, items, addLogEntry } = get();
+    const characterStore = useCharacterStore.getState();
+    const { characterSheet } = characterStore;
+    const { items, addLogEntry } = get();
     const slot = characterSheet.inventory[slotIndex];
     if (!slot) return;
     const item = items[slot.itemId];
@@ -1391,12 +1330,14 @@ export const useGameStore = create<GameState>((set, get) => ({
       addLogEntry(MessageType.ACTION_FAIL, { reason: `${item.name} è troppo importante.` });
       return;
     }
-    get().removeItem(slotIndex, slot.quantity);
+    characterStore.removeItem(slotIndex, slot.quantity);
     addLogEntry(MessageType.INVENTORY_CHANGE, { action: `Hai gettato ${item.name}.` });
   },
 
   consumeItem: (slotIndex) => {
-    const { characterSheet, items, addLogEntry, survivalState } = get();
+    const { items, addLogEntry, survivalState } = get();
+    const characterStore = useCharacterStore.getState();
+    const { characterSheet } = characterStore;
     const slot = characterSheet.inventory[slotIndex];
     if (!slot) return false;
 
@@ -1418,7 +1359,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         const actualHeal = newHP - oldHP;
 
         if (actualHeal > 0) {
-          get().updateHP(actualHeal);
+          characterStore.updateHP(actualHeal);
           addLogEntry(MessageType.HP_RECOVERY, {
             healing: actualHeal,
             item: item.name
@@ -1489,7 +1430,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Se l'effetto è stato applicato, rimuovi l'oggetto
     if (effectApplied) {
-      get().removeItem(slotIndex, 1);
+      characterStore.removeItem(slotIndex, 1);
       return true;
     }
 
@@ -1499,6 +1440,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- SAVE/LOAD SYSTEM ---
   saveCurrentGame: async (slot) => {
     const state = get();
+    const { characterSheet } = useCharacterStore.getState();
 
     try {
       // Mostra notifica di salvataggio in corso
@@ -1521,7 +1463,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       };
 
       const success = await saveSystem.saveGame(
-        state.characterSheet,
+        characterSheet,
         state.survivalState,
         gameData,
         slot
@@ -1537,7 +1479,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
         // Aggiungi al journal
         get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
-          text: `Partita salvata: ${state.characterSheet.name} - Livello ${state.characterSheet.level}`
+          text: `Partita salvata: ${characterSheet.name} - Livello ${characterSheet.level}`
         });
       } else {
         get().addNotification({
@@ -1562,6 +1504,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   loadSavedGame: async (slot) => {
+    const characterStore = useCharacterStore.getState();
     try {
       // Mostra notifica di caricamento in corso
       get().addNotification({
@@ -1593,13 +1536,15 @@ export const useGameStore = create<GameState>((set, get) => ({
           }
         }
 
+        // Update character store
+        characterStore.updateCharacterSheet(saveData.characterSheet);
+
         // Ricostruisci lo stato del gioco dai dati salvati
         set({
           mapData,
           isMapLoading: false, // <-- AGGIUNGI QUESTA RIGA
           playerPosition: saveData.gameData.playerPosition,
           timeState: saveData.gameData.timeState,
-          characterSheet: saveData.characterSheet,
           survivalState: saveData.survivalState,
           currentBiome: saveData.gameData.currentBiome,
           shelterAccessState: (saveData.gameData as any).shelterAccessState || {},

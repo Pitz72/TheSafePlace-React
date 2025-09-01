@@ -17,13 +17,23 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 
 ---
 
-### **Task 2: Implementare `uiStore.ts`**
+### **Task 2: Implementare `uiStore.ts` e Facade**
 *Data: 2025-09-01*
 
 **Operazioni:**
 - Creato il file `src/stores/ui/uiStore.ts` con stato e azioni dedicate alla UI.
 - Definite le interfacce `Screen`, `Notification`, e `UIState`.
 - Migrata tutta la logica relativa alla UI (gestione schermate, notifiche, indici selezionati) da `gameStore.ts` al nuovo `uiStore.ts`.
-- Rimosse le proprietà e le azioni corrispondenti dal `gameStore.ts` e dall'interfaccia `GameState` per eliminare la duplicazione.
+- Aggiornato `gameStore.ts` per agire come una *facade*, riesportando la logica da `uiStore` per mantenere la retrocompatibilità durante il refactoring.
+- Eseguiti test di regressione (`npm test`) per confermare che nessuna funzionalità esistente sia stata compromessa.
 
 **Stato:** Completato.
+
+---
+
+### **Task 3: Migrare logica del Personaggio in `characterStore.ts`**
+*Data: Inizio 2025-09-01*
+
+**Obiettivo:** Isolare tutta la gestione dello stato del personaggio (scheda, statistiche, PE, vita, modificatori) nel suo store dedicato.
+
+**Stato:** In corso.
