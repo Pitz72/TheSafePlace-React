@@ -9,20 +9,13 @@ import { saveSystem } from '../utils/saveSystem';
 import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
 import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
 import { useCharacterStore } from './character/characterStore';
-
-const DAWN_TIME = 360; // 06:00
-const DUSK_TIME = 1200; // 20:00
+import { useWorldStore } from './world/worldStore';
+import { useInventoryStore } from './inventory/inventoryStore';
 
 export const useGameStore = create<GameState>((set, get) => ({
   // --- STATO INIZIALE ---
-  mapData: [],
-  isMapLoading: true,
-  playerPosition: { x: -1, y: -1 },
-  cameraPosition: { x: 0, y: 0 },
-  timeState: { currentTime: DAWN_TIME, day: 1, isDay: true },
   survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } },
   logEntries: [],
-  currentBiome: null,
   items: itemDatabase,
   selectedInventoryIndex: 0,
   currentScreen: 'menu',
@@ -51,23 +44,17 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- AZIONI ---
 
   initializeGame: async () => {
-    if (get().isMapLoading === false) return; // Evita reinizializzazione
+    const worldStore = useWorldStore.getState();
+    if (worldStore.isMapLoading === false) return; // Evita reinizializzazione
 
     resetJournalState();
     set({ logEntries: [] });
-    useCharacterStore.getState().resetCharacter(); // Resetta il personaggio
+    useCharacterStore.getState().resetCharacter();
+    worldStore.resetWorld();
+
+    await worldStore.loadMap();
 
     try {
-      const response = await fetch('/map.txt');
-      const mapText = await response.text();
-      const lines = mapText.split('\n').filter(line => line);
-
-      let startPos = { x: 75, y: 75 };
-      lines.forEach((line, y) => {
-        const x = line.indexOf('S');
-        if (x !== -1) startPos = { x, y };
-      });
-
       const eventFiles = ['city_events.json', 'forest_events.json', 'plains_events.json', 'rest_stop_events.json', 'river_events.json', 'unique_events.json', 'village_events.json'];
       const database: Record<string, GameEvent[]> = {};
       for (const file of eventFiles) {
@@ -78,22 +65,16 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
 
       set({
-        mapData: lines,
-        playerPosition: startPos,
-        isMapLoading: false,
         eventDatabase: database,
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
-        timeState: { currentTime: DAWN_TIME, day: 1, isDay: true }, // Resetta tempo
         shelterAccessState: {}, // Resetta sistema rifugi v0.6.1
         weatherState: get().createClearWeather(), // Resetta meteo a sereno
         currentScreen: 'menu',
-        currentBiome: get().getBiomeKeyFromChar(lines[startPos.y][startPos.x]),
       });
       get().addLogEntry(MessageType.GAME_START);
 
     } catch (error) {
       console.error("Initialization failed in store:", error);
-      set({ isMapLoading: false });
     }
   },
 
@@ -123,179 +104,18 @@ export const useGameStore = create<GameState>((set, get) => ({
     get().setCurrentScreen('menu');
   },
 
-  formatTime: (timeMinutes: number): string => {
-    const hours = Math.floor(timeMinutes / 60);
-    const minutes = timeMinutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  },
-
   addLogEntry: (type, context) => {
     const message = getRandomMessage(type, context);
     if (!message) return;
+    const { formatTime, timeState } = useWorldStore.getState();
     const newEntry = {
       id: `${Date.now()}-${Math.random()}`,
-      timestamp: get().formatTime(get().timeState.currentTime),
+      timestamp: formatTime(timeState.currentTime),
       message,
       type,
       context,
     };
     set(state => ({ logEntries: [...state.logEntries, newEntry].slice(-JOURNAL_CONFIG.MAX_ENTRIES) }));
-  },
-
-  advanceTime: (minutes = 30) => {
-    const oldTimeState = get().timeState;
-    const newTotalMinutes = oldTimeState.currentTime + minutes;
-    const newDay = oldTimeState.day + Math.floor(newTotalMinutes / 1440);
-    const normalizedTime = newTotalMinutes % 1440;
-    const newIsDay = normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME;
-
-    if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) get().addLogEntry(MessageType.TIME_DAWN);
-    if (oldTimeState.currentTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
-      get().addLogEntry(MessageType.TIME_DUSK);
-      get().handleNightConsumption();
-    }
-    if (oldTimeState.currentTime > 0 && normalizedTime === 0) get().addLogEntry(MessageType.TIME_MIDNIGHT);
-
-    set({ timeState: { currentTime: normalizedTime, day: newDay, isDay: newIsDay } });
-  },
-
-  updatePlayerPosition: (newPosition, newBiomeChar) => {
-    const oldBiome = get().currentBiome;
-    const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
-    const characterStore = useCharacterStore.getState();
-
-    if (newBiomeKey !== oldBiome) {
-      get().addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
-      get().updateBiome(newBiomeChar); // Gestisce logica rifugi etc.
-    }
-
-    set({ playerPosition: newPosition, currentBiome: newBiomeKey });
-
-    // Aggiorna meteo prima del movimento
-    get().updateWeather();
-
-    // Consumo e XP con effetti meteo
-    characterStore.addExperience(Math.floor(Math.random() * 2) + 1);
-
-    const weatherEffects = get().getWeatherEffects();
-    const baseHungerLoss = 0.2;
-    const baseThirstLoss = 0.3;
-
-    set(state => ({
-      survivalState: {
-        ...state.survivalState,
-        hunger: Math.max(0, state.survivalState.hunger - (baseHungerLoss * weatherEffects.survivalModifier)),
-        thirst: Math.max(0, state.survivalState.thirst - (baseThirstLoss * weatherEffects.survivalModifier)),
-      }
-    }));
-
-    // Controllo fame e sete critiche
-    if (get().survivalState.hunger <= 0 || get().survivalState.thirst <= 0) {
-      characterStore.updateHP(-1);
-      get().addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
-    }
-
-    // Effetti meteo estremi durante il movimento
-    const { weatherState } = get();
-    if (weatherState.currentWeather === WeatherType.STORM && Math.random() < 0.15) {
-      // 15% di possibilità di subire danni durante una tempesta
-      const stormDamage = Math.floor(Math.random() * 2) + 1; // 1-2 danni
-      characterStore.updateHP(-stormDamage);
-      get().addLogEntry(MessageType.HP_DAMAGE, {
-        damage: stormDamage,
-        reason: 'tempesta violenta',
-        description: 'Venti fortissimi e detriti volanti ti colpiscono mentre ti muovi.'
-      });
-    } else if (weatherState.currentWeather === WeatherType.HEAVY_RAIN && Math.random() < 0.08) {
-      // 8% di possibilità di scivolare durante pioggia intensa
-      const slipDamage = 1;
-      characterStore.updateHP(-slipDamage);
-      get().addLogEntry(MessageType.HP_DAMAGE, {
-        damage: slipDamage,
-        reason: 'terreno scivoloso',
-        description: 'Scivoli sul terreno reso fangoso dalla pioggia intensa.'
-      });
-    }
-
-    // Messaggi atmosferici casuali basati sul meteo (10% di possibilità)
-    if (Math.random() < 0.10) {
-      const { weatherState } = get();
-      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
-        text: get().getRandomWeatherMessage(weatherState.currentWeather)
-      });
-    }
-
-    // Trigger Evento - v0.8.1: Probabilità differenziate per bioma
-    const BIOME_EVENT_CHANCES: Record<string, number> = {
-      'PLAINS': 0.10,      // 10% = ~1 evento ogni 10 passi (pianura comune)
-      'FOREST': 0.15,      // 15% = maggiore probabilità (bioma più raro)
-      'RIVER': 0.18,       // 18% = eventi fluviali più frequenti
-      'CITY': 0.33,        // 33% = ~1 evento ogni 3 passi (alta densità urbana)
-      'VILLAGE': 0.33,     // 33% = ~1 evento ogni 3 passi (alta densità urbana)
-      'SETTLEMENT': 0.25,  // 25% = insediamenti meno densi delle città
-      'REST_STOP': 0.20,   // 20% = rifugi con eventi moderati
-      'UNKNOWN': 0.05      // 5% = biomi sconosciuti molto rari
-    };
-
-    const baseEventChance = BIOME_EVENT_CHANCES[newBiomeKey] || 0.05;
-    const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
-
-    if (newBiomeKey && Math.random() < adjustedEventChance) {
-      setTimeout(() => get().triggerEvent(newBiomeKey), 150);
-    }
-
-    // Calcola tempo movimento con effetti meteo
-    const baseMovementTime = 10; // minuti base per movimento
-    const adjustedMovementTime = Math.ceil(baseMovementTime / weatherEffects.movementModifier);
-
-    // Messaggio informativo se il meteo rallenta il movimento
-    if (weatherEffects.movementModifier < 1.0) {
-      const { weatherState } = get();
-      const extraTime = adjustedMovementTime - baseMovementTime;
-      get().addLogEntry(MessageType.AMBIANCE_RANDOM, {
-        text: `Il ${get().getWeatherDescription(weatherState.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
-      });
-    }
-
-    get().advanceTime(adjustedMovementTime);
-  },
-
-  updateCameraPosition: (viewportSize: { width: number; height: number }) => {
-    const { playerPosition, mapData } = get();
-
-    if (!mapData || mapData.length === 0 || !viewportSize || viewportSize.width === 0 || viewportSize.height === 0) {
-      return; // Non fare nulla se i dati non sono pronti
-    }
-
-    // Costanti di rendering (derivate da MapViewport.tsx)
-    const CHAR_WIDTH = 25.6;
-    const CHAR_HEIGHT = 38.4;
-
-    // Dimensioni della mappa in tile
-    const MAP_WIDTH_IN_TILES = mapData[0].length;
-    const MAP_HEIGHT_IN_TILES = mapData.length;
-
-    // Calcola la posizione ideale della camera (in pixel) per centrare il giocatore
-    const idealCameraX = (playerPosition.x * CHAR_WIDTH) - (viewportSize.width / 2) + (CHAR_WIDTH / 2);
-    const idealCameraY = (playerPosition.y * CHAR_HEIGHT) - (viewportSize.height / 2) + (CHAR_HEIGHT / 2);
-
-    // Calcola i limiti massimi di scroll per non mostrare aree vuote
-    const maxScrollX = (MAP_WIDTH_IN_TILES * CHAR_WIDTH) - viewportSize.width;
-    const maxScrollY = (MAP_HEIGHT_IN_TILES * CHAR_HEIGHT) - viewportSize.height;
-
-    // Applica il "clamping" per mantenere la camera entro i bordi della mappa
-    const newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
-    const newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
-
-    set({ cameraPosition: { x: newCameraX, y: newCameraY } });
-  },
-
-  getBiomeKeyFromChar: (char: string) => {
-    const map: Record<string, string> = {
-      'C': 'CITY', 'F': 'FOREST', '.': 'PLAINS', '~': 'RIVER',
-      'V': 'VILLAGE', 'S': 'SETTLEMENT', 'R': 'REST_STOP',
-    };
-    return map[char] || 'UNKNOWN';
   },
 
   // --- SISTEMA RIFUGI v0.6.1 ---

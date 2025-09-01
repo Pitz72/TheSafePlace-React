@@ -58,8 +58,22 @@ Questo documento traccia le operazioni eseguite durante il refactoring del `game
 ---
 
 ### **Task 5: Isolare logica del Mondo in `worldStore.ts`**
+*Data: 2025-09-01*
+
+**Operazioni:**
+- Creato `worldStore.ts` per gestire lo stato del mondo di gioco (mappa, posizione, tempo, bioma).
+- Migrata la logica relativa da `gameStore.ts`.
+- Il `gameStore` ora delega la gestione del mondo al nuovo store.
+- Gestite le complesse dipendenze incrociate tra `worldStore`, `characterStore` e `gameStore`.
+- Eseguiti test di regressione, tutti superati con successo, confermando la validità del refactoring.
+
+**Stato:** Completato.
+
+---
+
+### **Task 6: Isolare logica Eventi in `eventStore.ts`**
 *Data: Inizio 2025-09-01*
 
-**Obiettivo:** Migrare la gestione dello stato del mondo di gioco (mappa, posizione giocatore, tempo, bioma) nel suo store dedicato.
+**Obiettivo:** Estrarre la gestione degli eventi di gioco (database eventi, evento corrente, trigger) nel suo store dedicato.
 
 **Stato:** In corso.

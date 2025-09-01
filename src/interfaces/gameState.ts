@@ -61,19 +61,6 @@ export interface WeatherState {
 }
 
 export interface GameState extends UIState {
-  // Map state
-  mapData: string[];
-  isMapLoading: boolean;
-  
-  // Player state
-  playerPosition: { x: number; y: number };
-  
-  // Camera state
-  cameraPosition: { x: number; y: number };
-  
-  // Time state
-  timeState: TimeState;
-  
   // Survival state
   survivalState: SurvivalState;
   
@@ -85,7 +72,6 @@ export interface GameState extends UIState {
 
   // Journal state
   logEntries: LogEntry[];
-  currentBiome: string | null;
 
   // Inventory state
   items: Record<string, IItem>;
@@ -102,9 +88,6 @@ export interface GameState extends UIState {
   
   // Actions
   initializeGame: () => Promise<void>;
-  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiome: string) => void;
-  updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
-  advanceTime: (minutes?: number) => void;
   
   // Character-related actions (now composite)
   performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
@@ -164,8 +147,6 @@ export interface GameState extends UIState {
   getWeatherPatterns: () => any;
   getTimeBasedWeatherModifiers: (timeState: TimeState) => string;
   selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string) => WeatherType;
-  getBiomeKeyFromChar: (char: string) => string;
-  formatTime: (timeMinutes: number) => string;
   
   // River crossing system
   attemptRiverCrossing: () => boolean;
