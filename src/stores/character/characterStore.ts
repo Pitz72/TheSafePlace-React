@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import type { ICharacterSheet, AbilityType } from '../../rules/types';
 import { createTestCharacter } from '../../rules/characterGenerator';
-import { equipItem } from '../../utils/equipmentManager';
-import { useGameStore } from '../gameStore';
-import { itemDatabase } from '../../data/items/itemDatabase';
-import { MessageType } from '../../data/MessageArchive';
 
 export interface CharacterState {
   characterSheet: ICharacterSheet;

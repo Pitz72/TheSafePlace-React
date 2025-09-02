@@ -19,7 +19,7 @@ export interface SaveState {
   recoverSave: (slot: string) => Promise<boolean>;
 }
 
-export const useSaveStore = create<SaveState>((set, get) => ({
+export const useSaveStore = create<SaveState>((_set, get) => ({
     saveCurrentGame: async (slot) => {
         const gameStore = useGameStore.getState();
         const characterStore = useCharacterStore.getState();
@@ -61,7 +61,6 @@ export const useSaveStore = create<SaveState>((set, get) => ({
     loadSavedGame: async (slot) => {
         const gameStore = useGameStore.getState();
         const characterStore = useCharacterStore.getState();
-        const worldStore = useWorldStore.getState();
         const shelterStore = useShelterStore.getState();
         try {
             gameStore.addNotification({ type: 'info', title: 'Caricamento', message: 'Caricamento partita in corso...', duration: 1000 });
@@ -74,15 +73,15 @@ export const useSaveStore = create<SaveState>((set, get) => ({
                 }
 
                 characterStore.updateCharacterSheet(saveData.characterSheet);
-                worldStore.setState({
+                useWorldStore.setState({
                     playerPosition: saveData.gameData.playerPosition,
                     timeState: saveData.gameData.timeState,
                     currentBiome: saveData.gameData.currentBiome,
                 });
-                shelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
-                gameStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
+                useShelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
+                useGameStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
 
-                gameStore.setState({
+                useGameStore.setState({
                     survivalState: saveData.survivalState,
                     currentScreen: 'game',
                     logEntries: [],
