@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameState, AbilityCheckResult, TimeState, ShelterAccessInfo, WeatherState, WeatherEffects } from '../interfaces/gameState';
+import type { GameState, AbilityCheckResult, WeatherState } from '../interfaces/gameState';
 import { WeatherType } from '../interfaces/gameState';
 
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
@@ -33,6 +33,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- FACADE PROPERTIES ---
   get characterSheet() {
     return useCharacterStore.getState().characterSheet;
+  },
+
+  get timeState() {
+    return useWorldStore.getState().timeState;
   },
 
   get playerPosition() {
@@ -611,10 +615,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     const characterStore = useCharacterStore.getState();
     const combatStore = useCombatStore.getState();
 
-    const handleOutcome = (outcome) => {
+    const handleOutcome = (outcome: EventChoice) => {
       addLogEntry(MessageType.EVENT_CHOICE, { text: outcome.text });
 
-      outcome.actions?.forEach(action => {
+      outcome.actions?.forEach((action: { type: string; payload: any }) => {
         switch (action.type) {
           case 'start_combat':
             combatStore.initiateCombat(action.payload.encounterId);
@@ -1043,8 +1047,12 @@ export const useGameStore = create<GameState>((set, get) => ({
     };
   },
 
-  shortRest: () => {
-    useCharacterStore.getState().shortRest();
+
+
+  // Time system facade methods
+  advanceTime: (hours) => {
+    const minutes = hours * 60;
+    useWorldStore.getState().advanceTime(minutes);
   },
 
   // Shelter system facade methods
@@ -1077,25 +1085,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   // Weather system facade methods
-  updateWeather: () => {
-    useWeatherStore.getState().updateWeather();
-  },
-
-  getWeatherEffects: () => {
-    return useWeatherStore.getState().getWeatherEffects();
-  },
-
-  generateWeatherChange: () => {
-    return useWeatherStore.getState().generateWeatherChange();
-  },
-
-  applyWeatherEffects: (baseValue, effectType) => {
-    return useWeatherStore.getState().applyWeatherEffects(baseValue, effectType);
-  },
-
-  createClearWeather: () => {
-    return useWeatherStore.getState().createClearWeather();
-  },
 
   getWeatherDescription: (weather) => {
     return useWeatherStore.getState().getWeatherDescription(weather);
