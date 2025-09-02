@@ -5,8 +5,7 @@ import { WeatherType } from '../interfaces/gameState';
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
 import { itemDatabase } from '../data/items/itemDatabase';
 import { isDead } from '../rules/mechanics';
-import { saveSystem } from '../utils/saveSystem';
-import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
+import type { GameEvent, EventChoice } from '../interfaces/events';
 import { useCharacterStore } from './character/characterStore';
 import { useWorldStore } from './world/worldStore';
 import { useInventoryStore } from './inventory/inventoryStore';
@@ -387,61 +386,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   }),
 
-  getWeatherDescription: (weather: WeatherType): string => {
-    const descriptions = {
-      [WeatherType.CLEAR]: 'Il cielo si schiarisce, rivelando un sole pallido che filtra attraverso l\'aria polverosa. La visibilità migliora notevolmente.',
-      [WeatherType.LIGHT_RAIN]: 'Gocce sottili iniziano a cadere dal cielo grigio, creando piccole pozze sul terreno arido. L\'aria si fa più umida.',
-      [WeatherType.HEAVY_RAIN]: 'La pioggia battente trasforma il paesaggio in un mare di fango. Ogni passo diventa una lotta contro gli elementi.',
-      [WeatherType.STORM]: 'Una tempesta furiosa scuote la terra desolata. Lampi illuminano brevemente l\'orizzonte mentre il vento ulula tra le rovine.',
-      [WeatherType.FOG]: 'Una nebbia spettrale avvolge tutto in un manto grigio. Il mondo oltre pochi metri scompare in un\'inquietante foschia.',
-      [WeatherType.WIND]: 'Raffiche violente sollevano nuvole di polvere e detriti, rendendo difficile tenere gli occhi aperti. Il vento porta con sé echi del passato.'
-    };
-    return descriptions[weather] || 'Il tempo cambia in modi che sfidano ogni comprensione, come se la natura stessa fosse stata corrotta.';
-  },
 
-  getRandomWeatherMessage: (weather: WeatherType): string => {
-    const weatherMessages = {
-      [WeatherType.CLEAR]: [
-        'I raggi del sole filtrano attraverso l\'aria, riscaldando leggermente il tuo volto.',
-        'Il cielo sereno offre una tregua dalla desolazione circostante.',
-        'Una brezza leggera porta con sé il profumo di terre lontane.',
-        'La luce del sole rivela dettagli nascosti nel paesaggio.'
-      ],
-      [WeatherType.LIGHT_RAIN]: [
-        'Le gocce di pioggia tamburellano dolcemente sulle superfici metalliche abbandonate.',
-        'L\'umidità nell\'aria porta un senso di rinnovamento in questo mondo arido.',
-        'La pioggia leggera crea riflessi argentei sulle pozzanghere.',
-        'Il suono della pioggia maschera i tuoi passi.'
-      ],
-      [WeatherType.HEAVY_RAIN]: [
-        'La pioggia torrenziale rende il terreno scivoloso e traditore.',
-        'L\'acqua scorre in rivoli lungo i detriti, creando nuovi percorsi.',
-        'Il martellare della pioggia è assordante, coprendo ogni altro suono.',
-        'Ti rifugi momentaneamente sotto una lamiera arrugginita.'
-      ],
-      [WeatherType.STORM]: [
-        'Un fulmine illumina il paesaggio desolato per un istante accecante.',
-        'Il tuono rimbomba tra le rovine come il grido di un gigante ferito.',
-        'Il vento della tempesta minaccia di trascinarti via.',
-        'La furia degli elementi ti ricorda quanto sei piccolo in questo mondo.'
-      ],
-      [WeatherType.FOG]: [
-        'Forme indistinte emergono e scompaiono nella nebbia come fantasmi.',
-        'Il mondo si riduce a pochi metri di visibilità inquietante.',
-        'La nebbia sembra sussurrare segreti che non riesci a comprendere.',
-        'Ogni passo nella foschia è un salto nel vuoto.'
-      ],
-      [WeatherType.WIND]: [
-        'Il vento porta con sé frammenti di carta e foglie secche del passato.',
-        'Le raffiche fanno gemere le strutture metalliche abbandonate.',
-        'Il vento ulula una melodia malinconica tra i rottami.',
-        'Devi lottare contro le raffiche per mantenere l\'equilibrio.'
-      ]
-    };
 
-    const messages = weatherMessages[weather];
-    return messages ? messages[Math.floor(Math.random() * messages.length)] : 'Il tempo si comporta in modo strano.';
-  },
+
 
   // --- SISTEMA ATTRAVERSAMENTO FIUMI v0.6.1 ---
 
@@ -612,7 +559,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!currentEvent) return;
 
     const { addLogEntry, performAbilityCheck, advanceTime } = get();
-    const characterStore = useCharacterStore.getState();
     const combatStore = useCombatStore.getState();
 
     const handleOutcome = (outcome: EventChoice) => {
@@ -660,40 +606,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  performAbilityCheck: (ability, difficulty, addToJournal = true, successMessageType) => {
-    const { addLogEntry, getWeatherEffects } = get();
-    const characterStore = useCharacterStore.getState();
 
-    // Get base modifier from character store
-    const baseModifier = characterStore.getModifier(ability);
-
-    // Get weather effects from game store
-    const weatherEffects = getWeatherEffects();
-    const weatherModifier = weatherEffects.skillCheckModifier;
-    const totalModifier = baseModifier + weatherModifier;
-
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const total = roll + totalModifier;
-    const success = total >= difficulty;
-
-    characterStore.addExperience(success ? 5 : 1);
-
-    const result: AbilityCheckResult = { success, roll, modifier: totalModifier, total, difficulty };
-
-    if (addToJournal) {
-      const context = {
-        ability,
-        roll,
-        modifier: totalModifier,
-        baseModifier,
-        weatherModifier,
-        total,
-        difficulty
-      };
-      addLogEntry(success ? (successMessageType || MessageType.SKILL_CHECK_SUCCESS) : MessageType.SKILL_CHECK_FAILURE, context);
-    }
-    return result;
-  },
 
   shortRest: () => {
     const { addLogEntry, advanceTime, eventDatabase } = get();
@@ -1035,7 +948,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   // --- FACADE METHODS FOR DELEGATING TO SPECIALIZED STORES ---
   
   // Character-related facade methods
-  performAbilityCheck: (ability, difficulty, addToJournal = true, successMessageType) => {
+  performAbilityCheck: (ability, difficulty) => {
     const characterStore = useCharacterStore.getState();
     const result = characterStore.performAbilityCheck(ability, difficulty);
     return {

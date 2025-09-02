@@ -126,12 +126,7 @@ export interface GameState extends UIState {
   canInvestigateShelter: (x: number, y: number) => boolean;
   resetShelterInvestigations: () => void;
   
-  // Weather system
-  updateWeather: () => void;
-  getWeatherEffects: () => WeatherEffects;
-  generateWeatherChange: () => WeatherState;
-  applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects) => number;
-  createClearWeather: () => WeatherState;
+  // Weather system facade methods
   getWeatherDescription: (weather: WeatherType) => string;
   getRandomWeatherMessage: (weather: WeatherType) => string;
   getWeatherPatterns: () => any;

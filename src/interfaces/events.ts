@@ -73,14 +73,15 @@ export interface EventChoice {
   id?: string; // ID della scelta (per rest stop)
   text: string; // Il testo mostrato al giocatore
   skillCheck?: SkillCheck; // Il test di abilità opzionale associato a questa scelta
-  successText?: string; // Testo in caso di successo dello skill check
-  failureText?: string; // Testo in caso di fallimento dello skill check
-  resultText?: string; // Testo per scelte che non hanno uno skill check
+  successText?: EventChoice; // Testo in caso di successo dello skill check
+  failureText?: EventChoice; // Testo in caso di fallimento dello skill check
+  resultText?: EventChoice; // Testo per scelte che non hanno uno skill check
   items_gained?: ItemReward[]; // Array di oggetti ottenuti
   penalty?: Penalty; // La penalità subita
   reward?: Reward; // La ricompensa ottenuta
   actionKey?: 'ignore'; // Chiave per azioni speciali come ignorare l'evento
   consequences?: RestStopConsequences; // Conseguenze specifiche per rest stop
+  actions?: Array<{ type: string; payload: any }>; // Azioni da eseguire (es. start_combat)
 }
 
 /**
