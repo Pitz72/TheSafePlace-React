@@ -4,10 +4,10 @@ import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
 import { useGameStore } from './stores/gameStore';
 import { useCombatStore } from './stores/combatStore';
-import { shallow } from 'zustand/shallow';
 import { useSettingsStore } from './stores/settingsStore';
-import { runAllResolutionTests } from './utils/resolutionTest';
-import { performanceMonitor } from './utils/performanceMonitor';
+import { useCharacterStore } from './stores/character/characterStore';
+import { useWorldStore } from './stores/world/worldStore';
+import { useSaveStore } from './stores/save/saveStore';
 import { GameErrorBoundary } from './utils/errorHandler';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
@@ -48,8 +48,7 @@ const GameScreenInputHandler = () => {
   usePlayerMovement();
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const shortRest = useGameStore(state => state.shortRest);
-  const handleQuickSave = useGameStore(state => state.handleQuickSave);
-  const handleQuickLoad = useGameStore(state => state.handleQuickLoad);
+  const { handleQuickSave, handleQuickLoad } = useSaveStore();
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -78,20 +77,16 @@ const GameContent = () => {
   // Optimized selectors to prevent re-render loops
   const currentScreen = useGameStore(state => state.currentScreen);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
-  const loadSavedGame = useGameStore(state => state.loadSavedGame);
   const initializeGame = useGameStore(state => state.initializeGame);
-  const isMapLoading = useGameStore(state => state.isMapLoading);
   const removeNotification = useGameStore(state => state.removeNotification);
+  const { loadSavedGame } = useSaveStore();
 
   // Granular selectors to prevent infinite loops
-  const playerPosition = useGameStore(state => state.playerPosition);
-  const mapData = useGameStore(state => state.mapData);
-  const timeState = useGameStore(state => state.timeState);
-  const characterSheet = useGameStore(state => state.characterSheet);
+  const { playerPosition, mapData, timeState, isMapLoading } = useWorldStore();
+  const { characterSheet, getModifier } = useCharacterStore();
   const items = useGameStore(state => state.items);
   const survivalState = useGameStore(state => state.survivalState);
   const notifications = useGameStore(state => state.notifications);
-  const getModifier = useGameStore(state => state.getModifier);
 
   const isInCombat = useCombatStore(state => state.isActive);
   const combatResult = useCombatStore(state => state.combatResult);
@@ -233,7 +228,7 @@ const AppUI = () => {
 
 function App() {
   const initializeGame = useGameStore(state => state.initializeGame);
-  const isMapLoading = useGameStore(state => state.isMapLoading);
+  const { isMapLoading } = useWorldStore();
 
   useEffect(() => {
     if (isMapLoading) {

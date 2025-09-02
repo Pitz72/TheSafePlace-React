@@ -6,7 +6,6 @@ import { useGameStore } from '../gameStore';
 import { useCharacterStore } from '../character/characterStore';
 import { useWorldStore } from '../world/worldStore';
 import { useShelterStore } from '../shelter/shelterStore';
-import { useEventStore } from '../events/eventStore';
 
 export interface SaveState {
   saveCurrentGame: (slot: string) => Promise<boolean>;
@@ -26,8 +25,6 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         const characterStore = useCharacterStore.getState();
         const worldStore = useWorldStore.getState();
         const shelterStore = useShelterStore.getState();
-        const eventStore = useEventStore.getState();
-
         try {
           gameStore.addNotification({ type: 'info', title: 'Salvataggio', message: 'Salvataggio in corso...', duration: 1000 });
 
@@ -37,7 +34,7 @@ export const useSaveStore = create<SaveState>((set, get) => ({
             currentScreen: gameStore.currentScreen,
             currentBiome: worldStore.currentBiome,
             shelterAccessState: shelterStore.shelterAccessState,
-            seenEventIds: eventStore.seenEventIds,
+            seenEventIds: gameStore.seenEventIds,
             gameFlags: {}
           };
 
@@ -66,8 +63,6 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         const characterStore = useCharacterStore.getState();
         const worldStore = useWorldStore.getState();
         const shelterStore = useShelterStore.getState();
-        const eventStore = useEventStore.getState();
-
         try {
             gameStore.addNotification({ type: 'info', title: 'Caricamento', message: 'Caricamento partita in corso...', duration: 1000 });
 
@@ -85,7 +80,7 @@ export const useSaveStore = create<SaveState>((set, get) => ({
                     currentBiome: saveData.gameData.currentBiome,
                 });
                 shelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
-                eventStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
+                gameStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
 
                 gameStore.setState({
                     survivalState: saveData.survivalState,

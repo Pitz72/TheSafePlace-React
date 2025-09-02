@@ -111,12 +111,12 @@ global.createMockPlayer = () => ({
   level: 1,
   experience: 0,
   stats: {
-    strength: 12,
-    dexterity: 14,
-    constitution: 13,
-    intelligence: 15,
-    wisdom: 11,
-    charisma: 10
+    potenza: 12,
+    agilita: 14,
+    vigore: 13,
+    percezione: 15,
+    adattamento: 11,
+    carisma: 10
   },
   hp: 15,
   hunger: 100,

@@ -6,11 +6,13 @@ import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from
 import { itemDatabase } from '../data/items/itemDatabase';
 import { isDead } from '../rules/mechanics';
 import { saveSystem } from '../utils/saveSystem';
-import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../utils/fileUtils';
 import type { GameEvent, EventChoice, Penalty } from '../interfaces/events';
 import { useCharacterStore } from './character/characterStore';
 import { useWorldStore } from './world/worldStore';
 import { useInventoryStore } from './inventory/inventoryStore';
+import { useShelterStore } from './shelter/shelterStore';
+import { useWeatherStore } from './weather/weatherStore';
+import { useCombatStore } from './combatStore';
 
 export const useGameStore = create<GameState>((set, get) => ({
   // --- STATO INIZIALE ---
@@ -28,12 +30,44 @@ export const useGameStore = create<GameState>((set, get) => ({
   notifications: [],
   unlockRecipesCallback: undefined,
 
+  // --- FACADE PROPERTIES ---
+  get characterSheet() {
+    return useCharacterStore.getState().characterSheet;
+  },
+
+  get playerPosition() {
+    return useWorldStore.getState().playerPosition;
+  },
+
+  get mapData() {
+    return useWorldStore.getState().mapData;
+  },
+
+  get isMapLoading() {
+    return useWorldStore.getState().isMapLoading;
+  },
+
+  get cameraPosition() {
+    return useWorldStore.getState().cameraPosition;
+  },
+
+  get weatherState() {
+    return useWeatherStore.getState();
+  },
+
+  get currentWeather() {
+    return useWeatherStore.getState().currentWeather;
+  },
+
   // --- AZIONI ---
+
+  updateCameraPosition: (viewportSize: { width: number; height: number }) => {
+    useWorldStore.getState().updateCameraPosition(viewportSize);
+  },
 
   initializeGame: async () => {
     const worldStore = useWorldStore.getState();
-    if (worldStore.isMapLoading === false) return; // Evita reinizializzazione
-
+    
     resetJournalState();
     set({ logEntries: [] });
     useCharacterStore.getState().resetCharacter();
@@ -596,16 +630,16 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
     };
 
-    if (choice.action === 'skill_check' && choice.skill) {
-      const result = performAbilityCheck(choice.skill, choice.difficulty || 10);
+    if (choice.skillCheck) {
+      const result = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
       if (result.success) {
-        handleOutcome(choice.success);
+        handleOutcome(choice.successText);
       } else {
-        handleOutcome(choice.failure);
+        handleOutcome(choice.failureText);
       }
     } else {
       // Azione immediata
-      handleOutcome(choice.success);
+      handleOutcome(choice.resultText);
     }
 
     // Marca l'incontro come completato se è unico
@@ -835,7 +869,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       // Rimuovi il manuale dall'inventario (non stackable, quindi rimuovi 1)
-      characterStore.removeItem(slotIndex, 1);
+      useInventoryStore.getState().removeItem(slotIndex, 1);
       return true;
 
     } else if (effectApplied > 0) {
@@ -863,7 +897,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       addLogEntry(MessageType.ACTION_FAIL, { reason: `${item.name} è troppo importante.` });
       return;
     }
-    characterStore.removeItem(slotIndex, slot.quantity);
+    useInventoryStore.getState().removeItem(slotIndex, slot.quantity);
     addLogEntry(MessageType.INVENTORY_CHANGE, { action: `Hai gettato ${item.name}.` });
   },
 
@@ -963,7 +997,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Se l'effetto è stato applicato, rimuovi l'oggetto
     if (effectApplied) {
-      characterStore.removeItem(slotIndex, 1);
+      useInventoryStore.getState().removeItem(slotIndex, 1);
       return true;
     }
 
@@ -993,4 +1027,95 @@ export const useGameStore = create<GameState>((set, get) => ({
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => {
     set({ unlockRecipesCallback: callback });
   },
+
+  // --- FACADE METHODS FOR DELEGATING TO SPECIALIZED STORES ---
+  
+  // Character-related facade methods
+  performAbilityCheck: (ability, difficulty, addToJournal = true, successMessageType) => {
+    const characterStore = useCharacterStore.getState();
+    const result = characterStore.performAbilityCheck(ability, difficulty);
+    return {
+      success: result.success,
+      roll: result.roll,
+      modifier: result.modifier,
+      total: result.total,
+      difficulty: difficulty
+    };
+  },
+
+  shortRest: () => {
+    useCharacterStore.getState().shortRest();
+  },
+
+  // Shelter system facade methods
+  createShelterKey: (x, y) => {
+    return useShelterStore.getState().createShelterKey(x, y);
+  },
+
+  getShelterInfo: (x, y) => {
+    return useShelterStore.getState().getShelterInfo(x, y);
+  },
+
+  createShelterInfo: (x, y) => {
+    return useShelterStore.getState().createShelterInfo(x, y);
+  },
+
+  updateShelterAccess: (x, y, updates) => {
+    useShelterStore.getState().updateShelterAccess(x, y, updates);
+  },
+
+  isShelterAccessible: (x, y) => {
+    return useShelterStore.getState().isShelterAccessible(x, y);
+  },
+
+  canInvestigateShelter: (x, y) => {
+    return useShelterStore.getState().canInvestigateShelter(x, y);
+  },
+
+  resetShelterInvestigations: () => {
+    useShelterStore.getState().resetShelterInvestigations();
+  },
+
+  // Weather system facade methods
+  updateWeather: () => {
+    useWeatherStore.getState().updateWeather();
+  },
+
+  getWeatherEffects: () => {
+    return useWeatherStore.getState().getWeatherEffects();
+  },
+
+  generateWeatherChange: () => {
+    return useWeatherStore.getState().generateWeatherChange();
+  },
+
+  applyWeatherEffects: (baseValue, effectType) => {
+    return useWeatherStore.getState().applyWeatherEffects(baseValue, effectType);
+  },
+
+  createClearWeather: () => {
+    return useWeatherStore.getState().createClearWeather();
+  },
+
+  getWeatherDescription: (weather) => {
+    return useWeatherStore.getState().getWeatherDescription(weather);
+  },
+
+  getRandomWeatherMessage: (weather) => {
+    return useWeatherStore.getState().getRandomWeatherMessage(weather);
+  },
+
+  getWeatherPatterns: () => {
+    return useWeatherStore.getState().getWeatherPatterns();
+  },
+
+  getTimeBasedWeatherModifiers: (timeState) => {
+    return useWeatherStore.getState().getTimeBasedWeatherModifiers(timeState);
+  },
+
+  selectWeatherWithModifiers: (possibleTransitions, timeModifier) => {
+    return useWeatherStore.getState().selectWeatherWithModifiers(possibleTransitions, timeModifier);
+  },
+
+
 }));

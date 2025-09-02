@@ -61,11 +61,17 @@ export interface WeatherState {
 }
 
 export interface GameState extends UIState {
+  // Time state
+  timeState: TimeState;
+  
   // Survival state
   survivalState: SurvivalState;
   
   // Journal state
   logEntries: LogEntry[];
+  
+  // Completed encounters tracking
+  completedEncounters: string[];
 
   // Inventory state
   items: Record<string, IItem>;
@@ -74,7 +80,7 @@ export interface GameState extends UIState {
   eventDatabase: Record<string, GameEvent[]>;
   currentEvent: GameEvent | null;
   seenEventIds: string[];
-  triggerEvent: (biome: string) => void;
+  triggerEvent: (event: GameEvent) => void;
   resolveChoice: (choice: EventChoice) => void;
 
   // Callback system
@@ -82,6 +88,7 @@ export interface GameState extends UIState {
   
   // Actions
   initializeGame: () => Promise<void>;
+  advanceTime: (hours: number) => void;
   
   // Character-related actions (now composite)
   performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
