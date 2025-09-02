@@ -3,8 +3,8 @@ import type { MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { IItem } from './items';
 import type { GameEvent, EventChoice } from './events';
+import type { UIState } from '../stores/ui/uiStore';
 
-// Aggiungi questa interfaccia all'inizio del file
 export interface AbilityCheckResult {
   success: boolean;
   roll: number;
@@ -14,9 +14,9 @@ export interface AbilityCheckResult {
 }
 
 export interface TimeState {
-  currentTime: number; // Minuti dall'inizio del gioco (0-1439, dove 1440 = 24 ore)
-  day: number; // Giorno corrente (inizia da 1)
-  isDay: boolean; // true se è giorno, false se è notte
+  currentTime: number;
+  day: number;
+  isDay: boolean;
 }
 
 export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event' | 'loadGame' | 'crafting';
@@ -27,17 +27,15 @@ export interface SurvivalState {
   lastNightConsumption: { day: number; consumed: boolean };
 }
 
-// Sistema rifugi migliorato - v0.6.1
 export interface ShelterAccessInfo {
-  coordinates: string; // "x,y"
-  dayVisited: number; // giorno della prima visita
-  timeVisited: number; // ora della prima visita
-  hasBeenInvestigated: boolean; // investigazione completata in questa sessione
-  isAccessible: boolean; // false dopo prima visita diurna
-  investigationResults?: string[]; // per debugging e logging
+  coordinates: string;
+  dayVisited: number;
+  timeVisited: number;
+  hasBeenInvestigated: boolean;
+  isAccessible: boolean;
+  investigationResults?: string[];
 }
 
-// Sistema meteo - v0.6.1
 export enum WeatherType {
   CLEAR = 'clear',
   LIGHT_RAIN = 'light_rain',
@@ -48,54 +46,29 @@ export enum WeatherType {
 }
 
 export interface WeatherEffects {
-  movementModifier: number; // moltiplicatore velocità movimento
-  survivalModifier: number; // consumo risorse extra
-  skillCheckModifier: number; // penalità/bonus skill check
-  eventProbabilityModifier: number; // modifica probabilità eventi
+  movementModifier: number;
+  survivalModifier: number;
+  skillCheckModifier: number;
+  eventProbabilityModifier: number;
 }
 
 export interface WeatherState {
   currentWeather: WeatherType;
-  intensity: number; // 0-100 intensità del fenomeno
-  duration: number; // minuti rimanenti
-  nextWeatherChange: number; // timestamp prossimo cambio
+  intensity: number;
+  duration: number;
+  nextWeatherChange: number;
   effects: WeatherEffects;
 }
 
-export interface GameState {
-  // Map state
-  mapData: string[];
-  isMapLoading: boolean;
-  
-  // Player state
-  playerPosition: { x: number; y: number };
-  
-  // Camera state
-  cameraPosition: { x: number; y: number };
-  
-  // Time state
-  timeState: TimeState;
-  
-  // Character state
-  characterSheet: ICharacterSheet;
-  lastShortRestTime: { day: number; time: number } | null;
-  
+export interface GameState extends UIState {
   // Survival state
   survivalState: SurvivalState;
   
-  // Shelter state
-  shelterAccessState: Record<string, ShelterAccessInfo>; // Sistema rifugi v0.6.1
-  
-  // Weather state
-  weatherState: WeatherState;
-
   // Journal state
   logEntries: LogEntry[];
-  currentBiome: string | null;
 
   // Inventory state
   items: Record<string, IItem>;
-  selectedInventoryIndex: number;
 
   // Event system
   eventDatabase: Record<string, GameEvent[]>;
@@ -104,43 +77,21 @@ export interface GameState {
   triggerEvent: (biome: string) => void;
   resolveChoice: (choice: EventChoice) => void;
 
-  // UI state
-  currentScreen: Screen;
-  previousScreen: Screen | null;
-  menuSelectedIndex: number;
-  
-  // Notification system
-  notifications: Array<{
-    id: string;
-    type: 'success' | 'error' | 'warning' | 'info';
-    title: string;
-    message: string;
-    duration?: number;
-  }>;
-
-  // Callback system for avoiding circular dependencies
+  // Callback system
   unlockRecipesCallback?: (manualId: string) => void;
   
   // Actions
   initializeGame: () => Promise<void>;
-  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiome: string) => void;
-  updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
-  advanceTime: (minutes?: number) => void;
   
-  // Character actions
-  updateHP: (amount: number) => void;
+  // Character-related actions (now composite)
   performAbilityCheck: (ability: keyof ICharacterSheet['stats'], difficulty: number, addToJournal?: boolean, successMessageType?: MessageType) => AbilityCheckResult;
-  getModifier: (ability: keyof ICharacterSheet['stats']) => number;
   shortRest: () => void;
   
   // Journal actions
   addLogEntry: (type: MessageType, context?: Record<string, any>) => void;
   updateBiome: (newBiome: string) => void;
 
-  // UI actions
-  setCurrentScreen: (screen: Screen) => void;
-  goBack: () => void;
-  setMenuSelectedIndex: (index: number) => void;
+  // Facade actions for UI
   handleNewGame: () => void;
   handleLoadGame: () => void;
   handleStory: () => void;
@@ -148,37 +99,18 @@ export interface GameState {
   handleOptions: () => void;
   handleBackToMenu: () => void;
   handleExit: () => void;
-  setSelectedInventoryIndex: (index: number) => void;
+
+  // Item actions that depend on multiple stores
   useItem: (slotIndex: number) => boolean;
   consumeItem: (slotIndex: number) => boolean;
-  equipItemFromInventory: (slotIndex: number) => void;
   dropItem: (slotIndex: number) => void;
-  updateCharacterSheet: (characterSheet: ICharacterSheet) => void;
-  addExperience: (xpGained: number) => void;
   handleNightConsumption: () => void;
   consumeFood: (amount: number) => void;
   consumeDrink: (amount: number) => void;
-  addItem: (itemId: string, quantity?: number) => boolean;
-  removeItem: (slotIndex: number, quantity?: number) => boolean;
   
-  // Save system actions
-  saveCurrentGame: (slot: string) => Promise<boolean>;
-  loadSavedGame: (slot: string) => Promise<boolean>;
-  handleQuickSave: () => Promise<boolean>;
-  handleQuickLoad: () => Promise<boolean>;
-  getSaveSlots: () => any[];
-  deleteSave: (slot: string) => boolean;
-  exportSave: (slot: string) => Promise<string | null>;
-  importSave: (slot: string) => Promise<boolean>;
-  recoverSave: (slot: string) => Promise<boolean>;
-  
-  // Notification system actions
-  addNotification: (notification: Omit<GameState['notifications'][0], 'id'>) => void;
-  removeNotification: (id: string) => void;
-  clearNotifications: () => void;
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => void;
   
-  // Shelter system v0.6.1 actions
+  // Shelter system
   createShelterKey: (x: number, y: number) => string;
   getShelterInfo: (x: number, y: number) => ShelterAccessInfo | null;
   createShelterInfo: (x: number, y: number) => ShelterAccessInfo;
@@ -187,7 +119,7 @@ export interface GameState {
   canInvestigateShelter: (x: number, y: number) => boolean;
   resetShelterInvestigations: () => void;
   
-  // Weather system v0.6.1 actions
+  // Weather system
   updateWeather: () => void;
   getWeatherEffects: () => WeatherEffects;
   generateWeatherChange: () => WeatherState;
@@ -198,10 +130,8 @@ export interface GameState {
   getWeatherPatterns: () => any;
   getTimeBasedWeatherModifiers: (timeState: TimeState) => string;
   selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string) => WeatherType;
-  getBiomeKeyFromChar: (char: string) => string;
-  formatTime: (timeMinutes: number) => string;
   
-  // River crossing system v0.6.1 actions
+  // River crossing system
   attemptRiverCrossing: () => boolean;
   calculateRiverDifficulty: () => number;
   getRiverCrossingWeatherDescription: () => string;

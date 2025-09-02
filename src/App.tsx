@@ -83,28 +83,23 @@ const GameContent = () => {
   const isMapLoading = useGameStore(state => state.isMapLoading);
   const removeNotification = useGameStore(state => state.removeNotification);
 
-  // Selectors for objects and arrays use shallow comparison
-  const playerPosition = useGameStore(state => state.playerPosition, shallow);
-  const mapData = useGameStore(state => state.mapData, shallow);
-  const timeState = useGameStore(state => state.timeState, shallow);
-  const characterSheet = useGameStore(state => state.characterSheet, shallow);
-  const items = useGameStore(state => state.items, shallow);
-  const survivalState = useGameStore(state => state.survivalState, shallow);
-  const notifications = useGameStore(state => state.notifications, shallow);
+  // Granular selectors to prevent infinite loops
+  const playerPosition = useGameStore(state => state.playerPosition);
+  const mapData = useGameStore(state => state.mapData);
+  const timeState = useGameStore(state => state.timeState);
+  const characterSheet = useGameStore(state => state.characterSheet);
+  const items = useGameStore(state => state.items);
+  const survivalState = useGameStore(state => state.survivalState);
+  const notifications = useGameStore(state => state.notifications);
   const getModifier = useGameStore(state => state.getModifier);
 
-  const { isInCombat, combatResult, clearCombatResults } = useCombatStore(
-    state => ({
-      isInCombat: state.isActive,
-      combatResult: state.combatResult,
-      clearCombatResults: state.clearCombatResults,
-    }),
-    shallow
-  );
+  const isInCombat = useCombatStore(state => state.isActive);
+  const combatResult = useCombatStore(state => state.combatResult);
+  const clearCombatResults = useCombatStore(state => state.clearCombatResults);
   const { videoMode } = useSettingsStore();
 
   const getCurrentTile = (): string => {
-    if (mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) return '.';
+    if (!mapData || mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) return '.';
     const row = mapData[playerPosition.y];
     if (!row || playerPosition.x >= row.length) return '.';
     return row[playerPosition.x];
@@ -118,7 +113,7 @@ const GameContent = () => {
   
   const currentTile = getCurrentTile();
   const currentLocation = getTileDescription(currentTile);
-  const formattedTime = formatTime(timeState.currentTime);
+  const formattedTime = timeState?.currentTime ? formatTime(timeState.currentTime) : '00:00';
 
   const renderGameScreens = () => {
     if (currentScreen === 'menu') return <StartScreen />;
@@ -174,7 +169,7 @@ const GameContent = () => {
                     <ul className="space-y-2 text-uniform">
                       <li>Posizione: ({playerPosition.x}, {playerPosition.y})</li>
                       <li>Luogo: {currentLocation}</li>
-                      <li>Ora: {formattedTime} Giorno {timeState.day}</li>
+                      <li>Ora: {formattedTime} Giorno {timeState?.day || 1}</li>
                     </ul>
                     <h2 className="panel-title mt-4">METEO</h2>
                     <WeatherDisplay />
