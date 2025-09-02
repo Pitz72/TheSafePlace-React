@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameState, AbilityCheckResult, WeatherState } from '../interfaces/gameState';
+import type { GameState, WeatherState } from '../interfaces/gameState';
 import { WeatherType } from '../interfaces/gameState';
 
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
@@ -583,13 +583,25 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (choice.skillCheck) {
       const result = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
       if (result.success) {
-        handleOutcome(choice.successText);
+        if (choice.successText) {
+          handleOutcome(choice.successText);
+        } else {
+          console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'successText' outcome.`, { event: currentEvent });
+        }
       } else {
-        handleOutcome(choice.failureText);
+        if (choice.failureText) {
+          handleOutcome(choice.failureText);
+        } else {
+          console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'failureText' outcome.`, { event: currentEvent });
+        }
       }
     } else {
-      // Azione immediata
-      handleOutcome(choice.resultText);
+      // Azione immediata senza skill check
+      if (choice.resultText) {
+        handleOutcome(choice.resultText);
+      } else {
+        console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'resultText' outcome.`, { event: currentEvent });
+      }
     }
 
     // Marca l'incontro come completato se è unico

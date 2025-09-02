@@ -59,7 +59,8 @@ Una parte significativa del lavoro è stata dedicata a risolvere una profonda in
 - **Test Saltati in `combatStore.test.ts`:** Durante la fase di stabilizzazione, sono stati riscontrati due test particolarmente problematici nel file `combatStore.test.ts` (`endCombat should reset the combat state` e `executeEnemyTurn › should handle player defeat`). Questi test falliscono in modo anomalo, non riflettendo lo stato corretto del componente nemmeno dopo l'applicazione di tutte le best practice di testing per Jest e Zustand. Per non bloccare il rilascio di questa importante versione, si è deciso di marcare temporaneamente questi due test con `test.skip`.
     - **Impatto:** Basso. La funzionalità è stata verificata manualmente e attraverso altri test di integrazione che passano. Il problema è isolato all'ambiente di esecuzione di questi due specifici unit test.
     - **Azione Futura:** Si raccomanda di creare un ticket di debito tecnico per investigare e risolvere questo problema in una futura sessione di manutenzione.
-=======
+
+---
 ### 🔧 Sistema di Crafting Completo e Realistico
 
 #### **Starter Kit System**
@@ -194,13 +195,10 @@ Una parte significativa del lavoro è stata dedicata a risolvere una profonda in
 - ✅ **Aggiornato**: Codename "I'm Constantly Tidying Up my Desk" → "Crafting Full and Real Integration"
 - ✅ **Aggiornato**: `StartScreen.tsx` dicitura versione nel menu principale
 - ✅ **Aggiornato**: Documentazione indice con nuova versione
->>>>>>> 9e2caaa6899de078a51c30bea4949886017a329d
 
 ---
 
 ## 📁 File Modificati/Creati
-
-<<<<<<< HEAD
 ### **Nuovi File Core**
 ```
 src/stores/combatStore.ts
@@ -242,11 +240,6 @@ Per bug report, feature request o supporto:
 - **GitHub Issues**: [TheSafePlace-React/issues](https://github.com/TheSafePlace-React/issues)
 - **Documentazione**: Leggere i nuovi file `CHANGELOG.md` e `ANTI_REGRESSION_GUIDE.md`.
 
----
-
-*Changelog consolidato e finalizzato il 31 Agosto 2025*
-*The Safe Place v0.9.0 - Run away, fight, or die.*
-=======
 ### **Nuovi File di Test**
 ```
 src/tests/
@@ -257,6 +250,11 @@ src/tests/
 └── README.md                       # Documentazione test suite
 └── README.md                       # Documentazione test
 ```
+
+---
+
+*Changelog consolidato e finalizzato il 31 Agosto 2025*
+*The Safe Place v0.9.0 - Run away, fight, or die.*
 
 ### **File Core Modificati**
 ```
@@ -467,5 +465,4 @@ Il gioco è ora dotato di un sistema di crafting **enterprise-grade** che:
 
 *Changelog consolidato e finalizzato il 30 Agosto 2025*  
 *The Safe Place v0.8.5 - Crafting Full and Real Integration*  
->>>>>>> 9e2caaa6899de078a51c30bea4949886017a329d
 *© 2025 Runtime Radio - Simone Pizzi*
