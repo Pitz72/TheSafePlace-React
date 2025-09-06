@@ -92,7 +92,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       set({
         eventDatabase: database,
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
-        currentScreen: 'menu',
       });
       get().addLogEntry(MessageType.GAME_START);
 
