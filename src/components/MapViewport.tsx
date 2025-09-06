@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWorldStore } from '../stores/world/worldStore';
+import { shallow } from 'zustand/shallow';
 
 interface MapViewportProps {
   className?: string;
@@ -41,7 +42,7 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth
     playerPosition: state.playerPosition,
     cameraPosition: state.cameraPosition,
     updateCameraPosition: state.updateCameraPosition
-  }));
+  }), shallow);
 
   const [blinkState, setBlinkState] = useState(true);
 
