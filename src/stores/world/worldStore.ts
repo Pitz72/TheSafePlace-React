@@ -75,7 +75,12 @@ export const useWorldStore = create<WorldState>((set, get) => ({
       gameStore.updateBiome(newBiomeChar); // This still has complex logic, leave in gameStore for now
     }
 
-    set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+    const oldPos = get().playerPosition;
+
+    // Aggiorna lo stato solo se qualcosa è effettivamente cambiato.
+    if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y || oldBiome !== newBiomeKey) {
+      set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+    }
 
     // Weather, survival, and events are still in gameStore, so we call it.
     // This shows the dependencies we still need to refactor.
