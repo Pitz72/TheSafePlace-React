@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useWorldStore } from '../stores/world/worldStore';
 
 interface MapViewportProps {
   className?: string;
@@ -29,12 +29,19 @@ const Player: React.FC<{left: number, top: number, charWidth: number, charHeight
 ));
 
 const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth, viewportHeight }) => {
-  const mapData = useGameStore(state => state.mapData);
-  const isMapLoading = useGameStore(state => state.isMapLoading);
-  console.log(`[MapViewport] Rendering. isMapLoading from useGameStore is: ${isMapLoading}`);
-  const playerPosition = useGameStore(state => state.playerPosition);
-  const cameraPosition = useGameStore(state => state.cameraPosition);
-  const updateCameraPosition = useGameStore(state => state.updateCameraPosition);
+  const {
+    mapData,
+    isMapLoading,
+    playerPosition,
+    cameraPosition,
+    updateCameraPosition
+  } = useWorldStore(state => ({
+    mapData: state.mapData,
+    isMapLoading: state.isMapLoading,
+    playerPosition: state.playerPosition,
+    cameraPosition: state.cameraPosition,
+    updateCameraPosition: state.updateCameraPosition
+  }));
 
   const [blinkState, setBlinkState] = useState(true);
 

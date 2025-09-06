@@ -23,9 +23,7 @@ const CharacterCreationScreen: React.FC = () => {
   ], [characterSheet]);
 
   const handleConfirm = useCallback(async () => {
-    console.log('[CharacterCreationScreen] handleConfirm called. Awaiting initializeGame...');
     await initializeGame();
-    console.log('[CharacterCreationScreen] initializeGame finished. Setting screen to "game".');
     setCurrentScreen('game');
   }, [setCurrentScreen, initializeGame]);
 
