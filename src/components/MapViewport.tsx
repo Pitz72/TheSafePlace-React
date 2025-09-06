@@ -31,6 +31,7 @@ const Player: React.FC<{left: number, top: number, charWidth: number, charHeight
 const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth, viewportHeight }) => {
   const mapData = useGameStore(state => state.mapData);
   const isMapLoading = useGameStore(state => state.isMapLoading);
+  console.log(`[MapViewport] Rendering. isMapLoading from useGameStore is: ${isMapLoading}`);
   const playerPosition = useGameStore(state => state.playerPosition);
   const cameraPosition = useGameStore(state => state.cameraPosition);
   const updateCameraPosition = useGameStore(state => state.updateCameraPosition);

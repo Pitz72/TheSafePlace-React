@@ -38,9 +38,12 @@ export const useWorldStore = create<WorldState>((set, get) => ({
   // --- ACTIONS ---
 
   loadMap: async () => {
+    console.log('[worldStore] loadMap: START');
     try {
+      console.log('[worldStore] loadMap: Fetching /map.txt...');
       const response = await fetch('/map.txt');
       const mapText = await response.text();
+      console.log('[worldStore] loadMap: Fetch successful.');
       const lines = mapText.split('\n').filter((line) => line);
 
       let startPos = { x: 75, y: 75 };
@@ -51,6 +54,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
       const startBiome = get().getBiomeKeyFromChar(lines[startPos.y][startPos.x]);
 
+      console.log('[worldStore] loadMap: Setting new state with isMapLoading: false.');
       set({
         mapData: lines,
         isMapLoading: false,
@@ -60,6 +64,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
     } catch (error) {
       console.error("Failed to load map data:", error);
+      console.log('[worldStore] loadMap: CATCH BLOCK - Setting isMapLoading: false.');
       set({ isMapLoading: false });
     }
   },
@@ -175,6 +180,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
   },
 
   resetWorld: () => {
+    console.log('[worldStore] resetWorld: Setting isMapLoading: true.');
     set({
       mapData: [],
       isMapLoading: true,

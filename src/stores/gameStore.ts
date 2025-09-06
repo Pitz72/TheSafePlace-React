@@ -69,14 +69,20 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   initializeGame: async () => {
+    console.log('[gameStore] initializeGame: START');
     const worldStore = useWorldStore.getState();
     
     resetJournalState();
+    console.log('[gameStore] initializeGame: Resetting journal and character...');
     set({ logEntries: [] });
     useCharacterStore.getState().resetCharacter();
+
+    console.log('[gameStore] initializeGame: Calling worldStore.resetWorld()...');
     worldStore.resetWorld();
 
+    console.log('[gameStore] initializeGame: Awaiting worldStore.loadMap()...');
     await worldStore.loadMap();
+    console.log('[gameStore] initializeGame: worldStore.loadMap() FINISHED.');
 
     try {
       const eventFiles = ['city_events.json', 'forest_events.json', 'plains_events.json', 'rest_stop_events.json', 'river_events.json', 'unique_events.json', 'village_events.json'];
