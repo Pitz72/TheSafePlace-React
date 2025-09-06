@@ -119,7 +119,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
   },
 
   updateCameraPosition: (viewportSize) => {
-    const { playerPosition, mapData } = get();
+    const { playerPosition, mapData, cameraPosition: oldCameraPosition } = get();
 
     if (!mapData || mapData.length === 0 || !viewportSize || viewportSize.width === 0 || viewportSize.height === 0) {
       return;
@@ -139,7 +139,9 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
     const newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
 
-    set({ cameraPosition: { x: newCameraX, y: newCameraY } });
+    if (oldCameraPosition.x !== newCameraX || oldCameraPosition.y !== newCameraY) {
+      set({ cameraPosition: { x: newCameraX, y: newCameraY } });
+    }
   },
 
   advanceTime: (minutes = 30) => {
