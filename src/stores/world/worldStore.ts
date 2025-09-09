@@ -75,7 +75,12 @@ export const useWorldStore = create<WorldState>((set, get) => ({
       gameStore.updateBiome(newBiomeChar); // This still has complex logic, leave in gameStore for now
     }
 
-    set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+    const oldPos = get().playerPosition;
+
+    // Aggiorna lo stato solo se qualcosa è effettivamente cambiato.
+    if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y || oldBiome !== newBiomeKey) {
+      set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+    }
 
     // Weather, survival, and events are still in gameStore, so we call it.
     // This shows the dependencies we still need to refactor.
@@ -119,7 +124,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
   },
 
   updateCameraPosition: (viewportSize) => {
-    const { playerPosition, mapData } = get();
+    const { playerPosition, mapData, cameraPosition: oldCameraPosition } = get();
 
     if (!mapData || mapData.length === 0 || !viewportSize || viewportSize.width === 0 || viewportSize.height === 0) {
       return;
@@ -139,7 +144,9 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
     const newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
 
-    set({ cameraPosition: { x: newCameraX, y: newCameraY } });
+    if (oldCameraPosition.x !== newCameraX || oldCameraPosition.y !== newCameraY) {
+      set({ cameraPosition: { x: newCameraX, y: newCameraY } });
+    }
   },
 
   advanceTime: (minutes = 30) => {

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameState, WeatherState } from '../interfaces/gameState';
+import type { GameState, AbilityCheckResult, WeatherState } from '../interfaces/gameState';
 import { WeatherType } from '../interfaces/gameState';
 
 import { MessageType, getRandomMessage, JOURNAL_CONFIG, resetJournalState } from '../data/MessageArchive';
@@ -74,6 +74,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     resetJournalState();
     set({ logEntries: [] });
     useCharacterStore.getState().resetCharacter();
+
     worldStore.resetWorld();
 
     await worldStore.loadMap();
@@ -92,7 +93,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       set({
         eventDatabase: database,
         survivalState: { hunger: 100, thirst: 100, lastNightConsumption: { day: 0, consumed: false } }, // Resetta sopravvivenza
-        currentScreen: 'menu',
       });
       get().addLogEntry(MessageType.GAME_START);
 
@@ -583,25 +583,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (choice.skillCheck) {
       const result = performAbilityCheck(choice.skillCheck.stat, choice.skillCheck.difficulty);
       if (result.success) {
-        if (choice.successText) {
-          handleOutcome(choice.successText);
-        } else {
-          console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'successText' outcome.`, { event: currentEvent });
-        }
+        handleOutcome(choice.successText);
       } else {
-        if (choice.failureText) {
-          handleOutcome(choice.failureText);
-        } else {
-          console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'failureText' outcome.`, { event: currentEvent });
-        }
+        handleOutcome(choice.failureText);
       }
     } else {
-      // Azione immediata senza skill check
-      if (choice.resultText) {
-        handleOutcome(choice.resultText);
-      } else {
-        console.error(`CRITICAL: Event choice '${choice.text}' is missing a 'resultText' outcome.`, { event: currentEvent });
-      }
+      // Azione immediata
+      handleOutcome(choice.resultText);
     }
 
     // Marca l'incontro come completato se è unico

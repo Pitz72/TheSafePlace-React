@@ -1,5 +1,31 @@
 # CHANGELOG - The Safe Place
 
+## v0.9.5 - "Ammappa" (09 Settembre 2025)
+
+**Tipo di Release:** Hotfix Critico
+**Stato:** ✅ PRODUCTION READY
+
+### 🐞 Bug Critico Risolto
+
+- **Fixato: Loop di Rendering Infinito in `MapViewport.tsx`**
+  - **Causa:** Instabilità nel selettore dello store Zustand e flusso di dati asimmetrico tra `usePlayerMovement` e `MapViewport`.
+  - **Soluzione:**
+    1.  Corretto `usePlayerMovement.ts` per usare `useWorldStore`.
+    2.  Refattorizzato `MapViewport.tsx` per usare selettori atomici e stabili.
+  - **Impatto:** Stabilità del gioco ripristinata. Il crash all'avvio è risolto.
+
+### 📄 Documentazione
+
+- **Nuovi file creati:**
+  - `documentazione/changelog/CHANGELOG-v0.9.5-Ammappa.md`
+  - `documentazione/anti-regressione/ANTI-REGRESSIONE-v0.9.5.md`
+- **File aggiornati:**
+  - `package.json` (versione 0.9.5)
+  - `README.md` (ristrutturato e pulito)
+  - `src/components/StartScreen.tsx`
+
+---
+
 ## v0.9.3 - "Modularization and Fix" (01 Settembre 2025)
 
 **Tipo di Release:** Major Refactoring & Architectural Improvement  

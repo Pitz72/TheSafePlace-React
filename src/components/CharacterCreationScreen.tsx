@@ -4,6 +4,7 @@ import { useGameStore } from '../stores/gameStore';
 const CharacterCreationScreen: React.FC = () => {
   const characterSheet = useGameStore(state => state.characterSheet);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const initializeGame = useGameStore(state => state.initializeGame);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
@@ -21,9 +22,10 @@ const CharacterCreationScreen: React.FC = () => {
     { text: `>>> Personaggio "${characterSheet.name.replace(' (Test)', '')}" creato!`, duration: 1200 }
   ], [characterSheet]);
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = useCallback(async () => {
+    await initializeGame();
     setCurrentScreen('game');
-  }, [setCurrentScreen]);
+  }, [setCurrentScreen, initializeGame]);
 
   useEffect(() => {
     if (!isAnimating) return;

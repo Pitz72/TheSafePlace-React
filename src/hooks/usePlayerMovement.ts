@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useWorldStore } from '../stores/world/worldStore';
 import { checkForEncounter } from '../utils/encounterUtils';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
@@ -11,7 +12,10 @@ interface MovementState {
 }
 
 export const usePlayerMovement = () => {
-  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
+  // World state from the correct source of truth
+  const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
+  // Actions and legacy state still in gameStore
+  const { addLogEntry, updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
   const [movementState, setMovementState] = useState<MovementState>({
     isExitingRiver: false,
     isInRiver: false,
@@ -55,7 +59,7 @@ export const usePlayerMovement = () => {
     }
 
     return true;
-  }, [isValidPosition, getTerrainAt]);
+  }, [isValidPosition, getTerrainAt, addLogEntry]);
 
   const handleMovement = useCallback((deltaX: number, deltaY: number) => {
     if (mapData.length === 0) return;
