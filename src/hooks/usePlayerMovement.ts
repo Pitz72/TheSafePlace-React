@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useWorldStore } from '../stores/world/worldStore';
+import { useCharacterStore } from '../stores/character/characterStore';
+import { useGameStore } from '../stores/gameStore'; // Keep for addLogEntry and updateBiome for now
 import { checkForEncounter } from '../utils/encounterUtils';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
@@ -11,7 +13,19 @@ interface MovementState {
 }
 
 export const usePlayerMovement = () => {
-  const { mapData, playerPosition, updatePlayerPosition, addLogEntry, updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
+  // State from specialized stores using atomic selectors
+  const mapData = useWorldStore(state => state.mapData);
+  const playerPosition = useWorldStore(state => state.playerPosition);
+  const updatePlayerPosition = useWorldStore(state => state.updatePlayerPosition);
+  const advanceTime = useWorldStore(state => state.advanceTime);
+
+  const performAbilityCheck = useCharacterStore(state => state.performAbilityCheck);
+  const updateHP = useCharacterStore(state => state.updateHP);
+
+  // Actions that are still in gameStore (candidates for future refactoring)
+  const addLogEntry = useGameStore(state => state.addLogEntry);
+  const updateBiome = useGameStore(state => state.updateBiome);
+
   const [movementState, setMovementState] = useState<MovementState>({
     isExitingRiver: false,
     isInRiver: false,
