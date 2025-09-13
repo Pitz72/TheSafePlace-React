@@ -6,6 +6,8 @@ import { useGameStore } from '../gameStore';
 import { useCharacterStore } from '../character/characterStore';
 import { useWorldStore } from '../world/worldStore';
 import { useShelterStore } from '../shelter/shelterStore';
+import { useSurvivalStore } from '../survival/survivalStore';
+import { useNotificationStore } from '../notifications/notificationStore';
 
 export interface SaveState {
   saveCurrentGame: (slot: string) => Promise<boolean>;
@@ -25,8 +27,10 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         const characterStore = useCharacterStore.getState();
         const worldStore = useWorldStore.getState();
         const shelterStore = useShelterStore.getState();
+        const survivalStore = useSurvivalStore.getState();
+        const notificationStore = useNotificationStore.getState();
         try {
-          gameStore.addNotification({ type: 'info', title: 'Salvataggio', message: 'Salvataggio in corso...', duration: 1000 });
+          notificationStore.addNotification({ type: 'info', title: 'Salvataggio', message: 'Salvataggio in corso...', duration: 1000 });
 
           const gameData = {
             timeState: worldStore.timeState,
@@ -40,20 +44,20 @@ export const useSaveStore = create<SaveState>((set, get) => ({
 
           const success = await saveSystem.saveGame(
             characterStore.characterSheet,
-            gameStore.survivalState,
+            survivalStore.survivalState,
             gameData,
             slot
           );
 
           if (success) {
-            gameStore.addNotification({ type: 'success', title: 'Salvataggio Completato', message: `Partita salvata nello slot ${slot}`, duration: 2000 });
+            notificationStore.addNotification({ type: 'success', title: 'Salvataggio Completato', message: `Partita salvata nello slot ${slot}`, duration: 2000 });
           } else {
-            gameStore.addNotification({ type: 'error', title: 'Errore Salvataggio', message: 'Impossibile salvare la partita.', duration: 4000 });
+            notificationStore.addNotification({ type: 'error', title: 'Errore Salvataggio', message: 'Impossibile salvare la partita.', duration: 4000 });
           }
           return success;
         } catch (error) {
           console.error('Save error:', error);
-          gameStore.addNotification({ type: 'error', title: 'Errore Salvataggio', message: 'Errore durante il salvataggio.', duration: 4000 });
+          notificationStore.addNotification({ type: 'error', title: 'Errore Salvataggio', message: 'Errore durante il salvataggio.', duration: 4000 });
           return false;
         }
     },
@@ -63,8 +67,10 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         const characterStore = useCharacterStore.getState();
         const worldStore = useWorldStore.getState();
         const shelterStore = useShelterStore.getState();
+        const survivalStore = useSurvivalStore.getState();
+        const notificationStore = useNotificationStore.getState();
         try {
-            gameStore.addNotification({ type: 'info', title: 'Caricamento', message: 'Caricamento partita in corso...', duration: 1000 });
+            notificationStore.addNotification({ type: 'info', title: 'Caricamento', message: 'Caricamento partita in corso...', duration: 1000 });
 
             const saveData = await saveSystem.loadGame(slot);
 
@@ -82,23 +88,20 @@ export const useSaveStore = create<SaveState>((set, get) => ({
                 shelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
                 gameStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
 
-                gameStore.setState({
-                    survivalState: saveData.survivalState,
-                    currentScreen: 'game',
-                    logEntries: [],
-                    notifications: [],
-                });
+                survivalStore.setState({ survivalState: saveData.survivalState });
+                gameStore.setState({ currentScreen: 'game' });
+                notificationStore.setState({ logEntries: [], notifications: [] });
 
                 shelterStore.resetShelterInvestigations();
-                gameStore.addNotification({ type: 'success', title: 'Caricamento Completato', message: `Partita caricata con successo.`, duration: 3000 });
+                notificationStore.addNotification({ type: 'success', title: 'Caricamento Completato', message: `Partita caricata con successo.`, duration: 3000 });
                 return true;
             } else {
-                gameStore.addNotification({ type: 'error', title: 'Errore Caricamento', message: 'Salvataggio non trovato.', duration: 4000 });
+                notificationStore.addNotification({ type: 'error', title: 'Errore Caricamento', message: 'Salvataggio non trovato.', duration: 4000 });
                 return false;
             }
         } catch (error) {
             console.error('Load error:', error);
-            gameStore.addNotification({ type: 'error', title: 'Errore Caricamento', message: `Impossibile caricare la partita.`, duration: 5000 });
+            notificationStore.addNotification({ type: 'error', title: 'Errore Caricamento', message: `Impossibile caricare la partita.`, duration: 5000 });
             return false;
         }
     },
@@ -116,46 +119,46 @@ export const useSaveStore = create<SaveState>((set, get) => ({
     deleteSave: (slot) => saveSystem.deleteSave(slot),
 
     exportSave: async (slot) => {
-        const gameStore = useGameStore.getState();
+        const notificationStore = useNotificationStore.getState();
         try {
             const saveContent = saveSystem.exportSave(slot);
             if (!saveContent) {
-                gameStore.addNotification({ type: 'error', title: 'Export Fallito', message: 'Salvataggio non trovato.', duration: 3000 });
+                notificationStore.addNotification({ type: 'error', title: 'Export Fallito', message: 'Salvataggio non trovato.', duration: 3000 });
                 return null;
             }
             const saveData = JSON.parse(saveContent);
             const filename = generateSaveFilename(saveData.characterSheet?.name || 'Sconosciuto', saveData.characterSheet?.level || 1, slot);
             downloadFile({ filename, content: saveContent, mimeType: 'application/json' });
-            gameStore.addNotification({ type: 'success', title: 'Export Completato', message: `Salvataggio esportato.`, duration: 4000 });
+            notificationStore.addNotification({ type: 'success', title: 'Export Completato', message: `Salvataggio esportato.`, duration: 4000 });
             return saveContent;
         } catch (error) {
             console.error('Export error:', error);
-            gameStore.addNotification({ type: 'error', title: 'Errore Export', message: 'Errore durante l\'esportazione.', duration: 4000 });
+            notificationStore.addNotification({ type: 'error', title: 'Errore Export', message: 'Errore durante l\'esportazione.', duration: 4000 });
             return null;
         }
     },
 
     importSave: async (slot) => {
-        const gameStore = useGameStore.getState();
+        const notificationStore = useNotificationStore.getState();
         return new Promise<boolean>((resolve) => {
             const input = createFileInput(async (file) => {
                 try {
                     const validation = validateSaveFile(file);
                     if (!validation.valid) {
-                        gameStore.addNotification({ type: 'error', title: 'File Non Valido', message: validation.error || 'File non supportato.', duration: 4000 });
+                        notificationStore.addNotification({ type: 'error', title: 'File Non Valido', message: validation.error || 'File non supportato.', duration: 4000 });
                         return resolve(false);
                     }
                     const content = await readFileAsText(file);
                     const success = await saveSystem.importSave(content, slot);
                     if (success) {
-                        gameStore.addNotification({ type: 'success', title: 'Import Completato', message: `Salvataggio importato con successo.`, duration: 4000 });
+                        notificationStore.addNotification({ type: 'success', title: 'Import Completato', message: `Salvataggio importato con successo.`, duration: 4000 });
                     } else {
-                        gameStore.addNotification({ type: 'error', title: 'Import Fallito', message: 'Salvataggio non valido o corrotto.', duration: 4000 });
+                        notificationStore.addNotification({ type: 'error', title: 'Import Fallito', message: 'Salvataggio non valido o corrotto.', duration: 4000 });
                     }
                     resolve(success);
                 } catch (error) {
                     console.error('Import error:', error);
-                    gameStore.addNotification({ type: 'error', title: 'Errore Import', message: 'Errore durante l\'importazione.', duration: 5000 });
+                    notificationStore.addNotification({ type: 'error', title: 'Errore Import', message: 'Errore durante l\'importazione.', duration: 5000 });
                     resolve(false);
                 }
             });
@@ -166,18 +169,18 @@ export const useSaveStore = create<SaveState>((set, get) => ({
     },
 
     recoverSave: async (slot) => {
-        const gameStore = useGameStore.getState();
+        const notificationStore = useNotificationStore.getState();
         try {
             const recoveredData = await saveSystem.recoverSave(slot);
             if (recoveredData) {
-                gameStore.addNotification({ type: 'success', title: 'Recupero Riuscito', message: 'Salvataggio recuperato con successo!', duration: 5000 });
+                notificationStore.addNotification({ type: 'success', title: 'Recupero Riuscito', message: 'Salvataggio recuperato con successo!', duration: 5000 });
                 return true;
             } else {
-                gameStore.addNotification({ type: 'error', title: 'Recupero Fallito', message: 'Impossibile recuperare il salvataggio.', duration: 4000 });
+                notificationStore.addNotification({ type: 'error', title: 'Recupero Fallito', message: 'Impossibile recuperare il salvataggio.', duration: 4000 });
                 return false;
             }
         } catch (error) {
-            gameStore.addNotification({ type: 'error', title: 'Errore Recupero', message: 'Errore durante il recupero.', duration: 4000 });
+            notificationStore.addNotification({ type: 'error', title: 'Errore Recupero', message: 'Errore durante il recupero.', duration: 4000 });
             return false;
         }
     },

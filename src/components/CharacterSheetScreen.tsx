@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useCharacterStore } from '../stores/character/characterStore';
+import { useInventoryStore } from '../stores/inventory/inventoryStore';
 
 const CharacterSheetScreen: React.FC = () => {
-  const characterSheet = useGameStore(state => state.characterSheet);
-  const getModifier = useGameStore(state => state.getModifier);
-  const items = useGameStore(state => state.items);
-  const goBack = useGameStore(state => state.goBack);
+  const { characterSheet, getModifier } = useCharacterStore();
+  const { items } = useInventoryStore();
+  const { goBack } = useGameStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

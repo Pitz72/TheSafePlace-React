@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import type { TimeState } from '../../interfaces/gameState';
-import { useGameStore } from '../gameStore';
+import { useEventStore } from '../events/eventStore';
 import { useCharacterStore } from '../character/characterStore';
 import { useWeatherStore } from '../weather/weatherStore';
+import { useSurvivalStore } from '../survival/survivalStore';
+import { useNotificationStore } from '../notifications/notificationStore';
 import { MessageType } from '../../data/MessageArchive';
 
 const DAWN_TIME = 360; // 06:00
@@ -68,11 +70,11 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const oldBiome = get().currentBiome;
     const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
     const characterStore = useCharacterStore.getState();
-    const gameStore = useGameStore.getState();
+    const survivalStore = useSurvivalStore.getState();
+    const notificationStore = useNotificationStore.getState();
 
     if (newBiomeKey !== oldBiome) {
-      gameStore.addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
-      gameStore.updateBiome(newBiomeChar); // This still has complex logic, leave in gameStore for now
+      notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
     }
 
     const oldPos = get().playerPosition;
@@ -80,6 +82,15 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     // Aggiorna lo stato solo se qualcosa è effettivamente cambiato.
     if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y || oldBiome !== newBiomeKey) {
       set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+      
+      // Log player movement
+      if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y) {
+        notificationStore.addLogEntry(MessageType.MOVEMENT, {
+          from: oldPos,
+          to: newPosition,
+          biome: newBiomeKey
+        });
+      }
     }
 
     // Weather, survival, and events are still in gameStore, so we call it.
@@ -90,12 +101,14 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     characterStore.addExperience(Math.floor(Math.random() * 2) + 1);
 
     const weatherEffects = weatherStore.getWeatherEffects();
-    gameStore.survivalState.hunger = Math.max(0, gameStore.survivalState.hunger - (0.2 * weatherEffects.survivalModifier));
-    gameStore.survivalState.thirst = Math.max(0, gameStore.survivalState.thirst - (0.3 * weatherEffects.survivalModifier));
+    survivalStore.updateSurvival({
+      hunger: survivalStore.survivalState.hunger + (-0.2 * weatherEffects.survivalModifier),
+      thirst: survivalStore.survivalState.thirst + (-0.3 * weatherEffects.survivalModifier)
+    });
 
-    if (gameStore.survivalState.hunger <= 0 || gameStore.survivalState.thirst <= 0) {
+    if (survivalStore.survivalState.hunger <= 0 || survivalStore.survivalState.thirst <= 0) {
       characterStore.updateHP(-1);
-      gameStore.addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
+      notificationStore.addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
     }
 
     // Event triggering logic will also be extracted later
@@ -107,7 +120,13 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
     if (newBiomeKey && Math.random() < adjustedEventChance) {
-        setTimeout(() => gameStore.triggerEvent(newBiomeKey), 150);
+        setTimeout(() => {
+          const eventStore = useEventStore.getState();
+          const randomEvent = eventStore.getRandomEventFromBiome(newBiomeKey);
+          if (randomEvent) {
+            eventStore.triggerEvent(randomEvent);
+          }
+        }, 150);
     }
 
     const baseMovementTime = 10;
@@ -115,7 +134,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
     if (weatherEffects.movementModifier < 1.0) {
         const extraTime = adjustedMovementTime - baseMovementTime;
-        gameStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
             text: `Il ${weatherStore.getWeatherDescription(weatherStore.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
         });
     }
@@ -156,15 +175,34 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const normalizedTime = newTotalMinutes % 1440;
     const newIsDay = normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME;
 
-    const gameStore = useGameStore.getState();
-    if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) gameStore.addLogEntry(MessageType.TIME_DAWN);
-    if (oldTimeState.currentTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
-      gameStore.addLogEntry(MessageType.TIME_DUSK);
-      gameStore.handleNightConsumption();
+    const notificationStore = useNotificationStore.getState();
+    const survivalStore = useSurvivalStore.getState();
+    
+    if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
+      notificationStore.addLogEntry(MessageType.TIME_DAWN);
     }
-    if (oldTimeState.currentTime > 0 && normalizedTime === 0) gameStore.addLogEntry(MessageType.TIME_MIDNIGHT);
+    if (oldTimeState.currentTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
+      notificationStore.addLogEntry(MessageType.TIME_DUSK);
+      survivalStore.handleNightConsumption((type, context) => notificationStore.addLogEntry(type, context));
+    }
+    if (oldTimeState.currentTime > 0 && normalizedTime === 0) {
+      notificationStore.addLogEntry(MessageType.TIME_MIDNIGHT);
+    }
 
     set({ timeState: { currentTime: normalizedTime, day: newDay, isDay: newIsDay } });
+    
+    // Log significant time changes
+    if (newDay > oldTimeState.day) {
+      notificationStore.addLogEntry(MessageType.TIME_DAWN, {
+        day: newDay
+      });
+    }
+    
+    if (minutes >= 60) {
+      notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        text: `Il tempo scorre... ${newIsDay ? 'È giorno' : 'È notte'}.`
+      });
+    }
   },
 
   getBiomeKeyFromChar: (char) => {

@@ -155,6 +155,7 @@ export enum MessageType {
   AMBIANCE_RANDOM = 'AMBIANCE_RANDOM',
 
   // Movimento e terreno
+  MOVEMENT = 'MOVEMENT', // Movimento base del player
   MOVEMENT_FAIL_OBSTACLE = 'MOVEMENT_FAIL_OBSTACLE', // Rinominato da MOVEMENT_FAIL_MOUNTAIN per GDD
   MOVEMENT_FAIL_MOUNTAIN = 'MOVEMENT_FAIL_MOUNTAIN', // Mantenuto per compatibilità
   ACTION_RIVER_CROSSING = 'ACTION_RIVER_CROSSING', // Nuovo secondo GDD
@@ -224,53 +225,53 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Il viaggio inizia ora. Che la fortuna ti accompagni."
   ],
   [MessageType.BIOME_ENTER]: {
-    'F': [
+    'FOREST': [
       "Entri in una fitta foresta. Gli alberi sussurrano segreti antichi.",
       "La vegetazione selvaggia ha riconquistato questo territorio.",
       "Rami e foglie creano un labirinto naturale intorno a te.",
       "L'aria profuma di muschio e di vita che resiste."
     ],
-    '.': [
+    'PLAINS': [
       "Una vasta pianura si apre davanti a te. L'orizzonte sembra infinito.",
       "Erba alta ondeggia nel vento come un mare verde.",
       "La pianura si estende a perdita d'occhio, silenziosa e desolata.",
       "Qui la natura ha ripreso il controllo, cancellando ogni traccia del passato."
     ],
-    'C': [
+    'CITY': [
       "Rovine di una città emergono dalla desolazione.",
       "Scheletri di grattacieli si stagliano contro il cielo plumbeo.",
       "Le strade sono crepe e invase dalla vegetazione.",
       "Echi di una civiltà perduta risuonano tra i detriti."
     ],
-    'V': [
+    'VILLAGE': [
       "Un piccolo insediamento appare all'orizzonte.",
       "Segni di vita umana: fumo che sale da camini improvvisati.",
       "Un villaggio di sopravvissuti, costruito con materiali di recupero.",
       "Qui qualcuno ha deciso di ricominciare da capo."
     ],
-    'S': [
+    'START': [
       "Il punto di partenza del tuo viaggio.",
       "Da qui tutto è iniziato.",
       "Un luogo familiare in un mondo che non lo è più."
     ],
-    'E': [
+    'END': [
       "La destinazione finale si avvicina.",
       "Qui termina il viaggio, ma inizia una nuova storia.",
       "Il punto di arrivo che hai tanto cercato."
     ],
-    'R': [
+    'REST_STOP': [
       "Un rifugio sicuro si presenta davanti a te.",
       "Questo luogo offre riparo dalle intemperie del mondo.",
       "Un posto dove riposare e recuperare le forze.",
       "Un rifugio abbandonato ma ancora utilizzabile."
     ],
-    'M': [
+    'MOUNTAIN': [
       "Imponenti montagne bloccano il passaggio.",
       "Picchi rocciosi si ergono minacciosi verso il cielo.",
       "La natura ha eretto qui una barriera invalicabile.",
       "Queste vette hanno resistito a ogni catastrofe."
     ],
-    '~': [
+    'RIVER': [
       "Un corso d'acqua scorre davanti a te.",
       "L'acqua riflette il cielo come uno specchio liquido.",
       "Un fiume che ha continuato a scorrere nonostante tutto.",
@@ -379,6 +380,14 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
   ],
 
   // Nuovi MessageType
+  [MessageType.MOVEMENT]: [
+    "Ti muovi attraverso il territorio desolato.",
+    "Ogni passo ti porta più lontano dalla sicurezza.",
+    "Il viaggio continua nel mondo post-apocalittico.",
+    "Avanzi cautamente nel paesaggio devastato.",
+    "Il tuo cammino prosegue tra le rovine del passato."
+  ],
+
   [MessageType.MOVEMENT_SUCCESS]: [
     "Ti muovi con sicurezza nel territorio.",
     "Ogni passo ti avvicina alla destinazione.",

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
 import type { SaveSlotInfo } from '../utils/saveSystem';
 import LoadingSpinner from './LoadingSpinner';
 
 const LoadScreen: React.FC = () => {
-  const loadSavedGame = useGameStore(state => state.loadSavedGame);
-  const getSaveSlots = useGameStore(state => state.getSaveSlots);
-  const deleteSave = useGameStore(state => state.deleteSave);
-  const goBack = useGameStore(state => state.goBack);
-  const addNotification = useGameStore(state => state.addNotification);
-  const recoverSave = useGameStore(state => state.recoverSave);
-  const exportSave = useGameStore(state => state.exportSave);
-  const importSave = useGameStore(state => state.importSave);
+  const { loadSavedGame, getSaveSlots, deleteSave, goBack, recoverSave, exportSave, importSave } = useGameStore();
+  const { addNotification } = useNotificationStore();
 
   const [saveSlots, setSaveSlots] = useState<SaveSlotInfo[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);

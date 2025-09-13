@@ -2,9 +2,9 @@ import { create } from 'zustand';
 import type { ICharacterSheet, AbilityType } from '../../rules/types';
 import { createTestCharacter } from '../../rules/characterGenerator';
 import { equipItem } from '../../utils/equipmentManager';
-import { useGameStore } from '../gameStore';
 import { itemDatabase } from '../../data/items/itemDatabase';
 import { MessageType } from '../../data/MessageArchive';
+import { useNotificationStore } from '../notifications/notificationStore';
 
 export interface CharacterState {
   characterSheet: ICharacterSheet;
@@ -31,36 +31,64 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
   // --- ACTIONS ---
 
-  updateHP: (amount) =>
-    set((state) => ({
+  updateHP: (amount) => {
+    const state = get();
+    const newHP = Math.max(
+      0,
+      Math.min(
+        state.characterSheet.maxHP,
+        state.characterSheet.currentHP + amount
+      )
+    );
+    
+    set({
       characterSheet: {
         ...state.characterSheet,
-        currentHP: Math.max(
-          0,
-          Math.min(
-            state.characterSheet.maxHP,
-            state.characterSheet.currentHP + amount
-          )
-        ),
+        currentHP: newHP,
       },
-    })),
+    });
+    
+    // Log HP changes
+    const notificationStore = useNotificationStore.getState();
+    if (amount > 0) {
+      notificationStore.addLogEntry(MessageType.HP_RECOVERY, {
+        healing: amount,
+        newHP,
+        maxHP: state.characterSheet.maxHP
+      });
+    } else if (amount < 0) {
+      notificationStore.addLogEntry(MessageType.HP_DAMAGE, {
+        damage: Math.abs(amount),
+        newHP,
+        maxHP: state.characterSheet.maxHP
+      });
+    }
+  },
 
-  addExperience: (xpGained) =>
-    set((state) => {
-      const newXP = state.characterSheet.experience.currentXP + xpGained;
-      return {
-        characterSheet: {
-          ...state.characterSheet,
-          experience: {
-            ...state.characterSheet.experience,
-            currentXP: newXP,
-            canLevelUp:
-              newXP >= state.characterSheet.experience.xpForNextLevel &&
-              state.characterSheet.level < 20,
-          },
+  addExperience: (xpGained) => {
+    const state = get();
+    const newXP = state.characterSheet.experience.currentXP + xpGained;
+    const canLevelUp = newXP >= state.characterSheet.experience.xpForNextLevel && state.characterSheet.level < 20;
+    
+    set({
+      characterSheet: {
+        ...state.characterSheet,
+        experience: {
+          ...state.characterSheet.experience,
+          currentXP: newXP,
+          canLevelUp,
         },
-      };
-    }),
+      },
+    });
+    
+    // Log experience gain
+    const notificationStore = useNotificationStore.getState();
+    notificationStore.addLogEntry(MessageType.XP_GAINED, {
+      xpGained,
+      totalXP: newXP,
+      canLevelUp
+    });
+  },
 
   updateCharacterSheet: (newSheet) => set({ characterSheet: newSheet }),
 

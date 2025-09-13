@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useWorldStore } from '../stores/world/worldStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { checkForEncounter } from '../utils/encounterUtils';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
@@ -15,7 +16,9 @@ export const usePlayerMovement = () => {
   // World state from the correct source of truth
   const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
   // Actions and legacy state still in gameStore
-  const { addLogEntry, updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
+  const { updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
+  // Notification system
+  const { addLogEntry } = useNotificationStore();
   const [movementState, setMovementState] = useState<MovementState>({
     isExitingRiver: false,
     isInRiver: false,

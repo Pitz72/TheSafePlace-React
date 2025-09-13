@@ -1,7 +1,7 @@
 # The Safe Place
 
-**Versione:** 0.9.5
-**Codename:** Ammappa
+**Versione:** 0.9.6
+**Codename:** Phoenix
 
 GDR Retrò a Fosfori Verdi. Un sistema di gioco avanzato con meccaniche D&D e un'atmosfera CRT anni '80.
 

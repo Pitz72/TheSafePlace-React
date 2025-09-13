@@ -4,21 +4,17 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
+import { useCharacterStore } from '../stores/character/characterStore';
+import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
-  const addLogEntry = useGameStore(state => state.addLogEntry);
-  const performAbilityCheck = useGameStore(state => state.performAbilityCheck);
-  const updateHP = useGameStore(state => state.updateHP);
-  const advanceTime = useGameStore(state => state.advanceTime);
-  const items = useGameStore(state => state.items);
-  const addItem = useGameStore(state => state.addItem);
-  const playerPosition = useGameStore(state => state.playerPosition);
-  const canInvestigateShelter = useGameStore(state => state.canInvestigateShelter);
-  const updateShelterAccess = useGameStore(state => state.updateShelterAccess);
-  const getShelterInfo = useGameStore(state => state.getShelterInfo);
+  const { setCurrentScreen, playerPosition, canInvestigateShelter, updateShelterAccess, getShelterInfo, advanceTime } = useGameStore();
+  const { addLogEntry } = useNotificationStore();
+  const { performAbilityCheck, updateHP } = useCharacterStore();
+  const { addItem, items } = useInventoryStore();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 

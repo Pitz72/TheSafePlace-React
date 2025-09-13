@@ -1,6 +1,7 @@
 // src/components/EventScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useEventStore } from '../stores/events/eventStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
 
 
 /**
@@ -9,13 +10,16 @@ import { useGameStore } from '../stores/gameStore';
  * KEYBOARD-ONLY: Navigazione con W/S, selezione con ENTER
  */
 const EventScreen: React.FC = () => {
-  const { currentEvent, resolveChoice } = useGameStore();
+  const { currentEvent, resolveChoice, dismissCurrentEvent } = useEventStore();
+  const { addLogEntry } = useNotificationStore();
   const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 
   // Non renderizzare nulla se non c'è un evento attivo
   if (!currentEvent) {
     return null;
   }
+
+  const hasChoices = currentEvent.choices && currentEvent.choices.length > 0;
 
   // Reset selezione quando cambia evento
   useEffect(() => {
@@ -26,6 +30,15 @@ const EventScreen: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!currentEvent) return;
+
+      // Se non ci sono scelte, solo ENTER o ESC (futuro) sono ammessi
+      if (!hasChoices) {
+        if (event.key.toLowerCase() === 'enter') {
+          event.preventDefault();
+          dismissCurrentEvent();
+        }
+        return;
+      }
 
       switch (event.key.toLowerCase()) {
         case 'w':
@@ -44,7 +57,9 @@ const EventScreen: React.FC = () => {
           break;
         case 'enter':
           event.preventDefault();
-          resolveChoice(currentEvent.choices[selectedChoiceIndex]);
+          if (currentEvent.choices[selectedChoiceIndex]) {
+            resolveChoice(currentEvent.choices[selectedChoiceIndex], addLogEntry, {});
+          }
           break;
         case '1':
         case '2':
@@ -54,7 +69,9 @@ const EventScreen: React.FC = () => {
           event.preventDefault();
           const choiceIndex = parseInt(event.key) - 1;
           if (choiceIndex >= 0 && choiceIndex < currentEvent.choices.length) {
-            resolveChoice(currentEvent.choices[choiceIndex]);
+            if (currentEvent.choices[choiceIndex]) {
+              resolveChoice(currentEvent.choices[choiceIndex], addLogEntry, {});
+            }
           }
           break;
       }
@@ -62,7 +79,7 @@ const EventScreen: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentEvent, selectedChoiceIndex, resolveChoice]);
+  }, [currentEvent, selectedChoiceIndex, resolveChoice, dismissCurrentEvent, hasChoices]);
 
 
 
@@ -76,7 +93,7 @@ const EventScreen: React.FC = () => {
           {currentEvent.description}
         </p>
         <div className="space-y-3">
-          {currentEvent.choices.map((choice, index) => (
+          {hasChoices && currentEvent.choices.map((choice, index) => (
             <div
               key={index}
               className={`w-full text-left p-4 rounded border transition-all duration-200 ${
@@ -97,7 +114,9 @@ const EventScreen: React.FC = () => {
         
         {/* Controlli keyboard */}
         <div className="mt-6 text-center text-phosphor-500 text-sm">
-          [↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta
+          {hasChoices 
+            ? '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
+            : '[ENTER] Continua'}
         </div>
       </div>
     </div>

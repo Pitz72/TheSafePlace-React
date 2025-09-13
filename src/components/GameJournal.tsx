@@ -6,11 +6,11 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { MessageType } from '../data/MessageArchive';
 
 const GameJournal: React.FC = () => {
-  const logEntries = useGameStore(state => state.logEntries);
+  const { logEntries } = useNotificationStore();
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // Auto-scroll per mantenere i messaggi più recenti visibili in alto

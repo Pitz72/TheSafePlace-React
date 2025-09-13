@@ -8,6 +8,10 @@ import { useSettingsStore } from './stores/settingsStore';
 import { useCharacterStore } from './stores/character/characterStore';
 import { useWorldStore } from './stores/world/worldStore';
 import { useSaveStore } from './stores/save/saveStore';
+import { useSurvivalStore } from './stores/survival/survivalStore';
+import { useNotificationStore } from './stores/notifications/notificationStore';
+import { useInventoryStore } from './stores/inventory/inventoryStore';
+import { itemDatabase } from './data/items/itemDatabase';
 import { GameErrorBoundary } from './utils/errorHandler';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
@@ -46,8 +50,9 @@ const getTileDescription = (char: string): string => {
 
 const GameScreenInputHandler = () => {
   usePlayerMovement();
-  const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
-  const shortRest = useGameStore(state => state.shortRest);
+  const { setCurrentScreen } = useGameStore();
+  const { shortRest } = useSurvivalStore();
+  const { addLogEntry } = useNotificationStore();
   const { handleQuickSave, handleQuickLoad } = useSaveStore();
 
   React.useEffect(() => {
@@ -55,10 +60,17 @@ const GameScreenInputHandler = () => {
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         return;
       }
+      
+      // Evita conflitti con i tasti di movimento gestiti da usePlayerMovement
+      const movementKeys = ['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'];
+      if (movementKeys.includes(event.key.toLowerCase())) {
+        return; // Lascia che usePlayerMovement gestisca questi tasti
+      }
+      
       switch (event.key.toLowerCase()) {
         case 'i': event.preventDefault(); setCurrentScreen('inventory'); break;
         case 'l': event.preventDefault(); setCurrentScreen('levelUp'); break;
-        case 'r': event.preventDefault(); shortRest(); break;
+        case 'r': event.preventDefault(); shortRest(addLogEntry); break;
         case 'tab': event.preventDefault(); setCurrentScreen('characterSheet'); break;
         case 'escape': event.preventDefault(); setCurrentScreen('menu'); break;
         case 'f5': event.preventDefault(); handleQuickSave(); break;
@@ -67,7 +79,7 @@ const GameScreenInputHandler = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setCurrentScreen, shortRest, handleQuickSave, handleQuickLoad]);
+  }, [setCurrentScreen, shortRest, addLogEntry, handleQuickSave, handleQuickLoad]);
 
   return null;
 };
@@ -78,15 +90,15 @@ const GameContent = () => {
   const currentScreen = useGameStore(state => state.currentScreen);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
   const initializeGame = useGameStore(state => state.initializeGame);
-  const removeNotification = useGameStore(state => state.removeNotification);
   const { loadSavedGame } = useSaveStore();
 
   // Granular selectors to prevent infinite loops
   const { playerPosition, mapData, timeState, isMapLoading } = useWorldStore();
   const { characterSheet, getModifier } = useCharacterStore();
-  const items = useGameStore(state => state.items);
-  const survivalState = useGameStore(state => state.survivalState);
-  const notifications = useGameStore(state => state.notifications);
+  const { getInventory } = useInventoryStore();
+  const items = getInventory();
+  const { survivalState } = useSurvivalStore();
+  const { notifications, removeNotification } = useNotificationStore();
 
   const isInCombat = useCombatStore(state => state.isActive);
   const combatResult = useCombatStore(state => state.combatResult);
@@ -179,8 +191,8 @@ const GameContent = () => {
                     </div>
                     <h2 className="panel-title mt-6">EQUIPAGGIAMENTO</h2>
                     <div className="space-y-1 text-uniform">
-                      <div>ARMA: {characterSheet.equipment.weapon.itemId ? items[characterSheet.equipment.weapon.itemId]?.name || 'Sconosciuta' : 'Nessuna'}</div>
-                      <div>ARMATURA: {characterSheet.equipment.armor.itemId ? items[characterSheet.equipment.armor.itemId]?.name || 'Sconosciuta' : 'Nessuna'}</div>
+                      <div>ARMA: {characterSheet.equipment.weapon.itemId ? itemDatabase[characterSheet.equipment.weapon.itemId]?.name || 'Sconosciuta' : 'Nessuna'}</div>
+                      <div>ARMATURA: {characterSheet.equipment.armor.itemId ? itemDatabase[characterSheet.equipment.armor.itemId]?.name || 'Sconosciuta' : 'Nessuna'}</div>
                     </div>
                   </div>
                 </aside>
@@ -200,7 +212,10 @@ const GameContent = () => {
     <div className="game-container-wrapper">
       <div className={`game-container ${currentScreen === 'game' && videoMode !== 'no-effects' ? 'no-warmup' : ''}`}>
         <div className="crt-premium-overlay"></div>
-        <NotificationSystem notifications={notifications} onRemove={removeNotification} />
+        <NotificationSystem 
+          notifications={notifications.map(n => ({ ...n, title: n.message }))} 
+          onRemove={removeNotification} 
+        />
         <div className="h-full flex flex-col">
           {combatResult ? (
             <PostCombatScreen
@@ -231,7 +246,7 @@ function App() {
   const { isMapLoading } = useWorldStore();
 
   useEffect(() => {
-    if (isMapLoading) {
+    if (!isMapLoading) {
       initializeGame();
     }
   }, [initializeGame, isMapLoading]);

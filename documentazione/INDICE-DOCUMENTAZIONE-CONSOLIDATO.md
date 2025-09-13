@@ -39,7 +39,9 @@
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog e Consolidamento Corrente**
-- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE CORRENTE "Run away, fight, or die."
+- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE CORRENTE v0.9.6.1 "Phoenix"
+- ✅ **[CHANGELOG-v0.9.6.1.md](../CHANGELOG-v0.9.6.1.md)** - Patch Sincronizzazione Store
+- ✅ **[ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md](./anti-regressione/ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md)** - Protezione v0.9.6.1
 - ✅ **[CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./changelog/CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - Versione Precedente "Crafting Full and Real Integration"
 - ✅ **[CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./consolidamento/CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - Consolidamento v0.8.5
 - ✅ **[CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./changelog/CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - Versione Precedente "I'm Constantly Tidying Up my Desk"

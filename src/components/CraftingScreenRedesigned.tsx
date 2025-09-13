@@ -4,6 +4,7 @@ import { useGameStore } from '../stores/gameStore';
 import { canCraftRecipe, meetsSkillRequirement, getMaterialStatus } from '../utils/craftingUtils';
 import type { Recipe } from '../types/crafting';
 import type { IInventorySlot } from '../interfaces/items';
+import { MessageType } from '../data/MessageArchive';
 
 // Error Boundary per gestire errori gracefully
 class CraftingErrorBoundary extends React.Component<
@@ -102,12 +103,18 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
   // Store hooks
   const craftingStore = useCraftingStore();
   const gameStore = useGameStore();
+  const inventoryStore = useInventoryStore();
+  const addLogEntry = useGameStore(state => state.addLogEntry);
+
+  useEffect(() => {
+    addLogEntry(MessageType.ACTION_SUCCESS, { action: 'Accessing workbench...' });
+  }, [addLogEntry]);
 
   // Computed values
   const allRecipes = craftingStore.allRecipes;
   const characterSheet = gameStore.characterSheet;
-  const items = gameStore.items;
-  const inventory: IInventorySlot[] = (characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
+  const items = inventoryStore.items;
+  const inventory: IInventorySlot[] = inventoryStore.getInventory().filter((item): item is IInventorySlot => item !== null);
 
   // Funzione per ottenere il nome tradotto di un oggetto
   const getTranslatedItemName = useCallback((itemId: string): string => {

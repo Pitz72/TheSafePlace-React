@@ -1,5 +1,63 @@
 # CHANGELOG - The Safe Place
 
+## v0.9.6.1 - "Phoenix" (Gennaio 2025)
+
+**Tipo di Release:** Patch di Sincronizzazione  
+**Stato:** ✅ PRODUCTION READY
+
+### 🔧 Sincronizzazione Store
+Patch di consolidamento per la risoluzione di riferimenti obsoleti e miglioramento della sincronizzazione tra store Zustand.
+
+### 🚨 Correzioni Implementate
+- **Risolti:** Riferimenti obsoleti a `gameStore.addLogEntry` in craftingStore e combatStore
+- **Corretti:** Errori di importazione in `craftingStore.ts` (percorso notificationStore)
+- **Standardizzato:** Sistema di logging centralizzato tramite `notificationStore.addLogEntry`
+- **Verificata:** Sincronizzazione completa tra tutti gli store del sistema
+
+### 📋 File Modificati
+- `craftingStore.ts` - Correzione importazioni e standardizzazione logging
+- `combatStore.ts` - Migrazione completa sistema notifiche
+- `ZUSTAND_REFACTORING_SPEC.md` - Aggiornamento stato completamento
+
+### 📄 Documentazione
+- `CHANGELOG-v0.9.6.1.md` - Cronaca dettagliata interventi
+- `ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md` - Guida prevenzione regressioni
+- Versioni aggiornate in `package.json` e `StartScreen.tsx`
+
+---
+
+## v0.9.6 - "Phoenix" (15 Gennaio 2025)
+
+**Tipo di Release:** Correzione Critica + Refactoring Architetturale  
+**Stato:** ✅ PRODUCTION READY
+
+### 🔥 Simbolismo "Phoenix"
+Versione denominata "Phoenix" per simboleggiare la rinascita dell'applicazione dopo la risoluzione di errori critici che impedivano il funzionamento normale del gioco.
+
+### 🚨 Correzioni Critiche
+- **Risolto:** Errore critico `err_1709404094092_readMgr%` che impediva l'accesso al gioco
+- **Causa:** Logica di inizializzazione errata in `App.tsx`
+- **Soluzione:** Corretta condizione useEffect da `if (isMapLoading)` a `if (!isMapLoading)`
+- **Migliorato:** Sistema di crafting con gestione errori robusta
+
+### 🏗️ Refactoring Architetturale
+- **Separazione Store:** Creati store dedicati (EventStore, SurvivalStore, NotificationStore, RiverCrossingStore)
+- **Benefici:** Migliore manutenibilità, performance ottimizzate, testabilità migliorata
+- **Impatto:** Base solida per sviluppi futuri
+
+### 📋 Componenti Aggiornati
+- `CraftingScreenRedesigned.tsx` - Gestione errori migliorata
+- `App.tsx` - Logica di inizializzazione corretta
+- Tutti i componenti - Integrazione con nuovi store
+
+### 📄 Documentazione
+- `documentazione/changelog/CHANGELOG-v0.9.6-Phoenix.md`
+- `documentazione/anti-regressione/ANTI-REGRESSION-v0.9.6-Phoenix.md`
+- `package.json` aggiornato alla versione 0.9.6
+- `StartScreen.tsx` aggiornato con nuova versione
+
+---
+
 ## v0.9.5 - "Ammappa" (09 Settembre 2025)
 
 **Tipo di Release:** Hotfix Critico

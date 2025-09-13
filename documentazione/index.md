@@ -15,12 +15,12 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**Voci del Diario**](./session-log/journal_entries.txt) - Archivio messaggi di gioco
 
 ### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.6.4 "How hard is it to wade across a river?" (COMPLETATA)
+- **Versione Corrente**: v0.9.6.1 "Phoenix" (COMPLETATA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.6.4 How hard is it to wade across a river?](./anti-regressione/ANTI-REGRESSIONE-v0.6.4.md)
-- **Ultimo Changelog**: [v0.6.4](./changelog/CHANGELOG-v0.6.4.md)
-- **Verifica Implementazione**: v0.6.4 (sistema attraversamento fiumi strategico, integrazione meteo-equipaggiamento)
-- **Ultimo Commit**: v0.6.4 How hard is it to wade across a river? (completato)
+- **Anti-Regressione**: [v0.9.6.1 Sincronizzazione Store](./anti-regressione/ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md)
+- **Ultimo Changelog**: [v0.9.6.1](../CHANGELOG-v0.9.6.1.md)
+- **Verifica Implementazione**: v0.9.6.1 (sincronizzazione store Zustand, sistema notifiche centralizzato)
+- **Ultimo Commit**: v0.9.6.1 Phoenix - Patch Sincronizzazione (completato)
 
 ---
 

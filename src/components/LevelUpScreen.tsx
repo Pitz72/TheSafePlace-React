@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useCharacterStore } from '../stores/character/characterStore';
+import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { getAvailableLevelUpOptions, applyLevelUpOption } from '../rules/levelUpSystem';
 import type { ICharacterStats } from '../rules/types';
 import { MessageType } from '../data/MessageArchive';
 
 const LevelUpScreen: React.FC = () => {
   // SELETTORI GRANULARI: la soluzione robusta
-  const characterSheet = useGameStore(state => state.characterSheet);
-  const goBack = useGameStore(state => state.goBack);
-  const updateCharacterSheet = useGameStore(state => state.updateCharacterSheet);
-  const addLogEntry = useGameStore(state => state.addLogEntry);
+  const { characterSheet, updateCharacterSheet } = useCharacterStore();
+  const { goBack } = useGameStore();
+  const { addLogEntry } = useNotificationStore();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 

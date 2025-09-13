@@ -28,6 +28,7 @@ import {
 } from '../utils/craftingUtils';
 
 import { useGameStore } from './gameStore';
+import { useNotificationStore } from './notifications/notificationStore';
 import { MessageType } from '../data/MessageArchive';
 import type { IInventorySlot } from '../interfaces/items';
 import { ensureStarterKit, SURVIVOR_STARTER_KIT } from '../rules/characterGenerator';
@@ -224,7 +225,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         }
 
         // Aggiungi notifica
-        gameStore.addLogEntry(MessageType.DISCOVERY, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.DISCOVERY, {
           discovery: `Nuova ricetta sbloccata: ${recipeId}`
         });
 
@@ -242,7 +244,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const failCraft = (error: string) => {
         debugLog(`Crafting failed: ${error}`);
         set({ isCrafting: false, craftingError: error });
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, { reason: error });
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: error });
         return false;
       };
 
@@ -291,7 +294,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         const resultItem = gameStore.items[recipe.resultItemId];
         const itemName = resultItem?.name || 'Oggetto Sconosciuto';
 
-        gameStore.addLogEntry(MessageType.ACTION_SUCCESS, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, {
           action: `Usando il banco di lavoro, hai creato: ${itemName} (x${recipe.resultQuantity}).`
         });
 
@@ -514,7 +518,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
         const manualName = manualNames[manualId] || 'Manuale Sconosciuto';
         
-        gameStore.addLogEntry(MessageType.DISCOVERY, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.DISCOVERY, {
           discovery: `Dal manuale "${manualName}" hai imparato ${recipesToUnlock.length} nuove ricette!`
         });
 
@@ -528,7 +533,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         debugLog(`Unlocked ${recipesToUnlock.length} recipes from manual ${manualId}`);
       } else {
         // Nessuna ricetta da sbloccare
-        gameStore.addLogEntry(MessageType.ACTION_FAIL, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.ACTION_FAIL, {
           reason: 'Questo manuale non contiene ricette che non conosci già.'
         });
         debugLog(`No new recipes to unlock from manual ${manualId}`);
@@ -557,7 +563,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         set({ knownRecipeIds: [...updatedCharacter.knownRecipes] });
         
         // Notifica nel journal
-        gameStore.addLogEntry(MessageType.DISCOVERY, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.DISCOVERY, {
           discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
         });
         
@@ -600,7 +607,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       
       if (success) {
         debugLog(`Added manual ${manualId} to inventory for testing`);
-        gameStore.addLogEntry(MessageType.ITEM_FOUND, { 
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.ITEM_FOUND, { 
           item: gameStore.items[manualId]?.name || 'Manuale Sconosciuto',
           quantity: 1 
         });
@@ -689,7 +697,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         // Reinitialize system
         get().initializeCraftingSystem();
         
-        gameStore.addLogEntry(MessageType.SYSTEM, {
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.SYSTEM, {
           message: 'Sistema di crafting ripristinato dopo errore dati corrotti'
         });
 

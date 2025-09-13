@@ -1,12 +1,18 @@
 import { create } from 'zustand';
 import { useCharacterStore } from '../character/characterStore';
-import { useGameStore } from '../gameStore';
+import { useNotificationStore } from '../notifications/notificationStore';
 import { itemDatabase } from '../../data/items/itemDatabase';
 import { equipItem } from '../../utils/equipmentManager';
 import { MessageType } from '../../data/MessageArchive';
 import type { IInventorySlot } from '../../interfaces/items';
 
 export interface InventoryState {
+  // UI State
+  selectedInventoryIndex: number | null;
+  
+  // Data
+  items: Record<string, any>;
+  
   // Selectors
   getInventory: () => (IInventorySlot | null)[];
   getEquippedWeaponId: () => string | null;
@@ -16,9 +22,18 @@ export interface InventoryState {
   addItem: (itemId: string, quantity?: number) => boolean;
   removeItem: (slotIndex: number, quantity?: number) => boolean;
   equipItemFromInventory: (slotIndex: number) => void;
+  setSelectedInventoryIndex: (index: number | null) => void;
+  useItem: (slotIndex: number) => void;
+  dropItem: (slotIndex: number) => void;
 }
 
 export const useInventoryStore = create<InventoryState>((set, get) => ({
+  // --- UI STATE ---
+  selectedInventoryIndex: null,
+  
+  // --- DATA ---
+  items: itemDatabase,
+  
   // --- SELECTORS ---
   getInventory: () => {
     return useCharacterStore.getState().characterSheet.inventory;
@@ -66,13 +81,13 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         ...characterSheet,
         inventory: newInventory,
       });
-      useGameStore
+      useNotificationStore
         .getState()
         .addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity });
       return true;
     }
 
-    useGameStore
+    useNotificationStore
       .getState()
       .addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
     return false;
@@ -103,15 +118,48 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
   equipItemFromInventory: (slotIndex) => {
     const characterStore = useCharacterStore.getState();
     const { characterSheet } = characterStore;
-    const game = useGameStore.getState(); // To add log entries
+    const notificationStore = useNotificationStore.getState();
 
     const result = equipItem(characterSheet, itemDatabase, slotIndex);
 
     if (result.success) {
       characterStore.updateCharacterSheet(result.updatedCharacterSheet);
-      game.addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
+      notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
     } else {
-      game.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
+      notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
+    }
+  },
+
+  setSelectedInventoryIndex: (index) => {
+    set({ selectedInventoryIndex: index });
+  },
+
+  useItem: (slotIndex) => {
+    const characterStore = useCharacterStore.getState();
+    const notificationStore = useNotificationStore.getState();
+    const inventory = characterStore.characterSheet.inventory;
+    const slot = inventory[slotIndex];
+    
+    if (slot && slot.itemId) {
+      const item = itemDatabase[slot.itemId];
+      if (item && item.consumable) {
+        // Logic for using consumable items
+        get().removeItem(slotIndex, 1);
+        notificationStore.addLogEntry('ITEM_USED', { itemName: item.name });
+      }
+    }
+  },
+
+  dropItem: (slotIndex) => {
+    const notificationStore = useNotificationStore.getState();
+    const characterStore = useCharacterStore.getState();
+    const inventory = characterStore.characterSheet.inventory;
+    const slot = inventory[slotIndex];
+    
+    if (slot && slot.itemId) {
+      const item = itemDatabase[slot.itemId];
+      get().removeItem(slotIndex, slot.quantity);
+      notificationStore.addLogEntry('ITEM_DROPPED', { itemName: item?.name || 'Unknown' });
     }
   },
 }));

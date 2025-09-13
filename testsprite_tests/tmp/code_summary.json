@@ -1,0 +1,116 @@
+{
+  "tech_stack": [
+    "TypeScript 5.7.3",
+    "React 18.3.1",
+    "Vite 6.0.3",
+    "Zustand 5.0.1",
+    "TailwindCSS 3.4.17",
+    "Jest 29.7.0",
+    "Node.js",
+    "PostCSS",
+    "ESLint",
+    "SWC"
+  ],
+  "features": [
+    {
+      "name": "Game State Management",
+      "description": "Sistema di gestione stato centralizzato con Zustand per tutto lo stato del gioco",
+      "files": ["src/stores/gameStore.ts", "src/stores/settingsStore.ts"]
+    },
+    {
+      "name": "Character System",
+      "description": "Sistema completo di creazione e gestione personaggi con meccaniche D&D",
+      "files": ["src/rules/characterGenerator.ts", "src/rules/mechanics.ts", "src/rules/levelUpSystem.ts", "src/components/LevelUpScreen.tsx"]
+    },
+    {
+      "name": "Inventory Management",
+      "description": "Sistema inventario con equipaggiamento, stacking e gestione oggetti",
+      "files": ["src/components/InventoryPanel.tsx", "src/components/crafting/InventoryScreen.tsx", "src/utils/equipmentManager.ts", "src/utils/itemActions.ts"]
+    },
+    {
+      "name": "Item Database",
+      "description": "Database completo oggetti con armi, armature, consumabili e materiali",
+      "files": ["src/data/items/itemDatabase.ts", "src/data/items/weapons.json", "src/data/items/armor.json", "src/data/items/consumables.json", "src/data/items/crafting_materials.json"]
+    },
+    {
+      "name": "Map and Movement",
+      "description": "Sistema mappa e movimento giocatore con collision detection",
+      "files": ["src/components/MapViewport.tsx", "src/hooks/usePlayerMovement.ts", "src/rules/movementIntegration.ts", "public/map.txt"]
+    },
+    {
+      "name": "Event System",
+      "description": "Sistema eventi dinamici per diverse location del mondo di gioco",
+      "files": ["src/components/EventScreen.tsx", "src/data/encounters.ts", "public/events/city_events.json", "public/events/forest_events.json", "public/events/plains_events.json", "public/events/river_events.json"]
+    },
+    {
+      "name": "Crafting System",
+      "description": "Sistema crafting con ricette e materiali (in fase di redesign)",
+      "files": ["src/components/crafting/CraftingScreen.tsx", "src/components/crafting/CraftingScreenRedesigned.tsx", "src/stores/craftingStore.ts", "src/config/craftingConfig.ts", "public/recipes.json"]
+    },
+    {
+      "name": "Combat System",
+      "description": "Sistema combattimento con AI nemici e calcoli danni",
+      "files": ["src/components/combat/CombatScreen.tsx", "src/stores/combatStore.ts", "src/utils/combatCalculations.ts", "src/utils/enemyAI.ts", "src/data/enemies.json"]
+    },
+    {
+      "name": "Save System",
+      "description": "Sistema salvataggio e caricamento partite con persistenza locale",
+      "files": ["src/utils/saveSystem.ts", "src/components/LoadScreen.tsx"]
+    },
+    {
+      "name": "Weather System",
+      "description": "Sistema meteo dinamico che influenza il gameplay",
+      "files": ["src/data/weather/weatherPatterns.json", "src/stores/weather/weatherStore.ts"]
+    },
+    {
+      "name": "Shelter System",
+      "description": "Sistema rifugi per sopravvivenza e crafting avanzato",
+      "files": ["src/components/ShelterScreen.tsx", "src/stores/shelter/shelterStore.ts"]
+    },
+    {
+      "name": "Message System",
+      "description": "Sistema messaggi e log di gioco con archivio storico",
+      "files": ["src/data/MessageArchive.ts", "src/components/GameJournal.tsx"]
+    },
+    {
+      "name": "UI Scaling",
+      "description": "Sistema scaling dinamico interfaccia per diverse risoluzioni",
+      "files": ["src/hooks/useGameScale.ts"]
+    },
+    {
+      "name": "Error Handling",
+      "description": "Sistema gestione errori con boundary e recovery",
+      "files": ["src/utils/errorHandler.tsx"]
+    },
+    {
+      "name": "Performance Monitoring",
+      "description": "Sistema monitoraggio performance e ottimizzazioni",
+      "files": ["src/utils/performanceMonitor.ts"]
+    },
+    {
+      "name": "Testing Suite",
+      "description": "Suite completa test manuali per tutti i sistemi di gioco",
+      "files": ["src/utils/riverSkillCheckTest.ts", "src/utils/portionSystemTest.ts", "src/utils/messageSystemTest.ts", "src/utils/itemActionsTest.ts", "src/utils/inventoryColorTest.ts", "src/utils/readabilityTest.ts"]
+    },
+    {
+      "name": "Analysis System",
+      "description": "Sistema analisi microscopica del codebase (non integrato)",
+      "files": ["src/analysis/AnalysisRunner.ts", "src/analysis/engine/AnalysisEngine.ts", "src/analysis/scanners/ComponentScanner.ts"]
+    },
+    {
+      "name": "Story System",
+      "description": "Sistema narrativo e progressione storia",
+      "files": ["src/components/StoryScreen.tsx"]
+    },
+    {
+      "name": "Options System",
+      "description": "Sistema opzioni e impostazioni di gioco",
+      "files": ["src/components/OptionsScreen.tsx"]
+    },
+    {
+      "name": "Loading System",
+      "description": "Sistema loading states e spinner per UX",
+      "files": ["src/components/LoadingSpinner.tsx"]
+    }
+  ]
+}

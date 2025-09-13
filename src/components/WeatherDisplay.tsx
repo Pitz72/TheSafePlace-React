@@ -3,11 +3,11 @@
  * Mostra il meteo attuale con icone ASCII e descrizioni
  */
 import React from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useWeatherStore } from '../stores/weather/weatherStore';
 import { WeatherType } from '../interfaces/gameState';
 
 const WeatherDisplay: React.FC = () => {
-  const weatherState = useGameStore(state => state.weatherState);
+  const { currentWeather, intensity, effects, duration } = useWeatherStore();
 
   const getWeatherIcon = (weather: WeatherType): string => {
     const icons = {
@@ -56,7 +56,6 @@ const WeatherDisplay: React.FC = () => {
   };
 
   const getEffectsDescription = () => {
-    const { effects } = weatherState;
     const descriptions = [];
 
     if (effects.movementModifier < 1.0) {
@@ -81,17 +80,17 @@ const WeatherDisplay: React.FC = () => {
     <div className="weather-display border border-phosphor-600 p-2 bg-gray-900 bg-opacity-50">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center space-x-2">
-          <span className="text-lg">{getWeatherIcon(weatherState.currentWeather)}</span>
+          <span className="text-lg">{getWeatherIcon(currentWeather)}</span>
           <span className="text-phosphor-400 font-bold">
-            {getWeatherName(weatherState.currentWeather)}
+            {getWeatherName(currentWeather)}
           </span>
         </div>
         <div className="text-right">
-          <div className={`text-sm ${getIntensityColor(weatherState.intensity)}`}>
-            {getIntensityDescription(weatherState.intensity)} ({weatherState.intensity}%)
-          </div>
-          <div className="text-xs text-phosphor-600">
-            ~{formatDuration(weatherState.duration)}
+          <div className={`text-sm ${getIntensityColor(intensity)}`}>
+            {getIntensityDescription(intensity)} ({intensity}%)
+            </div>
+            <div className="text-xs text-phosphor-500">
+              ~{formatDuration(duration)}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { useGameStore } from '../gameStore';
 import { useWorldStore } from '../world/worldStore';
+import { useNotificationStore } from '../notifications/notificationStore';
 import { MessageType } from '../../data/MessageArchive';
 import type { TimeState } from '../../interfaces/gameState';
 
@@ -61,7 +61,7 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
       const newWeather = get().generateWeatherChange();
       set(newWeather);
 
-      useGameStore.getState().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+      useNotificationStore.getState().addLogEntry(MessageType.AMBIANCE_RANDOM, {
         weather: newWeather.currentWeather,
         text: get().getRandomWeatherMessage(newWeather.currentWeather),
       });
