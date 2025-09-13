@@ -21,6 +21,10 @@ export interface CharacterState {
   ) => { success: boolean; roll: number; modifier: number; total: number };
   gainMovementXP: () => void;
 
+  // Inventory Management
+  addItemToInventory: (itemId: string, quantity: number) => boolean;
+  removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
+
   // Initialization
   resetCharacter: () => void;
 }
@@ -112,6 +116,59 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
   gainMovementXP: () => {
     get().addExperience(Math.floor(Math.random() * 2) + 1);
+  },
+
+  // --- INVENTORY MANAGEMENT ---
+  addItemToInventory: (itemId, quantity) => {
+    const { characterSheet } = get();
+    const item = itemDatabase[itemId];
+    if (!item) return false;
+
+    const newInventory = [...characterSheet.inventory];
+    let added = false;
+
+    // Try to stack first
+    if (item.stackable) {
+      const existingSlot = newInventory.find(slot => slot?.itemId === itemId);
+      if (existingSlot) {
+        existingSlot.quantity += quantity;
+        added = true;
+      }
+    }
+
+    // If not stacked, find an empty slot
+    if (!added) {
+      const emptySlotIndex = newInventory.findIndex(slot => slot === null);
+      if (emptySlotIndex !== -1) {
+        newInventory[emptySlotIndex] = { itemId, quantity, portions: item.portionsPerUnit };
+        added = true;
+      }
+    }
+
+    if (added) {
+      get().updateCharacterSheet({ ...characterSheet, inventory: newInventory });
+      return true;
+    }
+
+    return false; // Inventory is full
+  },
+
+  removeItemFromInventory: (slotIndex, quantity) => {
+    const { characterSheet } = get();
+    const slot = characterSheet.inventory[slotIndex];
+    if (!slot || slot.quantity < quantity) return false;
+
+    const newInventory = [...characterSheet.inventory];
+    const currentSlot = newInventory[slotIndex]!;
+
+    if (currentSlot.quantity === quantity) {
+      newInventory[slotIndex] = null;
+    } else {
+      currentSlot.quantity -= quantity;
+    }
+
+    get().updateCharacterSheet({ ...characterSheet, inventory: newInventory });
+    return true;
   },
 
   resetCharacter: () => {
