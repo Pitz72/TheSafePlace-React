@@ -1,9 +1,9 @@
 # The Safe Place
 
-**Versione:** 0.9.6
-**Codename:** Phoenix
+**Versione:** 0.9.7
+**Codename:** This is Ultimo's Story
 
-GDR Retrò a Fosfori Verdi. Un sistema di gioco avanzato con meccaniche D&D e un'atmosfera CRT anni '80.
+GDR Retrò a Fosfori Verdi. Un sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo che segue la storia di Ultimo attraverso frammenti di quest, eventi lore e scelte morali che influenzano l'evoluzione emotiva del personaggio.
 
 ---
 
@@ -46,6 +46,6 @@ npm run test
 
 Il progetto utilizza una moderna stack front-end basata su **React** e **TypeScript**.
 
-La gestione dello stato globale è affidata a **Zustand**, con un'architettura **multi-store** dove ogni "store" gestisce una porzione specifica e verticale dello stato dell'applicazione (es. `worldStore`, `characterStore`, `inventoryStore`). Questo garantisce modularità e manutenibilità.
+La gestione dello stato globale è affidata a **Zustand**, con un'architettura **multi-store** dove ogni "store" gestisce una porzione specifica e verticale dello stato dell'applicazione (es. `worldStore`, `characterStore`, `inventoryStore`, `narrativeStore`). Il nuovo `narrativeStore` gestisce il sistema narrativo canonico con progressione della quest principale, eventi lore e sistema emotivo. Questo garantisce modularità e manutenibilità.
 
 Il processo di build e sviluppo è gestito da **Vite** per la massima velocità e performance.

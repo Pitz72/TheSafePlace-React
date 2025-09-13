@@ -338,8 +338,8 @@ const LoadScreen: React.FC = () => {
   };
 
   const isVersionCompatible = (version: string): boolean => {
-    // Versioni compatibili con v0.6.1
-    const compatibleVersions = ['0.5.0', '0.6.0', '0.6.1'];
+    // Versioni compatibili con v0.9.7
+  const compatibleVersions = ['0.5.0', '0.6.0', '0.6.1', '0.9.6', '0.9.6.1', '0.9.7'];
     return compatibleVersions.includes(version);
   };
 

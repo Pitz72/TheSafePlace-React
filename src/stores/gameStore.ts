@@ -11,6 +11,8 @@ import { useEventStore } from './events/eventStore';
 import { useSurvivalStore } from './survival/survivalStore';
 import { useNotificationStore } from './notifications/notificationStore';
 import { useRiverCrossingStore } from './river/riverCrossingStore';
+import { useNarrativeStore } from './narrative/narrativeStore';
+import { narrativeIntegration } from '../services/narrativeIntegration';
 
 // Interfaccia semplificata per il GameStore principale
 export interface CoreGameState {
@@ -141,6 +143,14 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       
       // Carica la mappa del mondo
       await useWorldStore.getState().loadMap();
+      
+      // Inizializza il sistema narrativo
+      const narrativeStore = useNarrativeStore.getState();
+      await narrativeStore.loadQuestFragments();
+      await narrativeStore.loadLoreEvents();
+      
+      // Inizializza l'integrazione narrativa
+      narrativeIntegration.initialize();
       
       // Non cambiare currentScreen qui - lascia che sia gestito dal chiamante
       // set({ currentScreen: 'menu' }); // RIMOSSO: causava il redirect al menu

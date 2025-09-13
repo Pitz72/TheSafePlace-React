@@ -1,0 +1,464 @@
+{
+  "mainQuestFragments": {
+    "metadata": {
+      "title": "I 12 Frammenti della Memoria",
+      "description": "La Main Quest di The Safe Place - Un pellegrinaggio emotivo verso la verità",
+      "source": "Romanzo 'Echi Prima del Silenzio'",
+      "totalFragments": 12,
+      "questType": "linear_progressive",
+      "triggerSystem": "guaranteed_sequence"
+    },
+    "questState": {
+      "currentStage": 1,
+      "progressCounter": 0,
+      "flags": {},
+      "fragmentsCompleted": []
+    },
+    "fragments": [
+      {
+        "id": "fragment_01_first_silence",
+        "stage": 1,
+        "title": "Ricordo: Il Silenzio",
+        "category": "memory_trigger",
+        "emotionalWeight": 6,
+        "activationCondition": {
+          "type": "movement_progress",
+          "requirement": "first_10_steps",
+          "description": "Dopo aver fatto i primi 10 passi nel mondo di gioco"
+        },
+        "content": {
+          "description": "Mentre cammini, un silenzio innaturale ti avvolge, identico a quello di tanti anni fa. Ti torna in mente il giorno in cui tutto finì. Non con un boato, ma con un respiro trattenuto. Il rombo costante all'orizzonte cessò. Gli uccelli smisero di cantare. Persino il vento sembrò aver paura di muoversi. Tuo padre, Elian, ti strinse la mano, troppo forte. Nei suoi occhi non c'era solo paura, ma il riconoscimento di una fine. La 'Guerra Inespressa' era terminata, e il mondo aveva smesso di respirare.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Il silenzio... è sempre il silenzio che precede la fine di tutto."
+        },
+        "emotionalImpact": {
+          "understanding": 1,
+          "trauma": 2,
+          "elianConnection": 1,
+          "worldAwareness": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_01_completed",
+          "memoryUnlocked": "great_silence_memory",
+          "statusEffect": {
+            "type": "CONTEMPLATIVE",
+            "duration": 300
+          }
+        }
+      },
+      {
+        "id": "fragment_02_water_lesson",
+        "stage": 2,
+        "title": "Ricordo: La Sete",
+        "category": "survival_lesson",
+        "emotionalWeight": 5,
+        "activationCondition": {
+          "type": "survival_state",
+          "requirement": "thirst_below_25",
+          "description": "La prima volta che il giocatore si trova con la statistica 'Sete' sotto il 25%"
+        },
+        "content": {
+          "description": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di metallo e di morte. Stavi per bere, un bambino guidato solo dall'istinto. La mano di Elian ti afferrò, ferma, quasi violenta. 'No!', fu un ordine perentorio. Poi, con gesti lenti e metodici, prese uno straccio sudicio, sabbia, ciottoli, e costruì un filtro rudimentale. 'Il mondo non è più amico,' ti disse, porgendoti l'acqua torbida. 'Ogni sorso, ogni boccone, te lo devi conquistare. E devi capire cosa puoi prendere, e cosa ti ucciderà'.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Ogni goccia d'acqua pulita è una vittoria strappata a questo mondo ostile."
+        },
+        "emotionalImpact": {
+          "pragmatism": 2,
+          "elianConnection": 2,
+          "survival_wisdom": 3
+        },
+        "consequences": {
+          "questAdvancement": "fragment_02_completed",
+          "skillBoost": {
+            "skill": "survival",
+            "amount": 1
+          }
+        }
+      },
+      {
+        "id": "fragment_03_taste_of_blood",
+        "stage": 3,
+        "title": "Ricordo: Il Sapore del Sangue",
+        "category": "violence_initiation",
+        "emotionalWeight": 8,
+        "activationCondition": {
+          "type": "combat_experience",
+          "requirement": "first_combat_victory_or_damage",
+          "description": "La prima volta che il giocatore vince un combattimento o sopravvive a un evento che causa danno"
+        },
+        "content": {
+          "description": "Il dolore della ferita, o l'adrenalina dello scontro, ti riporta alla vecchia stazione ferroviaria. I predoni. Il lampo di un coltello. Tuo padre che combatteva, una furia disperata. L'ordine che ti squarciò l'anima: 'CORRI! NON VOLTARTI!'. Ricordi la tua fuga, il cuore che martellava, il sapore amaro della polvere e della paura in bocca. Ore dopo, Elian ti raggiunse, zoppicando, una maschera di sudore e sangue rappreso. Non disse nulla, ma quella notte capisti una lezione terribile: a volte, sopravvivere significa lasciare qualcuno indietro.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Il sapore del sangue... è il sapore della sopravvivenza. E della colpa."
+        },
+        "emotionalImpact": {
+          "trauma": 3,
+          "understanding": 2,
+          "guilt": 2,
+          "elianConnection": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_03_completed",
+          "memoryUnlocked": "station_attack_memory",
+          "statusEffect": {
+            "type": "HARDENED",
+            "duration": 480
+          }
+        }
+      },
+      {
+        "id": "fragment_04_learning_darkness",
+        "stage": 4,
+        "title": "Ricordo: Imparare il Buio",
+        "category": "combat_training",
+        "emotionalWeight": 6,
+        "activationCondition": {
+          "type": "time_survival",
+          "requirement": "survived_5_days",
+          "description": "Dopo essere sopravvissuto per 5 giorni"
+        },
+        "content": {
+          "description": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo, come usare il peso dell'avversario a tuo vantaggio. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Non siamo eroi. Siamo solo sopravvissuti che hanno imparato a vivere nel buio."
+        },
+        "emotionalImpact": {
+          "pragmatism": 3,
+          "combat_wisdom": 2,
+          "elianConnection": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_04_completed",
+          "skillBoost": {
+            "skill": "combat",
+            "amount": 1
+          }
+        }
+      },
+      {
+        "id": "fragment_05_unanswered_question",
+        "stage": 5,
+        "title": "Ricordo: La Mamma",
+        "category": "lena_mystery",
+        "emotionalWeight": 9,
+        "activationCondition": {
+          "type": "location_trigger",
+          "requirement": "first_shelter_entry",
+          "description": "La prima volta che il giocatore entra in un Rifugio (R)"
+        },
+        "content": {
+          "description": "Questo luogo... questo fragile barlume di sicurezza, ti ricorda la vecchia fattoria. E la fattoria ti ricorda le domande. Quelle che ponevi a tuo padre nelle notti fredde. 'E mamma? Cosa le è successo?'. Elian non rispondeva mai veramente. La sua voce si incrinava, i suoi occhi si perdevano in un abisso di sofferenza. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. 'Questo è quello che devi sapere. Questo è quello che lei avrebbe voluto.' Ma tu iniziavi a leggere tra le righe. C'era un segreto, un peso che tuo padre portava da solo. Un segreto che lo stava consumando da dentro.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Mamma... perché papà non riesce mai a parlare di te senza che gli si spezzi la voce?"
+        },
+        "emotionalImpact": {
+          "curiosity": 4,
+          "lenaConnection": 3,
+          "understanding": 2,
+          "pain": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_05_completed",
+          "questObjectiveUpdate": "seek_truth_about_lena",
+          "memoryUnlocked": "lena_questions_memory"
+        }
+      },
+      {
+        "id": "fragment_06_ash_angels",
+        "stage": 6,
+        "title": "Ricordo: Gli Angeli della Cenere",
+        "category": "world_horror",
+        "emotionalWeight": 7,
+        "activationCondition": {
+          "type": "exploration_progress",
+          "requirement": "progress_counter_200",
+          "description": "Dopo aver viaggiato per una distanza significativa (progressCounter > 200)"
+        },
+        "content": {
+          "description": "Un odore acre, chimico, ti pizzica le narici e ti gela il sangue. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte, ricoperte da quella polvere grigiastra. E le figure incappucciate che si muovevano tra di loro con calma metodica. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Ci sono cose in questo mondo che non dovrebbero esistere. Ma esistono."
+        },
+        "emotionalImpact": {
+          "fear": 3,
+          "worldAwareness": 3,
+          "trauma": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_06_completed",
+          "memoryUnlocked": "ash_angels_memory",
+          "statusEffect": {
+            "type": "WARY",
+            "duration": 600
+          }
+        }
+      },
+      {
+        "id": "fragment_07_truth_burden",
+        "stage": 7,
+        "title": "Ricordo: Il Fardello",
+        "category": "truth_weight",
+        "emotionalWeight": 8,
+        "activationCondition": {
+          "type": "character_progress",
+          "requirement": "reach_level_5",
+          "description": "La prima volta che il giocatore raggiunge il livello 5"
+        },
+        "content": {
+          "description": "La nuova forza che senti nelle tue membra ti riporta a un confronto con tuo padre, sulla vostra vecchia fattoria. 'Perché non mi dici mai niente? Di mamma? Di cosa è successo davvero?', gli avevi urlato, frustrato. E per la prima volta avevi visto un dolore nudo nei suoi occhi. 'Ci sono cose che un figlio non dovrebbe mai sapere,' ti aveva risposto. 'Sapere non cambierebbe nulla, ragazzo. Anzi, forse renderebbe tutto più difficile da sopportare. La verità, a volte, è un fardello troppo pesante'.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Forse papà aveva ragione. Forse ci sono verità troppo pesanti da portare."
+        },
+        "emotionalImpact": {
+          "understanding": 3,
+          "elianEmpathy": 2,
+          "wisdom": 2,
+          "pain": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_07_completed",
+          "emotionalMaturity": 1
+        }
+      },
+      {
+        "id": "fragment_08_the_map",
+        "stage": 8,
+        "title": "Ricordo: L'Ultima Lezione",
+        "category": "departure_memory",
+        "emotionalWeight": 9,
+        "activationCondition": {
+          "type": "item_usage",
+          "requirement": "use_lore_item",
+          "description": "La prima volta che il giocatore usa un oggetto 'lore' chiave (es. old_military_map)"
+        },
+        "content": {
+          "description": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi quella mattina gelida, quando ti svegliasti e lui non c'era. Il suo sacco, più leggero del solito. E la lettera. 'Nel tuo sacco, sotto le provviste, troverai una mappa,' scriveva. 'È vecchia, ma è l'unica che ho. Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile, lo so, forse solo una leggenda, ma è l'unica possibilità che ti resta.' Quella mappa non era solo un pezzo di carta. Era un testamento. L'inizio del tuo vero, solitario viaggio.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "La mappa non è solo una guida. È l'ultima cosa che papà mi ha dato prima di andarsene."
+        },
+        "emotionalImpact": {
+          "abandonment": 3,
+          "determination": 2,
+          "elianConnection": 2,
+          "loneliness": 3
+        },
+        "consequences": {
+          "questAdvancement": "fragment_08_completed",
+          "questObjectiveUpdate": "follow_elian_path"
+        }
+      },
+      {
+        "id": "fragment_09_meaning_of_name",
+        "stage": 9,
+        "title": "Ricordo: L'Ultimo",
+        "category": "identity_reflection",
+        "emotionalWeight": 7,
+        "activationCondition": {
+          "type": "time_survival",
+          "requirement": "survived_15_days",
+          "description": "Dopo essere sopravvissuto per 15 giorni"
+        },
+        "content": {
+          "description": "La solitudine è un compagno costante. Ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Non c'è più nessuno a cui appoggiarsi. Solo tu, e la promessa strappata a un padre fuggiasco.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Ultimo... è questo che sono? L'ultimo di tutto?"
+        },
+        "emotionalImpact": {
+          "existential_dread": 3,
+          "loneliness": 3,
+          "identity_crisis": 2,
+          "lenaConnection": 1
+        },
+        "consequences": {
+          "questAdvancement": "fragment_09_completed",
+          "statusEffect": {
+            "type": "INTROSPECTIVE",
+            "duration": 720
+          }
+        }
+      },
+      {
+        "id": "fragment_10_echo_of_choice",
+        "stage": 10,
+        "title": "L'Eco di una Scelta",
+        "category": "moral_awakening",
+        "emotionalWeight": 10,
+        "activationCondition": {
+          "type": "moral_choice",
+          "requirement": "complete_difficult_moral_event",
+          "description": "La prima volta che il giocatore è costretto a compiere una scelta morale difficile in un evento"
+        },
+        "content": {
+          "description": "Qualunque cosa tu abbia scelto, un pensiero ti gela il sangue. La scelta tra il pragmatismo brutale e la compassione rischiosa. Tra salvare te stesso e aiutare un altro. All'improvviso, capisci. Questo è l'abisso in cui tuo padre ha guardato. Questa è la scelta che ha dovuto fare. E tu, in questo istante, hai appena camminato sul bordo dello stesso precipizio. La sua durezza, i suoi silenzi... forse non erano crudeltà. Forse erano solo le cicatrici lasciate da una scelta impossibile.",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Ora capisco, papà. Ora capisco il peso delle scelte impossibili."
+        },
+        "emotionalImpact": {
+          "understanding": 5,
+          "elianEmpathy": 4,
+          "moral_awareness": 3,
+          "compassion": 2
+        },
+        "consequences": {
+          "questAdvancement": "fragment_10_completed",
+          "majorBreakthrough": "elian_understanding",
+          "questStageTransition": "approaching_revelation"
+        }
+      },
+      {
+        "id": "fragment_11_ash_lullaby",
+        "stage": 11,
+        "title": "La Ninnananna della Cenere",
+        "category": "lena_revelation",
+        "emotionalWeight": 10,
+        "activationCondition": {
+          "type": "complex_trigger",
+          "requirements": {
+            "mainQuestStage": 11,
+            "hasItem": "quest_music_box",
+            "location": "safe_house",
+            "locationDepth": "deep_territory",
+            "action": "rest_attempt"
+          },
+          "description": "Possedere il Carillon Annerito, trovarsi in un Rifugio in territorio profondo, e tentare di riposare"
+        },
+        "content": {
+          "phases": [
+            {
+              "phase": 1,
+              "title": "La Tentazione",
+              "description": "La stanchezza ti pesa sulle ossa come un macigno. Qui, nel silenzio di questo rifugio, il mondo là fuori sembra lontano. Il freddo si insinua nella tua giacca consunta. Dalla tasca interna, le tue dita sfiorano il metallo gelido del carillon. Ricordi le parole di tuo padre, quasi un ringhio di terrore represso: 'Non aprirlo mai. Il suo suono... attira i ricordi sbagliati.' Ma la solitudine, stanotte, è un nemico più vicino di qualsiasi ricordo.",
+              "choices": [
+                {
+                  "text": "Apri il carillon.",
+                  "consequence": "trigger_event"
+                },
+                {
+                  "text": "Cerca di dormire senza aprirlo.",
+                  "consequence": "defer_event"
+                },
+                {
+                  "text": "Rimani di guardia.",
+                  "consequence": "defer_event"
+                }
+              ]
+            },
+            {
+              "phase": 2,
+              "title": "La Ninnananna",
+              "description": "Le tue dita, tremanti, sollevano il coperchio. Il meccanismo scatta con un clic secco. Una melodia si leva nell'aria immobile. È flebile, incrinata, piena di note mancanti, come un ricordo che zoppica. Eppure, sotto la sua tristezza, c'è una dolcezza antica, quasi dimenticata. Una ninnananna. Non sai perché, ma senti le palpebre farsi pesanti. Il freddo sembra attenuarsi... Ti appoggi contro la parete fredda, e per la prima volta da quando tuo padre se n'è andato, il sonno non è una caduta nell'oscurità, ma un abbandono.",
+              "actionText": "[Invio] Continua"
+            },
+            {
+              "phase": 3,
+              "title": "La Presenza",
+              "description": "...Ti svegli di soprassalto. Non per un rumore. Ma per la sua assenza. La musica è finita. L'aria è immobile, pesante, e gelida. Molto più gelida di prima. E c'è un odore. Non di umidità o di rovina. È un odore pulito, chimico, sterile. L'odore di cenere fredda. I tuoi occhi si aprono nel buio. Non sei solo.",
+              "continuation": "Una figura è in piedi dall'altra parte della stanza... alta, avvolta in un mantello scuro... Un Angelo della Cenere. Il panico ti gela il sangue. Le lezioni di tuo padre ti urlano nella testa: Non farti vedere. Corri. Non combattere. Ma sei paralizzato. Puoi solo guardare.",
+              "actionText": "[Invio] Continua"
+            },
+            {
+              "phase": 4,
+              "title": "L'Interazione",
+              "description": "La creatura non si muove verso di te. Lentamente, si china... verso il carillon.",
+              "sequence": [
+                "Una mano pallida, quasi traslucida, emerge dal mantello. Si ferma a un soffio dal piccolo oggetto, come se temesse di romperlo.",
+                "Il cappuccio si sposta. Non vedi un volto. Solo l'oscurità, e il bagliore debole e azzurrognolo di una lente.",
+                "La creatura emette un suono. Un sibilo basso, ritmico. E mescolato al sibilo, un sussurro distorto, elettronico. Parole spezzate. Frammenti di un'eco.",
+                "«... mio... sole... devi... dormire...»",
+                "È una voce di macchina che cerca di cantare una ninnananna. La *tua* ninnananna."
+              ],
+              "actionText": "[Invio] Continua"
+            },
+            {
+              "phase": 5,
+              "title": "La Rivelazione",
+              "description": "Il terrore si trasforma in un orrore così profondo da farti male al petto. Quella cosa... quella cosa ti conosce. La figura ritrae la mano. Si rialza. Per un istante terribile, la lente scura sembra fissarti. Non c'è minaccia. Né pietà. C'è solo un vuoto vasto e incomprensibile. Poi, si volta e si dissolve nell'ombra. Svanita.",
+              "conclusion": "Rimani solo, tremante. Accanto a te, il carillon giace chiuso. Non è stato un sogno. Tua madre. Quello era ciò che restava di tua madre. Non ti ha attaccato. Ti ha trovato. E ti ha lasciato andare. La domanda che ora ti brucia dentro è peggiore di qualsiasi ferita.",
+              "finalQuestion": "Perché?",
+              "actionText": "[Invio] Continua"
+            }
+          ],
+          "reflectionText": "Mamma... cosa ti hanno fatto? Cosa sei diventata? E perché... perché mi hai riconosciuto?"
+        },
+        "emotionalImpact": {
+          "shock": 5,
+          "horror": 5,
+          "understanding": 3,
+          "grief": 5,
+          "lenaConnection": 4,
+          "existentialDread": 4
+        },
+        "consequences": {
+          "questAdvancement": "fragment_11_completed",
+          "majorRevelation": "lena_ash_angel_truth",
+          "questObjectiveUpdate": "find_elian_for_answers",
+          "itemConsequence": {
+            "disableRestInShelters": true,
+            "message": "Il sonno non arriverà. Non stanotte."
+          },
+          "statusEffect": {
+            "type": "TRAUMATIZED",
+            "duration": 2880
+          },
+          "memoryUnlocked": "lena_ash_angel_encounter"
+        }
+      },
+      {
+        "id": "fragment_12_final_truth",
+        "stage": 12,
+        "title": "La Verità Completa",
+        "category": "final_confrontation",
+        "emotionalWeight": 10,
+        "activationCondition": {
+          "type": "location_arrival",
+          "requirement": "reach_final_destination",
+          "description": "Arrivare alla casella di destinazione finale (E)"
+        },
+        "content": {
+          "description": "Sei arrivato a 'The Safe Place'. Non è una città utopica, ma un piccolo bunker, sicuro e funzionante. E dentro, ad aspettarti, c'è Elian. È più vecchio, più stanco. Ti guarda, e nei suoi occhi vedi un'attesa lunga una vita. Ma ora hai una domanda che brucia più di qualsiasi altra: 'Sapevi? Sapevi cosa era diventata mamma?'",
+          "elianResponse": "Il volto di tuo padre si contrae come se lo avessi colpito. 'L'hai vista,' sussurra. Non è una domanda. 'Speravo... speravo che non accadesse mai.' Si siede pesantemente, improvvisamente vecchissimo. 'Sì, lo sapevo. Gli Angeli della Cenere... non sono mostri casuali. Sono quello che resta di chi era troppo vicino all'epicentro quando tutto finì. Lena era nel palazzo governativo quando la Guerra Inespressa raggiunse il culmine. L'esplosione... non li uccise. Li trasformò.'",
+          "revelation": "La verità ti colpisce come un pugno. 'Ecco perché sei scappato. Non solo per salvarmi. Ma perché non potevi sopportare di vedere cosa era diventata.' Elian annuisce, le lacrime che rigano il suo volto segnato. 'Ogni notte la sognavo. Ogni giorno speravo che fosse morta davvero, invece di... quello. E tu... tu eri l'unica cosa buona che mi restava di lei. L'unica prova che Lena era esistita davvero, non solo quell'orrore.'",
+          "finalChoice": "Ora capisci tutto. Il peso che tuo padre ha portato. La scelta impossibile tra salvare te e tentare di salvare una moglie già perduta. Tu non sei solo il suo alibi vivente. Sei anche l'ultimo frammento di Lena che è rimasto umano. La domanda finale è: cosa fai con questa verità?",
+          "actionText": "[Invio] Continua",
+          "reflectionText": "Mamma... papà... ora capisco il peso che entrambi avete portato. E ora tocca a me decidere cosa farne."
+        },
+        "emotionalImpact": {
+          "revelation": 5,
+          "understanding": 5,
+          "compassion": 4,
+          "grief": 4,
+          "elianEmpathy": 5,
+          "closure": 3
+        },
+        "consequences": {
+          "questAdvancement": "fragment_12_completed",
+          "questCompletion": "main_quest_finished",
+          "finalChoice": "forgiveness_understanding_or_condemnation",
+          "gameStateTransition": "ending_sequence",
+          "majorRevelation": "complete_truth_about_lena_and_elian"
+        }
+      }
+    ],
+    "triggerSystem": {
+      "checkFunction": "checkMainQuestTrigger",
+      "callFrequency": "end_of_each_game_turn",
+      "progressTracking": {
+        "movementSteps": 0,
+        "daysAlive": 0,
+        "combatExperience": false,
+        "shelterVisited": false,
+        "moralChoiceMade": false,
+        "levelReached": 1,
+        "loreItemUsed": false,
+        "nearDestination": false,
+        "atDestination": false
+      }
+    },
+    "emotionalProgression": {
+      "innocentChild": "fragments_1_3",
+      "questioningSon": "fragments_4_7", 
+      "understandingSeeker": "fragments_8_11",
+      "empathicForgiver": "fragment_12"
+    }
+  }
+}

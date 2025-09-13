@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.9.0 - Run away, fight, or die.
+## The Safe Place v0.9.7 - This is Ultimo's Story
 
 **Stato**: CONSOLIDATO E AGGIORNATO
-**Ultima Revisione**: 2025-08-31
-**Versione Attiva**: v0.9.0 "Run away, fight, or die."
+**Ultima Revisione**: 2025-01-20
+**Versione Attiva**: v0.9.7 "This is Ultimo's Story"
 
 ---
 
@@ -22,6 +22,14 @@
 ### ⚔️ **Documentazione Sistema Combattimento v0.9.0**
 - ✅ **[ANTI_REGRESSION_GUIDE.md](../ANTI_REGRESSION_GUIDE.md)** - Guida anti-regressione per il sistema di combattimento V.A.T.
 
+### 📖 **Sistema Narrativo Canonico (v0.9.7)**
+- ✅ **[narrativeStore.ts](../src/stores/narrative/narrativeStore.ts)** - Store principale del sistema narrativo
+- ✅ **[narrative.ts](../src/types/narrative.ts)** - Interfacce e tipi del sistema narrativo
+- ✅ **[NarrativeScreen.tsx](../src/components/narrative/NarrativeScreen.tsx)** - Interfaccia utente principale
+- ✅ **[NarrativeManager.tsx](../src/components/narrative/NarrativeManager.tsx)** - Gestore componenti narrativi
+- ✅ **[narrativeIntegration.ts](../src/services/narrativeIntegration.ts)** - Integrazione con sistemi esistenti
+- ✅ **[storyProgression.ts](../src/services/storyProgression.ts)** - Logica di progressione della storia
+
 ### 🔧 **Documentazione Sistema Crafting (v0.8.5)**
 - ✅ **[CRAFTING-SYSTEM-GUIDE.md](./crafting-system/CRAFTING-SYSTEM-GUIDE.md)** - Guida completa sistema crafting
 - ✅ **[TROUBLESHOOTING-GUIDE.md](./crafting-system/TROUBLESHOOTING-GUIDE.md)** - Guida troubleshooting e debug
@@ -39,9 +47,11 @@
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog e Consolidamento Corrente**
-- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE CORRENTE v0.9.6.1 "Phoenix"
-- ✅ **[CHANGELOG-v0.9.6.1.md](../CHANGELOG-v0.9.6.1.md)** - Patch Sincronizzazione Store
-- ✅ **[ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md](./anti-regressione/ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md)** - Protezione v0.9.6.1
+- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE CORRENTE v0.9.7 "This is Ultimo's Story"
+- ✅ **[CHANGELOG-v0.9.7.md](./changelog/CHANGELOG-v0.9.7.md)** - Sistema Narrativo Canonico Completo
+- ✅ **[ANTI-REGRESSION-v0.9.7.md](./anti-regressione/ANTI-REGRESSION-v0.9.7.md)** - Protezione v0.9.7
+- ✅ **[CHANGELOG-v0.9.6.1.md](../CHANGELOG-v0.9.6.1.md)** - Patch Sincronizzazione Store (Precedente)
+- ✅ **[ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md](./anti-regressione/ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md)** - Protezione v0.9.6.1 (Precedente)
 - ✅ **[CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./changelog/CHANGELOG-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - Versione Precedente "Crafting Full and Real Integration"
 - ✅ **[CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./consolidamento/CONSOLIDAMENTO-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - Consolidamento v0.8.5
 - ✅ **[CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./changelog/CHANGELOG-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - Versione Precedente "I'm Constantly Tidying Up my Desk"

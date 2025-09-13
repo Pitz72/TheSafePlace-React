@@ -1,10 +1,10 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.9.6.1",
-  "codename": "Phoenix",
+  "version": "0.9.7",
+  "codename": "This is Ultimo's Story",
   "type": "module",
-  "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D e atmosfera CRT anni '80",
+  "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo",
   "author": "TheSafePlace Development Team",
   "license": "MIT",
   "keywords": [
@@ -15,7 +15,11 @@
     "retro",
     "crt",
     "survival",
-    "d&d"
+    "d&d",
+    "narrative",
+    "storytelling",
+    "emotional-ai",
+    "interactive-fiction"
   ],
   "homepage": "https://github.com/TheSafePlace-React",
   "repository": {

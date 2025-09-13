@@ -479,7 +479,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           const resultItem = gameStore.items[recipe.resultItemId];
           const itemName = resultItem?.name || 'Oggetto Sconosciuto';
 
-          gameStore.addLogEntry(MessageType.DISCOVERY, {
+          notificationStore.addLogEntry(MessageType.DISCOVERY, {
             discovery: `Nuova ricetta sbloccata: ${itemName}`
           });
         });

@@ -13,6 +13,7 @@ import { useNotificationStore } from './stores/notifications/notificationStore';
 import { useInventoryStore } from './stores/inventory/inventoryStore';
 import { itemDatabase } from './data/items/itemDatabase';
 import { GameErrorBoundary } from './utils/errorHandler';
+import NarrativeManager from './components/narrative/NarrativeManager';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
 import InventoryScreen from './components/InventoryScreen';
@@ -217,6 +218,7 @@ const GameContent = () => {
           onRemove={removeNotification} 
         />
         <div className="h-full flex flex-col">
+          <NarrativeManager />
           {combatResult ? (
             <PostCombatScreen
               result={combatResult}

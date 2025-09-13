@@ -1,0 +1,366 @@
+{
+  "loreEvents": {
+    "thematicEvents": [
+      {
+        "id": "lore_sick_traveler",
+        "title": "L'Eco di una Tosse",
+        "description": "Senti un colpo di tosse secca, fragile. Appoggiato a un albero crollato, vedi un uomo. È poco più di uno scheletro tenuto insieme da stracci. Accanto a lui, una ragazza molto giovane trema, scossa da una febbre evidente. Ti guardano con occhi privi di speranza. Sono deboli, forse troppo per essere una minaccia. Forse.",
+        "category": "tematico",
+        "isUnique": true,
+        "emotionalWeight": 8,
+        "elianParallel": "Questo è esattamente il tipo di scelta che ha dovuto affrontare tuo padre - aiutare i deboli rischiando le proprie risorse, o conservare tutto per sopravvivere",
+        "lenaConnection": "La compassione verso i più deboli era il tratto distintivo di tua madre",
+        "biomes": ["FOREST", "PLAINS", "HILLS"],
+        "questStageRequirement": "frammenti",
+        "probability": 0.15,
+        "choices": [
+          {
+            "id": "help_travelers",
+            "text": "Offri una piccola parte delle tue provviste",
+            "moralAlignment": "lena",
+            "skillCheck": {
+              "ability": "carisma",
+              "difficulty": 10
+            },
+            "successText": "Esiti un istante, poi porgi loro del cibo e dell'acqua. L'uomo piange in silenzio mentre la ragazza beve avidamente. Non dicono nulla, ma i loro occhi ti comunicano una gratitudine profonda. Mentre ti allontani, ti senti più leggero, ma anche più vulnerabile. Un pensiero ti tormenta: *è questo che avrebbe fatto mia madre?*",
+            "failureText": "Offri loro del cibo. Lo prendono con avidità, ma i loro sguardi rimangono diffidenti, quasi ostili. Non ricevi un grazie. Mentre ti allontani, senti un peso sullo stomaco, la sensazione di aver sprecato una risorsa preziosa per nulla. La generosità, in questo mondo, è un lusso pericoloso.",
+            "reflectionText": "Mentre condividi le tue risorse, senti un calore nel petto. È questo che avrebbe fatto mamma? Ma la paura ti sussurra: e se non bastasse per te?",
+            "emotionalImpact": {
+              "compassion": 3,
+              "understanding": 1,
+              "pragmatism": -1,
+              "guilt": 0
+            },
+            "consequences": {
+              "itemsLost": [
+                { "itemId": "CONS_001", "quantity": 1 },
+                { "itemId": "CONS_002", "quantity": 1 }
+              ],
+              "statusEffect": {
+                "type": "HOPEFUL",
+                "duration": 180
+              }
+            }
+          },
+          {
+            "id": "ignore_travelers",
+            "text": "Ignorali e tira dritto",
+            "moralAlignment": "elian",
+            "resultText": "Stringi i denti e prosegui. Le tue scorte sono solo tue. Non puoi permetterti di salvare nessuno. Superandoli, non ti volti, ma la loro silenziosa disperazione ti segue come un'ombra. È questa la lezione che ti ha insegnato tuo padre: sopravvivere significa, a volte, lasciare che altri muoiano.",
+            "reflectionText": "Li guardi allontanarsi e senti un peso nel petto. Papà... è così che ti sei sentito ogni volta? È questo il prezzo della sopravvivenza?",
+            "emotionalImpact": {
+              "pragmatism": 3,
+              "understanding": 2,
+              "guilt": 2,
+              "compassion": -1
+            },
+            "consequences": {
+              "statusEffect": {
+                "type": "HARDENED",
+                "duration": 240
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "lore_broken_radio",
+        "title": "Voci nel Silenzio",
+        "description": "Tra le macerie di un negozio di elettronica, trovi una vecchia radio a onde corte. Sembra danneggiata, ma un debole led rosso lampeggia ancora. Potresti provare a ripararla per cercare segnali, o smontarla per recuperare componenti preziosi.",
+        "category": "tematico",
+        "isUnique": true,
+        "emotionalWeight": 6,
+        "elianParallel": "La scelta tra speranza e pragmatismo - tuo padre avrebbe sempre scelto la sopravvivenza concreta",
+        "lenaConnection": "Tua madre credeva nell'importanza dei collegamenti umani, anche i più fragili",
+        "biomes": ["CITY", "RUINS"],
+        "questStageRequirement": "frammenti",
+        "probability": 0.12,
+        "choices": [
+          {
+            "id": "repair_radio",
+            "text": "Tenta di riparare la radio",
+            "moralAlignment": "lena",
+            "skillCheck": {
+              "ability": "intelligenza",
+              "difficulty": 14
+            },
+            "successText": "Con pazienza, riesci a ricollegare alcuni fili. Giri la manopola e, tra il fruscio della statica, senti una voce debole, quasi un sussurro, cantare una vecchia ninna nanna. È una melodia familiare, una melodia che ti fa male al cuore. Dura solo un istante, poi svanisce. La radio è di nuovo morta, ma per un secondo, non eri solo. Il ricordo di tua madre, sbiadito dal tempo, torna vivido per un momento.",
+            "failureText": "Armeggi con i circuiti, ma un filo sbagliato provoca una piccola scintilla e l'odore di bruciato. Il led rosso si spegne per sempre. Hai perso tempo e la possibilità di sentire qualcosa oltre al suono del vento.",
+            "reflectionText": "Per un istante, quella voce nella radio... sembrava quella di mamma. Era solo immaginazione, ma il cuore mi ha battuto più forte.",
+            "emotionalImpact": {
+              "compassion": 2,
+              "understanding": 1,
+              "lenaConnection": 3,
+              "hope": 2
+            },
+            "consequences": {
+              "success": {
+                "statusEffect": {
+                  "type": "INSPIRED",
+                  "duration": 300
+                },
+                "lenaMemoryUnlocked": "ninna_nanna_memory"
+              },
+              "failure": {
+                "statusEffect": {
+                  "type": "DISAPPOINTED",
+                  "duration": 120
+                }
+              }
+            }
+          },
+          {
+            "id": "salvage_radio",
+            "text": "Smontala per i componenti",
+            "moralAlignment": "elian",
+            "resultText": "La speranza non riempie lo stomaco. Con gesti precisi, smonti la radio, recuperando alcuni componenti elettronici che potrebbero fare la differenza tra la vita e la morte. Mentre lo fai, il led rosso si spegne, e con esso, l'ultima, flebile possibilità di un contatto.",
+            "reflectionText": "Papà aveva ragione. La sopravvivenza viene prima di tutto. Ma perché sento questo vuoto nel petto?",
+            "emotionalImpact": {
+              "pragmatism": 3,
+              "understanding": 1,
+              "hope": -2,
+              "guilt": 1
+            },
+            "consequences": {
+              "itemsGained": [
+                { "itemId": "CRAFT_001", "quantity": 3 },
+                { "itemId": "CRAFT_002", "quantity": 2 }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "lore_bridge_choice",
+        "title": "Il Ponte Crollato",
+        "description": "Arrivi a un ponte crollato su un fiume impetuoso. C'è un'unica, precaria trave di metallo che collega le due sponde. Mentre ti prepari ad attraversare, senti un lamento. Sotto il ponte, aggrappato a dei detriti, c'è un uomo con una gamba ferita, trascinato lentamente dalla corrente. Puoi tentare di salvarlo, ma perderesti tempo prezioso e rischieresti di essere visto. Oppure puoi attraversare in fretta e continuare il tuo viaggio.",
+        "category": "tematico",
+        "isUnique": true,
+        "emotionalWeight": 9,
+        "elianParallel": "La scelta tra salvare qualcuno e mettere a rischio se stessi - il dilemma che ha definito la vita di tuo padre",
+        "lenaConnection": "Tua madre non avrebbe mai potuto ignorare qualcuno in pericolo",
+        "biomes": ["RIVER"],
+        "questStageRequirement": "frammenti",
+        "probability": 0.20,
+        "choices": [
+          {
+            "id": "save_drowning_man",
+            "text": "Tenta di salvare l'uomo",
+            "moralAlignment": "lena",
+            "skillCheck": {
+              "ability": "forza",
+              "difficulty": 15
+            },
+            "successText": "Con uno sforzo immane, riesci a tirare l'uomo sulla riva. È ferito e delirante, ma vivo. Ti ringrazia balbettando e, prima di svenire, ti dà un piccolo oggetto che teneva stretto: una chiave arrugginita. Il salvataggio ti è costato tempo ed energie, ma per un istante hai agito contro le dure leggi di questo mondo.",
+            "failureText": "Provi a tirarlo, ma la corrente è troppo forte e lui è troppo pesante. La sua presa scivola e viene trascinato via, scomparendo tra i flutti. Rimani sulla riva, ansimante, con il suono del suo ultimo lamento nelle orecchie. Hai fallito. E hai perso tempo.",
+            "reflectionText": "Mentre tendo la mano verso di lui, sento la voce di mamma che sussurra: 'Ogni vita ha valore'. Ma se fallisco, chi salverà me?",
+            "emotionalImpact": {
+              "compassion": 4,
+              "understanding": 2,
+              "guilt": -2,
+              "courage": 2
+            },
+            "consequences": {
+              "success": {
+                "itemsGained": [
+                  { "itemId": "QUEST_001", "quantity": 1 }
+                ],
+                "timeLost": 120
+              },
+              "failure": {
+                "statusEffect": {
+                  "type": "GUILTY",
+                  "duration": 360
+                },
+                "timeLost": 120
+              }
+            }
+          },
+          {
+            "id": "ignore_drowning_man",
+            "text": "Attraversa la trave e ignoralo",
+            "moralAlignment": "elian",
+            "resultText": "Chiudi gli occhi e la mente. Il suo destino non è il tuo. Attraversi rapidamente la trave, senza voltarti. Le sue grida svaniscono dietro di te, inghiottite dal rumore dell'acqua. Sei al sicuro dall'altra parte. Sei solo. Proprio come voleva tuo padre. Ma la sensazione che ti rimane addosso non è sicurezza. È cenere.",
+            "reflectionText": "Le sue grida mi seguono anche dopo aver attraversato. Papà... è così che ti sei sentito quando hai lasciato mamma?",
+            "emotionalImpact": {
+              "pragmatism": 4,
+              "understanding": 3,
+              "guilt": 3,
+              "hardness": 2
+            },
+            "consequences": {
+              "statusEffect": {
+                "type": "HAUNTED",
+                "duration": 480
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "lore_unmarked_grave",
+        "title": "Tomba Senza Nome",
+        "description": "Trovi una piccola tomba improvvisata, segnata da un cumulo di pietre. Qualcuno ha seppellito una persona cara qui. Accanto al tumulo c'è un piccolo zaino, apparentemente dimenticato. Potrebbe contenere qualcosa di utile.",
+        "category": "tematico",
+        "isUnique": true,
+        "emotionalWeight": 5,
+        "elianParallel": "Anche tuo padre ha dovuto scegliere tra rispetto per i morti e necessità dei vivi",
+        "lenaConnection": "Tua madre credeva che onorare i morti fosse fondamentale per rimanere umani",
+        "biomes": ["PLAINS", "FOREST", "HILLS"],
+        "questStageRequirement": "frammenti",
+        "probability": 0.10,
+        "choices": [
+          {
+            "id": "take_supplies",
+            "text": "Prendi lo zaino. I morti non ne hanno bisogno",
+            "moralAlignment": "elian",
+            "resultText": "Il pragmatismo vince sulla sentimentalità. Apri lo zaino e trovi delle provviste essenziali. Mentre le trasferisci nel tuo sacco, eviti di guardare il tumulo di pietre. La sopravvivenza non ha spazio per il sentimentalismo.",
+            "reflectionText": "I morti non hanno bisogno di cibo. Ma mentre prendo le loro cose, sento il peso del loro silenzio.",
+            "emotionalImpact": {
+              "pragmatism": 3,
+              "guilt": 1,
+              "hardness": 2,
+              "compassion": -1
+            },
+            "consequences": {
+              "itemsGained": [
+                { "itemId": "CONS_001", "quantity": 2 },
+                { "itemId": "CONS_003", "quantity": 1 }
+              ]
+            }
+          },
+          {
+            "id": "honor_grave",
+            "text": "Lascia lo zaino come offerta e rendi omaggio",
+            "moralAlignment": "lena",
+            "resultText": "Decidi di rispettare questo luogo. È un piccolo, inutile gesto di umanità in un mondo che l'ha dimenticata. Ti prendi un momento di silenzio, poi prosegui. Non hai guadagnato nulla di materiale, ma il tuo passo sembra più saldo, la tua determinazione più forte.",
+            "reflectionText": "Mamma diceva sempre che rispettare i morti ci mantiene umani. Forse aveva ragione. Forse è questo che ci distingue dalle bestie.",
+            "emotionalImpact": {
+              "compassion": 3,
+              "understanding": 1,
+              "wisdom": 2,
+              "lenaConnection": 2
+            },
+            "consequences": {
+              "permanentStatBoost": {
+                "stat": "carisma",
+                "amount": 1
+              },
+              "statusEffect": {
+                "type": "PEACEFUL",
+                "duration": 240
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "mainQuestEvents": [
+      {
+        "id": "quest_elian_letter",
+        "title": "La Lettera del Padre",
+        "description": "Trovi una lettera lasciata da tuo padre prima della sua partenza. Le sue parole sono pesanti come pietre, cariche di un dolore che non riesci ancora a comprendere completamente.",
+        "category": "trama",
+        "isUnique": true,
+        "emotionalWeight": 10,
+        "questStage": "testamento",
+        "letterText": "Ultimo, se stai leggendo questo, significa che sono partito. Non odiarmi per questo. Ho passato anni a insegnarti tutto quello che so sulla sopravvivenza, ma c'è una cosa che non ti ho mai insegnato: come vivere con le scelte che fai. Vai a nord, oltre le colline rosse. Cerca 'The Safe Place'. Sii migliore di me. Sopravvivi. E forse, un giorno, capirai. O forse mi perdonerai. - Elian",
+        "questObjective": "Trova 'The Safe Place' come indicato nella lettera di tuo padre",
+        "emotionalImpact": {
+          "confusion": 5,
+          "determination": 3,
+          "abandonment": 4,
+          "curiosity": 2
+        },
+        "consequences": {
+          "questAdvancement": "testamento_completed",
+          "newObjective": "find_safe_place"
+        }
+      }
+    ],
+    "lenaMemoryEvents": [
+      {
+        "id": "lena_color_memory",
+        "title": "I Colori di Mamma",
+        "description": "Un raggio di sole filtra attraverso le nuvole, illuminando un campo di fiori selvatici. Per un istante, il mondo esplode di colori vividi. Ti ricordi di tua madre che diceva: 'Ultimo, guarda! Il mondo ha ancora i suoi colori, basta saperli vedere.'",
+        "category": "lena_memory",
+        "isUnique": false,
+        "emotionalWeight": 4,
+        "lenaConnection": "Tua madre aveva il dono di vedere la bellezza anche nel mondo più desolato",
+        "biomes": ["PLAINS", "FOREST"],
+        "lenaConnectionTrigger": 3,
+        "probability": 0.08,
+        "consequences": {
+          "emotionalImpact": {
+            "lenaConnection": 2,
+            "hope": 2,
+            "beauty": 3
+          },
+          "statusEffect": {
+            "type": "INSPIRED",
+            "duration": 180
+          },
+          "memoryUnlocked": "lena_colors_memory"
+        }
+      }
+    ],
+    "elianTraumaEvents": [
+      {
+        "id": "elian_nightmare_echo",
+        "title": "L'Eco di un Incubo",
+        "description": "Durante la notte, ti svegli di soprassalto. Hai sognato di essere in un luogo buio, con qualcuno che grida il tuo nome. Una voce femminile, disperata. Ti svegli con le lacrime agli occhi, senza capire perché.",
+        "category": "elian_trauma",
+        "isUnique": false,
+        "emotionalWeight": 7,
+        "elianParallel": "Questo incubo potrebbe essere l'eco del trauma che tormenta tuo padre",
+        "elianUnderstandingTrigger": 4,
+        "probability": 0.05,
+        "consequences": {
+          "emotionalImpact": {
+            "understanding": 2,
+            "elianEmpathy": 3,
+            "trauma": 2,
+            "curiosity": 2
+          },
+          "statusEffect": {
+            "type": "TROUBLED",
+            "duration": 240
+          },
+          "questHint": "nightmare_connection"
+        }
+      }
+    ]
+  },
+  "narrativeMetadata": {
+    "version": "2.0",
+    "source": "Romanzo 'Echi Prima del Silenzio'",
+    "totalEvents": 7,
+    "emotionalThemes": [
+      "sacrifice",
+      "survival_guilt",
+      "parental_love",
+      "moral_choices",
+      "compassion_vs_pragmatism",
+      "memory_and_loss",
+      "forgiveness"
+    ],
+    "characterArcs": {
+      "ultimo": {
+        "startingState": "innocent_survivor",
+        "progressionStages": [
+          "questioning_son",
+          "understanding_seeker", 
+          "empathetic_forgiver"
+        ]
+      },
+      "elian": {
+        "presence": "haunting_memory",
+        "revelation": "guilt_consumed_father"
+      },
+      "lena": {
+        "presence": "symbolic_compassion",
+        "influence": "moral_compass"
+      }
+    }
+  }
+}
