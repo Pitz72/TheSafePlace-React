@@ -11,8 +11,12 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { useWorldStore } from '../stores/world/worldStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
+import { playerMovementService } from '../services/playerMovementService';
 import type { IInventorySlot } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
+
+// Mock the service
+jest.mock('../services/playerMovementService');
 
 // Mock console methods to avoid noise in tests
 const originalConsole = { ...console };
@@ -44,7 +48,8 @@ describe('Store Synchronization Tests', () => {
     // Reset character and inventory
     characterStore.resetCharacter();
     inventoryStore.clearInventory?.();
-    notificationStore.clearLogs?.();
+    notificationStore.clearLog?.();
+    worldStore.resetWorld();
   });
 
   describe('Character-Inventory Synchronization', () => {
@@ -88,7 +93,7 @@ describe('Store Synchronization Tests', () => {
       const hpChange = -10;
       
       // Clear existing logs
-      const initialLogCount = notificationStore.logs.length;
+      const initialLogCount = notificationStore.logEntries.length;
       
       // Update HP through characterStore
       characterStore.updateHP(hpChange);
@@ -98,7 +103,7 @@ describe('Store Synchronization Tests', () => {
       expect(newHP).toBe(Math.max(0, initialHP + hpChange));
       
       // Verify logging occurred
-      const finalLogCount = notificationStore.logs.length;
+      const finalLogCount = notificationStore.logEntries.length;
       expect(finalLogCount).toBeGreaterThan(initialLogCount);
     });
   });
@@ -139,21 +144,30 @@ describe('Store Synchronization Tests', () => {
   });
 
   describe('World-Character Integration', () => {
-    test('should sync player movement with proper logging', () => {
-      const initialLogCount = notificationStore.logs.length;
+    test('should update position and delegate side effects to the service', () => {
+      const initialLogCount = notificationStore.logEntries.length;
       const newPosition = { x: 5, y: 5 };
-      
+      const newBiomeChar = 'F'; // Forest
+      const newBiomeKey = 'FOREST';
+
       // Move player through worldStore
-      worldStore.updatePlayerPosition(newPosition);
+      worldStore.updatePlayerPosition(newPosition, newBiomeChar);
       
-      // Verify position change
-      const currentPosition = worldStore.playerPosition;
+      // 1. Verify worldStore state is updated
+      const updatedWorldStore = useWorldStore.getState();
+      const currentPosition = updatedWorldStore.playerPosition;
       expect(currentPosition.x).toBe(newPosition.x);
       expect(currentPosition.y).toBe(newPosition.y);
-      
-      // Verify movement was logged
-      const finalLogCount = notificationStore.logs.length;
-      expect(finalLogCount).toBeGreaterThanOrEqual(initialLogCount);
+      expect(updatedWorldStore.currentBiome).toBe(newBiomeKey);
+
+      // 2. Verify the service was called correctly
+      expect(playerMovementService.handleMovementEffects).toHaveBeenCalledTimes(1);
+      expect(playerMovementService.handleMovementEffects).toHaveBeenCalledWith(newBiomeKey);
+
+      // 3. Verify only movement logs were created by this function
+      const finalLogCount = notificationStore.logEntries.length;
+      // It should create 2 logs: BIOME_ENTER and MOVEMENT
+      expect(finalLogCount).toBe(initialLogCount + 2);
     });
 
     test('should handle time advancement with proper effects', () => {
@@ -168,8 +182,8 @@ describe('Store Synchronization Tests', () => {
       expect(newTime).toBe((initialTime + timeAdvance) % 1440);
       
       // Verify logging for significant time changes
-      const logs = notificationStore.logs;
-      const timeLog = logs.find(log => log.type.includes('TIME'));
+      const logEntries = notificationStore.logEntries;
+      const timeLog = logEntries.find(log => log.type.includes('TIME'));
       expect(timeLog).toBeDefined();
     });
   });
@@ -180,7 +194,7 @@ describe('Store Synchronization Tests', () => {
       inventoryStore.addItem('FOOD_RATION', 3);
       characterStore.updateHP(-5);
       characterStore.addExperience(50);
-      worldStore.updatePlayerPosition({ x: 10, y: 15 });
+      worldStore.updatePlayerPosition({ x: 10, y: 15 }, 'V'); // Assuming 'V' for Village
       
       // Verify all changes are reflected correctly
       const inventory = inventoryStore.getInventory();
@@ -221,7 +235,7 @@ describe('Store Synchronization Tests', () => {
       const character = characterStore.characterSheet;
       
       expect(inventory.length).toBeGreaterThan(0);
-      expect(character.experience).toBeGreaterThan(0);
+      expect(character.experience.currentXP).toBeGreaterThan(0);
       
       // Verify no data corruption
       inventory.forEach(slot => {
@@ -233,24 +247,24 @@ describe('Store Synchronization Tests', () => {
 
   describe('Logging and Notification Integration', () => {
     test('should log critical state changes across all stores', () => {
-      const initialLogCount = notificationStore.logs.length;
+      const initialLogCount = notificationStore.logEntries.length;
       
       // Perform operations that should generate logs
       characterStore.updateHP(-15); // HP damage
       characterStore.addExperience(100); // XP gain
       inventoryStore.addItem('FOOD_RATION', 1); // Item added
-      worldStore.updatePlayerPosition({ x: 3, y: 7 }); // Movement
+      worldStore.updatePlayerPosition({ x: 3, y: 7 }, 'P'); // Assuming 'P' for Plains
       worldStore.advanceTime(90); // Time advance
       
       // Verify logs were created
-      const finalLogCount = notificationStore.logs.length;
+      const finalLogCount = notificationStore.logEntries.length;
       expect(finalLogCount).toBeGreaterThan(initialLogCount);
       
       // Verify different types of logs exist
-      const logs = notificationStore.logs;
-      const hasHPLog = logs.some(log => log.type.includes('HP'));
-      const hasXPLog = logs.some(log => log.type.includes('XP'));
-      const hasItemLog = logs.some(log => log.type.includes('ITEM') || log.type.includes('INVENTORY'));
+      const logEntries = notificationStore.logEntries;
+      const hasHPLog = logEntries.some(log => log.type.includes('HP'));
+      const hasXPLog = logEntries.some(log => log.type.includes('XP'));
+      const hasItemLog = logEntries.some(log => log.type.includes('ITEM') || log.type.includes('INVENTORY'));
       
       expect(hasHPLog || hasXPLog || hasItemLog).toBe(true);
     });

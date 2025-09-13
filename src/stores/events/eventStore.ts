@@ -5,6 +5,11 @@ import { useCharacterStore } from '../character/characterStore';
 import { useCombatStore } from '../combatStore';
 import { useWorldStore } from '../world/worldStore';
 
+// Minimal interface to avoid direct dependency on weatherStore shape
+interface WeatherEffects {
+  eventProbabilityModifier: number;
+}
+
 export interface EventState {
   // State
   eventDatabase: Record<string, GameEvent[]>;
@@ -22,6 +27,7 @@ export interface EventState {
   isEventSeen: (eventId: string) => boolean;
   isEncounterCompleted: (encounterId: string) => boolean;
   getRandomEventFromBiome: (biome: string) => GameEvent | null;
+  checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
   resetEventState: () => void;
 }
 
@@ -188,6 +194,25 @@ export const useEventStore = create<EventState>((set, get) => ({
     
     const randomIndex = Math.floor(Math.random() * availableEvents.length);
     return availableEvents[randomIndex];
+  },
+
+  checkForRandomEvent: (biome, weatherEffects) => {
+    const BIOME_EVENT_CHANCES: Record<string, number> = {
+      'PLAINS': 0.10, 'FOREST': 0.15, 'RIVER': 0.18, 'CITY': 0.33,
+      'VILLAGE': 0.33, 'SETTLEMENT': 0.25, 'REST_STOP': 0.20, 'UNKNOWN': 0.05
+    };
+    const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.05;
+    const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
+
+    if (biome && Math.random() < adjustedEventChance) {
+        setTimeout(() => {
+          const { getRandomEventFromBiome, triggerEvent } = get();
+          const randomEvent = getRandomEventFromBiome(biome);
+          if (randomEvent) {
+            triggerEvent(randomEvent);
+          }
+        }, 150);
+    }
   },
 
   resetEventState: () => {

@@ -97,12 +97,17 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     const characterStore = useCharacterStore.getState();
     const { characterSheet } = characterStore;
     const slot = characterSheet.inventory[slotIndex];
-    if (!slot) return false;
+    if (!slot) return { success: false, message: "Slot is empty." };
 
     const newInventory = [...characterSheet.inventory];
     const currentSlot = newInventory[slotIndex]!;
+    const itemName = itemDatabase[currentSlot.itemId]?.name || 'Unknown Item';
 
-    if (currentSlot.quantity <= quantity) {
+    if (currentSlot.quantity < quantity) {
+        return { success: false, message: `Not enough ${itemName} to remove.` };
+    }
+
+    if (currentSlot.quantity === quantity) {
       newInventory[slotIndex] = null;
     } else {
       currentSlot.quantity -= quantity;
@@ -112,7 +117,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
       ...characterSheet,
       inventory: newInventory,
     });
-    return true;
+    return { success: true, message: `${quantity} ${itemName} removed.` };
   },
 
   equipItemFromInventory: (slotIndex) => {
@@ -128,6 +133,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     } else {
       notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
     }
+    return result;
   },
 
   setSelectedInventoryIndex: (index) => {

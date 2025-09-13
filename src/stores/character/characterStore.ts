@@ -19,6 +19,7 @@ export interface CharacterState {
     ability: AbilityType,
     difficulty: number
   ) => { success: boolean; roll: number; modifier: number; total: number };
+  gainMovementXP: () => void;
 
   // Initialization
   resetCharacter: () => void;
@@ -107,6 +108,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     get().addExperience(success ? 5 : 1);
 
     return { success, roll, modifier, total };
+  },
+
+  gainMovementXP: () => {
+    get().addExperience(Math.floor(Math.random() * 2) + 1);
   },
 
   resetCharacter: () => {
