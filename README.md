@@ -1,7 +1,7 @@
 # The Safe Place
 
-**Versione:** 0.9.7
-**Codename:** This is Ultimo's Story
+**Versione:** 0.9.7.2
+**Codename:** Architectural Integrity
 
 GDR Retrò a Fosfori Verdi. Un sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo che segue la storia di Ultimo attraverso frammenti di quest, eventi lore e scelte morali che influenzano l'evoluzione emotiva del personaggio.
 
