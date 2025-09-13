@@ -1,319 +1,169 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import {
-  NarrativeEngine,
-  EmotionalState,
-  QuestStage,
-  MoralChoice,
-  MoralAlignment,
-  LoreEvent,
-  QuestFragment,
-  NarrativeChoice,
-  TextTone,
-  ComplexTriggerCondition
-} from '../../interfaces/narrative';
 
-// Stato emotivo iniziale di Ultimo
-const initialEmotionalState: EmotionalState = {
-  compassionLevel: 30, // Ultimo inizia con una base di compassione
-  pragmatismLevel: 20, // Meno pragmatico all'inizio
-  understandingLevel: 10, // Comprensione limitata del passato
-  lenaMemoryStrength: 15, // Ricordi vaghi della madre
-  elianEmpathy: 25, // Comprende parzialmente il padre
-  innocenceLost: 5, // Ancora relativamente innocente
-  wisdomGained: 10, // Poca saggezza acquisita
-  currentMood: 'curioso',
-  dominantEmotion: 'nostalgia'
-};
+// Interfaccia semplificata per la Main Quest secondo il GDD canonico
+export interface MainQuestState {
+  currentStage: number; // Da 1 a 12, indica il prossimo evento da attivare
+  progressCounter: number; // Aumenta a ogni passo del giocatore
+  flags: Record<string, boolean>; // Per tracciare scoperte chiave
+}
 
-interface NarrativeState extends NarrativeEngine {
-  // Azioni per la gestione della quest
-  advanceQuestStage: (newStage: QuestStage) => void;
-  recordMoralChoice: (choice: MoralChoice) => void;
-  updateEmotionalState: (changes: Partial<EmotionalState>) => void;
+// Interfaccia per i trigger degli eventi
+export interface MainQuestTrigger {
+  type: 'progress' | 'survival_stat' | 'combat_end' | 'survival_days' | 'enter_biome' | 'level_up' | 'use_item' | 'event_choice' | 'reach_location' | 'reach_end';
+  value?: number;
+  stat?: string;
+  result?: string;
+  biome?: string;
+  level?: number;
+  itemId?: string;
+  eventId?: string;
+  x?: number;
+  y?: number;
+}
+
+// Interfaccia per gli eventi della main quest
+export interface MainQuestEvent {
+  stage: number;
+  id: string;
+  trigger: MainQuestTrigger;
+  title: string;
+  description: string;
+}
+
+interface NarrativeState extends MainQuestState {
+  // Azioni per la gestione della main quest
+  advanceToNextStage: () => void;
+  incrementProgress: () => void;
+  setFlag: (key: string, value: boolean) => void;
   
-  // Azioni per frammenti e eventi
-  discoverFragment: (fragmentId: string) => void;
-  completeLoreEvent: (eventId: string) => void;
+  // Controllo dei trigger
+  checkMainQuestTrigger: () => MainQuestEvent | null;
   
-  // Selettori
-  getAvailableLoreEvents: () => LoreEvent[];
-  shouldTriggerQuestEvent: (conditions: ComplexTriggerCondition) => boolean;
-  getLastReflection: () => string | null;
-  
-  // Gestione oggetti narrativi
-  discoverMusicBox: () => void;
-  useMusicBox: () => boolean;
-  
-  // Sistema di riflessioni
-  generateReflection: (context: {
-    eventType: string;
-    choiceAlignment?: MoralAlignment;
-    combatResult?: any;
-  }) => { text: string; tone: TextTone };
+  // Caricamento degli eventi
+  loadMainQuestEvents: () => Promise<MainQuestEvent[]>;
   
   // Reset e inizializzazione
   initializeNarrative: () => void;
   resetNarrative: () => void;
+  
+  // Eventi caricati
+  mainQuestEvents: MainQuestEvent[];
 }
 
 export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector((set, get) => ({
-  // Stato iniziale
-  currentQuestStage: QuestStage.TESTAMENTO_PADRE,
-  emotionalState: initialEmotionalState,
-  moralChoicesHistory: [],
-  discoveredFragments: [],
-  completedLoreEvents: [],
-  
-  questProgress: {
-    [QuestStage.TESTAMENTO_PADRE]: {
-      started: true,
-      completed: false,
-      fragmentsFound: [],
-      emotionalMilestones: []
-    }
-  },
-  
-  questItems: {
-    musicBox: {
-      discovered: false,
-      used: false,
-      triggerConditionsMet: false
-    }
-  },
+  // Stato iniziale della Main Quest
+  currentStage: 1,
+  progressCounter: 0,
+  flags: {},
+  mainQuestEvents: [],
   
   // Azioni principali
-  advanceQuestStage: (newStage: QuestStage) => {
+  advanceToNextStage: () => {
     set((state) => {
-      const newProgress = { ...state.questProgress };
-      
-      // Completa lo stage corrente
-      if (newProgress[state.currentQuestStage]) {
-        newProgress[state.currentQuestStage].completed = true;
-      }
-      
-      // Inizia il nuovo stage
-      if (!newProgress[newStage]) {
-        newProgress[newStage] = {
-          started: true,
-          completed: false,
-          fragmentsFound: [],
-          emotionalMilestones: []
-        };
-      } else {
-        newProgress[newStage].started = true;
-      }
-      
+      const nextStage = Math.min(state.currentStage + 1, 12);
       return {
-        currentQuestStage: newStage,
-        questProgress: newProgress
+        currentStage: nextStage
       };
     });
   },
   
-  recordMoralChoice: (choice: MoralChoice) => {
-    set((state) => {
-      // Applica l'impatto emotivo
-      const newEmotionalState = { ...state.emotionalState };
-      Object.entries(choice.emotionalImpact).forEach(([key, value]) => {
-        if (value !== undefined && key in newEmotionalState) {
-          (newEmotionalState as any)[key] = Math.max(0, Math.min(100, 
-            (newEmotionalState as any)[key] + value
-          ));
-        }
-      });
-      
-      // Aggiorna l'umore basato sui cambiamenti
-      newEmotionalState.currentMood = get().calculateMoodFromState(newEmotionalState);
-      newEmotionalState.dominantEmotion = get().calculateDominantEmotion(newEmotionalState);
-      
-      return {
-        moralChoicesHistory: [...state.moralChoicesHistory, choice],
-        emotionalState: newEmotionalState
-      };
-    });
-  },
-  
-  updateEmotionalState: (changes: Partial<EmotionalState>) => {
-    set((state) => {
-      const newEmotionalState = { ...state.emotionalState, ...changes };
-      
-      // Assicura che i valori rimangano nel range 0-100
-      Object.keys(changes).forEach(key => {
-        if (typeof (newEmotionalState as any)[key] === 'number' && 
-            key !== 'currentMood' && key !== 'dominantEmotion') {
-          (newEmotionalState as any)[key] = Math.max(0, Math.min(100, (newEmotionalState as any)[key]));
-        }
-      });
-      
-      return { emotionalState: newEmotionalState };
-    });
-  },
-  
-  discoverFragment: (fragmentId: string) => {
-    set((state) => {
-      if (!state.discoveredFragments.includes(fragmentId)) {
-        const newProgress = { ...state.questProgress };
-        const currentStageProgress = newProgress[state.currentQuestStage];
-        
-        if (currentStageProgress) {
-          currentStageProgress.fragmentsFound.push(fragmentId);
-        }
-        
-        return {
-          discoveredFragments: [...state.discoveredFragments, fragmentId],
-          questProgress: newProgress
-        };
-      }
-      return state;
-    });
-  },
-  
-  completeLoreEvent: (eventId: string) => {
-    set((state) => {
-      if (!state.completedLoreEvents.includes(eventId)) {
-        return {
-          completedLoreEvents: [...state.completedLoreEvents, eventId]
-        };
-      }
-      return state;
-    });
-  },
-  
-  // Selettori
-  getAvailableLoreEvents: () => {
-    const state = get();
-    // Qui implementeremo la logica per filtrare gli eventi disponibili
-    // basata su questStage, stato emotivo, e eventi già completati
-    return [];
-  },
-  
-  shouldTriggerQuestEvent: (conditions: ComplexTriggerCondition) => {
-    const state = get();
-    
-    // Verifica stage della quest
-    if (state.currentQuestStage !== conditions.questStage) {
-      return false;
-    }
-    
-    // Verifica oggetti richiesti (implementazione semplificata)
-    // In una implementazione completa, questo dovrebbe controllare l'inventario
-    
-    // Verifica soglie emotive se specificate
-    if (conditions.emotionalThreshold) {
-      for (const [key, threshold] of Object.entries(conditions.emotionalThreshold)) {
-        if ((state.emotionalState as any)[key] < threshold) {
-          return false;
-        }
-      }
-    }
-    
-    return true;
-  },
-  
-  getLastReflection: () => {
-    const state = get();
-    if (state.moralChoicesHistory.length === 0) return null;
-    return state.moralChoicesHistory[state.moralChoicesHistory.length - 1].reflectionText;
-  },
-  
-  // Gestione oggetti narrativi
-  discoverMusicBox: () => {
+  incrementProgress: () => {
     set((state) => ({
-      questItems: {
-        ...state.questItems,
-        musicBox: {
-          ...state.questItems.musicBox,
-          discovered: true
-        }
+      progressCounter: state.progressCounter + 1
+    }));
+  },
+  
+  setFlag: (key: string, value: boolean) => {
+    set((state) => ({
+      flags: {
+        ...state.flags,
+        [key]: value
       }
     }));
   },
   
-  useMusicBox: () => {
+  // Controllo dei trigger per la main quest
+  checkMainQuestTrigger: () => {
     const state = get();
+    const currentEvent = state.mainQuestEvents.find(event => event.stage === state.currentStage);
     
-    // Verifica condizioni per l'uso del carillon
-    const canUse = state.questItems.musicBox.discovered && 
-                   state.currentQuestStage === QuestStage.FRAMMENTO_11;
+    if (!currentEvent) return null;
     
-    if (canUse) {
-      set((state) => ({
-        questItems: {
-          ...state.questItems,
-          musicBox: {
-            ...state.questItems.musicBox,
-            used: true
-          }
-        }
-      }));
-      return true;
+    const trigger = currentEvent.trigger;
+    
+    // Verifica le condizioni del trigger
+    switch (trigger.type) {
+      case 'progress':
+        return state.progressCounter >= (trigger.value || 0) ? currentEvent : null;
+      
+      case 'survival_stat':
+        // Qui dovresti accedere al characterStore per verificare le statistiche
+        // Per ora ritorna null, sarà implementato quando integrato
+        return null;
+      
+      case 'combat_end':
+        // Verificato tramite flag impostato dal sistema di combattimento
+        return state.flags[`combat_${trigger.result}`] ? currentEvent : null;
+      
+      case 'survival_days':
+        // Verificato tramite timeStore
+        return null;
+      
+      case 'enter_biome':
+        // Verificato tramite worldStore
+        return state.flags[`entered_biome_${trigger.biome}`] ? currentEvent : null;
+      
+      case 'level_up':
+        // Verificato tramite characterStore
+        return state.flags[`reached_level_${trigger.level}`] ? currentEvent : null;
+      
+      case 'use_item':
+        // Verificato tramite inventoryStore
+        return state.flags[`used_item_${trigger.itemId}`] ? currentEvent : null;
+      
+      case 'event_choice':
+        // Verificato quando il giocatore completa un evento specifico
+        return state.flags[`completed_event_${trigger.eventId}`] ? currentEvent : null;
+      
+      case 'reach_location':
+        // Verificato tramite worldStore
+        return state.flags[`reached_${trigger.x}_${trigger.y}`] ? currentEvent : null;
+      
+      case 'reach_end':
+        // Verificato quando il giocatore raggiunge la fine del gioco
+        return state.flags['reached_safe_place'] ? currentEvent : null;
+      
+      default:
+        return null;
     }
-    
-    return false;
   },
   
-  // Sistema di riflessioni
-  generateReflection: (context) => {
-    const state = get();
-    
-    // Logica semplificata per generare riflessioni
-    // In una implementazione completa, questo userebbe i file JSON dei testi
-    let text = "Ultimo riflette sulle sue azioni...";
-    let tone = TextTone.INTROSPETTIVO;
-    
-    if (context.choiceAlignment === MoralAlignment.LENA) {
-      text = "Le parole di mamma risuonano nel mio cuore. Forse la compassione è davvero la strada giusta.";
-      tone = TextTone.NOSTALGICO;
-    } else if (context.choiceAlignment === MoralAlignment.ELIAN) {
-      text = "Papà aveva ragione. A volte bisogna essere pragmatici per sopravvivere.";
-      tone = TextTone.MALINCONICO;
+  // Caricamento degli eventi della main quest
+  loadMainQuestEvents: async () => {
+    try {
+      const response = await fetch('/src/data/events/main_quest_events.json');
+      const data = await response.json();
+      const events = data.MAIN_QUEST as MainQuestEvent[];
+      
+      set({ mainQuestEvents: events });
+      return events;
+    } catch (error) {
+      console.error('Errore nel caricamento degli eventi della main quest:', error);
+      return [];
     }
-    
-    return { text, tone };
   },
-  
-  // Funzioni di utilità (non esposte nell'interfaccia)
-  calculateMoodFromState: (emotionalState: EmotionalState) => {
-    if (emotionalState.compassionLevel > 70) return 'sereno';
-    if (emotionalState.understandingLevel > 60) return 'determinato';
-    if (emotionalState.innocenceLost > 50) return 'turbato';
-    if (emotionalState.lenaMemoryStrength > 40) return 'malinconico';
-    return 'curioso';
-  },
-  
-  calculateDominantEmotion: (emotionalState: EmotionalState) => {
-    if (emotionalState.lenaMemoryStrength > 60) return 'nostalgia';
-    if (emotionalState.wisdomGained > 50) return 'accettazione';
-    if (emotionalState.compassionLevel > 70) return 'amore';
-    if (emotionalState.innocenceLost > 60) return 'dolore';
-    return 'speranza';
-  },
-  
-  // Inizializzazione e reset
+  // Inizializzazione del sistema narrativo
   initializeNarrative: () => {
-    set(() => ({
-      currentQuestStage: QuestStage.TESTAMENTO_PADRE,
-      emotionalState: initialEmotionalState,
-      moralChoicesHistory: [],
-      discoveredFragments: [],
-      completedLoreEvents: [],
-      questProgress: {
-        [QuestStage.TESTAMENTO_PADRE]: {
-          started: true,
-          completed: false,
-          fragmentsFound: [],
-          emotionalMilestones: []
-        }
-      },
-      questItems: {
-        musicBox: {
-          discovered: false,
-          used: false,
-          triggerConditionsMet: false
-        }
-      }
-    }));
+    set({
+      currentStage: 1,
+      progressCounter: 0,
+      flags: {},
+      mainQuestEvents: []
+    });
+    
+    // Carica gli eventi della main quest
+    get().loadMainQuestEvents();
   },
   
   resetNarrative: () => {
@@ -321,8 +171,8 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
   }
 })));
 
-// Selettori per componenti React
-export const selectCurrentQuestStage = (state: NarrativeState) => state.currentQuestStage;
-export const selectEmotionalState = (state: NarrativeState) => state.emotionalState;
-export const selectMoralChoicesHistory = (state: NarrativeState) => state.moralChoicesHistory;
-export const selectQuestProgress = (state: NarrativeState) => state.questProgress;
+// Selettori semplificati per componenti React
+export const selectCurrentStage = (state: NarrativeState) => state.currentStage;
+export const selectProgressCounter = (state: NarrativeState) => state.progressCounter;
+export const selectFlags = (state: NarrativeState) => state.flags;
+export const selectMainQuestEvents = (state: NarrativeState) => state.mainQuestEvents;

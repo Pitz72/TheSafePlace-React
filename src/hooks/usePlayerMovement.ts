@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useWorldStore } from '../stores/world/worldStore';
+import { useCharacterStore } from '../stores/character/characterStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { checkForEncounter } from '../utils/encounterUtils';
 
@@ -15,8 +16,10 @@ interface MovementState {
 export const usePlayerMovement = () => {
   // World state from the correct source of truth
   const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
-  // Actions and legacy state still in gameStore
-  const { updateBiome, performAbilityCheck, updateHP, advanceTime } = useGameStore();
+  // Character actions
+  const { performAbilityCheck, updateHP } = useCharacterStore();
+  // Game actions
+  const { advanceTime } = useGameStore();
   // Notification system
   const { addLogEntry } = useNotificationStore();
   const [movementState, setMovementState] = useState<MovementState>({
@@ -106,7 +109,7 @@ export const usePlayerMovement = () => {
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      updateBiome('R');
+      // Rifugio rilevato - logica gestita da updatePlayerPosition
     }
 
     // Messaggio atmosferico casuale
@@ -117,7 +120,7 @@ export const usePlayerMovement = () => {
     // Controlla se il movimento ha attivato un incontro
     checkForEncounter(nextX, nextY);
 
-  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, updateBiome, addLogEntry, advanceTime, movementState]);
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, addLogEntry, advanceTime, movementState]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento

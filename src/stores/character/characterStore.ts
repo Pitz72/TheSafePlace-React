@@ -83,7 +83,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     
     // Log experience gain
     const notificationStore = useNotificationStore.getState();
-    notificationStore.addLogEntry(MessageType.XP_GAINED, {
+    notificationStore.addLogEntry(MessageType.XP_GAIN, {
       xpGained,
       totalXP: newXP,
       canLevelUp

@@ -8,6 +8,12 @@ export interface LogEntry {
 
 // Funzione per ottenere un messaggio casuale dal tipo specificato
 export function getRandomMessage(type: MessageType, context?: Record<string, any>): string | null {
+  // Verifica che il tipo sia definito
+  if (type === undefined || type === null) {
+    console.warn('Tipo di messaggio non definito, usando messaggio di default');
+    return 'Un evento misterioso accade nel mondo desolato.';
+  }
+  
   const messages = MESSAGE_ARCHIVE[type];
   
   if (!messages) {

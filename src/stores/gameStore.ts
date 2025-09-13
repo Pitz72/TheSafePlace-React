@@ -146,8 +146,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       
       // Inizializza il sistema narrativo
       const narrativeStore = useNarrativeStore.getState();
-      await narrativeStore.loadQuestFragments();
-      await narrativeStore.loadLoreEvents();
+      narrativeStore.initializeNarrative();
       
       // Inizializza l'integrazione narrativa
       narrativeIntegration.initialize();

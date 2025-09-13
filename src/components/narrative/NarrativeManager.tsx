@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNarrativeStore } from '../../stores/narrative/narrativeStore';
-import { useCombatStore } from '../../stores/combatStore';
-import { useCharacterStore } from '../../stores/character/characterStore';
-import { useWorldStore } from '../../stores/world/worldStore';
+import type { MainQuestEvent } from '../../stores/narrative/narrativeStore';
+import { mainQuestTrigger } from '../../services/mainQuestTrigger';
 import NarrativeScreen from './NarrativeScreen';
-import { narrativeIntegration } from '../../services/narrativeIntegration';
-import { storyProgression } from '../../services/storyProgression';
-import {
-  LoreEvent,
-  QuestFragment,
-  NarrativeChoice
-} from '../../interfaces/narrative';
 
 interface NarrativeManagerProps {
   isGameActive: boolean;
@@ -21,169 +13,60 @@ interface NarrativeManagerProps {
  */
 const NarrativeManager: React.FC<NarrativeManagerProps> = ({ isGameActive }) => {
   const {
-    currentQuestStage,
-    discoveredFragments,
-    availableLoreEvents,
-    emotionalState,
-    recordMoralChoice,
-    discoverFragment,
-    updateEmotionalState
+    currentStage,
+    progressCounter,
+    flags,
+    initializeNarrative,
+    advanceToNextStage
   } = useNarrativeStore();
 
-  // Rimuovo useEventStore che non esiste più
+  const [currentEvent, setCurrentEvent] = useState<MainQuestEvent | null>(null);
+  const [isEventActive, setIsEventActive] = useState(false);
 
-  const [currentNarrativeEvent, setCurrentNarrativeEvent] = useState<LoreEvent | null>(null);
-  const [currentQuestFragment, setCurrentQuestFragment] = useState<QuestFragment | null>(null);
-  const [showNarrativeScreen, setShowNarrativeScreen] = useState(false);
-
-  // Inizializza l'integrazione narrativa e il sistema di progressione
+  // Inizializzazione del sistema narrativo
   useEffect(() => {
-    // Inizializza l'integrazione narrativa
-    narrativeIntegration.initialize();
-    
-    // Avvia il sistema di progressione della storia
-    storyProgression.startProgressionSystem();
-
-    return () => {
-      // Cleanup
-      storyProgression.stopProgressionSystem();
-    };
+    initializeNarrative();
   }, []);
 
-  // Controlla periodicamente la progressione della quest
+  // Controlla i trigger della main quest ogni volta che cambia lo stato
   useEffect(() => {
-    if (!isGameActive) return;
-
-    const checkProgressionInterval = setInterval(() => {
-      narrativeIntegration.checkQuestProgression();
-    }, 5000); // Controlla ogni 5 secondi
-
-    return () => clearInterval(checkProgressionInterval);
-  }, [isGameActive]);
-
-  // Monitora gli eventi del sistema esistente per trigger narrativi
-  useEffect(() => {
-    const handleCombatEnd = (result: any) => {
-      if (result.victory) {
-        // Aggiorna stato emotivo per vittoria
-        storyProgression.onCombatVictory();
-        checkForNarrativeEvents('combat_victory', result);
-      } else {
-        // Aggiorna stato emotivo per sconfitta
-        storyProgression.onCombatDefeat();
-        checkForNarrativeEvents('combat_defeat', result);
+    const checkMainQuest = () => {
+      const eventToTrigger = mainQuestTrigger.checkMainQuestTrigger();
+      if (eventToTrigger && !isEventActive) {
+        setCurrentEvent(eventToTrigger);
+        setIsEventActive(true);
       }
     };
 
-    // Monitora i cambiamenti nello store di combattimento
-    const unsubscribeCombat = useCombatStore.subscribe(
-      (state) => state.combatResult,
-      (combatResult) => {
-        if (combatResult) {
-          handleCombatEnd(combatResult);
-        }
-      }
-    );
-    
-    return () => {
-      unsubscribeCombat();
-    };
-  }, []);
+    checkMainQuest();
+  }, [currentStage, progressCounter, flags, isEventActive]);
 
-  // Sistema di trigger narrativi basato su eventi di gioco
-  const checkForNarrativeEvents = (eventType: string, eventData?: any) => {
-    const narrativeEvent = availableLoreEvents.find(event => 
-      event.triggerConditions.some(condition => condition.type === eventType)
-    );
-    
-    if (narrativeEvent) {
-       setCurrentNarrativeEvent(narrativeEvent);
-       setShowNarrativeScreen(true);
-     }
-   };
-
-  // Trigger automatico di frammenti di quest basato sullo stato emotivo
-  useEffect(() => {
-    if (!isGameActive) return;
-
-    const triggerQuestFragments = () => {
-      // Logica semplificata per i frammenti di quest
-      const mockFragment: QuestFragment = {
-        id: `fragment_${Date.now()}`,
-        title: 'Memoria del Passato',
-        content: 'Un ricordo emerge dalla nebbia della memoria...',
-        emotionalTrigger: emotionalState.dominantEmotion,
-        stageRequirement: currentQuestStage,
-        choices: []
-      };
-      
-      if (!discoveredFragments.some(f => f.id === mockFragment.id)) {
-        setCurrentQuestFragment(mockFragment);
-        setShowNarrativeScreen(true);
-        discoverFragment(mockFragment);
-      }
-    };
-
-    // Trigger frammenti con un delay per evitare spam
-    const fragmentTimer = setTimeout(triggerQuestFragments, 2000);
-    return () => clearTimeout(fragmentTimer);
-  }, [emotionalState, currentQuestStage, isGameActive]);
-
-  // Funzioni di utilità rimosse - logica semplificata nel checkForNarrativeEvents
-
-  // Funzione getEligibleQuestFragments rimossa - logica integrata nel useEffect
-
-  /**
-   * Gestisce la selezione di una scelta narrativa
-   */
-  const handleNarrativeChoice = (choice: NarrativeChoice) => {
-    // Registra la scelta morale
-    const moralChoice = {
-      id: `${Date.now()}_${choice.id}`,
-      eventId: currentNarrativeEvent?.id || currentQuestFragment?.id || 'unknown',
-      choiceText: choice.text,
-      alignment: choice.alignment,
-      emotionalImpact: choice.emotionalImpact,
-      reflectionText: choice.reflectionText,
-      timestamp: Date.now()
-    };
-
-    recordMoralChoice(moralChoice);
-
-    // Applica l'impatto emotivo
-    if (choice.emotionalImpact) {
-      updateEmotionalState(choice.emotionalImpact);
-    }
-
-    // Chiudi la schermata narrativa
-    handleCloseNarrativeScreen();
-  };
-
-  /**
-   * Gestisce la chiusura della schermata narrativa
-   */
-  const handleCloseNarrativeScreen = () => {
-    setShowNarrativeScreen(false);
-    setCurrentNarrativeEvent(null);
-    setCurrentQuestFragment(null);
-    
-    // Se c'era un evento del sistema esistente, dismissalo
+  // Gestione dell'evento della main quest
+  const handleMainQuestContinue = () => {
     if (currentEvent) {
-      dismissCurrentEvent();
+      // Avanza allo stage successivo
+      advanceToNextStage();
+      
+      // Chiudi l'evento
+      setIsEventActive(false);
+      setCurrentEvent(null);
     }
   };
 
   // Render del componente narrativo se necessario
-  if (!showNarrativeScreen || !isGameActive) {
+  if (!isEventActive || !currentEvent || !isGameActive) {
     return null;
   }
 
   return (
     <NarrativeScreen
-      currentEvent={currentNarrativeEvent}
-      currentFragment={currentQuestFragment}
-      onChoiceSelected={handleNarrativeChoice}
-      onClose={handleCloseNarrativeScreen}
+      currentEvent={currentEvent}
+      currentFragment={null}
+      onChoiceSelected={handleMainQuestContinue}
+      onClose={() => {
+        setIsEventActive(false);
+        setCurrentEvent(null);
+      }}
     />
   );
 };

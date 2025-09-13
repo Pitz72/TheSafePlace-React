@@ -186,8 +186,8 @@ export class StoryProgressionService {
     worldState: any,
     timeState: any
   ): void {
-    const availableEvents = narrativeState.availableLoreEvents;
-    const triggeredEvents = narrativeState.triggeredLoreEvents;
+    const availableEvents = narrativeState.availableLoreEvents || [];
+    const triggeredEvents = narrativeState.triggeredLoreEvents || [];
 
     for (const event of availableEvents) {
       // Salta eventi già triggerati
