@@ -251,7 +251,7 @@ const LoadScreen: React.FC = () => {
   const handleExportSave = async () => {
     const selectedSlot = saveSlots[selectedIndex];
     
-    if (!selectedSlot || !selectedSlot.exists || selectedSlot.corrupted) {
+    if (!selectedSlot || !selectedSlot.exists || !selectedSlot.corrupted) {
       setError('Seleziona un salvataggio valido da esportare');
       return;
     }

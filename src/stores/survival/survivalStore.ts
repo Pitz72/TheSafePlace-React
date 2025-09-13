@@ -4,6 +4,12 @@ import { MessageType } from '../../data/MessageArchive';
 import { useCharacterStore } from '../character/characterStore';
 import { useTimeStore } from '../time/timeStore';
 import { useInventoryStore } from '../inventory/inventoryStore';
+import { useNotificationStore } from '../notifications/notificationStore';
+
+// Minimal interface to avoid direct dependency on weatherStore shape
+interface WeatherEffects {
+  survivalModifier: number;
+}
 
 export interface SurvivalStoreState {
   // State
@@ -15,6 +21,7 @@ export interface SurvivalStoreState {
   handleNightConsumption: (addLogEntry: (type: MessageType, context?: any) => void) => void;
   checkSurvivalStatus: () => { hunger: string; thirst: string; fatigue: string };
   applySurvivalEffects: (addLogEntry: (type: MessageType, context?: any) => void) => void;
+  applyMovementSurvivalCost: (weatherEffects: WeatherEffects) => void;
   resetSurvivalState: () => void;
 }
 
@@ -218,6 +225,25 @@ export const useSurvivalStore = create<SurvivalStoreState>((set, get) => ({
       addLogEntry(MessageType.AMBIANCE_RANDOM, {
         text: 'Sei troppo stanco per concentrarti. Le tue azioni potrebbero essere meno efficaci.'
       });
+    }
+  },
+
+  applyMovementSurvivalCost: (weatherEffects) => {
+    const { survivalState, updateSurvival } = get();
+    const characterStore = useCharacterStore.getState();
+    const notificationStore = useNotificationStore.getState();
+
+    const newSurvivalState = {
+      ...survivalState,
+      hunger: survivalState.hunger + (-0.2 * weatherEffects.survivalModifier),
+      thirst: survivalState.thirst + (-0.3 * weatherEffects.survivalModifier)
+    };
+
+    updateSurvival(newSurvivalState);
+
+    if (newSurvivalState.hunger <= 0 || newSurvivalState.thirst <= 0) {
+      characterStore.updateHP(-1);
+      notificationStore.addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
     }
   },
 

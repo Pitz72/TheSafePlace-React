@@ -62,6 +62,7 @@ export interface CoreGameState {
   get survivalState(): any;
   get logEntries(): any[];
   get items(): any[];
+  get inventory(): any[];
   get currentEvent(): any;
   get notifications(): any[];
 }
@@ -114,6 +115,10 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
 
   get items(): Record<string, any> {
     return useInventoryStore.getState().items;
+  },
+
+  get inventory() {
+    return useInventoryStore.getState().getInventory();
   },
 
   get currentEvent() {

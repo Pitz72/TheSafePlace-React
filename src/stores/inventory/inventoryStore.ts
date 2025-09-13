@@ -49,70 +49,41 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
 
   addItem: (itemId, quantity = 1) => {
     const item = itemDatabase[itemId];
-    if (!item) return false;
+    if (!item) return { success: false, message: "Item not found in database." };
 
     const characterStore = useCharacterStore.getState();
-    const { characterSheet } = characterStore;
-    const newInventory = [...characterSheet.inventory];
-    let added = false;
+    const success = characterStore.addItemToInventory(itemId, quantity);
 
-    if (item.stackable) {
-      const slot = newInventory.find((s) => s?.itemId === itemId);
-      if (slot) {
-        slot.quantity += quantity;
-        added = true;
-      }
-    }
-
-    if (!added) {
-      const emptyIdx = newInventory.findIndex((s) => !s);
-      if (emptyIdx !== -1) {
-        newInventory[emptyIdx] = {
-          itemId,
-          quantity,
-          portions: item.portionsPerUnit,
-        };
-        added = true;
-      }
-    }
-
-    if (added) {
-      characterStore.updateCharacterSheet({
-        ...characterSheet,
-        inventory: newInventory,
-      });
+    if (success) {
       useNotificationStore
         .getState()
         .addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity });
-      return true;
+      return { success: true, message: `Added ${quantity} ${item.name}.`};
+    } else {
+      useNotificationStore
+        .getState()
+        .addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
+      return { success: false, message: "Inventory is full."};
     }
-
-    useNotificationStore
-      .getState()
-      .addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
-    return false;
   },
 
   removeItem: (slotIndex, quantity = 1) => {
     const characterStore = useCharacterStore.getState();
-    const { characterSheet } = characterStore;
-    const slot = characterSheet.inventory[slotIndex];
-    if (!slot) return false;
+    const inventory = characterStore.characterSheet.inventory;
+    const slot = inventory[slotIndex];
+    if (!slot) return { success: false, message: "Slot is empty." };
 
-    const newInventory = [...characterSheet.inventory];
-    const currentSlot = newInventory[slotIndex]!;
+    const itemName = itemDatabase[slot.itemId]?.name || 'Unknown Item';
+    const success = characterStore.removeItemFromInventory(slotIndex, quantity);
 
-    if (currentSlot.quantity <= quantity) {
-      newInventory[slotIndex] = null;
+    if (success) {
+      useNotificationStore
+        .getState()
+        .addLogEntry(MessageType.ITEM_DROPPED, { item: itemName, quantity });
+      return { success: true, message: `${quantity} ${itemName} removed.` };
     } else {
-      currentSlot.quantity -= quantity;
+      return { success: false, message: `Could not remove ${itemName}.` };
     }
-
-    characterStore.updateCharacterSheet({
-      ...characterSheet,
-      inventory: newInventory,
-    });
-    return true;
   },
 
   equipItemFromInventory: (slotIndex) => {
@@ -128,6 +99,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     } else {
       notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
     }
+    return result;
   },
 
   setSelectedInventoryIndex: (index) => {

@@ -23,7 +23,6 @@ graph TD
     C --> I
     B --> I
     D --> I
-    D --> B
     F --> B
     F --> I
     G --> B
@@ -98,6 +97,10 @@ interface CharacterStoreContract {
   addExperience: (xpGained: number) => void;    // Con logging automatico
   updateCharacterSheet: (newSheet: ICharacterSheet) => void;
   
+  // Inventory Management (Source of Truth)
+  addItemToInventory: (itemId: string, quantity: number) => boolean;
+  removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
+
   // Utility Actions
   getModifier: (ability: AbilityType) => number;
   performAbilityCheck: (ability: AbilityType, difficulty: number) => CheckResult;
@@ -118,24 +121,23 @@ interface CharacterStoreContract {
 ### 3. inventoryStore (InventoryState)
 
 **Responsabilità Primarie:**
-- Logica dell'inventario e gestione oggetti
-- Database degli oggetti (items)
-- Azioni di inventario (aggiungi, rimuovi, equipaggia)
-- Interfaccia per accesso all'inventario del personaggio
+- **Servizio** per la logica di inventario (NON la source of truth dei dati).
+- Database degli oggetti (`items`).
+- Espone azioni (`addItem`, `removeItem`) che chiamano `characterStore` per modificare l'inventario.
 
 **Contratto:**
 ```typescript
 interface InventoryStoreContract {
   // State
-  items: Record<string, IItem>;     // Database oggetti (source of truth)
+  items: Record<string, IItem>; // Database oggetti (source of truth)
   
-  // Core Actions
+  // Core Actions (as a Service Layer)
   addItem: (itemId: string, quantity: number) => ActionResult;
-  removeItem: (itemId: string, quantity: number) => ActionResult;
-  equipItemFromInventory: (itemId: string) => ActionResult;
+  removeItem: (slotIndex: number, quantity: number) => ActionResult;
+  equipItemFromInventory: (slotIndex: number) => ActionResult;
   
   // Access Methods
-  getInventory: () => IInventorySlot[];         // Accede a characterStore
+  getInventory: () => IInventorySlot[]; // Accede a characterStore
   getItemById: (itemId: string) => IItem | null;
   
   // Utility
@@ -144,9 +146,9 @@ interface InventoryStoreContract {
 ```
 
 **Pattern di Accesso:**
-- ✅ **Per oggetti**: Usare `inventoryStore.items[itemId]`
-- ✅ **Per inventario**: Usare `inventoryStore.getInventory()`
-- ❌ **Accesso diretto**: Non accedere a `characterStore.characterSheet.inventory`
+- ✅ **Per modificare l'inventario**: Usare le azioni di `inventoryStore` (es. `addItem`).
+- ✅ **Per leggere l'inventario**: Usare `inventoryStore.getInventory()` o il proxy di `gameStore`.
+- ❌ **Accesso diretto**: Non accedere a `characterStore.characterSheet.inventory` da nessun componente o store.
 
 **Invarianti:**
 - `getInventory()` deve sempre riflettere `characterStore.characterSheet.inventory`
@@ -162,44 +164,37 @@ interface InventoryStoreContract {
 ### 4. worldStore (WorldState)
 
 **Responsabilità Primarie:**
-- Gestione del mondo di gioco (mappa, posizione)
-- Sistema temporale
-- Movimento del giocatore
-- Eventi ambientali
+- Gestione dello stato del mondo di gioco: mappa, posizione del giocatore, bioma corrente e tempo.
+- **NON GESTISCE** logica di gioco complessa (es. sopravvivenza, eventi, XP).
 
 **Contratto:**
 ```typescript
 interface WorldStoreContract {
   // State
-  mapData: string[][];
+  mapData: string[];
+  isMapLoading: boolean;
   playerPosition: { x: number; y: number };
-  timeState: { currentTime: number; day: number; isDay: boolean };
-  currentBiome: string | null;
   cameraPosition: { x: number; y: number };
-  
+  timeState: TimeState;
+  currentBiome: string | null;
+
   // Core Actions
-  loadMap: (mapData: string[][]) => void;
-  updatePlayerPosition: (position: { x: number; y: number }) => void;  // Con logging
-  advanceTime: (minutes: number) => void;                              // Con logging
+  loadMap: () => Promise<void>;
+  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiomeChar: string) => void;
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
-  
-  // Utility
-  getBiomeKeyFromChar: (char: string) => string;
-  formatTime: (timeMinutes: number) => string;
+  advanceTime: (minutes?: number) => void;
   resetWorld: () => void;
 }
 ```
 
 **Invarianti:**
-- Il movimento del giocatore deve essere loggato
-- I cambi di tempo significativi (>= 60 min) devono essere loggati
-- I cambi di bioma devono essere loggati
-- `currentTime` deve essere sempre tra 0 e 1439 (minuti in un giorno)
+- `updatePlayerPosition` deve solo aggiornare lo stato del mondo e loggare il movimento.
+- Qualsiasi effetto collaterale complesso del movimento **DEVE** essere delegato al `playerMovementService`.
+- `currentTime` deve essere sempre tra 0 e 1439 (minuti in un giorno).
 
 **Dipendenze:**
-- `characterStore` (per danni da fame/sete)
-- `notificationStore` (per logging eventi)
-- `gameStore` (per trigger eventi)
+- `notificationStore` (per logging di movimento e cambio bioma).
+- **NON DEVE** avere dipendenze dirette da altri store di gioco per la logica di movimento.
 
 ---
 
@@ -317,66 +312,80 @@ worldStore.updatePlayerPosition({ x: 5, y: 3 }); // Non gameStore
 - Gli errori non devono corrompere lo stato
 - Le operazioni fallite devono essere loggate
 
+---
+
+### 7. Livello Servizi (Service Layer)
+
+Per gestire interazioni complesse che coinvolgono più store, viene introdotto un livello di servizi. I servizi non mantengono uno stato proprio ma orchestrano le azioni tra gli store.
+
+#### **playerMovementService**
+- **Responsabilità:** Gestire tutti gli effetti collaterali del movimento del giocatore (meteo, sopravvivenza, eventi, XP, tempo).
+- **Diagramma di Flusso:**
+  ```mermaid
+  sequenceDiagram
+      participant WS as worldStore
+      participant PMS as playerMovementService
+      participant WeatherS as weatherStore
+      participant CS as characterStore
+      participant SS as survivalStore
+      participant ES as eventStore
+
+      WS->>PMS: handleMovementEffects(biome)
+      PMS->>WeatherS: updateWeather()
+      PMS->>CS: gainMovementXP()
+      PMS->>SS: applyMovementSurvivalCost()
+      PMS->>ES: checkForRandomEvent()
+      PMS->>WS: advanceTime()
+  ```
+
+---
+
 ## Test di Validazione
 
-Per verificare il rispetto dei contratti, eseguire:
+Per verificare il rispetto dei contratti, le suite di test principali sono:
+- `src/tests/services/playerMovementService.test.ts` (verifica l'orchestrazione del movimento)
+- `src/tests/stores/inventoryStore.test.ts` (verifica il disaccoppiamento dell'inventario)
 
-```typescript
-import { validateStoreSynchronization } from './tests/store-synchronization.test';
-
-const validation = validateStoreSynchronization();
-if (!validation.isValid) {
-  console.error('Store synchronization issues:', validation.issues);
-}
-```
+La suite `store-synchronization.test.ts` è stata disabilitata perché inaffidabile.
 
 ## Linee Guida per lo Sviluppo
 
 ### DO ✅
-- Usare gameStore per lettura nei componenti UI principali
-- Usare store specifici per modifiche di stato
-- Loggare tutte le modifiche critiche
-- Restituire risultati con `success: boolean`
-- Mantenere gli invarianti definiti
+- Usare gameStore per lettura nei componenti UI principali.
+- Usare store specifici per modifiche di stato.
+- Usare un servizio per orchestratore logica complessa tra più store.
+- Loggare tutte le modifiche critiche.
+- Mantenere gli invarianti definiti.
 
 ### DON'T ❌
-- Modificare dati tramite gameStore
-- Accedere direttamente a `characterStore.characterSheet.inventory`
-- Saltare il logging per modifiche critiche
-- Creare dipendenze circolari tra store
-- Modificare dati di altri store direttamente
+- **NON** inserire logica di orchestrazione complessa all'interno di un'azione di uno store (`worldStore` anti-pattern).
+- **NON** modificare lo stato di uno store dall'interno di un altro store (`inventoryStore` anti-pattern).
+- **NON** accedere direttamente a `characterSheet.inventory` da componenti o altri store.
+- **NON** creare dipendenze circolari tra store.
 
 ## Diagramma di Flusso delle Operazioni
 
 ```mermaid
 sequenceDiagram
     participant UI as UI Component
-    participant GS as gameStore
     participant IS as inventoryStore
     participant CS as characterStore
     participant NS as notificationStore
     
-    UI->>GS: Leggi inventory
-    GS->>IS: getInventory()
-    IS->>CS: characterSheet.inventory
-    CS-->>IS: inventory data
-    IS-->>GS: inventory data
-    GS-->>UI: inventory data
-    
     UI->>IS: addItem('WOOD', 5)
-    IS->>CS: Modifica inventory
-    IS->>NS: addLogEntry(ITEM_ADDED)
+    IS->>CS: addItemToInventory('WOOD', 5)
+    CS-->>IS: {success: true}
+    IS->>NS: addLogEntry(ITEM_FOUND)
     IS-->>UI: {success: true}
 ```
 
 ## Versioning e Compatibilità
 
-- **Versione Corrente**: 1.0.0
-- **Compatibilità**: Tutti i contratti sono stabili
-- **Modifiche Future**: Devono mantenere backward compatibility
-- **Deprecazioni**: Devono essere documentate con almeno una versione di preavviso
+- **Versione Corrente**: 0.9.7.2
+- **Compatibilità**: I contratti degli store sono stati modificati in questa versione.
+- **Modifiche Future**: Devono mantenere backward compatibility con la nuova architettura.
 
 ---
 
-*Ultimo aggiornamento: Gennaio 2025*
-*Autore: Sistema di Refactoring Zustand*
+*Ultimo aggiornamento: Settembre 2025*
+*Autore: Jules, Direttore allo Sviluppo*

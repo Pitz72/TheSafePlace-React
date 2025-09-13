@@ -1,11 +1,9 @@
 import { create } from 'zustand';
 import type { TimeState } from '../../interfaces/gameState';
-import { useEventStore } from '../events/eventStore';
-import { useCharacterStore } from '../character/characterStore';
-import { useWeatherStore } from '../weather/weatherStore';
-import { useSurvivalStore } from '../survival/survivalStore';
 import { useNotificationStore } from '../notifications/notificationStore';
+import { useSurvivalStore } from '../survival/survivalStore';
 import { MessageType } from '../../data/MessageArchive';
+import { playerMovementService } from '../../services/playerMovementService';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -69,77 +67,33 @@ export const useWorldStore = create<WorldState>((set, get) => ({
   updatePlayerPosition: (newPosition, newBiomeChar) => {
     const oldBiome = get().currentBiome;
     const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
-    const characterStore = useCharacterStore.getState();
-    const survivalStore = useSurvivalStore.getState();
+    const oldPos = get().playerPosition;
     const notificationStore = useNotificationStore.getState();
 
-    if (newBiomeKey !== oldBiome) {
+    const hasMoved = oldPos.x !== newPosition.x || oldPos.y !== newPosition.y;
+    const hasChangedBiome = newBiomeKey !== oldBiome;
+
+    // 1. Update world state if necessary
+    if (hasMoved || hasChangedBiome) {
+      set({ playerPosition: newPosition, currentBiome: newBiomeKey });
+    }
+
+    // 2. Log biome change
+    if (hasChangedBiome) {
       notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
     }
 
-    const oldPos = get().playerPosition;
-
-    // Aggiorna lo stato solo se qualcosa è effettivamente cambiato.
-    if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y || oldBiome !== newBiomeKey) {
-      set({ playerPosition: newPosition, currentBiome: newBiomeKey });
-      
-      // Log player movement
-      if (oldPos.x !== newPosition.x || oldPos.y !== newPosition.y) {
-        notificationStore.addLogEntry(MessageType.MOVEMENT, {
-          from: oldPos,
-          to: newPosition,
-          biome: newBiomeKey
-        });
-      }
+    // 3. Log movement
+    if (hasMoved) {
+      notificationStore.addLogEntry(MessageType.MOVEMENT, {
+        from: oldPos,
+        to: newPosition,
+        biome: newBiomeKey
+      });
     }
 
-    // Weather, survival, and events are still in gameStore, so we call it.
-    // This shows the dependencies we still need to refactor.
-    const weatherStore = useWeatherStore.getState();
-    weatherStore.updateWeather();
-
-    characterStore.addExperience(Math.floor(Math.random() * 2) + 1);
-
-    const weatherEffects = weatherStore.getWeatherEffects();
-    survivalStore.updateSurvival({
-      hunger: survivalStore.survivalState.hunger + (-0.2 * weatherEffects.survivalModifier),
-      thirst: survivalStore.survivalState.thirst + (-0.3 * weatherEffects.survivalModifier)
-    });
-
-    if (survivalStore.survivalState.hunger <= 0 || survivalStore.survivalState.thirst <= 0) {
-      characterStore.updateHP(-1);
-      notificationStore.addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
-    }
-
-    // Event triggering logic will also be extracted later
-    const BIOME_EVENT_CHANCES: Record<string, number> = {
-        'PLAINS': 0.10, 'FOREST': 0.15, 'RIVER': 0.18, 'CITY': 0.33,
-        'VILLAGE': 0.33, 'SETTLEMENT': 0.25, 'REST_STOP': 0.20, 'UNKNOWN': 0.05
-    };
-    const baseEventChance = BIOME_EVENT_CHANCES[newBiomeKey] || 0.05;
-    const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
-
-    if (newBiomeKey && Math.random() < adjustedEventChance) {
-        setTimeout(() => {
-          const eventStore = useEventStore.getState();
-          const randomEvent = eventStore.getRandomEventFromBiome(newBiomeKey);
-          if (randomEvent) {
-            eventStore.triggerEvent(randomEvent);
-          }
-        }, 150);
-    }
-
-    const baseMovementTime = 10;
-    const adjustedMovementTime = Math.ceil(baseMovementTime / weatherEffects.movementModifier);
-
-    if (weatherEffects.movementModifier < 1.0) {
-        const extraTime = adjustedMovementTime - baseMovementTime;
-        notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
-            text: `Il ${weatherStore.getWeatherDescription(weatherStore.currentWeather).toLowerCase()} rallenta il tuo movimento (+${extraTime} min).`
-        });
-    }
-
-    get().advanceTime(adjustedMovementTime);
+    // 4. Delegate all side effects to the service
+    playerMovementService.handleMovementEffects(newBiomeKey);
   },
 
   updateCameraPosition: (viewportSize) => {
