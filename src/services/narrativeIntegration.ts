@@ -86,16 +86,9 @@ export class NarrativeIntegrationService {
     // Intercetta i cambi di HP per trigger narrativi
     const originalUpdateHP = characterStore.updateHP;
     characterStore.updateHP = (change: number) => {
-      const { character } = characterStore;
-      // GUARDIA: Non eseguire la logica narrativa se il contesto del personaggio non è valido
-      if (!character) {
-        originalUpdateHP.call(characterStore, change);
-        return;
-      }
-
-      const oldHP = character.hp;
+      const oldHP = characterStore.character.hp;
       originalUpdateHP.call(characterStore, change);
-      const newHP = characterStore.character.hp; // Rileggi dopo l'aggiornamento
+      const newHP = characterStore.character.hp;
       this.handleHPChange(oldHP, newHP, change);
     };
   }

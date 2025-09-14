@@ -19,9 +19,9 @@ export interface InventoryState {
   getEquippedArmorId: () => string | null;
 
   // Actions
-  addItem: (itemId: string, quantity?: number) => { success: boolean; message: string };
-  removeItem: (slotIndex: number, quantity?: number) => { success: boolean; message: string };
-  equipItemFromInventory: (slotIndex: number) => { success: boolean; message: string };
+  addItem: (itemId: string, quantity?: number) => boolean;
+  removeItem: (slotIndex: number, quantity?: number) => boolean;
+  equipItemFromInventory: (slotIndex: number) => void;
   setSelectedInventoryIndex: (index: number | null) => void;
   useItem: (slotIndex: number) => void;
   dropItem: (slotIndex: number) => void;

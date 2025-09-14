@@ -50,8 +50,8 @@ const getTileDescription = (char: string): string => {
 };
 
 const GameScreenInputHandler = () => {
-  usePlayerMovement();
   const { setCurrentScreen } = useGameStore();
+  usePlayerMovement({ setCurrentScreen });
   const { shortRest } = useSurvivalStore();
   const { addLogEntry } = useNotificationStore();
   const { handleQuickSave, handleQuickLoad } = useSaveStore();

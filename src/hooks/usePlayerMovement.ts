@@ -13,9 +13,13 @@ interface MovementState {
   riverPosition: { x: number; y: number } | null;
 }
 
-export const usePlayerMovement = () => {
+interface UsePlayerMovementProps {
+  setCurrentScreen: (screen: string) => void;
+}
+
+export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) => {
   // World state from the correct source of truth
-  const { mapData, updatePlayerPosition } = useWorldStore();
+  const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
   // Character actions
   const { performAbilityCheck, updateHP } = useCharacterStore();
   // Game actions
@@ -70,7 +74,6 @@ export const usePlayerMovement = () => {
   const handleMovement = useCallback((deltaX: number, deltaY: number) => {
     if (mapData.length === 0) return;
 
-    const { playerPosition } = useWorldStore.getState();
     const nextX = playerPosition.x + deltaX;
     const nextY = playerPosition.y + deltaY;
 
@@ -110,7 +113,8 @@ export const usePlayerMovement = () => {
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      // Rifugio rilevato - logica gestita da updatePlayerPosition
+      setCurrentScreen('shelter');
+      return; // Stop further processing, the shelter screen takes over
     }
 
     // Messaggio atmosferico casuale
@@ -121,7 +125,7 @@ export const usePlayerMovement = () => {
     // Controlla se il movimento ha attivato un incontro
     checkForEncounter(nextX, nextY);
 
-  }, [mapData, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, advanceTime, movementState, setCurrentScreen]);
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, addLogEntry, advanceTime, movementState]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento

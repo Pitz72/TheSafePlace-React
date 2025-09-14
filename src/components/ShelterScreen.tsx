@@ -168,7 +168,7 @@ const ShelterScreen: React.FC = () => {
         if (foundItem) {
           const quantity = foundItem.stackable ? (Math.floor(Math.random() * 2) + 1) : 1;
           const added = addItem(foundItemId, quantity);
-          if (added.success) {
+          if (added) {
             outcomeMessage += `La tua attenzione viene ripagata. Trovi: ${foundItem.name}${quantity > 1 ? ` x${quantity}` : ''}`;
           } else {
             outcomeMessage += `Trovi ${foundItem.name}, ma il tuo inventario è pieno!`;
