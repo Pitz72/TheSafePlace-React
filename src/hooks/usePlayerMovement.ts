@@ -19,7 +19,7 @@ export const usePlayerMovement = () => {
   // Character actions
   const { performAbilityCheck, updateHP } = useCharacterStore();
   // Game actions
-  const { advanceTime } = useGameStore();
+  const { advanceTime, setCurrentScreen } = useGameStore();
   // Notification system
   const { addLogEntry } = useNotificationStore();
   const [movementState, setMovementState] = useState<MovementState>({
@@ -50,7 +50,6 @@ export const usePlayerMovement = () => {
 
   const canMoveToPosition = useCallback((x: number, y: number): boolean => {
     if (!isValidPosition(x, y)) {
-      console.log(`🚫 Movimento bloccato: fuori dai confini (${x}, ${y})`);
       return false;
     }
 
@@ -58,9 +57,7 @@ export const usePlayerMovement = () => {
 
     // Terreno invalicabile: Montagne
     if (terrain === 'M') {
-      console.log(`🏔️ Movimento bloccato: montagna a (${x}, ${y})`);
-      // Aggiungi messaggio ironico per tentativo di attraversare montagna
-      addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
+      // Il logging viene ora gestito centralmente
       return false;
     }
 
@@ -86,7 +83,6 @@ export const usePlayerMovement = () => {
           isInRiver: true,
           riverPosition: { x: nextX, y: nextY }
         });
-        addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
         // Primo turno perso - avanza tempo ma non muovere ancora
         advanceTime(10);
         return; // Blocca il movimento, richiede seconda pressione
@@ -109,18 +105,13 @@ export const usePlayerMovement = () => {
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      // Rifugio rilevato - logica gestita da updatePlayerPosition
-    }
-
-    // Messaggio atmosferico casuale
-    if (Math.random() < JOURNAL_CONFIG.AMBIANCE_PROBABILITY) {
-      addLogEntry(MessageType.AMBIANCE_RANDOM);
+      setCurrentScreen('shelter');
     }
 
     // Controlla se il movimento ha attivato un incontro
     checkForEncounter(nextX, nextY);
 
-  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, addLogEntry, advanceTime, movementState]);
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, advanceTime, movementState, setCurrentScreen]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento
