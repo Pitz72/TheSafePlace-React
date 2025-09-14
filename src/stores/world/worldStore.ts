@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { TimeState } from '../../interfaces/gameState';
 import { useNotificationStore } from '../notifications/notificationStore';
+import { useSurvivalStore } from '../survival/survivalStore';
 import { MessageType } from '../../data/MessageArchive';
 import { playerMovementService } from '../../services/playerMovementService';
 
@@ -19,7 +20,7 @@ export interface WorldState {
   loadMap: () => Promise<void>;
   updatePlayerPosition: (newPosition: { x: number; y: number }, newBiomeChar: string) => void;
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
-  setTimeState: (newTimeState: TimeState) => void;
+  advanceTime: (minutes?: number) => void;
   getBiomeKeyFromChar: (char: string) => string;
   formatTime: (timeMinutes: number) => string;
   resetWorld: () => void;
@@ -121,8 +122,41 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     }
   },
 
-  setTimeState: (newTimeState: TimeState) => {
-    set({ timeState: newTimeState });
+  advanceTime: (minutes = 30) => {
+    const oldTimeState = get().timeState;
+    const newTotalMinutes = oldTimeState.currentTime + minutes;
+    const newDay = oldTimeState.day + Math.floor(newTotalMinutes / 1440);
+    const normalizedTime = newTotalMinutes % 1440;
+    const newIsDay = normalizedTime >= DAWN_TIME && normalizedTime <= DUSK_TIME;
+
+    const notificationStore = useNotificationStore.getState();
+    const survivalStore = useSurvivalStore.getState();
+
+    if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
+      notificationStore.addLogEntry(MessageType.TIME_DAWN);
+    }
+    if (oldTimeState.currentTime < DUSK_TIME && normalizedTime >= DUSK_TIME) {
+      notificationStore.addLogEntry(MessageType.TIME_DUSK);
+      survivalStore.handleNightConsumption((type, context) => notificationStore.addLogEntry(type, context));
+    }
+    if (oldTimeState.currentTime > 0 && normalizedTime === 0) {
+      notificationStore.addLogEntry(MessageType.TIME_MIDNIGHT);
+    }
+
+    set({ timeState: { currentTime: normalizedTime, day: newDay, isDay: newIsDay } });
+
+    // Log significant time changes
+    if (newDay > oldTimeState.day) {
+      notificationStore.addLogEntry(MessageType.TIME_DAWN, {
+        day: newDay
+      });
+    }
+
+    if (minutes >= 60) {
+      notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
+        text: `Il tempo scorre... ${newIsDay ? 'È giorno' : 'È notte'}.`
+      });
+    }
   },
 
   getBiomeKeyFromChar: (char) => {

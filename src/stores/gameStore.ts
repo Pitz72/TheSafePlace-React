@@ -50,6 +50,11 @@ export interface CoreGameState {
   
   // Time Actions
   advanceTime: (hours: number) => void;
+
+  // Shelter Actions (facade)
+  getShelterInfo: (x: number, y: number) => any | null;
+  canInvestigateShelter: (x: number, y: number) => boolean;
+  updateShelterAccess: (x: number, y: number, updates: any) => void;
   
   // Facade Properties (delegano ai store specializzati)
   get characterSheet(): any;
@@ -234,6 +239,17 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   // Time Actions
   advanceTime: (hours: number) => {
     useTimeStore.getState().advanceTime(hours);
+  },
+
+  // --- SHELTER ACTIONS ---
+  getShelterInfo: (x: number, y: number) => {
+    return useShelterStore.getState().getShelterInfo(x, y);
+  },
+  canInvestigateShelter: (x: number, y: number) => {
+    return useShelterStore.getState().canInvestigateShelter(x, y);
+  },
+  updateShelterAccess: (x: number, y: number, updates: any) => {
+    useShelterStore.getState().updateShelterAccess(x, y, updates);
   },
 }));
 

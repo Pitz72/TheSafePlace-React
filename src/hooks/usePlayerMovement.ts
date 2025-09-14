@@ -15,11 +15,11 @@ interface MovementState {
 
 export const usePlayerMovement = () => {
   // World state from the correct source of truth
-  const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
+  const { mapData, updatePlayerPosition } = useWorldStore();
   // Character actions
   const { performAbilityCheck, updateHP } = useCharacterStore();
   // Game actions
-  const { advanceTime, setCurrentScreen } = useGameStore();
+  const { advanceTime } = useGameStore();
   // Notification system
   const { addLogEntry } = useNotificationStore();
   const [movementState, setMovementState] = useState<MovementState>({
@@ -50,6 +50,7 @@ export const usePlayerMovement = () => {
 
   const canMoveToPosition = useCallback((x: number, y: number): boolean => {
     if (!isValidPosition(x, y)) {
+      console.log(`🚫 Movimento bloccato: fuori dai confini (${x}, ${y})`);
       return false;
     }
 
@@ -57,7 +58,9 @@ export const usePlayerMovement = () => {
 
     // Terreno invalicabile: Montagne
     if (terrain === 'M') {
-      // Il logging viene ora gestito centralmente
+      console.log(`🏔️ Movimento bloccato: montagna a (${x}, ${y})`);
+      // Aggiungi messaggio ironico per tentativo di attraversare montagna
+      addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
       return false;
     }
 
@@ -67,6 +70,7 @@ export const usePlayerMovement = () => {
   const handleMovement = useCallback((deltaX: number, deltaY: number) => {
     if (mapData.length === 0) return;
 
+    const { playerPosition } = useWorldStore.getState();
     const nextX = playerPosition.x + deltaX;
     const nextY = playerPosition.y + deltaY;
 
@@ -83,6 +87,7 @@ export const usePlayerMovement = () => {
           isInRiver: true,
           riverPosition: { x: nextX, y: nextY }
         });
+        addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
         // Primo turno perso - avanza tempo ma non muovere ancora
         advanceTime(10);
         return; // Blocca il movimento, richiede seconda pressione
@@ -105,13 +110,18 @@ export const usePlayerMovement = () => {
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      setCurrentScreen('shelter');
+      // Rifugio rilevato - logica gestita da updatePlayerPosition
+    }
+
+    // Messaggio atmosferico casuale
+    if (Math.random() < JOURNAL_CONFIG.AMBIANCE_PROBABILITY) {
+      addLogEntry(MessageType.AMBIANCE_RANDOM);
     }
 
     // Controlla se il movimento ha attivato un incontro
     checkForEncounter(nextX, nextY);
 
-  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, advanceTime, movementState, setCurrentScreen]);
+  }, [mapData, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, advanceTime, movementState, setCurrentScreen]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento
