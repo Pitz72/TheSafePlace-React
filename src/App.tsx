@@ -33,6 +33,7 @@ import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
 import WeatherDisplay from './components/WeatherDisplay';
 import CombatScreen from './components/combat/CombatScreen';
 import PostCombatScreen from './components/combat/PostCombatScreen';
+import KeyboardCommandsPanel from './components/KeyboardCommandsPanel';
 
 const getTileDescription = (char: string): string => {
   switch (char) {
@@ -50,8 +51,8 @@ const getTileDescription = (char: string): string => {
 };
 
 const GameScreenInputHandler = () => {
-  usePlayerMovement();
   const { setCurrentScreen } = useGameStore();
+  usePlayerMovement({ setCurrentScreen });
   const { shortRest } = useSurvivalStore();
   const { addLogEntry } = useNotificationStore();
   const { handleQuickSave, handleQuickLoad } = useSaveStore();
@@ -161,6 +162,7 @@ const GameContent = () => {
                       <li>Status: <span className={`${(characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' : 'text-green-400'}`}>{characterSheet.currentHP <= 0 ? 'Morto' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'Critico' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'Ferito' : 'Normale'}</span></li>
                     </ul>
                     <InventoryPanel />
+                    <KeyboardCommandsPanel />
                   </div>
                 </aside>
                 <section className="flex-1 flex flex-col">

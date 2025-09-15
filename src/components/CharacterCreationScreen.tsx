@@ -2,6 +2,21 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 
+/**
+ * COMPONENTE IMMUTABILE - PATTO DI SVILUPPO
+ * 
+ * Questo componente è DEFINITIVO e IMMUTABILE.
+ * NON deve essere modificato per nessuna ragione al mondo
+ * se non previa autorizzazione esplicita dell'operatore.
+ * 
+ * La schermata di creazione del personaggio all'avvio del gioco
+ * rappresenta un elemento fondamentale dell'esperienza utente
+ * e deve rimanere invariata per garantire la coerenza del gameplay.
+ * 
+ * Qualsiasi modifica non autorizzata a questo componente
+ * costituisce una violazione del patto di sviluppo.
+ */
+
 const CharacterCreationScreen: React.FC = () => {
   const { characterSheet } = useCharacterStore();
   const { setCurrentScreen, initializeGame } = useGameStore();

@@ -1,53 +1,64 @@
-# 📚 The Safe Place - Documentazione v0.5.1 "Look Me"
+# 📚 The Safe Place - Documentazione v0.9.7.2 "Architectural Integrity"
 
-**Versione**: v0.5.1 "Look Me"  
-**Data**: 24 Agosto 2025  
-**Status**: PRODUZIONE - COMPLETAMENTE FUNZIONALE
+**Versione**: v0.9.7.2 "Architectural Integrity"  
+**Data**: 13 Gennaio 2025  
+**Status**: PRODUZIONE - SISTEMA NARRATIVO CANONICO ATTIVO
 
 ---
 
 ## 🎯 **DOCUMENTAZIONE ESSENZIALE**
 
 ### 📋 **Guida Utente**
-- [RIFERIMENTO-ESSENZIALE-v0.5.1.md](RIFERIMENTO-ESSENZIALE-v0.5.1.md) - Guida completa per giocatori
+- [RIFERIMENTO-ESSENZIALE-v0.5.0.md](./analisi/RIFERIMENTO-ESSENZIALE-v0.5.0.md) - Guida completa per giocatori
+- [Crafting User Guide](./api/crafting-user-guide.md) - Guida sistema crafting
 
 ### 🛠️ **Guida Sviluppatore**
-- [RIFERIMENTO-TECNICO-v0.5.1.md](RIFERIMENTO-TECNICO-v0.5.1.md) - Documentazione tecnica dettagliata
+- [RIFERIMENTO-TECNICO-v0.5.0.md](./analisi/RIFERIMENTO-TECNICO-v0.5.0.md) - Documentazione tecnica dettagliata
+- [API Documentation](./api/api-documentation.md) - Documentazione API complete
+- [Crafting System Guide](./crafting-system/CRAFTING-SYSTEM-GUIDE.md) - Sistema crafting avanzato
 
 ### 📈 **Registro Modifiche**
-- [CHANGELOG-v0.5.1.md](changelog/CHANGELOG-v0.5.1.md) - Elenco completo delle modifiche
-- [CHANGELOG-v0.5.0.md](CHANGELOG-v0.5.0.md) - Versione precedente (storica)
+- [CHANGELOG-v0.9.7.2.md](./changelog/CHANGELOG-v0.9.7.2.md) - Modifiche versione corrente
+- [CHANGELOG-v0.9.7.md](./changelog/CHANGELOG-v0.9.7.md) - Sistema Narrativo Canonico
+- [CHANGELOG.md](./changelog/CHANGELOG.md) - Registro completo modifiche
 
 ### 🛡️ **Validazione Qualità**
-- [ANTI-REGRESSION-v0.5.1.md](anti-regressione/ANTI-REGRESSION-v0.5.1.md) - Checklist validazione
+- [ANTI-REGRESSION-v0.9.7.2.md](./anti-regressione/ANTI-REGRESSION-v0.9.7.2.md) - Checklist validazione corrente
+- [ANTI-REGRESSION-v0.9.7.2.md](./anti-regressione/ANTI-REGRESSION-v0.9.7.2.md) - Integrità architetturale
 
 ---
 
 ## 🏗️ **ARCHITETTURA E COMPONENTI**
 
 ### 📐 **Riferimento Componenti**
-- [INDICE-RIFERIMENTO-COMPONENTI-GIOCO-v1.0.md](INDICE-RIFERIMENTO-COMPONENTI-GIOCO-v1.0.md) - Mappa completa componenti
+- [INDICE-RIFERIMENTO-COMPONENTI-GIOCO-v1.0.md](./analisi/INDICE-RIFERIMENTO-COMPONENTI-GIOCO-v1.0.md) - Mappa completa componenti
+- [Crafting System API](./api/crafting-system.md) - API sistema crafting
 
 ### 🎨 **Sistema Grafico**
-- [MAPPA-SIMBOLI-E-SIGNIFICATI.md](MAPPA-SIMBOLI-E-SIGNIFICATI.md) - Legenda simboli mappa
+- [MAPPA-SIMBOLI-E-SIGNIFICATI.md](./analisi/MAPPA-SIMBOLI-E-SIGNIFICATI.md) - Legenda simboli mappa
+- [Inventario](./analisi/inventario.md) - Sistema inventario e roadmap
 
 ### 📖 **Sistema Narrativo**
-- [SISTEMA-MESSAGGI-NARRATIVI-v0.4.1.md](SISTEMA-MESSAGGI-NARRATIVI-v0.4.1.md) - Gestione messaggi
+- [SISTEMA-MESSAGGI-NARRATIVI-v0.4.1.md](./analisi/SISTEMA-MESSAGGI-NARRATIVI-v0.4.1.md) - Gestione messaggi
+- [GDD Narrativo](./analisi/GDD-narrativo.md) - Game Design Document narrativo
 
 ---
 
 ## 🔒 **SPECIFICHE IMMUTABILI**
 
 ### 🚫 **StartScreen**
-- [STARTSCREEN-IMMUTABLE-SPEC.md](STARTSCREEN-IMMUTABLE-SPEC.md) - Specifica immutabilità
-- [startscreen-validator.ts](startscreen-validator.ts) - Validatore automatico
+- [STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md) - Specifica immutabilità
+- [IMMUTABLE-STARTSCREEN-SUMMARY.md](./dsar/IMMUTABLE-STARTSCREEN-SUMMARY.md) - Riepilogo immutabilità
 
 ### 🚫 **InstructionsScreen**
-- [INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md](INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md) - Specifica immutabilità
-- [instructions-validator.ts](instructions-validator.ts) - Validatore automatico
+- [INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md](./dsar/INSTRUCTIONSSCREEN-IMMUTABLE-SPEC.md) - Specifica immutabilità
+- [IMMUTABLE-INSTRUCTIONS-SUMMARY.md](./dsar/IMMUTABLE-INSTRUCTIONS-SUMMARY.md) - Riepilogo immutabilità
 
-### 🚫 **MapViewport**
-- [DEBUG-PANEL-HIDING-v0.5.1.md](DEBUG-PANEL-HIDING-v0.5.1.md) - Documentazione pannello debug
+### 🚫 **Inventory Panel**
+- [INVENTORY-PANEL-IMMUTABLE-SPEC.md](./dsar/INVENTORY-PANEL-IMMUTABLE-SPEC.md) - Specifica immutabilità inventario
+
+### 🔒 **DSAR Attivo**
+- [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md) - Specifica adattamento schermo
 
 ---
 
@@ -67,13 +78,16 @@
 ## 🚀 **DISTRIBUZIONE**
 
 ### 📦 **Build Information**
-- **Bundle Size**: 263.25kB
-- **Gzipped Size**: 81.71kB
+- **Bundle Size**: Ottimizzato per performance
+- **Gzipped Size**: Compressione avanzata
 - **Frameworks**: React 18.3.1, TypeScript 5.7.3, Vite 6.0.3
+- **Sistema Crafting**: Completamente integrato
+- **Sistema Narrativo**: Canonico e semplificato
 
 ### 🌐 **Compatibilità**
 - **Browser**: Chrome 120+, Firefox 120+, Safari 17+, Edge 120+
-- **Device**: Desktop, Tablet, Mobile responsive
+- **Device**: Desktop ottimizzato, responsive design
+- **TypeScript**: Strict mode, verbatimModuleSyntax compliant
 
 ---
 
@@ -82,10 +96,13 @@
 ### 👨‍💻 **Team Sviluppo**
 - **Autore Principale**: Simone Pizzi
 - **Repository**: [TheSafePlace-React](https://github.com/TheSafePlace-React)
+- **Versione Corrente**: v0.9.7.2 "Architectural Integrity"
+- **Sistema**: Narrativo Canonico Attivo
 
 ### 📧 **Supporto**
-- Email: support@runtime.radio
-- Issues: [GitHub Issues](https://github.com/TheSafePlace-React/issues)
+- **Documentazione**: [Indice Consolidato](./INDICE-DOCUMENTAZIONE-CONSOLIDATO.md)
+- **Troubleshooting**: [Crafting Troubleshooting](./crafting-system/TROUBLESHOOTING-GUIDE.md)
+- **Issues**: [GitHub Issues](https://github.com/TheSafePlace-React/issues)
 
 ---
 

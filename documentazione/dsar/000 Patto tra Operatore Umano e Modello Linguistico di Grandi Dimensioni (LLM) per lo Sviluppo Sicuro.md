@@ -71,6 +71,22 @@ Questo documento stabilisce i principi inderogabili e il protocollo operativo ch
 10.1. Tutta la documentazione prodotta durante lo sviluppo, inclusi log, roadmap, e documenti anti-regressione, deve essere salvata e organizzata esclusivamente all'interno della cartella `documentazione/` presente nella root del progetto.
 10.2. L'LLM, su richiesta dell'Operatore, è tenuto a mantenere aggiornato il file `documentazione/index.md` per riflettere la struttura e il contenuto corrente della documentazione.
 
+#### **Articolo 11: Protezione dei File Immutabili**
+11.1. I seguenti file sono considerati **IMMUTABILI** e **PROTETTI** da qualsiasi modifica:
+    a. `src/components/StoryScreen.tsx` - Pagina storia del gioco
+    b. `src/components/StartScreen.tsx` - Pagina istruzioni/menu principale
+    c. `src/components/LoadScreen.tsx` - Pagina caricamento partite
+    d. `src/components/InventoryPanel.tsx` - Pannello inventario del gioco
+    e. `src/components/WeatherDisplay.tsx` - Pannello meteo del gioco
+    f. `src/components/CharacterCreationScreen.tsx` - Schermata creazione personaggio all'avvio
+    g. `src/components/KeyboardCommandsPanel.tsx` - Pannello comandi da tastiera
+    h. `src/components/CharacterSheetScreen.tsx` - Scheda personaggio attivabile con Tab
+    i. `src/components/LevelUpScreen.tsx` - Pagina levelup attivabile con L
+11.2. Questi file contengono avvisi di immutabilità nel loro header e sono considerati **contenuto finale e definitivo**.
+11.3. **DIVIETO ASSOLUTO**: L'LLM non può modificare, alterare o suggerire modifiche a questi file senza **Autorizzazione Esplicita Scritta** dall'Operatore.
+11.4. Qualsiasi richiesta di modifica a questi file deve essere immediatamente segnalata come **violazione del protocollo di sicurezza** e l'LLM deve entrare in **Modalità Sicura** (Articolo 7).
+11.5. L'unica eccezione ammessa è l'aggiunta o l'aggiornamento degli avvisi di immutabilità stessi, e solo su esplicito comando dell'Operatore.
+
 ---
 
 ### **Dichiarazione di Accettazione e Modalità d'Uso**

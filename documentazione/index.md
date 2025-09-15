@@ -1,6 +1,87 @@
-# Indice della Documentazione
+# 📚 DOCUMENTAZIONE - The Safe Place
 
-Questo file funge da indice centrale per tutta la documentazione del progetto "The Safe Place" v0.6.4 "How hard is it to wade across a river?".
+**Versione**: v0.9.7.3 "We shore up the building"  
+**Data Aggiornamento**: 16 Gennaio 2025  
+**Status**: ✅ SINCRONIZZATA CON CODICE - Consolidamento Architetturale e Immutabilità
+
+---
+
+## 🎯 PANORAMICA v0.9.7.3
+
+Questa documentazione è stata **sincronizzata con la versione v0.9.7.3** per riflettere il consolidamento architetturale e l'implementazione di componenti immutabili. Le **protezioni runtime sono state aggiunte**, i componenti critici resi immutabili, e la stabilità ulteriormente rinforzata. Tutti i documenti sono aggiornati con le nuove protezioni.
+
+### 📊 Documenti Unificati - AGGIORNATI v0.9.7.3
+
+| Documento | Descrizione | Stato v0.9.7.3 |
+|-----------|-------------|-------|
+| **[PROJECT_STATUS.md](PROJECT_STATUS.md)** | Stato completo del progetto, refactoring architetturale | ✅ **SINCRONIZZATO** |
+| **[ARCHITECTURE_DESIGN.md](ARCHITECTURE_DESIGN.md)** | Architettura refactored, servizi dedicati, pattern SOLID | ✅ **SINCRONIZZATO** |
+| **[ROADMAP_CURRENT.md](ROADMAP_CURRENT.md)** | Roadmap post-refactoring, consolidamento e espansione | ✅ **SINCRONIZZATO** |
+
+### 🔄 Processo di Sincronizzazione v0.9.7.3
+
+1. **Analisi Consolidamento**: Identificazione componenti critici per immutabilità
+2. **Implementazione Protezioni**: CharacterSheetScreen, LevelUpScreen resi immutabili
+3. **Validazione Runtime**: Zustand stores con restoreState per robustezza
+4. **Documentazione**: Changelog e anti-regressione per v0.9.7.3
+5. **Stabilizzazione**: Conferma allineamento documentazione-codice consolidato
+
+## 📋 CHANGELOG DOCUMENTAZIONE
+
+### v1.2 - Sincronizzazione v0.9.7.3 (16 Gennaio 2025)
+- ✅ **CONSOLIDATO**: Componenti immutabili implementati
+- ✅ **PROTETTO**: CharacterSheetScreen e LevelUpScreen immutabili
+- ✅ **RINFORZATO**: Zustand stores con protezioni runtime
+- ✅ **DOCUMENTATO**: Changelog e anti-regressione v0.9.7.3
+- ✅ **STABILIZZATO**: Architettura "We shore up the building"
+
+### v1.0 - Consolidamento Completo (13 Settembre 2025)
+- ✅ Archiviati 129 documenti obsoleti
+- ✅ Creati 3 documenti unificati
+- ✅ Eliminata duplicazione informazioni
+- ✅ Struttura semplificata e navigabile
+
+## 🎯 COME NAVIGARE - AGGIORNATO v0.9.7.2
+
+### Per Sviluppatori
+1. **Inizia da**: [PROJECT_STATUS.md](PROJECT_STATUS.md) per stato post-refactoring
+2. **Architettura**: [ARCHITECTURE_DESIGN.md](ARCHITECTURE_DESIGN.md) per servizi e pattern SOLID
+3. **Pianificazione**: [ROADMAP_CURRENT.md](ROADMAP_CURRENT.md) per consolidamento
+
+### Per Project Manager
+1. **Status**: [PROJECT_STATUS.md](PROJECT_STATUS.md) per metriche stabilizzate
+2. **Timeline**: [ROADMAP_CURRENT.md](ROADMAP_CURRENT.md) per fasi post-refactoring
+3. **Qualità**: Test suite stabilizzata (244 test passanti)
+
+### Per Stakeholder
+1. **Executive Summary**: Refactoring completato con successo
+2. **Roadmap**: [ROADMAP_CURRENT.md](ROADMAP_CURRENT.md) per espansione
+3. **Qualità**: Architettura SOLID, God Objects eliminati
+
+---
+
+## 📁 STRUTTURA DOCUMENTAZIONE v0.9.7.2
+
+Documentazione sincronizzata con refactoring architetturale:
+
+```
+documentazione/
+├── archivio/           # 129 documenti obsoleti preservati
+│   ├── roadmap/        # Roadmap storiche
+│   ├── status/         # Status report obsoleti
+│   ├── architecture/   # Documenti architettura vecchi
+│   └── misc/          # Altri documenti
+├── changelog/          # CHANGELOG-v0.9.7.2.md - Dettagli refactoring
+├── anti-regressione/   # ANTI-REGRESSION-v0.9.7.2.md - Regole architetturali
+├── PROJECT_STATUS.md   # ✅ SINCRONIZZATO v0.9.7.2
+├── ARCHITECTURE_DESIGN.md # ✅ SINCRONIZZATO v0.9.7.2
+├── ROADMAP_CURRENT.md  # ✅ SINCRONIZZATO v0.9.7.2
+└── index.md           # Questo file
+```
+
+---
+
+*Documentazione sincronizzata con v0.9.7.2 "Architectural Integrity" - Refactoring completato*
 
 ## 📋 Documenti Principali
 
@@ -14,19 +95,26 @@ Questo file funge da indice centrale per tutta la documentazione del progetto "T
 - [**File di Inventario**](./analisi/inventario.md) - Sistema inventario e roadmap implementazione
 - [**Voci del Diario**](./session-log/journal_entries.txt) - Archivio messaggi di gioco
 
-### 📊 Stato Attuale Progetto
-- **Versione Corrente**: v0.9.6.1 "Phoenix" (COMPLETATA)
+### 📊 Stato Attuale Progetto v0.9.7.2
+- **Versione Corrente**: v0.9.7.2 "Architectural Integrity" (ATTIVA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.9.6.1 Sincronizzazione Store](./anti-regressione/ANTI-REGRESSIONE-v0.9.6.1-SINCRONIZZAZIONE-STORE.md)
-- **Ultimo Changelog**: [v0.9.6.1](../CHANGELOG-v0.9.6.1.md)
-- **Verifica Implementazione**: v0.9.6.1 (sincronizzazione store Zustand, sistema notifiche centralizzato)
-- **Ultimo Commit**: v0.9.6.1 Phoenix - Patch Sincronizzazione (completato)
+- **Anti-Regressione**: [v0.9.7.2 Refactoring Architetturale](./anti-regressione/ANTI-REGRESSION-v0.9.7.2.md)
+- **Ultimo Changelog**: [v0.9.7.2](./changelog/CHANGELOG-v0.9.7.2.md)
+- **Verifica Implementazione**: v0.9.7.2 (refactoring architetturale, servizi dedicati, God Objects eliminati)
+- **Ultimo Commit**: v0.9.7.2 Architectural Integrity - Refactoring Completato (stabilizzato)
 
 ---
 
 ## 📂 Sezioni della Documentazione
 
-### 🛡️ [Anti-Regressione](./anti-regressione/) (30 documenti)
+### 🔌 [API](./api/) (3 documenti)
+
+Documentazione API e sistema:
+- [API Documentation](./api/api-documentation.md) - Documentazione completa delle API
+- [Crafting System API](./api/crafting-system.md) - API del sistema crafting
+- [Crafting User Guide](./api/crafting-user-guide.md) - Guida utente crafting
+
+### 🛡️ [Anti-Regressione](./anti-regressione/) (50+ documenti)
 
 Documenti di protezione che definiscono baseline immutabili e procedure di test per prevenire regressioni. Include:
 - **Documenti v0.0.x - v0.6.0**: Protezioni progressive per ogni versione
@@ -42,13 +130,18 @@ Documenti di analisi, report e riferimenti:
 - Consolidamenti e verifiche completate
 - **Organizzati (2025-01-30)**: Tutti i documenti di analisi centralizzati
 
-### 📦 [Archivio](./archivio/) (14 documenti)
+### 📦 [Archivio](./archivio/) (14 documenti + 129 documenti obsoleti)
 
 Documenti completati, roadmap concluse e analisi storiche:
 - Consolidamenti e migrazioni completate
 - Analisi estetiche e correzioni TypeScript
 - Roadmap migrate e documenti obsoleti
 - **Nuovi Archiviati (2025-01-30)**: 5 documenti obsoleti organizzati
+- **📁 [Versioni Obsolete](./archivio/versioni-obsolete/)**: 129 documenti < v0.7.0 archiviati
+  - **Changelog**: 53 file changelog obsoleti
+  - **Analisi**: 21 documenti di analisi obsoleti
+  - **Consolidamento**: 3 documenti di consolidamento obsoleti
+  - **Varie**: 5 documenti commit e altri file obsoleti
 
 ### 📝 [Changelog](./changelog/) (20 documenti)
 
@@ -79,10 +172,11 @@ Report di incidenti tecnici critici con analisi e soluzioni:
 - [INCIDENTE-CENTRATURA-GLOBALE-2025.md](./incidenti/INCIDENTE-CENTRATURA-GLOBALE-2025.md)
 - [INCIDENTE-PLAYER-MOVEMENT-2025.md](./incidenti/INCIDENTE-PLAYER-MOVEMENT-2025.md)
 
-### 🗺️ [Roadmap](./roadmap/) (1 cartella)
+### 🗺️ [Roadmap](./roadmap/) (3 documenti attivi + archivio)
 
 Roadmap di sviluppo:
-- **Attive**: Nessuna (tutte le roadmap completate)
+- **📋 [ROADMAP_CURRENT.md](./ROADMAP_CURRENT.md)**: **NUOVO** - Roadmap unificata consolidata
+- **Attive**: 3 roadmap correnti (CORRETTA v0.7.0, GAMEPLAY-LOOP v0.5.0, RIPRISTINO-TSP)
 - **Archiviate**: 14 roadmap completate con successo
 - **Archivio**: [Roadmap Storiche](./roadmap/archivio/) - Tutte le implementazioni completate
 
@@ -98,6 +192,35 @@ Log dettagliati delle sessioni di sviluppo e analisi:
 ### 🧪 [Test](./test/) (3 documenti)
 
 Documenti di validazione e test:
+- Documenti di validazione baseline
+- Test di regressione e qualità
+- Procedure di testing
+
+### 🔧 [Testing](./testing/) (Nuova sezione)
+
+Documenti di testing avanzato:
+- Framework di testing
+- Test automatizzati
+- Validazione continua
+
+### 🎯 [Crafting System](./crafting-system/) (2 documenti)
+
+Documentazione sistema crafting:
+- [Crafting System Guide](./crafting-system/CRAFTING-SYSTEM-GUIDE.md) - Guida completa sistema crafting
+- [Troubleshooting Guide](./crafting-system/TROUBLESHOOTING-GUIDE.md) - Risoluzione problemi crafting
+
+### 📦 [Versioni](./versioni/) (Nuova sezione)
+
+Release notes e documentazione versioni:
+- Note di rilascio dettagliate
+- Documentazione cambiamenti major
+- Archivio versioni storiche
+
+### 📄 [Root Docs](./root-docs/) (2 documenti)
+
+Documenti generici dalla root:
+- Documenti di configurazione
+- File di prompt e setup
 - **Validator TypeScript**: Instructions e Start Screen
 - **File di Test**: Validatori per componenti specifici
 - **Organizzati (2025-01-30)**: Tutti i file di test centralizzati
@@ -132,8 +255,8 @@ Documenti di validazione e test:
 
 ---
 
-*Ultimo aggiornamento: 2025-01-26*  
-*v0.6.4 "How hard is it to wade across a river?": Sistema Attraversamento Fiumi Strategico*  
-*Consolidamento Release: Integrazione meteo-equipaggiamento, modificatori dinamici, feedback trasparente*
+*Ultimo aggiornamento: 13 Settembre 2025*  
+*v0.9.7.2 "Architectural Integrity": Refactoring Architetturale Completato*  
+*Consolidamento Release: Eliminazione God Objects, servizi dedicati, architettura SOLID stabilizzata*
 
-**Nota**: Questo indice viene mantenuto automaticamente dal sistema LLM secondo il Patto per lo Sviluppo Sicuro.
+**Nota**: Questo indice viene mantenuto automaticamente dal sistema LLM secondo il Patto per lo Sviluppo Sicuro e sincronizzato con il refactoring v0.9.7.2.

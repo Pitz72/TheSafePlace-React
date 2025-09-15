@@ -8,6 +8,7 @@ import { useWorldStore } from '../world/worldStore';
 import { useShelterStore } from '../shelter/shelterStore';
 import { useSurvivalStore } from '../survival/survivalStore';
 import { useNotificationStore } from '../notifications/notificationStore';
+import { useEventStore } from '../events/eventStore';
 
 export interface SaveState {
   saveCurrentGame: (slot: string) => Promise<boolean>;
@@ -80,17 +81,26 @@ export const useSaveStore = create<SaveState>((set, get) => ({
                 }
 
                 characterStore.updateCharacterSheet(saveData.characterSheet);
-                worldStore.setState({
+                worldStore.restoreState({
                     playerPosition: saveData.gameData.playerPosition,
                     timeState: saveData.gameData.timeState,
                     currentBiome: saveData.gameData.currentBiome,
                 });
-                shelterStore.setState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
-                gameStore.setState({ seenEventIds: saveData.gameData.seenEventIds || [] });
+                shelterStore.restoreState({ shelterAccessState: saveData.gameData.shelterAccessState || {} });
+                
+                // Restore event state (seenEventIds is in eventStore, not gameStore)
+                const eventStore = useEventStore.getState();
+                eventStore.restoreState({ 
+                  seenEventIds: saveData.gameData.seenEventIds || [],
+                  completedEncounters: saveData.gameData.completedEncounters || []
+                });
 
-                survivalStore.setState({ survivalState: saveData.survivalState });
-                gameStore.setState({ currentScreen: 'game' });
-                notificationStore.setState({ logEntries: [], notifications: [] });
+                survivalStore.updateSurvival(saveData.survivalState);
+    gameStore.setCurrentScreen('game');
+    notificationStore.restoreState({ 
+                  logEntries: saveData.logEntries || [], 
+                  notifications: [] 
+                });
 
                 shelterStore.resetShelterInvestigations();
                 notificationStore.addNotification({ type: 'success', title: 'Caricamento Completato', message: `Partita caricata con successo.`, duration: 3000 });

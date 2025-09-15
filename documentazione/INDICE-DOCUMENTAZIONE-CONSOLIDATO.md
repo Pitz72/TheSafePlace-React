@@ -224,8 +224,10 @@
 - **SESSION-LOG-**: Log delle sessioni di sviluppo
 
 ### **Gestione Versioni**
-- **v0.8.4**: Versione corrente ATTIVA "I'm Constantly Tidying Up my Desk"
-- **v0.8.0-v0.8.3**: Versioni crafting system e style omologation
+- **v0.9.7.2**: Versione corrente ATTIVA "Architectural Integrity" (Refactoring Architetturale Completato)
+- **v0.9.7.x**: Versioni sistema narrativo e correzioni TypeScript
+- **v0.9.6.x**: Versioni Phoenix e sincronizzazione store
+- **v0.8.x**: Versioni crafting system e style omologation
 - **v0.7.x**: Versioni river crossing e correzioni
 - **v0.6.0**: Versione storica "Lazarus Rising Again"
 - **v0.0.x - v0.5.x**: Versioni OBSOLETE (riferimento storico)
@@ -247,14 +249,16 @@
 - **./dsar/**: 8 documenti di specifica immutabile e baseline
 - **./session-log/**: 23 documenti di log sessioni e analisi
 - **./test/**: 3 documenti di validazione e test
-- **./anti-regressione/**: Protezioni versione (45+ documenti)
+- **./testing/**: Framework di testing avanzato (nuova sezione)
+- **./crafting-system/**: Sistema crafting completo (2 documenti)
+- **./anti-regressione/**: Protezioni versione (50+ documenti)
 - **./archivio/**: Documenti obsoleti (14 documenti)
-- **./changelog/**: Log modifiche (45+ documenti)
+- **./changelog/**: Log modifiche (50+ documenti)
 - **./commit/**: Documentazione commit specifici (5 documenti)
-- **./consolidamento/**: Documenti di consolidamento (6+ documenti)
+- **./consolidamento/**: Documenti di consolidamento (8 documenti)
 - **./incidenti/**: Report incidenti critici (4 documenti)
 - **./roadmap/**: Roadmap di sviluppo (3+ documenti)
-- **./versioni/**: Release notes (3 documenti)
+- **./versioni/**: Release notes e documentazione versioni (nuova sezione)
 
 ### 📋 **Convenzioni Aggiornate**
 - **API-**: Documentazione API e sistema
@@ -266,9 +270,13 @@
 - **ANALISI-**: Documenti di analisi e report
 - **SESSION-LOG-**: Log delle sessioni di sviluppo
 - **ROADMAP-**: Piani di sviluppo
+- **CRAFTING-**: Sistema crafting e guide
+- **TESTING-**: Framework e procedure di test
+- **VERSION-**: Release notes e documentazione versioni
 
 ---
 
-*Indice consolidato aggiornato durante il consolidamento v0.8.4 del 2025-08-30*  
+*Indice consolidato aggiornato durante la sincronizzazione v0.9.7.2 del 2025-09-13*  
 *Sistema di migrazione documentazione implementato e operativo*  
-*Versione corrente: v0.8.4 "I'm Constantly Tidying Up my Desk"*
+*Versione corrente: v0.9.7.2 "Architectural Integrity" - Refactoring Architetturale Completato*  
+*Ultima sincronizzazione indici: 2025-09-13 - Discrepanze risolte*

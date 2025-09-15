@@ -13,7 +13,11 @@ interface MovementState {
   riverPosition: { x: number; y: number } | null;
 }
 
-export const usePlayerMovement = () => {
+interface UsePlayerMovementProps {
+  setCurrentScreen: (screen: string) => void;
+}
+
+export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) => {
   // World state from the correct source of truth
   const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
   // Character actions
@@ -109,7 +113,8 @@ export const usePlayerMovement = () => {
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      // Rifugio rilevato - logica gestita da updatePlayerPosition
+      setCurrentScreen('shelter');
+      return; // Stop further processing, the shelter screen takes over
     }
 
     // Messaggio atmosferico casuale

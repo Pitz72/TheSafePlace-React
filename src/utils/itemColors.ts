@@ -11,16 +11,22 @@ import { ItemType, Rarity } from '../interfaces/items';
 export function getItemColorClass(item: IItem): string {
   // Priorità 1: Colore basato su rarità (se presente)
   if (item.rarity) {
-    switch (item.rarity) {
+    const rarity = typeof item.rarity === 'string' ? item.rarity.toLowerCase() : item.rarity;
+    switch (rarity) {
       case Rarity.LEGENDARY:
+      case 'legendary':
         return 'item-legendary';
       case Rarity.EPIC:
+      case 'epic':
         return 'item-epic';
       case Rarity.RARE:
+      case 'rare':
         return 'item-rare';
       case Rarity.UNCOMMON:
+      case 'uncommon':
         return 'item-uncommon';
       case Rarity.COMMON:
+      case 'common':
         return 'item-common';
     }
   }

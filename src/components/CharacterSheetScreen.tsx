@@ -3,6 +3,19 @@ import { useGameStore } from '../stores/gameStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useInventoryStore } from '../stores/inventory/inventoryStore';
 
+/**
+ * ⚠️ AVVISO CRITICO DI IMMUTABILITÀ ⚠️
+ * 
+ * Questo componente è DEFINITIVO e IMMUTABILE.
+ * 
+ * NON PUÒ ESSERE MODIFICATO per nessuna ragione se non tramite
+ * ESPLICITA E SCRITTA AUTORIZZAZIONE dell'operatore umano.
+ * 
+ * Qualsiasi tentativo di modifica non autorizzata costituisce
+ * violazione del patto di cooperazione e compromette l'integrità
+ * architettonica del sistema.
+ */
+
 const CharacterSheetScreen: React.FC = () => {
   const { characterSheet, getModifier } = useCharacterStore();
   const { items } = useInventoryStore();

@@ -1,11 +1,24 @@
+/**
+ * LoadScreen.tsx — Schermata di caricamento partite
+ * 
+ * ⚠️ ATTENZIONE: QUESTO FILE È PROTETTO E NON DEVE ESSERE MODIFICATO ⚠️
+ * Qualsiasi modifica a questo componente richiede autorizzazione esplicita.
+ * La pagina di caricamento è considerata funzionalità finale e immutabile.
+ * 
+ * Layout ottimizzato e funzionalità complete - NON MODIFICARE.
+ * Eventuali modifiche potrebbero compromettere il sistema di salvataggio.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useSaveStore } from '../stores/save/saveStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import type { SaveSlotInfo } from '../utils/saveSystem';
 import LoadingSpinner from './LoadingSpinner';
 
 const LoadScreen: React.FC = () => {
-  const { loadSavedGame, getSaveSlots, deleteSave, goBack, recoverSave, exportSave, importSave } = useGameStore();
+  const { goBack } = useGameStore();
+  const { loadSavedGame, getSaveSlots, deleteSave, recoverSave, exportSave, importSave } = useSaveStore();
   const { addNotification } = useNotificationStore();
 
   const [saveSlots, setSaveSlots] = useState<SaveSlotInfo[]>([]);
@@ -17,52 +30,41 @@ const LoadScreen: React.FC = () => {
   // Carica informazioni slot salvataggio
   useEffect(() => {
     try {
-      const slots = getSaveSlots();
-      setSaveSlots(slots);
+      const allSlots = getSaveSlots();
+      // Filtra solo i 5 slot principali, escludendo autosave e quicksave
+      const mainSlots = allSlots.filter(slot => 
+        slot.slot.startsWith('slot') && !slot.slot.includes('autosave') && !slot.slot.includes('quicksave')
+      );
+      setSaveSlots(mainSlots);
       
       // Trova il primo slot con salvataggio esistente e non corrotto
-      const firstValidSlot = slots.findIndex(slot => slot.exists && !slot.corrupted);
+      const firstValidSlot = mainSlots.findIndex(slot => slot.exists && !slot.corrupted);
       if (firstValidSlot !== -1) {
         setSelectedIndex(firstValidSlot);
       } else {
         // Se non ci sono salvataggi validi, seleziona il primo slot vuoto
-        const firstEmptySlot = slots.findIndex(slot => !slot.exists);
+        const firstEmptySlot = mainSlots.findIndex(slot => !slot.exists);
         if (firstEmptySlot !== -1) {
           setSelectedIndex(firstEmptySlot);
         }
       }
 
       // Mostra notifica se ci sono salvataggi corrotti
-      const corruptedSlots = slots.filter(slot => slot.corrupted);
+      const corruptedSlots = mainSlots.filter(slot => slot.corrupted);
       if (corruptedSlots.length > 0) {
-        addNotification({
-          type: 'warning',
-          title: 'Salvataggi Corrotti Rilevati',
-          message: `${corruptedSlots.length} salvataggio/i corrotto/i. Usa [R] per tentare il recupero.`,
-          duration: 5000
-        });
+        addNotification('warning', `${corruptedSlots.length} salvataggio/i corrotto/i. Usa [R] per tentare il recupero.`, 5000);
       }
 
       // Mostra suggerimento se non ci sono salvataggi
-      const validSlots = slots.filter(slot => slot.exists && !slot.corrupted);
+      const validSlots = mainSlots.filter(slot => slot.exists && !slot.corrupted);
       if (validSlots.length === 0) {
-        addNotification({
-          type: 'info',
-          title: 'Nessun Salvataggio',
-          message: 'Nessun salvataggio trovato. Inizia una nuova partita o importa un salvataggio esistente.',
-          duration: 4000
-        });
+        addNotification('info', 'Nessun salvataggio trovato. Inizia una nuova partita o importa un salvataggio esistente.', 4000);
       }
     } catch (err) {
       setError('Errore nel caricamento degli slot di salvataggio');
       console.error('Error loading save slots:', err);
       
-      addNotification({
-        type: 'error',
-        title: 'Errore Sistema Salvataggio',
-        message: 'Impossibile accedere al sistema di salvataggio. Controlla le impostazioni del browser.',
-        duration: 6000
-      });
+      addNotification('error', 'Impossibile accedere al sistema di salvataggio. Controlla le impostazioni del browser.', 6000);
     }
   }, [getSaveSlots, addNotification]);
 
@@ -188,7 +190,10 @@ const LoadScreen: React.FC = () => {
       
       if (success) {
         // Ricarica la lista degli slot
-        const updatedSlots = getSaveSlots();
+        const allUpdatedSlots = getSaveSlots();
+        const updatedSlots = allUpdatedSlots.filter(slot => 
+          slot.slot.startsWith('slot') && !slot.slot.includes('autosave') && !slot.slot.includes('quicksave')
+        );
         setSaveSlots(updatedSlots);
         
         // Aggiusta l'indice selezionato se necessario
@@ -196,22 +201,12 @@ const LoadScreen: React.FC = () => {
           setSelectedIndex(Math.max(0, updatedSlots.length - 1));
         }
         
-        addNotification({
-          type: 'success',
-          title: 'Salvataggio Eliminato',
-          message: `Salvataggio eliminato con successo`,
-          duration: 2000
-        });
+        addNotification('success', 'Salvataggio eliminato con successo', 2000);
         
         setError(null);
       } else {
         setError('Errore nell\'eliminazione del salvataggio');
-        addNotification({
-          type: 'error',
-          title: 'Errore Eliminazione',
-          message: 'Impossibile eliminare il salvataggio',
-          duration: 3000
-        });
+        addNotification('error', 'Impossibile eliminare il salvataggio', 3000);
       }
     } catch (err) {
       setError('Errore nell\'eliminazione del salvataggio');
@@ -237,7 +232,10 @@ const LoadScreen: React.FC = () => {
       
       if (success) {
         // Ricarica la lista degli slot per mostrare il salvataggio recuperato
-        const updatedSlots = getSaveSlots();
+        const allUpdatedSlots = getSaveSlots();
+        const updatedSlots = allUpdatedSlots.filter(slot => 
+          slot.slot.startsWith('slot') && !slot.slot.includes('autosave') && !slot.slot.includes('quicksave')
+        );
         setSaveSlots(updatedSlots);
       }
     } catch (err) {
@@ -296,7 +294,10 @@ const LoadScreen: React.FC = () => {
       
       if (success) {
         // Ricarica la lista degli slot per mostrare il nuovo salvataggio
-        const updatedSlots = getSaveSlots();
+        const allUpdatedSlots = getSaveSlots();
+        const updatedSlots = allUpdatedSlots.filter(slot => 
+          slot.slot.startsWith('slot') && !slot.slot.includes('autosave') && !slot.slot.includes('quicksave')
+        );
         setSaveSlots(updatedSlots);
       }
     } catch (err) {
@@ -392,11 +393,18 @@ const LoadScreen: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-phosphor-400 font-mono p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl text-phosphor-300 mb-2">CARICA PARTITA</h1>
+    <div className="h-full flex flex-col p-4">
+      {/* Titolo più in alto, vicino al bordo del contenitore */}
+      <div className="pt-2 pb-4">
+        <h2 className="text-phosphor-400 text-5xl font-bold text-center font-mono tracking-wider glow-phosphor-bright text-shadow-phosphor-bright animate-glow">
+          CARICA PARTITA
+        </h2>
+      </div>
+
+      {/* Box di contenuto allargato */}
+      <div className="flex-1 w-[85%] h-[97.5vh] mx-auto border border-phosphor-600 bg-phosphor-900 bg-opacity-10 p-8 overflow-y-auto scrollbar-thin scrollbar-track-phosphor-900 scrollbar-thumb-phosphor-600 hover:scrollbar-thumb-phosphor-400">
+        {/* Istruzioni */}
+        <div className="text-center mb-6">
           <div className="text-sm text-phosphor-600">
             ↑↓ Naviga • [ENTER] Carica • [N] Nuova Partita • [D] Elimina • [R] Recupera • [E] Esporta • [I] Importa • [ESC] Torna
           </div>
@@ -417,12 +425,12 @@ const LoadScreen: React.FC = () => {
         )}
 
         {/* Save Slots List */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           {saveSlots.map((slot, index) => (
             <div
               key={slot.slot}
               className={`
-                border p-4 transition-colors
+                border p-3 transition-colors
                 ${index === selectedIndex 
                   ? 'border-phosphor-400 bg-phosphor-900 bg-opacity-30' 
                   : 'border-phosphor-600'
@@ -433,8 +441,8 @@ const LoadScreen: React.FC = () => {
               <div className="flex justify-between items-start">
                 {/* Slot Info */}
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-phosphor-300 font-bold">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-phosphor-300 font-bold text-sm">
                       {getSlotDisplayName(slot.slot)}
                     </span>
                     
@@ -444,71 +452,66 @@ const LoadScreen: React.FC = () => {
                   </div>
 
                   {slot.exists && !slot.corrupted && slot.metadata ? (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       {/* Character Info */}
-                      <div className="flex items-center gap-4">
-                        <span className="text-phosphor-200 font-semibold">
+                      <div className="flex items-center gap-3">
+                        <span className="text-phosphor-200 font-semibold text-sm">
                           {slot.metadata.playerName}
                         </span>
-                        <span className="text-phosphor-500">
-                          Livello {slot.metadata.playerLevel}
+                        <span className="text-phosphor-500 text-sm">
+                          Lv.{slot.metadata.playerLevel}
                         </span>
-                      </div>
-
-                      {/* Game Info */}
-                      <div className="flex items-center gap-4 text-sm">
-                        <span className="text-phosphor-500">
+                        <span className="text-phosphor-500 text-xs">
                           📍 {formatLocation(slot.metadata.location)}
                         </span>
-                        <span className="text-phosphor-500">
+                        <span className="text-phosphor-500 text-xs">
                           ⏱️ {formatPlaytime(slot.metadata.playtime)}
                         </span>
                       </div>
 
                       {/* Save Info */}
                       <div className="text-xs text-phosphor-600">
-                        <div>
-                          Salvato: {new Date(slot.metadata.lastModified).toLocaleString('it-IT')} • 
-                          Versione: {slot.metadata.version}
-                        </div>
+                        <span>
+                          {new Date(slot.metadata.lastModified).toLocaleString('it-IT')} • v{slot.metadata.version}
+                        </span>
                         {getVersionWarning(slot.metadata.version) && (
-                          <div className="text-yellow-400 mt-1">
+                          <span className="text-yellow-400 ml-2">
                             {getVersionWarning(slot.metadata.version)}
-                          </div>
+                          </span>
                         )}
                       </div>
                     </div>
                   ) : slot.corrupted ? (
-                    <div className="text-red-400">
-                      <div className="mb-1">⚠️ Salvataggio corrotto o non compatibile</div>
+                    <div className="text-red-400 text-sm">
+                      <div className="mb-0.5">⚠️ Salvataggio corrotto</div>
                       <div className="text-xs text-red-300">
-                        Premi [R] per tentare il recupero
+                        Premi [R] per recupero
                       </div>
                     </div>
                   ) : (
-                    <div className="text-phosphor-600 italic">
+                    <div className="text-phosphor-600 italic text-sm">
                       Slot vuoto
                     </div>
                   )}
                 </div>
 
                 {/* Actions */}
-                <div className="text-right text-sm text-phosphor-600">
+                <div className="text-right text-xs text-phosphor-600">
                   {slot.exists && !slot.corrupted && (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       <div>[ENTER] Carica</div>
                       <div>[E] Esporta</div>
                       <div>[D] Elimina</div>
                     </div>
                   )}
                   {slot.exists && slot.corrupted && (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       <div className="text-yellow-400">[R] Recupera</div>
                       <div>[D] Elimina</div>
                     </div>
                   )}
                   {!slot.exists && (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       <div className="text-green-400">[I] Importa</div>
                     </div>
                   )}

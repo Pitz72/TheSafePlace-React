@@ -21,6 +21,7 @@ export interface NotificationState {
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
   resetNotificationState: () => void;
+  restoreState: (state: { logEntries: LogEntry[]; notifications: Notification[] }) => void;
 }
 
 export const useNotificationStore = create<NotificationState>((set, get) => ({
@@ -122,9 +123,13 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   },
 
   resetNotificationState: () => {
+    set({ logEntries: [], notifications: [] });
+  },
+
+  restoreState: (state) => {
     set({
-      logEntries: [],
-      notifications: []
+      logEntries: state.logEntries,
+      notifications: state.notifications
     });
   }
 }));

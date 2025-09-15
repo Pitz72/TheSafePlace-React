@@ -15,6 +15,7 @@ export interface ShelterState {
   isPlayerInShelter: () => boolean;
   resetShelterInvestigations: () => void;
   resetShelters: () => void;
+  restoreState: (state: { shelterAccessState: Record<string, ShelterAccessInfo> }) => void;
 }
 
 export const useShelterStore = create<ShelterState>((set, get) => ({
@@ -95,6 +96,10 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
   },
 
   resetShelters: () => {
-      set({ shelterAccessState: {} });
+    set({ shelterAccessState: {} });
+  },
+
+  restoreState: (state) => {
+    set({ shelterAccessState: state.shelterAccessState });
   }
 }));

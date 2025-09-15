@@ -24,6 +24,7 @@ export interface WorldState {
   getBiomeKeyFromChar: (char: string) => string;
   formatTime: (timeMinutes: number) => string;
   resetWorld: () => void;
+  restoreState: (state: { playerPosition: { x: number; y: number }; timeState: TimeState; currentBiome: string | null }) => void;
 }
 
 export const useWorldStore = create<WorldState>((set, get) => ({
@@ -131,7 +132,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
     const notificationStore = useNotificationStore.getState();
     const survivalStore = useSurvivalStore.getState();
-    
+
     if (oldTimeState.currentTime < DAWN_TIME && normalizedTime >= DAWN_TIME) {
       notificationStore.addLogEntry(MessageType.TIME_DAWN);
     }
@@ -144,14 +145,14 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     }
 
     set({ timeState: { currentTime: normalizedTime, day: newDay, isDay: newIsDay } });
-    
+
     // Log significant time changes
     if (newDay > oldTimeState.day) {
       notificationStore.addLogEntry(MessageType.TIME_DAWN, {
         day: newDay
       });
     }
-    
+
     if (minutes >= 60) {
       notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
         text: `Il tempo scorre... ${newIsDay ? 'È giorno' : 'È notte'}.`
@@ -182,5 +183,13 @@ export const useWorldStore = create<WorldState>((set, get) => ({
       timeState: { currentTime: DAWN_TIME, day: 1, isDay: true },
       currentBiome: null,
     })
+  },
+
+  restoreState: (state) => {
+    set({
+      playerPosition: state.playerPosition,
+      timeState: state.timeState,
+      currentBiome: state.currentBiome,
+    });
   }
 }));

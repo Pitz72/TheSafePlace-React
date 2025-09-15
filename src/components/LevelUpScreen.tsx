@@ -6,6 +6,19 @@ import { getAvailableLevelUpOptions, applyLevelUpOption } from '../rules/levelUp
 import type { ICharacterStats } from '../rules/types';
 import { MessageType } from '../data/MessageArchive';
 
+/**
+ * ⚠️ AVVISO CRITICO DI IMMUTABILITÀ ⚠️
+ * 
+ * Questo componente è DEFINITIVO e IMMUTABILE.
+ * 
+ * NON PUÒ ESSERE MODIFICATO per nessuna ragione se non tramite
+ * ESPLICITA E SCRITTA AUTORIZZAZIONE dell'operatore umano.
+ * 
+ * Qualsiasi tentativo di modifica non autorizzata costituisce
+ * violazione del patto di cooperazione e compromette l'integrità
+ * architettonica del sistema.
+ */
+
 const LevelUpScreen: React.FC = () => {
   // SELETTORI GRANULARI: la soluzione robusta
   const { characterSheet, updateCharacterSheet } = useCharacterStore();

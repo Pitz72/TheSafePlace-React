@@ -1,5 +1,10 @@
 /**
  * StoryScreen.tsx — Introduzione alla storia
+ * 
+ * ⚠️ ATTENZIONE: QUESTO FILE È PROTETTO E NON DEVE ESSERE MODIFICATO ⚠️
+ * Qualsiasi modifica a questo componente richiede autorizzazione esplicita.
+ * La pagina storia è considerata contenuto finale e immutabile.
+ * 
  * Usa PaginatedInfoPage (scorrimento). Se in futuro migri a UniversalInfoPage,
  * allinea la tipografia a text-[28px] + leading-relaxed + mb-4 e rivedi la paginazione.
  */

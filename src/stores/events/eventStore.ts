@@ -29,6 +29,7 @@ export interface EventState {
   getRandomEventFromBiome: (biome: string) => GameEvent | null;
   checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
   resetEventState: () => void;
+  restoreState: (state: { seenEventIds: string[]; completedEncounters: string[] }) => void;
 }
 
 export const useEventStore = create<EventState>((set, get) => ({
@@ -221,6 +222,13 @@ export const useEventStore = create<EventState>((set, get) => ({
       currentEvent: null,
       seenEventIds: [],
       completedEncounters: []
+    });
+  },
+
+  restoreState: (state) => {
+    set({
+      seenEventIds: state.seenEventIds,
+      completedEncounters: state.completedEncounters
     });
   }
 }));

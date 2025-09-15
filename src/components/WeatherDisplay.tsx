@@ -1,3 +1,19 @@
+/*
+⚠️ AVVISO CRITICO - PANNELLO METEO DEFINITIVO E IMMUTABILE ⚠️
+
+QUESTO FILE È STATO DICHIARATO DEFINITIVO E IMMUTABILE
+
+- DIVIETO ASSOLUTO di modifica senza autorizzazione esplicita scritta dell'operatore
+- CONTENUTO FINALE: Ogni aspetto del pannello meteo è stato finalizzato e certificato
+- PROTEZIONE TOTALE: Qualsiasi tentativo di modifica non autorizzata è VIETATO
+- AUTORIZZAZIONE RICHIESTA: Solo l'operatore può autorizzare modifiche future
+- STILE OMOLOGATO: Design uniforme consolidato e definitivo
+- LAYOUT: Struttura ottimizzata e immutabile
+
+Data finalizzazione: 2025-01-15 (Sessione Serale)
+Stato: DEFINITIVO E PROTETTO
+*/
+
 /**
  * WeatherDisplay.tsx — Componente per visualizzare le condizioni meteo
  * Mostra il meteo attuale con icone ASCII e descrizioni
@@ -77,8 +93,8 @@ const WeatherDisplay: React.FC = () => {
   };
 
   return (
-    <div className="weather-display border border-phosphor-600 p-2 bg-gray-900 bg-opacity-50">
-      <div className="flex items-center justify-between mb-1">
+    <div className="space-y-2 text-uniform">
+      <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span className="text-lg">{getWeatherIcon(currentWeather)}</span>
           <span className="text-phosphor-400 font-bold">
@@ -88,14 +104,14 @@ const WeatherDisplay: React.FC = () => {
         <div className="text-right">
           <div className={`text-sm ${getIntensityColor(intensity)}`}>
             {getIntensityDescription(intensity)} ({intensity}%)
-            </div>
-            <div className="text-xs text-phosphor-500">
-              ~{formatDuration(duration)}
+          </div>
+          <div className="text-xs text-phosphor-500">
+            ~{formatDuration(duration)}
           </div>
         </div>
       </div>
       
-      <div className="text-xs text-phosphor-500 border-t border-phosphor-700 pt-1">
+      <div className="text-xs text-phosphor-500">
         Effetti: {getEffectsDescription()}
       </div>
     </div>

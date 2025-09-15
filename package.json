@@ -1,8 +1,8 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.9.7.2",
-  "codename": "Architectural Integrity",
+  "version": "0.9.7.3",
+  "codename": "We shore up the building",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo",
   "author": "TheSafePlace Development Team",
@@ -68,6 +68,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "terser": "^5.44.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",

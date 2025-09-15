@@ -1,7 +1,7 @@
 Game Design Document Canonico: La Main Quest di "The Safe Place"
 Progetto: The Safe Place
 Documento: GDD-MAINQUEST-CANON-v1.1
-Versione Implementata: 0.9.7.5 "The True Story"
+Versione Implementata: 0.9.7.2 "Architectural Integrity"
 Direttiva: Questo documento sostituisce qualsiasi GDD narrativo precedente e costituisce l'unica fonte di verità per l'implementazione della storia principale.
 
 ## Sistema Narrativo Canonico - The Safe Place
@@ -142,6 +142,6 @@ JSON
 - Sistema anti-regressione implementato
 - Documentazione consolidata e aggiornata
 
-✅ **VERSIONE 0.9.7.5 "The True Story" - SISTEMA STABILE E OPERATIVO**
+✅ **VERSIONE 0.9.7.2 "Architectural Integrity" - REFACTORING COMPLETATO E STABILE**
 
 **Il sistema narrativo canonico è completamente implementato, testato e consolidato.**
