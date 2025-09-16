@@ -1,0 +1,166 @@
+{
+  "LORE_EVENTS": [
+    {
+      "id": "lena_memory_forest",
+      "title": "Ricordo di Lena",
+      "category": "lena_memory",
+      "questStageRequirement": [1, 2, 3],
+      "emotionalPrerequisites": {
+        "lenaMemoryStrength": 30
+      },
+      "locationRequirement": ["forest"],
+      "description": "Camminando tra gli alberi, un profumo familiare ti riporta alla mente un ricordo di Lena.",
+      "narrativeText": "Il vento porta con sé l'odore di muschio e foglie bagnate. Per un istante, è come se Lena fosse qui accanto a te, indicandoti i fiori selvatici che crescono all'ombra degli alberi. 'Guarda, Ultimo,' sembra sussurrare la sua voce nel vento, 'anche nei luoghi più bui, la bellezza trova sempre un modo per fiorire.'",
+      "tone": "nostalgico",
+      "choices": [
+        {
+          "id": "embrace_memory",
+          "text": "Abbraccia il ricordo",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "lenaMemoryStrength": 10,
+            "compassionLevel": 5,
+            "dominantEmotion": "nostalgia"
+          },
+          "reflectionText": "Lascio che il ricordo mi avvolga come un abbraccio caldo. Lena aveva ragione: anche qui, in questo mondo spezzato, c'è ancora bellezza da trovare."
+        },
+        {
+          "id": "push_away_memory",
+          "text": "Scaccia il ricordo",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 5,
+            "innocenceLost": 3,
+            "dominantEmotion": "dolore"
+          },
+          "reflectionText": "Non posso permettermi di perdermi nei ricordi. Lena non c'è più, e io devo concentrarmi sulla sopravvivenza."
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 8
+    },
+    {
+      "id": "elian_legacy_city",
+      "title": "L'Eredità di Elian",
+      "category": "elian_legacy",
+      "questStageRequirement": [2, 3, 4],
+      "emotionalPrerequisites": {
+        "elianEmpathy": 25
+      },
+      "locationRequirement": ["city"],
+      "description": "Tra le rovine della città, trovi i resti di quello che un tempo era un rifugio per sopravvissuti.",
+      "narrativeText": "Le pareti sono coperte di scritte: nomi, date, messaggi di speranza. Riconosci la calligrafia di tuo padre in alcuni appunti strategici sui muri. 'Proteggere i deboli non è debolezza,' leggi in una sua nota, 'è la cosa più forte che un uomo possa fare.' Capisci che anche nelle sue scelte più dure, Elian cercava di salvare vite.",
+      "tone": "introspettivo",
+      "choices": [
+        {
+          "id": "understand_father",
+          "text": "Comprendi le scelte di tuo padre",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "elianEmpathy": 15,
+            "understandingLevel": 10,
+            "wisdomGained": 8,
+            "dominantEmotion": "accettazione"
+          },
+          "reflectionText": "Forse papà non era il mostro che pensavo. Le sue scelte brutali nascondevano un cuore che sanguinava per ogni vita che non riusciva a salvare."
+        },
+        {
+          "id": "reject_fathers_way",
+          "text": "Rifiuta i metodi di Elian",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 10,
+            "lenaMemoryStrength": 8,
+            "dominantEmotion": "determinazione"
+          },
+          "reflectionText": "Anche se capisco le sue intenzioni, non posso accettare i suoi metodi. Lena mi ha insegnato che c'è sempre un'altra strada."
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 9
+    },
+    {
+      "id": "family_discovery_plains",
+      "title": "Tracce del Passato",
+      "category": "family_discovery",
+      "questStageRequirement": [3, 4, 5],
+      "emotionalPrerequisites": {
+        "understandingLevel": 40
+      },
+      "locationRequirement": ["plains"],
+      "description": "Nelle pianure desolate, scopri i resti di un piccolo accampamento familiare.",
+      "narrativeText": "Tra i detriti riconosci oggetti della tua infanzia: il vecchio orsacchiotto di Lena, una foto di famiglia mezzo bruciata, il diario di tuo padre con pagine strappate dal vento. Ogni oggetto racconta una storia di amore, perdita e sacrificio. Realizzi che la tua famiglia, nonostante tutto, era unita dall'amore.",
+      "tone": "malinconico",
+      "choices": [
+        {
+          "id": "collect_memories",
+          "text": "Raccogli i ricordi",
+          "alignment": "neutral",
+          "emotionalImpact": {
+            "understandingLevel": 15,
+            "lenaMemoryStrength": 10,
+            "elianEmpathy": 10,
+            "wisdomGained": 12,
+            "dominantEmotion": "nostalgia"
+          },
+          "reflectionText": "Ogni oggetto è un pezzo del puzzle della mia famiglia. Ora capisco che l'amore può esistere anche nelle circostanze più difficili."
+        },
+        {
+          "id": "leave_past_behind",
+          "text": "Lascia il passato alle spalle",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 12,
+            "innocenceLost": 8,
+            "dominantEmotion": "determinazione"
+          },
+          "reflectionText": "Il passato è passato. Devo guardare avanti e costruire il mio futuro, non rimanere intrappolato nei ricordi."
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 10
+    },
+    {
+      "id": "thematic_river_reflection",
+      "title": "Il Fiume della Memoria",
+      "category": "thematic",
+      "questStageRequirement": [1, 2, 3, 4, 5],
+      "emotionalPrerequisites": {
+        "compassionLevel": 30
+      },
+      "locationRequirement": ["river"],
+      "description": "Seduto sulla riva del fiume, osservi l'acqua che scorre inesorabile.",
+      "narrativeText": "L'acqua del fiume riflette il cielo grigio, portando con sé foglie, detriti e ricordi. Come questo fiume, anche tu stai attraversando un paesaggio cambiato, raccogliendo esperienze lungo il cammino. Lena diceva sempre che i fiumi sanno dove andare, anche quando il percorso sembra impossibile.",
+      "tone": "poetico",
+      "choices": [
+        {
+          "id": "trust_the_flow",
+          "text": "Fidati del flusso della vita",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 8,
+            "lenaMemoryStrength": 12,
+            "wisdomGained": 10,
+            "currentMood": "sereno",
+            "dominantEmotion": "speranza"
+          },
+          "reflectionText": "Come il fiume trova sempre la sua strada verso il mare, anch'io troverò il mio posto sicuro. Devo solo continuare a fluire."
+        },
+        {
+          "id": "fight_the_current",
+          "text": "Lotta contro la corrente",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 10,
+            "elianEmpathy": 5,
+            "currentMood": "determinato",
+            "dominantEmotion": "determinazione"
+          },
+          "reflectionText": "Non lascerò che il destino decida per me. Forgerò il mio cammino, anche se devo andare contro corrente."
+        }
+      ],
+      "isRepeatable": true,
+      "priority": 6
+    }
+  ]
+}

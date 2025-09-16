@@ -4,6 +4,7 @@ import { useNotificationStore } from '../notifications/notificationStore';
 import { useSurvivalStore } from '../survival/survivalStore';
 import { MessageType, JOURNAL_STATE, resetJournalState } from '../../data/MessageArchive';
 import { playerMovementService } from '../../services/playerMovementService';
+import { narrativeIntegration } from '../../services/narrativeIntegration';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -82,7 +83,22 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
     // 2. Log biome change
     if (hasChangedBiome) {
+      console.log('🌍 WORLDSTORE DEBUG - Biome changed:', {
+        oldBiome,
+        newBiome: newBiomeKey,
+        position: newPosition,
+        char: newBiomeChar
+      });
+      
       notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
+      
+      // 2.2. Trigger narrative events for biome change
+      console.log('🌍 WORLDSTORE DEBUG - Calling narrativeIntegration.checkForNarrativeEvents...');
+      narrativeIntegration.checkForNarrativeEvents('biome_change', {
+        oldBiome,
+        newBiome: newBiomeKey
+      });
+      console.log('🌍 WORLDSTORE DEBUG - narrativeIntegration.checkForNarrativeEvents called');
     }
 
     // 2.1. Show first biome message (plains) only once

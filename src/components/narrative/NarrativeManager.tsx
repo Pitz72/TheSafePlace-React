@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNarrativeStore } from '../../stores/narrative/narrativeStore';
 import type { MainQuestEvent } from '../../stores/narrative/narrativeStore';
 import { mainQuestTrigger } from '../../services/mainQuestTrigger';
+import { narrativeIntegration } from '../../services/narrativeIntegration';
 import NarrativeScreen from './NarrativeScreen';
 
 interface NarrativeManagerProps {
@@ -26,6 +27,7 @@ const NarrativeManager: React.FC<NarrativeManagerProps> = ({ isGameActive }) => 
   // Inizializzazione del sistema narrativo
   useEffect(() => {
     initializeNarrative();
+    narrativeIntegration.initialize();
   }, []);
 
   // Controlla i trigger della main quest ogni volta che cambia lo stato

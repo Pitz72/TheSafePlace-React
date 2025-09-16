@@ -38,8 +38,14 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     const timestamp = Date.now();
     const id = `${timestamp}-${Math.random().toString(36).substr(2, 9)}`;
     
-    // Genera il messaggio usando getRandomMessage
-    const message = getRandomMessage(type, context) || `Evento di tipo ${type} senza messaggio definito.`;
+    let message: string;
+    // Gestione speciale per EVENT_CHOICE per usare direttamente il testo del risultato.
+    if (type === MessageType.EVENT_CHOICE && context?.text) {
+      message = context.text;
+    } else {
+      // Comportamento standard per tutti gli altri tipi di messaggio.
+      message = getRandomMessage(type, context) || `Evento di tipo ${type} senza messaggio definito.`;
+    }
     
     const newEntry: LogEntry = {
       id,

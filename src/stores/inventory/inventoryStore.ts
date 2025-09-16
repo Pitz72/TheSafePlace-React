@@ -21,6 +21,7 @@ export interface InventoryState {
   // Actions
   addItem: (itemId: string, quantity?: number) => boolean;
   removeItem: (slotIndex: number, quantity?: number) => boolean;
+  removeItems: (itemId: string, quantity: number) => boolean;
   equipItemFromInventory: (slotIndex: number) => void;
   setSelectedInventoryIndex: (index: number | null) => void;
   useItem: (slotIndex: number) => void;
@@ -47,7 +48,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
 
   // --- ACTIONS ---
 
-  addItem: (itemId, quantity = 1) => {
+  addItem: (itemId: string, quantity: number = 1) => {
     const item = itemDatabase[itemId];
     if (!item) return { success: false, message: "Item not found in database." };
 
@@ -67,7 +68,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     }
   },
 
-  removeItem: (slotIndex, quantity = 1) => {
+  removeItem: (slotIndex: number, quantity: number = 1) => {
     const characterStore = useCharacterStore.getState();
     const inventory = characterStore.characterSheet.inventory;
     const slot = inventory[slotIndex];
@@ -86,7 +87,36 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     }
   },
 
-  equipItemFromInventory: (slotIndex) => {
+  removeItems: (itemId: string, quantity: number) => {
+    const characterStore = useCharacterStore.getState();
+    const inventory = characterStore.characterSheet.inventory;
+    
+    // Trova tutti gli slot con l'itemId specificato
+    let remainingToRemove = quantity;
+    const slotsToUpdate = [];
+    
+    for (let i = 0; i < inventory.length; i++) {
+      const slot = inventory[i];
+      if (slot && slot.itemId === itemId && remainingToRemove > 0) {
+        const toRemove = Math.min(slot.quantity, remainingToRemove);
+        slotsToUpdate.push({ index: i, quantity: toRemove });
+        remainingToRemove -= toRemove;
+      }
+    }
+    
+    if (remainingToRemove > 0) {
+      return false; // Non abbastanza item disponibili
+    }
+    
+    // Rimuovi gli item dagli slot
+    for (const update of slotsToUpdate) {
+      characterStore.removeItemFromInventory(update.index, update.quantity);
+    }
+    
+    return true;
+  },
+
+  equipItemFromInventory: (slotIndex: number) => {
     const characterStore = useCharacterStore.getState();
     const { characterSheet } = characterStore;
     const notificationStore = useNotificationStore.getState();
@@ -102,11 +132,11 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     return result;
   },
 
-  setSelectedInventoryIndex: (index) => {
+  setSelectedInventoryIndex: (index: number | null) => {
     set({ selectedInventoryIndex: index });
   },
 
-  useItem: (slotIndex) => {
+  useItem: (slotIndex: number) => {
     const characterStore = useCharacterStore.getState();
     const notificationStore = useNotificationStore.getState();
     const inventory = characterStore.characterSheet.inventory;
@@ -117,12 +147,12 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
       if (item && item.consumable) {
         // Logic for using consumable items
         get().removeItem(slotIndex, 1);
-        notificationStore.addLogEntry('ITEM_USED', { itemName: item.name });
+        notificationStore.addLogEntry(MessageType.ITEM_USED, { itemName: item.name });
       }
     }
   },
 
-  dropItem: (slotIndex) => {
+  dropItem: (slotIndex: number) => {
     const notificationStore = useNotificationStore.getState();
     const characterStore = useCharacterStore.getState();
     const inventory = characterStore.characterSheet.inventory;
@@ -131,7 +161,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     if (slot && slot.itemId) {
       const item = itemDatabase[slot.itemId];
       get().removeItem(slotIndex, slot.quantity);
-      notificationStore.addLogEntry('ITEM_DROPPED', { itemName: item?.name || 'Unknown' });
+      notificationStore.addLogEntry(MessageType.ITEM_DROPPED, { itemName: item?.name || 'Unknown' });
     }
   },
 }));

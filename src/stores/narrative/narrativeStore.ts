@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { EmotionalState, LoreEvent, QuestFragment, MoralChoice } from '../../interfaces/narrative';
 
 // Interfaccia semplificata per la Main Quest secondo il GDD canonico
 export interface MainQuestState {
@@ -32,6 +33,14 @@ export interface MainQuestEvent {
 }
 
 interface NarrativeState extends MainQuestState {
+  // Stato emotivo del personaggio
+  emotionalState: EmotionalState;
+  
+  // Eventi narrativi disponibili
+  availableLoreEvents: LoreEvent[];
+  discoveredFragments: QuestFragment[];
+  moralChoices: MoralChoice[];
+  
   // Azioni per la gestione della main quest
   advanceToNextStage: () => void;
   incrementProgress: () => void;
@@ -42,10 +51,18 @@ interface NarrativeState extends MainQuestState {
   
   // Caricamento degli eventi
   loadMainQuestEvents: () => Promise<MainQuestEvent[]>;
+  loadLoreEvents: () => Promise<void>;
   
   // Reset e inizializzazione
   initializeNarrative: () => void;
   resetNarrative: () => void;
+  
+  // Gestione dello stato emotivo
+  updateEmotionalState: (updates: Partial<EmotionalState>) => void;
+  
+  // Gestione eventi narrativi
+  triggerLoreEvent: (event: LoreEvent) => void;
+  addMoralChoice: (choice: MoralChoice) => void;
   
   // Eventi caricati
   mainQuestEvents: MainQuestEvent[];
@@ -57,6 +74,24 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
   progressCounter: 0,
   flags: {},
   mainQuestEvents: [],
+  
+  // Eventi narrativi iniziali
+  availableLoreEvents: [],
+  discoveredFragments: [],
+  moralChoices: [],
+  
+  // Stato emotivo iniziale
+  emotionalState: {
+    compassionLevel: 50,
+    pragmatismLevel: 50,
+    understandingLevel: 0,
+    lenaMemoryStrength: 30,
+    elianEmpathy: 20,
+    innocenceLost: 10,
+    wisdomGained: 0,
+    currentMood: 'curioso',
+    dominantEmotion: 'nostalgia'
+  },
   
   // Azioni principali
   advanceToNextStage: () => {
@@ -153,21 +188,94 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
       return [];
     }
   },
+
+  // Caricamento degli eventi lore
+  loadLoreEvents: async () => {
+    console.log('📚 NARRATIVE STORE DEBUG - Loading lore events...');
+    try {
+      const response = await fetch('/src/data/events/lore_events.json');
+      console.log('📚 NARRATIVE STORE DEBUG - Fetch response:', response.status, response.ok);
+      
+      const data = await response.json();
+      console.log('📚 NARRATIVE STORE DEBUG - Raw data:', data);
+      
+      const events = data.LORE_EVENTS as LoreEvent[];
+      console.log('📚 NARRATIVE STORE DEBUG - Parsed events:', {
+        count: events?.length || 0,
+        events: events?.map(e => ({ id: e.id, biome: e.locationRequirement })) || []
+      });
+      
+      set({ availableLoreEvents: events || [] });
+      console.log('📚 NARRATIVE STORE DEBUG - Events loaded successfully');
+    } catch (error) {
+      console.error('📚 NARRATIVE STORE ERROR - Failed to load lore events:', error);
+      set({ availableLoreEvents: [] });
+    }
+  },
+
+  // Gestione eventi narrativi
+  triggerLoreEvent: (event: LoreEvent) => {
+    set((state) => ({
+      discoveredFragments: [...state.discoveredFragments, ...event.choices.map(choice => ({
+        id: `${event.id}_${choice.id}`,
+        stage: state.currentStage,
+        title: event.title,
+        activationConditions: {
+          questStage: state.currentStage,
+          emotionalThreshold: event.emotionalPrerequisites,
+          locationContext: event.locationRequirement?.[0]
+        },
+        narrativeText: event.narrativeText,
+        tone: event.tone,
+        emotionalImpact: choice.emotionalImpact
+      }))]
+    }));
+  },
+
+  addMoralChoice: (choice: MoralChoice) => {
+    set((state) => ({
+      moralChoices: [...state.moralChoices, choice]
+    }));
+  },
   // Inizializzazione del sistema narrativo
   initializeNarrative: () => {
     set({
       currentStage: 1,
       progressCounter: 0,
       flags: {},
-      mainQuestEvents: []
+      mainQuestEvents: [],
+      availableLoreEvents: [],
+      discoveredFragments: [],
+      moralChoices: [],
+      emotionalState: {
+        compassionLevel: 50,
+        pragmatismLevel: 50,
+        understandingLevel: 0,
+        lenaMemoryStrength: 30,
+        elianEmpathy: 20,
+        innocenceLost: 10,
+        wisdomGained: 0,
+        currentMood: 'curioso',
+        dominantEmotion: 'nostalgia'
+      }
     });
     
-    // Carica gli eventi della main quest
+    // Carica gli eventi della main quest e lore
     get().loadMainQuestEvents();
+    get().loadLoreEvents();
   },
   
   resetNarrative: () => {
     get().initializeNarrative();
+  },
+  
+  updateEmotionalState: (updates: Partial<EmotionalState>) => {
+    set((state) => ({
+      emotionalState: {
+        ...state.emotionalState,
+        ...updates
+      }
+    }));
   }
 })));
 

@@ -4,6 +4,7 @@ import { MessageType } from '../../data/MessageArchive';
 import { useCharacterStore } from '../character/characterStore';
 import { useCombatStore } from '../combatStore';
 import { useWorldStore } from '../world/worldStore';
+import { useGameStore } from '../gameStore';
 
 // Minimal interface to avoid direct dependency on weatherStore shape
 interface WeatherEffects {
@@ -28,6 +29,7 @@ export interface EventState {
   isEncounterCompleted: (encounterId: string) => boolean;
   getRandomEventFromBiome: (biome: string) => GameEvent | null;
   checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
+  forceBiomeEvent: (biome: string) => void; // DEBUG: Forza un evento per bioma
   resetEventState: () => void;
   restoreState: (state: { seenEventIds: string[]; completedEncounters: string[] }) => void;
 }
@@ -80,6 +82,8 @@ export const useEventStore = create<EventState>((set, get) => ({
     }
 
     set({ currentEvent: event });
+    // Mostra la schermata dell'evento
+    useGameStore.getState().setCurrentScreen('event');
   },
 
   dismissCurrentEvent: () => {
@@ -147,6 +151,8 @@ export const useEventStore = create<EventState>((set, get) => ({
     }
 
     set({ currentEvent: null });
+    // Ritorna alla schermata di gioco
+    useGameStore.getState().goBack();
   },
 
   markEventAsSeen: (eventId: string) => {
@@ -230,5 +236,23 @@ export const useEventStore = create<EventState>((set, get) => ({
       seenEventIds: state.seenEventIds,
       completedEncounters: state.completedEncounters
     });
+  },
+
+  // DEBUG: Funzione per forzare un evento casuale da un bioma specifico
+  forceBiomeEvent: (biome: string) => {
+    console.log(`[DEBUG] Forzando evento per bioma: ${biome}`);
+    const { getRandomEventFromBiome, triggerEvent, eventDatabase } = get();
+    
+    // Log del database eventi per debug
+    console.log('[DEBUG] Database eventi disponibili:', Object.keys(eventDatabase));
+    console.log(`[DEBUG] Eventi per ${biome.toUpperCase()}:`, eventDatabase[biome.toUpperCase()]?.length || 0);
+    
+    const randomEvent = getRandomEventFromBiome(biome);
+    if (randomEvent) {
+      console.log(`[DEBUG] Evento selezionato:`, randomEvent.id, randomEvent.title);
+      triggerEvent(randomEvent);
+    } else {
+      console.log(`[DEBUG] Nessun evento disponibile per il bioma: ${biome}`);
+    }
   }
 }));

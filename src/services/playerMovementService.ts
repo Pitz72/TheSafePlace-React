@@ -3,6 +3,7 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useSurvivalStore } from '../stores/survival/survivalStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useWorldStore } from '../stores/world/worldStore';
+import { narrativeIntegration } from './narrativeIntegration';
 
 import { MessageType } from '../data/MessageArchive';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
@@ -29,7 +30,29 @@ class PlayerMovementService {
     // 4. Check for random events
     eventStore.checkForRandomEvent(newBiomeKey, weatherEffects);
 
-    // 5. Calculate movement time and advance game time
+    // 5. TEMPORANEAMENTE DISATTIVATO: Check for narrative events (movimento e bioma)
+    // Disattivato per concentrarsi sui biome events casuali
+    /*
+    console.log('🚶 MOVEMENT SERVICE DEBUG - Calling narrativeIntegration for movement:', {
+      biome: newBiomeKey,
+      weather: weatherStore.currentWeather
+    });
+    narrativeIntegration.checkForNarrativeEvents?.('movement', { 
+      biome: newBiomeKey, 
+      weather: weatherStore.currentWeather 
+    });
+    console.log('🚶 MOVEMENT SERVICE DEBUG - narrativeIntegration called for movement');
+    */
+    
+    // DEBUG: Log per verificare che gli eventi per bioma funzionino
+    console.log('🎲 BIOME EVENTS DEBUG - Movement triggered for biome:', newBiomeKey);
+    console.log('🎲 BIOME EVENTS DEBUG - Weather effects:', weatherEffects);
+    
+    // Attiva eventi casuali per bioma tramite eventStore
+    console.log('🎲 BIOME EVENTS DEBUG - Calling eventStore.checkForRandomEvent()');
+    eventStore.checkForRandomEvent(newBiomeKey, weatherEffects);
+
+    // 6. Calculate movement time and advance game time
     const baseMovementTime = 10;
     const adjustedMovementTime = Math.ceil(baseMovementTime / weatherEffects.movementModifier);
 

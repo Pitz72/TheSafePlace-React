@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEventStore } from '../stores/events/eventStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
+import { useTimeStore } from '../stores/time/timeStore';
 
 
 /**
@@ -12,14 +13,10 @@ import { useNotificationStore } from '../stores/notifications/notificationStore'
 const EventScreen: React.FC = () => {
   const { currentEvent, resolveChoice, dismissCurrentEvent } = useEventStore();
   const { addLogEntry } = useNotificationStore();
+  const { advanceTime } = useTimeStore();
   const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 
-  // Non renderizzare nulla se non c'è un evento attivo
-  if (!currentEvent) {
-    return null;
-  }
-
-  const hasChoices = currentEvent.choices && currentEvent.choices.length > 0;
+  const hasChoices = currentEvent?.choices && currentEvent.choices.length > 0;
 
   // Reset selezione quando cambia evento
   useEffect(() => {
@@ -58,7 +55,7 @@ const EventScreen: React.FC = () => {
         case 'enter':
           event.preventDefault();
           if (currentEvent.choices[selectedChoiceIndex]) {
-            resolveChoice(currentEvent.choices[selectedChoiceIndex], addLogEntry, {});
+            resolveChoice(currentEvent.choices[selectedChoiceIndex], addLogEntry, advanceTime);
           }
           break;
         case '1':
@@ -70,7 +67,7 @@ const EventScreen: React.FC = () => {
           const choiceIndex = parseInt(event.key) - 1;
           if (choiceIndex >= 0 && choiceIndex < currentEvent.choices.length) {
             if (currentEvent.choices[choiceIndex]) {
-              resolveChoice(currentEvent.choices[choiceIndex], addLogEntry, {});
+              resolveChoice(currentEvent.choices[choiceIndex], addLogEntry, advanceTime);
             }
           }
           break;
@@ -79,7 +76,12 @@ const EventScreen: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentEvent, selectedChoiceIndex, resolveChoice, dismissCurrentEvent, hasChoices]);
+  }, [currentEvent, selectedChoiceIndex, resolveChoice, dismissCurrentEvent, hasChoices, advanceTime]);
+
+  // Non renderizzare nulla se non c'è un evento attivo
+  if (!currentEvent) {
+    return null;
+  }
 
 
 

@@ -255,6 +255,7 @@ export const CRAFTING_ERRORS = {
   INVENTORY_FULL: "Il tuo inventario è pieno. Libera spazio prima di creare oggetti.",
   RECIPE_NOT_FOUND: "Ricetta non trovata o corrotta.",
   RECIPE_NOT_KNOWN: "Non conosci ancora questa ricetta.",
+  NO_CHARACTER: "Nessun personaggio attivo trovato.",
   UNKNOWN_ERROR: "Errore sconosciuto durante il crafting."
 } as const;
 

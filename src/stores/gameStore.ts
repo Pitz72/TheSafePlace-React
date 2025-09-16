@@ -61,6 +61,12 @@ export interface CoreGameState {
   // Time Actions
   advanceTime: (hours: number) => void;
   
+  // Inventory and Character Management
+  removeItems: (itemId: string, quantity: number) => boolean;
+  addItem: (itemId: string, quantity: number) => boolean;
+  addExperience: (xpGained: number) => void;
+  useItem: (slotIndex: number) => void;
+  
   // Facade Properties (delegano ai store specializzati)
   get characterSheet(): any;
   get timeState(): any;
@@ -71,8 +77,8 @@ export interface CoreGameState {
   get currentWeather(): any;
   get survivalState(): any;
   get logEntries(): any[];
-  get items(): any[];
-  get inventory(): any[];
+  get items(): Record<string, any>;
+  get inventory(): (any | null)[];
   get currentEvent(): any;
   get notifications(): any[];
 }
@@ -286,6 +292,23 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   // Time Actions
   advanceTime: (hours: number) => {
     useTimeStore.getState().advanceTime(hours);
+  },
+
+  // --- INVENTORY AND CHARACTER DELEGATES ---
+  removeItems: (itemId: string, quantity: number) => {
+    return useInventoryStore.getState().removeItems(itemId, quantity);
+  },
+
+  addItem: (itemId: string, quantity: number) => {
+    return useInventoryStore.getState().addItem(itemId, quantity);
+  },
+
+  addExperience: (xpGained: number) => {
+    useCharacterStore.getState().addExperience(xpGained);
+  },
+
+  useItem: (slotIndex: number) => {
+    useInventoryStore.getState().useItem(slotIndex);
   },
 
   // --- SHELTER SYSTEM DELEGATES ---

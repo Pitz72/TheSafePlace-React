@@ -28,6 +28,7 @@ import {
 } from '../utils/craftingUtils';
 
 import { useGameStore } from './gameStore';
+import { useCharacterStore } from './character/characterStore';
 import { useNotificationStore } from './notifications/notificationStore';
 import { MessageType } from '../data/MessageArchive';
 import type { IInventorySlot } from '../interfaces/items';
@@ -136,7 +137,12 @@ interface ExtendedCraftingState extends CraftingState {
   craftingError: string | null;
 
   // ===== RECIPE MANAGEMENT =====
+  recipes: Recipe[];
+  selectedRecipe: Recipe | null;
+  craftingQueue: Recipe[];
+  isInitialized: boolean;
   initializeRecipes: () => Promise<void>;
+  initializeCraftingSystem: () => Promise<void>;
   reloadRecipes: () => Promise<void>;
   clearCraftingError: () => void;
 
@@ -180,6 +186,10 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     selectedRecipeIndex: 0,
     isOpen: false,
     allRecipes: [],
+    recipes: [],
+    selectedRecipe: null,
+    craftingQueue: [],
+    isInitialized: false,
     knownRecipeIds: [],
     isLoading: false,
     loadError: null,
@@ -254,7 +264,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         return failCraft(CRAFTING_ERRORS.RECIPE_NOT_FOUND);
       }
 
-      const inventory = (gameStore.characterSheet?.inventory || []).filter((item): item is IInventorySlot => item !== null);
+      const inventory = (gameStore.characterSheet?.inventory || []).filter((item: any): item is IInventorySlot => item !== null);
       const characterSheet = gameStore.characterSheet;
 
       if (!characterSheet) {
@@ -326,7 +336,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe || !gameStore.characterSheet) return false;
 
-      const inventory = (gameStore.characterSheet.inventory || []).filter((item): item is IInventorySlot => item !== null);
+      const inventory = (gameStore.characterSheet.inventory || []).filter((item: any): item is IInventorySlot => item !== null);
       return canCraftRecipe(recipe, inventory, gameStore.characterSheet);
     },
 
@@ -337,7 +347,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const recipe = getRecipeById(allRecipes, recipeId);
       if (!recipe || !gameStore.characterSheet) return [];
 
-      const inventory = (gameStore.characterSheet.inventory || []).filter((item): item is IInventorySlot => item !== null);
+      const inventory = (gameStore.characterSheet.inventory || []).filter((item: any): item is IInventorySlot => item !== null);
       return getMaterialStatus(recipe, inventory, gameStore.items);
     },
 
@@ -405,6 +415,12 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     reloadRecipes: async () => {
       debugLog('Reloading recipes');
       await get().initializeRecipes();
+    },
+
+    initializeCraftingSystem: async () => {
+      debugLog('Initializing crafting system');
+      await get().initializeRecipes();
+      get().syncWithGameStore();
     },
 
     // ===== NAVIGATION =====
@@ -480,7 +496,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const recipesWithLevel = allRecipes.filter(recipe => recipe.unlockedByLevel !== undefined);
       debugLog(`[UNLOCK DEBUG] Recipes with unlockedByLevel: ${recipesWithLevel.length}`);
       
-      const recipesToUnlock = allRecipes.filter(recipe =>
+      const recipesToUnlock = allRecipes.filter((recipe: Recipe) =>
         recipe.unlockedByLevel !== undefined &&
         recipe.unlockedByLevel <= level &&
         !knownRecipeIds.includes(recipe.id)
@@ -515,7 +531,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
 
-      const recipesToUnlock = allRecipes.filter(recipe =>
+      const recipesToUnlock = allRecipes.filter((recipe: Recipe) =>
         recipe.unlockedByManual === manualId &&
         !knownRecipeIds.includes(recipe.id)
       );
@@ -582,26 +598,27 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       debugLog(`[STARTER DEBUG] After ensureStarterKit, knownRecipes: ${updatedCharacter.knownRecipes?.length || 0}`);
       debugLog(`[STARTER DEBUG] Known recipe IDs: ${JSON.stringify(updatedCharacter.knownRecipes)}`);
       
-      // Se il personaggio è stato aggiornato, aggiorna il game store
-      if (updatedCharacter !== gameStore.characterSheet) {
-        // Aggiorna il character sheet nel game store
-        gameStore.characterSheet = updatedCharacter;
+      // SEMPRE sincronizza le ricette, anche se il personaggio non è cambiato
+      if (updatedCharacter.knownRecipes && updatedCharacter.knownRecipes.length > 0) {
+        // Aggiorna il character sheet se necessario
+        if (updatedCharacter !== gameStore.characterSheet) {
+          useCharacterStore.getState().updateCharacterSheet(updatedCharacter);
+          
+          // Notifica nel journal solo se è la prima volta
+          const notificationStore = useNotificationStore.getState();
+          notificationStore.addLogEntry(MessageType.DISCOVERY, {
+            discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
+          });
+          
+          debugLog(`[STARTER DEBUG] Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
+        }
         
-        // Sincronizza le ricette conosciute
+        // SEMPRE sincronizza le ricette nel crafting store
         set({ knownRecipeIds: [...updatedCharacter.knownRecipes] });
         debugLog(`[STARTER DEBUG] Set knownRecipeIds in crafting store: ${updatedCharacter.knownRecipes.length}`);
-        
-        // Notifica nel journal
-        const notificationStore = useNotificationStore.getState();
-        notificationStore.addLogEntry(MessageType.DISCOVERY, {
-          discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
-        });
-        
-        debugLog(`[STARTER DEBUG] Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
+        debugLog(`[STARTER DEBUG] Final knownRecipeIds: ${JSON.stringify(get().knownRecipeIds)}`);
       } else {
-        // Sincronizza comunque le ricette se già presenti
-        get().syncWithGameStore();
-        debugLog('[STARTER DEBUG] Character already has starter kit, syncing with game store');
+        debugLog('[STARTER DEBUG] No known recipes found after ensureStarterKit');
       }
     },
 
@@ -686,7 +703,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const inventory = gameStore.characterSheet.inventory;
       
       // Trova il manuale nell'inventario
-      const manualSlotIndex = inventory.findIndex(slot => 
+      const manualSlotIndex = inventory.findIndex((slot: IInventorySlot | null) => 
         slot && slot.itemId === manualId
       );
       
@@ -728,8 +745,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         get().initializeCraftingSystem();
         
         const notificationStore = useNotificationStore.getState();
-        notificationStore.addLogEntry(MessageType.SYSTEM, {
-          message: 'Sistema di crafting ripristinato dopo errore dati corrotti'
+        notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, {
+          action: 'Sistema di crafting ripristinato dopo errore dati corrotti'
         });
 
         debugLog('Successfully recovered from corrupted data');
@@ -746,7 +763,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
       // Check for invalid recipes
       const invalidRecipes = knownRecipeIds.filter(id => 
-        !recipes.find(recipe => recipe.id === id)
+        !recipes.find((recipe: Recipe) => recipe.id === id)
       );
 
       if (invalidRecipes.length > 0) {
@@ -755,7 +772,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         // Clean up invalid recipes
         set({
           knownRecipeIds: knownRecipeIds.filter(id => 
-            recipes.find(recipe => recipe.id === id)
+            recipes.find((recipe: Recipe) => recipe.id === id)
           )
         });
       }
