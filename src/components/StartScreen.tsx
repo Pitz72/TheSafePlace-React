@@ -1,10 +1,18 @@
 /**
  * StartScreen.tsx — Menu iniziale
  * 
+ * 🚨 AVVISO CRITICO DI IMMUTABILITÀ 🚨
+ * 
  * ⚠️  COMPONENTE IMMUTABILE - v0.5.1-Look Me Final ⚠️
  * 
- * QUESTA COMPONENTE È CONSIDERATA IMMUTABILE E DEFINITIVA.
- * Modifiche vietate senza autorizzazione esplicita dell'autore.
+ * 🔒 QUESTA SCHERMATA DEL MENU DI GIOCO È INTOCCABILE E IMMUTABILE 🔒
+ * 
+ * ❌ MODIFICHE VIETATE SENZA AUTORIZZAZIONE ESPLICITA E SCRITTA DELL'OPERATORE ❌
+ * 
+ * La schermata del menu principale è considerata un componente critico
+ * del sistema e non può essere modificata senza autorizzazione scritta.
+ * Qualsiasi tentativo di modifica non autorizzata sarà considerato
+ * una violazione delle specifiche di sistema.
  * 
  * Documentazione completa: /documentazione/STARTSCREEN-IMMUTABLE-SPEC.md
  * 
@@ -29,6 +37,8 @@
  * Data: 2025-08-24
  * Autore: Simone Pizzi
  * Stato: IMMUTABILE ✅
+ * 
+ * ULTIMA MODIFICA: 16 Gennaio 2025 - Aggiunto avviso critico di immutabilità
  */
 import React, { useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
@@ -36,14 +46,24 @@ import { useGameStore } from '../stores/gameStore';
 const StartScreen: React.FC = () => {
   const menuSelectedIndex = useGameStore(state => state.menuSelectedIndex);
   const setMenuSelectedIndex = useGameStore(state => state.setMenuSelectedIndex);
+  const isPaused = useGameStore(state => state.isPaused);
+  const gameInProgress = useGameStore(state => state.gameInProgress);
   const handleNewGame = useGameStore(state => state.handleNewGame);
   const handleLoadGame = useGameStore(state => state.handleLoadGame);
   const handleStory = useGameStore(state => state.handleStory);
   const handleInstructions = useGameStore(state => state.handleInstructions);
   const handleOptions = useGameStore(state => state.handleOptions);
   const handleExit = useGameStore(state => state.handleExit);
+  const resumeGame = useGameStore(state => state.resumeGame);
+  const startNewGame = useGameStore(state => state.startNewGame);
   
-  const menuItems = [
+  // Menu diverso se il gioco è in pausa
+  const menuItems = isPaused && gameInProgress ? [
+    { key: 'R', label: 'Riprendi Partita', action: resumeGame },
+    { key: 'N', label: 'Nuova Partita', action: startNewGame },
+    { key: 'O', label: 'Opzioni', action: handleOptions },
+    { key: 'E', label: 'Esci', action: handleExit }
+  ] : [
     { key: 'N', label: 'Nuova Partita', action: handleNewGame },
     { key: 'C', label: 'Carica Partita', action: handleLoadGame },
     { key: 'I', label: 'Istruzioni', action: handleInstructions },
@@ -79,7 +99,7 @@ const StartScreen: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
     // L'array di dipendenze ora è stabile e non causerà nuove esecuzioni
-  }, [setMenuSelectedIndex, handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit]);
+  }, [setMenuSelectedIndex, handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit, resumeGame, startNewGame, menuItems]);
 
   return (
     <div className="h-full flex items-center justify-center overflow-hidden crt-screen scan-lines">
@@ -109,10 +129,17 @@ const StartScreen: React.FC = () => {
           un gioco di Simone Pizzi
         </p>
         
-        {/* Versione */}
-        <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '3rem' }}>
-          v0.9.7.3 - We shore up the building
+        {/* Versione e stato pausa */}
+        <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
+          v0.9.7.4 - The Fix Era Part 1
         </p>
+        
+        {/* Indicatore di pausa */}
+        {isPaused && gameInProgress && (
+          <p className="text-phosphor-400 text-lg font-bold animate-pulse glow-phosphor-bright" style={{ marginBottom: '2rem' }}>
+            GIOCO IN PAUSA
+          </p>
+        )}
         
         {/* Menu Items Testuali */}
         <div className="space-y-1 mb-4">

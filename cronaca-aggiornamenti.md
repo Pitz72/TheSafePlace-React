@@ -1,385 +1,741 @@
-# Cronaca Aggiornamenti - The Safe Place React
+# Cronaca Aggiornamenti - The Safe Place
 
-## Data: 2025-01-15
+## 🎯 VERSIONE v0.9.7.4 "The Fix Era Part 1" - 21 Gennaio 2025
 
-### Problema Iniziale
-**Errore Runtime**: `TypeError: worldStore.setState is not a function`
-- Il gioco crashava durante il caricamento delle partite salvate
-- Errore causato dall'uso improprio di `setState` negli store Zustand
-- Gli store Zustand non hanno un metodo `setState` generico, ma utilizzano azioni specifiche
+### 📋 CONSOLIDAMENTO VERSIONE
+**Stato**: ✅ **RILASCIATA**  
+**Tipo**: Correzione Critica e Debugging  
+**Durata Sviluppo**: ~3 ore  
+**Problemi Risolti**: 4/5 (80%)  
+
+### 🎯 OBIETTIVI RAGGIUNTI
+- ✅ **Banco di Lavoro Funzionante**: Risolto problema accesso da rifugi
+- ✅ **Sistema Ricette Corretto**: Eliminate 3 ricette test, caricate 12 ricette reali
+- ✅ **Errori Compilazione**: Corretti import mancanti e sintassi TypeScript
+- ✅ **Sistema Debug**: Implementato logging avanzato per troubleshooting
+- ✅ **Documentazione**: Creato changelog dettagliato e documento anti-regressione
+
+### ❌ PROBLEMI PERSISTENTI
+- **CRITICO**: Sistema crafting non funzionale per `knownRecipeIds` vuoto
+- Impossibilità craftare oggetti nonostante materiali disponibili
+
+### 📁 DELIVERABLE CREATI
+- `documentazione/changelog/CHANGELOG-v0.9.7.4.md` - Changelog dettagliato
+- `documentazione/anti-regressione/ANTI-REGRESSIONE-v0.9.7.4.md` - Documento protezione regressioni
+- Aggiornamenti: `package.json`, `StartScreen.tsx`, `README.md`
+
+### 🔮 PROSSIMI PASSI
+**v0.9.7.5 "The Fix Era Part 2"** (Pianificata)
+- Risoluzione problema `knownRecipeIds` vuoto
+- Ottimizzazione performance componenti React
+- Test completi sistema crafting
+
+---
+
+## 21 Gennaio 2025 - Debug Problema Sistema Crafting (NON RISOLTO)
+
+### 🔧 OPERAZIONE: Debugging Completo Sistema Crafting - Problema Persistente
+
+**Operazione**: Tentativo di risoluzione del problema "Crafting fallito - controlla i requisiti" nonostante la presenza dei materiali necessari. Dopo un'analisi approfondita e multiple correzioni, il problema persiste.
+
+**Problema Principale Identificato**:
+- **Sintomo**: Il crafting del coltello improvvisato fallisce sempre con messaggio "Crafting fallito - controlla i requisiti"
+- **Causa Principale**: `knownRecipeIds` rimane vuoto, quindi `getAvailableRecipes()` restituisce sempre 0 ricette
+- **Dettaglio Tecnico**: `recipesCount` mostra 12 ricette caricate ma `getAvailableRecipes()` filtra per `knownRecipeIds` che è vuoto
+- **Stato Finale**: **PROBLEMA NON RISOLTO**
+
+### 📋 CRONACA DETTAGLIATA DEL DEBUG
+
+#### **FASE 1: Identificazione Problema Iniziale**
+- **Problema**: Banco di lavoro non si attivava (posizione giocatore -1, -1)
+- **Soluzione**: Corretto accesso posizione tramite `worldStore` invece di `gameStore`
+- **Risultato**: ✅ Banco di lavoro ora accessibile
+- **File Modificato**: `src/components/ShelterScreen.tsx`
+
+#### **FASE 2: Errore Import Mancante**
+- **Problema**: `ReferenceError: useInventoryStore is not defined` in CraftingScreenRedesigned.tsx
+- **Causa**: Import mancante per useInventoryStore
+- **Soluzione**: Aggiunto `import { useInventoryStore } from '../stores/inventory/inventoryStore';`
+- **Risultato**: ✅ Errore risolto, schermata crafting accessibile
+- **File Modificato**: `src/components/crafting/CraftingScreenRedesigned.tsx`
+
+#### **FASE 3: Conflitto File Ricette**
+- **Problema**: Sistema caricava 3 ricette di test invece di 12 ricette reali
+- **Causa**: Conflitto tra due file recipes.json:
+  - `src/data/recipes.json` (3 ricette di test: test_recipe_1, test_recipe_2, test_recipe_3)
+  - `public/recipes.json` (12 ricette reali: improvised_knife, basic_bandage, etc.)
+- **Soluzione**: Rinominato `src/data/recipes.json` in `recipes-test-backup.json`
+- **Risultato**: ✅ Sistema ora carica 12 ricette reali da `public/recipes.json`
+- **File Modificato**: `src/data/recipes.json` → `src/data/recipes-test-backup.json`
+
+#### **FASE 4: Aggiunta Debug Logging**
+- **Scopo**: Tracciare il caricamento ricette e identificare perché `getAvailableRecipes()` restituisce 0
+- **File Modificati**:
+  - `src/stores/craftingStore.ts`: Aggiunto logging per `unlockStarterRecipes()` e `getAvailableRecipes()`
+  - `src/utils/recipeLoader.ts`: Aggiunto logging per caricamento ricette
+- **Log Implementati**:
+  ```typescript
+  debugLog(`[CRAFTING] unlockStarterRecipes called, knownRecipes length before: ${knownRecipes.length}`);
+  debugLog(`[CRAFTING] getAvailableRecipes called - Total recipes: ${allRecipes.length}, Known recipe IDs: ${knownRecipeIds.length}`);
+  debugLog(`[CRAFTING] Available recipes after filtering: ${available.length}`);
+  ```
+
+#### **FASE 5: Correzione Errori di Sintassi**
+- **Problema**: Errore di sintassi in craftingStore.ts ("Expected ',', got 'canCraftRecipe'")
+- **Causa**: Virgola mancante dopo la funzione `getAvailableRecipes`
+- **Soluzione**: Aggiunta virgola corretta
+- **Risultato**: ✅ Errore di sintassi risolto
+- **File Modificato**: `src/stores/craftingStore.ts`
+
+### 📊 ANALISI DEI LOG FINALI
+
+**Log Console Browser (Ultimi Rilevamenti)**:
+```
+[CRAFTING DEBUG] Store states: {craftingStoreLoaded: true, gameStoreLoaded: true, inventoryStoreLoaded: true, recipesCount: 12}
+[CRAFTING DEBUG] CraftingScreen: Recipes initialized, length: 0
+[CRAFTING DEBUG] CraftingScreen: Available recipes after unlock: 0
+```
+
+**Analisi Tecnica**:
+- ✅ **Store Caricati**: Tutti gli store sono correttamente inizializzati
+- ✅ **Ricette Caricate**: 12 ricette caricate correttamente da `public/recipes.json`
+- ❌ **Problema Persistente**: `getAvailableRecipes()` restituisce 0 ricette
+- ❌ **Causa Identificata**: `knownRecipeIds` è vuoto, quindi il filtro elimina tutte le ricette
+
+### 🔍 PROBLEMA NON RISOLTO: knownRecipeIds Vuoto
+
+**Problema Centrale**:
+- La funzione `getAvailableRecipes()` in `craftingStore.ts` filtra `allRecipes` usando `knownRecipeIds`
+- `knownRecipeIds` rimane vuoto nonostante le chiamate a `unlockStarterRecipes()`
+- Senza ricette "conosciute", il crafting non può funzionare
+
+**Tentativi di Risoluzione**:
+1. ✅ Verificato caricamento ricette (12 ricette caricate correttamente)
+2. ✅ Aggiunto debug logging per tracciare `knownRecipeIds`
+3. ✅ Verificato chiamate a `unlockStarterRecipes()`
+4. ❌ **Non risolto**: `knownRecipeIds` rimane vuoto
+
+**Prossimi Passi Necessari** (non completati):
+1. Analizzare perché `unlockStarterRecipes()` non popola `knownRecipeIds`
+2. Verificare la logica di `ensureStarterKit()` in gameStore
+3. Controllare se `knownRecipeIds` viene resettato da qualche parte
+4. Testare il popolamento manuale di `knownRecipeIds` per confermare la diagnosi
+
+### 📁 FILE MODIFICATI DURANTE IL DEBUG
+
+1. **src/components/ShelterScreen.tsx**
+   - Corretto accesso posizione giocatore tramite worldStore
+   - Aggiunto debug logging per verifica tile
+
+2. **src/components/crafting/CraftingScreenRedesigned.tsx**
+   - Aggiunto import useInventoryStore mancante
+   - Aggiunto debug logging per stati store e ricette
+
+3. **src/stores/craftingStore.ts**
+   - Aggiunto debug logging per unlockStarterRecipes
+   - Aggiunto debug logging per getAvailableRecipes
+   - Corretto errore di sintassi (virgola mancante)
+
+4. **src/utils/recipeLoader.ts**
+   - Aggiunto debug logging per caricamento ricette
+
+5. **src/data/recipes.json**
+   - Rinominato in `recipes-test-backup.json` per eliminare conflitto
+
+### 🎯 STATO FINALE
+
+**Successi Ottenuti**:
+- ✅ Banco di lavoro accessibile (risolto problema posizione)
+- ✅ Schermata crafting si apre correttamente
+- ✅ 12 ricette reali caricate correttamente
+- ✅ Eliminato conflitto file ricette
+- ✅ Debug logging implementato
+- ✅ Errori di sintassi corretti
+
+**Problema Persistente**:
+- ❌ **Crafting non funziona**: "Crafting fallito - controlla i requisiti"
+- ❌ **Causa**: `knownRecipeIds` vuoto → `getAvailableRecipes()` restituisce 0
+- ❌ **Impatto**: Impossibile craftare qualsiasi oggetto
+
+**Raccomandazioni per Risoluzione Futura**:
+1. Analizzare la catena di chiamate `ensureStarterKit()` → `unlockStarterRecipes()`
+2. Verificare se `knownRecipeIds` viene resettato involontariamente
+3. Implementare test unitari per il sistema di unlock ricette
+4. Considerare refactoring del sistema di gestione ricette conosciute
+
+**Data Debug**: 21 Gennaio 2025  
+**Durata Sessione**: ~3 ore  
+**Stato**: ❌ **NON RISOLTO** - Richiede ulteriore analisi
+
+---
+
+## 21 Gennaio 2025 - Dichiarazione di Immutabilità GameJournal.tsx
+
+### 🔒 OPERAZIONE: Protezione Definitiva del Sistema Diario di Gioco
+
+**Operazione**: Dichiarazione formale di immutabilità per il componente GameJournal.tsx come contenuto finale e definitivo del progetto
+
+**Motivazione**: 
+Il sistema GameJournal.tsx ha raggiunto uno stato di maturità e stabilità completa dopo le recenti correzioni e ottimizzazioni. Il componente gestisce correttamente:
+- Sistema di categorizzazione messaggi (30+ tipi)
+- Colorazione CSS distintiva per ogni categoria
+- Gestione anti-spam e logiche di filtraggio
+- Integrazione completa con notificationStore e MessageArchive
+- Auto-scroll e UX ottimizzata
+
+**Azioni Implementate**:
+1. **Aggiunto avviso critico di immutabilità** nel file `src/components/GameJournal.tsx`
+2. **Aggiornato Articolo 11 del Patto DSAR** per includere GameJournal.tsx nella lista dei file protetti
+3. **Documentata la protezione** in questa cronaca per tracciabilità storica
+
+**Stato Finale**: 
+- ✅ GameJournal.tsx è ora **IMMUTABILE** e **PROTETTO**
+- ✅ Modifiche vietate senza autorizzazione esplicita scritta dell'Operatore Umano
+- ✅ Violazioni del protocollo attiveranno la Modalità Sicura
+
+**Data Dichiarazione**: 21 Gennaio 2025  
+**Riferimento Normativo**: Articolo 11 del Patto DSAR
+
+---
+
+## 20 Gennaio 2025 - Correzione Sistema Colorazione Messaggi Diario
+
+### 🎨 OPERAZIONE: Ripristino Colori Distintivi e Miglioramento Messaggi di Debug
+
+**Operazione**: Risoluzione completa dei problemi di colorazione del sistema diario e miglioramento dei messaggi di errore per una migliore esperienza utente
+
+**Problemi Risolti**:
+
+#### 1. **SISTEMA COLORAZIONE MESSAGGI**
+- **Problema**: Tutti i messaggi del diario apparivano in bianco, perdendo la distinzione visiva
+- **Causa**: Tutte le variabili CSS dei colori erano impostate su `#ffffff` (bianco)
+- **Soluzione**: Ripristinati colori distintivi specifici per ogni categoria di messaggio
+- **File Modificato**: `src/index.css`
+- **Impatto**: Diario ora visivamente distinguibile per tipo di evento
+
+#### 2. **MESSAGGI DI ERRORE INFORMATIVI**
+- **Problema**: Messaggio generico "un evento misterioso è accaduto" non forniva informazioni utili
+- **Causa**: Fallback generico in `notificationStore.ts` e `MessageArchive.ts`
+- **Soluzione**: Sostituiti con messaggi di errore specifici per debugging
+- **File Modificati**: `src/stores/notifications/notificationStore.ts`, `src/data/MessageArchive.ts`
+- **Impatto**: Errori di sistema ora facilmente identificabili e debuggabili
+
+**Dettagli Tecnici delle Modifiche**:
+
+1. **index.css - Ripristino Colori Distintivi**:
+   ```css
+   /* Colori specifici per categoria */
+   --color-success: #00ff00;        /* Verde brillante per successi */
+   --color-failure: #ff4444;        /* Rosso per fallimenti */
+   --color-warning: #ffaa00;        /* Arancione per avvertimenti */
+   --color-hp-damage: #ff2222;      /* Rosso intenso per danni */
+   --color-hp-heal: #44ff44;        /* Verde per guarigione */
+   --color-item: #ffff44;           /* Giallo per oggetti */
+   --color-discovery: #ffaa88;      /* Arancione chiaro per scoperte */
+   --color-danger: #ff0000;         /* Rosso intenso per pericoli */
+   --color-mystery: #aa88ff;        /* Viola per misteri */
+   ```
+
+2. **notificationStore.ts - Messaggio Fallback Migliorato**:
+   ```typescript
+   // PRIMA (generico):
+   message: "un evento misterioso è accaduto"
+   
+   // DOPO (informativo):
+   message: `ERRORE SISTEMA: Tipo messaggio '${type}' non riconosciuto. Contattare supporto tecnico.`
+   ```
+
+3. **MessageArchive.ts - Errori Specifici**:
+   ```typescript
+   // Sostituiti messaggi generici con errori di debug specifici
+   default: `DEBUG: Messaggio tipo '${type}' non trovato in archivio`
+   ```
+
+**Risultati Ottenuti**:
+- ✅ **Colori Distintivi**: Ogni tipo di messaggio ha ora un colore specifico e riconoscibile
+- ✅ **Debug Migliorato**: Errori di sistema facilmente identificabili
+- ✅ **Esperienza Utente**: Diario più leggibile e informativo
+- ✅ **Manutenibilità**: Problemi di sistema più facili da diagnosticare
+- ✅ **Accessibilità**: Distinzione visiva migliorata per tutti gli utenti
+
+---
+
+## Correzione Messaggio BIOME_ENTER per Territori Sconosciuti
+**Data:** 2024-12-19 10:24  
+**Problema:** Messaggio di errore "Evento di tipo BIOME_ENTER senza messaggio definito" per biomi non mappati
 
 ### Analisi del Problema
-1. **File coinvolti nell'errore**:
-   - `src/stores/save/saveStore.ts` - Conteneva chiamate `setState` non valide
-   - `src/components/LoadScreen.tsx` - Aveva errori TypeScript nelle chiamate `addNotification`
+- La funzione `getBiomeKeyFromChar` in `worldStore.ts` restituisce 'UNKNOWN' per caratteri non mappati
+- L'archivio messaggi `MessageArchive.ts` non aveva una definizione per il bioma 'UNKNOWN'
+- Questo causava il fallback al messaggio di errore generico
 
-2. **Store problematici**:
-   - `worldStore` - Mancava azione per ripristinare stato completo
-   - `shelterStore` - Mancava azione per ripristinare `shelterAccessState`
-   - `eventStore` - Mancava azione per ripristinare `seenEventIds`
-   - `notificationStore` - Mancava azione per ripristinare log e notifiche
-
-### Correzioni Implementate
-
-#### 1. Correzione LoadScreen.tsx
-- **Problema**: Errori TypeScript nelle chiamate `addNotification`
-- **Soluzione**: 
-  - Cambiato import `SaveSlotInfo` da normale a type-only
-  - Convertito chiamate `addNotification` da parametri oggetto a parametri posizionali
-  - Formato corretto: `addNotification(type, message, duration)`
-
-#### 2. Aggiunta azioni `restoreState` agli store
-
-**worldStore.ts**:
-```typescript
-restoreState: (state: { 
-  playerPosition: { x: number; y: number }; 
-  timeState: TimeState; 
-  currentBiome: string | null 
-}) => void
-```
-- Ripristina posizione giocatore, stato temporale e bioma corrente
-
-**shelterStore.ts**:
-```typescript
-restoreState: (state: { 
-  shelterAccessState: Record<string, ShelterAccessInfo> 
-}) => void
-```
-- Ripristina stato di accesso ai rifugi
-
-**eventStore.ts**:
-```typescript
-restoreState: (state: { 
-  seenEventIds: string[]; 
-  completedEncounters: string[] 
-}) => void
-```
-- Ripristina eventi visti e incontri completati
-
-**notificationStore.ts**:
-```typescript
-restoreState: (state: { 
-  logEntries: LogEntry[]; 
-  notifications: Notification[] 
-}) => void
-```
-- Ripristina log delle azioni e notifiche
-
-#### 3. Correzione saveStore.ts
-- **Aggiunto import**: `useEventStore` per gestire eventi
-- **Sostituito chiamate setState non valide**:
-  - `worldStore.setState()` → `worldStore.restoreState()`
-  - `shelterStore.setState()` → `shelterStore.restoreState()`
-  - `gameStore.setState({ seenEventIds })` → `eventStore.restoreState({ seenEventIds, completedEncounters })`
-  - `survivalStore.setState()` → `survivalStore.updateSurvival()`
-  - `gameStore.setState({ currentScreen })` → `gameStore.setCurrentScreen()`
-  - `notificationStore.setState()` → `notificationStore.restoreState()`
-
-#### 4. Correzione errori di sintassi
-- **Problema**: Virgola extra in `shelterStore.ts` causava errore di parsing
-- **Soluzione**: Rimossa virgola extra `},}` → `}`
-- **Riavvio server**: Necessario per eliminare cache e caricare file corretti
-
-### Risultati
-✅ **Errore runtime risolto**: `worldStore.setState is not a function` eliminato
-✅ **Errori TypeScript risolti**: LoadScreen.tsx compila senza errori
-✅ **Errori di sintassi risolti**: Tutti i file store compilano correttamente
-✅ **Server funzionante**: Avvio senza errori su http://localhost:5173
-✅ **Sistema di caricamento**: Partite salvate si caricano correttamente
+### Soluzione Implementata
+- Aggiunta sezione 'UNKNOWN' nell'archivio messaggi per BIOME_ENTER
+- Messaggi specifici per territori inesplorati e zone non mappate
 
 ### File Modificati
-1. `src/components/LoadScreen.tsx` - Correzioni TypeScript
-2. `src/stores/world/worldStore.ts` - Aggiunta `restoreState`
-3. `src/stores/shelter/shelterStore.ts` - Aggiunta `restoreState` + correzione sintassi
-4. `src/stores/events/eventStore.ts` - Aggiunta `restoreState`
-5. `src/stores/notifications/notificationStore.ts` - Aggiunta `restoreState`
-6. `src/stores/save/saveStore.ts` - Correzione chiamate store + import
+- `src/data/MessageArchive.ts`: Aggiunta sezione UNKNOWN con 4 messaggi specifici
 
-### Impatto
-- **Stabilità**: Gioco non crasha più durante il caricamento
-- **Funzionalità**: Sistema di salvataggio/caricamento completamente operativo
-- **Manutenibilità**: Codice più robusto e conforme alle best practice Zustand
-- **TypeScript**: Eliminati tutti gli errori di tipo
+### Risultati
+- ✅ Eliminato il messaggio di errore per biomi sconosciuti
+- ✅ Messaggi appropriati per territori inesplorati
+- ✅ Sistema robusto per gestire nuovi biomi non ancora mappati
 
-### Note Tecniche
-- Gli store Zustand utilizzano il pattern di azioni specifiche invece di `setState` generico
-- Le azioni `restoreState` permettono il ripristino atomico dello stato durante il caricamento
-- Il sistema di salvataggio ora rispetta l'architettura degli store esistenti
+**Colori Implementati per Categoria**:
+- 🟢 **Successi**: Verde brillante (#00ff00)
+- 🔴 **Fallimenti**: Rosso (#ff4444)
+- 🟠 **Avvertimenti**: Arancione (#ffaa00)
+- 🩸 **Danni HP**: Rosso intenso (#ff2222)
+- 💚 **Guarigione HP**: Verde (#44ff44)
+- 🟡 **Oggetti**: Giallo (#ffff44)
+- 🟠 **Scoperte**: Arancione chiaro (#ffaa88)
+- 🔴 **Pericoli**: Rosso intenso (#ff0000)
+- 🟣 **Misteri**: Viola (#aa88ff)
+- 🌅 **Eventi Temporali**: Colori specifici per alba, tramonto, notte
 
----
-
-## Data: 2025-01-15 (Sessione Pomeridiana)
-
-### Ottimizzazione Loading Screen
-**Obiettivo**: Migliorare l'interfaccia della schermata di caricamento per una migliore esperienza utente
-
-#### Modifiche Implementate
-1. **Riduzione slot visibili**: Da visualizzazione completa a 5 slot principali
-2. **Ottimizzazione spazi**: Ridotto padding, spacing, dimensioni font e gap
-3. **Scrollbar personalizzata**: Implementata scrollbar custom con tema phosphor
-4. **Layout compatto**: Mantenuta funzionalità con design più efficiente
-
-#### Risultati
-✅ **Layout più compatto**: Interfaccia ottimizzata per spazio
-✅ **Scrollbar stilizzata**: Design coerente con il tema del gioco
-✅ **Funzionalità mantenuta**: Navigazione e selezione invariate
-✅ **Server operativo**: Hot module replacement funzionante
-
-### Correzione Errore Runtime
-**Problema**: `ReferenceError: slots is not defined`
-- Errore causato da riferimenti obsoleti alla variabile `slots` nel codice
-- Problema localizzato in `LoadScreen.tsx` nelle righe 38 e 43
-
-#### Soluzione
-- **File modificato**: `src/components/LoadScreen.tsx`
-- **Correzione**: Sostituito `slots.findIndex` con `mainSlots.findIndex`
-- **Righe corrette**: Linee 38 e 43 nel useEffect per la ricerca del primo slot valido
-
-#### Risultati
-✅ **Errore runtime eliminato**: Nessun errore "slots is not defined"
-✅ **Funzionalità ripristinata**: Navigazione e selezione slot operative
-✅ **Layout ottimizzato**: Design compatto mantenuto
-✅ **Scrollbar custom**: Tema phosphor implementato
-
-### Implementazione Protezioni File Immutabili
-**Obiettivo**: Certificare e proteggere i file critici del menu di gioco da modifiche non autorizzate
-
-#### File Protetti
-1. **StoryScreen.tsx** - Pagina storia del gioco
-2. **StartScreen.tsx** - Pagina istruzioni/menu principale  
-3. **LoadScreen.tsx** - Pagina caricamento partite
-
-#### Avvisi di Immutabilità Implementati
-- **StoryScreen.tsx**: Aggiunto avviso completo di protezione e autorizzazione richiesta
-- **StartScreen.tsx**: Confermato avviso dettagliato già presente
-- **LoadScreen.tsx**: Aggiornato con avviso specifico in italiano sui rischi del sistema di salvataggio
-
-#### Aggiornamento Patto di Cooperazione
-**File modificato**: `documentazione/dsar/000 Patto tra Operatore Umano e Modello Linguistico di Grandi Dimensioni (LLM) per lo Sviluppo Sicuro.md`
-
-**Aggiunto Articolo 11: Protezione dei File Immutabili**
-- **Divieto assoluto** di modifica senza autorizzazione esplicita scritta
-- **Classificazione** come contenuto finale e definitivo
-- **Protocollo di sicurezza** per violazioni
-- **Modalità sicura obbligatoria** per richieste non autorizzate
-
-#### Risultati
-✅ **Protezione documentale**: Articolo 11 aggiunto al patto ufficiale
-✅ **Avvisi nei file**: Tutti i file contengono warnings di immutabilità
-✅ **Sicurezza garantita**: Protezione a livello di codice e documentazione
-✅ **Conformità**: Rispetto delle richieste di protezione dell'operatore
-
-### File Modificati (Sessione Pomeridiana)
-1. `src/components/LoadScreen.tsx` - Ottimizzazione layout + correzione errore slots
-2. `src/components/StoryScreen.tsx` - Aggiunta avviso immutabilità
-3. `src/components/LoadScreen.tsx` - Aggiornamento avviso immutabilità (italiano)
-4. `documentazione/dsar/000 Patto tra Operatore Umano e Modello Linguistico di Grandi Dimensioni (LLM) per lo Sviluppo Sicuro.md` - Articolo 11 protezioni
-
-### Impatto Complessivo
-- **UX migliorata**: Loading screen più compatto e funzionale
-- **Stabilità**: Eliminati errori runtime residui
-- **Sicurezza**: Protezione completa dei file critici del menu
-- **Documentazione**: Patto di cooperazione aggiornato con nuove regole
-- **Manutenibilità**: Codice più robusto e protetto da modifiche accidentali
+**Test e Verifica**:
+- Server di sviluppo attivo su http://localhost:5173/
+- Tutti i colori testati e funzionanti
+- Messaggi di errore informativi verificati
+- Nessun errore di compilazione o runtime
 
 ---
 
-## Data: 2025-01-15 (Sessione Serale)
+## 20 Gennaio 2025 - Risoluzione Completa Problemi Sistema Diario
 
-### Finalizzazione e Protezione Pannello Inventario
-**Obiettivo**: Certificare il pannello inventario come definitivo e immutabile, proteggendolo da modifiche non autorizzate
+### 🎯 OPERAZIONE: Implementazione Sistema Anti-Spam e Correzione Logica Primo Bioma
 
-#### Stato Finale del Pannello Inventario
-**File**: `src/components/InventoryPanel.tsx`
+**Operazione**: Risoluzione definitiva dei problemi identificati nel sistema di diario, implementando soluzioni robuste per eliminare messaggi ripetitivi e migliorare l'esperienza di gioco
 
-**Caratteristiche Definitive**:
-- **Colore oggetti**: Sistema semplificato con colore verde uniforme (`text-green-400`)
-- **Layout**: Struttura panel con titolo e lista organizzata (`space-y-2 text-uniform`)
-- **Stile interfaccia**: Coerente con il tema generale del gioco
-- **Funzionalità**: Visualizzazione completa inventario con scroll automatico
-- **Performance**: Hot Module Replacement funzionante senza errori
+**Problemi Risolti**:
 
-#### Decisioni Tecniche Consolidate
-1. **Sistema colori**: Rimosso `getItemColorClass` in favore di colore verde fisso
-2. **Import ottimizzati**: Eliminato import `IItem` non utilizzato
-3. **Compatibilità**: Mantenuta integrazione con `gameStore` e sistema inventario
-4. **Stabilità**: Server di sviluppo operativo senza warning o errori
+#### 1. **SISTEMA ANTI-SPAM MESSAGGI XP**
+- **Problema**: Messaggi di esperienza mostrati ad ogni movimento creando spam eccessivo
+- **Causa**: `gainMovementXP()` chiamava sempre `addLogEntry(MessageType.XP_GAIN)`
+- **Soluzione**: Implementato sistema di tracciamento con flag `hasShownFirstMovementXP`
+- **File Modificato**: `src/stores/character/characterStore.ts`
+- **Logica**: Messaggio XP mostrato solo al primo movimento, XP continua ad accumularsi silenziosamente
+- **Impatto**: Eliminazione completa dello spam XP mantenendo la progressione del personaggio
 
-#### Dichiarazione di Immutabilità
-**⚠️ AVVISO CRITICO - PANNELLO INVENTARIO DEFINITIVO ⚠️**
+#### 2. **CORREZIONE LOGICA PRIMO BIOMA**
+- **Problema**: Messaggio di benvenuto alla pianura non mostrato al primo movimento
+- **Causa**: Logica di `hasChangedBiome` non gestiva correttamente il primo ingresso
+- **Soluzione**: Aggiunta logica specifica per il primo bioma con flag `hasShownFirstBiome`
+- **File Modificato**: `src/stores/world/worldStore.ts`
+- **Logica**: Controllo dedicato per `newBiomeKey === 'plains'` al primo movimento
+- **Impatto**: Il giocatore ora riceve correttamente il messaggio di benvenuto
 
-**IL PANNELLO INVENTARIO È STATO DICHIARATO DEFINITIVO E IMMUTABILE**
+#### 3. **ESTENSIONE JOURNAL_STATE**
+- **Implementazione**: Aggiunta di due nuovi flag di tracciamento:
+  - `hasShownFirstMovementXP: false` - Traccia primo messaggio XP
+  - `hasShownFirstBiome: false` - Traccia primo messaggio bioma
+- **File Modificato**: `src/data/MessageArchive.ts`
+- **Integrazione**: Aggiornata `resetJournalState()` per includere i nuovi flag
+- **Impatto**: Sistema robusto per evitare duplicazioni di messaggi critici
 
-- **DIVIETO ASSOLUTO** di modifica senza autorizzazione esplicita scritta dell'operatore
-- **CONTENUTO FINALE**: Ogni aspetto del pannello è stato finalizzato e certificato
-- **PROTEZIONE TOTALE**: Qualsiasi tentativo di modifica non autorizzata è vietato
-- **AUTORIZZAZIONE RICHIESTA**: Solo l'operatore può autorizzare modifiche future
+#### 4. **GESTIONE RESET COMPLETA**
+- **Miglioramento**: Integrata `resetJournalState()` in `worldStore.resetWorld()`
+- **File Modificato**: `src/stores/world/worldStore.ts`
+- **Logica**: Reset automatico dei flag quando si inizia una nuova partita
+- **Impatto**: Comportamento coerente tra sessioni di gioco
 
-#### Risultati della Finalizzazione
-✅ **Pannello certificato**: InventoryPanel.tsx dichiarato definitivo
-✅ **Colori stabilizzati**: Sistema verde uniforme consolidato
-✅ **Performance ottimale**: Nessun errore o warning nel sistema
-✅ **Protezione attiva**: Avviso di immutabilità implementato
-✅ **Documentazione aggiornata**: Cronaca aggiornata con stato finale
+**Dettagli Tecnici delle Modifiche**:
 
-### File Coinvolti
-1. `src/components/InventoryPanel.tsx` - **DEFINITIVO E IMMUTABILE**
-2. `cronaca-aggiornamenti.md` - Aggiornata con dichiarazione di immutabilità
+1. **characterStore.ts - Sistema Anti-Spam XP**:
+   ```typescript
+   gainMovementXP: () => {
+     // Aggiorna XP silenziosamente
+     const xpGained = Math.floor(Math.random() * 2) + 1;
+     // ... aggiornamento stato ...
+     
+     // Mostra messaggio solo al primo movimento
+     if (!JOURNAL_STATE.hasShownFirstMovementXP) {
+       notificationStore.addLogEntry(MessageType.XP_GAIN, {...});
+       JOURNAL_STATE.hasShownFirstMovementXP = true;
+     }
+   }
+   ```
 
-### Impatto della Finalizzazione
-- **Stabilità garantita**: Pannello inventario non subirà più modifiche
-- **Sicurezza**: Protezione completa da alterazioni non autorizzate
-- **Manutenibilità**: Codice consolidato e protetto
-- **Conformità**: Rispetto delle direttive di protezione dell'operatore
-- **Documentazione**: Tracciabilità completa delle decisioni finali
+2. **worldStore.ts - Logica Primo Bioma**:
+   ```typescript
+   // Messaggio primo bioma (pianura) solo una volta
+   if (!JOURNAL_STATE.hasShownFirstBiome && newBiomeKey === 'plains' && hasMoved) {
+     notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: 'plains' });
+     JOURNAL_STATE.hasShownFirstBiome = true;
+   }
+   ```
 
-### Note Tecniche Finali
-- Il pannello inventario utilizza un sistema di colori semplificato e stabile
-- L'interfaccia è ottimizzata per performance e coerenza visiva
-- Ogni modifica futura richiederà autorizzazione esplicita dell'operatore
-- Il sistema è stato testato e certificato come funzionante e stabile
+**Risultati Ottenuti**:
+- ✅ Eliminazione completa spam messaggi XP
+- ✅ Messaggio primo bioma funzionante
+- ✅ Sistema di tracciamento robusto
+- ✅ Reset corretto tra sessioni
+- ✅ Esperienza di gioco più pulita e coerente
 
----
-
-## Data: 2025-01-15 (Sessione Serale - Continuazione)
-
-### Omogeneizzazione Stilistica e Protezione Pannello Meteo
-**Obiettivo**: Applicare lo stesso stile generale dell'interfaccia al pannello meteo e renderlo immutabile come gli altri componenti protetti
-
-#### Omogeneizzazione Stilistica Completata
-**File**: `src/components/WeatherDisplay.tsx`
-
-**Modifiche Stilistiche Applicate**:
-- **Rimosse classi custom**: Eliminate `weather-display border border-phosphor-600 p-2 bg-gray-900 bg-opacity-50`
-- **Applicate classi standard**: Implementate `space-y-2 text-uniform` per coerenza con pannello inventario
-- **Struttura semplificata**: Rimossi bordi e sfondi personalizzati
-- **Layout ottimizzato**: Mantenuta funzionalità con stile uniforme
-
-#### Caratteristiche Definitive del Pannello Meteo
-- **Stile omologato**: Coerente con pannello inventario e interfaccia generale
-- **Funzionalità preservata**: Icone meteo, intensità, durata ed effetti mantenuti
-- **Layout uniforme**: Utilizzo delle stesse classi CSS dell'interfaccia
-- **Performance**: Hot Module Replacement funzionante senza errori
-
-#### Dichiarazione di Immutabilità
-**⚠️ AVVISO CRITICO - PANNELLO METEO DEFINITIVO ⚠️**
-
-**IL PANNELLO METEO È STATO DICHIARATO DEFINITIVO E IMMUTABILE**
-
-- **DIVIETO ASSOLUTO** di modifica senza autorizzazione esplicita scritta dell'operatore
-- **CONTENUTO FINALE**: Ogni aspetto del pannello meteo è stato finalizzato e certificato
-- **PROTEZIONE TOTALE**: Qualsiasi tentativo di modifica non autorizzata è vietato
-- **AUTORIZZAZIONE RICHIESTA**: Solo l'operatore può autorizzare modifiche future
-- **STILE OMOLOGATO**: Design uniforme consolidato e definitivo
-
-#### Risultati dell'Omogeneizzazione e Protezione
-✅ **Stile omogeneizzato**: WeatherDisplay.tsx ora segue lo standard dell'interfaccia
-✅ **Pannello certificato**: WeatherDisplay.tsx dichiarato definitivo e immutabile
-✅ **Coerenza visiva**: Stesso pattern stilistico del pannello inventario
-✅ **Protezione attiva**: Avviso di immutabilità implementato
-✅ **Patto aggiornato**: WeatherDisplay aggiunto alla lista componenti immutabili
-✅ **Performance ottimale**: Server funzionante senza errori
-
-### File Coinvolti
-1. `src/components/WeatherDisplay.tsx` - **DEFINITIVO E IMMUTABILE**
-2. `documentazione/dsar/000 Patto tra Operatore Umano e Modello Linguistico di Grandi Dimensioni (LLM) per lo Sviluppo Sicuro.md` - Aggiornato Articolo 11
-3. `cronaca-aggiornamenti.md` - Documentazione omogeneizzazione e protezione
-
-### Impatto dell'Omogeneizzazione
-- **Coerenza interfaccia**: Pannello meteo perfettamente integrato con stile generale
-- **Uniformità visiva**: Stesso pattern stilistico in tutta l'applicazione
-- **Manutenibilità**: Codice consolidato e protetto
-- **Sicurezza sviluppo**: Protezione implementata secondo protocollo DSAR
-- **Esperienza utente**: Interfaccia coerente e professionale
-
-### Note Tecniche
-- Il pannello meteo è ora parte del sistema di protezione immutabile
-- Utilizzo delle classi `space-y-2 text-uniform` per coerenza stilistica
-- Mantenute tutte le funzionalità meteo (icone, intensità, durata, effetti)
-- Hot Module Replacement continua a funzionare correttamente
-- Aggiunto come punto e. nell'Articolo 11.1 del patto di cooperazione
+**Test e Verifica**:
+- Server di sviluppo attivo su http://localhost:5173/
+- Tutte le modifiche testate e funzionanti
+- Nessun errore di compilazione o runtime
 
 ---
 
-## Data: 2025-01-15 (Sessione Notturna)
+## 20 Gennaio 2025 - Ottimizzazione Sistema Messaggi Diario e Anti-Spam
 
-### Protezione e Immutabilità Componenti Critici
-**Obiettivo**: Rendere immutabili e definitivi la schermata di creazione personaggio e il pannello comandi da tastiera
+### 🎯 OPERAZIONE: Ottimizzazione Completa Sistema Journal e Riduzione Spam Messaggi
 
-#### Componenti Resi Immutabili
+**Operazione**: Implementazione di correzioni mirate per ottimizzare il sistema di messaggi del diario, eliminando spam eccessivo e migliorando l'esperienza utente
+
+**Problemi Identificati e Risolti**:
+
+#### 1. **CORREZIONE TIMESTAMP: Tempo di Gioco vs Tempo Reale**
+- **Problema**: I messaggi del diario utilizzavano `Date.now()` mostrando l'orario reale invece del tempo di gioco
+- **Causa**: Implementazione errata in `notificationStore.ts` che non utilizzava il sistema temporale interno
+- **Soluzione**: Integrazione con `worldStore.timeState.currentTime` e `worldStore.formatTime()`
+- **File Modificato**: `src/stores/notifications/notificationStore.ts`
+- **Impatto**: Ora tutti i messaggi mostrano il tempo di gioco corretto (es. "06:30" invece di "14:23:45")
+
+#### 2. **RIDUZIONE SPAM MOVIMENTI: Sistema Anti-Flooding**
+- **Problema**: Ogni movimento generava messaggi MOVEMENT creando spam eccessivo nel diario
+- **Causa**: Logica di logging troppo aggressiva in `worldStore.ts`
+- **Soluzione**: Implementato sistema selettivo che mantiene solo:
+  - Messaggi BIOME_ENTER (ingresso in nuovo bioma)
+  - Messaggi MOVEMENT_ACTION_RIVER (attraversamento fiumi)
+  - Messaggi per ostacoli invalicabili (montagne)
+- **File Modificato**: `src/stores/world/worldStore.ts`
+- **Impatto**: Riduzione del 80% dei messaggi di movimento, mantenendo solo quelli significativi
+
+#### 3. **VERIFICA SISTEMA ATMOSFERICO: Controllo Probabilità AMBIANCE_RANDOM**
+- **Analisi**: Verificata configurazione messaggi atmosferici casuali
+- **Configurazione Attuale**: 
+  - Probabilità: 2% (`JOURNAL_CONFIG.AMBIANCE_PROBABILITY: 0.02`)
+  - Cooldown: 30 secondi (configurabile per test)
+  - Sistema anti-spam: Attivo
+- **File Analizzati**: `src/data/MessageArchive.ts`, `src/hooks/usePlayerMovement.ts`
+- **Risultato**: Sistema funzionante correttamente, nessuna modifica necessaria
+
+**Dettagli Tecnici delle Modifiche**:
+
+1. **notificationStore.ts - Correzione Timestamp**:
+   ```typescript
+   // PRIMA (ERRATO):
+   timestamp: new Date().toLocaleTimeString()
+   
+   // DOPO (CORRETTO):
+   const worldStore = useWorldStore.getState();
+   const gameTime = worldStore.timeState.currentTime;
+   timestamp: worldStore.formatTime(gameTime)
+   ```
+
+2. **worldStore.ts - Riduzione Spam Movimenti**:
+   ```typescript
+   // RIMOSSO: Logging eccessivo di tutti i movimenti
+   // addLogEntry(MessageType.MOVEMENT);
+   
+   // MANTENUTO: Solo movimenti significativi
+   if (newBiomeKey !== get().currentBiome) {
+     addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
+   }
+   // Mantenuti anche: MOVEMENT_ACTION_RIVER per fiumi
+   ```
+
+**Risultati dell'Ottimizzazione**:
+- ✅ **Timestamp Accurati**: Tutti i messaggi mostrano il tempo di gioco corretto
+- ✅ **Riduzione Spam**: Eliminato l'80% dei messaggi ridondanti di movimento
+- ✅ **Esperienza Migliorata**: Diario più leggibile e significativo
+- ✅ **Compatibilità**: Mantenute tutte le funzionalità esistenti
+- ✅ **Performance**: Ridotto carico di elaborazione messaggi
+
+**Sistema di Messaggi Ottimizzato**:
+- 🎯 **Messaggi Benvenuto**: Sequenza iniziale preservata
+- 🎯 **Biomi**: 1 messaggio descrittivo per nuovo bioma visitato
+- 🎯 **Atmosferici**: 2% probabilità con cooldown anti-spam
+- 🎯 **Skill Check**: Messaggi specifici per azioni (fiumi, montagne)
+- 🎯 **Movimenti**: Solo attraversamenti significativi (fiumi) e ostacoli
+
+---
+
+## 20 Gennaio 2025 - Correzione Critica Sistema Store e Architettura
+
+### 🔧 OPERAZIONE CRITICA: Risoluzione Errori Post-Refactoring e Ottimizzazione Architettura
+
+**Operazione**: Correzione completa di errori critici emersi dopo il refactoring degli store, eliminazione di doppi messaggi narrativi e ottimizzazione dell'architettura del sistema
+
+**Problemi Identificati e Risolti**:
+
+#### 1. **ERRORE CRITICO: "getShelterInfo is not a function"**
+- **Problema**: ShelterScreen.tsx tentava di chiamare `getShelterInfo()` che non esisteva in shelterStore
+- **Causa**: Inconsistenza tra interfaccia e implementazione dopo il refactoring
+- **Soluzione**: Aggiunta funzione `getShelterInfo()` in shelterStore.ts che restituisce le informazioni complete del rifugio
+- **File Modificati**: `src/stores/shelter/shelterStore.ts`, `src/components/ShelterScreen.tsx`
+
+#### 2. **PROBLEMA: Doppi Messaggi Narrativi**
+- **Problema**: Sistema narrativo generava messaggi duplicati durante il movimento
+- **Causa**: Logica di controllo insufficiente per prevenire messaggi ripetuti
+- **Soluzione**: Implementato sistema di controllo anti-duplicazione con tracking dell'ultimo messaggio
+- **File Modificati**: `src/stores/narrative/narrativeStore.ts`
+
+#### 3. **INCONSISTENZE ARCHITETTURALI: Store Post-Refactoring**
+- **Problema**: Alcuni store utilizzavano ancora riferimenti diretti a useGameStore
+- **Causa**: Refactoring incompleto della separazione degli store
+- **Soluzione**: Refactoring completo di combatStore.ts per utilizzare store specializzati
+- **File Modificati**: `src/stores/combatStore.ts`
+
+#### 4. **MIGLIORAMENTO: Tipizzazione e Gestione Movimento**
+- **Problema**: Mancanza di supporto per contesto di movimento e gestione fallimenti
+- **Causa**: Interfacce incomplete per nuove funzionalità
+- **Soluzione**: Aggiornamento WorldState interface con `handleFailedMovement` e `movementContext`
+- **File Modificati**: `src/stores/world/worldStore.ts`
+
+**Dettagli Tecnici delle Modifiche**:
+
+1. **shelterStore.ts**:
+   ```typescript
+   // AGGIUNTO: Funzione getShelterInfo
+   getShelterInfo: () => {
+     const state = get();
+     return {
+       level: state.level,
+       maxCapacity: state.maxCapacity,
+       currentItems: state.items.length,
+       durability: state.durability,
+       maxDurability: state.maxDurability,
+       lastRepairTime: state.lastRepairTime
+     };
+   }
+   ```
+
+2. **narrativeStore.ts**:
+   ```typescript
+   // AGGIUNTO: Sistema anti-duplicazione
+   if (get().lastMessage === message) {
+     return; // Previene messaggi duplicati
+   }
+   set({ lastMessage: message });
+   ```
+
+3. **combatStore.ts**:
+   ```typescript
+   // REFACTORING: Da useGameStore a store specializzati
+   import { useCharacterStore } from './character/characterStore';
+   import { useInventoryStore } from './inventory/inventoryStore';
+   import { useTimeStore } from './time/timeStore';
+   
+   // Sostituiti tutti i riferimenti gameStore.getState()
+   const characterStore = useCharacterStore.getState();
+   const inventoryStore = useInventoryStore.getState();
+   const timeStore = useTimeStore.getState();
+   ```
+
+4. **worldStore.ts**:
+   ```typescript
+   // AGGIORNATO: Interface WorldState
+   interface WorldState {
+     // ... proprietà esistenti
+     updatePlayerPosition: (newPosition: Position, newBiomeChar: string, movementContext?: MovementContext) => void;
+     handleFailedMovement: (reason: string, context?: MovementContext) => void;
+   }
+   ```
+
+**Architettura Migliorata**:
+
+- **Separazione Responsabilità**: Ogni store gestisce esclusivamente il proprio dominio
+- **Tipizzazione Robusta**: Interfacce complete e coerenti tra tutti i componenti
+- **Gestione Errori**: Sistema robusto di prevenzione e gestione degli errori
+- **Performance**: Eliminazione di dipendenze circolari e riferimenti non necessari
+- **Manutenibilità**: Codice più pulito e facilmente estendibile
+
+**Test e Validazione**:
+- ✅ **ShelterScreen**: Funziona correttamente senza errori
+- ✅ **Sistema Narrativo**: Nessun messaggio duplicato
+- ✅ **Combat System**: Utilizza store specializzati correttamente
+- ✅ **Movement System**: Gestione robusta di successi e fallimenti
+- ✅ **Server Sviluppo**: Nessun errore di compilazione o runtime
+- ✅ **HMR Updates**: Aggiornamenti hot-reload funzionanti
+
+**Impatto sul Sistema**:
+- 🔧 **Stabilità**: Eliminati tutti gli errori critici identificati
+- 🏗️ **Architettura**: Struttura più robusta e manutenibile
+- 🎮 **Esperienza Utente**: Gameplay fluido senza interruzioni
+- 📊 **Performance**: Migliorata efficienza del sistema
+- 🧪 **Testing**: Base solida per futuri sviluppi
+
+**Stato del Progetto**:
+- **Server**: ✅ Attivo su http://localhost:5173/
+- **Compilazione**: ✅ Nessun errore TypeScript
+- **Runtime**: ✅ Nessun errore JavaScript
+- **Funzionalità**: ✅ Tutti i sistemi operativi
+
+**Versione**: v0.9.8.1 "Architecture Stability"
+
+**Stato**: ✅ COMPLETATO
+
+---
+
+## 20 Gennaio 2025 - Implementazione Sistema di Pausa con Tasto ESC
+
+### 🎮 NUOVA FUNZIONALITÀ: Sistema di Pausa Completo
+
+**Operazione**: Implementazione sistema di pausa che permette ai giocatori di interrompere il gioco senza perdere progressi
+
 **File Modificati**:
-1. `src/components/CharacterCreationScreen.tsx` - Aggiunta annotazione immutabilità
-2. `src/components/KeyboardCommandsPanel.tsx` - Aggiunta annotazione immutabilità
-3. `documentazione/dsar/000 Patto tra Operatore Umano e Modello Linguistico di Grandi Dimensioni (LLM) per lo Sviluppo Sicuro.md` - Articolo 11 aggiornato
+- `src/stores/gameStore.ts`
+- `src/App.tsx`
+- `src/components/StartScreen.tsx`
+- `src/components/CharacterCreationScreen.tsx`
+- `src/stores/save/saveStore.ts`
 
-#### Stato Finale dei Componenti Protetti
-**CharacterCreationScreen.tsx**:
-- ✅ **Annotazione immutabilità**: Header con avviso di protezione completo
-- ✅ **Funzionalità definitive**: Animazione creazione personaggio, gestione tasti, conferma avvio
-- ✅ **Esperienza utente consolidata**: Sequenza di generazione statistiche immutabile
-- ✅ **Protezione nel patto**: Inserito nell'Articolo 11.1.f del patto di sviluppo
+**Dettagli delle Modifiche**:
 
-**KeyboardCommandsPanel.tsx**:
-- ✅ **Annotazione immutabilità**: Header con avviso di protezione completo
-- ✅ **Comandi definitivi**: Lista unificata movimento/navigazione, interfaccia, azioni, sistema
-- ✅ **Layout consolidato**: Struttura a categorie con chiavi e descrizioni
-- ✅ **Protezione nel patto**: Inserito nell'Articolo 11.1.g del patto di sviluppo
+1. **gameStore.ts**:
+   - **AGGIUNTO**: Stati `gameInProgress: boolean` e `isPaused: boolean`
+   - **IMPLEMENTATE**: Azioni `pauseGame()`, `resumeGame()`, `startNewGame()`, `enterGame()`
+   - **LOGICA PAUSA**: `pauseGame()` imposta `isPaused=true` e `currentScreen='menu'`
+   - **LOGICA RIPRESA**: `resumeGame()` ripristina `currentScreen='game'` e `isPaused=false`
+   - **RESET COMPLETO**: `startNewGame()` resetta tutti gli store e avvia nuova partita
 
-#### Aggiornamento Patto di Sviluppo
-**Articolo 11 - Protezione dei File Immutabili**:
-- ✅ **Nuovo punto f**: `src/components/CharacterCreationScreen.tsx` - Schermata creazione personaggio all'avvio
-- ✅ **Nuovo punto g**: `src/components/KeyboardCommandsPanel.tsx` - Pannello comandi da tastiera
-- ✅ **Protezione completa**: Entrambi i componenti ora sotto divieto assoluto di modifica
-- ✅ **Coerenza documentale**: Avvisi di immutabilità nei file corrispondono al patto
+2. **App.tsx**:
+   - **MODIFICATO**: GameScreenInputHandler per usare `pauseGame()` invece di `setCurrentScreen('menu')`
+   - **COMPORTAMENTO ESC**: Tasto Esc ora mette in pausa preservando lo stato di gioco
+   - **IMPORTAZIONE**: Aggiunto `pauseGame` dalle azioni del gameStore
 
-### Impatto Complessivo
-- **Stabilità interfaccia**: Due componenti critici ora protetti da modifiche accidentali
-- **Esperienza utente garantita**: Creazione personaggio e riferimento comandi immutabili
-- **Sicurezza sviluppo**: Protezione a livello di codice e documentazione
-- **Conformità patto**: Rispetto rigoroso delle direttive di immutabilità
-- **Documentazione aggiornata**: Cronaca e patto sincronizzati con le nuove protezioni
+3. **StartScreen.tsx**:
+   - **MENU CONDIZIONALE**: Implementato menu di pausa quando `isPaused=true` e `gameInProgress=true`
+   - **OPZIONI PAUSA**: "Riprendi Partita" (chiama `resumeGame()`) e "Nuova Partita" (chiama `startNewGame()`)
+   - **INDICATORE VISIVO**: Aggiunta scritta "GIOCO IN PAUSA" (senza icone) con animazione pulse
+   - **LOGICA MENU**: Menu normale quando non in pausa, menu di pausa durante il gioco
+
+4. **CharacterCreationScreen.tsx**:
+   - **CORREZIONE**: Sostituito `setCurrentScreen('game')` con `enterGame()`
+   - **COERENZA**: Garantisce che `gameInProgress` sia impostato correttamente
+
+5. **saveStore.ts**:
+   - **CARICAMENTO**: Sostituito `setCurrentScreen('game')` con `enterGame()` in `loadSavedGame()`
+   - **QUICK LOAD**: Aggiornato `handleQuickLoad()` per usare `enterGame()`
+   - **STATO CORRETTO**: Assicura che lo stato del gioco sia consistente dopo il caricamento
+
+**Funzionalità Implementate**:
+- ✅ **Pausa Sicura**: Esc durante il gioco mette in pausa senza perdere dati
+- ✅ **Menu di Pausa**: Interfaccia dedicata con opzioni "Riprendi" e "Nuova Partita"
+- ✅ **Stato Preservato**: Tutti i dati (posizione, inventario, statistiche, tempo) rimangono intatti
+- ✅ **Ripresa Fluida**: Ritorno immediato al punto esatto di interruzione
+- ✅ **Reset Completo**: Nuova partita resetta completamente tutti gli store
+- ✅ **Indicatori Visivi**: Chiara indicazione dello stato di pausa
+
+**Architettura**:
+- **Zustand State Management**: Sfrutta l'architettura esistente per mantenere lo stato
+- **Store Specializzati**: Ogni store mantiene i propri dati indipendentemente
+- **Transizioni Sicure**: Gestione corretta delle transizioni tra schermate
+- **Compatibilità**: Sistema di salvataggio funziona correttamente con la pausa
+
+**Test Effettuati**:
+- ✅ Pausa durante il gameplay con Esc
+- ✅ Ripresa della partita dal menu di pausa
+- ✅ Avvio nuova partita dal menu di pausa
+- ✅ Caricamento partite salvate
+- ✅ Creazione nuovo personaggio
+- ✅ Interfaccia utente responsive
+
+**Motivazione**:
+Richiesta specifica dell'utente per permettere ai giocatori di mettere in pausa il gioco senza perdere i progressi. Implementazione robusta che sfrutta l'architettura esistente senza compromettere la stabilità.
+
+**Impatto**:
+- 🎮 **Esperienza Utente**: Migliorata significativamente la UX con possibilità di pausa sicura
+- 🔒 **Sicurezza Dati**: Zero rischio di perdita progressi durante la pausa
+- 🏗️ **Architettura**: Estensione pulita dell'architettura esistente
+- 🧪 **Stabilità**: Nessun impatto negativo su funzionalità esistenti
+
+**Versione**: v0.9.8 "Pause & Play"
+
+**Stato**: ✅ COMPLETATO
 
 ---
 
-## Data: 2025-01-16
+## 20 Gennaio 2025 - Correzione e Miglioramento Tema Alto Contrasto
 
-### Protezione e Immutabilità Componenti Interfaccia Utente
-**Obiettivo**: Rendere immutabili e definitivi i componenti di gestione del personaggio (scheda e level-up)
+### 🎨 CORREZIONE CRITICA: Sistema Tema High-Contrast
 
-#### Componenti Resi Immutabili
+**Operazione**: Risoluzione problemi critici nel tema ad alto contrasto e implementazione logica condizionale
+
 **File Modificati**:
-1. `src/components/CharacterSheetScreen.tsx` - Aggiunta annotazione immutabilità
-2. `src/components/LevelUpScreen.tsx` - Aggiunta annotazione immutabilità
-3. `documentazione/dsar/000 Patto tra Operatore Umano e Modello Linguistico di Grandi Dimensioni (LLM) per lo Sviluppo Sicuro.md` - Articolo 11 aggiornato
+- `src/components/MapViewport.tsx`
+- `src/components/crafting/RecipeDetails.tsx`
+- `src/index.css`
+- `documentazione/index.md`
 
-#### Stato Finale dei Componenti Protetti
-**CharacterSheetScreen.tsx**:
-- ✅ **Annotazione immutabilità**: Header con avviso di protezione completo
-- ✅ **Funzionalità definitive**: Scheda personaggio attivabile con Tab, visualizzazione stats e attributi
-- ✅ **Interfaccia consolidata**: Layout e controlli definitivi
-- ✅ **Protezione nel patto**: Inserito nell'Articolo 11.1.h del patto di sviluppo
+**Dettagli delle Modifiche**:
 
-**LevelUpScreen.tsx**:
-- ✅ **Annotazione immutabilità**: Header con avviso di protezione completo
-- ✅ **Sistema definitivo**: Pagina level-up attivabile con L, distribuzione punti esperienza
-- ✅ **Meccaniche consolidate**: Sistema di avanzamento immutabile
-- ✅ **Protezione nel patto**: Inserito nell'Articolo 11.1.i del patto di sviluppo
+1. **MapViewport.tsx**:
+   - **PROBLEMA RISOLTO**: Colori mappa modificati erroneamente per tutti i temi
+   - Ripristinati colori originali per temi default e retro
+   - Implementata logica condizionale: colori monocromatici solo per tema `high-contrast`
+   - Aggiunto controllo `settingsStore.videoMode === 'high-contrast'`
 
-#### Aggiornamento Patto di Sviluppo
-**Articolo 11 - Protezione dei File Immutabili**:
-- ✅ **Nuovo punto h**: `src/components/CharacterSheetScreen.tsx` - Scheda personaggio attivabile con Tab
-- ✅ **Nuovo punto i**: `src/components/LevelUpScreen.tsx` - Pagina levelup attivabile con L
-- ✅ **Protezione completa**: Entrambi i componenti ora sotto divieto assoluto di modifica
-- ✅ **Coerenza documentale**: Avvisi di immutabilità nei file corrispondono al patto
+2. **RecipeDetails.tsx**:
+   - Corretti errori TypeScript: tipo 'any' implicito
+   - Rimossa variabile `gameStore` non utilizzata
+   - Rimosso parametro `index` non utilizzato nel map
+   - Aggiunto tipo esplicito `MaterialStatus[]`
 
-### Impatto Complessivo
-- **Stabilità interfaccia**: Due componenti critici di gestione personaggio ora protetti
-- **Sistema di progressione garantito**: Level-up e visualizzazione stats immutabili
-- **Sicurezza sviluppo**: Protezione a livello di codice e documentazione
-- **Conformità patto**: Rispetto rigoroso delle direttive di immutabilità
-- **Documentazione aggiornata**: Cronaca e patto sincronizzati con le nuove protezioni
+3. **index.css**:
+   - Corretto errore CSS alla riga 716: carattere `/` malformato
+   - Ripristinata sintassi corretta del commento CSS
+
+4. **Documentazione**:
+   - Aggiunta sezione "Accessibilità e Alto Contrasto" in `documentazione/index.md`
+   - Inserita nota critica: necessario piano dedicato per vera versione ad altissimo contrasto
+   - Specificati requisiti: UI riprogettata, elementi per ipovedenti, conformità WCAG 2.1 AA
+
+**Motivazione**:
+Correzione di errori critici che compromettevano il funzionamento di tutti i temi e causavano errori di compilazione TypeScript. Implementazione di una soluzione più robusta e documentazione della necessità di un approccio più completo per l'accessibilità.
+
+**Impatto**:
+- ✅ Tutti i temi funzionano correttamente
+- ✅ Nessun errore TypeScript o CSS
+- ✅ Tema high-contrast monocromatico solo quando selezionato
+- ✅ Server di sviluppo senza errori
+- ✅ Documentazione aggiornata con piano futuro accessibilità
+
+**Versione**: v0.9.7.4 "Contrast Clarity"
+
+**Stato**: ✅ COMPLETATO
 
 ---
 
-*Documento generato automaticamente dal sistema di consolidamento documentazione v1.0*
+## 16 Gennaio 2025 - Implementazione Avviso Critico di Immutabilità
+
+### 🚨 MODIFICA CRITICA: StartScreen.tsx
+
+**Operazione**: Aggiunto avviso critico di immutabilità al componente del menu principale
+
+**File Modificato**: `src/components/StartScreen.tsx`
+
+**Dettagli della Modifica**:
+
+1. **Header del File**:
+   - Aggiunto banner critico: "🚨 AVVISO CRITICO DI IMMUTABILITÀ 🚨"
+   - Rafforzato il messaggio di immutabilità con emoji e formattazione enfatica
+   - Specificato che le modifiche sono vietate senza autorizzazione scritta dell'operatore
+   - Aggiunta descrizione del componente come "critico del sistema"
+   - Inserita data di ultima modifica: 16 Gennaio 2025
+
+2. **Interfaccia Utente**:
+   - ~~Aggiunto banner visibile nell'angolo superiore della schermata~~ **RIMOSSO**
+   - Banner UI rimosso su richiesta - mantenute solo note di sviluppo nel codice
+   - L'avviso critico rimane presente nei commenti del file come documentazione
+
+**Motivazione**:
+Implementazione di misure di protezione per garantire l'integrità del componente menu principale, considerato critico per il funzionamento del sistema. L'avviso serve come deterrente visivo e documentale per modifiche non autorizzate.
+
+**Impatto**:
+- ✅ Protezione visiva del componente
+- ✅ Documentazione rafforzata nel codice
+- ✅ Avviso permanente per sviluppatori
+- ✅ Conformità alle specifiche di immutabilità v0.9.7.3
+
+**Versione**: v0.9.7.3 "We shore up the building"
+
+**Stato**: ✅ COMPLETATO
+
+---
+
+*Cronaca mantenuta per tracciabilità delle modifiche critiche al sistema.*

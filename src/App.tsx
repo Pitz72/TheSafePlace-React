@@ -51,7 +51,7 @@ const getTileDescription = (char: string): string => {
 };
 
 const GameScreenInputHandler = () => {
-  const { setCurrentScreen } = useGameStore();
+  const { setCurrentScreen, pauseGame, currentScreen } = useGameStore();
   usePlayerMovement({ setCurrentScreen });
   const { shortRest } = useSurvivalStore();
   const { addLogEntry } = useNotificationStore();
@@ -60,6 +60,12 @@ const GameScreenInputHandler = () => {
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
+      // Non gestire eventi se siamo in schermate che hanno i propri gestori
+      const screensWithOwnHandlers = ['shelter', 'crafting', 'inventory', 'characterSheet', 'levelUp'];
+      if (screensWithOwnHandlers.includes(currentScreen)) {
         return;
       }
       
@@ -74,14 +80,14 @@ const GameScreenInputHandler = () => {
         case 'l': event.preventDefault(); setCurrentScreen('levelUp'); break;
         case 'r': event.preventDefault(); shortRest(addLogEntry); break;
         case 'tab': event.preventDefault(); setCurrentScreen('characterSheet'); break;
-        case 'escape': event.preventDefault(); setCurrentScreen('menu'); break;
+        case 'escape': event.preventDefault(); pauseGame(); break;
         case 'f5': event.preventDefault(); handleQuickSave(); break;
         case 'f9': event.preventDefault(); handleQuickLoad(); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setCurrentScreen, shortRest, addLogEntry, handleQuickSave, handleQuickLoad]);
+  }, [setCurrentScreen, shortRest, addLogEntry, handleQuickSave, handleQuickLoad, currentScreen]);
 
   return null;
 };

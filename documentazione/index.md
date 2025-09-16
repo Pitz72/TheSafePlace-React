@@ -203,6 +203,15 @@ Documenti di testing avanzato:
 - Test automatizzati
 - Validazione continua
 
+### ♿ **Accessibilità e Alto Contrasto**
+
+**NOTA IMPORTANTE**: Prima del rilascio finale del gioco deve essere studiato un piano per la costruzione di una vera versione ad altissimo contrasto di tutto il gioco. L'attuale implementazione del tema high-contrast è limitata e non sufficiente per garantire piena accessibilità. Sarà necessario progettare un sistema dedicato che consideri:
+- Interfaccia completamente riprogettata per massimo contrasto
+- Elementi UI specifici per ipovedenti
+- Sistema di navigazione alternativo
+- Test con utenti con disabilità visive
+- Conformità alle linee guida WCAG 2.1 AA
+
 ### 🎯 [Crafting System](./crafting-system/) (2 documenti)
 
 Documentazione sistema crafting:

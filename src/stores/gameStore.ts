@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameState } from '../interfaces/gameState';
+import type { GameState, ShelterAccessInfo } from '../interfaces/gameState';
 import { useCharacterStore } from './character/characterStore';
 import { useTimeStore } from './time/timeStore';
 import { useInventoryStore } from './inventory/inventoryStore';
@@ -23,6 +23,10 @@ export interface CoreGameState {
   selectedInventoryIndex: number;
   cameraPosition: { x: number; y: number };
   
+  // Game State
+  gameInProgress: boolean;
+  isPaused: boolean;
+  
   // Callback per ricette
   unlockRecipesCallback?: (manualId: string) => void;
   
@@ -35,6 +39,12 @@ export interface CoreGameState {
   goBack: () => void;
   setMenuSelectedIndex: (index: number) => void;
   setSelectedInventoryIndex: (index: number) => void;
+  
+  // Game State Management
+  pauseGame: () => void;
+  resumeGame: () => void;
+  startNewGame: () => void;
+  enterGame: () => void;
   
   // Menu Actions
   handleNewGame: () => void;
@@ -74,6 +84,8 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   menuSelectedIndex: 0,
   selectedInventoryIndex: 0,
   cameraPosition: { x: 0, y: 0 },
+  gameInProgress: false,
+  isPaused: false,
   unlockRecipesCallback: undefined,
 
   // --- FACADE PROPERTIES (delegano ai store specializzati) ---
@@ -172,6 +184,37 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       previousScreen: state.currentScreen 
     }));
   },
+  
+  // --- GAME STATE MANAGEMENT ---
+  
+  pauseGame: () => {
+    set({ 
+      isPaused: true, 
+      currentScreen: 'menu',
+      previousScreen: 'game'
+    });
+  },
+  
+  resumeGame: () => {
+    set({ 
+      isPaused: false, 
+      currentScreen: 'game',
+      previousScreen: 'menu'
+    });
+  },
+  
+  startNewGame: () => {
+    // Reset di tutti gli store per iniziare una nuova partita
+    const worldStore = useWorldStore.getState();
+    worldStore.resetWorld();
+    
+    set({ 
+      gameInProgress: true,
+      isPaused: false,
+      currentScreen: 'characterCreation',
+      previousScreen: 'menu'
+    });
+  },
 
   goBack: () => {
     set(state => {
@@ -194,11 +237,20 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   // --- MENU ACTIONS ---
   
   handleNewGame: () => {
-    get().setCurrentScreen('characterCreation');
+    get().startNewGame();
   },
 
   handleLoadGame: () => {
     get().setCurrentScreen('loadGame');
+  },
+  
+  // Chiamata quando si entra effettivamente nel gioco
+  enterGame: () => {
+    set({ 
+      gameInProgress: true,
+      isPaused: false,
+      currentScreen: 'game'
+    });
   },
 
   handleStory: () => {
@@ -234,6 +286,35 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   // Time Actions
   advanceTime: (hours: number) => {
     useTimeStore.getState().advanceTime(hours);
+  },
+
+  // --- SHELTER SYSTEM DELEGATES ---
+  createShelterKey: (x: number, y: number) => {
+    return useShelterStore.getState().createShelterKey(x, y);
+  },
+
+  getShelterInfo: (x: number, y: number) => {
+    return useShelterStore.getState().getShelterInfo(x, y);
+  },
+
+  createShelterInfo: (x: number, y: number) => {
+    return useShelterStore.getState().createShelterInfo(x, y);
+  },
+
+  updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => {
+    useShelterStore.getState().updateShelterAccess(x, y, updates);
+  },
+
+  isShelterAccessible: (x: number, y: number) => {
+    return useShelterStore.getState().isShelterAccessible(x, y);
+  },
+
+  canInvestigateShelter: (x: number, y: number) => {
+    return useShelterStore.getState().canInvestigateShelter(x, y);
+  },
+
+  resetShelterInvestigations: () => {
+    useShelterStore.getState().resetShelterInvestigations();
   },
 }));
 

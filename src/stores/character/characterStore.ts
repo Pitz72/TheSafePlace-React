@@ -3,7 +3,7 @@ import type { ICharacterSheet, AbilityType } from '../../rules/types';
 import { createTestCharacter } from '../../rules/characterGenerator';
 import { equipItem } from '../../utils/equipmentManager';
 import { itemDatabase } from '../../data/items/itemDatabase';
-import { MessageType } from '../../data/MessageArchive';
+import { MessageType, JOURNAL_STATE } from '../../data/MessageArchive';
 import { useNotificationStore } from '../notifications/notificationStore';
 
 export interface CharacterState {
@@ -115,7 +115,34 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   },
 
   gainMovementXP: () => {
-    get().addExperience(Math.floor(Math.random() * 2) + 1);
+    const xpGained = Math.floor(Math.random() * 2) + 1;
+    const { characterSheet } = get();
+    const currentXP = characterSheet.experience.currentXP;
+    const newXP = currentXP + xpGained;
+    const canLevelUp = newXP >= characterSheet.experience.nextLevelXP;
+
+    // Update XP without notification
+    set({
+      characterSheet: {
+        ...characterSheet,
+        experience: {
+          ...characterSheet.experience,
+          currentXP: newXP,
+          canLevelUp,
+        },
+      },
+    });
+
+    // Show XP message only for the first movement
+    if (!JOURNAL_STATE.hasShownFirstMovementXP) {
+      const notificationStore = useNotificationStore.getState();
+      notificationStore.addLogEntry(MessageType.XP_GAIN, {
+        xpGained,
+        totalXP: newXP,
+        canLevelUp
+      });
+      JOURNAL_STATE.hasShownFirstMovementXP = true;
+    }
   },
 
   // --- INVENTORY MANAGEMENT ---

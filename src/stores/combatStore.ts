@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { CombatState, CombatResult, CombatActionType, CombatLogEntry } from '../types/combat';
-import { useGameStore } from './gameStore'; // To get player data
+import { useCharacterStore } from './character/characterStore';
+import { useInventoryStore } from './inventory/inventoryStore';
+import { useTimeStore } from './time/timeStore';
 import { createEnemyCombatant, updateEnemyHealthDescription } from '../utils/enemyUtils';
 import { rollToHit, rollDamage } from '../utils/combatCalculations';
 import { combatEncounters } from '../data/combatEncounters';
@@ -48,7 +50,10 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
       return;
     }
 
-    const { characterSheet, items } = useGameStore.getState();
+    const characterStore = useCharacterStore.getState();
+    const inventoryStore = useInventoryStore.getState();
+    const { characterSheet } = characterStore;
+    const { items } = inventoryStore;
 
     const playerCombatState = {
       hp: characterSheet.currentHP,
@@ -89,7 +94,8 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
 
   endCombat: (result) => {
     const { currentState } = get();
-    const gameStore = useGameStore.getState();
+    const characterStore = useCharacterStore.getState();
+    const inventoryStore = useInventoryStore.getState();
     if (!currentState) return;
 
     let finalResult: CombatResult = { type: result.type };
@@ -149,7 +155,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
       const newLogEntry: CombatLogEntry = {
         ...entry,
         id: `${Date.now()}-${Math.random()}`,
-        timestamp: useGameStore.getState().formatTime(useGameStore.getState().timeState.currentTime),
+        timestamp: useTimeStore.getState().formatTime(useTimeStore.getState().currentTime),
       };
 
       return {
@@ -192,7 +198,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
           const createLogEntry = (entry: Omit<CombatLogEntry, 'id' | 'timestamp'>): CombatLogEntry => ({
             ...entry,
             id: `${Date.now()}-${Math.random()}`,
-            timestamp: useGameStore.getState().formatTime(useGameStore.getState().timeState.currentTime),
+            timestamp: useTimeStore.getState().formatTime(useTimeStore.getState().currentTime),
           });
 
           newLogEntries.push(createLogEntry({

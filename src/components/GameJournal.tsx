@@ -3,6 +3,19 @@
  * 
  * Componente UI per la visualizzazione del Diario di Gioco Dinamico e Narrativo.
  * Mostra le voci del diario con colori categorizzati e auto-scroll.
+ * 
+ * ⚠️  AVVISO CRITICO DI IMMUTABILITÀ ⚠️
+ * QUESTO FILE È DICHIARATO DEFINITIVO E IMMUTABILE
+ * 
+ * Stato: CONTENUTO FINALE E DEFINITIVO
+ * Modifiche: VIETATE senza autorizzazione esplicita e scritta dell'Operatore Umano
+ * Protezione: Articolo 11 del Patto DSAR
+ * 
+ * Qualsiasi tentativo di modifica deve essere immediatamente segnalato
+ * come violazione del protocollo di sicurezza.
+ * 
+ * Data dichiarazione immutabilità: 21 Gennaio 2025
+ * ⚠️  FINE AVVISO CRITICO ⚠️
  */
 
 import React, { useEffect, useRef } from 'react';

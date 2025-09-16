@@ -313,7 +313,10 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
     getAvailableRecipes: () => {
       const { allRecipes, knownRecipeIds } = get();
-      return getAvailableRecipes(allRecipes, knownRecipeIds);
+      const available = getAvailableRecipes(allRecipes, knownRecipeIds);
+      debugLog(`[GET AVAILABLE DEBUG] Total recipes: ${allRecipes.length}, Known IDs: ${knownRecipeIds.length}, Available: ${available.length}`);
+      debugLog(`[GET AVAILABLE DEBUG] Known recipe IDs: ${JSON.stringify(knownRecipeIds)}`);
+      return available;
     },
 
     canCraftRecipe: (recipeId: string) => {
@@ -343,6 +346,8 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     initializeRecipes: async () => {
       const currentState = get();
       
+      debugLog(`[INIT DEBUG] Current state - isLoading: ${currentState.isLoading}, allRecipes.length: ${currentState.allRecipes.length}`);
+      
       // Prevenzione doppia inizializzazione usando singleton
       if (currentState.isLoading || currentState.allRecipes.length > 0) {
         debugLog('Recipes already loading or loaded, skipping initialization');
@@ -354,7 +359,15 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
 
       try {
         const recipeManager = RecipeManager.getInstance();
+        debugLog('[INIT DEBUG] RecipeManager instance obtained');
+        
         const recipes = await recipeManager.getRecipes();
+        debugLog(`[INIT DEBUG] RecipeManager returned ${recipes.length} recipes`);
+        
+        // Log delle prime 3 ricette per debug
+        if (recipes.length > 0) {
+          debugLog(`[INIT DEBUG] First recipe: ${recipes[0].id}, unlockedByLevel: ${recipes[0].unlockedByLevel}`);
+        }
 
         set({
           allRecipes: recipes,
@@ -459,11 +472,21 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const { allRecipes, knownRecipeIds } = get();
       const gameStore = useGameStore.getState();
 
+      debugLog(`[UNLOCK DEBUG] Starting unlock for level ${level}`);
+      debugLog(`[UNLOCK DEBUG] Total recipes available: ${allRecipes.length}`);
+      debugLog(`[UNLOCK DEBUG] Currently known recipes: ${knownRecipeIds.length} - ${knownRecipeIds.join(', ')}`);
+      
+      // Log delle ricette che hanno unlockedByLevel definito
+      const recipesWithLevel = allRecipes.filter(recipe => recipe.unlockedByLevel !== undefined);
+      debugLog(`[UNLOCK DEBUG] Recipes with unlockedByLevel: ${recipesWithLevel.length}`);
+      
       const recipesToUnlock = allRecipes.filter(recipe =>
         recipe.unlockedByLevel !== undefined &&
         recipe.unlockedByLevel <= level &&
         !knownRecipeIds.includes(recipe.id)
       );
+      
+      debugLog(`[UNLOCK DEBUG] Recipes to unlock: ${recipesToUnlock.length} - ${recipesToUnlock.map(r => r.id).join(', ')}`);
 
       if (recipesToUnlock.length > 0) {
         const newKnownRecipes = [...knownRecipeIds, ...recipesToUnlock.map(r => r.id)];
@@ -547,12 +570,17 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const gameStore = useGameStore.getState();
       
       if (!gameStore.characterSheet) {
-        debugLog('No character sheet available for starter recipes');
+        debugLog('[STARTER DEBUG] No character sheet available for starter recipes');
         return;
       }
 
+      debugLog('[STARTER DEBUG] Unlocking starter recipes');
+      debugLog(`[STARTER DEBUG] Current knownRecipes: ${gameStore.characterSheet.knownRecipes?.length || 0}`);
+
       // Assicura che il personaggio abbia lo starter kit
       const updatedCharacter = ensureStarterKit(gameStore.characterSheet);
+      debugLog(`[STARTER DEBUG] After ensureStarterKit, knownRecipes: ${updatedCharacter.knownRecipes?.length || 0}`);
+      debugLog(`[STARTER DEBUG] Known recipe IDs: ${JSON.stringify(updatedCharacter.knownRecipes)}`);
       
       // Se il personaggio è stato aggiornato, aggiorna il game store
       if (updatedCharacter !== gameStore.characterSheet) {
@@ -561,6 +589,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         
         // Sincronizza le ricette conosciute
         set({ knownRecipeIds: [...updatedCharacter.knownRecipes] });
+        debugLog(`[STARTER DEBUG] Set knownRecipeIds in crafting store: ${updatedCharacter.knownRecipes.length}`);
         
         // Notifica nel journal
         const notificationStore = useNotificationStore.getState();
@@ -568,10 +597,11 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
         });
         
-        debugLog(`Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
+        debugLog(`[STARTER DEBUG] Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
       } else {
         // Sincronizza comunque le ricette se già presenti
         get().syncWithGameStore();
+        debugLog('[STARTER DEBUG] Character already has starter kit, syncing with game store');
       }
     },
 

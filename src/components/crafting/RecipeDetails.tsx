@@ -43,7 +43,7 @@ export const RecipeDetails: React.FC<RecipeDetailsProps> = ({
   const renderRecipeHeader = () => {
     if (!recipe) return null;
 
-    const resultItem = gameStore.items[recipe.resultItemId];
+    const resultItem = gameStore.items[recipe.resultItemId as keyof typeof gameStore.items];
     const itemName = resultItem?.name || 'Oggetto Sconosciuto';
 
     return (
@@ -89,12 +89,12 @@ export const RecipeDetails: React.FC<RecipeDetailsProps> = ({
         </h4>
         
         <div className="space-y-2">
-          {materialStatus.map((material, index) => (
+          {materialStatus.map((material) => (
             <div 
               key={material.itemId}
               className="flex items-center justify-between p-3 bg-gray-800 rounded border-l-4"
               style={{
-                borderLeftColor: material.sufficient ? '#10b981' : '#ef4444'
+                borderLeftColor: material.sufficient ? '#ffffff' : '#ffffff'
               }}
             >
               <div className="flex-1">
@@ -297,12 +297,10 @@ export const RecipeDetails: React.FC<RecipeDetailsProps> = ({
  * Container che connette RecipeDetails al store
  */
 export const RecipeDetailsContainer: React.FC = () => {
-  const gameStore = useGameStore();
-  
   // Qui dovremmo usare il crafting store per ottenere la ricetta selezionata
   // Per ora usiamo un placeholder
   const selectedRecipe = null; // TODO: get from crafting store
-  const materialStatus = []; // TODO: get from crafting store
+  const materialStatus: MaterialStatus[] = []; // TODO: get from crafting store
   const meetsSkillRequirement = true; // TODO: calculate from character sheet
 
   return (

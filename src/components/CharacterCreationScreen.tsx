@@ -19,7 +19,7 @@ import { useCharacterStore } from '../stores/character/characterStore';
 
 const CharacterCreationScreen: React.FC = () => {
   const { characterSheet } = useCharacterStore();
-  const { setCurrentScreen, initializeGame } = useGameStore();
+  const { setCurrentScreen, initializeGame, enterGame } = useGameStore();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
@@ -39,8 +39,8 @@ const CharacterCreationScreen: React.FC = () => {
 
   const handleConfirm = useCallback(async () => {
     await initializeGame();
-    setCurrentScreen('game');
-  }, [setCurrentScreen, initializeGame]);
+    enterGame();
+  }, [enterGame, initializeGame]);
 
   useEffect(() => {
     if (!isAnimating) return;

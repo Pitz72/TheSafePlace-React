@@ -34,7 +34,6 @@ const KEYBOARD_COMMANDS: KeyboardCommand[] = [
   // Azioni
   { key: 'R', description: 'Riposo Breve', category: 'actions' },
   { key: 'L', description: 'Level Up', category: 'actions' },
-  { key: 'C', description: 'Crafting', category: 'actions' },
   
   // Sistema
   { key: 'F5', description: 'Salvataggio Rapido', category: 'system' },

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWorldStore } from '../stores/world/worldStore';
+import { useSettingsStore } from '../stores/settingsStore';
 
 interface MapViewportProps {
   className?: string;
@@ -34,6 +35,7 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth
   const playerPosition = useWorldStore(state => state.playerPosition);
   const cameraPosition = useWorldStore(state => state.cameraPosition);
   const updateCameraPosition = useWorldStore(state => state.updateCameraPosition);
+  const settingsStore = useSettingsStore();
 
   const [blinkState, setBlinkState] = useState(true);
 
@@ -65,6 +67,12 @@ const MapViewport: React.FC<MapViewportProps> = ({ className = '', viewportWidth
   }, [cameraPosition, viewportHeight, viewportWidth, mapData]);
 
   const getTileColor = (char: string): string => {
+    // Se il tema è high-contrast, usa solo bianco
+    if (settingsStore.videoMode === 'high-contrast') {
+      return '#ffffff';
+    }
+    
+    // Altrimenti usa i colori normali
     if (char === 'S' || char === 'E') return blinkState ? '#00ff00' : '#ffff00';
     return TILE_COLORS[char] || '#336940';
   };

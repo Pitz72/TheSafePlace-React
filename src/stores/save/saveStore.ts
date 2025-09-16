@@ -96,8 +96,8 @@ export const useSaveStore = create<SaveState>((set, get) => ({
                 });
 
                 survivalStore.updateSurvival(saveData.survivalState);
-    gameStore.setCurrentScreen('game');
-    notificationStore.restoreState({ 
+                gameStore.enterGame();
+                notificationStore.restoreState({ 
                   logEntries: saveData.logEntries || [], 
                   notifications: [] 
                 });
@@ -120,7 +120,7 @@ export const useSaveStore = create<SaveState>((set, get) => ({
     handleQuickLoad: async () => {
         const success = await get().loadSavedGame('quicksave');
         if (success) {
-            useGameStore.getState().setCurrentScreen('game');
+            useGameStore.getState().enterGame();
         }
         return success;
     },

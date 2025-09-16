@@ -100,21 +100,21 @@ function applyTheme(mode: VideoMode) {
       break;
       
     case 'high-contrast':
-      // High contrast black and white theme
+      // Monochromatic theme - ONLY white and black for accessibility
       root.style.setProperty('--phosphor-primary', '#ffffff');
-      root.style.setProperty('--phosphor-secondary', '#cccccc');
+      root.style.setProperty('--phosphor-secondary', '#ffffff');
       root.style.setProperty('--phosphor-bg', '#000000');
-      root.style.setProperty('--phosphor-panel-bg', '#111111');
+      root.style.setProperty('--phosphor-panel-bg', '#000000');
       root.style.setProperty('--phosphor-border', '#ffffff');
       root.style.setProperty('--phosphor-text', '#ffffff');
       root.style.setProperty('--phosphor-glow', '#ffffff');
       
-      // Map colors in high contrast
+      // Map colors - completely monochromatic
       root.style.setProperty('--phosphor-plains', '#ffffff');
-      root.style.setProperty('--phosphor-forest', '#cccccc');
-      root.style.setProperty('--phosphor-mountain', '#888888');
-      root.style.setProperty('--phosphor-water', '#666666');
-      root.style.setProperty('--phosphor-ruin', '#444444');
+      root.style.setProperty('--phosphor-forest', '#ffffff');
+      root.style.setProperty('--phosphor-mountain', '#ffffff');
+      root.style.setProperty('--phosphor-water', '#ffffff');
+      root.style.setProperty('--phosphor-ruin', '#ffffff');
       root.style.setProperty('--phosphor-special', '#ffffff');
       
       // Disable CRT effects for accessibility

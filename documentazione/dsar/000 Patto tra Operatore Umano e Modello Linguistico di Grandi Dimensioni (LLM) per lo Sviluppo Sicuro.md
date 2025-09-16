@@ -74,7 +74,7 @@ Questo documento stabilisce i principi inderogabili e il protocollo operativo ch
 #### **Articolo 11: Protezione dei File Immutabili**
 11.1. I seguenti file sono considerati **IMMUTABILI** e **PROTETTI** da qualsiasi modifica:
     a. `src/components/StoryScreen.tsx` - Pagina storia del gioco
-    b. `src/components/StartScreen.tsx` - Pagina istruzioni/menu principale
+    b. `src/components/StartScreen.tsx` - Schermata menu principale (IMMUTABILE - contenuto finale e definitivo)
     c. `src/components/LoadScreen.tsx` - Pagina caricamento partite
     d. `src/components/InventoryPanel.tsx` - Pannello inventario del gioco
     e. `src/components/WeatherDisplay.tsx` - Pannello meteo del gioco
@@ -82,6 +82,7 @@ Questo documento stabilisce i principi inderogabili e il protocollo operativo ch
     g. `src/components/KeyboardCommandsPanel.tsx` - Pannello comandi da tastiera
     h. `src/components/CharacterSheetScreen.tsx` - Scheda personaggio attivabile con Tab
     i. `src/components/LevelUpScreen.tsx` - Pagina levelup attivabile con L
+    j. `src/components/GameJournal.tsx` - Componente diario di gioco dinamico e narrativo
 11.2. Questi file contengono avvisi di immutabilità nel loro header e sono considerati **contenuto finale e definitivo**.
 11.3. **DIVIETO ASSOLUTO**: L'LLM non può modificare, alterare o suggerire modifiche a questi file senza **Autorizzazione Esplicita Scritta** dall'Operatore.
 11.4. Qualsiasi richiesta di modifica a questi file deve essere immediatamente segnalata come **violazione del protocollo di sicurezza** e l'LLM deve entrare in **Modalità Sicura** (Articolo 7).

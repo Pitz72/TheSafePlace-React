@@ -249,15 +249,19 @@ export async function loadRecipes(): Promise<RecipeLoadResult> {
     
     // Carica il file JSON
     const response = await fetch('/recipes.json');
+    debugLog(`[RECIPE LOADER DEBUG] Fetch response status: ${response.status}`);
     
     if (!response.ok) {
       throw new Error(`Failed to load recipes: ${response.status} ${response.statusText}`);
     }
 
     const data: RecipeDatabase = await response.json();
+    debugLog(`[RECIPE LOADER DEBUG] Raw data loaded, recipes count: ${data.recipes?.length || 0}`);
+    debugLog(`[RECIPE LOADER DEBUG] First recipe ID: ${data.recipes?.[0]?.id || 'none'}`);
     
     // Valida i dati
     const result = validateRecipeDatabase(data);
+    debugLog(`[RECIPE LOADER DEBUG] Validation result: success=${result.success}, recipes=${result.recipes?.length || 0}`);
     
     if (result.success) {
       // Aggiorna cache

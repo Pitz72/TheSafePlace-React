@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useCraftingStore } from '../stores/craftingStore';
 import { useGameStore } from '../stores/gameStore';
+import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { canCraftRecipe, meetsSkillRequirement, getMaterialStatus } from '../utils/craftingUtils';
 import type { Recipe } from '../types/crafting';
 import type { IInventorySlot } from '../interfaces/items';
@@ -68,6 +69,9 @@ const MATERIAL_COLORS = {
 };
 
 const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit }) => {
+  // DEBUG: Aggiungi logging per investigare il problema
+  console.log('[CRAFTING DEBUG] CraftingScreenCore component mounted');
+  
   // Validazione della funzione onExit
   const safeOnExit = useCallback(() => {
     if (typeof onExit === 'function') {
@@ -104,11 +108,14 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
   const craftingStore = useCraftingStore();
   const gameStore = useGameStore();
   const inventoryStore = useInventoryStore();
-  const addLogEntry = useGameStore(state => state.addLogEntry);
-
-  useEffect(() => {
-    addLogEntry(MessageType.ACTION_SUCCESS, { action: 'Accessing workbench...' });
-  }, [addLogEntry]);
+  
+  // DEBUG: Log store states
+  console.log('[CRAFTING DEBUG] Store states:', {
+    craftingStoreLoaded: !!craftingStore,
+    gameStoreLoaded: !!gameStore,
+    inventoryStoreLoaded: !!inventoryStore,
+    recipesCount: craftingStore?.allRecipes?.length || 0
+  });
 
   // Computed values
   const allRecipes = craftingStore.allRecipes;
@@ -164,14 +171,18 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         return;
       }
       
+      console.log('[CRAFTING DEBUG] CraftingScreen: Starting initialization');
       setIsInitialized(true);
       setInitializationError(null);
       
       try {
         // Inizializza ricette solo se non sono già caricate
         if (craftingStore.allRecipes.length === 0) {
+          console.log('[CRAFTING DEBUG] CraftingScreen: Recipes not loaded, initializing...');
           await craftingStore.initializeRecipes();
         }
+        
+        console.log('[CRAFTING DEBUG] CraftingScreen: Recipes initialized, length:', craftingStore.allRecipes.length);
         
         // Sblocca ricette starter se necessario
         if (isMounted && characterSheet) {
@@ -179,12 +190,17 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
           
           // Poi sblocca ricette per livello
           const currentLevel = Math.floor(characterSheet.experience.currentXP / 100) + 1;
+          console.log('[CRAFTING DEBUG] CraftingScreen: Unlocking recipes for level:', currentLevel);
           craftingStore.unlockRecipesByLevel(currentLevel);
+          
+          console.log('[CRAFTING DEBUG] CraftingScreen: Available recipes after unlock:', craftingStore.getAvailableRecipes().length);
         }
+        
+        console.log('[CRAFTING DEBUG] CraftingScreen: Component initialized successfully');
       } catch (error) {
         if (isMounted) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          console.error('CraftingScreen: Failed to initialize recipes:', errorMessage);
+          console.error('[CRAFTING DEBUG] CraftingScreen: Failed to initialize recipes:', errorMessage);
           setInitializationError(errorMessage);
           setIsInitialized(false); // Permetti retry
         }

@@ -76,21 +76,21 @@ export function getItemColor(item: IItem): string {
   const colorClass = getItemColorClass(item);
   
   const colorMap: Record<string, string> = {
-    'item-weapon': '#FF4444',
-    'item-armor': '#4169E1',
-    'item-consumable': '#32CD32',
-    'item-quest': '#FFD700',
-    'item-crafting': '#DDA0DD',
-    'item-unique': '#FF69B4',
-    'item-potion': '#00CED1',
-    'item-common': '#C0C0C0',
-    'item-uncommon': '#90EE90',
-    'item-rare': '#4169E1',
-    'item-epic': '#9370DB',
-    'item-legendary': '#FFD700'
+    'item-weapon': '#ffffff',
+    'item-armor': '#ffffff',
+    'item-consumable': '#ffffff',
+    'item-quest': '#ffffff',
+    'item-crafting': '#ffffff',
+    'item-unique': '#ffffff',
+    'item-potion': '#ffffff',
+    'item-common': '#ffffff',
+    'item-uncommon': '#ffffff',
+    'item-rare': '#ffffff',
+    'item-epic': '#ffffff',
+    'item-legendary': '#ffffff'
   };
   
-  return colorMap[colorClass] || '#C0C0C0';
+  return colorMap[colorClass] || '#ffffff';
 }
 
 /**

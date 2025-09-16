@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { TimeState } from '../../interfaces/gameState';
 import { useNotificationStore } from '../notifications/notificationStore';
 import { useSurvivalStore } from '../survival/survivalStore';
-import { MessageType } from '../../data/MessageArchive';
+import { MessageType, JOURNAL_STATE, resetJournalState } from '../../data/MessageArchive';
 import { playerMovementService } from '../../services/playerMovementService';
 
 const DAWN_TIME = 360; // 06:00
@@ -18,7 +18,8 @@ export interface WorldState {
 
   // Actions
   loadMap: () => Promise<void>;
-  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiomeChar: string) => void;
+  updatePlayerPosition: (newPosition: { x: number; y: number }, newBiomeChar: string, movementContext?: { isEnteringRiver?: boolean }) => void;
+  handleFailedMovement: (targetX: number, targetY: number, terrain: string) => void;
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   advanceTime: (minutes?: number) => void;
   getBiomeKeyFromChar: (char: string) => string;
@@ -65,7 +66,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     }
   },
 
-  updatePlayerPosition: (newPosition, newBiomeChar) => {
+  updatePlayerPosition: (newPosition, newBiomeChar, movementContext) => {
     const oldBiome = get().currentBiome;
     const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
     const oldPos = get().playerPosition;
@@ -84,17 +85,30 @@ export const useWorldStore = create<WorldState>((set, get) => ({
       notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: newBiomeKey });
     }
 
-    // 3. Log movement
-    if (hasMoved) {
-      notificationStore.addLogEntry(MessageType.MOVEMENT, {
-        from: oldPos,
-        to: newPosition,
-        biome: newBiomeKey
-      });
+    // 2.1. Show first biome message (plains) only once
+    if (!JOURNAL_STATE.hasShownFirstBiome && newBiomeKey === 'plains' && hasMoved) {
+      notificationStore.addLogEntry(MessageType.BIOME_ENTER, { biome: 'plains' });
+      JOURNAL_STATE.hasShownFirstBiome = true;
+    }
+
+    // 3. Log specific movement actions (only for special terrains)
+    if (hasMoved && newBiomeChar === '~') {
+      // River movement - always log river crossing
+      notificationStore.addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
     }
 
     // 4. Delegate all side effects to the service
     playerMovementService.handleMovementEffects(newBiomeKey);
+  },
+
+  handleFailedMovement: (targetX, targetY, terrain) => {
+    const notificationStore = useNotificationStore.getState();
+    
+    // Generate appropriate failure message based on terrain
+    if (terrain === 'M') {
+      notificationStore.addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
+    }
+    // Add other terrain-specific failure messages as needed
   },
 
   updateCameraPosition: (viewportSize) => {
@@ -182,7 +196,8 @@ export const useWorldStore = create<WorldState>((set, get) => ({
       cameraPosition: { x: 0, y: 0 },
       timeState: { currentTime: DAWN_TIME, day: 1, isDay: true },
       currentBiome: null,
-    })
+    });
+    resetJournalState();
   },
 
   restoreState: (state) => {

@@ -11,14 +11,14 @@ export function getRandomMessage(type: MessageType, context?: Record<string, any
   // Verifica che il tipo sia definito
   if (type === undefined || type === null) {
     console.warn('Tipo di messaggio non definito, usando messaggio di default');
-    return 'Un evento misterioso accade nel mondo desolato.';
+    return 'Errore: tipo di messaggio non definito.';
   }
   
   const messages = MESSAGE_ARCHIVE[type];
   
   if (!messages) {
     console.warn(`Nessun messaggio trovato per il tipo: ${type}`);
-    return 'Un evento misterioso accade nel mondo desolato.';
+    return `Errore: nessun messaggio definito per il tipo ${type}.`;
   }
   
   // Gestione speciale per MessageType che utilizzano parametri specifici dal context
@@ -145,6 +145,8 @@ export const JOURNAL_STATE = {
   visitedBiomes: new Set<string>(), // Biomi già visitati
   lastAmbianceTime: 0, // Timestamp ultimo messaggio ambientale
   gameStartSequenceIndex: 0, // Indice per la sequenza GAME_START
+  hasShownFirstMovementXP: false, // Flag per il primo messaggio XP
+  hasShownFirstBiome: false, // Flag per il primo bioma (pianura)
 };
 
 // Funzione per resettare lo stato del journal
@@ -152,6 +154,8 @@ export function resetJournalState(): void {
   JOURNAL_STATE.visitedBiomes.clear();
   JOURNAL_STATE.lastAmbianceTime = 0;
   JOURNAL_STATE.gameStartSequenceIndex = 0;
+  JOURNAL_STATE.hasShownFirstMovementXP = false;
+  JOURNAL_STATE.hasShownFirstBiome = false;
 }
 
 export enum MessageType {
@@ -284,6 +288,12 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
       "La corrente sussurra storie di tempi migliori."
     ],
     // Fallback per biomi non mappati
+    'UNKNOWN': [
+      "Ti trovi in un territorio inesplorato.",
+      "Questo luogo nasconde ancora i suoi segreti.",
+      "Un'area misteriosa si apre davanti a te.",
+      "Una zona non mappata si estende davanti a te."
+    ],
     'default': [
       "Ti trovi in un territorio inesplorato.",
       "Questo luogo nasconde ancora i suoi segreti.",

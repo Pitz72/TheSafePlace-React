@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
+import { useWorldStore } from '../stores/world/worldStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useInventoryStore } from '../stores/inventory/inventoryStore';
@@ -36,6 +37,10 @@ const ShelterScreen: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
       const key = event.key.toLowerCase();
       
       // Gestione ESC standardizzata - torna alla mappa di gioco
@@ -198,15 +203,43 @@ const ShelterScreen: React.FC = () => {
 
   const handleWorkbench = () => {
     // Verifica se il crafting è disponibile (solo nei rifugi)
-    const { x, y } = playerPosition;
-    const currentTile = useGameStore.getState().mapData[y]?.[x];
+    // Usa direttamente il worldStore per evitare problemi di sincronizzazione
+    const worldStore = useWorldStore.getState();
+    const { x, y } = worldStore.playerPosition;
+    const currentTile = worldStore.mapData[y]?.[x];
+    
+    // DEBUG: Aggiungi logging per investigare il problema
+    console.log('[WORKBENCH DEBUG] Player position from worldStore:', { x, y });
+    console.log('[WORKBENCH DEBUG] Current tile:', currentTile);
+    console.log('[WORKBENCH DEBUG] Map data at position:', worldStore.mapData[y]);
+    console.log('[WORKBENCH DEBUG] Full map data length:', worldStore.mapData.length);
+    
+    // Verifica che la mappa sia caricata e la posizione sia valida
+    if (!worldStore.mapData || worldStore.mapData.length === 0) {
+      console.log('[WORKBENCH DEBUG] Map data not loaded');
+      addLogEntry(MessageType.ACTION_FAIL, {
+        reason: 'mappa non caricata correttamente'
+      });
+      return;
+    }
+    
+    if (x === -1 || y === -1) {
+      console.log('[WORKBENCH DEBUG] Invalid player position');
+      addLogEntry(MessageType.ACTION_FAIL, {
+        reason: 'posizione del giocatore non valida'
+      });
+      return;
+    }
     
     if (currentTile !== 'R') {
+      console.log('[WORKBENCH DEBUG] Tile verification failed - expected R, got:', currentTile);
       addLogEntry(MessageType.ACTION_FAIL, {
         reason: 'il banco di lavoro è disponibile solo nei rifugi sicuri'
       });
       return;
     }
+    
+    console.log('[WORKBENCH DEBUG] Tile verification passed - opening crafting screen');
     
     // Apri la schermata di crafting
     setCurrentScreen('crafting');

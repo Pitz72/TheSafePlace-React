@@ -63,8 +63,9 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
     // Terreno invalicabile: Montagne
     if (terrain === 'M') {
       console.log(`🏔️ Movimento bloccato: montagna a (${x}, ${y})`);
-      // Aggiungi messaggio ironico per tentativo di attraversare montagna
-      addLogEntry(MessageType.MOVEMENT_FAIL_MOUNTAIN);
+      // Gestisci il messaggio di movimento fallito tramite worldStore
+      const { handleFailedMovement } = useWorldStore.getState();
+      handleFailedMovement(x, y, terrain);
       return false;
     }
 
@@ -90,7 +91,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
           isInRiver: true,
           riverPosition: { x: nextX, y: nextY }
         });
-        addLogEntry(MessageType.MOVEMENT_ACTION_RIVER);
+        // Il messaggio sarà gestito da worldStore per evitare duplicati
         // Primo turno perso - avanza tempo ma non muovere ancora
         advanceTime(10);
         return; // Blocca il movimento, richiede seconda pressione
@@ -108,8 +109,11 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
       setMovementState({ isExitingRiver: false, isInRiver: false, riverPosition: null });
     }
 
-    // Chiama la nuova funzione centralizzata, passando anche il bioma
-    updatePlayerPosition({ x: nextX, y: nextY }, nextTerrain);
+    // Chiama la nuova funzione centralizzata, passando anche il bioma e contesto
+    const movementContext = {
+      isEnteringRiver: nextTerrain === '~' && !movementState.isInRiver
+    };
+    updatePlayerPosition({ x: nextX, y: nextY }, nextTerrain, movementContext);
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {

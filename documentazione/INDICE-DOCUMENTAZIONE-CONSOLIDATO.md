@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.9.7 - This is Ultimo's Story
+## The Safe Place v0.9.7.4 - The Fix Era Part 1
 
 **Stato**: CONSOLIDATO E AGGIORNATO
-**Ultima Revisione**: 2025-01-20
-**Versione Attiva**: v0.9.7 "This is Ultimo's Story"
+**Ultima Revisione**: 2025-01-21
+**Versione Attiva**: v0.9.7.4 "The Fix Era Part 1"
 
 ---
 
@@ -36,6 +36,7 @@
 - ✅ **[Test Suite Documentation](../src/tests/README.md)** - Documentazione suite di test
 
 ### 🛡️ **Protezioni Anti-Regressione ATTIVE**
+- ✅ **[ANTI-REGRESSIONE-v0.9.7.4.md](./anti-regressione/ANTI-REGRESSIONE-v0.9.7.4.md)** - **PROTEZIONE ATTIVA v0.9.7.4** - The Fix Era Part 1
 - ✅ **[ANTI_REGRESSION_GUIDE.md](../ANTI_REGRESSION_GUIDE.md)** - PROTEZIONE ATTIVA v0.9.0
 - ✅ **[ANTI-REGRESSIONE-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.5-CRAFTING-FULL-AND-REAL-INTEGRATION.md)** - Protezione v0.8.5 (Storico)
 - ✅ **[ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md](./anti-regressione/ANTI-REGRESSIONE-v0.8.4-IM-CONSTANTLY-TIDYING-UP-MY-DESK.md)** - Protezione v0.8.4 (Storico)
@@ -47,7 +48,8 @@
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog e Consolidamento Corrente**
-- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE CORRENTE v0.9.7 "This is Ultimo's Story"
+- ✅ **[CHANGELOG-v0.9.7.4.md](./changelog/CHANGELOG-v0.9.7.4.md)** - **VERSIONE CORRENTE v0.9.7.4** "The Fix Era Part 1"
+- ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE PRECEDENTE v0.9.7 "This is Ultimo's Story"
 - ✅ **[CHANGELOG-v0.9.7.md](./changelog/CHANGELOG-v0.9.7.md)** - Sistema Narrativo Canonico Completo
 - ✅ **[ANTI-REGRESSION-v0.9.7.md](./anti-regressione/ANTI-REGRESSION-v0.9.7.md)** - Protezione v0.9.7
 - ✅ **[CHANGELOG-v0.9.6.1.md](../CHANGELOG-v0.9.6.1.md)** - Patch Sincronizzazione Store (Precedente)

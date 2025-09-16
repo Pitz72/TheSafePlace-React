@@ -50,38 +50,41 @@
   /* Colore testo notturno */
   --phosphor-night-blue: #00BFFF;
   
-  /* Colori messaggi diario - v0.4.1 "Enhanced Colors" */
-  --journal-welcome: #FFD700;     /* Giallo acceso per benvenuto */
-  --journal-standard: var(--phosphor-primary); /* Verde standard */
-  --journal-river: var(--phosphor-water);      /* Blu acqua per fiumi */
-  --journal-warning: #FFA500;     /* Arancione per avvertimenti */
-  --journal-ambiance: var(--phosphor-dim);     /* Verde scuro per atmosfera */
-  --journal-success: #00FF7F;     /* Verde brillante per successi */
-  --journal-failure: #FF4444;     /* Rosso per fallimenti */
-  --journal-hp-recovery: #32CD32; /* Verde lime per guarigione */
-  --journal-hp-damage: #DC143C;   /* Rosso cremisi per danni */
-  --journal-rest: #87CEEB;        /* Azzurro per riposo */
-  --journal-item: #FFD700;        /* Oro per oggetti */
-  --journal-time-dawn: #FFA500;   /* Arancione alba */
-  --journal-time-dusk: #4169E1;   /* Blu royal tramonto */
-  --journal-time-night: #191970;  /* Blu notte */
-  --journal-discovery: #FF69B4;   /* Rosa per scoperte */
-  --journal-danger: #FF0000;      /* Rosso puro per pericoli */
-  --journal-mystery: #9370DB;     /* Viola per misteri */
+  /* Colori messaggi diario - v0.4.1 "Enhanced Colors" - HIGH CONTRAST MONOCHROME */
+  --journal-welcome: #ffffff;     /* Bianco per benvenuto */
+  --journal-standard: #ffffff;    /* Bianco standard */
+  --journal-river: #ffffff;       /* Bianco per fiumi */
+  --journal-warning: #ffaa00;     /* Arancione per avvertimenti */
+  --journal-standard: #00ff88;    /* Verde chiaro per messaggi standard */
+  --journal-success: #00ff00;     /* Verde brillante per successi */
+  --journal-failure: #ff4444;     /* Rosso per fallimenti */
+  --journal-hp-recovery: #44ff44; /* Verde per guarigione */
+  --journal-hp-damage: #ff2222;   /* Rosso intenso per danni */
+  --journal-rest: #88aaff;        /* Blu chiaro per riposo */
+  --journal-item: #ffff44;        /* Giallo per oggetti */
+  --journal-ambiance: #aaaaaa;    /* Grigio per atmosfera */
+  --journal-river: #4488ff;       /* Blu per fiume */
+  --journal-welcome: #ff88ff;     /* Magenta per benvenuto */
+  --journal-discovery: #ffaa88;   /* Arancione chiaro per scoperte */
+  --journal-danger: #ff0000;      /* Rosso intenso per pericoli */
+  --journal-mystery: #aa88ff;     /* Viola per misteri */
+  --journal-time-dawn: #ffdd88;   /* Giallo dorato per alba */
+  --journal-time-dusk: #ff8844;   /* Arancione per tramonto */
+  --journal-time-night: #8888ff;  /* Blu per notte */
   
-  /* Colori oggetti inventario - v0.4.1 "Enhanced Item Colors" */
-  --item-weapon: #FF4444;         /* Rosso brillante per armi */
-  --item-armor: #4169E1;          /* Blu royal per armature */
-  --item-consumable: #00FF7F;     /* Verde spring per consumabili */
-  --item-quest: #FFD700;          /* Oro per oggetti quest */
-  --item-crafting: #DA70D6;       /* Orchidea per crafting */
-  --item-unique: #FF1493;         /* Rosa profondo per oggetti unici */
-  --item-potion: #00FFFF;         /* Ciano per pozioni */
-  --item-common: #D3D3D3;         /* Grigio chiaro per comuni */
-  --item-uncommon: #ADFF2F;       /* Verde giallo per non comuni */
-  --item-rare: #1E90FF;           /* Blu dodger per rari */
-  --item-epic: #8A2BE2;           /* Viola blu per epici */
-  --item-legendary: #FF8C00;      /* Arancione scuro per leggendari */
+  /* Colori oggetti inventario - v0.4.1 "Enhanced Item Colors" - HIGH CONTRAST MONOCHROME */
+  --item-weapon: #ffffff;         /* Bianco per armi */
+  --item-armor: #ffffff;          /* Bianco per armature */
+  --item-consumable: #ffffff;     /* Bianco per consumabili */
+  --item-quest: #ffffff;          /* Bianco per oggetti quest */
+  --item-crafting: #ffffff;       /* Bianco per crafting */
+  --item-unique: #ffffff;         /* Bianco per oggetti unici */
+  --item-potion: #ffffff;         /* Bianco per pozioni */
+  --item-common: #ffffff;         /* Bianco per comuni */
+  --item-uncommon: #ffffff;       /* Bianco per non comuni */
+  --item-rare: #ffffff;           /* Bianco per rari */
+  --item-epic: #ffffff;           /* Bianco per epici */
+  --item-legendary: #ffffff;      /* Bianco per leggendari */
   
   /* Container System - Preparazione */
   --game-width: 1920px;
@@ -713,8 +716,9 @@ body {
 
 .scrollbar-phosphor::-webkit-scrollbar-corner {
   background: #1a1a1a;
-}/
-* Glow effects per feedback crafting */
+}
+
+/* Glow effects per feedback crafting */
 .glow-green {
   box-shadow: 0 0 10px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.3);
 }

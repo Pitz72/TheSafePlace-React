@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { LogEntry } from '../../interfaces/gameState';
 import { MessageType, getRandomMessage } from '../../data/MessageArchive';
+import { useWorldStore } from '../world/worldStore';
 
 export interface NotificationState {
   // State
@@ -32,16 +33,18 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   // --- ACTIONS ---
   
   addLogEntry: (type: MessageType, context?: any) => {
+    const worldStore = useWorldStore.getState();
+    const gameTime = worldStore.timeState.currentTime;
     const timestamp = Date.now();
     const id = `${timestamp}-${Math.random().toString(36).substr(2, 9)}`;
     
     // Genera il messaggio usando getRandomMessage
-    const message = getRandomMessage(type, context) || 'Un evento misterioso accade.';
+    const message = getRandomMessage(type, context) || `Evento di tipo ${type} senza messaggio definito.`;
     
     const newEntry: LogEntry = {
       id,
       type,
-      timestamp: new Date(timestamp).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: worldStore.formatTime(gameTime),
       message,
       context: context || {}
     };
