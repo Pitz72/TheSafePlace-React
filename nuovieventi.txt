@@ -1,0 +1,726 @@
+NUOVI EVENTI PIANURE
+
+EVENTO UNICO La Lettera Mai Spedita
+ID: plains_unsent_letter
+Titolo: Le Ultime Parole
+Descrizione: Accanto allo scheletro di un vecchio postino, la sua borsa di pelle a brandelli è aperta come una ferita. Una singola lettera, quasi miracolosamente protetta da una busta di plastica ingiallita, è scivolata fuori. L'inchiostro è sbiadito, ma ancora leggibile. È indirizzata a una certa "Anna".
+Choices:
+"Leggi la lettera. Devi sapere."
+Result Text:
+"Apri con delicatezza la busta. La carta è fragile. La calligrafia è elegante, ma diventa tremolante verso la fine, come se la mano che scriveva stesse lottando contro il tempo e la disperazione. Leggi uno stralcio:"
+"...Anna, amore mio,
+Non so se queste parole ti raggiungeranno mai. Il mondo sta impazzendo. Dicono che il Silenzio sia solo l'inizio. Ma io non ci credo. Finché respiro, continuerò a camminare verso di te. Ricordo ancora la promessa che ci siamo fatti sotto il vecchio salice: qualunque cosa accada, ci ritroveremo lì. Non importa quanto sarà buio. Non importa quanto sarà lungo il viaggio.
+Ho trovato delle provviste. Basteranno. Ho ancora la tua foto, quella scattata al mare. La guardo ogni notte. Mi dà la forza. Mi ricorda che c'è ancora un 'noi' per cui lottare.
+Sto arrivando. Non perdere la speranza. Aspettami al salice...
+"La lettera si interrompe qui. Il postino non è mai arrivato. E probabilmente, nemmeno Anna. Ripieghi il foglio, un pezzo di una storia d'amore tragica e incompiuta. Il peso di tutte le promesse infrante di questo mondo ti sembra, per un istante, troppo pesante da sopportare."
+Emotional Impact: { "dominantEmotion": "melancholy", "lenaMemoryStrength": 10, "understandingLevel": 5 }
+"Lascia la lettera al suo messaggero caduto."
+Result Text:
+"Decidi che quella lettera contiene una promessa troppo intima per essere violata. È un segreto tra due persone che questo mondo ha separato. Con un gesto di rispetto, riponi la lettera nella borsa del postino, accanto a lui. Lasci che il loro segreto riposi in pace. Questo piccolo atto di rispetto per i morti ti riempie di una strana, solenne determinazione."
+Reward: { "type": "stat_boost", "stat": "carisma", "amount": 1, "duration": "temporary" }
+
+
+
+Il Cratere da Impatto
+ID: plains_impact_crater
+Titolo: Ferita della Terra
+Descrizione: Davanti a te si apre un piccolo cratere vetrificato, testimone di un impatto antico ma violento. Al centro, tra i frammenti di roccia fusa, noti un pezzo di metallo di forma strana, non terrestre.
+Choices:
+"Scendi con cautela per recuperare il metallo."
+Skill Check: agilita, difficulty: 12
+Success Text: "Riesci a scendere senza scivolare sulle superfici lisce. Il metallo è stranamente leggero e freddo al tatto. Non hai idea di cosa sia, ma sembra prezioso."
+Failure Text: "Scivoli lungo il pendio ripido, tagliandoti contro i bordi affilati del vetro nero. Il frammento di metallo rimane irraggiungibile."
+Items Gained (Successo): [{ "id": "meteorite_fragment", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 8 }
+"Evita il cratere. Potrebbe essere radioattivo."
+Action Key: "ignore"
+Result Text: "L'istinto di sopravvivenza prevale. Qualunque cosa sia caduta dal cielo, è meglio lasciarla dove si trova. Fai un largo giro."
+7. Sussurri Elettronici
+ID: plains_electronic_whispers
+Titolo: Voci Statiche
+Descrizione: Passando vicino a un groviglio di cavi che spuntano dal terreno, il tuo walkie-talkie (se ne hai uno) gracida con una scarica di statica. Tra il rumore, ti sembra di percepire frammenti di voci.
+Choices:
+"Tenta di sintonizzarti sulla frequenza."
+Item Requirement: [{ "id": "walkie_talkie", "quantity": 1 }]
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Dopo aver armeggiato con la manopola, riesci a isolare un frammento di trasmissione: '...ripeto, il punto di raccolta a Delta-7 è compromesso. Ripiegare su...'. La trasmissione si interrompe. Hai ottenuto un'informazione potenzialmente vitale."
+Failure Text: "Riesci solo ad amplificare la statica. Qualsiasi messaggio ci fosse, è perso per sempre nel rumore bianco."
+Reward (Successo): { "type": "lore_clue", "clueId": "delta_7_compromised" }
+"Strappa i cavi per recuperare il rame."
+Result Text: "Le voci fantasma non ti interessano. I cavi, invece, sono una fonte preziosa di rame. Li strappi dal terreno con fatica."
+Items Gained: [{ "id": "copper_wire", "quantity": 3 }]
+8. Sciame di Farfalle Mute
+ID: plains_mute_butterflies
+Titolo: Volo Silenzioso
+Descrizione: Uno sciame di centinaia di farfalle, tutte di un bianco spettrale, ti volteggia intorno in un silenzio innaturale. Non c'è il minimo battito d'ali. È uno spettacolo bellissimo e profondamente inquietante.
+Choices:
+"Cerca di catturarne qualcuna."
+Result Text: "Riesci a prenderne una. Osservandola da vicino, ti accorgi che non è un insetto, ma un piccolo drone di sorveglianza mimetizzato. Qualcuno sta osservando queste pianure."
+Items Gained: [{ "id": "surveillance_drone_small", "quantity": 1 }]
+Emotional Impact: { "pragmatismLevel": 5, "dominantEmotion": "paranoia" }
+"Rimani immobile e osservale."
+Result Text: "Resti immobile mentre lo sciame silenzioso ti passa accanto. È uno dei pochi momenti di pura, strana bellezza che hai visto da molto tempo. Ti senti stranamente rinvigorito."
+Reward: { "type": "status_heal", "status": "STRESSED" }
+9. Il Recinto di Filo Spinato
+ID: plains_barbed_wire_fence
+Titolo: Vecchio Confine
+Descrizione: Una lunga linea di filo spinato arrugginito si estende a perdita d'occhio, un vecchio confine che non separa più nulla. In un punto, vedi lo scheletro di un cervo impigliato.
+Choices:
+"Recupera il filo spinato con attenzione."
+Item Requirement: [{ "id": "gloves_work", "quantity": 1 }] (o simile)
+Skill Check: agilita, difficulty: 10
+Success Text: "Usando i guanti, riesci a tagliare e arrotolare una buona quantità di filo spinato senza ferirti. Sarà ottimo per fortificare un rifugio."
+Failure Text: "Il filo è teso e scatta all'indietro mentre lo tagli, lasciandoti un profondo graffio sul braccio."
+Items Gained (Successo): [{ "id": "barbed_wire_roll", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 5 }
+"Ispeziona lo scheletro del cervo."
+Result Text: "Ti avvicini allo scheletro. La maggior parte è stata spolpata, ma le corna sono intatte e possono essere usate come materiale o come arma improvvisata."
+Items Gained: [{ "id": "antlers", "quantity": 2 }]
+10. La Macchia d'Olio
+ID: plains_oil_slick
+Titolo: Piaga Nera
+Descrizione: Una vasta e densa macchia di olio nero e catramoso affiora dal terreno, soffocando ogni forma di vita. L'odore è acre.
+Choices:
+"Raccogli un po' di sostanza oleosa."
+Item Requirement: [{ "id": "empty_canister", "quantity": 1 }]
+Result Text: "Riempi con cautela una tanica. Questa sostanza è troppo grezza per essere usata come carburante, ma è altamente infiammabile. Potrebbe essere utile per creare molotov o per accendere fuochi umidi."
+Items Gained: [{ "id": "crude_oil_canister", "quantity": 1 }]
+"Cerca la fonte della perdita."
+Result Text: "Segui la macchia fino a un vecchio tubo arrugginito che spunta dal terreno. È una perdita da un oleodotto sotterraneo. Decidi di segnare il punto sulla mappa per future necessità."
+Reward: { "type": "special", "effect": "mark_oil_source" }
+11. Resti di un Aquilone
+ID: plains_kite_remains
+Titolo: Giocattolo Spezzato
+Descrizione: Impigliato in un cespuglio spinoso, trovi i resti di un aquilone colorato, il suo filo spezzato che serpeggia nel vento. Un'immagine malinconica di un'infanzia interrotta.
+Choices:
+"Recupera il filo e la stoffa."
+Result Text: "Con attenzione, liberi i resti dell'aquilone. La stoffa è robusta e il filo di nylon, sebbene aggrovigliato, è ancora molto resistente."
+Items Gained: [{ "id": "nylon_wire", "quantity": 1 }, { "id": "durable_cloth", "quantity": 1 }]
+"Lascialo come un monumento."
+Action Key: "ignore"
+Result Text: "Decidi di non toccarlo. Che rimanga lì, un piccolo, colorato monumento a un mondo che non c'è più. Prosegui, con un senso di tristezza nel cuore."
+12. Il Silenzio di una Battaglia
+ID: plains_battle_silence
+Titolo: Campo di Battaglia Silenzioso
+Descrizione: Ti imbatti in un'area disseminata di bossoli arrugginiti, piccole trincee improvvisate e i resti di equipaggiamento militare. Qui si è combattuta una piccola, disperata battaglia, molto tempo fa.
+Choices:
+"Cerca munizioni o equipaggiamento utilizzabile."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "La maggior parte delle cose è corrosa dal tempo, ma riesci a trovare una scatola di munizioni impermeabile semi-sepolta e un elmetto da combattimento ancora integro."
+Failure Text: "Hai cercato ovunque, ma le intemperie e altri saccheggiatori non hanno lasciato nulla di valore."
+Items Gained (Successo): [{ "id": "ammo_rifle", "quantity": 10 }, { "id": "combat_helmet", "quantity": 1 }]
+"Cerca di ricostruire cosa è successo."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Analizzando la disposizione dei bossoli e le posizioni, capisci che un piccolo gruppo si è difeso strenuamente da un attacco più numeroso, vendendo cara la pelle. La loro determinazione ti ispira."
+Failure Text: "È impossibile dire cosa sia successo. È solo un caos di violenza passata."
+Reward (Successo): { "type": "stat_boost", "stat": "vigore", "amount": 1, "duration": "permanent" }
+13. La Pozzanghera Iridescente
+ID: plains_iridescent_puddle
+Titolo: Acqua Arcobaleno
+Descrizione: Una grande pozzanghera riflette la luce con un luccichio innaturale, oleoso, simile a un arcobaleno. L'acqua sembra pulita, ma la patina colorata è sospetta.
+Choices:
+"Raccogli l'acqua e filtrala più tardi."
+Result Text: "Raccogli l'acqua. Non la berrai così com'è, ma con un buon filtro potresti riuscire a purificarla dai contaminanti chimici."
+Items Gained: [{ "id": "water_contaminated", "quantity": 2 }]
+"Analizza il terreno circostante."
+Result Text: "Noti che la contaminazione proviene da alcuni barili arrugginiti semi-sepolti poco più a monte. Evitando la pozzanghera, trovi un piccolo sentiero che aggira la zona contaminata, probabilmente tracciato da animali che hanno imparato a evitarla."
+Reward: { "type": "special", "effect": "reveal_safe_path" }
+14. Il Carillon del Vento
+ID: plains_wind_chime
+Titolo: Musica Fantasma
+Descrizione: Appeso all'unico ramo di un albero morto, un carillon a vento fatto di vecchie posate e pezzi di metallo emette un suono dissonante e malinconico a ogni soffio di vento.
+Choices:
+"Smontalo per recuperare i materiali."
+Result Text: "La musica è triste, ma i materiali sono utili. Smonti con cura il carillon, recuperando fili metallici e piccoli pezzi di metallo."
+Items Gained: [{ "id": "metal_wire", "quantity": 3 }, { "id": "scrap_metal_small", "quantity": 5 }]
+"Ascolta la sua canzone per un po'."
+Result Text: "Ti siedi e ascolti la musica casuale e triste del carillon. In questo mondo silenzioso, anche un suono così stonato ha una sua strana bellezza. Ti senti meno solo."
+Reward: { "type": "status_heal", "status": "LONELY" }
+
+ Il Glifo Solitario
+ID: plains_lone_glyph
+Titolo: Il Segno sul Sasso
+Descrizione: In mezzo a un'immensa distesa d'erba secca, trovi una singola, grande pietra piatta. Sulla sua superficie è inciso un glifo che non riconosci, ma che emana una strana sensazione di pace.
+Choices:
+"Tocca il glifo."
+Result Text: "Esitante, posi la mano sulla pietra fredda. Un calore inaspettato si diffonde attraverso di te, calmando i tuoi nervi e alleviando la tua stanchezza. Qualunque fosse lo scopo di questo segno, era benevolo."
+Reward: { "type": "status_heal", "status": ["TIRED", "ANXIOUS"] }, { "type": "hp_recovery", "amount": 5 }
+"Studia il glifo da lontano."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Osservando la forma e l'usura della pietra, capisci che è un antico segnavia. Il glifo non indica una direzione, ma un concetto: 'riposo sicuro qui'. Ti senti rassicurato, sapendo che per un po' sei al riparo da minacce immediate."
+Failure Text: "Il simbolo rimane un mistero. Potrebbe essere qualsiasi cosa. La prudenza ti suggerisce di non interagire con l'ignoto."
+Reward (Successo): { "type": "special", "effect": "prevent_random_encounter", "duration": "3_hours" }
+2. Campo di Fiori Cinerei
+ID: plains_ash_flowers
+Titolo: Fiori di Cenere
+Descrizione: Ti imbatti in un'area surreale dove dal terreno grigiastro spuntano centinaia di fiori delicati i cui petali sono del colore della cenere. Un vento leggero li fa ondeggiare, creando un'immagine di una bellezza triste e malinconica.
+Choices:
+"Raccogli alcuni fiori."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "Li esamini con attenzione. Noti che il polline ha proprietà leggermente soporifere e antisettiche. Potrebbero essere utili per creare bende calmanti o esche."
+Failure Text: "Mentre li raccogli, una polvere finissima si alza e ti irrita gli occhi e i polmoni. Inizi a tossire, sentendoti leggermente indebolito."
+Items Gained (Successo): [{ "id": "ash_petals", "quantity": 3 }]
+Penalty (Fallimento): { "type": "status", "status": "SICK" }
+"Attraversa il campo senza toccare nulla."
+Action Key: "ignore"
+Result Text: "Decidi di non disturbare questa strana e silenziosa bellezza. Attraversi il campo con rispetto, sentendo la cenere scricchiolare dolcemente sotto i tuoi stivali."
+3. Il Fulmine Fossile
+ID: plains_fossilized_lightning
+Titolo: La Cicatrice del Cielo
+Descrizione: Il terreno davanti a te è vetrificato in uno schema a raggiera, come se un fulmine di incredibile potenza avesse colpito qui, trasformando la sabbia in vetro nero e contorto. Al centro della "cicatrice", qualcosa brilla.
+Choices:
+"Recupera il frammento al centro."
+Skill Check: agilita, difficulty: 13
+Success Text: "Camminando con attenzione sul vetro tagliente, raggiungi il centro. Recuperi un pezzo di fulgurite, un frammento di vetro naturale percorso da una strana energia. È caldo al tatto."
+Failure Text: "Un pezzo di vetro si frantuma sotto il tuo peso, facendoti perdere l'equilibrio. Cadi, tagliandoti le mani e le ginocchia sulla superficie affilata."
+Items Gained (Successo): [{ "id": "fulgurite_shard", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 10 }, { "type": "status", "status": "WOUNDED" }
+"Raccogli i frammenti di vetro più piccoli dai bordi."
+Result Text: "Non rischi di avventurarti al centro. Raccogli con cura alcuni frammenti di vetro nero dai bordi. Sono affilati come rasoi e potrebbero essere usati per creare punte di freccia o un'arma improvvisata."
+Items Gained: [{ "id": "obsidian_shard", "quantity": 4 }]
+4. Lo Scheletro del Gigante
+ID: plains_giant_skeleton
+Titolo: Dove Dormono i Giganti
+Descrizione: Le ossa sbiancate di una creatura enorme, molto più grande di qualsiasi cosa tu abbia mai visto, spuntano dal terreno. La sua cassa toracica è grande come una piccola grotta.
+Choices:
+"Cerca riparo all'interno della cassa toracica."
+Result Text: "Entri nel riparo offerto dalle costole gigantesche. È un luogo macabro, ma ti protegge dal vento sferzante. Ti concedi un breve ma profondo riposo."
+Reward: { "type": "hp_recovery", "amount": 20 }
+Penalty: { "type": "time", "minutes": 60 }
+"Stacca un frammento d'osso per usarlo come arma o attrezzo."
+Skill Check: forza, difficulty: 12
+Success Text: "Riesci a spezzare un pezzo di una costola. È incredibilmente denso e resistente, perfetto per essere affilato e usato come una clava o un'arma da taglio pesante."
+Failure Text: "L'osso è più duro della roccia. Non riesci a scalfirlo. I tuoi sforzi ti lasciano solo con le mani doloranti."
+Items Gained (Successo): [{ "id": "giant_bone_club", "quantity": 1 }]
+5. L'Albero Solitario
+ID: plains_lone_tree
+Titolo: L'Ultimo Albero
+Descrizione: Un unico, enorme albero contorto si erge solitario in mezzo alla pianura, un sopravvissuto solitario. Ai suoi piedi, il terreno è coperto da uno strato di foglie secche.
+Choices:
+"Cerca tra le foglie alla base."
+Result Text: "Frugando tra le foglie accumulate da anni, trovi una piccola scorta di noci selvatiche, ben conservate e ancora commestibili, nascoste da qualche creatura previdente."
+Items Gained: [{ "id": "wild_nuts", "quantity": 3 }]
+"Arrampicati per avere una vista migliore."
+Skill Check: agilita, difficulty: 11
+Success Text: "I rami sono robusti. Dall'alto, riesci a vedere oltre l'orizzonte piatto, notando un sentiero nascosto che non era visibile dal basso."
+Failure Text: "Un ramo secco si spezza e scivoli, rimanendo appeso a mezz'aria prima di riuscire a scendere. Non hai visto nulla e hai solo rischiato."
+Reward (Successo): { "type": "special", "effect": "reveal_hidden_path" }
+
+Miraggio (plains_mirage) - Nuovo Recuperato
+Titolo: Oasi Illusoria
+Descrizione: In lontananza, sotto il sole cocente, vedi quella che sembra un'oasi con acqua e palme. Potrebbe essere la tua salvezza, o solo un inganno della mente affaticata.
+Choices:
+"Dirigiti verso l'oasi."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "Ti avvicini e ti rendi conto che è solo un miraggio. Deluso, stai per andartene quando noti qualcosa di semi-sepolto nella sabbia dove avrebbe dovuto esserci l'acqua: una borraccia quasi piena!"
+Failure Text: "Cammini per quasi un'ora verso l'oasi, solo per vederla svanire nel nulla. Hai sprecato tempo ed energie preziose per un'illusione."
+Items Gained (Successo): [{ "id": "water_bottle_large", "quantity": 1 }]
+Penalty (Fallimento): { "type": "time", "minutes": 60 }
+"Ignora l'illusione."
+Action Key: "ignore"
+Result Text: "Sai riconoscere un miraggio quando lo vedi. Risparmi le tue energie e prosegui sul tuo cammino."
+10. Fenditura nel Terreno (plains_fissure) - Nuovo Recuperato
+Titolo: Crepa Inaspettata
+Descrizione: Una profonda crepa si apre nel terreno arido. È troppo larga per essere saltata facilmente. Puoi cercare un punto più stretto o provare a calarti al suo interno in cerca di riparo.
+Choices:
+"Cerca un passaggio sicuro."
+Skill Check: intelligenza, difficulty: 10
+Success Text: "Dopo una breve ricerca, trovi un punto in cui le due sponde quasi si toccano, permettendoti di attraversare senza problemi."
+Failure Text: "Giri a vuoto per un po', non trovando un passaggio sicuro. Perdi tempo e decidi di tornare indietro."
+Penalty (Fallimento): { "type": "time", "minutes": 30 }
+"Calati nella fenditura."
+Skill Check: agilita, difficulty: 14
+Success Text: "Scendendo con attenzione, scopri che la fenditura porta a una piccola grotta nascosta dal vento. All'interno trovi i resti di un accampamento e un kit medico."
+Failure Text: "Perdi la presa durante la discesa e scivoli, graffiandoti contro le rocce taglienti. Risali a fatica, ferito e senza aver trovato nulla."
+Items Gained (Successo): [{ "id": "medkit_field", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 15 }
+11. Cerchio di Avvoltoi (plains_vulture_circle) - Nuovo Recuperato
+Titolo: Il Banchetto Silenzioso
+Descrizione: Vedi un gruppo di avvoltoi mutati che volteggiano in cerchio nel cielo. Stanno chiaramente girando sopra a qualcosa. Potrebbe essere una preda recente o un altro sopravvissuto in difficoltà.
+Choices:
+"Avvicinati per investigare."
+Result Text: "Spaventando gli avvoltoi, scopri che stavano banchettando con la carcassa di un grosso animale. Recuperi della carne ancora buona e una pelle robusta che puoi usare."
+Items Gained: [{ "id": "meat_raw", "quantity": 2 }, { "id": "animal_hide", "quantity": 1 }]
+"Evita la zona."
+Action Key: "ignore"
+Result Text: "Dove ci sono avvoltoi, spesso ci sono anche predatori più grandi attirati dall'odore. Decidi di non rischiare e cambi strada."
+12. Resti di un Convoglio (plains_convoy_wreckage) - Nuovo Recuperato
+Titolo: Convoglio Fantasma
+Descrizione: In mezzo alla pianura, trovi i resti carbonizzati di un piccolo convoglio militare. Un paio di camion e una jeep sono ridotti a scheletri di metallo. È un luogo sinistro, ma potrebbe nascondere equipaggiamento prezioso.
+Choices:
+"Perquisisci la jeep di comando."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "In un compartimento blindato sotto il sedile, trovi una pistola militare in buone condizioni e una scatola di munizioni."
+Failure Text: "La jeep è stata completamente devastata dall'esplosione. Non trovi altro che metallo contorto e vetri in frantumi."
+Items Gained (Successo): [{ "id": "pistol_military", "quantity": 1 }, { "id": "ammo_9mm", "quantity": 12 }]
+"Controlla i camion di rifornimento."
+Result Text: "La maggior parte delle casse è stata distrutta o saccheggiata, ma in un angolo riesci a trovare una cassa di razioni militari a lunga conservazione e un kit di riparazione per armi."
+Items Gained: [{ "id": "rations_military", "quantity": 3 }, { "id": "weapon_repair_kit", "quantity": 1 }]
+
+NUOVI EVENTI FORESTA
+
+Sentiero Ricoperto (forest_overgrown_path) - Nuovo Recuperato
+Titolo: Sentiero Dimenticato
+Descrizione: Il sentiero che stai seguendo è quasi scomparso, inghiottito dalla vegetazione. Proseguire richiederà fatica, ma potrebbe condurre a un luogo non toccato da altri.
+Choices:
+"Apri un varco tra la vegetazione."
+Skill Check: forza, difficulty: 11
+Success Text: "Dopo aver lottato con rovi e rami, sbuchi in una piccola radura dimenticata. Qui trovi i resti di un vecchio ponte di legno e una cassetta degli attrezzi ancora sigillata."
+Failure Text: "Le spine dei rovi ti graffiano e i rami ti colpiscono. Apri un varco, ma a caro prezzo, sentendoti sfinito."
+Items Gained (Successo): [{ "id": "tool_box", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 10 }
+"Torna indietro e cerca un'altra via."
+Action Key: "ignore"
+Result Text: "È troppo fitto. Decidi che non vale la pena sprecare energie e torni sui tuoi passi per cercare un percorso più agevole."
+9. Ponte di Tronco Caduto (forest_fallen_log_bridge) - Nuovo Recuperato
+Titolo: Attraversamento Precario
+Descrizione: Un grosso albero è caduto attraverso un piccolo burrone, creando un ponte naturale. Sembra solido, ma è scivoloso a causa del muschio.
+Choices:
+"Attraversa con cautela."
+Skill Check: agilita, difficulty: 12
+Success Text: "Con passi misurati e un perfetto equilibrio, attraversi il tronco senza problemi. Dall'altra parte, appoggiata a un albero, trovi una vecchia borsa da escursionista."
+Failure Text: "Scivoli sul muschio umido e cadi nel burrone. Per fortuna non è molto profondo, ma ti fai male e gran parte delle tue scorte si bagna."
+Items Gained (Successo): [{ "id": "hiking_backpack", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 15 }
+"Scendi nel burrone e risali."
+Skill Check: forza, difficulty: 13
+Success Text: "Scendi e risali usando radici e sporgenze rocciose. È faticoso ma sicuro. Sul fondo del burrone trovi anche qualche fungo commestibile."
+Failure Text: "La risalita è più difficile del previsto. Rimani bloccato a metà e devi lottare per uscire, esaurendo le tue energie."
+Items Gained (Successo): [{ "id": "edible_mushrooms", "quantity": 2 }]
+Penalty (Fallimento): { "type": "status", "status": "EXHAUSTED" }
+10. Cerchio di Funghi (forest_mushroom_circle) - Nuovo Recuperato
+Titolo: Cerchio Fatato
+Descrizione: Ti imbatti in un cerchio perfetto di funghi bioluminescenti che emettono una debole luce verdastra. L'aria qui sembra strana, quasi vibrante.
+Choices:
+"Raccogli i funghi."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Riconosci i funghi come una rara varietà con proprietà curative. Li raccogli con cura."
+Failure Text: "Mentre li tocchi, i funghi rilasciano una nuvola di spore. Inizi a sentirti stordito e nauseato. Erano velenosi."
+Items Gained (Successo): [{ "id": "glowing_mushrooms", "quantity": 3 }]
+Penalty (Fallimento): { "type": "status", "status": "SICK" }
+"Lascia il cerchio indisturbato."
+Action Key: "ignore"
+Result Text: "Qualcosa ti dice di non disturbare questo luogo. Prosegui il tuo cammino, sentendo ancora il formicolio dell'aria sulla pelle."
+11. Accampamento Abbandonato (forest_abandoned_camp) - Nuovo Recuperato
+Titolo: Echi Silenziosi
+Descrizione: Tra gli alberi scorgi i resti di un piccolo accampamento. C'è una tenda lacerata, un cerchio di pietre per il fuoco e alcuni oggetti sparsi, come se i suoi occupanti fossero fuggiti in fretta.
+Choices:
+"Fruga tra i resti."
+Skill Check: intelligenza, difficulty: 10
+Success Text: "Tra gli oggetti sparsi trovi una borraccia ancora piena, un accendino funzionante e una mappa della zona disegnata a mano."
+Failure Text: "Gli oggetti sono troppo danneggiati dalle intemperie per essere utili. Hai perso solo tempo."
+Items Gained (Successo): [{ "id": "water_bottle", "quantity": 1 }, { "id": "lighter", "quantity": 1 }, { "id": "local_map", "quantity": 1 }]
+"Cerca di capire cosa è successo."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "Noti delle tracce non umane intorno all'accampamento e segni di lotta. Chiunque fosse qui, è stato attaccato da una creatura. La scoperta ti mette in allerta."
+Failure Text: "Non riesci a trovare indizi chiari. Il mistero di questo luogo rimane irrisolto."
+Reward (Successo): { "type": "status_boost", "status": "ALERT", "duration": "temporary" } (es. bonus alla Percezione per un'ora)
+12. L'Albero Segnato (forest_marked_tree) - Nuovo Recuperato
+Titolo: Il Segno del Viandante
+Descrizione: Su un grande faggio noti uno strano simbolo inciso rozzamente nella corteccia. Sembra un codice o un segnale lasciato da qualcuno.
+Choices:
+"Tenta di decifrare il simbolo."
+Skill Check: intelligenza, difficulty: 15
+Success Text: "Riconosci il simbolo! È un vecchio codice da ranger che indica un nascondiglio di scorte nelle vicinanze. Seguendo le indicazioni implicite nel segno, trovi una piccola cassa impermeabile sepolta alla base di un albero vicino."
+Failure Text: "Il simbolo non ha alcun senso per te. Potrebbe essere qualsiasi cosa, da un avvertimento a un semplice scarabocchio."
+Reward (Successo): { "type": "special", "effect": "reveal_hidden_cache" }
+"Scava alla base dell'albero."
+Result Text: "Il tuo istinto ti dice che se qualcuno ha lasciato un segno, potrebbe aver lasciato anche qualcos'altro. Scavi con le mani e, dopo un po', le tue dita urtano qualcosa di duro. È una piccola scatola di metallo con dentro delle munizioni."
+Items Gained: [{ "id": "ammo_pistol", "quantity": 10 }]
+
+NUOVI EVENTI VILLAGGI
+
+Il Vecchio Mulino ad Acqua
+ID: village_water_mill
+Titolo: La Ruota Silenziosa
+Descrizione: Le rovine di un vecchio mulino ad acqua si trovano sul bordo del villaggio. La grande ruota di legno è ferma e coperta di muschio, ma la struttura in pietra sembra ancora solida. Il suono dell'acqua che scorre nel canale deviato è uno dei pochi rumori pacifici che hai sentito da tempo.
+Choices:
+"Ispeziona il meccanismo interno."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "All'interno, tra ingranaggi arrugginiti, trovi una piccola cassetta degli attrezzi da meccanico. Sembra che qualcuno stesse cercando di riparare il mulino prima della fine. Gli attrezzi sono di ottima fattura."
+Failure Text: "I meccanismi sono un groviglio incomprensibile di metallo corroso. Non riesci a capire come funzionasse, né a trovare nulla di utile."
+Items Gained (Successo): [{ "id": "mechanic_toolkit", "quantity": 1 }]
+"Cerca nel granaio adiacente."
+Result Text: "Il granaio è per lo più vuoto, ma in un angolo, sotto un telo cerato, trovi alcuni sacchi di grano secco ancora commestibili. Una risorsa preziosa."
+Items Gained: [{ "id": "grain_sack", "quantity": 2 }]
+14. L'Ufficio Postale Abbandonato
+ID: village_post_office
+Titolo: Corrispondenza Incompiuta
+Descrizione: Un piccolo ufficio postale con le porte divelte. All'interno, lettere e pacchi sono sparsi ovunque sul pavimento, testimonianza di un servizio interrotto a metà.
+Choices:
+"Cerca tra i pacchi non consegnati."
+Result Text: "La maggior parte dei pacchi è stata aperta o rovinata dall'umidità, ma ne trovi uno piccolo e pesante, avvolto con cura. Dentro c'è un set di coltelli da lancio ben bilanciati."
+Items Gained: [{ "id": "throwing_knives", "quantity": 3 }]
+"Leggi alcune delle lettere."
+Skill Check: intelligenza, difficulty: 11
+Success Text: "Leggi frammenti di vite interrotte: preoccupazioni, speranze, pettegolezzi. Una lettera, però, attira la tua attenzione: un abitante scrive a un parente di una 'scorta di famiglia nascosta sotto il vecchio pozzo' in caso di emergenza. Forse vale la pena controllare."
+Failure Text: "Le lettere sono per lo più illeggibili, l'inchiostro sbavato dalle lacrime o dalla pioggia. Sono solo tristi pezzi di carta."
+Reward (Successo): { "type": "lore_clue", "clueId": "village_well_cache" }
+15. La Clinica del Medico di Campagna
+ID: village_doctor_clinic
+Titolo: Il Giuramento Silenzioso
+Descrizione: Un piccolo edificio con un'insegna sbiadita che recita "Dr. A. Rossi - Medico". La porta è socchiusa. All'interno, l'odore di antisettico si mescola a quello della polvere.
+Choices:
+"Cerca nell'armadietto dei farmaci."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "La maggior parte dei farmaci è scaduta, ma la tua conoscenza ti permette di identificare alcuni antidolorifici e antibiotici ancora efficaci, se usati con cautela."
+Failure Text: "Trovi solo boccette vuote e scatole strappate. Qualcuno ha fatto pulizia molto prima di te."
+Items Gained (Successo): [{ "id": "painkillers", "quantity": 1 }, { "id": "antibiotics_expired", "quantity": 1 }]
+"Leggi gli appunti sulla scrivania."
+Result Text: "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia che si stava diffondendo poco prima del Silenzio, e alcuni tentativi di cura. Impari qualcosa di nuovo sulle possibili minacce biologiche di questo mondo."
+Reward: { "type": "special", "effect": "learn_disease_symptoms" } (es. un bonus per identificare o curare lo stato "SICK").
+
+
+Avviso Scarabocchiato (village_scrawled_warning) - Nuovo Recuperato
+Titolo: Messaggio sul Muro
+Descrizione: Un graffito fatto in fretta su un muro avverte: "NON BERE L'ACQUA DEL POZZO. È AVVELENATA."
+Choices:
+"Indaga sul perché."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "Analizzando l'area intorno al pozzo del villaggio, noti una strana patina oleosa sull'acqua e i resti di alcuni piccoli animali morti sulla sponda. L'avvertimento era fondato. Segni questa zona come pericolosa sulla tua mappa."
+Failure Text: "Non trovi indizi evidenti che confermino o smentiscano l'avvertimento. Potrebbe essere vero, o potrebbe essere un trucco per allontanare i viaggiatori da una risorsa."
+Reward (Successo): { "type": "special", "effect": "mark_danger_zone" }
+"Ignora l'avviso. Potrebbe essere un depistaggio."
+Action Key: "ignore"
+Result Text: "Decidi di fidarti del tuo giudizio. Molti in questo mondo mentirebbero per tenere per sé una fonte d'acqua. Manterrai l'informazione a mente, ma non la prenderai come oro colato."
+11. Vecchia Chiesa (village_old_church) - Nuovo Recuperato
+Titolo: Santuario Silenzioso
+Descrizione: Una piccola chiesa di paese con le porte spalancate. L'interno è buio ma sembra stranamente intatto. L'eco dei tuoi passi risuona nel silenzio.
+Choices:
+"Cerca nella cassetta delle offerte."
+Skill Check: agilita, difficulty: 11
+Success Text: "La cassetta è stata forzata, ma chi l'ha fatto ha tralasciato qualcosa. Trovi alcune vecchie monete e un piccolo medaglione d'argento."
+Failure Text: "La cassetta è completamente vuota e sfondata. Non c'è rimasto nulla."
+Items Gained (Successo): [{ "id": "old_coins", "quantity": 10 }, { "id": "silver_medallion", "quantity": 1 }]
+"Leggi il registro parrocchiale sull'altare."
+Result Text: "Il registro è coperto di polvere. Le ultime pagine contengono una lista frettolosa dei nomi degli abitanti del villaggio prima che tutto finisse. Un triste memento di un mondo perduto."
+Reward: { "type": "lore_clue", "clueId": "village_roster" }
+"Riposati sui banchi."
+Action Key: "rest"
+Result Text: "Ti siedi su uno dei vecchi banchi di legno. Il silenzio quasi sacro del luogo ti dona un senso di pace inaspettato. Ti senti ristorato."
+Reward: { "type": "hp_recovery", "amount": 10 }
+12. Emporio del Villaggio (village_general_store) - Nuovo Recuperato
+Titolo: L'Emporio Svuotato
+Descrizione: Le insegne sbiadite recitano "Emporio di G. Rossi - Un po' di tutto". La vetrina è in frantumi e gli scaffali sono per lo più vuoti, ma l'odore di polvere e spezie persiste.
+Choices:
+"Perquisisci dietro il bancone."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "Sotto un'asse del pavimento allentata, trovi la scorta personale del negoziante: una bottiglia di liquore forte e una scatola di sigari, ancora sigillata."
+Failure Text: "Dietro il bancone c'è solo un cassetto vuoto e scontrini scoloriti. Qualcuno ti ha preceduto."
+Items Gained (Successo): [{ "id": "strong_liquor", "quantity": 1 }, { "id": "cigars_box", "quantity": 1 }]
+"Controlla il magazzino sul retro."
+Skill Check: forza, difficulty: 11
+Success Text: "Forzi la porta del magazzino e, dietro a sacchi di farina ammuffita, trovi una cassa intatta di cibo in scatola e dei prodotti per la pulizia."
+Failure Text: "La porta del magazzino è bloccata da detriti troppo pesanti da spostare."
+Items Gained (Successo): [{ "id": "canned_food", "quantity": 3 }, { "id": "cleaning_supplies", "quantity": 1 }]
+
+
+NUOVI EVENTI CITTA'
+
+Il Teatro dell'Opera in Rovina
+ID: city_opera_house
+Titolo: Sinfonia del Silenzio
+Descrizione: Le porte monumentali di un teatro dell'opera sono spalancate. All'interno, il velluto rosso dei sedili è scolorito e strappato, e uno strato di polvere copre il palco come un sudario. Il silenzio qui è quasi assordante.
+Choices:
+"Esplora i camerini dietro le quinte."
+Result Text: "Nei camerini, tra costumi di scena logori, trovi un kit da cucito di alta qualità e una trousse per il trucco contenente sostanze chimiche che potrebbero essere riutilizzate."
+Items Gained: [{ "id": "sewing_kit_professional", "quantity": 1 }, { "id": "chemicals_makeup", "quantity": 1 }]
+"Scendi nella buca dell'orchestra."
+Skill Check: agilita, difficulty: 12
+Success Text: "Ti cali con attenzione nella buca. Tra leggii rovesciati e strumenti distrutti, trovi una custodia di violino sorprendentemente intatta. All'interno non c'è lo strumento, ma un fucile di precisione smontato."
+Failure Text: "Scivoli su uno spartito umido e cadi malamente, atterrando su un violoncello sfondato. Il rumore attira attenzioni indesiderate."
+Items Gained (Successo): [{ "id": "sniper_rifle_disassembled", "quantity": 1 }]
+Penalty (Fallimento): { "type": "special", "effect": "attract_predators" }
+14. La Vecchia Rete Fognaria
+ID: city_sewer_entrance
+Titolo: Sotto la Città Morta
+Descrizione: Un tombino aperto rivela una scala arrugginita che scende nelle fogne della città. Un odore nauseabondo ne fuoriesce, ma è un percorso che evita completamente le strade principali, potenzialmente piene di pericoli.
+Choices:
+"Avventurati nelle fogne."
+Skill Check: vigore, difficulty: 13
+Success Text: "L'odore è terribile e l'ambiente è opprimente, ma la tua resistenza ti permette di attraversare un lungo tratto sottoterra. Riemergi in un'altra zona della città, avendo evitato una pattuglia di predoni che sentivi muoversi sopra di te."
+Failure Text: "Le esalazioni sono troppo forti. Dopo pochi metri ti senti soffocare e sei costretto a tornare in superficie, nauseato e indebolito."
+Reward (Successo): { "type": "special", "effect": "bypass_danger_zone" }
+Penalty (Fallimento): { "type": "status", "status": "SICK" }
+"Controlla solo l'ingresso."
+Result Text: "Decidi di non scendere, ma noti che vicino alla scala, incastrato in una grata, c'è un piede di porco, probabilmente perso da qualcuno che è sceso prima di te."
+Items Gained: [{ "id": "crowbar", "quantity": 1 }]
+15. L'Appartamento del Collezionista
+ID: city_collector_apartment
+Titolo: Il Museo Personale
+Descrizione: Entri in un appartamento all'ultimo piano di un palazzo di lusso. L'interno è immacolato, protetto dalla polvere, e pieno di teche di vetro contenenti artefatti pre-Silenzio: vecchi computer, console per videogiochi, telefoni. Sembra la casa di un collezionista.
+Choices:
+"Cerca tra gli oggetti tecnologici."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Riconosci un vecchio computer militare portatile. È pesante e obsoleto, ma la sua batteria interna ha ancora una carica residua e potrebbe contenere dati preziosi, come mappe tattiche."
+Failure Text: "È tutto affascinante, ma non sai come far funzionare nulla. Per te, è solo un ammasso di plastica e silicio inutile."
+Items Gained (Successo): [{ "id": "rugged_laptop_military", "quantity": 1 }]
+"Cerca provviste e oggetti pratici."
+Result Text: "Ignori gli oggetti da collezione. Nella dispensa, trovi ciò che conta davvero: cibo gourmet in scatola e bottiglie di vino d'annata, perfettamente conservati. Un lusso quasi dimenticato."
+Items Gained: [{ "id": "gourmet_canned_food", "quantity": 2 }, { "id": "wine_bottle_aged", "quantity": 1 }]
+
+Banca Sventrata (city_bank_vault) - Nuovo Recuperato
+Titolo: La Cassaforte Aperta
+Descrizione: Ti trovi di fronte a una banca con un enorme buco nel muro. La porta del caveau è stata divelta, probabilmente con esplosivi. L'interno è un caos di cassette di sicurezza aperte e documenti sparsi.
+Choices:
+"Cerca tra le cassette di sicurezza."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "La maggior parte sono vuote, ma in una, trascurata dai saccheggiatori, trovi un piccolo lingotto d'oro e alcuni documenti che sembrano importanti."
+Failure Text: "Hai cercato per quasi un'ora, ma è tutto inutile. Chiunque sia passato di qui prima di te ha fatto un lavoro meticoloso. Hai solo perso tempo."
+Items Gained (Successo): [{ "id": "gold_bar", "quantity": 1 }, { "id": "sensitive_documents", "quantity": 1 }]
+Penalty (Fallimento): { "type": "time", "minutes": 60 }
+"Ispeziona l'ufficio del direttore."
+Result Text: "L'ufficio è in disordine, ma sotto una pesante scrivania di mogano trovi una pistola di piccolo calibro, probabilmente l'arma di difesa personale del direttore."
+Items Gained: [{ "id": "pistol_small_caliber", "quantity": 1 }]
+12. Museo di Storia Naturale (city_museum_ruins) - Nuovo Recuperato
+Titolo: Silenzio tra i Giganti
+Descrizione: Entri nella grande sala di un museo di storia naturale. Gli scheletri di dinosauri e altre creature preistoriche si ergono come fantasmi silenziosi nella penombra, coperti di polvere.
+Choices:
+"Cerca nel deposito dei reperti."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "Nel deposito trovi degli strumenti di precisione usati dai paleontologi e delle sostanze chimiche per la conservazione, come alcol e formaldeide, che possono essere riutilizzate."
+Failure Text: "Il deposito è stato sigillato a causa di un crollo. Non riesci ad entrare."
+Items Gained (Successo): [{ "id": "precision_tools", "quantity": 1 }, { "id": "alcohol_pure", "quantity": 2 }]
+"Smonta parte di un'esposizione per materiali."
+Result Text: "Decidi che i vivi hanno più bisogno di risorse dei morti da tempo. Smonti con cura una base di metallo di un'esposizione, recuperando rottami di alta qualità."
+Items Gained: [{ "id": "scrap_metal_high_quality", "quantity": 2 }]
+
+NUOVI EVENTI RANDOM
+
+Il Predone Solitario
+ID: random_lone_raider
+Titolo: Occhi nella Desolazione
+Descrizione: Una figura solitaria ti si para davanti. È un predone, magro e disperato, armato con un pezzo di tubo arrugginito. I suoi occhi sono pieni di una fame che non è solo di cibo. "Dammi tutto quello che hai," sibila, la voce roca. "Oggi non è il tuo giorno fortunato."
+Choices:
+"Intimidiscilo, mostrandoti più pericoloso di lui."
+Skill Check: carisma, difficulty: 13
+Success Text: "Lo fissi dritto negli occhi, senza un briciolo di paura. La tua determinazione gelida lo scuote. Vede in te un predatore, non una preda. Borbotta una maledizione e si allontana nell'ombra."
+Failure Text: "La tua finta spavalderia non lo convince. Vede solo la tua paura. Ringhia e si lancia all'attacco."
+Reward (Successo): { "type": "xp_gain", "amount": 25 }
+Penalty (Fallimento): { "type": "trigger_combat", "enemyId": "raider_weak" }
+"Attacca per primo, senza esitazione."
+Skill Check: agilita, difficulty: 12
+Success Text: "Agisci prima ancora che possa finire la frase. Il tuo attacco fulmineo lo coglie di sorpresa. Dopo un breve e brutale scontro, giace a terra sconfitto."
+Failure Text: "Il tuo attacco è goffo. Il predone para facilmente il colpo e contrattacca. Il combattimento ha inizio."
+Reward (Successo): { "type": "trigger_combat", "enemyId": "raider_weak", "player_advantage": true } (Inizia il combattimento con un turno di vantaggio).
+Penalty (Fallimento): { "type": "trigger_combat", "enemyId": "raider_weak" }
+2. La Richiesta d'Aiuto
+ID: random_cry_for_help
+Titolo: Voce Ingannevole
+Descrizione: Senti una voce debole che chiede aiuto da dietro un ammasso di rovine. "Aiuto... sono ferito... per favore..." Potrebbe essere un sopravvissuto in difficoltà o un'esca per un'imboscata.
+Choices:
+"Avvicinati con cautela per aiutare."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Ti avvicini, ma qualcosa non torna. Noti delle tracce fresche e il modo innaturale in cui la voce echeggia. È una trappola. Ti allontani silenziosamente prima che i banditi nascosti si accorgano di te."
+Failure Text: "Corri per aiutare e cadi dritto nell'imboscata. Due predoni saltano fuori dalle rovine, le armi spianate."
+Reward (Successo): { "type": "xp_gain", "amount": 30 }
+Penalty (Fallimento): { "type": "trigger_combat", "enemyId": "raider_duo" }
+"Ignora la richiesta e prosegui."
+Action Key: "ignore"
+Result Text: "Le lezioni di tuo padre sono state chiare: non fidarti mai. Potrebbe essere un innocente, ma il rischio è troppo alto. Prosegui, il cuore pesante, cercando di ignorare la voce che si spegne alle tue spalle."
+3. Il Mercante Nomade
+ID: random_wandering_trader
+Titolo: Un Affare nella Polvere
+Descrizione: Incontri un vecchio mercante che spinge un carretto cigolante pieno di cianfrusaglie. Ti saluta con un sorriso sdentato. "Un viaggiatore! Raro di questi tempi. Vuoi dare un'occhiata alla mia merce? Ho cose che non troveresti da nessun'altra parte."
+Choices:
+"Commercia con lui."
+Result Text: "Passi un po' di tempo a esaminare la sua merce. Potrebbe essere un'opportunità per scambiare oggetti che non ti servono con qualcosa di più utile."
+Reward: { "type": "special", "effect": "open_trade_screen" } (Apre un'interfaccia di baratto).
+"Tenta di derubarlo."
+Skill Check: agilita, difficulty: 15
+Success Text: "Con un movimento fulmineo, riesci ad afferrare un oggetto prezioso dal carretto e a scappare prima che il vecchio possa reagire. Ti senti un verme, ma hai un nuovo oggetto."
+Failure Text: "Il vecchio è più veloce di quanto sembri. Urla, attirando l'attenzione di una guardia armata che non avevi visto. Ora sei nei guai."
+Items Gained (Successo): { "type": "random_item", "rarity": "rare" }
+Penalty (Fallimento): { "type": "trigger_combat", "enemyId": "trader_guard" }
+4. Bestia Ferita
+ID: random_wounded_beast
+Titolo: Bestia Ferita
+Descrizione: Trovi un grosso lupo mutato, con una zampa intrappolata in una vecchia tagliola. Ringhia debolmente al tuo avvicinarsi, più spaventato che aggressivo. È un predatore pericoloso, ma al momento è vulnerabile.
+Choices:
+"Finiscilo per recuperare carne e pelle."
+Result Text: "È la legge crudele di questo mondo. Con un colpo rapido, poni fine alle sue sofferenze. La sua carcassa ti fornirà cibo per giorni e una pelle resistente."
+Items Gained: [{ "id": "mutant_wolf_meat", "quantity": 3 }, { "id": "mutant_wolf_pelt", "quantity": 1 }]
+"Tenta di liberarlo."
+Skill Check: intelligenza, difficulty: 14
+Success Text: "Usando un lungo ramo per tenere a bada la sua testa, riesci ad aprire la tagliola. Il lupo, sorpreso, ti fissa per un istante, poi si allontana zoppicando nella boscaglia, senza attaccarti. Forse, per oggi, hai creato un alleato invece di un nemico."
+Failure Text: "Mentre ti avvicini, il lupo, in un impeto di dolore e paura, si divincola e riesce a morderti prima di liberarsi e fuggire. La tua compassione ti è costata cara."
+Reward (Successo): { "type": "special", "effect": "wolf_gratitude" } (Potrebbe aiutare in un futuro scontro).
+Penalty (Fallimento): { "type": "damage", "amount": 15 }, { "type": "status", "status": "WOUNDED" }
+5. Tempesta Improvvisa
+ID: random_sudden_storm
+Titolo: La Furia del Cielo
+Descrizione: Il cielo si oscura in pochi minuti e una tempesta violenta si abbatte su di te, con pioggia sferzante e fulmini che squarciano l'orizzonte. Devi trovare un riparo, e in fretta.
+Choices:
+"Cerca un riparo immediato (grotta, rovina)."
+Skill Check: intelligenza, difficulty: 11
+Success Text: "Il tuo istinto da sopravvissuto ha la meglio. Individui una piccola grotta e ti ci infili giusto in tempo per evitare il peggio della tempesta."
+Failure Text: "Non trovi alcun riparo adeguato. Sei esposto alla furia degli elementi, subendo danni dal freddo e rischiando di ammalarti."
+Penalty (Fallimento): { "type": "damage", "amount": 10 }, { "type": "status", "status": "SICK" }
+"Resisti alla tempesta e prosegui."
+Skill Check: vigore, difficulty: 15
+Success Text: "Stringi i denti e affronti la tempesta a testa alta. È una prova durissima, ma la tua resistenza ti permette di superarla. Quando la pioggia cessa, ti senti più forte e temprato."
+Failure Text: "La tempesta è troppo forte. Il freddo ti entra nelle ossa, sei completamente fradicio e le tue forze ti abbandonano. Ne esci a pezzi."
+Reward (Successo): { "type": "permanent_stat_boost", "stat": "vigore", "amount": 1 }
+Penalty (Fallimento): { "type": "damage", "amount": 25 }
+
+
+Resti di un Viandante (random_traveler_remains) - Nuovo Recuperato
+Titolo: Compagno di Viaggio Silenzioso
+Descrizione: Trovi i resti di un altro sopravvissuto accasciato contro una roccia, lo zaino ancora in spalla.
+Choices:
+"Perquisisci lo zaino con rispetto."
+Result Text: "Con un cenno silenzioso al viaggiatore caduto, apri il suo zaino. Dentro trovi una manciata di provviste che a lui non servono più. Prendi solo lo stretto necessario."
+Items Gained: [{ "id": "canned_food", "quantity": 1 }, { "id": "water_bottle", "quantity": 1 }]
+"Seppelliscilo sommariamente."
+Skill Check: forza, difficulty: 10
+Success Text: "Passi un po' di tempo a coprire il corpo con pietre e terra. È un piccolo gesto di umanità. Ti senti stranamente in pace e più determinato a continuare."
+Failure Text: "Il terreno è troppo duro e sei troppo stanco. Desisti, lasciando il viandante al suo destino, con un senso di amarezza."
+Reward (Successo): { "type": "status_boost", "status": "FOCUSED", "duration": "temporary" }
+6. Strano Simbolo sul Terreno (random_ground_symbol) - Nuovo Recuperato
+Titolo: Il Segno sulla Polvere
+Descrizione: Noti uno strano simbolo tracciato nella polvere o nel fango. Non sembra naturale.
+Choices:
+"Tenta di interpretare il simbolo."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "Riconosci il simbolo! È un vecchio codice di viandanti che indica la direzione di una piccola scorta nascosta. Seguendo l'indizio, trovi delle bende e dei proiettili sepolti."
+Failure Text: "Il simbolo è incomprensibile. Potrebbe significare qualsiasi cosa, da 'pericolo' a 'acqua potabile'. Decidi di non rischiare."
+Items Gained (Successo): [{ "id": "bandages_clean", "quantity": 2 }, { "id": "ammo_pistol", "quantity": 5 }]
+"Cancellalo per non lasciare tracce."
+Action Key: "ignore"
+Result Text: "Chiunque l'abbia lasciato, non vuoi che sappia che sei passato di qui. Cancelli il simbolo con i piedi e prosegui, aumentando il tuo anonimato."
+7. Sciame di Insetti Mutati (random_mutant_insect_swarm) - Nuovo Recuperato
+Titolo: Ronzio Minaccioso
+Descrizione: Un denso sciame di insetti volanti, grandi come il tuo pollice e dal ronzio aggressivo, ti blocca il cammino.
+Choices:
+"Cerca di attraversarlo velocemente."
+Skill Check: agilita, difficulty: 12
+Success Text: "Correndo a perdifiato e agitando le braccia, riesci a passare attraverso lo sciame subendo solo qualche puntura minore."
+Failure Text: "Lo sciame ti avvolge. Le punture bruciano e ti lasciano disorientato e indebolito."
+Penalty (Successo): { "type": "damage", "amount": 3 }
+Penalty (Fallimento): { "type": "damage", "amount": 10 }, { "type": "status", "status": "SICK" }
+"Usa del fumo per scacciarli (richiede torcia/fiammiferi)."
+Item Requirement: [{ "id": "torch", "quantity": 1 }] (o matches)
+Result Text: "Accendi rapidamente una torcia improvvisata. Il fumo denso infastidisce gli insetti, che si disperdono abbastanza a lungo da permetterti di passare indenne."
+Items Lost: [{ "id": "torch", "quantity": 1 }]
+8. L'Eco di una Risata (random_laughter_echo) - Nuovo Recuperato
+Titolo: L'Eco di una Risata
+Descrizione: Per un istante, ti sembra di aver sentito chiaramente l'eco di una risata di bambino, portata dal vento. Dura un attimo, poi svanisce.
+Choices:
+"Investiga la fonte del suono."
+Result Text: "Cerchi per un po', ma non trovi nulla. Probabilmente era solo uno scherzo del vento e della tua mente affaticata. La ricerca ti ha fatto perdere tempo."
+Penalty: { "type": "time", "minutes": 30 }
+"Ignora il suono e stringi più forte la tua arma."
+Result Text: "Vero o no, qualsiasi cosa produca suoni in questo mondo è potenzialmente una minaccia. Ignori la distrazione e la tua vigilanza aumenta."
+Reward: { "type": "status_boost", "status": "ALERT", "duration": "temporary" }
+9. Pioggia Acida Improvvisa (random_acid_rain) - Nuovo Recuperato
+Titolo: Pioggia Corrosiva
+Descrizione: Nuvole scure si addensano rapidamente sopra di te e iniziano a cadere gocce pesanti e sfrigolanti. È una pioggia acida. Devi trovare un riparo, subito.
+Choices:
+"Cerca un riparo di fortuna (grotta, edificio)."
+Skill Check: intelligenza, difficulty: 10
+Success Text: "Riesci a trovare rapidamente una piccola sporgenza rocciosa che ti offre un riparo sufficiente. Aspetti che la pioggia corrosiva passi, rimanendo all'asciutto."
+Failure Text: "Non trovi un riparo adeguato in tempo. La pioggia ti inzuppa i vestiti, corrodendo leggermente la tua armatura e irritandoti la pelle."
+Penalty (Fallimento): { "type": "damage", "amount": 5 }, { "type": "item_damage", "item_slot": "armor", "amount": 10 }
+"Usa un telo impermeabile per proteggerti."
+Item Requirement: [{ "id": "tarp", "quantity": 1 }]
+Result Text: "Tiri fuori rapidamente il tuo telo impermeabile e ti crei un riparo improvvisato, rimanendo completamente protetto dalla pioggia acida."
+
+ Il Drone di Sorveglianza
+ID: random_surveillance_drone
+Titolo: L'Occhio nel Cielo
+Descrizione: Un ronzio acuto attira la tua attenzione verso il cielo. Un piccolo drone di sorveglianza ti sta sorvolando, un singolo occhio rosso che ti fissa. Non sembra armato, ma sta chiaramente registrando la tua posizione.
+Choices:
+"Tenta di abbatterlo con un sasso."
+Skill Check: agilita, difficulty: 14
+Success Text: "Prendi la mira e scagli una pietra con precisione. Colpisci uno dei rotori. Il drone precipita a terra con un rumore sordo. Ora puoi recuperare i suoi componenti tecnologici."
+Failure Text: "Il sasso manca il bersaglio di molto. Il drone emette un segnale acustico, probabilmente segnalando la tua presenza a qualcuno, prima di allontanarsi a grande velocità."
+Items Gained (Successo): [{ "id": "tech_components", "quantity": 2 }, { "id": "camera_lens", "quantity": 1 }]
+Penalty (Fallimento): { "type": "special", "effect": "increase_encounter_rate", "duration": "1_hour" }
+"Nasconditi e aspetta che se ne vada."
+Action Key: "ignore"
+Result Text: "Ti butti a terra dietro un riparo e rimani immobile. Dopo alcuni minuti, che ti sembrano un'eternità, il drone sembra perderti di vista e si allontana. Per ora, sei di nuovo invisibile."
+7. Il Campo Minato Dimenticato
+ID: random_minefield
+Titolo: Un Passo Falso
+Descrizione: Stai per fare un passo quando noti qualcosa di innaturale nel terreno: la sommità di una vecchia mina antiuomo, quasi completamente sepolta. Guardandoti intorno, ti rendi conto di essere ai margini di un campo minato dimenticato.
+Choices:
+"Tenta di attraversarlo con estrema cautela."
+Skill Check: intelligenza, difficulty: 15
+Success Text: "Trattieni il respiro. Studi il terreno, cercando i segni quasi invisibili delle altre mine. Con una concentrazione assoluta, riesci a tracciare un sentiero sicuro e ad attraversare il campo. Dall'altro lato, trovi i resti di qualcuno meno fortunato, ma con un equipaggiamento di valore."
+Failure Text: "Un clic metallico sotto il tuo stivale. L'esplosione ti scaraventa a terra, lasciandoti gravemente ferito e sanguinante."
+Items Gained (Successo): [{ "id": "military_backpack", "quantity": 1 }, { "id": "medkit_advanced", "quantity": 1 }]
+Penalty (Fallimento): { "type": "damage", "amount": 40 }, { "type": "status", "status": "WOUNDED" }
+"Torna indietro e aggira l'area."
+Action Key: "ignore"
+Result Text: "Fai un passo indietro, lentamente e con attenzione, poi giri alla larga. Ci vorrà più tempo, ma la tua vita vale più di qualsiasi scorciatoia."
+Penalty: { "type": "time", "minutes": 90 }
+8. La Scorta Nascosta
+ID: random_hidden_stash
+Titolo: La X sulla Roccia
+Descrizione: Noti una "X" dipinta rozzamente con vernice rossa sbiadita su una grande roccia. Potrebbe non essere nulla, o potrebbe essere il segno di una scorta nascosta da qualche sopravvissuto.
+Choices:
+"Scava alla base della roccia."
+Skill Check: forza, difficulty: 11
+Success Text: "Dopo aver spostato alcune pietre pesanti, il tuo sforzo viene premiato. Trovi una piccola cassa di metallo impermeabile. Contiene cibo, acqua e delle munizioni."
+Failure Text: "Scavi per un po', ma non trovi nulla. O il segno era uno scherzo, o qualcun altro è già passato a ritirare la scorta."
+Items Gained (Successo): [{ "id": "canned_food", "quantity": 2 }, { "id": "water_purified", "quantity": 1 }, { "id": "ammo_shotgun", "quantity": 4 }]
+"Usa l'intelligenza: il segno è un indizio."
+Skill Check: intelligenza, difficulty: 13
+Success Text: "Invece di scavare, studi il segno. Noti che uno dei bracci della 'X' è leggermente più lungo e punta verso un albero cavo a una decina di metri di distanza. All'interno dell'albero, trovi la vera scorta, molto più ricca."
+Failure Text: "Il segno non ti dice nulla. Sembra solo una 'X'. Non riesci a dedurre alcun significato nascosto."
+Items Gained (Successo): [{ "id": "medkit_field", "quantity": 1 }, { "id": "weapon_repair_kit", "quantity": 1 }]
+9. L'Anomalia Radioattiva
+ID: random_radiation_pocket
+Titolo: Aria Pesante
+Descrizione: Inizi a sentire un sapore metallico in bocca e la tua pelle formicola. L'aria sembra innaturalmente pesante. Sei entrato in una sacca di radiazioni a basso livello, invisibile ma pericolosa.
+Choices:
+"Attraversa l'area il più velocemente possibile."
+Result Text: "Trattieni il respiro e corri. Esci dall'area sentendoti nauseato, ma limitando l'esposizione. Subisci un danno moderato."
+Penalty: { "type": "damage", "amount": 15 }
+"Usa farmaci anti-radiazioni (se li hai)."
+Item Requirement: [{ "id": "rad_away_pills", "quantity": 1 }]
+Result Text: "Ingoi rapidamente una delle pillole anti-radiazioni. Senti i suoi effetti quasi subito, proteggendoti mentre attraversi l'area contaminata. Ne esci completamente indenne."
+Items Lost: [{ "id": "rad_away_pills", "quantity": 1 }]
+10. Il Messaggero Caduto
+ID: random_fallen_messenger
+Titolo: Messaggero Silenzioso
+Descrizione: Trovi il corpo di un uomo in abiti robusti, con una grande borsa di pelle a tracolla. Sembra un messaggero o un corriere. Non ci sono segni evidenti di violenza; forse è morto di stenti.
+Choices:
+"Prendi la borsa e il suo contenuto."
+Result Text: "I vivi hanno bisogno di risorse più dei morti. Prendi la borsa. All'interno, oltre a un po' di cibo, trovi un pacco sigillato che non apri e un piccolo coltello."
+Items Gained: [{ "id": "ration_pack", "quantity": 1 }, { "id": "sealed_package_quest", "quantity": 1 }, { "id": "folding_knife", "quantity": 1 }]
+"Cerca solo indizi sulla sua identità o missione."
+Skill Check: intelligenza, difficulty: 12
+Success Text: "Decidi di non saccheggiarlo. Cerchi solo dei documenti. Trovi un ordine di consegna per un 'avamposto a nord' e una lettera personale. Le informazioni potrebbero guidarti verso una comunità di sopravvissuti."
+Failure Text: "Non trovi alcun documento o indizio. La sua storia muore con lui."
+Reward (Successo): { "type": "lore_clue", "clueId": "outpost_north" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+L3fàcc1nEbLL##_2025
+
+
+
+Analizza tutta la documentazione e tutto il codice di questo progetto. Evidenziane gli aspetti positivi e le criticità di codice e controlla lo stato reale sincronizzando le info della documentazione con lo stato del codice

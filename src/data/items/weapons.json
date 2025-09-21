@@ -95,5 +95,38 @@
     "value": 50,
     "damage": "1d6",
     "rarity": "Uncommon"
+  },
+  "hunting_knife": {
+    "id": "hunting_knife",
+    "name": "Coltello da caccia",
+    "description": "Un coltello robusto progettato per la caccia e la sopravvivenza.",
+    "type": "weapon",
+    "weight": 1.0,
+    "value": 20,
+    "damage": "1d4",
+    "durability": 200,
+    "rarity": "Uncommon"
+  },
+  "folding_knife": {
+    "id": "folding_knife",
+    "name": "Coltello pieghevole",
+    "description": "Un coltello compatto che si chiude in tasca. Pratico e discreto.",
+    "type": "weapon",
+    "weight": 0.5,
+    "value": 15,
+    "damage": "1d3",
+    "durability": 150,
+    "rarity": "Common"
+  },
+  "kitchen_knife": {
+    "id": "kitchen_knife",
+    "name": "Coltello da cucina",
+    "description": "Un coltello affilato originariamente per cucinare, ora utile per difesa.",
+    "type": "weapon",
+    "weight": 0.6,
+    "value": 8,
+    "damage": "1d3",
+    "durability": 100,
+    "rarity": "Common"
   }
 }

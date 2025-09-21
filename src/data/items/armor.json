@@ -8,5 +8,15 @@
     "value": 20,
     "armor": 1,
     "rarity": "Common"
+  },
+  "kevlar_vest": {
+    "id": "kevlar_vest",
+    "name": "Giubbotto antiproiettile",
+    "description": "Un giubbotto tattico con inserti in kevlar. Offre ottima protezione contro proiettili.",
+    "type": "armor",
+    "weight": 8,
+    "value": 150,
+    "armor": 4,
+    "rarity": "Rare"
   }
 }

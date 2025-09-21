@@ -8,5 +8,55 @@
     "value": 10,
     "stackable": true,
     "rarity": "Common"
+  },
+  "rifle_ammo": {
+    "id": "rifle_ammo",
+    "name": "Munizioni fucile",
+    "description": "Munizioni per fucili da caccia o militari.",
+    "type": "ammo",
+    "weight": 0.8,
+    "value": 25,
+    "stackable": true,
+    "rarity": "Uncommon"
+  },
+  "shotgun_shells": {
+    "id": "shotgun_shells",
+    "name": "Cartucce shotgun",
+    "description": "Munizioni per fucili a pompa.",
+    "type": "ammo",
+    "weight": 0.6,
+    "value": 20,
+    "stackable": true,
+    "rarity": "Uncommon"
+  },
+  "ammo_pistol": {
+    "id": "ammo_pistol",
+    "name": "Munizioni pistola",
+    "description": "Munizioni per pistole di vario calibro.",
+    "type": "ammo",
+    "weight": 0.4,
+    "value": 15,
+    "stackable": true,
+    "rarity": "Common"
+  },
+  "pistol_ammo": {
+    "id": "pistol_ammo",
+    "name": "Munizioni pistola 9mm",
+    "description": "Munizioni standard per pistole 9mm.",
+    "type": "ammo",
+    "weight": 0.4,
+    "value": 12,
+    "stackable": true,
+    "rarity": "Common"
+  },
+  "special_ammo": {
+    "id": "special_ammo",
+    "name": "Munizioni speciali",
+    "description": "Munizioni avanzate con proprietà speciali.",
+    "type": "ammo",
+    "weight": 0.3,
+    "value": 40,
+    "stackable": true,
+    "rarity": "Rare"
   }
 }

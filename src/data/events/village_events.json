@@ -201,6 +201,109 @@
           "successText": "Scopri segni di una banda che pattuglia quella zona. Meglio evitarla.",
           "failureText": "Non trovi indizi sufficienti.",
           "reward": { "type": "special", "effect": "mark_danger_zone" }
+        },
+        {
+          "id": "village_water_mill",
+          "title": "La Ruota Silenziosa",
+          "description": "Le rovine di un vecchio mulino ad acqua si trovano sul bordo del villaggio. La grande ruota di legno è ferma e coperta di muschio, ma la struttura in pietra sembra ancora solida. Il suono dell'acqua che scorre nel canale deviato è uno dei pochi rumori pacifici che hai sentito da tempo.",
+          "choices": [
+            {
+              "text": "Ispeziona il meccanismo interno",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+              "successText": "All'interno, tra ingranaggi arrugginiti, trovi una piccola cassetta degli attrezzi da meccanico. Sembra che qualcuno stesse cercando di riparare il mulino prima della fine. Gli attrezzi sono di ottima fattura.",
+              "failureText": "I meccanismi sono un groviglio incomprensibile di metallo corroso. Non riesci a capire come funzionasse, né a trovare nulla di utile.",
+              "items_gained": [{ "id": "mechanic_toolkit", "quantity": 1 }]
+            },
+            {
+              "text": "Cerca nel granaio adiacente",
+              "resultText": "Il granaio è per lo più vuoto, ma in un angolo, sotto un telo cerato, trovi alcuni sacchi di grano secco ancora commestibili. Una risorsa preziosa.",
+              "items_gained": [{ "id": "grain_sack", "quantity": 2 }]
+            }
+          ]
+        },
+        {
+          "id": "village_post_office",
+          "title": "Corrispondenza Incompiuta",
+          "description": "Un piccolo ufficio postale con le porte divelte. All'interno, lettere e pacchi sono sparsi ovunque sul pavimento, testimonianza di un servizio interrotto a metà.",
+          "choices": [
+            {
+              "text": "Cerca tra i pacchi non consegnati",
+              "resultText": "La maggior parte dei pacchi è stata aperta o rovinata dall'umidità, ma ne trovi uno piccolo e pesante, avvolto con cura. Dentro c'è un set di coltelli da lancio ben bilanciati.",
+              "items_gained": [{ "id": "throwing_knives", "quantity": 3 }]
+            },
+            {
+              "text": "Leggi alcune delle lettere",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+              "successText": "Leggi frammenti di vite interrotte: preoccupazioni, speranze, pettegolezzi. Una lettera, però, attira la tua attenzione: un abitante scrive a un parente di una 'scorta di famiglia nascosta sotto il vecchio pozzo' in caso di emergenza. Forse vale la pena controllare.",
+              "failureText": "Le lettere sono per lo più illeggibili, l'inchiostro sbavato dalle lacrime o dalla pioggia. Sono solo tristi pezzi di carta.",
+              "reward": { "type": "lore_clue", "clueId": "village_well_cache" }
+            }
+          ]
+        },
+        {
+          "id": "village_doctor_clinic",
+          "title": "Il Giuramento Silenzioso",
+          "description": "Un piccolo edificio con un'insegna sbiadita che recita \"Dr. A. Rossi - Medico\". La porta è socchiusa. All'interno, l'odore di antisettico si mescola a quello della polvere.",
+          "choices": [
+            {
+              "text": "Cerca nell'armadietto dei farmaci",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+              "successText": "La maggior parte dei farmaci è scaduta, ma la tua conoscenza ti permette di identificare alcuni antidolorifici e antibiotici ancora efficaci, se usati con cautela.",
+              "failureText": "Trovi solo boccette vuote e scatole strappate. Qualcuno ha fatto pulizia molto prima di te.",
+              "items_gained": [{ "id": "painkillers", "quantity": 1 }, { "id": "antibiotics_expired", "quantity": 1 }]
+            },
+            {
+              "text": "Leggi gli appunti sulla scrivania",
+              "resultText": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia che si stava diffondendo poco prima del Silenzio, e alcuni tentativi di cura. Impari qualcosa di nuovo sulle possibili minacce biologiche di questo mondo.",
+              "reward": { "type": "special", "effect": "learn_disease_symptoms" }
+            }
+          ]
+        },
+        {
+          "id": "village_old_church",
+          "title": "Santuario Silenzioso",
+          "description": "Una piccola chiesa di paese con le porte spalancate. L'interno è buio ma sembra stranamente intatto. L'eco dei tuoi passi risuona nel silenzio.",
+          "choices": [
+            {
+              "text": "Cerca nella cassetta delle offerte",
+              "skillCheck": { "stat": "agilita", "difficulty": 11 },
+              "successText": "La cassetta è stata forzata, ma chi l'ha fatto ha tralasciato qualcosa. Trovi alcune vecchie monete e un piccolo medaglione d'argento.",
+              "failureText": "La cassetta è completamente vuota e sfondata. Non c'è rimasto nulla.",
+              "items_gained": [{ "id": "old_coins", "quantity": 10 }, { "id": "silver_medallion", "quantity": 1 }]
+            },
+            {
+              "text": "Leggi il registro parrocchiale sull'altare",
+              "resultText": "Il registro è coperto di polvere. Le ultime pagine contengono una lista frettolosa dei nomi degli abitanti del villaggio prima che tutto finisse. Un triste memento di un mondo perduto.",
+              "reward": { "type": "lore_clue", "clueId": "village_roster" }
+            },
+            {
+              "text": "Riposati sui banchi",
+              "actionKey": "rest",
+              "resultText": "Ti siedi su uno dei vecchi banchi di legno. Il silenzio quasi sacro del luogo ti dona un senso di pace inaspettato. Ti senti ristorato.",
+              "reward": { "type": "hp_recovery", "amount": 10 }
+            }
+          ]
+        },
+        {
+          "id": "village_general_store",
+          "title": "L'Emporio Svuotato",
+          "description": "Le insegne sbiadite recitano \"Emporio di G. Rossi - Un po' di tutto\". La vetrina è in frantumi e gli scaffali sono per lo più vuoti, ma l'odore di polvere e spezie persiste.",
+          "choices": [
+            {
+              "text": "Perquisisci dietro il bancone",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+              "successText": "Sotto un'asse del pavimento allentata, trovi la scorta personale del negoziante: una bottiglia di liquore forte e una scatola di sigari, ancora sigillata.",
+              "failureText": "Dietro il bancone c'è solo un cassetto vuoto e scontrini scoloriti. Qualcuno ti ha preceduto.",
+              "items_gained": [{ "id": "strong_liquor", "quantity": 1 }, { "id": "cigars_box", "quantity": 1 }]
+            },
+            {
+              "text": "Controlla il magazzino sul retro",
+              "skillCheck": { "stat": "forza", "difficulty": 11 },
+              "successText": "Forzi la porta del magazzino e, dietro a sacchi di farina ammuffita, trovi una cassa intatta di cibo in scatola e dei prodotti per la pulizia.",
+              "failureText": "La porta del magazzino è bloccata da detriti troppo pesanti da spostare.",
+              "items_gained": [{ "id": "canned_food", "quantity": 3 }, { "id": "cleaning_supplies", "quantity": 1 }]
+            }
+          ]
         }
       ]
     }

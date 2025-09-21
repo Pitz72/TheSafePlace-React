@@ -1,23 +1,24 @@
 # 🗺️ ROADMAP CORRENTE - The Safe Place
 
-**Data Aggiornamento**: 13 Settembre 2025  
-**Versione Corrente**: v0.9.7.2 "Architectural Integrity"  
-**Status**: ✅ STABILE - Refactoring Architetturale Completato  
+**Data Aggiornamento**: 21 Settembre 2025
+**Versione Corrente**: v0.9.7.6 "A triumph of objects"
+**Status**: ✅ STABILE - Sistema Oggetti Completato
 **Timeline**: Q4 2025 - Q1 2026
 
 ---
 
-## 🎯 PANORAMICA STRATEGICA v0.9.7.2
+## 🎯 PANORAMICA STRATEGICA v0.9.7.6
 
 ### Obiettivo Principale - AGGIORNATO
-Consolidare i miglioramenti architetturali della v0.9.7.2, espandere le funzionalità e preparare il rilascio della versione stabile v1.0.0.
+Sistema oggetti completamente implementato. Eventi ora danno ricompense funzionanti. Preparazione per espansione contenuti e ottimizzazioni.
 
-### Stato Attuale del Progetto - MIGLIORATO
+### Stato Attuale del Progetto - ULTERIORMENTE MIGLIORATO
 - **Architettura**: ✅ **REFACTORED** - God Objects eliminati, servizi dedicati
-- **Sistemi Core**: ✅ **STABILIZZATI** - 85% completati
+- **Sistemi Core**: ✅ **COMPLETATI** - 95% completati (sistema oggetti aggiunto)
+- **Sistema Oggetti**: ✅ **NUOVO** - 57 oggetti implementati, eventi funzionanti
 - **UI/UX**: ✅ Tema CRT implementato
 - **Testing**: ✅ **STABILIZZATO** - 19 suite, 244 test passanti
-- **Documentazione**: ✅ **SINCRONIZZATA** - Aggiornata con v0.9.7.2
+- **Documentazione**: ✅ **SINCRONIZZATA** - Aggiornata con v0.9.7.6
 
 ---
 

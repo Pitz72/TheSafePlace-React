@@ -224,6 +224,45 @@
           "successText": "Con qualche aggiustamento riesci a rendere la tenda di nuovo utilizzabile. Ora hai un riparo portatile.",
           "failureText": "La tenda è troppo danneggiata. Nel tentativo di ripararla la rovini completamente.",
           "items_gained": [{ "id": "portable_tent", "quantity": 1 }]
+        },
+        {
+          "id": "forest_mushroom_circle",
+          "title": "Cerchio Fatato",
+          "description": "Ti imbatti in un cerchio perfetto di funghi bioluminescenti che emettono una debole luce verdastra. L'aria qui sembra strana, quasi vibrante.",
+          "choices": [
+            {
+              "text": "Raccogli i funghi",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+              "successText": "Riconosci i funghi come una rara varietà con proprietà curative. Li raccogli con cura.",
+              "failureText": "Mentre li tocchi, i funghi rilasciano una nuvola di spore. Inizi a sentirti stordito e nauseato. Erano velenosi.",
+              "items_gained": [{ "id": "glowing_mushrooms", "quantity": 3 }],
+              "penalty": { "type": "status", "status": "SICK" }
+            },
+            {
+              "text": "Lascia il cerchio indisturbato",
+              "actionKey": "ignore",
+              "resultText": "Qualcosa ti dice di non disturbare questo luogo. Prosegui il tuo cammino, sentendo ancora il formicolio dell'aria sulla pelle."
+            }
+          ]
+        },
+        {
+          "id": "forest_marked_tree",
+          "title": "Il Segno del Viandante",
+          "description": "Su un grande faggio noti uno strano simbolo inciso rozzamente nella corteccia. Sembra un codice o un segnale lasciato da qualcuno.",
+          "choices": [
+            {
+              "text": "Tenta di decifrare il simbolo",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 15 },
+              "successText": "Riconosci il simbolo! È un vecchio codice da ranger che indica la direzione di un nascondiglio di scorte nelle vicinanze. Seguendo le indicazioni implicite nel segno, trovi una piccola cassa impermeabile sepolta alla base di un albero vicino.",
+              "failureText": "Il simbolo non ha alcun senso per te. Potrebbe essere qualsiasi cosa, da un avvertimento a un semplice scarabocchio.",
+              "reward": { "type": "special", "effect": "reveal_hidden_cache" }
+            },
+            {
+              "text": "Scava alla base dell'albero",
+              "resultText": "Il tuo istinto ti dice che se qualcuno ha lasciato un segno, potrebbe aver lasciato anche qualcos'altro. Scavi con le mani e, dopo un po', le tue dita urtano qualcosa di duro. È una piccola scatola di metallo con dentro delle munizioni.",
+              "items_gained": [{ "id": "ammo_pistol", "quantity": 10 }]
+            }
+          ]
         }
       ]
     }

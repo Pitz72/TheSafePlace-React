@@ -148,5 +148,75 @@
     "value": 5,
     "rarity": "Uncommon",
     "stackable": true
+  },
+  "dry_wood": {
+    "id": "dry_wood",
+    "name": "Legna secca",
+    "description": "Legna stagionata perfetta per fare fuoco o costruire.",
+    "type": "crafting",
+    "weight": 1.0,
+    "value": 3,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "spider_silk": {
+    "id": "spider_silk",
+    "name": "Seta di ragno",
+    "description": "Fibra resistente prodotta da grossi ragni mutati. Ottima per corde e tessuti.",
+    "type": "crafting",
+    "weight": 0.1,
+    "value": 12,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "mutant_wolf_pelt": {
+    "id": "mutant_wolf_pelt",
+    "name": "Pelle di lupo mutato",
+    "description": "Pelle spessa e resistente di un lupo mutato. Valorevole per protezioni.",
+    "type": "crafting",
+    "weight": 2.0,
+    "value": 25,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "tech_components": {
+    "id": "tech_components",
+    "name": "Componenti tecnologici",
+    "description": "Circuiti e componenti elettronici recuperati da dispositivi avanzati.",
+    "type": "crafting",
+    "weight": 0.3,
+    "value": 20,
+    "rarity": "Rare",
+    "stackable": true
+  },
+  "camera_lens": {
+    "id": "camera_lens",
+    "name": "Lente di fotocamera",
+    "description": "Lente ottica di precisione da fotocamera o binocolo.",
+    "type": "crafting",
+    "weight": 0.1,
+    "value": 15,
+    "rarity": "Uncommon",
+    "stackable": true
+  },
+  "sturdy_branches": {
+    "id": "sturdy_branches",
+    "name": "Rami robusti",
+    "description": "Rami solidi di alberi maturi, perfetti per costruzioni.",
+    "type": "crafting",
+    "weight": 0.8,
+    "value": 4,
+    "rarity": "Common",
+    "stackable": true
+  },
+  "clay_chunk": {
+    "id": "clay_chunk",
+    "name": "Pezzo di argilla",
+    "description": "Argilla malleabile per creare oggetti ceramici o sigillanti.",
+    "type": "crafting",
+    "weight": 1.5,
+    "value": 6,
+    "rarity": "Common",
+    "stackable": true
   }
 }

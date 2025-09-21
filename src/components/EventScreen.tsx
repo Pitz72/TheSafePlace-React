@@ -11,12 +11,13 @@ import { useTimeStore } from '../stores/time/timeStore';
  * KEYBOARD-ONLY: Navigazione con W/S, selezione con ENTER
  */
 const EventScreen: React.FC = () => {
-  const { currentEvent, resolveChoice, dismissCurrentEvent } = useEventStore();
+  const { currentEvent, currentEventResult, resolveChoice, dismissCurrentEvent } = useEventStore();
   const { addLogEntry } = useNotificationStore();
   const { advanceTime } = useTimeStore();
   const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 
   const hasChoices = currentEvent?.choices && currentEvent.choices.length > 0;
+  const showingResult = currentEventResult !== null;
 
   // Reset selezione quando cambia evento
   useEffect(() => {
@@ -27,6 +28,15 @@ const EventScreen: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!currentEvent) return;
+
+      // Se stiamo mostrando il risultato, solo ENTER chiude l'evento
+      if (showingResult) {
+        if (event.key.toLowerCase() === 'enter') {
+          event.preventDefault();
+          dismissCurrentEvent();
+        }
+        return;
+      }
 
       // Se non ci sono scelte, solo ENTER o ESC (futuro) sono ammessi
       if (!hasChoices) {
@@ -41,14 +51,14 @@ const EventScreen: React.FC = () => {
         case 'w':
         case 'arrowup':
           event.preventDefault();
-          setSelectedChoiceIndex(prev => 
+          setSelectedChoiceIndex(prev =>
             prev > 0 ? prev - 1 : currentEvent.choices.length - 1
           );
           break;
         case 's':
         case 'arrowdown':
           event.preventDefault();
-          setSelectedChoiceIndex(prev => 
+          setSelectedChoiceIndex(prev =>
             prev < currentEvent.choices.length - 1 ? prev + 1 : 0
           );
           break;
@@ -76,7 +86,7 @@ const EventScreen: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentEvent, selectedChoiceIndex, resolveChoice, dismissCurrentEvent, hasChoices, advanceTime]);
+  }, [currentEvent, selectedChoiceIndex, resolveChoice, dismissCurrentEvent, hasChoices, showingResult, advanceTime]);
 
   // Non renderizzare nulla se non c'è un evento attivo
   if (!currentEvent) {
@@ -91,35 +101,51 @@ const EventScreen: React.FC = () => {
         <h2 className="text-4xl font-bold mb-4 text-center text-phosphor-300 glow-phosphor-bright">
           {currentEvent.title}
         </h2>
-        <p className="text-lg mb-8 text-phosphor-400 whitespace-pre-wrap">
-          {currentEvent.description}
-        </p>
-        <div className="space-y-3">
-          {hasChoices && currentEvent.choices.map((choice, index) => (
-            <div
-              key={index}
-              className={`w-full text-left p-4 rounded border transition-all duration-200 ${
-                index === selectedChoiceIndex
-                  ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20 glow-phosphor-primary'
-                  : 'border-phosphor-600'
-              }`}
-            >
-              <span className={`font-bold ${
-                index === selectedChoiceIndex ? 'text-phosphor-200' : 'text-phosphor-400'
-              }`}>
-                {index === selectedChoiceIndex ? '► ' : '  '}
-                [{index + 1}] {choice.text}
-              </span>
+
+        {showingResult ? (
+          // Mostra il risultato della scelta
+          <div className="text-center">
+            <p className="text-lg mb-8 text-phosphor-400 whitespace-pre-wrap">
+              {currentEventResult || 'Risultato elaborato con successo.'}
+            </p>
+            <div className="mt-6 text-center text-phosphor-500 text-sm">
+              [ENTER] Continua
             </div>
-          ))}
-        </div>
-        
-        {/* Controlli keyboard */}
-        <div className="mt-6 text-center text-phosphor-500 text-sm">
-          {hasChoices 
-            ? '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
-            : '[ENTER] Continua'}
-        </div>
+          </div>
+        ) : (
+          // Mostra descrizione e scelte
+          <>
+            <p className="text-lg mb-8 text-phosphor-400 whitespace-pre-wrap">
+              {currentEvent.description}
+            </p>
+            <div className="space-y-3">
+              {hasChoices && currentEvent.choices.map((choice, index) => (
+                <div
+                  key={index}
+                  className={`w-full text-left p-4 rounded border transition-all duration-200 ${
+                    index === selectedChoiceIndex
+                      ? 'border-phosphor-400 bg-phosphor-400 bg-opacity-20 glow-phosphor-primary'
+                      : 'border-phosphor-600'
+                  }`}
+                >
+                  <span className={`font-bold ${
+                    index === selectedChoiceIndex ? 'text-phosphor-200' : 'text-phosphor-400'
+                  }`}>
+                    {index === selectedChoiceIndex ? '► ' : '  '}
+                    [{index + 1}] {choice.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Controlli keyboard */}
+            <div className="mt-6 text-center text-phosphor-500 text-sm">
+              {hasChoices
+                ? '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
+                : '[ENTER] Continua'}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

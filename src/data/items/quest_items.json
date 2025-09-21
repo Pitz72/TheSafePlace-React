@@ -73,5 +73,203 @@
     "rarity": "Epic",
     "effect": "unlock_recipes",
     "effectValue": "manual_survival_expert"
+  },
+  "fathers_compass": {
+    "id": "fathers_compass",
+    "name": "Bussola del Padre",
+    "description": "Una bussola antica appartenuta al padre di Ultimo. Ha un significato emotivo profondo.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 50,
+    "rarity": "Unique",
+    "effect": "navigation",
+    "effectValue": "perfect"
+  },
+  "old_military_map": {
+    "id": "old_military_map",
+    "name": "Vecchia Mappa Militare",
+    "description": "Una mappa militare dettagliata di prima dell'apocalisse. Mostra posizioni strategiche.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 75,
+    "rarity": "Rare",
+    "effect": "map",
+    "effectValue": "military"
+  },
+  "code_list": {
+    "id": "code_list",
+    "name": "Lista Codici",
+    "description": "Una lista di codici di accesso per strutture militari e governative.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 100,
+    "rarity": "Rare",
+    "effect": "access_codes",
+    "effectValue": "military"
+  },
+  "sealed_package_quest": {
+    "id": "sealed_package_quest",
+    "name": "Pacco Sigillato",
+    "description": "Un pacco sigillato trovato su un messaggero caduto. Potrebbe contenere informazioni importanti.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 25,
+    "rarity": "Uncommon",
+    "effect": "package",
+    "effectValue": "sealed"
+  },
+  "gold_coin": {
+    "id": "gold_coin",
+    "name": "Moneta d'Oro Antica",
+    "description": "Una moneta d'oro antica con incisioni elaborate. Potrebbe valere molto o avere significato storico.",
+    "type": "quest",
+    "weight": 0.01,
+    "value": 200,
+    "rarity": "Rare",
+    "effect": "currency",
+    "effectValue": "gold"
+  },
+  "precious_stone": {
+    "id": "precious_stone",
+    "name": "Pietra Preziosa",
+    "description": "Una gemma scintillante di valore inestimabile. Potrebbe essere scambiata con risorse rare.",
+    "type": "quest",
+    "weight": 0.05,
+    "value": 300,
+    "rarity": "Epic",
+    "effect": "currency",
+    "effectValue": "gem"
+  },
+  "frag_grenade": {
+    "id": "frag_grenade",
+    "name": "Granata a Frammentazione",
+    "description": "Una granata militare letale. Da usare con estrema cautela.",
+    "type": "quest",
+    "weight": 0.4,
+    "value": 150,
+    "rarity": "Epic",
+    "effect": "explosive",
+    "effectValue": "area_damage"
+  },
+  "coins": {
+    "id": "coins",
+    "name": "Monete",
+    "description": "Piccole monete pre-apocalisse. Hanno ancora qualche valore di scambio.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 5,
+    "rarity": "Common",
+    "effect": "currency",
+    "effectValue": "coins"
+  },
+  "emergency_info": {
+    "id": "emergency_info",
+    "name": "Informazioni di Emergenza",
+    "description": "Documenti con informazioni cruciali su zone sicure e pericoli.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 40,
+    "rarity": "Uncommon",
+    "effect": "information",
+    "effectValue": "emergency"
+  },
+  "phone_book": {
+    "id": "phone_book",
+    "name": "Elenco Telefonico",
+    "description": "Un vecchio elenco telefonico con indirizzi e numeri. Potrebbe contenere indizi utili.",
+    "type": "quest",
+    "weight": 0.8,
+    "value": 10,
+    "rarity": "Common",
+    "effect": "information",
+    "effectValue": "directory"
+  },
+  "detailed_area_map": {
+    "id": "detailed_area_map",
+    "name": "Mappa Dettagliata della Zona",
+    "description": "Una mappa dettagliata dell'area locale con annotazioni utili.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 60,
+    "rarity": "Uncommon",
+    "effect": "map",
+    "effectValue": "detailed"
+  },
+  "emergency_kit": {
+    "id": "emergency_kit",
+    "name": "Kit di Emergenza",
+    "description": "Un kit di sopravvivenza di base con strumenti essenziali.",
+    "type": "quest",
+    "weight": 1.5,
+    "value": 80,
+    "rarity": "Rare",
+    "effect": "survival_kit",
+    "effectValue": "basic"
+  },
+  "dried_food": {
+    "id": "dried_food",
+    "name": "Cibo Essiccato",
+    "description": "Cibo essiccato che dura a lungo. Nutriente ma poco appetitoso.",
+    "type": "quest",
+    "weight": 0.3,
+    "value": 12,
+    "rarity": "Common",
+    "effect": "satiety",
+    "effectValue": 20
+  },
+  "cooking_utensils": {
+    "id": "cooking_utensils",
+    "name": "Utensili da Cucina",
+    "description": "Utensili per cucinare e preparare cibo. Migliorano la qualità dei pasti.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 25,
+    "rarity": "Uncommon",
+    "effect": "cooking",
+    "effectValue": "tools"
+  },
+  "basic_medicine": {
+    "id": "basic_medicine",
+    "name": "Medicina di Base",
+    "description": "Farmaci di base per trattare malattie e infezioni comuni.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 35,
+    "rarity": "Uncommon",
+    "effect": "heal",
+    "effectValue": 15
+  },
+  "sterile_bandages": {
+    "id": "sterile_bandages",
+    "name": "Bende Sterili",
+    "description": "Bende sterili per medicare ferite senza rischio di infezione.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 20,
+    "rarity": "Uncommon",
+    "effect": "heal",
+    "effectValue": 8
+  },
+  "local_map": {
+    "id": "local_map",
+    "name": "Mappa Locale",
+    "description": "Una mappa della zona locale con punti di interesse segnati.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 30,
+    "rarity": "Common",
+    "effect": "map",
+    "effectValue": "local"
+  },
+  "mutant_wolf_meat": {
+    "id": "mutant_wolf_meat",
+    "name": "Carne di Lupo Mutato",
+    "description": "Carne di un lupo mutato. È commestibile ma potrebbe avere effetti collaterali.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 15,
+    "rarity": "Uncommon",
+    "effect": "satiety",
+    "effectValue": 25
   }
 }

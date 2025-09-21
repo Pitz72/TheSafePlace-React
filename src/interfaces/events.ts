@@ -20,10 +20,11 @@ export interface ItemReward {
  * Definisce una penalità risultante da una scelta.
  */
 export interface Penalty {
-  type: 'damage' | 'time' | 'stat_reduction' | 'special'; // Tipi di penalità
+  type: 'damage' | 'time' | 'stat_reduction' | 'special' | 'status'; // Tipi di penalità
   amount?: number; // Valore per 'damage', 'time' (in minuti)
   stat?: 'potenza' | 'agilita' | 'vigore' | 'percezione' | 'adattamento' | 'carisma'; // Statistica per 'stat_reduction'
   effect?: string; // Per penalità speciali come 'attract_predators'
+  status?: string; // Per penalità di status come 'WOUNDED'
 }
 
 /**
@@ -51,11 +52,15 @@ type SpecialReward = {
   effect: string; // Es. 'reveal_map_area', 'unlock_shelter'
 };
 
+type RevealMapPoiReward = {
+  type: 'reveal_map_poi';
+};
+
 /**
  * Definisce una ricompensa generica, che può essere di vari tipi.
  * Questa è un'unione discriminata basata sulla proprietà 'type'.
  */
-export type Reward = StatBoostReward | XpGainReward | HpGainReward | SpecialReward;
+export type Reward = StatBoostReward | XpGainReward | HpGainReward | SpecialReward | RevealMapPoiReward;
 
 /**
  * Definisce le conseguenze specifiche per eventi rest stop.
@@ -73,9 +78,9 @@ export interface EventChoice {
   id?: string; // ID della scelta (per rest stop)
   text: string; // Il testo mostrato al giocatore
   skillCheck?: SkillCheck; // Il test di abilità opzionale associato a questa scelta
-  successText?: EventChoice; // Testo in caso di successo dello skill check
-  failureText?: EventChoice; // Testo in caso di fallimento dello skill check
-  resultText?: EventChoice; // Testo per scelte che non hanno uno skill check
+  successText?: string; // Testo in caso di successo dello skill check
+  failureText?: string; // Testo in caso di fallimento dello skill check
+  resultText?: string; // Testo per scelte che non hanno uno skill check
   items_gained?: ItemReward[]; // Array di oggetti ottenuti
   penalty?: Penalty; // La penalità subita
   reward?: Reward; // La ricompensa ottenuta

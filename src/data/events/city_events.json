@@ -218,6 +218,104 @@
           "successText": "Ricevi un messaggio da una webradio clandestina che indica rifugi sicuri.",
           "failureText": "Solo interferenze.",
           "reward": { "type": "special", "effect": "reveal_safe_routes" }
+        },
+        {
+          "id": "city_opera_house",
+          "title": "Sinfonia del Silenzio",
+          "description": "Le porte monumentali di un teatro dell'opera sono spalancate. All'interno, il velluto rosso dei sedili è scolorito e strappato, e uno strato di polvere copre il palco come un sudario. Il silenzio qui è quasi assordante.",
+          "choices": [
+            {
+              "text": "Esplora i camerini dietro le quinte",
+              "resultText": "Nei camerini, tra costumi di scena logori, trovi un kit da cucito di alta qualità e una trousse per il trucco contenente sostanze chimiche che potrebbero essere riutilizzate.",
+              "items_gained": [{ "id": "sewing_kit_professional", "quantity": 1 }, { "id": "chemicals_makeup", "quantity": 1 }]
+            },
+            {
+              "text": "Scendi nella buca dell'orchestra",
+              "skillCheck": { "stat": "agilita", "difficulty": 12 },
+              "successText": "Ti cali con attenzione nella buca. Tra leggii rovesciati e strumenti distrutti, trovi una custodia di violino sorprendentemente intatta. All'interno non c'è lo strumento, ma un fucile di precisione smontato.",
+              "failureText": "Scivoli su uno spartito umido e cadi malamente, atterrando su un violoncello sfondato. Il rumore attira attenzioni indesiderate.",
+              "items_gained": [{ "id": "sniper_rifle_disassembled", "quantity": 1 }],
+              "penalty": { "type": "special", "effect": "attract_predators" }
+            }
+          ]
+        },
+        {
+          "id": "city_sewer_entrance",
+          "title": "Sotto la Città Morta",
+          "description": "Un tombino aperto rivela una scala arrugginita che scende nelle fogne della città. Un odore nauseabondo ne fuoriesce, ma è un percorso che evita completamente le strade principali, potenzialmente piene di pericoli.",
+          "choices": [
+            {
+              "text": "Avventurati nelle fogne",
+              "skillCheck": { "stat": "vigore", "difficulty": 13 },
+              "successText": "L'odore è terribile e l'ambiente è opprimente, ma la tua resistenza ti permette di attraversare un lungo tratto sottoterra. Riemergi in un'altra zona della città, avendo evitato una pattuglia di predoni che sentivi muoversi sopra di te.",
+              "failureText": "Le esalazioni sono troppo forti. Dopo pochi metri ti senti soffocare e sei costretto a tornare in superficie, nauseato e indebolito.",
+              "reward": { "type": "special", "effect": "bypass_danger_zone" },
+              "penalty": { "type": "status", "status": "SICK" }
+            },
+            {
+              "text": "Controlla solo l'ingresso",
+              "resultText": "Decidi di non scendere, ma noti che vicino alla scala, incastrato in una grata, c'è un piede di porco, probabilmente perso da qualcuno che è sceso prima di te.",
+              "items_gained": [{ "id": "crowbar", "quantity": 1 }]
+            }
+          ]
+        },
+        {
+          "id": "city_collector_apartment",
+          "title": "Il Museo Personale",
+          "description": "Entri in un appartamento all'ultimo piano di un palazzo di lusso. L'interno è immacolato, protetto dalla polvere, e pieno di teche di vetro contenenti artefatti pre-Silenzio: vecchi computer, console per videogiochi, telefoni. Sembra la casa di un collezionista.",
+          "choices": [
+            {
+              "text": "Cerca tra gli oggetti tecnologici",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+              "successText": "Riconosci un vecchio computer militare portatile. È pesante e obsoleto, ma la sua batteria interna ha ancora una carica residua e potrebbe contenere dati preziosi, come mappe tattiche.",
+              "failureText": "È tutto affascinante, ma non sai come far funzionare nulla. Per te, è solo un ammasso di plastica e silicio inutile.",
+              "items_gained": [{ "id": "rugged_laptop_military", "quantity": 1 }]
+            },
+            {
+              "text": "Cerca provviste e oggetti pratici",
+              "resultText": "Ignori gli oggetti da collezione. Nella dispensa, trovi ciò che conta davvero: cibo gourmet in scatola e bottiglie di vino d'annata, perfettamente conservati. Un lusso quasi dimenticato.",
+              "items_gained": [{ "id": "gourmet_canned_food", "quantity": 2 }, { "id": "wine_bottle_aged", "quantity": 1 }]
+            }
+          ]
+        },
+        {
+          "id": "city_bank_vault",
+          "title": "La Cassaforte Aperta",
+          "description": "Ti trovi di fronte a una banca con un enorme buco nel muro. La porta del caveau è stata divelta, probabilmente con esplosivi. L'interno è un caos di cassette di sicurezza aperte e documenti sparsi.",
+          "choices": [
+            {
+              "text": "Cerca tra le cassette di sicurezza",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+              "successText": "La maggior parte sono vuote, ma in una, trascurata dai saccheggiatori, trovi un piccolo lingotto d'oro e alcuni documenti che sembrano importanti.",
+              "failureText": "Hai cercato per quasi un'ora, ma è tutto inutile. Chiunque sia passato di qui prima di te ha fatto un lavoro meticoloso. Hai solo perso tempo.",
+              "items_gained": [{ "id": "gold_bar", "quantity": 1 }, { "id": "sensitive_documents", "quantity": 1 }],
+              "penalty": { "type": "time", "minutes": 60 }
+            },
+            {
+              "text": "Ispeziona l'ufficio del direttore",
+              "resultText": "L'ufficio è in disordine, ma sotto una pesante scrivania di mogano trovi una pistola di piccolo calibro, probabilmente l'arma di difesa personale del direttore.",
+              "items_gained": [{ "id": "pistol_small_caliber", "quantity": 1 }]
+            }
+          ]
+        },
+        {
+          "id": "city_museum_ruins",
+          "title": "Silenzio tra i Giganti",
+          "description": "Entri nella grande sala di un museo di storia naturale. Gli scheletri di dinosauri e altre creature preistoriche si ergono come fantasmi silenziosi nella penombra, coperti di polvere.",
+          "choices": [
+            {
+              "text": "Cerca nel deposito dei reperti",
+              "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+              "successText": "Nel deposito trovi degli strumenti di precisione usati dai paleontologi e delle sostanze chimiche per la conservazione, come alcol e formaldeide, che possono essere riutilizzate.",
+              "failureText": "Il deposito è stato sigillato a causa di un crollo. Non riesci ad entrare.",
+              "items_gained": [{ "id": "precision_tools", "quantity": 1 }, { "id": "alcohol_pure", "quantity": 2 }]
+            },
+            {
+              "text": "Smonta parte di un'esposizione per materiali",
+              "resultText": "Decidi che i vivi hanno più bisogno di risorse dei morti da tempo. Smonti con cura una base di metallo di un'esposizione, recuperando rottami di alta qualità.",
+              "items_gained": [{ "id": "scrap_metal_high_quality", "quantity": 2 }]
+            }
+          ]
         }
       ]
     }
