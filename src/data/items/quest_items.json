@@ -271,5 +271,14 @@
     "rarity": "Uncommon",
     "effect": "satiety",
     "effectValue": 25
+  },
+  "quest_music_box": {
+    "id": "quest_music_box",
+    "name": "Carillon Annerito",
+    "description": "Un piccolo carillon di metallo, annerito dal tempo. È stranamente pesante. Tuo padre ti ha avvertito di non aprirlo mai, dicendo che il suo suono 'attira i ricordi sbagliati'.",
+    "type": "QUEST",
+    "rarity": "UNIQUE",
+    "weight": 0.2,
+    "stackable": false
   }
 }

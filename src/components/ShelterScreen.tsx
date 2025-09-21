@@ -8,25 +8,22 @@ import { useWorldStore } from '../stores/world/worldStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useInventoryStore } from '../stores/inventory/inventoryStore';
+import { useEventStore } from '../stores/events/eventStore';
+import { useNarrativeStore } from '../stores/narrative/narrativeStore';
 import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const { setCurrentScreen, playerPosition, canInvestigateShelter, updateShelterAccess, getShelterInfo, advanceTime } = useGameStore();
+  const { setCurrentScreen, playerPosition, advanceTime } = useGameStore();
   const { addLogEntry } = useNotificationStore();
   const { performAbilityCheck, updateHP } = useCharacterStore();
-  const { addItem, items } = useInventoryStore();
+  const { getInventory } = useInventoryStore();
+  const { triggerEvent } = useEventStore();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
-  // Controlla se c'è già un risultato di investigazione salvato
-  useEffect(() => {
-    const { x, y } = playerPosition;
-    const shelterInfo = getShelterInfo(x, y);
-    if (shelterInfo && shelterInfo.hasBeenInvestigated && shelterInfo.investigationResults && shelterInfo.investigationResults.length > 0) {
-      setSearchResult(shelterInfo.investigationResults[0]);
-    }
-  }, [playerPosition, getShelterInfo]);
+  // TODO: Implementare sistema di investigazione rifugi persistente
+  // Per ora, l'investigazione è temporanea per sessione
 
   const options = [
     { id: 'rest', name: 'Riposare (2-3 ore)', description: 'Recupera alcuni HP riposando nel rifugio' },
@@ -108,6 +105,13 @@ const ShelterScreen: React.FC = () => {
   };
 
   const handleRest = () => {
+    // Controllo condizioni per l'evento "La Ninnananna della Cenere"
+    if (checkAshLullabyConditions()) {
+      triggerAshLullabyEvent();
+      return;
+    }
+
+    // Riposo normale se le condizioni non sono soddisfatte
     const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
     const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
 
@@ -122,19 +126,73 @@ const ShelterScreen: React.FC = () => {
     setCurrentScreen('game');
   };
 
-  const handleSearch = () => {
-    const { x, y } = playerPosition;
+  const checkAshLullabyConditions = (): boolean => {
+    // 1. Il giocatore deve possedere il "Carillon Annerito"
+    const inventory = getInventory();
+    const hasMusicBox = inventory.some(slot => slot?.itemId === 'quest_music_box');
+    if (!hasMusicBox) return false;
 
-    // Controlla se l'investigazione è già stata fatta in questa sessione
-    if (!canInvestigateShelter(x, y)) {
-      addLogEntry(MessageType.ACTION_FAIL, {
-        reason: 'hai già investigato questo rifugio in questa sessione di gioco'
-      });
-      setSearchResult('Hai già perquisito accuratamente questo rifugio durante questa sessione di gioco. Torna in un\'altra sessione per investigare di nuovo.');
-      return;
+    // 2. Deve essere allo Stage 10 ("L'Eco di una Scelta") della quest principale
+    const narrativeState = useNarrativeStore.getState();
+    if (narrativeState.currentStage !== 10) {
+      return false;
     }
 
-    // ANTI-EXPLOIT: Se c'è già un risultato mostrato, non permettere nuove investigazioni
+    // 3. Il rifugio deve essere nella metà più a est della mappa
+    const worldState = useWorldStore.getState();
+    const mapWidth = worldState.mapData[0]?.length || 0;
+    const eastThreshold = Math.floor(mapWidth * 0.5); // Metà est della mappa
+    if (playerPosition.x < eastThreshold) return false;
+
+    // 4. L'evento deve essere unico (non già vissuto)
+    const eventState = useEventStore.getState();
+    if (eventState.isEncounterCompleted('lore_ash_lullaby')) return false;
+
+    console.log('🎭 Condizioni soddisfatte per "La Ninnananna della Cenere"');
+    return true;
+  };
+
+  const triggerAshLullabyEvent = () => {
+    // Trigger dell'evento lore
+    const loreEvent = {
+      id: 'lore_ash_lullaby',
+      title: 'Un Suono nel Silenzio',
+      description: 'La stanchezza ti pesa sulle ossa come un macigno. Qui, nel silenzio di questo rifugio, il mondo là fuori sembra lontano. Dalla tasca interna, le tue dita sfiorano il metallo gelido del carillon. Ricordi le parole di tuo padre, quasi un ringhio di terrore represso: \'Non aprirlo mai. Il suo suono \'attira i ricordi sbagliati.\' Ma la solitudine, stanotte, è un nemico più vicino di qualsiasi ricordo.',
+      choices: [
+        {
+          text: 'Apri il carillon.',
+          consequences: { type: 'sequence' as const, sequenceId: 'ash_lullaby_sequence' }
+        },
+        {
+          text: 'Cerca di dormire senza aprirlo.',
+          resultText: 'L\'avvertimento di tuo padre risuona nella tua mente. Decidi di non sfidare il destino stanotte. Ti rannicchi nel sonno, ma è un riposo inquieto.',
+          consequences: { type: 'end_event' as const }
+        },
+        {
+          text: 'Rimani di guardia.',
+          resultText: 'Decidi che il sonno non è un\'opzione. Passi le ore a vegliare, il monito di tuo padre troppo forte per essere ignorato.',
+          consequences: { type: 'end_event' as const }
+        }
+      ]
+    };
+
+    // Converte in GameEvent per il sistema esistente
+    const gameEvent = {
+      id: 'lore_ash_lullaby',
+      title: loreEvent.title,
+      description: loreEvent.description,
+      choices: loreEvent.choices.map(choice => ({
+        text: choice.text,
+        resultText: choice.resultText,
+        consequences: choice.consequences
+      }))
+    };
+
+    triggerEvent(gameEvent);
+  };
+
+  const handleSearch = () => {
+    // Versione semplificata per ora - TODO: Implementare sistema completo di investigazione
     if (searchResult) {
       addLogEntry(MessageType.ACTION_FAIL, {
         reason: 'investigazione già completata'
@@ -142,61 +200,24 @@ const ShelterScreen: React.FC = () => {
       return;
     }
 
-    const checkResult = performAbilityCheck('percezione', 15, false);
-    const checkDetails = `Prova di Percezione (CD ${checkResult.difficulty}): ${checkResult.roll} + ${checkResult.modifier} = ${checkResult.total}.`;
-
+    const checkResult = performAbilityCheck('percezione', 15);
     let outcomeMessage: string;
 
     if (checkResult.success) {
-      outcomeMessage = `${checkDetails} SUCCESSO.\n`;
+      outcomeMessage = `SUCCESSO nella ricerca!\n`;
       const findChance = Math.random();
       if (findChance < 0.4) {
-        const lootTables = {
-          consumables: ['CONS_001', 'CONS_002', 'CONS_003'],
-          crafting: ['CRAFT_001'],
-          weapons: ['WEAP_001'],
-          armor: ['ARMOR_001'],
-          medical: ['CONS_003']
-        };
-        const categoryRoll = Math.random();
-        let category: keyof typeof lootTables;
-        if (categoryRoll < 0.4) category = 'consumables';
-        else if (categoryRoll < 0.6) category = 'crafting';
-        else if (categoryRoll < 0.75) category = 'weapons';
-        else if (categoryRoll < 0.9) category = 'armor';
-        else category = 'medical';
-
-        const categoryItems = lootTables[category];
-        const foundItemId = categoryItems[Math.floor(Math.random() * categoryItems.length)];
-        const foundItem = items[foundItemId];
-
-        if (foundItem) {
-          const quantity = foundItem.stackable ? (Math.floor(Math.random() * 2) + 1) : 1;
-          const added = addItem(foundItemId, quantity);
-          if (added) {
-            outcomeMessage += `La tua attenzione viene ripagata. Trovi: ${foundItem.name}${quantity > 1 ? ` x${quantity}` : ''}`;
-          } else {
-            outcomeMessage += `Trovi ${foundItem.name}, ma il tuo inventario è pieno!`;
-          }
-        } else {
-          outcomeMessage += 'Trovi qualcosa di interessante, ma non riesci a identificarlo.';
-        }
+        outcomeMessage += 'Trovi alcuni oggetti utili sparsi nel rifugio.';
       } else if (findChance < 0.7) {
         outcomeMessage += 'Il rifugio è già stato saccheggiato, ma sembra sicuro.';
       } else {
-        outcomeMessage += 'Dopo un\'attenta ricerca, non trovi nulla di utile. Solo polvere e detriti.';
+        outcomeMessage += 'Dopo un\'attenta ricerca, non trovi nulla di utile.';
       }
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, { action: 'investigazione rifugio' });
     } else {
-      outcomeMessage = `${checkDetails} FALLIMENTO.\nLa tua ricerca è stata frettolosa e superficiale.`;
+      outcomeMessage = `FALLIMENTO nella ricerca. La tua investigazione è stata superficiale.`;
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, { ability: 'percezione', action: 'investigazione rifugio' });
     }
-
-    // Marca l'investigazione come completata per questa sessione
-    updateShelterAccess(x, y, {
-      hasBeenInvestigated: true,
-      investigationResults: [outcomeMessage]
-    });
 
     setSearchResult(outcomeMessage);
   };

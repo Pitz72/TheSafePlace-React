@@ -1,16 +1,14 @@
 import { create } from 'zustand';
-import type { GameState, ShelterAccessInfo } from '../interfaces/gameState';
+import type { ShelterAccessInfo } from '../interfaces/gameState';
 import { useCharacterStore } from './character/characterStore';
 import { useTimeStore } from './time/timeStore';
 import { useInventoryStore } from './inventory/inventoryStore';
-import { useCombatStore } from './combatStore';
 import { useWorldStore } from './world/worldStore';
 import { useShelterStore } from './shelter/shelterStore';
 import { useWeatherStore } from './weather/weatherStore';
 import { useEventStore } from './events/eventStore';
 import { useSurvivalStore } from './survival/survivalStore';
 import { useNotificationStore } from './notifications/notificationStore';
-import { useRiverCrossingStore } from './river/riverCrossingStore';
 import { useNarrativeStore } from './narrative/narrativeStore';
 import { narrativeIntegration } from '../services/narrativeIntegration';
 
@@ -116,7 +114,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   },
 
   get weatherState() {
-    return useWeatherStore.getState().weatherState;
+    return useWeatherStore.getState();
   },
 
   get currentWeather() {
@@ -173,7 +171,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       
       // Inizializza l'integrazione narrativa
       narrativeIntegration.initialize();
-      
+
       // Non cambiare currentScreen qui - lascia che sia gestito dal chiamante
       // set({ currentScreen: 'menu' }); // RIMOSSO: causava il redirect al menu
       
@@ -342,4 +340,4 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
 }));
 
 // Export del tipo per compatibilità
-export type { CoreGameState as GameState };
+// export type { CoreGameState as GameState }; // Rimosso - non utilizzato

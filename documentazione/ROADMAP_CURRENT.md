@@ -1,8 +1,8 @@
 # 🗺️ ROADMAP CORRENTE - The Safe Place
 
 **Data Aggiornamento**: 21 Settembre 2025
-**Versione Corrente**: v0.9.7.7 "Fix Era Part 3"
-**Status**: ✅ STABILE - Sistema Eventi Integrato
+**Versione Corrente**: v0.9.8 "Lullaby of Ashes"
+**Status**: ✅ STABILE - Sistema Narrativo Avanzato
 **Timeline**: Q4 2025 - Q1 2026
 
 ---

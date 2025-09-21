@@ -74,29 +74,13 @@ export function generateStats(): ICharacterStats {
 export function applyStarterKit(character: ICharacterSheet, starterKit: StarterKit = SURVIVOR_STARTER_KIT): ICharacterSheet {
   // Clona il personaggio per evitare mutazioni
   const updatedCharacter = { ...character };
-  
+
   // Applica le ricette conosciute
   updatedCharacter.knownRecipes = [...starterKit.knownRecipes];
-  
-  // Trova i primi slot liberi nell'inventario per i materiali
-  let currentSlot = 0;
-  
-  starterKit.materials.forEach(material => {
-    // Trova il prossimo slot libero
-    while (currentSlot < updatedCharacter.inventory.length && updatedCharacter.inventory[currentSlot] !== null) {
-      currentSlot++;
-    }
-    
-    // Se c'è spazio, aggiungi il materiale
-    if (currentSlot < updatedCharacter.inventory.length) {
-      const item = itemDatabase[material.itemId];
-      if (item) {
-        updatedCharacter.inventory[currentSlot] = initializePortions(item, material.quantity);
-        currentSlot++;
-      }
-    }
-  });
-  
+
+  // Rimosso: Non aggiungere più materiali di crafting all'inventario iniziale
+  // Erano solo per testare il sistema di crafting
+
   return updatedCharacter;
 }
 
@@ -153,7 +137,8 @@ export function createTestCharacter(values?: Partial<ICharacterStats>, includeSt
     { itemId: 'CONS_001', quantity: 2 }, // 2x Cibo
     { itemId: 'CONS_003', quantity: 2 }, // 2x Bende
     { itemId: 'WEAP_001', quantity: 1 }, // 1x Coltello
-    { itemId: 'ARMOR_001', quantity: 1 }  // 1x Giubbotto di pelle
+    { itemId: 'ARMOR_001', quantity: 1 }, // 1x Giubbotto di pelle
+    { itemId: 'quest_music_box', quantity: 1 } // 1x Carillon Annerito (oggetto chiave)
   ];
 
   let currentSlot = 0;

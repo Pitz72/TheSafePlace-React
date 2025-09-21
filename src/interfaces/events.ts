@@ -72,6 +72,35 @@ export interface RestStopConsequences {
 }
 
 /**
+ * Definisce una singola pagina di una sequenza narrativa.
+ */
+export interface SequencePage {
+  page: number; // Numero della pagina nella sequenza
+  text: string; // Testo narrativo della pagina
+}
+
+/**
+ * Definisce una sequenza narrativa completa.
+ */
+export interface Sequence {
+  id: string; // ID univoco della sequenza
+  pages: SequencePage[]; // Array delle pagine della sequenza
+}
+
+/**
+ * Definisce le conseguenze di una scelta che possono avviare una sequenza.
+ */
+export interface SequenceConsequence {
+  type: 'sequence'; // Tipo di conseguenza
+  sequenceId: string; // ID della sequenza da avviare
+}
+
+/**
+ * Unione di tutti i tipi di conseguenze possibili.
+ */
+export type Consequence = SequenceConsequence | { type: 'end_event' };
+
+/**
  * Definisce una singola scelta che il giocatore può compiere durante un evento.
  */
 export interface EventChoice {
@@ -85,7 +114,7 @@ export interface EventChoice {
   penalty?: Penalty; // La penalità subita
   reward?: Reward; // La ricompensa ottenuta
   actionKey?: 'ignore'; // Chiave per azioni speciali come ignorare l'evento
-  consequences?: RestStopConsequences; // Conseguenze specifiche per rest stop
+  consequences?: RestStopConsequences | Consequence; // Conseguenze specifiche per rest stop o sequenze
   actions?: Array<{ type: string; payload: any }>; // Azioni da eseguire (es. start_combat)
 }
 

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameEvent, EventChoice } from '../../interfaces/events';
+import type { GameEvent, EventChoice, Sequence, SequencePage } from '../../interfaces/events';
 import { MessageType } from '../../data/MessageArchive';
 import { useCharacterStore } from '../character/characterStore';
 import { useCombatStore } from '../combatStore';
@@ -19,11 +19,23 @@ export interface EventState {
   seenEventIds: string[];
   completedEncounters: string[];
 
+  // Sequence state
+  activeSequence: {
+    sequenceId: string | null;
+    currentPage: number;
+    totalPages: number;
+    pages: SequencePage[];
+  };
+
   // Actions
   loadEventDatabase: () => Promise<void>;
+  loadSequences: () => Promise<Record<string, Sequence>>;
   triggerEvent: (event: GameEvent) => void;
   dismissCurrentEvent: () => void;
   resolveChoice: (choice: EventChoice, addLogEntry: (type: MessageType, context?: any) => void, advanceTime: (minutes: number) => void) => void;
+  startSequence: (sequenceId: string) => Promise<void>;
+  advanceSequence: () => void;
+  endSequence: () => void;
   markEventAsSeen: (eventId: string) => void;
   markEncounterAsCompleted: (encounterId: string) => void;
   isEventSeen: (eventId: string) => boolean;
@@ -44,6 +56,14 @@ export const useEventStore = create<EventState>((set, get) => ({
   eventQueue: [], // Coda eventi in attesa
   seenEventIds: [],
   completedEncounters: [],
+
+  // Sequence initial state
+  activeSequence: {
+    sequenceId: null,
+    currentPage: 0,
+    totalPages: 0,
+    pages: []
+  },
 
   // --- ACTIONS ---
   
@@ -73,6 +93,78 @@ export const useEventStore = create<EventState>((set, get) => ({
     } catch (error) {
       console.error('Failed to load event database:', error);
     }
+  },
+
+  loadSequences: async () => {
+    try {
+      const res = await fetch('/events/sequences.json');
+      const data = await res.json();
+      return data.SEQUENCES as Record<string, Sequence>;
+    } catch (error) {
+      console.error('Failed to load sequences:', error);
+      return {};
+    }
+  },
+
+  startSequence: async (sequenceId: string) => {
+    try {
+      const sequences = await get().loadSequences();
+      const sequence = sequences[sequenceId];
+
+      if (!sequence) {
+        console.error(`Sequence ${sequenceId} not found`);
+        return;
+      }
+
+      set({
+        activeSequence: {
+          sequenceId,
+          currentPage: 1, // Start from page 1
+          totalPages: sequence.pages.length,
+          pages: sequence.pages
+        }
+      });
+
+      console.log(`🎭 Sequence "${sequenceId}" started - ${sequence.pages.length} pages`);
+    } catch (error) {
+      console.error('Failed to start sequence:', error);
+    }
+  },
+
+  advanceSequence: () => {
+    const { activeSequence } = get();
+
+    if (!activeSequence.sequenceId) return;
+
+    const nextPage = activeSequence.currentPage + 1;
+
+    if (nextPage > activeSequence.totalPages) {
+      // Sequence completed
+      get().endSequence();
+    } else {
+      // Advance to next page
+      set({
+        activeSequence: {
+          ...activeSequence,
+          currentPage: nextPage
+        }
+      });
+    }
+  },
+
+  endSequence: () => {
+    console.log('🎭 Sequence ended');
+    set({
+      activeSequence: {
+        sequenceId: null,
+        currentPage: 0,
+        totalPages: 0,
+        pages: []
+      }
+    });
+
+    // Return to game after sequence ends
+    useGameStore.getState().goBack();
   },
 
   triggerEvent: (event: GameEvent) => {
@@ -256,6 +348,25 @@ export const useEventStore = create<EventState>((set, get) => ({
             console.warn('Unknown reward type:', (reward as any).type);
         }
       }
+
+      // Process consequences (sequences, etc.)
+      if (choice.consequences) {
+        const consequence = choice.consequences;
+        if (typeof consequence === 'object' && 'type' in consequence) {
+          switch (consequence.type) {
+            case 'sequence':
+              // Start sequence instead of ending event
+              console.log(`🎭 Starting sequence: ${(consequence as any).sequenceId}`);
+              get().startSequence((consequence as any).sequenceId);
+              return; // Don't end the event, sequence takes over
+            case 'end_event':
+              // Continue with normal event ending
+              break;
+            default:
+              console.warn('Unknown consequence type:', (consequence as any).type);
+          }
+        }
+      }
     };
 
     if (choice.skillCheck) {
@@ -400,7 +511,13 @@ export const useEventStore = create<EventState>((set, get) => ({
       currentEventResult: null,
       eventQueue: [],
       seenEventIds: [],
-      completedEncounters: []
+      completedEncounters: [],
+      activeSequence: {
+        sequenceId: null,
+        currentPage: 0,
+        totalPages: 0,
+        pages: []
+      }
     });
   },
 

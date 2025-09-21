@@ -131,7 +131,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione e stato pausa */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
-          v0.9.7.7 - Fix Era Part 3
+          v0.9.8 - Lullaby of Ashes
         </p>
         
         {/* Indicatore di pausa */}
