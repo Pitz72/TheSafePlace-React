@@ -1,24 +1,25 @@
 # 🗺️ ROADMAP CORRENTE - The Safe Place
 
 **Data Aggiornamento**: 21 Settembre 2025
-**Versione Corrente**: v0.9.7.6 "A triumph of objects"
-**Status**: ✅ STABILE - Sistema Oggetti Completato
+**Versione Corrente**: v0.9.7.7 "Fix Era Part 3"
+**Status**: ✅ STABILE - Sistema Eventi Integrato
 **Timeline**: Q4 2025 - Q1 2026
 
 ---
 
-## 🎯 PANORAMICA STRATEGICA v0.9.7.6
+## 🎯 PANORAMICA STRATEGICA v0.9.7.7
 
 ### Obiettivo Principale - AGGIORNATO
-Sistema oggetti completamente implementato. Eventi ora danno ricompense funzionanti. Preparazione per espansione contenuti e ottimizzazioni.
+Sistema eventi completamente integrato. Conflitti tra eventi bioma/random e main quest risolti. Ogni evento importante ora mostrato senza eccezioni.
 
 ### Stato Attuale del Progetto - ULTERIORMENTE MIGLIORATO
 - **Architettura**: ✅ **REFACTORED** - God Objects eliminati, servizi dedicati
-- **Sistemi Core**: ✅ **COMPLETATI** - 95% completati (sistema oggetti aggiunto)
-- **Sistema Oggetti**: ✅ **NUOVO** - 57 oggetti implementati, eventi funzionanti
+- **Sistemi Core**: ✅ **COMPLETATI** - 98% completati (sistema eventi integrato)
+- **Sistema Eventi**: ✅ **NUOVO** - Coda prioritaria, 0 conflitti, narrativa garantita
+- **Sistema Oggetti**: ✅ **COMPLETATO** - 57 oggetti implementati, eventi funzionanti
 - **UI/UX**: ✅ Tema CRT implementato
 - **Testing**: ✅ **STABILIZZATO** - 19 suite, 244 test passanti
-- **Documentazione**: ✅ **SINCRONIZZATA** - Aggiornata con v0.9.7.6
+- **Documentazione**: ✅ **SINCRONIZZATA** - Aggiornata con v0.9.7.7
 
 ---
 
@@ -82,12 +83,14 @@ Sistema oggetti completamente implementato. Eventi ora danno ricompense funziona
 - **Sistema Zustand**: ✅ **REFACTORED** - Multi-store con architettura pulita
 - **Save/Load**: ✅ Persistenza completa
 - **Level Up**: ✅ Sistema progressione
-- **Eventi**: ✅ Sistema eventi casuali
+- **Sistema Eventi**: ✅ **NUOVO** - Coda prioritaria, 0 conflitti, narrativa garantita
+- **Main Quest**: ✅ Sistema narrativo canonico con 12 frammenti
 - **Navigazione UI**: ✅ Gestione schermate
 - **Camera di Gioco**: ✅ Viewport e rendering
 - **Persistenza Personaggio**: ✅ Salvataggio stato
 - **Pannello Impostazioni**: ✅ Configurazioni utente
 - **Sistema Inventario**: ✅ **REFACTORED** - characterStore come source of truth
+- **Sistema Oggetti**: ✅ **COMPLETATO** - 57 oggetti implementati
 - **Servizi Architetturali**: ✅ **NUOVO** - playerMovementService
 
 ### 🟡 Sistemi in Sviluppo

@@ -3,7 +3,9 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useWorldStore } from '../stores/world/worldStore';
 import { useTimeStore } from '../stores/time/timeStore';
 import { useSurvivalStore } from '../stores/survival/survivalStore';
+import { useEventStore } from '../stores/events/eventStore';
 import type { MainQuestEvent } from '../stores/narrative/narrativeStore';
+import type { GameEvent } from '../interfaces/events';
 
 /**
  * Servizio per gestire i trigger della main quest secondo il GDD canonico
@@ -119,28 +121,61 @@ export class MainQuestTriggerService {
    */
   public triggerMainQuestEvent(event: MainQuestEvent): void {
     const narrativeStore = useNarrativeStore.getState();
-    
-    // Qui dovresti integrare con il sistema di eventi esistente
-    // Per ora, logga l'evento e avanza allo stage successivo
-    console.log(`Triggering main quest event: ${event.title}`);
-    
-    // Mostra l'evento al giocatore (da implementare con EventScreen)
-    this.showMainQuestEvent(event);
-    
+
+    console.log(`🎭 MAIN QUEST EVENT TRIGGERED: ${event.title}`);
+
+    // Per eventi main quest narrativi, mostra direttamente il testo e chiudi automaticamente
+    const eventStore = useEventStore.getState();
+
+    // Crea un evento semplice che si chiude automaticamente
+    const gameEvent: GameEvent = {
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      choices: [] // Nessuna scelta - si chiude automaticamente
+    };
+
+    // Triggera l'evento attraverso il sistema esistente
+    eventStore.triggerEvent(gameEvent);
+
+    // L'evento si chiude automaticamente grazie all'EventScreen
     // Avanza allo stage successivo
     narrativeStore.advanceToNextStage();
   }
   
   /**
-   * Mostra l'evento al giocatore usando EventScreen
+   * Controlla periodicamente i trigger basati su tempo e posizione
    */
-  private showMainQuestEvent(event: MainQuestEvent): void {
-    // Qui dovresti integrare con il sistema di eventi esistente
-    // L'evento deve essere mostrato a schermo intero con una sola opzione: [Invio] Continua
-    
-    // Per ora, implementazione placeholder
-    console.log(`Showing event: ${event.title}`);
-    console.log(`Description: ${event.description}`);
+  public checkPeriodicTriggers(): void {
+    const timeStore = useTimeStore.getState();
+    const worldStore = useWorldStore.getState();
+
+    // Controlla trigger basati su giorni di sopravvivenza
+    const currentDay = timeStore.timeState?.day || 0;
+    if (currentDay >= 2 || currentDay >= 7) { // Per mq_04_darkness e mq_09_name
+      const eventToTrigger = this.checkMainQuestTrigger();
+      if (eventToTrigger) {
+        this.triggerMainQuestEvent(eventToTrigger);
+      }
+    }
+
+    // Controlla trigger basati su posizione
+    const playerPos = worldStore.playerPosition;
+    if (playerPos.x === 140 && playerPos.y === 140) { // Per mq_11_confession
+      const eventToTrigger = this.checkMainQuestTrigger();
+      if (eventToTrigger) {
+        this.triggerMainQuestEvent(eventToTrigger);
+      }
+    }
+
+    // Controlla trigger basati su bioma (fiume)
+    if (worldStore.currentBiome === 'R') { // Per mq_05_question
+      this.onBiomeEntered('R');
+      const eventToTrigger = this.checkMainQuestTrigger();
+      if (eventToTrigger) {
+        this.triggerMainQuestEvent(eventToTrigger);
+      }
+    }
   }
   
   /**
@@ -150,8 +185,22 @@ export class MainQuestTriggerService {
     // Incrementa il contatore di progresso
     const narrativeStore = useNarrativeStore.getState();
     narrativeStore.incrementProgress();
-    
+
     // Controlla se triggerare un evento
+    const eventToTrigger = this.checkMainQuestTrigger();
+    if (eventToTrigger) {
+      this.triggerMainQuestEvent(eventToTrigger);
+    }
+  }
+
+  /**
+   * Funzione semplificata per incrementare progresso (chiamata dal movimento)
+   */
+  public incrementProgress(): void {
+    const narrativeStore = useNarrativeStore.getState();
+    narrativeStore.incrementProgress();
+
+    // Controlla automaticamente se triggerare un evento
     const eventToTrigger = this.checkMainQuestTrigger();
     if (eventToTrigger) {
       this.triggerMainQuestEvent(eventToTrigger);

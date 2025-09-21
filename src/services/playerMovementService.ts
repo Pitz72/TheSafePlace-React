@@ -3,7 +3,7 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useSurvivalStore } from '../stores/survival/survivalStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useWorldStore } from '../stores/world/worldStore';
-import { narrativeIntegration } from './narrativeIntegration';
+import { mainQuestTrigger } from './mainQuestTrigger';
 
 import { MessageType } from '../data/MessageArchive';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
@@ -51,6 +51,20 @@ class PlayerMovementService {
     // Attiva eventi casuali per bioma tramite eventStore
     console.log('🎲 BIOME EVENTS DEBUG - Calling eventStore.checkForRandomEvent()');
     eventStore.checkForRandomEvent(newBiomeKey, weatherEffects);
+
+    // 5.5. Incrementa progresso main quest e controlla trigger
+    mainQuestTrigger.incrementProgress();
+
+    // 5.6. Controlla trigger periodici (tempo, posizione)
+    mainQuestTrigger.checkPeriodicTriggers();
+
+    // 5.7. Controlla se siamo arrivati al Safe Place
+    if (worldStore.mapData && worldStore.playerPosition) {
+      const currentTile = worldStore.mapData[worldStore.playerPosition.y]?.[worldStore.playerPosition.x];
+      if (currentTile === 'S') {
+        mainQuestTrigger.onSafePlaceReached();
+      }
+    }
 
     // 6. Calculate movement time and advance game time
     const baseMovementTime = 10;

@@ -10,21 +10,21 @@
     {
       "stage": 2,
       "id": "mq_02_water",
-      "trigger": { "type": "survival_stat", "stat": "thirst", "value": 25 },
+      "trigger": { "type": "progress", "value": 15 },
       "title": "Ricordo: La Lezione dell'Acqua",
       "description": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di metallo e di morte. Stavi per bere, un bambino guidato solo dall'istinto. La mano di Elian ti afferrò, ferma, quasi violenta. 'No!', fu un ordine perentorio. Poi, con gesti lenti e metodici, prese uno straccio sudicio, sabbia, ciottoli, e costruì un filtro rudimentale. 'Il mondo non è più amico,' ti disse, porgendoti l'acqua torbida. 'Ogni sorso, ogni boccone, te lo devi conquistare. E devi capire cosa puoi prendere, e cosa ti ucciderà'."
     },
     {
       "stage": 3,
       "id": "mq_03_blood",
-      "trigger": { "type": "combat_end", "result": "win" },
+      "trigger": { "type": "progress", "value": 30 },
       "title": "Ricordo: Il Sapore del Sangue",
       "description": "L'adrenalina dello scontro ti riporta alla vecchia stazione ferroviaria. I predoni. Il lampo di un coltello. Tuo padre che combatteva, una furia disperata. L'ordine che ti squarciò l'anima: 'CORRI! NON VOLTARTI!'. Ricordi la tua fuga, il cuore che martellava, il sapore amaro della polvere e della paura in bocca. Ore dopo, Elian ti raggiunse, zoppicando, una maschera di sudore e sangue rappreso. Non disse nulla, ma quella notte capisti una lezione terribile: a volte, sopravvivere significa lasciare qualcuno indietro."
     },
     {
       "stage": 4,
       "id": "mq_04_darkness",
-      "trigger": { "type": "survival_days", "value": 5 },
+      "trigger": { "type": "survival_days", "value": 2 },
       "title": "Ricordo: Imparare il Buio",
       "description": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'."
     },
@@ -38,35 +38,35 @@
     {
       "stage": 6,
       "id": "mq_06_angels",
-      "trigger": { "type": "progress", "value": 200 },
+      "trigger": { "type": "progress", "value": 80 },
       "title": "Ricordo: Gli Angeli della Cenere",
       "description": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame."
     },
     {
       "stage": 7,
       "id": "mq_07_burden",
-      "trigger": { "type": "level_up", "level": 5 },
+      "trigger": { "type": "progress", "value": 120 },
       "title": "Ricordo: Il Fardello",
       "description": "La nuova forza che senti nelle tue membra ti riporta a un confronto con tuo padre. 'Perché non mi dici mai niente?', gli avevi urlato. E per la prima volta avevi visto un dolore nudo nei suoi occhi. 'Ci sono cose che un figlio non dovrebbe mai sapere,' ti aveva risposto. 'Sapere non cambierebbe nulla, ragazzo. Anzi, forse renderebbe tutto più difficile da sopportare. La verità, a volte, è un fardello troppo pesante'."
     },
     {
       "stage": 8,
       "id": "mq_08_map",
-      "trigger": { "type": "use_item", "itemId": "old_military_map" },
+      "trigger": { "type": "progress", "value": 160 },
       "title": "Ricordo: L'Ultima Lezione",
       "description": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi quella mattina gelida, quando ti svegliasti e lui non c'era. E la lettera. 'Nel tuo sacco... troverai una mappa... Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile... ma è l'unica possibilità che ti resta.' Quella mappa non era solo un pezzo di carta. Era un testamento. L'inizio del tuo vero, solitario viaggio."
     },
     {
       "stage": 9,
       "id": "mq_09_name",
-      "trigger": { "type": "survival_days", "value": 15 },
+      "trigger": { "type": "survival_days", "value": 7 },
       "title": "Ricordo: Il Significato di un Nome",
       "description": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco."
     },
     {
       "stage": 10,
       "id": "mq_10_choice",
-      "trigger": { "type": "event_choice", "eventId": "lore_sick_traveler" },
+      "trigger": { "type": "progress", "value": 200 },
       "title": "L'Eco di una Scelta",
       "description": "Qualunque cosa tu abbia scelto, un pensiero ti gela il sangue. La scelta tra il pragmatismo brutale e la compassione rischiosa. All'improvviso, capisci. Questo è l'abisso in cui tuo padre ha guardato. Questa è la scelta che ha dovuto fare. La sua durezza, i suoi silenzi... forse non erano crudeltà. Forse erano solo le cicatrici lasciate da una scelta impossibile."
     },

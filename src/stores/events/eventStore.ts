@@ -15,6 +15,7 @@ export interface EventState {
   eventDatabase: Record<string, GameEvent[]>;
   currentEvent: GameEvent | null;
   currentEventResult: string | null;
+  eventQueue: GameEvent[]; // Coda eventi in attesa
   seenEventIds: string[];
   completedEncounters: string[];
 
@@ -40,6 +41,7 @@ export const useEventStore = create<EventState>((set, get) => ({
   eventDatabase: {},
   currentEvent: null,
   currentEventResult: null,
+  eventQueue: [], // Coda eventi in attesa
   seenEventIds: [],
   completedEncounters: [],
 
@@ -74,24 +76,56 @@ export const useEventStore = create<EventState>((set, get) => ({
   },
 
   triggerEvent: (event: GameEvent) => {
-    const { currentEvent, markEventAsSeen } = get();
-    
-    // Evita di sovrascrivere eventi attivi
-    if (currentEvent) return;
+    const { currentEvent, eventQueue, markEventAsSeen } = get();
 
     // Se l'evento ha un ID, segnalo come visto
     if (event.id) {
       markEventAsSeen(event.id);
     }
 
+    // Se c'è già un evento attivo, aggiungilo alla coda con priorità
+    if (currentEvent) {
+      const isMainQuest = event.id?.startsWith('mq_') || event.title?.includes('Ricordo:');
+      if (isMainQuest) {
+        // Eventi main quest in testa alla coda
+        console.log(`🎭 Evento main quest "${event.title}" prioritario in testa coda`);
+        set({ eventQueue: [event, ...eventQueue] });
+      } else {
+        // Eventi normali in fondo alla coda
+        console.log(`🎭 Evento "${event.title}" accodato (slot occupato)`);
+        set({ eventQueue: [...eventQueue, event] });
+      }
+      return;
+    }
+
+    // Slot libero: mostra l'evento immediatamente
+    console.log(`🎭 Evento "${event.title}" mostrato immediatamente`);
     set({ currentEvent: event });
     // Mostra la schermata dell'evento
     useGameStore.getState().setCurrentScreen('event');
   },
 
   dismissCurrentEvent: () => {
+    const { eventQueue } = get();
+
+    // Controlla se ci sono eventi in coda
+    if (eventQueue.length > 0) {
+      const nextEvent = eventQueue[0];
+      const remainingQueue = eventQueue.slice(1);
+
+      console.log(`🎭 Evento dalla coda: "${nextEvent.title}" (${remainingQueue.length} in coda)`);
+
+      set({
+        currentEvent: nextEvent,
+        currentEventResult: null,
+        eventQueue: remainingQueue
+      });
+      // Rimani sulla schermata eventi
+      return;
+    }
+
+    // Nessun evento in coda: torna al gioco
     set({ currentEvent: null, currentEventResult: null });
-    // Torna alla schermata precedente
     useGameStore.getState().goBack();
   },
 
@@ -364,6 +398,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       eventDatabase: {},
       currentEvent: null,
       currentEventResult: null,
+      eventQueue: [],
       seenEventIds: [],
       completedEncounters: []
     });
@@ -372,7 +407,8 @@ export const useEventStore = create<EventState>((set, get) => ({
   restoreState: (state) => {
     set({
       seenEventIds: state.seenEventIds,
-      completedEncounters: state.completedEncounters
+      completedEncounters: state.completedEncounters,
+      eventQueue: [] // Reset coda al caricamento
     });
   },
 

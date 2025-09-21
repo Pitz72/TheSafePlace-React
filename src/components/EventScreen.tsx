@@ -24,6 +24,17 @@ const EventScreen: React.FC = () => {
     setSelectedChoiceIndex(0);
   }, [currentEvent]);
 
+  // Per eventi senza scelte (come main quest), chiudi automaticamente dopo 6 secondi
+  useEffect(() => {
+    if (currentEvent && !hasChoices && !showingResult) {
+      const timer = setTimeout(() => {
+        dismissCurrentEvent();
+      }, 6000); // 6 secondi per leggere
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentEvent, hasChoices, showingResult, dismissCurrentEvent]);
+
   // Gestione input keyboard-only
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -38,7 +49,7 @@ const EventScreen: React.FC = () => {
         return;
       }
 
-      // Se non ci sono scelte, solo ENTER o ESC (futuro) sono ammessi
+      // Se non ci sono scelte, solo ENTER chiude l'evento
       if (!hasChoices) {
         if (event.key.toLowerCase() === 'enter') {
           event.preventDefault();
@@ -140,9 +151,14 @@ const EventScreen: React.FC = () => {
 
             {/* Controlli keyboard */}
             <div className="mt-6 text-center text-phosphor-500 text-sm">
-              {hasChoices
-                ? '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
-                : '[ENTER] Continua'}
+              {hasChoices ? (
+                '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
+              ) : (
+                <div>
+                  <div className="mb-2">Questo ricordo svanirà automaticamente tra pochi secondi...</div>
+                  <div>[ENTER] Chiudi ora</div>
+                </div>
+              )}
             </div>
           </>
         )}
