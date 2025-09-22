@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './App.css';
 import { useGameScale } from './hooks/useGameScale';
 import { usePlayerMovement } from './hooks/usePlayerMovement';
 import { useGameStore } from './stores/gameStore';
@@ -229,7 +228,7 @@ const GameContent = () => {
           onRemove={removeNotification} 
         />
         <div className="h-full flex flex-col">
-          <NarrativeManager />
+          <NarrativeManager isGameActive={currentScreen === 'game' && !isGameOver} />
           {combatResult ? (
             <PostCombatScreen
               result={combatResult}
