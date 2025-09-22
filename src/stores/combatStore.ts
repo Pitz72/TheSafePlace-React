@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import type { CombatState, CombatResult, CombatActionType, CombatLogEntry } from '../types/combat';
+import type { IInventorySlot } from '../interfaces/items';
 import { useCharacterStore } from './character/characterStore';
 import { useInventoryStore } from './inventory/inventoryStore';
 import { useTimeStore } from './time/timeStore';
+import { useGameStore } from './gameStore';
 import { createEnemyCombatant, updateEnemyHealthDescription } from '../utils/enemyUtils';
 import { rollToHit, rollDamage } from '../utils/combatCalculations';
 import { combatEncounters } from '../data/combatEncounters';
@@ -105,12 +107,15 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
       const loot: IInventorySlot[] = [];
 
       currentState.enemies.forEach(enemy => {
-        xpGained += enemy.xpValue || 10;
+        // Trova il template dell'enemy per ottenere xpValue
+        const enemyTemplate = currentState.encounter.enemies.find(e => e.id === enemy.templateId);
+        xpGained += enemyTemplate?.xpValue || 10;
         if (Math.random() < 0.5) {
           loot.push({ itemId: 'scrap_metal', quantity: 1 });
         }
       });
 
+      const gameStore = useGameStore.getState();
       gameStore.addExperience(xpGained);
       loot.forEach(item => gameStore.addItem(item.itemId, item.quantity));
 
@@ -155,7 +160,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
       const newLogEntry: CombatLogEntry = {
         ...entry,
         id: `${Date.now()}-${Math.random()}`,
-        timestamp: useTimeStore.getState().formatTime(useTimeStore.getState().currentTime),
+        timestamp: useTimeStore.getState().getTimeString(),
       };
 
       return {
@@ -198,7 +203,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
           const createLogEntry = (entry: Omit<CombatLogEntry, 'id' | 'timestamp'>): CombatLogEntry => ({
             ...entry,
             id: `${Date.now()}-${Math.random()}`,
-            timestamp: useTimeStore.getState().formatTime(useTimeStore.getState().currentTime),
+            timestamp: useTimeStore.getState().getTimeString(),
           });
 
           newLogEntries.push(createLogEntry({
@@ -288,13 +293,17 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         // Pausa simulata per dare al giocatore il tempo di leggere
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        const attackResult = rollToHit(enemy, player.ac, 'melee'); // Assumiamo melee per ora
+        // Per gli enemy, facciamo un tiro semplice con attackBonus
+        const roll = Math.floor(Math.random() * 20) + 1;
+        const total = roll + enemy.attackBonus;
+        const isHit = total >= player.ac;
+
         addLogEntry({
           type: 'roll',
-          message: `${enemy.name} attacca! Tiro per colpire: ${attackResult.roll} + ${attackResult.attackBonus} = ${attackResult.total} (vs AC ${player.ac})`
+          message: `${enemy.name} attacca! Tiro per colpire: ${roll} + ${enemy.attackBonus} = ${total} (vs AC ${player.ac})`
         });
 
-        if (attackResult.isHit) {
+        if (isHit) {
           const damageResult = rollDamage(enemy.damage);
           playerHp -= damageResult.total;
 
