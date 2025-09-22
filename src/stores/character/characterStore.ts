@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import type { ICharacterSheet, AbilityType, ICharacterStatus } from '../../rules/types';
 import { CharacterStatus } from '../../rules/types';
 import { createTestCharacter } from '../../rules/characterGenerator';
-import { equipItem } from '../../utils/equipmentManager';
 import { itemDatabase } from '../../data/items/itemDatabase';
 import { MessageType, JOURNAL_STATE } from '../../data/MessageArchive';
 import { useNotificationStore } from '../notifications/notificationStore';

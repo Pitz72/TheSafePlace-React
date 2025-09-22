@@ -325,7 +325,6 @@ export const useEventStore = create<EventState>((set, get) => ({
             }
             break;
           case 'status':
-            const characterStore = useCharacterStore.getState();
             if (choice.penalty.status === 'SICK') {
               characterStore.applyStatus(CharacterStatus.SICK);
             } else if (choice.penalty.status === 'WOUNDED') {
