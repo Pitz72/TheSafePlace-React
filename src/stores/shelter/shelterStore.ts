@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { ShelterAccessInfo } from '../../interfaces/gameState';
 import { useWorldStore } from '../world/worldStore';
+import { useTimeStore } from '../time/timeStore';
 
 export interface ShelterState {
   shelterAccessState: Record<string, ShelterAccessInfo>;
@@ -32,7 +33,7 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
   },
 
   createShelterInfo: (x, y) => {
-    const { timeState } = useWorldStore.getState();
+    const { timeState } = useTimeStore.getState();
     return {
       coordinates: get().createShelterKey(x, y),
       dayVisited: timeState.day,
@@ -60,8 +61,9 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
     const shelterInfo = get().getShelterInfo(x, y);
     if (!shelterInfo) return true;
 
-    const { timeState } = useWorldStore.getState();
-    if (!timeState.isDay) return true;
+    const { timeState } = useTimeStore.getState();
+    const isDay = timeState.currentTime >= 360 && timeState.currentTime <= 1200; // 06:00 - 20:00
+    if (!isDay) return true;
 
     return shelterInfo.isAccessible;
   },

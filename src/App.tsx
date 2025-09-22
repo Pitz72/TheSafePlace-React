@@ -6,6 +6,7 @@ import { useCombatStore } from './stores/combatStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { useCharacterStore } from './stores/character/characterStore';
 import { useWorldStore } from './stores/world/worldStore';
+import { useTimeStore } from './stores/time/timeStore';
 import { useSaveStore } from './stores/save/saveStore';
 import { useSurvivalStore } from './stores/survival/survivalStore';
 import { useNotificationStore } from './stores/notifications/notificationStore';
@@ -100,7 +101,8 @@ const GameContent = () => {
   const { loadSavedGame } = useSaveStore();
 
   // Granular selectors to prevent infinite loops
-  const { playerPosition, mapData, timeState, isMapLoading } = useWorldStore();
+  const { playerPosition, mapData, isMapLoading } = useWorldStore();
+  const { timeState } = useTimeStore();
   const { characterSheet, getModifier } = useCharacterStore();
   const { getInventory } = useInventoryStore();
   const items = getInventory();
