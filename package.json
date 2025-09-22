@@ -1,8 +1,8 @@
 {
   "name": "the-safe-place",
   "private": true,
-  "version": "0.9.8",
-  "codename": "Lullaby of Ashes",
+  "version": "0.9.8.1",
+  "codename": "Fix and Fix",
   "type": "module",
   "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo",
   "author": "TheSafePlace Development Team",
