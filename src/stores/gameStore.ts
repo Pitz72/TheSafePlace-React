@@ -208,11 +208,19 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   },
   
   startNewGame: () => {
-    // Reset di tutti gli store per iniziare una nuova partita
+    // Reset completo di tutti gli store per iniziare una nuova partita
     const worldStore = useWorldStore.getState();
+    const characterStore = useCharacterStore.getState();
+    const eventStore = useEventStore.getState();
+    const shelterStore = useShelterStore.getState();
+
+    // Reset degli store che hanno metodi di reset
     worldStore.resetWorld();
-    
-    set({ 
+    characterStore.resetCharacter();
+    eventStore.resetEventState();
+    shelterStore.resetShelterInvestigations();
+
+    set({
       gameInProgress: true,
       isPaused: false,
       currentScreen: 'characterCreation',

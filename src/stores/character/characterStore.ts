@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { ICharacterSheet, AbilityType } from '../../rules/types';
+import type { ICharacterSheet, AbilityType, ICharacterStatus } from '../../rules/types';
+import { CharacterStatus } from '../../rules/types';
 import { createTestCharacter } from '../../rules/characterGenerator';
 import { equipItem } from '../../utils/equipmentManager';
 import { itemDatabase } from '../../data/items/itemDatabase';
@@ -24,6 +25,12 @@ export interface CharacterState {
   // Inventory Management
   addItemToInventory: (itemId: string, quantity: number) => boolean;
   removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
+
+  // Status Management
+  applyStatus: (status: CharacterStatus, duration?: number) => void;
+  removeStatus: (status: CharacterStatus) => void;
+  hasStatus: (status: CharacterStatus) => boolean;
+  getStatusDescription: (status: CharacterStatus) => string;
 
   // Initialization
   resetCharacter: () => void;
@@ -119,7 +126,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     const { characterSheet } = get();
     const currentXP = characterSheet.experience.currentXP;
     const newXP = currentXP + xpGained;
-    const canLevelUp = newXP >= characterSheet.experience.nextLevelXP;
+    const canLevelUp = newXP >= characterSheet.experience.xpForNextLevel;
 
     // Update XP without notification
     set({
@@ -196,6 +203,85 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
     get().updateCharacterSheet({ ...characterSheet, inventory: newInventory });
     return true;
+  },
+
+  // --- STATUS MANAGEMENT ---
+  applyStatus: (status, duration = 0) => {
+    const { characterSheet } = get();
+    const newStatusEffects = [...characterSheet.status.statusEffects];
+
+    if (!newStatusEffects.includes(status)) {
+      newStatusEffects.push(status);
+    }
+
+    const newStatusDuration = { ...characterSheet.status.statusDuration };
+    if (duration > 0) {
+      newStatusDuration[status] = duration;
+    }
+
+    const updatedStatus: ICharacterStatus = {
+      ...characterSheet.status,
+      currentStatus: status,
+      statusEffects: newStatusEffects,
+      statusDuration: newStatusDuration
+    };
+
+    get().updateCharacterSheet({
+      ...characterSheet,
+      status: updatedStatus
+    });
+
+    // Log status application
+    const notificationStore = useNotificationStore.getState();
+    notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
+      status: status,
+      action: 'applicato'
+    });
+  },
+
+  removeStatus: (status) => {
+    const { characterSheet } = get();
+    const newStatusEffects = characterSheet.status.statusEffects.filter(s => s !== status);
+    const newStatusDuration = { ...characterSheet.status.statusDuration };
+    delete newStatusDuration[status];
+
+    const currentStatus = newStatusEffects.length > 0 ? newStatusEffects[0] : CharacterStatus.NORMAL;
+
+    const updatedStatus: ICharacterStatus = {
+      ...characterSheet.status,
+      currentStatus,
+      statusEffects: newStatusEffects,
+      statusDuration: newStatusDuration
+    };
+
+    get().updateCharacterSheet({
+      ...characterSheet,
+      status: updatedStatus
+    });
+
+    // Log status removal
+    const notificationStore = useNotificationStore.getState();
+    notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
+      status: status,
+      action: 'rimosso'
+    });
+  },
+
+  hasStatus: (status) => {
+    return get().characterSheet.status.statusEffects.includes(status);
+  },
+
+  getStatusDescription: (status) => {
+    const descriptions = {
+      [CharacterStatus.NORMAL]: 'Normale',
+      [CharacterStatus.SICK]: 'Malato - Debole e vulnerabile',
+      [CharacterStatus.WOUNDED]: 'Ferito - Ridotta efficienza',
+      [CharacterStatus.POISONED]: 'Avvelenato - Danni nel tempo',
+      [CharacterStatus.STARVING]: 'Affamato - Forza ridotta',
+      [CharacterStatus.DEHYDRATED]: 'Disidratato - Stanchezza aumentata',
+      [CharacterStatus.DEAD]: 'Morto'
+    };
+    return descriptions[status] || 'Sconosciuto';
   },
 
   resetCharacter: () => {

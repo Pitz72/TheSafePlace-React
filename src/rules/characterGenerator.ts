@@ -1,7 +1,8 @@
 // Character Generator - D&D Style "4d6 drop lowest" method
 // Parte del progetto "Rules are Rules" v0.2.0
 
-import type { ICharacterStats, ICharacterSheet } from './types';
+import type { ICharacterStats, ICharacterSheet, ICharacterStatus } from './types';
+import { CharacterStatus } from './types';
 import { calculateMaxHP, calculateBaseAC, calculateCarryCapacity } from './mechanics';
 import type { IInventorySlot } from '../interfaces/items';
 import { initializePortions } from '../utils/portionSystem';
@@ -14,6 +15,25 @@ interface StarterKit {
   knownRecipes: string[];
   materials: { itemId: string; quantity: number }[];
   description: string;
+}
+
+/**
+ * Crea uno stato personaggio normale
+ */
+function createNormalStatus(): ICharacterStatus {
+  return {
+    currentStatus: CharacterStatus.NORMAL,
+    statusEffects: [],
+    statusDuration: {
+      [CharacterStatus.NORMAL]: 0,
+      [CharacterStatus.SICK]: 0,
+      [CharacterStatus.WOUNDED]: 0,
+      [CharacterStatus.POISONED]: 0,
+      [CharacterStatus.STARVING]: 0,
+      [CharacterStatus.DEHYDRATED]: 0,
+      [CharacterStatus.DEAD]: 0
+    }
+  };
 }
 
 /**
@@ -106,6 +126,7 @@ export function createCharacter(): ICharacterSheet {
       armor: { itemId: null, slotType: 'armor' },
       accessory: { itemId: null, slotType: 'accessory' }
     },
+    status: createNormalStatus(),
     experience: {
       currentXP: 0,
       xpForNextLevel: 100, // XP necessari per livello 2
@@ -166,6 +187,7 @@ export function createTestCharacter(values?: Partial<ICharacterStats>, includeSt
       armor: { itemId: null, slotType: 'armor' },
       accessory: { itemId: null, slotType: 'accessory' }
     },
+    status: createNormalStatus(),
     experience: {
       currentXP: 0,
       xpForNextLevel: 100, // XP necessari per livello 2

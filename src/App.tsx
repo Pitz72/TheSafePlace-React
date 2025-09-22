@@ -113,6 +113,9 @@ const GameContent = () => {
   const clearCombatResults = useCombatStore(state => state.clearCombatResults);
   const { videoMode } = useSettingsStore();
 
+  // Check for game over condition
+  const isGameOver = characterSheet.currentHP <= 0;
+
   const getCurrentTile = (): string => {
     if (!mapData || mapData.length === 0 || playerPosition.x === -1 || playerPosition.y === -1) return '.';
     const row = mapData[playerPosition.y];
@@ -165,7 +168,7 @@ const GameContent = () => {
                       <li>HP: <span className={`${(characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' : 'text-green-400'}`}>{characterSheet.currentHP}</span>/<span className="text-phosphor-400">{characterSheet.maxHP}</span></li>
                       <li>Sazietà: <span className={`${survivalState.hunger < 25 ? 'text-red-400' : survivalState.hunger < 50 ? 'text-yellow-400' : 'text-phosphor-400'}`}>{Math.floor(survivalState.hunger)}</span>/100</li>
                       <li>Idratazione: <span className={`${survivalState.thirst < 25 ? 'text-red-400' : survivalState.thirst < 50 ? 'text-yellow-400' : 'text-phosphor-400'}`}>{Math.floor(survivalState.thirst)}</span>/100</li>
-                      <li>Status: <span className={`${(characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' : 'text-green-400'}`}>{characterSheet.currentHP <= 0 ? 'Morto' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'Critico' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'Ferito' : 'Normale'}</span></li>
+                      <li>Status: <span className={`${characterSheet.status.currentStatus === 'dead' ? 'text-red-600' : characterSheet.status.currentStatus === 'sick' ? 'text-yellow-500' : characterSheet.status.currentStatus === 'wounded' ? 'text-orange-400' : 'text-green-400'}`}>{characterSheet.status.currentStatus === 'dead' ? 'Morto' : characterSheet.status.currentStatus === 'sick' ? 'Malato' : characterSheet.status.currentStatus === 'wounded' ? 'Ferito' : characterSheet.status.currentStatus === 'poisoned' ? 'Avvelenato' : characterSheet.status.currentStatus === 'starving' ? 'Affamato' : characterSheet.status.currentStatus === 'dehydrated' ? 'Disidratato' : 'Normale'}</span></li>
                     </ul>
                     <InventoryPanel />
                     <KeyboardCommandsPanel />
@@ -236,6 +239,47 @@ const GameContent = () => {
               onLoadGame={() => loadSavedGame('quicksave')}
               onMainMenu={initializeGame}
             />
+          ) : isGameOver ? (
+            <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
+              <div className="w-full max-w-2xl border border-red-600 bg-gray-900 p-8 rounded-lg shadow-lg">
+                <h2 className="text-6xl font-bold mb-8 text-center text-red-400 glow-red">
+                  GAME OVER
+                </h2>
+                <div className="text-center mb-8">
+                  <p className="text-xl mb-4 text-phosphor-400">
+                    Il viaggio di Ultimo è giunto al termine.
+                  </p>
+                  <p className="text-lg text-phosphor-500 mb-8">
+                    {characterSheet.status.currentStatus === 'starving' ? 'La fame ha avuto la meglio...' :
+                     characterSheet.status.currentStatus === 'dehydrated' ? 'La sete ha vinto...' :
+                     characterSheet.status.currentStatus === 'sick' ? 'La malattia ha trionfato...' :
+                     characterSheet.status.currentStatus === 'poisoned' ? 'Il veleno ha fatto il suo corso...' :
+                     'Il combattimento è stato fatale...'}
+                  </p>
+                  <p className="text-sm text-phosphor-600 mb-8">
+                    "Non tutti i viaggi hanno una destinazione felice, ma ogni storia merita di essere raccontata."
+                  </p>
+                </div>
+                <div className="flex justify-center space-x-4">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="px-6 py-3 bg-phosphor-600 hover:bg-phosphor-500 text-black font-bold rounded transition-colors"
+                  >
+                    NUOVA PARTITA
+                  </button>
+                  <button
+                    onClick={() => {
+                      const { initializeGame } = useGameStore.getState();
+                      initializeGame();
+                      setCurrentScreen('menu');
+                    }}
+                    className="px-6 py-3 border border-phosphor-600 hover:bg-phosphor-600 hover:text-black text-phosphor-400 font-bold rounded transition-colors"
+                  >
+                    MENU PRINCIPALE
+                  </button>
+                </div>
+              </div>
+            </div>
           ) : isInCombat ? (
             <CombatScreen />
           ) : (

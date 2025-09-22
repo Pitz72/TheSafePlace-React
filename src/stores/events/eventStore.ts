@@ -4,6 +4,7 @@ import { MessageType } from '../../data/MessageArchive';
 import { useCharacterStore } from '../character/characterStore';
 import { useCombatStore } from '../combatStore';
 import { useGameStore } from '../gameStore';
+import { CharacterStatus } from '../../rules/types';
 
 // Esponi funzioni di debug globalmente
 if (typeof window !== 'undefined') {
@@ -324,8 +325,14 @@ export const useEventStore = create<EventState>((set, get) => ({
             }
             break;
           case 'status':
-            // TODO: Implement status effects in character store
-            addLogEntry(MessageType.STATUS_CHANGE, { text: `Status applicato: ${choice.penalty.status}` });
+            const characterStore = useCharacterStore.getState();
+            if (choice.penalty.status === 'SICK') {
+              characterStore.applyStatus(CharacterStatus.SICK);
+            } else if (choice.penalty.status === 'WOUNDED') {
+              characterStore.applyStatus(CharacterStatus.WOUNDED);
+            } else if (choice.penalty.status === 'POISONED') {
+              characterStore.applyStatus(CharacterStatus.POISONED);
+            }
             break;
           case 'stat_reduction':
             // TODO: Implement temporary stat reduction
@@ -489,10 +496,10 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   checkForRandomEvent: (biome, weatherEffects) => {
     const BIOME_EVENT_CHANCES: Record<string, number> = {
-      'PLAINS': 0.25, 'FOREST': 0.35, 'RIVER': 0.40, 'CITY': 0.50,
-      'VILLAGE': 0.50, 'SETTLEMENT': 0.45, 'REST_STOP': 0.40, 'UNKNOWN': 0.20
+      'PLAINS': 0.08, 'FOREST': 0.12, 'RIVER': 0.15, 'CITY': 0.18,
+      'VILLAGE': 0.18, 'SETTLEMENT': 0.16, 'REST_STOP': 0.14, 'UNKNOWN': 0.06
     };
-    const RANDOM_EVENT_CHANCE = 0.10;
+    const RANDOM_EVENT_CHANCE = 0.03;
 
     const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.20;
     const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;

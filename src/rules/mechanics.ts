@@ -135,12 +135,13 @@ export function isWounded(currentHP: number, maxHP: number): boolean {
 
 /**
  * Calcola i punti vita massimi basati su Vigore
+ * Nuovo sistema: HP base 100 + modificatore * 10 per range 60-180
  * @param vigore Valore di Vigore del personaggio
  * @returns Punti vita massimi
  */
 export function calculateMaxHP(vigore: number): number {
   const modifier = calculateModifier(vigore);
-  return Math.max(1, 10 + modifier); // Minimo 1 HP
+  return Math.max(10, 100 + (modifier * 10)); // Range 60-180 HP
 }
 
 /**

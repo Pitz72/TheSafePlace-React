@@ -46,6 +46,7 @@ export interface ICharacterSheet {
   carryCapacity: number;
   inventory: (IInventorySlot | null)[];
   equipment: IEquipment;
+  status: ICharacterStatus;
   experience: {
     currentXP: number;
     xpForNextLevel: number;
@@ -86,4 +87,26 @@ export interface IDamageResult {
   damage: number;
   type: string;
   description: string;
+}
+
+/**
+ * Stati possibili del personaggio
+ */
+export enum CharacterStatus {
+  NORMAL = 'normal',
+  SICK = 'sick',
+  WOUNDED = 'wounded',
+  POISONED = 'poisoned',
+  STARVING = 'starving',
+  DEHYDRATED = 'dehydrated',
+  DEAD = 'dead'
+}
+
+/**
+ * Sistema di stati del personaggio
+ */
+export interface ICharacterStatus {
+  currentStatus: CharacterStatus;
+  statusEffects: CharacterStatus[];
+  statusDuration: Record<CharacterStatus, number>; // Durata in minuti
 }
