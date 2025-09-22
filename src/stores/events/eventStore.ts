@@ -5,6 +5,16 @@ import { useCharacterStore } from '../character/characterStore';
 import { useCombatStore } from '../combatStore';
 import { useGameStore } from '../gameStore';
 
+// Esponi funzioni di debug globalmente
+if (typeof window !== 'undefined') {
+  (window as any).debugEvents = {
+    forceBiome: (biome: string) => useEventStore.getState().forceBiomeEvent(biome),
+    forceRandom: () => useEventStore.getState().forceRandomEvent(),
+    status: () => useEventStore.getState().debugEventSystem(),
+    check: (biome: string) => useEventStore.getState().checkForRandomEvent(biome, { eventProbabilityModifier: 1.0 })
+  };
+}
+
 // Minimal interface to avoid direct dependency on weatherStore shape
 interface WeatherEffects {
   eventProbabilityModifier: number;
@@ -44,6 +54,8 @@ export interface EventState {
   getRandomEvent: () => GameEvent | null;
   checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
   forceBiomeEvent: (biome: string) => void; // DEBUG: Forza un evento per bioma
+  forceRandomEvent: () => void; // DEBUG: Forza evento random
+  debugEventSystem: () => void; // DEBUG: Mostra stato sistema
   resetEventState: () => void;
   restoreState: (state: { seenEventIds: string[]; completedEncounters: string[] }) => void;
 }
@@ -77,16 +89,26 @@ export const useEventStore = create<EventState>((set, get) => ({
         'river_events.json',
         'unique_events.json',
         'village_events.json',
-        'random_events.json'
+        'random_events.json',
+        'lore_events.json'
       ];
 
       const database: Record<string, GameEvent[]> = {};
 
       for (const file of eventFiles) {
-        const res = await fetch(`/events/${file}`);
-        const data = await res.json();
-        const key = Object.keys(data)[0];
-        database[key] = Object.values(data)[0] as GameEvent[];
+        try {
+          const res = await fetch(`/events/${file}`);
+          if (!res.ok) {
+            console.error(`Failed to fetch ${file}: ${res.status} ${res.statusText}`);
+            continue;
+          }
+          const data = await res.json();
+          const key = Object.keys(data)[0];
+          const events = Object.values(data)[0] as GameEvent[];
+          database[key] = events;
+        } catch (fileError) {
+          console.error(`Error loading ${file}:`, fileError);
+        }
       }
 
       set({ eventDatabase: database });
@@ -175,7 +197,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       markEventAsSeen(event.id);
     }
 
-    // Se c'è già un evento attivo, aggiungilo alla coda con priorità
+    // Se c'è già un evento attivo, aggiungilo alla coda
     if (currentEvent) {
       const isMainQuest = event.id?.startsWith('mq_') || event.title?.includes('Ricordo:');
       if (isMainQuest) {
@@ -205,7 +227,6 @@ export const useEventStore = create<EventState>((set, get) => ({
       const nextEvent = eventQueue[0];
       const remainingQueue = eventQueue.slice(1);
 
-      console.log(`🎭 Evento dalla coda: "${nextEvent.title}" (${remainingQueue.length} in coda)`);
 
       set({
         currentEvent: nextEvent,
@@ -468,19 +489,18 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   checkForRandomEvent: (biome, weatherEffects) => {
     const BIOME_EVENT_CHANCES: Record<string, number> = {
-      'PLAINS': 0.08, 'FOREST': 0.12, 'RIVER': 0.15, 'CITY': 0.25,
-      'VILLAGE': 0.25, 'SETTLEMENT': 0.20, 'REST_STOP': 0.15, 'UNKNOWN': 0.05
+      'PLAINS': 0.25, 'FOREST': 0.35, 'RIVER': 0.40, 'CITY': 0.50,
+      'VILLAGE': 0.50, 'SETTLEMENT': 0.45, 'REST_STOP': 0.40, 'UNKNOWN': 0.20
     };
-    const RANDOM_EVENT_CHANCE = 0.03; // 3% chance for random events anywhere
+    const RANDOM_EVENT_CHANCE = 0.10;
 
-    const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.05;
+    const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.20;
     const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
     if (biome && Math.random() < adjustedEventChance) {
         setTimeout(() => {
           const { getRandomEventFromBiome, getRandomEvent, triggerEvent } = get();
 
-          // 30% chance for random event, 70% for biome event
           let randomEvent;
           if (Math.random() < 0.3) {
             randomEvent = getRandomEvent();
@@ -493,7 +513,6 @@ export const useEventStore = create<EventState>((set, get) => ({
           }
         }, 150);
     } else if (Math.random() < RANDOM_EVENT_CHANCE) {
-      // Chance for random event even in low-probability areas
       setTimeout(() => {
         const { getRandomEvent, triggerEvent } = get();
         const randomEvent = getRandomEvent();
@@ -533,11 +552,11 @@ export const useEventStore = create<EventState>((set, get) => ({
   forceBiomeEvent: (biome: string) => {
     console.log(`[DEBUG] Forzando evento per bioma: ${biome}`);
     const { getRandomEventFromBiome, triggerEvent, eventDatabase } = get();
-    
+
     // Log del database eventi per debug
     console.log('[DEBUG] Database eventi disponibili:', Object.keys(eventDatabase));
     console.log(`[DEBUG] Eventi per ${biome.toUpperCase()}:`, eventDatabase[biome.toUpperCase()]?.length || 0);
-    
+
     const randomEvent = getRandomEventFromBiome(biome);
     if (randomEvent) {
       console.log(`[DEBUG] Evento selezionato:`, randomEvent.id, randomEvent.title);
@@ -545,5 +564,38 @@ export const useEventStore = create<EventState>((set, get) => ({
     } else {
       console.log(`[DEBUG] Nessun evento disponibile per il bioma: ${biome}`);
     }
+  },
+
+  // DEBUG: Forza evento random globale
+  forceRandomEvent: () => {
+    console.log(`[DEBUG] Forzando evento random globale`);
+    const { getRandomEvent, triggerEvent, eventDatabase } = get();
+
+    console.log('[DEBUG] Eventi random disponibili:', eventDatabase['RANDOM']?.length || 0);
+
+    const randomEvent = getRandomEvent();
+    if (randomEvent) {
+      console.log(`[DEBUG] Evento random selezionato:`, randomEvent.id, randomEvent.title);
+      triggerEvent(randomEvent);
+    } else {
+      console.log(`[DEBUG] Nessun evento random disponibile`);
+    }
+  },
+
+  // DEBUG: Mostra stato completo del sistema eventi
+  debugEventSystem: () => {
+    const state = get();
+    console.log('🔍 EVENT SYSTEM DEBUG STATUS:', {
+      currentEvent: state.currentEvent?.title || 'None',
+      eventQueueLength: state.eventQueue.length,
+      queuedEvents: state.eventQueue.map(e => e.title),
+      databaseKeys: Object.keys(state.eventDatabase),
+      databaseSizes: Object.fromEntries(
+        Object.entries(state.eventDatabase).map(([key, events]) => [key, events.length])
+      ),
+      seenEvents: state.seenEventIds.length,
+      completedEncounters: state.completedEncounters.length,
+      activeSequence: state.activeSequence.sequenceId || 'None'
+    });
   }
 }));

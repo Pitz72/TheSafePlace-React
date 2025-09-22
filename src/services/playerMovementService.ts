@@ -27,29 +27,7 @@ class PlayerMovementService {
     // 3. Apply survival cost for moving
     survivalStore.applyMovementSurvivalCost(weatherEffects);
 
-    // 4. Check for random events
-    eventStore.checkForRandomEvent(newBiomeKey, weatherEffects);
-
-    // 5. TEMPORANEAMENTE DISATTIVATO: Check for narrative events (movimento e bioma)
-    // Disattivato per concentrarsi sui biome events casuali
-    /*
-    console.log('🚶 MOVEMENT SERVICE DEBUG - Calling narrativeIntegration for movement:', {
-      biome: newBiomeKey,
-      weather: weatherStore.currentWeather
-    });
-    narrativeIntegration.checkForNarrativeEvents?.('movement', { 
-      biome: newBiomeKey, 
-      weather: weatherStore.currentWeather 
-    });
-    console.log('🚶 MOVEMENT SERVICE DEBUG - narrativeIntegration called for movement');
-    */
-    
-    // DEBUG: Log per verificare che gli eventi per bioma funzionino
-    console.log('🎲 BIOME EVENTS DEBUG - Movement triggered for biome:', newBiomeKey);
-    console.log('🎲 BIOME EVENTS DEBUG - Weather effects:', weatherEffects);
-    
-    // Attiva eventi casuali per bioma tramite eventStore
-    console.log('🎲 BIOME EVENTS DEBUG - Calling eventStore.checkForRandomEvent()');
+    // 4. Check for random events (bioma + random)
     eventStore.checkForRandomEvent(newBiomeKey, weatherEffects);
 
     // 5.5. Incrementa progresso main quest e controlla trigger

@@ -1,16 +1,9 @@
 import { useNarrativeStore } from '../stores/narrative/narrativeStore';
 import { useEventStore } from '../stores/events/eventStore';
-import { useCombatStore } from '../stores/combatStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useWorldStore } from '../stores/world/worldStore';
-import {
-  QuestStage,
-  LoreEvent,
-  QuestFragment,
-  MoralAlignment,
-  TextTone,
-  EmotionalState
-} from '../interfaces/narrative';
+import { QuestStage } from '../interfaces/narrative';
+import type { LoreEvent, QuestFragment, EmotionalState } from '../interfaces/narrative';
 import type { GameEvent } from '../interfaces/events';
 
 /**
@@ -52,14 +45,9 @@ export class NarrativeIntegrationService {
    * Configura i listener per il combattimento
    */
   private setupCombatListeners(): void {
-    const combatStore = useCombatStore.getState();
-    
-    // Intercetta la fine del combattimento per trigger narrativi
-    const originalEndCombat = combatStore.endCombat;
-    combatStore.endCombat = (victory: boolean) => {
-      originalEndCombat.call(combatStore, victory);
-      this.handleCombatEnd(victory);
-    };
+    // Nota: Il sistema di combattimento è cambiato e ora usa un approccio diverso
+    // per gestire gli eventi post-combattimento. Rimuoviamo l'intercettazione diretta.
+    console.log('🔧 NARRATIVE DEBUG - Combat listeners setup skipped (API changed)');
   }
 
   /**
@@ -82,10 +70,9 @@ export class NarrativeIntegrationService {
     // Intercetta i cambi di HP per trigger narrativi
     const originalUpdateHP = characterStore.updateHP;
     characterStore.updateHP = (change: number) => {
-      const oldHP = characterStore.characterSheet.currentHP;
       originalUpdateHP.call(characterStore, change);
       const newHP = characterStore.characterSheet.currentHP;
-      this.handleHPChange(oldHP, newHP, change);
+      this.handleHPChange(newHP, change);
     };
   }
 
@@ -126,88 +113,21 @@ export class NarrativeIntegrationService {
     }
   }
 
-  /**
-   * Gestisce la fine del combattimento
-   */
-  private handleCombatEnd(victory: boolean): void {
-    const narrativeStore = useNarrativeStore.getState();
-    const { currentQuestStage, emotionalState } = narrativeStore;
 
-    // Aggiorna lo stato emotivo in base al risultato del combattimento
-    if (victory) {
-      // Vittoria aumenta pragmatismo (approccio di Elian)
-      narrativeStore.updateEmotionalState({
-        pragmatismLevel: Math.min(100, emotionalState.pragmatismLevel + 5),
-        understandingLevel: Math.min(100, emotionalState.understandingLevel + 2)
-      });
-    } else {
-      // Sconfitta aumenta compassione (riflessione di Lena)
-      narrativeStore.updateEmotionalState({
-        compassionLevel: Math.min(100, emotionalState.compassionLevel + 5),
-        lenaMemoryStrength: Math.min(100, emotionalState.lenaMemoryStrength + 3)
-      });
-    }
-
-    // Trigger eventi narrativi post-combattimento
-    this.checkForNarrativeEvents('combat_end', { victory });
-  }
-
-  /**
-   * Gestisce i cambi di bioma
-   */
-  private handleBiomeChange(oldBiome: string, newBiome: string): void {
-    console.log('🌍 NARRATIVE DEBUG - handleBiomeChange called:', {
-      oldBiome,
-      newBiome,
-      timestamp: new Date().toISOString()
-    });
-    
-    const narrativeStore = useNarrativeStore.getState();
-    
-    // Aggiorna lo stato emotivo in base al bioma
-    const biomeEmotionalEffects = {
-      'forest': { lenaMemoryStrength: 2, compassionLevel: 1 },
-      'city': { pragmatismLevel: 2, understandingLevel: 1 },
-      'plains': { understandingLevel: 1 },
-      'village': { compassionLevel: 2, lenaMemoryStrength: 1 },
-      'river': { compassionLevel: 1, lenaMemoryStrength: 1 }
-    };
-
-    const effect = biomeEmotionalEffects[newBiome as keyof typeof biomeEmotionalEffects];
-    if (effect) {
-      console.log('🌍 NARRATIVE DEBUG - Applying biome emotional effect:', effect);
-      const currentState = narrativeStore.emotionalState;
-      const updates: Partial<EmotionalState> = {};
-      
-      Object.entries(effect).forEach(([key, value]) => {
-        const currentValue = currentState[key as keyof EmotionalState] as number;
-        updates[key as keyof EmotionalState] = Math.min(100, currentValue + value) as any;
-      });
-      
-      narrativeStore.updateEmotionalState(updates);
-      console.log('🌍 NARRATIVE DEBUG - Emotional state updated:', updates);
-    } else {
-      console.log('🌍 NARRATIVE DEBUG - No emotional effect for biome:', newBiome);
-    }
-
-    // Trigger eventi narrativi per cambio bioma
-    console.log('🌍 NARRATIVE DEBUG - Triggering narrative events for biome change...');
-    this.checkForNarrativeEvents('biome_change', { oldBiome, newBiome });
-  }
 
   /**
    * Gestisce i cambi di HP
    */
-  private handleHPChange(oldHP: number, newHP: number, change: number): void {
+  private handleHPChange(newHP: number, change: number): void {
     const narrativeStore = useNarrativeStore.getState();
-    
+
     // Se il giocatore è gravemente ferito, aumenta la memoria di Lena
     if (newHP < 30 && change < 0) {
       narrativeStore.updateEmotionalState({
         lenaMemoryStrength: Math.min(100, narrativeStore.emotionalState.lenaMemoryStrength + 3),
         compassionLevel: Math.min(100, narrativeStore.emotionalState.compassionLevel + 2)
       });
-      
+
       this.checkForNarrativeEvents('low_health', { hp: newHP });
     }
   }
@@ -238,8 +158,11 @@ export class NarrativeIntegrationService {
         currentStage,
         locationReq: event.locationRequirement,
         currentBiome,
-        emotionalPrereq: event.emotionalPrerequisites
+        emotionalPrereq: event.emotionalPrerequisites,
+        isRepeatable: event.isRepeatable,
+        completed: event.id ? useEventStore.getState().isEncounterCompleted(event.id) : false
       });
+
 
       // Controlla requisiti di stage (deve essere un array che include lo stage corrente)
       if (event.questStageRequirement && !event.questStageRequirement.includes(currentStage)) {
@@ -284,7 +207,7 @@ export class NarrativeIntegrationService {
       }
 
       // Controlla requisiti di location
-      if (event.locationRequirement && event.locationRequirement.length > 0) {
+      if (event.locationRequirement && event.locationRequirement.length > 0 && currentBiome) {
         if (!event.locationRequirement.includes(currentBiome)) {
           console.log(`❌ Event ${event.id} rejected: location requirement not met (needs ${event.locationRequirement}, current: ${currentBiome})`);
           return false;
@@ -294,7 +217,7 @@ export class NarrativeIntegrationService {
       // Controlla se l'evento è appropriato per il tipo di trigger
       if (eventType === 'biome_change') {
         // Per cambio bioma, accetta eventi che hanno requisiti di location
-        const isValid = event.locationRequirement && event.locationRequirement.includes(currentBiome);
+        const isValid = event.locationRequirement && currentBiome && event.locationRequirement.includes(currentBiome);
         if (isValid) {
           console.log(`✅ Event ${event.id} passed all checks for biome_change`);
         } else {
@@ -388,16 +311,16 @@ export class NarrativeIntegrationService {
    */
   public checkQuestProgression(): void {
     const narrativeStore = useNarrativeStore.getState();
-    const { currentQuestStage, discoveredFragments, emotionalState } = narrativeStore;
+    const { currentStage, discoveredFragments, emotionalState } = narrativeStore;
 
     // Logica per avanzamento automatico della quest
-    const stageFragments = discoveredFragments.filter(f => f.questStage === currentQuestStage);
-    const requiredFragments = this.getRequiredFragmentsForStage(currentQuestStage);
+    const stageFragments = discoveredFragments.filter(f => f.stage === currentStage);
+    const requiredFragments = this.getRequiredFragmentsForStage(currentStage);
 
     if (stageFragments.length >= requiredFragments) {
       // Controlla se le condizioni emotive sono soddisfatte
-      if (this.checkEmotionalRequirementsForAdvancement(currentQuestStage, emotionalState)) {
-        narrativeStore.advanceQuestStage();
+      if (this.checkEmotionalRequirementsForAdvancement(currentStage, emotionalState)) {
+        narrativeStore.advanceToNextStage();
       }
     }
   }
@@ -406,14 +329,20 @@ export class NarrativeIntegrationService {
    * Ottiene il numero di frammenti richiesti per uno stage
    */
   private getRequiredFragmentsForStage(stage: QuestStage): number {
-    const requirements = {
-      [QuestStage.TESTAMENTO]: 3,
-      [QuestStage.RICORDI_LENA]: 4,
-      [QuestStage.DILEMMA_MORALE]: 3,
-      [QuestStage.RIVELAZIONE]: 2,
-      [QuestStage.SCELTA_FINALE]: 1
-    };
-    return requirements[stage] || 3;
+    switch (stage) {
+      case QuestStage.TESTAMENTO_PADRE:
+        return 3;
+      case QuestStage.RICORDI_LENA:
+        return 4;
+      case QuestStage.COMPRENSIONE_PASSATO:
+        return 3;
+      case QuestStage.ACCETTAZIONE:
+        return 2;
+      case QuestStage.SAFE_PLACE_TROVATO:
+        return 1;
+      default:
+        return 3;
+    }
   }
 
   /**
@@ -421,13 +350,13 @@ export class NarrativeIntegrationService {
    */
   private checkEmotionalRequirementsForAdvancement(stage: QuestStage, emotional: EmotionalState): boolean {
     switch (stage) {
-      case QuestStage.TESTAMENTO:
+      case QuestStage.TESTAMENTO_PADRE:
         return emotional.understandingLevel >= 20;
       case QuestStage.RICORDI_LENA:
         return emotional.lenaMemoryStrength >= 40;
-      case QuestStage.DILEMMA_MORALE:
+      case QuestStage.COMPRENSIONE_PASSATO:
         return emotional.compassionLevel >= 30 || emotional.pragmatismLevel >= 30;
-      case QuestStage.RIVELAZIONE:
+      case QuestStage.ACCETTAZIONE:
         return emotional.understandingLevel >= 60;
       default:
         return true;
@@ -440,7 +369,7 @@ export class NarrativeIntegrationService {
   public getIntegrationStatus() {
     const narrativeStore = useNarrativeStore.getState();
     return {
-      currentStage: narrativeStore.currentQuestStage,
+      currentStage: narrativeStore.currentStage,
       emotionalState: narrativeStore.emotionalState,
       discoveredFragments: narrativeStore.discoveredFragments.length,
       availableEvents: narrativeStore.availableLoreEvents.length,
@@ -458,8 +387,7 @@ export class NarrativeIntegrationService {
     
     // Forza il bioma a river se non lo è già
     if (worldStore.currentBiome !== 'river') {
-      console.log('🧪 DEBUG - Setting biome to river for test...');
-      worldStore.setBiome('river');
+      console.log('🧪 DEBUG - Cannot force biome change - worldStore.setBiome not available');
     }
     
     // Trigger manuale dell'evento

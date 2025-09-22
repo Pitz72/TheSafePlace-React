@@ -190,8 +190,19 @@ const EventScreen: React.FC = () => {
                     '[↑↓/W/S] Naviga | [ENTER] Seleziona | [1-5] Scelta Diretta'
                   ) : (
                     <div>
-                      <div className="mb-2">Questo ricordo svanirà automaticamente tra pochi secondi...</div>
-                      <div>[ENTER] Chiudi ora</div>
+                      {(() => {
+                        // Non mostrare il timer per eventi main quest
+                        const isMainQuest = currentEvent?.id?.startsWith('mq_') ||
+                                           currentEvent?.title?.includes('Ricordo:');
+                        return (
+                          <>
+                            {!isMainQuest && (
+                              <div className="mb-2">Questo ricordo svanirà automaticamente tra pochi secondi...</div>
+                            )}
+                            <div>[ENTER] Chiudi ora</div>
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
                 </div>

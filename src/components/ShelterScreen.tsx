@@ -185,7 +185,8 @@ const ShelterScreen: React.FC = () => {
         text: choice.text,
         resultText: choice.resultText,
         consequences: choice.consequences
-      }))
+      })),
+      isUnique: true // L'evento è unico per sessione
     };
 
     triggerEvent(gameEvent);
