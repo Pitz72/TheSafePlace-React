@@ -497,29 +497,44 @@ export const useEventStore = create<EventState>((set, get) => ({
     const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.20;
     const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
+    console.log(`🎲 [EVENT DEBUG] Checking for random event in ${biome}`);
+    console.log(`🎲 [EVENT DEBUG] Base chance: ${baseEventChance}, Weather modifier: ${weatherEffects.eventProbabilityModifier}, Adjusted: ${adjustedEventChance}`);
+
     if (biome && Math.random() < adjustedEventChance) {
+        console.log(`🎲 [EVENT DEBUG] Biome event triggered!`);
         setTimeout(() => {
           const { getRandomEventFromBiome, getRandomEvent, triggerEvent } = get();
 
           let randomEvent;
           if (Math.random() < 0.3) {
             randomEvent = getRandomEvent();
+            console.log(`🎲 [EVENT DEBUG] Chose random global event`);
           } else {
             randomEvent = getRandomEventFromBiome(biome);
+            console.log(`🎲 [EVENT DEBUG] Chose biome event for ${biome}`);
           }
 
           if (randomEvent) {
+            console.log(`🎲 [EVENT DEBUG] Triggering event: ${randomEvent.title}`);
             triggerEvent(randomEvent);
+          } else {
+            console.log(`🎲 [EVENT DEBUG] No event found for ${biome}`);
           }
         }, 150);
     } else if (Math.random() < RANDOM_EVENT_CHANCE) {
+      console.log(`🎲 [EVENT DEBUG] Random global event triggered!`);
       setTimeout(() => {
         const { getRandomEvent, triggerEvent } = get();
         const randomEvent = getRandomEvent();
         if (randomEvent) {
+          console.log(`🎲 [EVENT DEBUG] Triggering random event: ${randomEvent.title}`);
           triggerEvent(randomEvent);
+        } else {
+          console.log(`🎲 [EVENT DEBUG] No random event found`);
         }
       }, 150);
+    } else {
+      console.log(`🎲 [EVENT DEBUG] No event triggered this time`);
     }
   },
 

@@ -3,6 +3,7 @@ import { useGameStore } from '../stores/gameStore';
 import { useWorldStore } from '../stores/world/worldStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
+import { useShelterStore } from '../stores/shelter/shelterStore';
 import { checkForEncounter } from '../utils/encounterUtils';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
@@ -98,7 +99,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
       } else {
         // Seconda pressione: completa attraversamento con skill check
         setMovementState({ isExitingRiver: true, isInRiver: false, riverPosition: null });
-        const success = performAbilityCheck('agilita', 15, true, MessageType.SKILL_CHECK_RIVER_SUCCESS);
+        const success = performAbilityCheck('agilita', 15);
         if (!success.success) {
           const damage = Math.floor(Math.random() * 4) + 1;
           updateHP(-damage);
@@ -117,8 +118,15 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
 
     // Gestisce l'ingresso nei rifugi separatamente
     if (nextTerrain === 'R') {
-      setCurrentScreen('shelter');
-      return; // Stop further processing, the shelter screen takes over
+      const { isShelterAccessible } = useShelterStore.getState();
+      if (isShelterAccessible(nextX, nextY)) {
+        setCurrentScreen('shelter');
+        return; // Stop further processing, the shelter screen takes over
+      } else {
+        // Shelter not accessible - show message and don't move
+        addLogEntry(MessageType.ACTION_FAIL, { reason: 'rifugio non accessibile di giorno' });
+        return;
+      }
     }
 
     // Messaggio atmosferico casuale

@@ -3,6 +3,7 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useSurvivalStore } from '../stores/survival/survivalStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useWorldStore } from '../stores/world/worldStore';
+import { useTimeStore } from '../stores/time/timeStore';
 import { mainQuestTrigger } from './mainQuestTrigger';
 
 import { MessageType } from '../data/MessageArchive';
@@ -15,6 +16,7 @@ class PlayerMovementService {
     const survivalStore = useSurvivalStore.getState();
     const eventStore = useEventStore.getState();
     const worldStore = useWorldStore.getState();
+    const timeStore = useTimeStore.getState();
     const notificationStore = useNotificationStore.getState();
 
     // 1. Update weather and get its effects
@@ -55,7 +57,7 @@ class PlayerMovementService {
         });
     }
 
-    worldStore.advanceTime(adjustedMovementTime);
+    timeStore.advanceTime(adjustedMovementTime);
   }
 }
 

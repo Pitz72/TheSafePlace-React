@@ -10,6 +10,7 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useNarrativeStore } from '../stores/narrative/narrativeStore';
+import { useShelterStore } from '../stores/shelter/shelterStore';
 import { MessageType } from '../data/MessageArchive';
 
 
@@ -193,15 +194,19 @@ const ShelterScreen: React.FC = () => {
   };
 
   const handleSearch = () => {
-    // Versione semplificata per ora - TODO: Implementare sistema completo di investigazione
-    if (searchResult) {
+    const shelterStore = useShelterStore.getState();
+    const { x, y } = playerPosition;
+
+    // Controlla se il rifugio è già stato investigato
+    if (!shelterStore.canInvestigateShelter(x, y)) {
       addLogEntry(MessageType.ACTION_FAIL, {
-        reason: 'investigazione già completata'
+        reason: 'questo rifugio è già stato investigato'
       });
       return;
     }
 
-    const checkResult = performAbilityCheck('percezione', 15);
+    // Difficoltà più bassa per permettere successi
+    const checkResult = performAbilityCheck('percezione', 12);
     let outcomeMessage: string;
 
     if (checkResult.success) {
@@ -215,6 +220,12 @@ const ShelterScreen: React.FC = () => {
         outcomeMessage += 'Dopo un\'attenta ricerca, non trovi nulla di utile.';
       }
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, { action: 'investigazione rifugio' });
+
+      // Marca il rifugio come investigato
+      shelterStore.updateShelterAccess(x, y, {
+        hasBeenInvestigated: true,
+        investigationResults: [outcomeMessage]
+      });
     } else {
       outcomeMessage = `FALLIMENTO nella ricerca. La tua investigazione è stata superficiale.`;
       addLogEntry(MessageType.SKILL_CHECK_FAILURE, { ability: 'percezione', action: 'investigazione rifugio' });
