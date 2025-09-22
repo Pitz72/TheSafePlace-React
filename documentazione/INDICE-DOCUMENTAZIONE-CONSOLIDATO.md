@@ -1,9 +1,9 @@
 # 📚 INDICE DOCUMENTAZIONE CONSOLIDATO
-## The Safe Place v0.9.8 - Lullaby of Ashes
+## The Safe Place v0.9.9.0 - Architecture Reset
 
 **Stato**: CONSOLIDATO E AGGIORNATO
-**Ultima Revisione**: 2025-09-21
-**Versione Attiva**: v0.9.8 "Lullaby of Ashes"
+**Ultima Revisione**: 2025-09-22
+**Versione Attiva**: v0.9.9.0 "Architecture Reset"
 
 ---
 
@@ -30,6 +30,16 @@
 - ✅ **[narrativeIntegration.ts](../src/services/narrativeIntegration.ts)** - Integrazione con sistemi esistenti
 - ✅ **[storyProgression.ts](../src/services/storyProgression.ts)** - Logica di progressione della storia
 
+### 🏗️ **Architettura v2.0 - GameEngine Unificato (v0.9.9.0)**
+- ✅ **[GDD.md](./GDD.md)** - Architettura Core v2.0 completa
+- ✅ **[GDD2.md](./GDD2.md)** - Domini Business (Inventory, Survival)
+- ✅ **[GDD3.md](./GDD3.md)** - Narrative & Game Systems
+- ✅ **[GDD4.md](./GDD4.md)** - UI/UX & Implementation
+- ✅ **[eventBus.ts](../src/core/events/eventBus.ts)** - Sistema eventi centralizzato
+- ✅ **[timeSystem.ts](../src/core/time/timeSystem.ts)** - Sistema tempo unificato
+- ✅ **[gameLoop.ts](../src/core/game/gameLoop.ts)** - Game loop ottimizzato
+- ✅ **[gameConfig.ts](../src/core/config/gameConfig.ts)** - Configurazioni globali
+
 ### 🔧 **Documentazione Sistema Crafting (v0.8.5)**
 - ✅ **[CRAFTING-SYSTEM-GUIDE.md](./crafting-system/CRAFTING-SYSTEM-GUIDE.md)** - Guida completa sistema crafting
 - ✅ **[TROUBLESHOOTING-GUIDE.md](./crafting-system/TROUBLESHOOTING-GUIDE.md)** - Guida troubleshooting e debug
@@ -51,8 +61,9 @@
 - ✅ **[STARTSCREEN-IMMUTABLE-SPEC.md](./dsar/STARTSCREEN-IMMUTABLE-SPEC.md)** - SPECIFICA IMMUTABILE SCHERMATA INIZIALE
 
 ### 📝 **Changelog e Consolidamento Corrente**
-- ✅ **[CHANGELOG-v0.9.8.md](./changelog/CHANGELOG-v0.9.8.md)** - **VERSIONE CORRENTE v0.9.8** "Lullaby of Ashes"
-- ✅ **[CHANGELOG-v0.9.7.7.md](./changelog/CHANGELOG-v0.9.7.7.md)** - VERSIONE PRECEDENTE v0.9.7.7 "Fix Era Part 3"
+- ✅ **[CHANGELOG-v0.9.9.0.md](./changelog/CHANGELOG-v0.9.9.0.md)** - **VERSIONE CORRENTE v0.9.9.0** "Architecture Reset"
+- ✅ **[ANTI-REGRESSION-v0.9.9.0.md](./anti-regressione/ANTI-REGRESSION-v0.9.9.0.md)** - **PROTEZIONE ATTIVA v0.9.9.0** - Architecture Reset
+- ✅ **[CHANGELOG-v0.9.8.md](./changelog/CHANGELOG-v0.9.8.md)** - VERSIONE PRECEDENTE v0.9.8 "Lullaby of Ashes"
 - ✅ **[CHANGELOG-v0.9.7.6.md](./changelog/CHANGELOG-v0.9.7.6.md)** - VERSIONE PRECEDENTE v0.9.7.6 "A triumph of objects"
 - ✅ **[CHANGELOG-v0.9.7.4.md](./changelog/CHANGELOG-v0.9.7.4.md)** - VERSIONE PRECEDENTE v0.9.7.4 "The Fix Era Part 1"
 - ✅ **[CHANGELOG.md](../CHANGELOG.md)** - VERSIONE PRECEDENTE v0.9.7 "This is Ultimo's Story"
@@ -232,7 +243,8 @@
 - **SESSION-LOG-**: Log delle sessioni di sviluppo
 
 ### **Gestione Versioni**
-- **v0.9.8**: Versione corrente ATTIVA "Lullaby of Ashes" (Sistema Narrativo Avanzato)
+- **v0.9.9.0**: Versione corrente ATTIVA "Architecture Reset" (GameEngine v2.0)
+- **v0.9.8**: Versione precedente "Lullaby of Ashes" (Sistema Narrativo Avanzato)
 - **v0.9.7.7**: Versione precedente "Fix Era Part 3" (Sistema Eventi Integrato)
 - **v0.9.7.x**: Versioni sistema eventi e correzioni critiche
 - **v0.9.6.x**: Versioni Phoenix e sincronizzazione store
@@ -285,7 +297,7 @@
 
 ---
 
-*Indice consolidato aggiornato durante la sincronizzazione v0.9.8 del 2025-09-21*
-*Sistema narrativo avanzato implementato e operativo*
-*Versione corrente: v0.9.8 "Lullaby of Ashes" - Sistema Narrativo Avanzato*
-*Ultima sincronizzazione indici: 2025-09-21 - Evento "La Ninnananna della Cenere" integrato*
+*Indice consolidato aggiornato durante la sincronizzazione v0.9.9.0 del 2025-09-22*
+*Architettura v2.0 implementata e operativa - GameEngine unificato*
+*Versione corrente: v0.9.9.0 "Architecture Reset" - Ricostruzione Totale*
+*Ultima sincronizzazione indici: 2025-09-22 - Architettura v2.0 consolidata*

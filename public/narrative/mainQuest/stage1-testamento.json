@@ -1,0 +1,77 @@
+{
+  "stage": 1,
+  "title": "Il Testamento del Padre",
+  "description": "La lettera di Elian rivela l'obiettivo finale: trovare The Safe Place",
+  "fragments": [
+    {
+      "id": "testamento_lettera",
+      "stage": 1,
+      "title": "La Lettera di Papà",
+      "activationConditions": {
+        "questStage": 1,
+        "actionContext": "game_start",
+        "requiredItems": []
+      },
+      "narrativeText": "Mio caro Ultimo,\n\nSe stai leggendo questa lettera, significa che non sono più con te. Il mio cuore si spezza al pensiero di lasciarti solo, ma so che sei forte. Tua madre Lena ti ha trasmesso quella forza, anche se non l'hai mai conosciuta.\n\nC'è un posto, figlio mio. Un posto che tua madre chiamava 'The Safe Place'. Non so dove sia esattamente, ma so che esiste. Lena ne parlava sempre, con gli occhi che brillavano di una luce che non ho mai più visto dopo la sua morte.\n\nTrova quel posto, Ultimo. Troverai le risposte che cerchi, e forse... forse troverai la pace che io non sono mai riuscito a darti.\n\nRicorda: la compassione di tua madre e la determinazione che ti ho insegnato ti guideranno. Non dimenticare mai chi sei.\n\nCon tutto il mio amore,\nPapà",
+      "tone": "malinconico",
+      "emotionalImpact": {
+        "understandingLevel": 15,
+        "elianEmpathy": 20,
+        "lenaMemoryStrength": 10,
+        "wisdomGained": 5
+      },
+      "completionRewards": {
+        "questAdvancement": false,
+        "unlockedReflections": ["testamento_reflection_1"],
+        "emotionalMilestone": "first_understanding"
+      }
+    },
+    {
+      "id": "obiettivo_iniziale",
+      "stage": 1,
+      "title": "L'Obiettivo si Delinea",
+      "activationConditions": {
+        "questStage": 1,
+        "actionContext": "post_letter_reading"
+      },
+      "narrativeText": "Le parole di papà risuonano nella mia mente. 'The Safe Place'... un nome che evoca sicurezza, ma anche mistero. Mamma ne parlava con amore, papà con nostalgia. Cosa nasconde questo posto?\n\nNon ho molto altro da fare qui. La casa è vuota, i ricordi pesano come macigni. Forse è tempo di partire, di cercare questo luogo misterioso. Forse lì troverò le risposte sui miei genitori... e su me stesso.",
+      "tone": "determinato",
+      "emotionalImpact": {
+        "understandingLevel": 10,
+        "lenaMemoryStrength": 15,
+        "pragmatismLevel": 10
+      },
+      "completionRewards": {
+        "questAdvancement": true,
+        "unlockedReflections": ["obiettivo_reflection_1"],
+        "emotionalMilestone": "journey_begins"
+      }
+    }
+  ],
+  "reflections": {
+    "testamento_reflection_1": {
+      "text": "Papà ha sempre avuto difficoltà a esprimere i suoi sentimenti. Ma in questa lettera... c'è qualcosa di diverso. Un dolore profondo, ma anche una speranza che non gli avevo mai visto prima.",
+      "tone": "nostalgico",
+      "trigger": "post_letter_reading"
+    },
+    "obiettivo_reflection_1": {
+      "text": "'The Safe Place'... il nome stesso mi fa sentire qualcosa. Come se una parte di me, una parte che non sapevo di avere, riconoscesse quelle parole. Forse è l'eredità di mamma che parla.",
+      "tone": "speranzoso",
+      "trigger": "quest_objective_set"
+    }
+  },
+  "stageCompletion": {
+    "requiredFragments": ["testamento_lettera", "obiettivo_iniziale"],
+    "emotionalThreshold": {
+      "understandingLevel": 20
+    },
+    "nextStage": 2,
+    "completionReward": {
+      "emotionalImpact": {
+        "wisdomGained": 10,
+        "elianEmpathy": 15
+      },
+      "unlockedContent": ["stage2_intro_event"]
+    }
+  }
+}

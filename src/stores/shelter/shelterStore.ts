@@ -69,9 +69,9 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
   },
 
   canInvestigateShelter: (x, y) => {
-    const shelterInfo = get().getShelterInfo(x, y);
-    if (!shelterInfo) return true;
-    return !shelterInfo.hasBeenInvestigated;
+    // Un rifugio può essere investigato ogni volta che il giocatore ci entra
+    // Non c'è limite al numero di investigazioni per rifugio
+    return true;
   },
 
   isPlayerInShelter: () => {

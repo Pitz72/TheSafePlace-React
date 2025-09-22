@@ -12,6 +12,10 @@ export default {
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@rules/(.*)$': '<rootDir>/src/rules/$1',
+    '^@core/(.*)$': '<rootDir>/src/core/$1',
+    '^@domains/(.*)$': '<rootDir>/src/domains/$1',
+    '^@ui/(.*)$': '<rootDir>/src/ui/$1',
+    '^@data/(.*)$': '<rootDir>/src/data/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'jest-transform-stub'
   },
@@ -23,7 +27,8 @@ export default {
     '!src/main.tsx',
     '!src/vite-env.d.ts',
     '!src/**/*.stories.{ts,tsx}',
-    '!src/setupTests.ts'
+    '!src/setupTests.ts',
+    '!src/analysis/**' // Exclude analysis tools
   ],
   
   // Coverage thresholds
@@ -35,6 +40,12 @@ export default {
       statements: 80
     },
     // Higher coverage for critical modules
+    'src/core/': {
+      branches: 95,
+      functions: 95,
+      lines: 95,
+      statements: 95
+    },
     'src/rules/': {
       branches: 90,
       functions: 90,

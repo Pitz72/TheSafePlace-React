@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { EmotionalState, LoreEvent, QuestFragment, MoralChoice } from '../../interfaces/narrative';
+import type { EmotionalState, LoreEvent, QuestFragment, MoralChoice } from '../../interfaces/narrative';
 
 // Interfaccia semplificata per la Main Quest secondo il GDD canonico
 export interface MainQuestState {
@@ -177,10 +177,10 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
   // Caricamento degli eventi della main quest
   loadMainQuestEvents: async () => {
     try {
-      const response = await fetch('/src/data/events/main_quest_events.json');
+      const response = await fetch('/events/main_quest_events.json');
       const data = await response.json();
       const events = data.MAIN_QUEST as MainQuestEvent[];
-      
+
       set({ mainQuestEvents: events });
       return events;
     } catch (error) {
@@ -193,18 +193,18 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
   loadLoreEvents: async () => {
     console.log('📚 NARRATIVE STORE DEBUG - Loading lore events...');
     try {
-      const response = await fetch('/src/data/events/lore_events.json');
+      const response = await fetch('/events/lore_events.json');
       console.log('📚 NARRATIVE STORE DEBUG - Fetch response:', response.status, response.ok);
-      
+
       const data = await response.json();
       console.log('📚 NARRATIVE STORE DEBUG - Raw data:', data);
-      
+
       const events = data.LORE_EVENTS as LoreEvent[];
       console.log('📚 NARRATIVE STORE DEBUG - Parsed events:', {
         count: events?.length || 0,
         events: events?.map(e => ({ id: e.id, biome: e.locationRequirement })) || []
       });
-      
+
       set({ availableLoreEvents: events || [] });
       console.log('📚 NARRATIVE STORE DEBUG - Events loaded successfully');
     } catch (error) {

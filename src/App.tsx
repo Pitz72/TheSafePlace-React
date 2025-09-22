@@ -13,6 +13,7 @@ import { useNotificationStore } from './stores/notifications/notificationStore';
 import { useInventoryStore } from './stores/inventory/inventoryStore';
 import { itemDatabase } from './data/items/itemDatabase';
 import { GameErrorBoundary } from './utils/errorHandler';
+import { GameEngineProvider, useGameEngine } from './contexts/GameEngineContext';
 import NarrativeManager from './components/narrative/NarrativeManager';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
@@ -134,6 +135,10 @@ const GameContent = () => {
   const currentLocation = getTileDescription(currentTile);
   const formattedTime = timeState?.currentTime ? formatTime(timeState.currentTime) : '00:00';
 
+  // Determina se è notte (dopo le 20:00 o prima delle 06:00)
+  const isNight = timeState?.currentTime ?
+    (timeState.currentTime >= 1200 || timeState.currentTime < 360) : false;
+
   const renderGameScreens = () => {
     if (currentScreen === 'menu') return <StartScreen />;
     if (currentScreen === 'instructions') return <InstructionsScreen />;
@@ -189,7 +194,7 @@ const GameContent = () => {
                     <ul className="space-y-2 text-uniform">
                       <li>Posizione: ({playerPosition.x}, {playerPosition.y})</li>
                       <li>Luogo: {currentLocation}</li>
-                      <li>Ora: {formattedTime} Giorno {timeState?.day || 1}</li>
+                      <li className={isNight ? 'text-blue-900' : ''}>Ora: {formattedTime} Giorno {timeState?.day || 1}</li>
                     </ul>
                     <h2 className="panel-title mt-4">METEO</h2>
                     <WeatherDisplay />
@@ -292,8 +297,33 @@ const GameContent = () => {
   );
 };
 
+const GameEngineInitializer = () => {
+  const { initialize, start } = useGameEngine();
+
+  useEffect(() => {
+    const initEngine = async () => {
+      try {
+        await initialize();
+        console.log('🎮 GameEngine initialized and ready');
+        // Per ora non avviamo automaticamente, lascio che sia l'utente a iniziare il gioco
+      } catch (error) {
+        console.error('Failed to initialize GameEngine:', error);
+      }
+    };
+
+    initEngine();
+  }, [initialize]);
+
+  return null;
+};
+
 const AppUI = () => {
-  return <GameContent />;
+  return (
+    <>
+      <GameEngineInitializer />
+      <GameContent />
+    </>
+  );
 };
 
 function App() {
@@ -308,7 +338,9 @@ function App() {
 
   return (
     <GameErrorBoundary>
-      <AppUI />
+      <GameEngineProvider>
+        <AppUI />
+      </GameEngineProvider>
     </GameErrorBoundary>
   );
 }

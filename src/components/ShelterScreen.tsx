@@ -11,6 +11,7 @@ import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useNarrativeStore } from '../stores/narrative/narrativeStore';
 import { useShelterStore } from '../stores/shelter/shelterStore';
+import { useTimeStore } from '../stores/time/timeStore';
 import { MessageType } from '../data/MessageArchive';
 
 
@@ -26,8 +27,17 @@ const ShelterScreen: React.FC = () => {
   // TODO: Implementare sistema di investigazione rifugi persistente
   // Per ora, l'investigazione è temporanea per sessione
 
+  // Controlla se è notte per mostrare l'opzione speciale
+  const { timeState } = useTimeStore();
+  const isNight = timeState?.currentTime ?
+    (timeState.currentTime >= 1200 || timeState.currentTime < 360) : false;
+
   const options = [
-    { id: 'rest', name: 'Riposare (2-3 ore)', description: 'Recupera alcuni HP riposando nel rifugio' },
+    {
+      id: 'rest',
+      name: isNight ? 'Dormire fino al mattino' : 'Riposare (2-3 ore)',
+      description: isNight ? 'Dormi fino alle 06:00 del mattino' : 'Recupera alcuni HP riposando nel rifugio'
+    },
     { id: 'search', name: 'Investigare il rifugio', description: 'Cerca oggetti utili o indizi' },
     { id: 'workbench', name: '[B]anco di Lavoro', description: 'Crea e migliora oggetti usando i materiali raccolti' },
     { id: 'leave', name: 'Lasciare il rifugio', description: 'Torna alla mappa' }
@@ -112,17 +122,41 @@ const ShelterScreen: React.FC = () => {
       return;
     }
 
-    // Riposo normale se le condizioni non sono soddisfatte
-    const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
-    const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
+    if (isNight) {
+      // Dormire fino al mattino (06:00)
+      const currentTime = timeState?.currentTime || 0;
+      let sleepTime;
 
-    updateHP(healingAmount);
-    advanceTime(restTime);
-    addLogEntry(MessageType.REST_SUCCESS, {
-      healingAmount,
-      location: 'rifugio',
-      time: Math.floor(restTime / 60)
-    });
+      if (currentTime >= 1200) {
+        // È dopo le 20:00, dormi fino alle 06:00 del giorno successivo
+        sleepTime = (24 * 60 - currentTime) + 360; // fino alle 06:00
+      } else {
+        // È prima delle 06:00, dormi fino alle 06:00
+        sleepTime = 360 - currentTime;
+      }
+
+      const healingAmount = Math.floor(Math.random() * 8) + 5; // 5-12 HP (più recupero per notte intera)
+
+      updateHP(healingAmount);
+      advanceTime(sleepTime);
+      addLogEntry(MessageType.REST_SUCCESS, {
+        healingAmount,
+        location: 'rifugio',
+        time: 'fino al mattino'
+      });
+    } else {
+      // Riposo normale diurno (2-3 ore)
+      const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
+      const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
+
+      updateHP(healingAmount);
+      advanceTime(restTime);
+      addLogEntry(MessageType.REST_SUCCESS, {
+        healingAmount,
+        location: 'rifugio',
+        time: Math.floor(restTime / 60)
+      });
+    }
 
     setCurrentScreen('game');
   };
@@ -197,14 +231,6 @@ const ShelterScreen: React.FC = () => {
     const shelterStore = useShelterStore.getState();
     const { x, y } = playerPosition;
 
-    // Controlla se il rifugio è già stato investigato
-    if (!shelterStore.canInvestigateShelter(x, y)) {
-      addLogEntry(MessageType.ACTION_FAIL, {
-        reason: 'questo rifugio è già stato investigato'
-      });
-      return;
-    }
-
     // Difficoltà più bassa per permettere successi
     const checkResult = performAbilityCheck('percezione', 12);
     let outcomeMessage: string;
@@ -221,10 +247,11 @@ const ShelterScreen: React.FC = () => {
       }
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, { action: 'investigazione rifugio' });
 
-      // Marca il rifugio come investigato
+      // Aggiungi i risultati dell'investigazione (senza bloccare future investigazioni)
+      const existingInfo = shelterStore.getShelterInfo(x, y);
+      const currentResults = existingInfo?.investigationResults || [];
       shelterStore.updateShelterAccess(x, y, {
-        hasBeenInvestigated: true,
-        investigationResults: [outcomeMessage]
+        investigationResults: [...currentResults, outcomeMessage]
       });
     } else {
       outcomeMessage = `FALLIMENTO nella ricerca. La tua investigazione è stata superficiale.`;
