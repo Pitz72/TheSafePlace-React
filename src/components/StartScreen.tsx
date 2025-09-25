@@ -107,21 +107,17 @@ const StartScreen: React.FC = () => {
         {/* Effetti CRT di sfondo */}
         <div className="absolute inset-0 pointer-events-none animate-crt-flicker opacity-10"></div>
         
-        {/* Titolo ASCII Art */}
-        <div className="text-phosphor-400 font-mono font-bold mb-4 text-shadow-phosphor-bright animate-glow leading-none" style={{ fontSize: '0.8rem' }}>
-          <pre className="whitespace-pre">
-{`████████ ██   ██ ███████     ███████  █████  ███████ ███████ 
-   ██    ██   ██ ██          ██      ██   ██ ██      ██      
-   ██    ███████ █████       ███████ ███████ █████   █████   
-   ██    ██   ██ ██               ██ ██   ██ ██      ██      
-   ██    ██   ██ ███████     ███████ ██   ██ ██      ███████ 
-                                                            
-██████  ██       █████   ██████ ███████                    
-██   ██ ██      ██   ██ ██      ██                         
-██████  ██      ███████ ██      █████                      
-██      ██      ██   ██ ██      ██                         
-██      ███████ ██   ██  ██████ ███████                    `}
-          </pre>
+        {/* Titolo Immagine */}
+        <div className="mb-4 animate-glow" style={{ marginBottom: '2rem' }}>
+          <img
+            src="/titoli/journey.png"
+            alt="THE SAFE PLACE CHRONICLES: THE ECHO OF THE JOURNEY"
+            className="max-w-full h-auto object-contain mx-auto"
+            style={{
+              maxHeight: '40vh',
+              filter: 'drop-shadow(0 0 10px rgba(0, 255, 0, 0.5))'
+            }}
+          />
         </div>
         
         {/* Autore */}
@@ -131,7 +127,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione e stato pausa */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
-          v0.9.9.1 - Testing, Cleaning, and Optimization
+          v0.9.9.2 - The Computer Boot System
         </p>
         
         {/* Indicatore di pausa */}

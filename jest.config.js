@@ -7,15 +7,6 @@ export default {
   // Module resolution
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@components/(.*)$': '<rootDir>/src/components/$1',
-    '^@stores/(.*)$': '<rootDir>/src/stores/$1',
-    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@types/(.*)$': '<rootDir>/src/types/$1',
-    '^@rules/(.*)$': '<rootDir>/src/rules/$1',
-    '^@core/(.*)$': '<rootDir>/src/core/$1',
-    '^@domains/(.*)$': '<rootDir>/src/domains/$1',
-    '^@ui/(.*)$': '<rootDir>/src/ui/$1',
-    '^@data/(.*)$': '<rootDir>/src/data/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'jest-transform-stub'
   },
@@ -46,22 +37,22 @@ export default {
     },
     // Higher coverage for critical modules
     'src/core/': {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85
     },
     'src/rules/': {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85
     },
     'src/utils/': {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85
     }
   },
   

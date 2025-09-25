@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import type { ShelterAccessInfo } from '../interfaces/gameState';
 import { useCharacterStore } from './character/characterStore';
 import { useTimeStore } from './time/timeStore';
 import { useInventoryStore } from './inventory/inventoryStore';
@@ -11,6 +10,14 @@ import { useSurvivalStore } from './survival/survivalStore';
 import { useNotificationStore } from './notifications/notificationStore';
 import { useNarrativeStore } from './narrative/narrativeStore';
 import { narrativeIntegration } from '../services/narrativeIntegration';
+import type { TimeState, WeatherType } from '../interfaces/gameState';
+import type { LogEntry } from '../data/MessageArchive';
+import type { ICharacterSheet } from '../rules/types';
+import type { GameEvent } from '../interfaces/events';
+import type { IItem } from '../interfaces/items';
+
+// Boot sequence states
+export type BootPhase = 'black-screen-1' | 'production' | 'black-screen-2' | 'boot-simulation' | 'black-screen-3' | 'menu';
 
 // Interfaccia semplificata per il GameStore principale
 export interface CoreGameState {
@@ -20,30 +27,39 @@ export interface CoreGameState {
   menuSelectedIndex: number;
   selectedInventoryIndex: number;
   cameraPosition: { x: number; y: number };
-  
+
   // Game State
   gameInProgress: boolean;
   isPaused: boolean;
-  
+
+  // Boot sequence state
+  bootPhase: BootPhase;
+  isBootSequenceActive: boolean;
+
   // Callback per ricette
   unlockRecipesCallback?: (manualId: string) => void;
-  
+
   // Core Actions
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
   initializeGame: () => Promise<void>;
-  
+
+  // Boot sequence actions
+  startBootSequence: () => void;
+  advanceBootPhase: () => void;
+  skipBootSequence: () => void;
+
   // Screen Navigation
   setCurrentScreen: (screen: string) => void;
   goBack: () => void;
   setMenuSelectedIndex: (index: number) => void;
   setSelectedInventoryIndex: (index: number) => void;
-  
+
   // Game State Management
   pauseGame: () => void;
   resumeGame: () => void;
   startNewGame: () => void;
   enterGame: () => void;
-  
+
   // Menu Actions
   handleNewGame: () => void;
   handleLoadGame: () => void;
@@ -52,44 +68,46 @@ export interface CoreGameState {
   handleOptions: () => void;
   handleBackToMenu: () => void;
   handleExit: () => void;
-  
+
   // Utility
   setUnlockRecipesCallback: (callback: (manualId: string) => void) => void;
-  
+
   // Time Actions
   advanceTime: (hours: number) => void;
-  
+
   // Inventory and Character Management
   removeItems: (itemId: string, quantity: number) => boolean;
   addItem: (itemId: string, quantity: number) => boolean;
   addExperience: (xpGained: number) => void;
-  useItem: (slotIndex: number) => void;
-  
-  // Facade Properties (delegano ai store specializzati)
-  get characterSheet(): any;
-  get timeState(): any;
-  get playerPosition(): any;
+  useItem: (slotIndex: number) => boolean;
+
+  // Facade Properties (delegano ai store specializzati) con tipi corretti
+  get characterSheet(): ICharacterSheet;
+  get timeState(): TimeState;
+  get playerPosition(): { x: number; y: number };
   get mapData(): any;
   get isMapLoading(): boolean;
   get weatherState(): any;
-  get currentWeather(): any;
+  get currentWeather(): WeatherType;
   get survivalState(): any;
-  get logEntries(): any[];
-  get items(): Record<string, any>;
-  get inventory(): (any | null)[];
-  get currentEvent(): any;
+  get logEntries(): LogEntry[];
+  get items(): Record<string, IItem>;
+  get inventory(): any[];
+  get currentEvent(): GameEvent | null;
   get notifications(): any[];
 }
 
 export const useGameStore = create<CoreGameState>((set, get) => ({
   // --- INITIAL STATE ---
-  currentScreen: 'menu',
+  currentScreen: 'boot-black-screen-1',
   previousScreen: null,
   menuSelectedIndex: 0,
   selectedInventoryIndex: 0,
   cameraPosition: { x: 0, y: 0 },
   gameInProgress: false,
   isPaused: false,
+  bootPhase: 'black-screen-1',
+  isBootSequenceActive: true,
   unlockRecipesCallback: undefined,
 
   // --- FACADE PROPERTIES (delegano ai store specializzati) ---
@@ -97,8 +115,13 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
     return useCharacterStore.getState().characterSheet;
   },
 
-  get timeState() {
-    return useTimeStore.getState().timeState;
+  get timeState(): TimeState {
+    const timeData = useTimeStore.getState().timeState;
+    return {
+      currentTime: timeData.currentTime,
+      day: timeData.day,
+      isDay: timeData.timeOfDay === 'morning' || timeData.timeOfDay === 'afternoon'
+    };
   },
 
   get playerPosition() {
@@ -313,38 +336,56 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
     useCharacterStore.getState().addExperience(xpGained);
   },
 
-  useItem: (slotIndex: number) => {
-    useInventoryStore.getState().useItem(slotIndex);
+  useItem: (slotIndex: number): boolean => {
+    try {
+      useInventoryStore.getState().useItem(slotIndex);
+      return true;
+    } catch (error) {
+      console.error('Failed to use item:', error);
+      return false;
+    }
   },
 
-  // --- SHELTER SYSTEM DELEGATES ---
-  createShelterKey: (x: number, y: number) => {
-    return useShelterStore.getState().createShelterKey(x, y);
+  // --- BOOT SEQUENCE ACTIONS ---
+  startBootSequence: () => {
+    set({
+      isBootSequenceActive: true,
+      bootPhase: 'black-screen-1',
+      currentScreen: 'boot-black-screen-1'
+    });
   },
 
-  getShelterInfo: (x: number, y: number) => {
-    return useShelterStore.getState().getShelterInfo(x, y);
+  advanceBootPhase: () => {
+    set(state => {
+      const phaseOrder: BootPhase[] = ['black-screen-1', 'production', 'black-screen-2', 'boot-simulation', 'black-screen-3'];
+      const currentIndex = phaseOrder.indexOf(state.bootPhase);
+      const nextIndex = currentIndex + 1;
+
+      if (nextIndex >= phaseOrder.length) {
+        // Boot sequence complete - FINE SEQUENZA
+        return {
+          isBootSequenceActive: false,
+          bootPhase: 'menu',
+          currentScreen: 'menu'  // ← Menu principale del gioco
+        };
+      }
+
+      const nextPhase = phaseOrder[nextIndex];
+      return {
+        bootPhase: nextPhase,
+        currentScreen: `boot-${nextPhase}`
+      };
+    });
   },
 
-  createShelterInfo: (x: number, y: number) => {
-    return useShelterStore.getState().createShelterInfo(x, y);
+  skipBootSequence: () => {
+    set({
+      isBootSequenceActive: false,
+      bootPhase: 'menu',
+      currentScreen: 'menu'
+    });
   },
 
-  updateShelterAccess: (x: number, y: number, updates: Partial<ShelterAccessInfo>) => {
-    useShelterStore.getState().updateShelterAccess(x, y, updates);
-  },
-
-  isShelterAccessible: (x: number, y: number) => {
-    return useShelterStore.getState().isShelterAccessible(x, y);
-  },
-
-  canInvestigateShelter: (x: number, y: number) => {
-    return useShelterStore.getState().canInvestigateShelter(x, y);
-  },
-
-  resetShelterInvestigations: () => {
-    useShelterStore.getState().resetShelterInvestigations();
-  },
 }));
 
 // Export del tipo per compatibilità

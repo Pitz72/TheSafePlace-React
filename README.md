@@ -1,7 +1,7 @@
-# The Safe Place
+# THE SAFE PLACE CHRONICLES: THE ECHO OF THE JOURNEY
 
-**Versione:** 0.9.9.1
-**Codename:** Testing, Cleaning, and Optimization
+**Versione:** 0.9.9.2
+**Codename:** The Computer Boot System
 
 GDR Retrò a Fosfori Verdi. Un sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e **sistema narrativo canonico immersivo** che segue la storia di Ultimo attraverso frammenti di quest, eventi lore e scelte morali che influenzano l'evoluzione emotiva del personaggio.
 
@@ -87,8 +87,8 @@ Il progetto è stato completamente ricostruito con un'**architettura modulare e 
 - **Error Boundaries**: Crash prevention implementata
 - **E2E Testing**: Cypress con copertura flussi critici
 
-### **Feature Principale v0.9.9.1**
-**"La Ninnananna della Cenere"** - Evento narrativo di 7 pagine completamente testato con meccaniche giorno/notte ottimizzate, esplorazione rifugi realistica e sistema di attivazione condizionale garantito.
+### **Feature Principale v0.9.9.2**
+**"The Computer Boot System"** - Sistema di avvio computer completo con sequenza boot realistica, effetti CRT su tutte le schermate, cursore ottimizzato e immagini ASCII artistiche personalizzate.
 
 ### **Ricostruzione Totale**
 **"Architecture Reset"** - Trasformazione da progetto caotico a base professionale. Fine dei refactoring distruttivi e inizio dell'era scalabile.

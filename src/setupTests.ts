@@ -156,17 +156,7 @@ global.createMockInventoryItem = (overrides = {}) => ({
   ...overrides
 });
 
-// Console error suppression for expected errors in tests
-const originalError = console.error;
-console.error = (...args) => {
-  if (
-    typeof args[0] === 'string' &&
-    args[0].includes('Warning: ReactDOM.render is no longer supported')
-  ) {
-    return;
-  }
-  originalError.call(console, ...args);
-};
+// Console error suppression removed - let tests handle their own console output
 
 // Setup cleanup
 afterEach(() => {

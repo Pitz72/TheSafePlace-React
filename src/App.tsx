@@ -10,7 +10,6 @@ import { useTimeStore } from './stores/time/timeStore';
 import { useSaveStore } from './stores/save/saveStore';
 import { useSurvivalStore } from './stores/survival/survivalStore';
 import { useNotificationStore } from './stores/notifications/notificationStore';
-import { useInventoryStore } from './stores/inventory/inventoryStore';
 import { itemDatabase } from './data/items/itemDatabase';
 import { GameErrorBoundary } from './utils/errorHandler';
 import { GameEngineProvider, useGameEngine } from './contexts/GameEngineContext';
@@ -35,6 +34,7 @@ import WeatherDisplay from './components/WeatherDisplay';
 import CombatScreen from './components/combat/CombatScreen';
 import PostCombatScreen from './components/combat/PostCombatScreen';
 import KeyboardCommandsPanel from './components/KeyboardCommandsPanel';
+import BootSequenceManager from './components/boot/BootSequenceManager';
 
 const getTileDescription = (char: string): string => {
   switch (char) {
@@ -105,8 +105,6 @@ const GameContent = () => {
   const { playerPosition, mapData, isMapLoading } = useWorldStore();
   const { timeState } = useTimeStore();
   const { characterSheet, getModifier } = useCharacterStore();
-  const { getInventory } = useInventoryStore();
-  const items = getInventory();
   const { survivalState } = useSurvivalStore();
   const { notifications, removeNotification } = useNotificationStore();
 
@@ -140,6 +138,9 @@ const GameContent = () => {
     (timeState.currentTime >= 1200 || timeState.currentTime < 360) : false;
 
   const renderGameScreens = () => {
+    // Boot sequence screens are handled by BootSequenceManager
+    if (currentScreen.startsWith('boot-')) return null;
+
     if (currentScreen === 'menu') return <StartScreen />;
     if (currentScreen === 'instructions') return <InstructionsScreen />;
     if (currentScreen === 'story') return <StoryScreen />;
@@ -230,9 +231,10 @@ const GameContent = () => {
     <div className="game-container-wrapper">
       <div className={`game-container ${currentScreen === 'game' && videoMode !== 'no-effects' ? 'no-warmup' : ''}`}>
         <div className="crt-premium-overlay"></div>
-        <NotificationSystem 
-          notifications={notifications.map(n => ({ ...n, title: n.message }))} 
-          onRemove={removeNotification} 
+        <BootSequenceManager />
+        <NotificationSystem
+          notifications={notifications.map(n => ({ ...n, title: n.message }))}
+          onRemove={removeNotification}
         />
         <div className="h-full flex flex-col">
           <NarrativeManager isGameActive={currentScreen === 'game' && !isGameOver} />
@@ -298,7 +300,7 @@ const GameContent = () => {
 };
 
 const GameEngineInitializer = () => {
-  const { initialize, start } = useGameEngine();
+  const { initialize } = useGameEngine();
 
   useEffect(() => {
     const initEngine = async () => {
