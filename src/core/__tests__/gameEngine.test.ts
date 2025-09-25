@@ -103,7 +103,11 @@ describe('GameEngine', () => {
   });
 
   it('should prevent operations when not initialized', () => {
-    expect(() => gameEngine.start()).toThrow();
-    expect(() => gameEngine.movePlayer('north')).toBe(false);
+    // Create a fresh GameEngine instance for this test
+    const { GameEngine } = require('../game/GameEngine');
+    const freshGameEngine = new GameEngine();
+
+    expect(() => freshGameEngine.start()).toThrow();
+    expect(freshGameEngine.movePlayer('north')).toBe(false);
   });
 });

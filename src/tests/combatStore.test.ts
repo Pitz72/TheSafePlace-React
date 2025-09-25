@@ -12,6 +12,16 @@ jest.mock('../stores/gameStore', () => ({
     setState: jest.fn(), // Mock setState as well
   },
 }));
+jest.mock('../stores/character/characterStore', () => ({
+  useCharacterStore: {
+    getState: jest.fn(),
+  },
+}));
+jest.mock('../stores/inventory/inventoryStore', () => ({
+  useInventoryStore: {
+    getState: jest.fn(),
+  },
+}));
 jest.mock('../utils/combatCalculations', () => ({
   rollToHit: jest.fn(),
   rollDamage: jest.fn(),
@@ -20,6 +30,8 @@ jest.mock('../utils/combatCalculations', () => ({
 }));
 
 const mockGetState = useGameStore.getState as jest.Mock;
+const mockCharacterGetState = require('../stores/character/characterStore').useCharacterStore.getState as jest.Mock;
+const mockInventoryGetState = require('../stores/inventory/inventoryStore').useInventoryStore.getState as jest.Mock;
 const mockedRollToHit = combatCalculations.rollToHit as jest.Mock;
 const mockedRollDamage = combatCalculations.rollDamage as jest.Mock;
 
@@ -28,9 +40,13 @@ describe('Combat Store', () => {
 
   jest.useFakeTimers();
 
+  // Calculate actual HP based on CON modifier
+  const conModifier = Math.floor((13 - 10) / 2); // CON 13 = +1
+  const actualMaxHP = Math.max(10, 100 + (conModifier * 10)); // 100 + 10 = 110
+
   const mockGameData = {
     characterSheet: {
-      currentHP: 80, maxHP: 100,
+      currentHP: actualMaxHP, maxHP: actualMaxHP,
       equipment: { weapon: { itemId: 'sword', slotType: 'weapon' }, armor: { itemId: 'leather', slotType: 'armor' } },
       stats: { potenza: 14, agilita: 12, vigore: 13, percezione: 10, adattamento: 11, carisma: 9 },
     },
@@ -53,6 +69,13 @@ describe('Combat Store', () => {
   beforeEach(() => {
     useCombatStore.setState(getInitialState(), true);
     mockGetState.mockReturnValue(mockGameData);
+    mockCharacterGetState.mockReturnValue({
+      characterSheet: mockGameData.characterSheet,
+    });
+    mockInventoryGetState.mockReturnValue({
+      items: mockGameData.items,
+      getInventory: () => [],
+    });
     jest.clearAllMocks();
     jest.clearAllTimers();
   });
@@ -73,7 +96,7 @@ describe('Combat Store', () => {
       const state = useCombatStore.getState();
       expect(state.isActive).toBe(true);
       expect(state.currentState).not.toBeNull();
-      expect(state.currentState?.player.hp).toBe(80);
+      expect(state.currentState?.player.hp).toBe(mockGameData.characterSheet.currentHP);
       expect(state.currentState?.enemies[0].name).toBe('Bandito');
     });
   });
@@ -163,7 +186,8 @@ describe('Combat Store', () => {
       await promise;
 
       const state = useCombatStore.getState();
-      expect(state.currentState!.player.hp).toBe(74); // 80 - 6
+      const expectedHP = mockGameData.characterSheet.currentHP - 6;
+      expect(state.currentState!.player.hp).toBe(expectedHP);
       expect(state.currentState!.log.some(e => e.message.includes('ti infligge 6 danni'))).toBe(true);
       expect(state.currentState!.phase).toBe('player-turn');
     });

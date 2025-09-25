@@ -40,7 +40,6 @@ export interface GameState {
 export class GameEngine {
   private state: GameState;
   private isRunning: boolean = false;
-  private lastUpdateTime: number = 0;
 
   constructor() {
     this.state = this.createInitialGameState();
@@ -159,6 +158,10 @@ export class GameEngine {
    * Esegue un movimento del giocatore
    */
   movePlayer(direction: 'north' | 'south' | 'east' | 'west' | 'northeast' | 'northwest' | 'southeast' | 'southwest'): boolean {
+    if (!this.state.isInitialized) {
+      return false;
+    }
+
     const result = movementSystem.movePlayer(direction, this.state.world);
 
     if (result.success) {
@@ -191,7 +194,7 @@ export class GameEngine {
     return new Promise((resolve, reject) => {
       try {
         const saveData = {
-          version: '0.9.9.0',
+          version: '0.9.9.5',
           timestamp: Date.now(),
           state: this.state
         };
@@ -223,8 +226,8 @@ export class GameEngine {
         const saveData = JSON.parse(saveDataStr);
 
         // Version check
-        if (saveData.version !== '0.9.9.0') {
-          console.warn(`Save version mismatch: ${saveData.version} vs 0.9.9.0`);
+        if (saveData.version !== '0.9.9.5') {
+          console.warn(`Save version mismatch: ${saveData.version} vs 0.9.9.5`);
         }
 
         // Ripristina stato
@@ -287,16 +290,16 @@ export class GameEngine {
 
   private setupEventListeners(): void {
     // Ascolta eventi importanti
-    eventBus.on('world:playerMoved', (data) => {
+    eventBus.on('world:playerMoved', (_data) => {
       // Logica aggiuntiva per movimento
     });
 
-    eventBus.on('character:levelUp', (data) => {
+    eventBus.on('character:levelUp', (_data) => {
       // Aggiorna statistiche personaggio
       this.state.character = updateCharacterStats(this.state.character);
     });
 
-    eventBus.on('survival:needsCritical', (data) => {
+    eventBus.on('survival:needsCritical', (_data) => {
       // Gestisci stati critici
     });
   }

@@ -1,17 +1,26 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    // Module Resolution for Jest
+    // Override for Jest compatibility
     "module": "CommonJS",
     "moduleResolution": "node",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    
+    "jsx": "react-jsx",
+
     // Testing Types
-    "types": ["jest", "@testing-library/jest-dom", "node"]
+    "types": ["jest", "@testing-library/jest-dom", "node"],
+
+    // Disable strict checks that interfere with testing
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noUncheckedSideEffectImports": false
   },
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",

@@ -5,6 +5,7 @@ import { useCharacterStore } from '../../stores/character/characterStore';
 import { useSurvivalStore } from '../../stores/survival/survivalStore';
 import { useEventStore } from '../../stores/events/eventStore';
 import { useWorldStore } from '../../stores/world/worldStore';
+import { useTimeStore } from '../../stores/time/timeStore';
 import { useNotificationStore } from '../../stores/notifications/notificationStore';
 
 // Mock all the stores
@@ -13,6 +14,7 @@ jest.mock('../../stores/character/characterStore');
 jest.mock('../../stores/survival/survivalStore');
 jest.mock('../../stores/events/eventStore');
 jest.mock('../../stores/world/worldStore');
+jest.mock('../../stores/time/timeStore');
 jest.mock('../../stores/notifications/notificationStore');
 
 describe('PlayerMovementService', () => {
@@ -47,7 +49,14 @@ describe('PlayerMovementService', () => {
       checkForRandomEvent: mockCheckForRandomEvent,
     });
     (useWorldStore.getState as jest.Mock).mockReturnValue({
+      playerPosition: { x: 0, y: 0 },
+      currentBiome: 'PLAINS',
+      mapData: [],
+    });
+    (useTimeStore.getState as jest.Mock).mockReturnValue({
       advanceTime: mockAdvanceTime,
+      getTimeString: jest.fn().mockReturnValue('12:00'),
+      timeState: { day: 1, currentTime: 720 },
     });
     (useNotificationStore.getState as jest.Mock).mockReturnValue({
       addLogEntry: mockAddLogEntry,
