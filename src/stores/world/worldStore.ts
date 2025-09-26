@@ -142,8 +142,34 @@ export const useWorldStore = create<WorldState>((set, get) => ({
     const maxScrollX = (MAP_WIDTH_IN_TILES * CHAR_WIDTH) - viewportSize.width;
     const maxScrollY = (MAP_HEIGHT_IN_TILES * CHAR_HEIGHT) - viewportSize.height;
 
-    const newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
-    const newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
+    let newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
+    let newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
+
+    // Garantisci che il player sia sempre visibile dopo il clamping
+    const playerLeft = (playerPosition.x * CHAR_WIDTH) - newCameraX;
+    const playerTop = (playerPosition.y * CHAR_HEIGHT) - newCameraY;
+
+    // Se il player sarebbe fuori vista a sinistra, sposta la camera a sinistra
+    if (playerLeft < 0) {
+      newCameraX = playerPosition.x * CHAR_WIDTH;
+    }
+    // Se il player sarebbe fuori vista a destra, sposta la camera a destra
+    else if (playerLeft > viewportSize.width - CHAR_WIDTH) {
+      newCameraX = (playerPosition.x * CHAR_WIDTH) - (viewportSize.width - CHAR_WIDTH);
+    }
+
+    // Se il player sarebbe fuori vista in alto, sposta la camera in alto
+    if (playerTop < 0) {
+      newCameraY = playerPosition.y * CHAR_HEIGHT;
+    }
+    // Se il player sarebbe fuori vista in basso, sposta la camera in basso
+    else if (playerTop > viewportSize.height - CHAR_HEIGHT) {
+      newCameraY = (playerPosition.y * CHAR_HEIGHT) - (viewportSize.height - CHAR_HEIGHT);
+    }
+
+    // Ri-clampa per sicurezza
+    newCameraX = Math.max(0, Math.min(newCameraX, maxScrollX));
+    newCameraY = Math.max(0, Math.min(newCameraY, maxScrollY));
 
     if (oldCameraPosition.x !== newCameraX || oldCameraPosition.y !== newCameraY) {
       set({ cameraPosition: { x: newCameraX, y: newCameraY } });

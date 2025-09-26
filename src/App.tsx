@@ -36,6 +36,25 @@ import PostCombatScreen from './components/combat/PostCombatScreen';
 import KeyboardCommandsPanel from './components/KeyboardCommandsPanel';
 import BootSequenceManager from './components/boot/BootSequenceManager';
 
+// LootItem interface for PostCombatScreen
+interface LootItem {
+  id: string;
+  name: string;
+  quantity: number;
+}
+
+// Transform combat loot from IInventorySlot[] to LootItem[]
+const transformCombatLoot = (lootSlots: any[]): LootItem[] => {
+  return lootSlots.map(slot => {
+    const item = itemDatabase[slot.itemId];
+    return {
+      id: slot.itemId,
+      name: item?.name || 'Oggetto Sconosciuto',
+      quantity: slot.quantity
+    };
+  });
+};
+
 const getTileDescription = (char: string): string => {
   switch (char) {
     case '.': return 'Pianura';
@@ -170,6 +189,7 @@ const GameContent = () => {
               <div className="flex-1 flex">
                 <aside className="w-1/4 border-r border-phosphor-600">
                   <div className="panel h-full">
+                    {/* IMMUTABLE COMPONENT - Survival Panel - DO NOT MODIFY WITHOUT EXPLICIT WRITTEN AUTHORIZATION FROM OPERATOR */}
                     <h3 className="panel-title">SOPRAVVIVENZA</h3>
                     <ul className="space-y-2 text-uniform">
                       <li>HP: <span className={`${(characterSheet.currentHP / characterSheet.maxHP) * 100 < 25 ? 'text-red-400' : (characterSheet.currentHP / characterSheet.maxHP) * 100 < 50 ? 'text-yellow-400' : 'text-green-400'}`}>{characterSheet.currentHP}</span>/<span className="text-phosphor-400">{characterSheet.maxHP}</span></li>
@@ -191,6 +211,7 @@ const GameContent = () => {
                 </section>
                 <aside className="w-1/4 border-l border-phosphor-600">
                   <div className="panel h-full">
+                    {/* IMMUTABLE COMPONENT - Information Panel - DO NOT MODIFY WITHOUT EXPLICIT WRITTEN AUTHORIZATION FROM OPERATOR */}
                     <h2 className="panel-title">INFORMAZIONI</h2>
                     <ul className="space-y-2 text-uniform">
                       <li>Posizione: ({playerPosition.x}, {playerPosition.y})</li>
@@ -242,7 +263,7 @@ const GameContent = () => {
             <PostCombatScreen
               result={combatResult}
               xpGained={combatResult.xpGained || 0}
-              loot={combatResult.loot || []}
+              loot={transformCombatLoot(combatResult.loot || [])}
               onContinue={clearCombatResults}
               onLoadGame={() => loadSavedGame('quicksave')}
               onMainMenu={initializeGame}

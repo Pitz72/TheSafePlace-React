@@ -17,7 +17,7 @@ import TargetSelector from './TargetSelector';
 
 export const CombatScreen: React.FC = () => {
   const combatState = useCombatStore();
-  const gameCharacter = useGameStore(state => state.characterSheet);
+  const gameCharacter = useGameStore((state: any) => state.characterSheet);
 
   if (!combatState.isActive || !gameCharacter) {
     // TODO: Aggiungere una schermata di caricamento o errore più robusta
