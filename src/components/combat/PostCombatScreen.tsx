@@ -5,7 +5,14 @@
  * Visualizza il risultato (vittoria/sconfitta), XP guadagnati e loot ottenuto.
  */
 import React from 'react';
-import type { CombatResult, LootItem } from '../../types/combat';
+import type { CombatResult } from '@/types/combat';
+import type { IInventorySlot } from '@/interfaces/items';
+
+interface LootItem {
+  id: string;
+  name: string;
+  quantity: number;
+}
 
 interface PostCombatScreenProps {
   result: CombatResult;

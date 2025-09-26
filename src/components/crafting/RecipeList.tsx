@@ -6,11 +6,11 @@
  */
 
 import React, { useEffect, useCallback } from 'react';
-import type { RecipeListProps } from '../../types/crafting';
-import { useCraftingStore } from '../../stores/craftingStore';
-import { useGameStore } from '../../stores/gameStore';
-import { UI_CONFIG, KEYBOARD_CONFIG, UI_MESSAGES } from '../../config/craftingConfig';
-import { canCraftRecipe } from '../../utils/craftingUtils';
+import type { RecipeListProps } from '@/types/crafting';
+import { useCraftingStore } from '@/stores/craftingStore';
+import { useGameStore } from '@/stores/gameStore';
+import { UI_CONFIG, KEYBOARD_CONFIG, UI_MESSAGES } from '@/config/craftingConfig';
+import { canCraftRecipe } from '@/utils/craftingUtils';
 
 /**
  * Componente RecipeList

@@ -6,8 +6,8 @@
  */
 
 import React, { useEffect, useCallback, useState } from 'react';
-import type { CraftingActionBarProps } from '../../types/crafting';
-import { UI_CONFIG, KEYBOARD_CONFIG, UI_MESSAGES } from '../../config/craftingConfig';
+import type { CraftingActionBarProps } from '@/types/crafting';
+import { UI_CONFIG, KEYBOARD_CONFIG, UI_MESSAGES } from '@/config/craftingConfig';
 
 /**
  * Componente CraftingActionBar

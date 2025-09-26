@@ -1,5 +1,6 @@
 # THE SAFE PLACE CHRONICLES: THE ECHO OF THE JOURNEY
 
+<<<<<<< Updated upstream
 **Versione:** 0.9.9.2
 **Codename:** The Computer Boot System
 
@@ -35,9 +36,85 @@ npm install
 Per avviare il server di sviluppo locale, esegui:
 
 ```bash
-npm run dev
+=======
+**Version:** 0.9.9.5
+**Codename:** Resolution of LLM Aberration
+**Status:** ✅ Production Ready - High Quality Architecture
+
+A post-apocalyptic RPG adventure built with modern React, TypeScript, and cutting-edge architectural patterns. Experience a fully functional survival game with crafting, dynamic events, turn-based combat, and character progression in a world that demands your wits and resilience.
+
+## 🌟 What is The Safe Place?
+
+In a world ravaged by catastrophe, you play as "Ultimo" - a survivor navigating through dangerous biomes, gathering resources, and making choices that shape your destiny. This is not just a game; it's a testament to what clean, maintainable code can achieve in game development.
+
+### 🎮 Core Gameplay Features
+
+- **🏭 Advanced Crafting System**: Full recipe-based crafting with skill requirements, material management, and unlockable recipes
+- **🎲 Dynamic Event System**: Branching narratives with meaningful choices, consequences, and rewards across multiple biomes
+- **⚔️ Turn-Based Combat**: Strategic combat with d20 mechanics, AC, damage calculation, and enemy AI
+- **📈 Character Progression**: Exponential XP scaling, stat boosts, HP increases, and special abilities
+- **🌍 World Exploration**: Multiple biomes (Forest, City, Plains, River, Village) with unique encounters
+- **⏰ Time & Survival**: Day/night cycle, hunger/thirst mechanics, and rest management
+- **💾 Persistent State**: Complete save/load system with multiple save slots
+
+## 🏗️ Architecture Excellence
+
+Built with a **modular, event-driven architecture** that prioritizes maintainability and scalability:
+
+### Core Systems
+- **Event Bus**: Centralized communication between all game systems
+- **Domain Stores**: Specialized state management for character, world, inventory, combat, and survival
+- **Type Safety**: 100% TypeScript with strict typing and zero `any` usage
+- **Clean Imports**: Consistent `@/` path aliases throughout the codebase
+
+### Technical Stack
+- **Frontend**: React 18 with TypeScript
+- **State Management**: Zustand with granular selectors
+- **Build Tool**: Vite with optimized production builds
+- **Styling**: Tailwind CSS with custom CRT-themed components
+- **Testing**: Jest with comprehensive unit tests
+- **Code Quality**: ESLint, Prettier, and strict TypeScript configuration
+
+### Quality Metrics
+- ✅ **Type Safety**: Zero `any` types, full TypeScript coverage
+- ✅ **Test Coverage**: Growing test suite with critical path coverage
+- ✅ **Build Status**: Clean builds with zero TypeScript errors
+- ✅ **Performance**: Optimized rendering and state updates
+- ✅ **Maintainability**: Clean, documented, and well-structured code
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** 18+
+- **Git**
+
+### Installation
+```bash
+# Clone the repository
+git clone <repository-url>
+cd TheSafePlace-React
+
+# Install dependencies
+npm install
 ```
 
+### Development
+```bash
+# Start development server
+>>>>>>> Stashed changes
+npm run dev
+
+# Run tests
+npm test
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+<<<<<<< Updated upstream
 Il server sarà disponibile all'indirizzo `http://localhost:5173` (o la prima porta disponibile).
 
 ### Eseguire i Test
@@ -116,3 +193,81 @@ Il progetto è stato completamente ricostruito con un'**architettura modulare e 
 - ✅ **Stabilità**: Anti-regression measures implementati
 
 **La ricostruzione totale è completata. Il progetto ora ha fondamenta solide per crescere.** 🚀
+=======
+### Game Controls
+- **WASD/Arrow Keys**: Movement and navigation
+- **Enter**: Confirm actions
+- **ESC**: Cancel/Exit
+- **C**: Open Crafting Interface
+- **I**: Open Inventory
+- **L**: Level Up (when available)
+- **Space**: Interact with world
+
+## 🎯 Game Features Deep Dive
+
+### Crafting System
+- **Terminal Interface**: Authentic 80s-style terminal UI
+- **Recipe Management**: 20+ craftable items with skill requirements
+- **Material Tracking**: Real-time inventory validation
+- **Skill Progression**: Crafting improves with character level
+
+### Event System
+- **Biome-Specific Events**: Unique encounters per location
+- **Choice Consequences**: Meaningful decisions with lasting impact
+- **Reward System**: XP, items, and stat bonuses
+- **Dynamic Narratives**: Branching storylines
+
+### Combat System
+- **D20 Mechanics**: Classic tabletop RPG combat
+- **Enemy AI**: Intelligent enemy behavior and tactics
+- **Loot System**: Combat rewards and item drops
+- **Status Effects**: Temporary buffs and debuffs
+
+### Character Development
+- **Stat System**: 6 core stats (Potenza, Agilità, Vigore, Percezione, Adattamento, Carisma)
+- **Level Progression**: Balanced exponential XP scaling
+- **Ability Unlocks**: New capabilities at higher levels
+- **Equipment System**: Weapon and armor management
+
+## 📊 Project Status
+
+This project represents a complete architectural recovery and modernization. What started as legacy code with significant technical debt has been transformed into a showcase of modern React/TypeScript development practices.
+
+### Recent Achievements
+- ✅ **Complete Store Refactoring**: All state management migrated to type-safe, event-driven architecture
+- ✅ **Import System Cleanup**: Eliminated all relative imports in favor of clean `@/` aliases
+- ✅ **Test Suite Enhancement**: Added comprehensive testing for core systems
+- ✅ **Documentation Overhaul**: Accurate, professional documentation reflecting current state
+
+### Roadmap Ahead
+With the foundation now solid, future development can focus on:
+- New content creation (additional biomes, quests, items)
+- UI/UX enhancements
+- Performance optimizations
+- Multiplayer features
+- Mobile responsiveness
+
+## 🤝 Contributing
+
+This codebase serves as an example of high-quality game development practices. Contributions are welcome, especially in:
+- New game content (events, recipes, enemies)
+- UI/UX improvements
+- Performance optimizations
+- Additional test coverage
+
+### Development Guidelines
+- Strict TypeScript usage
+- Comprehensive testing for new features
+- Clean, documented code
+- Event-driven architecture patterns
+
+## 📄 License
+
+This project is developed as an educational and demonstrative example of modern web game development.
+
+---
+
+**Built with ❤️ and modern web technologies**
+
+*Experience the future of RPG gaming, one clean commit at a time.*
+>>>>>>> Stashed changes

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNarrativeStore } from '../../stores/narrative/narrativeStore';
-import type { MainQuestEvent } from '../../stores/narrative/narrativeStore';
-import { mainQuestTrigger } from '../../services/mainQuestTrigger';
-import { narrativeIntegration } from '../../services/narrativeIntegration';
+import { useNarrativeStore } from '@/stores/narrative/narrativeStore';
+import type { MainQuestEvent } from '@/stores/narrative/narrativeStore';
+import { mainQuestTrigger } from '@/services/mainQuestTrigger';
+import { narrativeIntegration } from '@/services/narrativeIntegration';
 import NarrativeScreen from './NarrativeScreen';
 
 interface NarrativeManagerProps {

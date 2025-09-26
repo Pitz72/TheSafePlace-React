@@ -6,9 +6,9 @@
  */
 
 import React from 'react';
-import type { RecipeDetailsProps } from '../../types/crafting';
-import { UI_CONFIG, UI_MESSAGES } from '../../config/craftingConfig';
-import { useGameStore } from '../../stores/gameStore';
+import type { RecipeDetailsProps } from '@/types/crafting';
+import { UI_CONFIG, UI_MESSAGES } from '@/config/craftingConfig';
+import { useGameStore } from '@/stores/gameStore';
 
 /**
  * Componente RecipeDetails

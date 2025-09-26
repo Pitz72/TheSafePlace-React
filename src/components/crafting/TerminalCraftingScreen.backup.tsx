@@ -4,10 +4,10 @@
  */
 
 import React, { useEffect, useCallback, useState, useMemo } from 'react';
-import { useCraftingStore } from '../../stores/craftingStore';
-import { useGameStore } from '../../stores/gameStore';
-import { meetsSkillRequirement } from '../../utils/craftingUtils';
-import type { Recipe } from '../../types/crafting';
+import { useCraftingStore } from '@/stores/craftingStore';
+import { useGameStore } from '@/stores/gameStore';
+import { meetsSkillRequirement } from '@/utils/craftingUtils';
+import type { Recipe } from '@/types/crafting';
 
 // ===== CONSTANTS =====
 const TERMINAL_LAYOUT = {

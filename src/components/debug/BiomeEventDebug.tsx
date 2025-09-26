@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useEventStore } from '../../stores/events/eventStore';
-import { useWorldStore } from '../../stores/world/worldStore';
+import { useEventStore } from '@/stores/events/eventStore';
+import { useWorldStore } from '@/stores/world/worldStore';
 
 interface BiomeEventDebugProps {
   onClose: () => void;

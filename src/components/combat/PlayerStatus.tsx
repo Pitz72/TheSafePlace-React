@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PlayerCombatState } from '../../types/combat';
+import type { PlayerCombatState } from '@/types/combat';
 
 interface PlayerStatusProps {
   playerState: PlayerCombatState;

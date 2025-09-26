@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CombatState } from '../../types/combat';
+import type { CombatState } from '@/types/combat';
 import PlayerStatus from './PlayerStatus';
 import EnemyStatus from './EnemyStatus';
 

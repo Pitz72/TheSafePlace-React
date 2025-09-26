@@ -6,11 +6,11 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useCraftingStore } from '../../stores/craftingStore';
-import { useGameStore } from '../../stores/gameStore';
-import { canCraftRecipe, meetsSkillRequirement } from '../../utils/craftingUtils';
-import type { Recipe } from '../../types/crafting';
-import type { IInventorySlot } from '../../interfaces/items';
+import { useCraftingStore } from '@/stores/craftingStore';
+import { useGameStore } from '@/stores/gameStore';
+import { canCraftRecipe, meetsSkillRequirement } from '@/utils/craftingUtils';
+import type { Recipe } from '@/types/crafting';
+import type { IInventorySlot } from '@/interfaces/items';
 
 interface TerminalCraftingScreenProps {
   onExit: () => void;

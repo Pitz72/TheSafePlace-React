@@ -12,8 +12,8 @@ const BootSimulation: React.FC<BootSimulationProps> = ({ onComplete, onSkip }) =
 
   // Retro PC boot sequence - simulating old computer boot
   const bootLines = [
-    'THE SAFE PLACE BOOT LOADER v1.0',
-    'Copyright (C) 1985 The Safe Place Inc.',
+    'THE SAFE PLACE CHRONICLES BOOT LOADER v1.0',
+    'Copyright (C) 1985 The Safe Place Chronicles Inc.',
     '',
     'CPU: Intel 8086 @ 4.77 MHz',
     'Memory: 640KB OK',
@@ -28,7 +28,7 @@ const BootSimulation: React.FC<BootSimulationProps> = ({ onComplete, onSkip }) =
     '',
     'Initializing graphics mode...',
     'Setting 320x200 4-color CGA mode',
-    'Loading THE_SAFE_PLACE.EXE...',
+    'Loading TSP_CHRONICLES.EXE...',
     '',
     'Memory allocation: 512KB free',
     'Initializing game engine...',
@@ -37,9 +37,10 @@ const BootSimulation: React.FC<BootSimulationProps> = ({ onComplete, onSkip }) =
     'Loading item database...',
     '',
     'System ready.',
-    'Starting THE SAFE PLACE...',
+    'Starting THE SAFE PLACE CHRONICLES...',
     '',
-    'Welcome to THE SAFE PLACE',
+    'Welcome to THE SAFE PLACE CHRONICLES',
+    'THE ECHO OF THE JOURNEY',
     'A retro RPG experience',
     '',
     'Press any key to continue...'

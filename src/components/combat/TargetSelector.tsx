@@ -1,5 +1,5 @@
 import React from 'react';
-import type { EnemyCombatState } from '../../types/combat';
+import type { EnemyCombatState } from '@/types/combat';
 
 interface TargetSelectorProps {
   enemies: EnemyCombatState[];

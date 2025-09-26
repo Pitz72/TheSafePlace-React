@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { MainQuestEvent } from '../../stores/narrative/narrativeStore';
+import type { MainQuestEvent } from '@/stores/narrative/narrativeStore';
 
 interface NarrativeScreenProps {
   currentEvent?: MainQuestEvent;

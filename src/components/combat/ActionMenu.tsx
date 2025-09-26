@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CombatActionType } from '../../types/combat';
+import type { CombatActionType } from '@/types/combat';
 
 interface ActionMenuProps {
   availableActions: { type: CombatActionType; label: string; enabled: boolean }[];

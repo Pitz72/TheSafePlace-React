@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useGameStore } from '@/stores/gameStore';
 import BlackScreen from './BlackScreen';
 import ProductionScreen from './ProductionScreen';
 import BootSimulation from './BootSimulation';

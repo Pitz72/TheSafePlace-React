@@ -1,10 +1,10 @@
 {
-  "name": "the-safe-place",
+  "name": "the-safe-place-chronicles",
   "private": true,
-  "version": "0.9.9.2",
-  "codename": "The Computer Boot System",
+  "version": "0.9.9.5",
+  "codename": "Resolution of LLM Aberration",
   "type": "module",
-  "description": "The Safe Place - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo",
+  "description": "THE SAFE PLACE CHRONICLES: THE ECHO OF THE JOURNEY - GDR Retrocomputazionale a Fosfori Verdi - Sistema di gioco avanzato con meccaniche D&D, atmosfera CRT anni '80 e sistema narrativo canonico immersivo",
   "author": "TheSafePlace Development Team",
   "license": "MIT",
   "keywords": [
