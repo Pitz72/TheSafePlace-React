@@ -1,21 +1,23 @@
 import { create } from 'zustand';
-import type { LogEntry } from '../../data/MessageArchive';
-import { MessageType, getRandomMessage } from '../../data/MessageArchive';
-import { useWorldStore } from '../world/worldStore';
-import { useTimeStore } from '../time/timeStore';
+import type { LogEntry } from '@/data/MessageArchive';
+import { MessageType, getRandomMessage } from '@/data/MessageArchive';
+import { useWorldStore } from '@/stores/world/worldStore';
+import { useTimeStore } from '@/stores/time/timeStore';
 
-export interface NotificationState {
-  // State
+interface Notification {
+  id: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  message: string;
+  timestamp: number;
+  duration?: number;
+}
+
+interface NotificationState {
   logEntries: LogEntry[];
-  notifications: Array<{
-    id: string;
-    type: 'info' | 'warning' | 'error' | 'success';
-    message: string;
-    timestamp: number;
-    duration?: number;
-  }>;
-  
-  // Actions
+  notifications: Notification[];
+}
+
+interface NotificationActions {
   addLogEntry: (type: MessageType, context?: any) => void;
   clearLog: () => void;
   getRecentEntries: (count?: number) => LogEntry[];
@@ -23,10 +25,12 @@ export interface NotificationState {
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
   resetNotificationState: () => void;
-  restoreState: (state: { logEntries: LogEntry[]; notifications: Array<{ id: string; type: 'info' | 'warning' | 'error' | 'success'; message: string; timestamp: number; duration?: number }> }) => void;
+  restoreState: (state: NotificationState) => void;
 }
 
-export const useNotificationStore = create<NotificationState>((set, get) => ({
+export type NotificationStore = NotificationState & NotificationActions;
+
+export const useNotificationStore = create<NotificationStore>((set, get) => ({
   // --- INITIAL STATE ---
   logEntries: [],
   notifications: [],
@@ -36,7 +40,11 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   addLogEntry: (type: MessageType, context?: any) => {
     const timeStore = useTimeStore.getState();
     const worldStore = useWorldStore.getState();
-    const gameTime = timeStore.timeState.currentTime;
+    
+    // Safe access to currentTime with fallback
+    const timeState = timeStore?.timeState;
+    const gameTime = timeState?.currentTime || 0;
+    
     const timestamp = Date.now();
     const id = `${timestamp}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -138,52 +146,3 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     });
   }
 }));
-
-// Helper functions per formattare i messaggi
-export const formatLogMessage = (entry: LogEntry): string => {
-  const { type, context } = entry;
-
-  switch (type) {
-    case MessageType.MOVEMENT:
-      return `Ti sei spostato verso ${context?.direction || 'una nuova area'}.`;
-
-    case MessageType.HP_DAMAGE:
-      return `Hai subito ${context?.damage || 0} danni${context?.reason ? ` da ${context.reason}` : ''}.`;
-
-    case MessageType.HP_RECOVERY:
-      return `Hai recuperato ${context?.healing || 0} HP${context?.reason ? ` grazie a ${context.reason}` : ''}.`;
-
-    case MessageType.ITEM_FOUND:
-      return `Hai trovato: ${context?.itemName || 'un oggetto'}.`;
-
-    case MessageType.ITEM_USED:
-      return `Hai usato: ${context?.itemName || 'un oggetto'}.`;
-
-    case MessageType.LEVEL_UP:
-      return `Hai raggiunto il livello ${context?.newLevel || '?'}!`;
-
-    case MessageType.EVENT_CHOICE:
-      return context?.text || 'Hai fatto una scelta.';
-
-    case MessageType.AMBIANCE_RANDOM:
-      return context?.text || 'Qualcosa accade nell\'ambiente circostante.';
-
-    default:
-      return context?.text || 'È successo qualcosa.';
-  }
-};
-
-// Helper per ottenere l'icona del tipo di messaggio
-export const getMessageIcon = (type: MessageType): string => {
-  switch (type) {
-    case MessageType.MOVEMENT: return '🚶';
-    case MessageType.HP_DAMAGE: return '💔';
-    case MessageType.HP_RECOVERY: return '💚';
-    case MessageType.ITEM_FOUND: return '📦';
-    case MessageType.ITEM_USED: return '🔧';
-    case MessageType.LEVEL_UP: return '⭐';
-    case MessageType.EVENT_CHOICE: return '💭';
-    case MessageType.AMBIANCE_RANDOM: return '🌿';
-    default: return 'ℹ️';
-  }
-};

@@ -1,16 +1,18 @@
 import { create } from 'zustand';
-import { saveSystem } from '../../utils/saveSystem';
-import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '../../utils/fileUtils';
+import { saveSystem } from '@/utils/saveSystem';
+import { downloadFile, readFileAsText, validateSaveFile, generateSaveFilename, createFileInput } from '@/utils/fileUtils';
 
-import { useGameStore } from '../gameStore';
-import { useCharacterStore } from '../character/characterStore';
-import { useWorldStore } from '../world/worldStore';
-import { useShelterStore } from '../shelter/shelterStore';
-import { useSurvivalStore } from '../survival/survivalStore';
-import { useNotificationStore } from '../notifications/notificationStore';
-import { useEventStore } from '../events/eventStore';
+import { useGameStore } from '@/stores/gameStore';
+import { useCharacterStore } from '@/stores/character/characterStore';
+import { useWorldStore } from '@/stores/world/worldStore';
+import { useShelterStore } from '@/stores/shelter/shelterStore';
+import { useSurvivalStore } from '@/stores/survival/survivalStore';
+import { useNotificationStore } from '@/stores/notifications/notificationStore';
+import { useEventStore } from '@/stores/events/eventStore';
 
-export interface SaveState {
+export interface SaveState {}
+
+export interface SaveActions {
   saveCurrentGame: (slot: string) => Promise<boolean>;
   loadSavedGame: (slot: string) => Promise<boolean>;
   handleQuickSave: () => Promise<boolean>;
@@ -22,7 +24,9 @@ export interface SaveState {
   recoverSave: (slot: string) => Promise<boolean>;
 }
 
-export const useSaveStore = create<SaveState>((set, get) => ({
+export type SaveStore = SaveState & SaveActions;
+
+export const useSaveStore = create<SaveStore>((set, get) => ({
     saveCurrentGame: async (slot) => {
         const gameStore = useGameStore.getState();
         const characterStore = useCharacterStore.getState();

@@ -1,12 +1,13 @@
 import { create } from 'zustand';
-import type { ShelterAccessInfo } from '../../interfaces/gameState';
-import { useWorldStore } from '../world/worldStore';
-import { useTimeStore } from '../time/timeStore';
+import type { ShelterAccessInfo } from '@/interfaces/gameState';
+import { useWorldStore } from '@/stores/world/worldStore';
+import { useTimeStore } from '@/stores/time/timeStore';
 
 export interface ShelterState {
   shelterAccessState: Record<string, ShelterAccessInfo>;
+}
 
-  // Actions
+export interface ShelterActions {
   createShelterKey: (x: number, y: number) => string;
   getShelterInfo: (x: number, y: number) => ShelterAccessInfo | null;
   createShelterInfo: (x: number, y: number) => ShelterAccessInfo;
@@ -19,7 +20,9 @@ export interface ShelterState {
   restoreState: (state: { shelterAccessState: Record<string, ShelterAccessInfo> }) => void;
 }
 
-export const useShelterStore = create<ShelterState>((set, get) => ({
+export type ShelterStore = ShelterState & ShelterActions;
+
+export const useShelterStore = create<ShelterStore>((set, get) => ({
   // --- INITIAL STATE ---
   shelterAccessState: {},
 
@@ -33,11 +36,13 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
   },
 
   createShelterInfo: (x, y) => {
-    const { timeState } = useTimeStore.getState();
+    const timeStore = useTimeStore.getState();
+    const timeState = timeStore?.timeState;
+    
     return {
       coordinates: get().createShelterKey(x, y),
-      dayVisited: timeState.day,
-      timeVisited: timeState.currentTime,
+      dayVisited: timeState?.day || 1,
+      timeVisited: timeState?.currentTime || 0,
       hasBeenInvestigated: false,
       isAccessible: true,
       investigationResults: [],
@@ -61,7 +66,14 @@ export const useShelterStore = create<ShelterState>((set, get) => ({
     const shelterInfo = get().getShelterInfo(x, y);
     if (!shelterInfo) return true;
 
-    const { timeState } = useTimeStore.getState();
+    const timeStore = useTimeStore.getState();
+    const timeState = timeStore?.timeState;
+    
+    // If timeState is not available, allow access (fallback)
+    if (!timeState || typeof timeState.currentTime === 'undefined') {
+      return true;
+    }
+    
     const isDay = timeState.currentTime >= 360 && timeState.currentTime <= 1200; // 06:00 - 20:00
     if (!isDay) return true;
 

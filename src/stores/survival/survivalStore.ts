@@ -1,22 +1,23 @@
 import { create } from 'zustand';
-import type { SurvivalState } from '../../interfaces/gameState';
-import { MessageType } from '../../data/MessageArchive';
-import { useCharacterStore } from '../character/characterStore';
-import { useTimeStore } from '../time/timeStore';
-import { useInventoryStore } from '../inventory/inventoryStore';
-import { useNotificationStore } from '../notifications/notificationStore';
+import type { SurvivalState as SurvivalStateType } from '@/interfaces/gameState';
+import { MessageType } from '@/data/MessageArchive';
+import { useCharacterStore } from '@/stores/character/characterStore';
+import { useTimeStore } from '@/stores/time/timeStore';
+import { useInventoryStore } from '@/stores/inventory/inventoryStore';
+import { useNotificationStore } from '@/stores/notifications/notificationStore';
+import { calculateRestResults, calculateNightConsumption, getSurvivalStatus, applySurvivalPenalties } from '@/utils/survivalUtils';
 
 // Minimal interface to avoid direct dependency on weatherStore shape
 interface WeatherEffects {
   survivalModifier: number;
 }
 
-export interface SurvivalStoreState {
-  // State
-  survivalState: SurvivalState;
-  
-  // Actions
-  updateSurvival: (updates: Partial<SurvivalState>) => void;
+interface SurvivalState {
+  survivalState: SurvivalStateType;
+}
+
+interface SurvivalActions {
+  updateSurvival: (updates: Partial<SurvivalStateType>) => void;
   shortRest: (addLogEntry: (type: MessageType, context?: any) => void) => void;
   handleNightConsumption: (addLogEntry: (type: MessageType, context?: any) => void) => void;
   checkSurvivalStatus: () => { hunger: string; thirst: string; fatigue: string };
@@ -25,7 +26,9 @@ export interface SurvivalStoreState {
   resetSurvivalState: () => void;
 }
 
-const INITIAL_SURVIVAL_STATE: SurvivalState = {
+export type SurvivalStore = SurvivalState & SurvivalActions;
+
+const INITIAL_SURVIVAL_STATE: SurvivalStateType = {
   hunger: 100,
   thirst: 100,
   fatigue: 0,
@@ -34,13 +37,13 @@ const INITIAL_SURVIVAL_STATE: SurvivalState = {
   waterSource: false
 };
 
-export const useSurvivalStore = create<SurvivalStoreState>((set, get) => ({
+export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
   // --- INITIAL STATE ---
   survivalState: INITIAL_SURVIVAL_STATE,
 
   // --- ACTIONS ---
   
-  updateSurvival: (updates: Partial<SurvivalState>) => {
+  updateSurvival: (updates: Partial<SurvivalStateType>) => {
     set(state => ({
       survivalState: { ...state.survivalState, ...updates }
     }));
@@ -55,27 +58,15 @@ export const useSurvivalStore = create<SurvivalStoreState>((set, get) => ({
     // Avanza il tempo di 1 ora
     timeStore.advanceTime(60);
     
-    // Calcola il recupero di fatica
-    let fatigueReduction = 15;
-    if (survivalState.shelter) fatigueReduction += 5;
-    if (survivalState.fire) fatigueReduction += 5;
-    
-    const newFatigue = Math.max(0, survivalState.fatigue - fatigueReduction);
-    
-    // Calcola il consumo di risorse
-    const hungerLoss = 5;
-    const thirstLoss = 8;
-    
-    const newHunger = Math.max(0, survivalState.hunger - hungerLoss);
-    const newThirst = Math.max(0, survivalState.thirst - thirstLoss);
-    
+    const { newFatigue, newHunger, newThirst, fatigueReduction, hungerLoss, thirstLoss } = calculateRestResults(survivalState);
+
     // Aggiorna lo stato
     updateSurvival({
       hunger: newHunger,
       thirst: newThirst,
       fatigue: newFatigue
     });
-    
+
     // Recupero HP se le condizioni sono buone
     if (newHunger > 50 && newThirst > 50 && newFatigue < 50) {
       const hpRecovery = Math.floor(characterStore.characterSheet.maxHP * 0.1);
@@ -101,39 +92,15 @@ export const useSurvivalStore = create<SurvivalStoreState>((set, get) => ({
   handleNightConsumption: (addLogEntry: (type: MessageType, context?: any) => void) => {
     const { survivalState, updateSurvival } = get();
     const characterStore = useCharacterStore.getState();
-    
-    // Consumo notturno base
-    let hungerLoss = 15;
-    let thirstLoss = 10;
-    let fatigueReduction = 30;
-    
-    // Modificatori per shelter e fire
-    if (survivalState.shelter) {
-      hungerLoss -= 3;
-      thirstLoss -= 2;
-      fatigueReduction += 10;
-    }
-    
-    if (survivalState.fire) {
-      hungerLoss -= 2;
-      fatigueReduction += 5;
-    }
-    
-    // Accesso all'acqua riduce la sete
-    if (survivalState.waterSource) {
-      thirstLoss = Math.max(0, thirstLoss - 5);
-    }
-    
-    const newHunger = Math.max(0, survivalState.hunger - hungerLoss);
-    const newThirst = Math.max(0, survivalState.thirst - thirstLoss);
-    const newFatigue = Math.max(0, survivalState.fatigue - fatigueReduction);
-    
+
+    const { newHunger, newThirst, newFatigue, hungerLoss, thirstLoss, fatigueReduction } = calculateNightConsumption(survivalState);
+
     updateSurvival({
       hunger: newHunger,
       thirst: newThirst,
       fatigue: newFatigue
     });
-    
+
     // Recupero HP notturno se le condizioni sono buone
     if (newHunger > 30 && newThirst > 30) {
       const baseRecovery = Math.floor(characterStore.characterSheet.maxHP * 0.2);
@@ -164,62 +131,22 @@ export const useSurvivalStore = create<SurvivalStoreState>((set, get) => ({
 
   checkSurvivalStatus: () => {
     const { survivalState } = get();
-    
-    const getHungerStatus = (hunger: number) => {
-      if (hunger > 75) return 'Sazio';
-      if (hunger > 50) return 'Leggermente affamato';
-      if (hunger > 25) return 'Affamato';
-      if (hunger > 10) return 'Molto affamato';
-      return 'Morendo di fame';
-    };
-    
-    const getThirstStatus = (thirst: number) => {
-      if (thirst > 75) return 'Idratato';
-      if (thirst > 50) return 'Leggermente assetato';
-      if (thirst > 25) return 'Assetato';
-      if (thirst > 10) return 'Molto assetato';
-      return 'Morendo di sete';
-    };
-    
-    const getFatigueStatus = (fatigue: number) => {
-      if (fatigue < 25) return 'Riposato';
-      if (fatigue < 50) return 'Leggermente stanco';
-      if (fatigue < 75) return 'Stanco';
-      if (fatigue < 90) return 'Molto stanco';
-      return 'Esausto';
-    };
-    
-    return {
-      hunger: getHungerStatus(survivalState.hunger),
-      thirst: getThirstStatus(survivalState.thirst),
-      fatigue: getFatigueStatus(survivalState.fatigue)
-    };
+    return getSurvivalStatus(survivalState);
   },
 
   applySurvivalEffects: (addLogEntry: (type: MessageType, context?: any) => void) => {
     const { survivalState } = get();
     const characterStore = useCharacterStore.getState();
-    
-    // Effetti della fame estrema
-    if (survivalState.hunger <= 10) {
-      const damage = Math.floor(characterStore.characterSheet.maxHP * 0.05);
-      characterStore.updateHP(-damage);
-      addLogEntry(MessageType.HP_DAMAGE, {
-        damage,
-        reason: 'fame estrema'
+
+    const penalties = applySurvivalPenalties(survivalState, characterStore.characterSheet);
+
+    if (penalties.damage > 0) {
+      characterStore.updateHP(-penalties.damage);
+      penalties.messages.forEach(msg => {
+        addLogEntry(MessageType.HP_DAMAGE, { damage: msg.damage, reason: msg.reason });
       });
     }
-    
-    // Effetti della sete estrema
-    if (survivalState.thirst <= 10) {
-      const damage = Math.floor(characterStore.characterSheet.maxHP * 0.08);
-      characterStore.updateHP(-damage);
-      addLogEntry(MessageType.HP_DAMAGE, {
-        damage,
-        reason: 'sete estrema'
-      });
-    }
-    
+
     // Effetti della fatica estrema
     if (survivalState.fatigue >= 90) {
       addLogEntry(MessageType.AMBIANCE_RANDOM, {

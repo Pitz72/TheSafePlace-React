@@ -73,7 +73,14 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
   },
 
   generateWeatherChange: (): Omit<WeatherState, 'actions'> => {
-    const { timeState } = useWorldStore.getState();
+    const worldStore = useWorldStore.getState();
+    const timeState = worldStore?.timeState;
+    
+    // If timeState is not available, return clear weather
+    if (!timeState || typeof timeState.currentTime === 'undefined') {
+      return get().createClearWeather();
+    }
+    
     const weatherPatterns = get().getWeatherPatterns();
     const currentWeather = get().currentWeather;
     const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
@@ -149,6 +156,11 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
   }),
 
   getTimeBasedWeatherModifiers: (timeState) => {
+    // Add null safety check for timeState
+    if (!timeState || typeof timeState.currentTime === 'undefined') {
+      return 'day'; // Default to day if timeState is not available
+    }
+    
     const hour = Math.floor(timeState.currentTime / 60);
     if (hour >= 5 && hour < 8) return 'dawn';
     if (hour >= 8 && hour < 18) return 'day';

@@ -116,56 +116,76 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   },
 
   get timeState(): TimeState {
-    const timeData = useTimeStore.getState().timeState;
+    const timeStore = useTimeStore.getState();
+    // Ensure timeStore exists and has the required properties
+    if (!timeStore || typeof timeStore.currentTime === 'undefined') {
+      // Return default time state if timeStore is not initialized
+      return {
+        currentTime: 480, // 8:00 AM
+        day: 1,
+        isDay: true
+      };
+    }
+    
     return {
-      currentTime: timeData.currentTime,
-      day: timeData.day,
-      isDay: timeData.timeOfDay === 'morning' || timeData.timeOfDay === 'afternoon'
+      currentTime: timeStore.currentTime,
+      day: timeStore.day,
+      isDay: timeStore.timeOfDay === 'morning' || timeStore.timeOfDay === 'afternoon'
     };
   },
 
   get playerPosition() {
-    return useWorldStore.getState().playerPosition;
+    const worldStore = useWorldStore.getState();
+    return worldStore?.playerPosition || { x: 0, y: 0 };
   },
 
   get mapData() {
-    return useWorldStore.getState().mapData;
+    const worldStore = useWorldStore.getState();
+    return worldStore?.mapData || [];
   },
 
   get isMapLoading() {
-    return useWorldStore.getState().isMapLoading;
+    const worldStore = useWorldStore.getState();
+    return worldStore?.isMapLoading || false;
   },
 
   get weatherState() {
-    return useWeatherStore.getState();
+    return useWeatherStore.getState() || {};
   },
 
   get currentWeather() {
-    return useWeatherStore.getState().currentWeather;
+    const weatherStore = useWeatherStore.getState();
+    return weatherStore?.currentWeather || 'clear';
   },
 
   get survivalState() {
-    return useSurvivalStore.getState().survivalState;
+    const survivalStore = useSurvivalStore.getState();
+    return survivalStore?.survivalState || { hunger: 100, thirst: 100, fatigue: 0 };
   },
 
   get logEntries() {
-    return useNotificationStore.getState().logEntries;
+    const notificationStore = useNotificationStore.getState();
+    return notificationStore?.logEntries || [];
   },
 
   get items(): Record<string, any> {
-    return useInventoryStore.getState().items;
+    const inventoryStore = useInventoryStore.getState();
+    return inventoryStore?.items || {};
   },
 
   get inventory() {
-    return useInventoryStore.getState().getInventory();
+    const inventoryStore = useInventoryStore.getState();
+    return inventoryStore?.getInventory ? inventoryStore.getInventory() : [];
   },
 
   get currentEvent() {
-    return useEventStore.getState().currentEvent;
+    const eventStore = useEventStore.getState();
+    return eventStore?.currentEvent || null;
   },
 
   get notifications() {
-    return useNotificationStore.getState().notifications;
+    const notificationStore = useNotificationStore.getState();
+    return notificationStore?.notifications || [];
   },
 
   // --- CORE ACTIONS ---

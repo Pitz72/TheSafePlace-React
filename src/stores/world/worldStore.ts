@@ -1,10 +1,13 @@
 import { create } from 'zustand';
-import { useNotificationStore } from '../notifications/notificationStore';
-import { useSurvivalStore } from '../survival/survivalStore';
-import { useTimeStore } from '../time/timeStore';
-import { MessageType, JOURNAL_STATE, resetJournalState } from '../../data/MessageArchive';
-import { playerMovementService } from '../../services/playerMovementService';
-import { narrativeIntegration } from '../../services/narrativeIntegration';
+import { useNotificationStore } from '@/stores/notifications/notificationStore';
+import { useSurvivalStore } from '@/stores/survival/survivalStore';
+import { useTimeStore } from '@/stores/time/timeStore';
+import { MessageType, JOURNAL_STATE, resetJournalState } from '@/data/MessageArchive';
+import { playerMovementService } from '@/services/playerMovementService';
+import { narrativeIntegration } from '@/services/narrativeIntegration';
+import { loadMapData } from '@/services/mapService';
+import { getBiomeKeyFromChar } from '@/utils/mapUtils';
+import { calculateCameraPosition } from '@/utils/cameraUtils';
 
 const DAWN_TIME = 360; // 06:00
 const DUSK_TIME = 1200; // 20:00
@@ -15,8 +18,9 @@ export interface WorldState {
   playerPosition: { x: number; y: number };
   cameraPosition: { x: number; y: number };
   currentBiome: string | null;
+}
 
-  // Actions
+export interface WorldActions {
   loadMap: () => Promise<void>;
   updatePlayerPosition: (newPosition: { x: number; y: number }, newBiomeChar: string, movementContext?: { isEnteringRiver?: boolean }) => void;
   handleFailedMovement: (targetX: number, targetY: number, terrain: string) => void;
@@ -27,37 +31,28 @@ export interface WorldState {
   restoreState: (state: { playerPosition: { x: number; y: number }; currentBiome: string | null }) => void;
 }
 
-export const useWorldStore = create<WorldState>((set, get) => ({
-  // --- INITIAL STATE ---
+export type WorldStore = WorldState & WorldActions;
+
+const initialState: WorldState = {
   mapData: [],
   isMapLoading: true,
   playerPosition: { x: -1, y: -1 },
   cameraPosition: { x: 0, y: 0 },
   currentBiome: null,
+};
 
-  // --- ACTIONS ---
+export const useWorldStore = create<WorldStore>((set, get) => ({
+  ...initialState,
 
   loadMap: async () => {
     try {
-      const response = await fetch('/map.txt');
-      const mapText = await response.text();
-      const lines = mapText.split('\n').filter((line) => line);
-
-      let startPos = { x: 75, y: 75 };
-      lines.forEach((line, y) => {
-        const x = line.indexOf('S');
-        if (x !== -1) startPos = { x, y };
-      });
-
-      const startBiome = get().getBiomeKeyFromChar(lines[startPos.y][startPos.x]);
-
+      const { mapData, startPos, startBiome } = await loadMapData();
       set({
-        mapData: lines,
+        mapData,
         isMapLoading: false,
         playerPosition: startPos,
         currentBiome: startBiome,
       });
-
     } catch (error) {
       console.error("Failed to load map data:", error);
       set({ isMapLoading: false });
@@ -66,7 +61,7 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
   updatePlayerPosition: (newPosition, newBiomeChar, movementContext) => {
     const oldBiome = get().currentBiome;
-    const newBiomeKey = get().getBiomeKeyFromChar(newBiomeChar);
+    const newBiomeKey = getBiomeKeyFromChar(newBiomeChar);
     const oldPos = get().playerPosition;
     const notificationStore = useNotificationStore.getState();
 
@@ -126,96 +121,15 @@ export const useWorldStore = create<WorldState>((set, get) => ({
 
   updateCameraPosition: (viewportSize) => {
     const { playerPosition, mapData, cameraPosition: oldCameraPosition } = get();
+    const newCameraPosition = calculateCameraPosition(playerPosition, mapData, viewportSize, oldCameraPosition);
 
-    if (!mapData || mapData.length === 0 || !viewportSize || viewportSize.width === 0 || viewportSize.height === 0) {
-      return;
-    }
-
-    const CHAR_WIDTH = 25.6;
-    const CHAR_HEIGHT = 38.4;
-    const MAP_WIDTH_IN_TILES = mapData[0].length;
-    const MAP_HEIGHT_IN_TILES = mapData.length;
-
-    const idealCameraX = (playerPosition.x * CHAR_WIDTH) - (viewportSize.width / 2) + (CHAR_WIDTH / 2);
-    const idealCameraY = (playerPosition.y * CHAR_HEIGHT) - (viewportSize.height / 2) + (CHAR_HEIGHT / 2);
-
-    const maxScrollX = (MAP_WIDTH_IN_TILES * CHAR_WIDTH) - viewportSize.width;
-    const maxScrollY = (MAP_HEIGHT_IN_TILES * CHAR_HEIGHT) - viewportSize.height;
-
-    let newCameraX = Math.max(0, Math.min(idealCameraX, maxScrollX));
-    let newCameraY = Math.max(0, Math.min(idealCameraY, maxScrollY));
-
-    // Garantisci che il player sia sempre visibile dopo il clamping
-    const playerLeft = (playerPosition.x * CHAR_WIDTH) - newCameraX;
-    const playerTop = (playerPosition.y * CHAR_HEIGHT) - newCameraY;
-
-    // Se il player sarebbe fuori vista a sinistra, sposta la camera a sinistra
-    if (playerLeft < 0) {
-      newCameraX = playerPosition.x * CHAR_WIDTH;
-    }
-    // Se il player sarebbe fuori vista a destra, sposta la camera a destra
-    else if (playerLeft > viewportSize.width - CHAR_WIDTH) {
-      newCameraX = (playerPosition.x * CHAR_WIDTH) - (viewportSize.width - CHAR_WIDTH);
-    }
-
-    // Se il player sarebbe fuori vista in alto, sposta la camera in alto
-    if (playerTop < 0) {
-      newCameraY = playerPosition.y * CHAR_HEIGHT;
-    }
-    // Se il player sarebbe fuori vista in basso, sposta la camera in basso
-    else if (playerTop > viewportSize.height - CHAR_HEIGHT) {
-      newCameraY = (playerPosition.y * CHAR_HEIGHT) - (viewportSize.height - CHAR_HEIGHT);
-    }
-
-    // Ri-clampa per sicurezza
-    newCameraX = Math.max(0, Math.min(newCameraX, maxScrollX));
-    newCameraY = Math.max(0, Math.min(newCameraY, maxScrollY));
-
-    if (oldCameraPosition.x !== newCameraX || oldCameraPosition.y !== newCameraY) {
-      set({ cameraPosition: { x: newCameraX, y: newCameraY } });
-    }
-  },
-
-  advanceTime: (minutes = 30) => {
-    // Delegate to timeStore
-    const timeStore = useTimeStore.getState();
-    timeStore.advanceTime(minutes);
-
-    // Handle notifications and survival effects
-    const notificationStore = useNotificationStore.getState();
-    const survivalStore = useSurvivalStore.getState();
-    const currentTime = timeStore.timeState.currentTime;
-
-    // Check for dawn transition
-    if (currentTime >= DAWN_TIME && currentTime < DAWN_TIME + minutes) {
-      notificationStore.addLogEntry(MessageType.TIME_DAWN);
-    }
-
-    // Check for dusk transition
-    if (currentTime >= DUSK_TIME && currentTime < DUSK_TIME + minutes) {
-      notificationStore.addLogEntry(MessageType.TIME_DUSK);
-      survivalStore.handleNightConsumption((type, context) => notificationStore.addLogEntry(type, context));
-    }
-
-    // Check for midnight transition
-    if (currentTime >= 1440 - minutes && currentTime < 1440) {
-      notificationStore.addLogEntry(MessageType.TIME_MIDNIGHT);
-    }
-
-    if (minutes >= 60) {
-      const isDay = currentTime >= DAWN_TIME && currentTime <= DUSK_TIME;
-      notificationStore.addLogEntry(MessageType.AMBIANCE_RANDOM, {
-        text: `Il tempo scorre... ${isDay ? 'È giorno' : 'È notte'}.`
-      });
+    if (oldCameraPosition.x !== newCameraPosition.x || oldCameraPosition.y !== newCameraPosition.y) {
+      set({ cameraPosition: newCameraPosition });
     }
   },
 
   getBiomeKeyFromChar: (char) => {
-    const map: Record<string, string> = {
-      'C': 'CITY', 'F': 'FOREST', '.': 'PLAINS', '~': 'RIVER',
-      'V': 'VILLAGE', 'S': 'SETTLEMENT', 'R': 'REST_STOP',
-    };
-    return map[char] || 'UNKNOWN';
+    return getBiomeKeyFromChar(char);
   },
 
   formatTime: (timeMinutes) => {

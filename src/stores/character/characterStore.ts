@@ -1,185 +1,123 @@
 import { create } from 'zustand';
-import type { ICharacterSheet, AbilityType, ICharacterStatus } from '../../rules/types';
-import { CharacterStatus } from '../../rules/types';
-import { createTestCharacter } from '../../rules/characterGenerator';
-import { itemDatabase } from '../../data/items/itemDatabase';
-import { MessageType, JOURNAL_STATE } from '../../data/MessageArchive';
-import { useNotificationStore } from '../notifications/notificationStore';
+import type { ICharacterSheet, AbilityType, ICharacterStatus } from '@/rules/types';
+import { CharacterStatus } from '@/rules/types';
+import { createTestCharacter } from '@/rules/characterGenerator';
+import { useNotificationStore } from '@/stores/notifications/notificationStore';
+import {
+  findEmptySlot,
+  findStackableSlot,
+  addItemToStack,
+  addNewItem,
+  removeItemFromSlot,
+  InventorySlot,
+} from '@/utils/inventoryUtils';
+import { performAbilityCheck } from '@/utils/abilityUtils';
+import { takeDamage, healDamage } from '@/utils/healthUtils';
+import { gainExperience, gainMovementXP } from '@/utils/experienceUtils';
+import { itemDatabase } from '@/data/items/itemDatabase';
+import { MessageType, JOURNAL_STATE } from '@/data/MessageArchive';
 
 export interface CharacterState {
   characterSheet: ICharacterSheet;
-  lastShortRestTime: { day: number; time: number } | null;
-
-  // Actions
-  updateHP: (amount: number) => void;
-  addExperience: (xpGained: number) => void;
-  updateCharacterSheet: (newSheet: ICharacterSheet) => void;
-  getModifier: (ability: AbilityType) => number;
-  performAbilityCheck: (
-    ability: AbilityType,
-    difficulty: number
-  ) => { success: boolean; roll: number; modifier: number; total: number };
-  gainMovementXP: () => void;
-
-  // Inventory Management
-  addItemToInventory: (itemId: string, quantity: number) => boolean;
-  removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
-
-  // Status Management
-  applyStatus: (status: CharacterStatus, duration?: number) => void;
-  removeStatus: (status: CharacterStatus) => void;
-  hasStatus: (status: CharacterStatus) => boolean;
-  getStatusDescription: (status: CharacterStatus) => string;
-
-  // Initialization
-  resetCharacter: () => void;
+  isDead: boolean;
+  isComatose: boolean;
+  status: ICharacterStatus;
 }
 
-export const useCharacterStore = create<CharacterState>((set, get) => ({
-  // --- INITIAL STATE ---
+export interface CharacterActions {
+  initialize: () => void;
+  updateCharacterSheet: (sheet: ICharacterSheet) => void;
+  // --- ABILITY & SKILL CHECKS ---
+  performAbilityCheck: (ability: AbilityType, difficulty: number) => { roll: number; success: boolean };
+  getModifier: (ability: AbilityType) => number;
+  // --- INVENTORY MANAGEMENT ---
+  addItemToInventory: (itemId: string, quantity: number) => boolean;
+  removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
+  // --- STATUS MANAGEMENT ---
+  addStatus: (status: CharacterStatus, duration: number) => void;
+  removeStatus: (status: CharacterStatus) => void;
+  hasStatus: (status: CharacterStatus) => boolean;
+  // --- HEALTH & DAMAGE ---
+  takeDamage: (amount: number) => void;
+  healDamage: (amount: number) => void;
+  // --- EXPERIENCE & PROGRESSION ---
+  gainExperience: (amount: number) => void;
+  gainMovementXP: () => void;
+  // --- UTILITY ---
+  handleConsequence: (consequence: any) => void; // TODO: Define consequence type
+}
+
+export type CharacterStore = CharacterState & CharacterActions;
+
+const initialState: CharacterState = {
   characterSheet: createTestCharacter(),
-  lastShortRestTime: null,
+  isDead: false,
+  isComatose: false,
+  status: { effects: [] }, // Initialize with an empty effects array
+};
 
-  // --- ACTIONS ---
+export const useCharacterStore = create<CharacterStore>((set, get) => ({
+  ...initialState,
 
-  updateHP: (amount) => {
-    const state = get();
-    const newHP = Math.max(
-      0,
-      Math.min(
-        state.characterSheet.maxHP,
-        state.characterSheet.currentHP + amount
-      )
-    );
-    
-    set({
-      characterSheet: {
-        ...state.characterSheet,
-        currentHP: newHP,
-      },
-    });
-    
-    // Log HP changes
-    const notificationStore = useNotificationStore.getState();
-    if (amount > 0) {
-      notificationStore.addLogEntry(MessageType.HP_RECOVERY, {
-        healing: amount,
-        newHP,
-        maxHP: state.characterSheet.maxHP
-      });
-    } else if (amount < 0) {
-      notificationStore.addLogEntry(MessageType.HP_DAMAGE, {
-        damage: Math.abs(amount),
-        newHP,
-        maxHP: state.characterSheet.maxHP
-      });
-    }
+  initialize: () => set(initialState),
+
+  updateCharacterSheet: (sheet) => {
+    set({ characterSheet: sheet });
   },
 
-  addExperience: (xpGained) => {
-    const state = get();
-    const newXP = state.characterSheet.experience.currentXP + xpGained;
-    const canLevelUp = newXP >= state.characterSheet.experience.xpForNextLevel && state.characterSheet.level < 20;
-    
-    set({
-      characterSheet: {
-        ...state.characterSheet,
-        experience: {
-          ...state.characterSheet.experience,
-          currentXP: newXP,
-          canLevelUp,
-        },
-      },
-    });
-    
-    // Log experience gain
-    const notificationStore = useNotificationStore.getState();
-    notificationStore.addLogEntry(MessageType.XP_GAIN, {
-      xpGained,
-      totalXP: newXP,
-      canLevelUp
-    });
-  },
-
-  updateCharacterSheet: (newSheet) => set({ characterSheet: newSheet }),
-
-  getModifier: (ability) =>
-    Math.floor((get().characterSheet.stats[ability] - 10) / 2),
-
+  // --- ABILITY & SKILL CHECKS ---
   performAbilityCheck: (ability, difficulty) => {
-    // This is the "pure" version of the check.
-    // The gameStore will handle weather effects and logging.
-    const modifier = get().getModifier(ability);
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const total = roll + modifier;
-    const success = total >= difficulty;
+    const { characterSheet, updateCharacterSheet } = get();
+    const { success, roll } = performAbilityCheck(characterSheet.stats, ability, difficulty);
+    updateCharacterSheet(gainExperience(characterSheet, success ? 5 : 1));
+    return { success, roll };
+  },
 
-    // Award XP for any check
-    get().addExperience(success ? 5 : 1);
+  getModifier: (ability) => {
+    const { characterSheet } = get();
+    return Math.floor((characterSheet.stats[ability] - 10) / 2);
+  },
 
-    return { success, roll, modifier, total };
+  // --- EXPERIENCE & PROGRESSION ---
+  gainExperience: (amount) => {
+    const { characterSheet, updateCharacterSheet } = get();
+    const updatedSheet = gainExperience(characterSheet, amount);
+    updateCharacterSheet(updatedSheet);
   },
 
   gainMovementXP: () => {
-    const xpGained = Math.floor(Math.random() * 2) + 1;
-    const { characterSheet } = get();
-    const currentXP = characterSheet.experience.currentXP;
-    const newXP = currentXP + xpGained;
-    const canLevelUp = newXP >= characterSheet.experience.xpForNextLevel;
-
-    // Update XP without notification
-    set({
-      characterSheet: {
-        ...characterSheet,
-        experience: {
-          ...characterSheet.experience,
-          currentXP: newXP,
-          canLevelUp,
-        },
-      },
-    });
-
-    // Show XP message only for the first movement
-    if (!JOURNAL_STATE.hasShownFirstMovementXP) {
-      const notificationStore = useNotificationStore.getState();
-      notificationStore.addLogEntry(MessageType.XP_GAIN, {
-        xpGained,
-        totalXP: newXP,
-        canLevelUp
-      });
-      JOURNAL_STATE.hasShownFirstMovementXP = true;
-    }
+    const { characterSheet, updateCharacterSheet } = get();
+    const updatedSheet = gainMovementXP(characterSheet);
+    updateCharacterSheet(updatedSheet);
   },
 
   // --- INVENTORY MANAGEMENT ---
   addItemToInventory: (itemId, quantity) => {
-    const { characterSheet } = get();
+    const { characterSheet, updateCharacterSheet } = get();
     const item = itemDatabase[itemId];
     if (!item) return false;
 
-    const newInventory = [...characterSheet.inventory];
+    let newInventory: InventorySlot[] = [...characterSheet.inventory];
     let added = false;
 
-    // Try to stack first
     if (item.stackable) {
-      const existingSlot = newInventory.find(slot => slot?.itemId === itemId);
-      if (existingSlot) {
-        existingSlot.quantity += quantity;
+      const stackableSlotIndex = findStackableSlot(newInventory, itemId);
+      if (stackableSlotIndex !== -1) {
+        newInventory = addItemToStack(newInventory, stackableSlotIndex, quantity);
         added = true;
       }
     }
 
-    // If not stacked, find an empty slot
     if (!added) {
-      const emptySlotIndex = newInventory.findIndex(slot => slot === null);
+      const emptySlotIndex = findEmptySlot(newInventory);
       if (emptySlotIndex !== -1) {
-        newInventory[emptySlotIndex] = { itemId, quantity, portions: item.portionsPerUnit };
+        newInventory = addNewItem(newInventory, emptySlotIndex, itemId, quantity);
         added = true;
       }
     }
 
     if (added) {
-      get().updateCharacterSheet({ ...characterSheet, inventory: newInventory });
+      updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
       return true;
     }
 
@@ -187,20 +125,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   },
 
   removeItemFromInventory: (slotIndex, quantity) => {
-    const { characterSheet } = get();
+    const { characterSheet, updateCharacterSheet } = get();
     const slot = characterSheet.inventory[slotIndex];
     if (!slot || slot.quantity < quantity) return false;
 
-    const newInventory = [...characterSheet.inventory];
-    const currentSlot = newInventory[slotIndex]!;
-
-    if (currentSlot.quantity === quantity) {
-      newInventory[slotIndex] = null;
-    } else {
-      currentSlot.quantity -= quantity;
-    }
-
-    get().updateCharacterSheet({ ...characterSheet, inventory: newInventory });
+    const newInventory = removeItemFromSlot(characterSheet.inventory, slotIndex, quantity);
+    updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
     return true;
   },
 
