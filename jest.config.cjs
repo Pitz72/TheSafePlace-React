@@ -1,5 +1,5 @@
 /** @type {import('jest').Config} */
-export default {
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -72,9 +72,11 @@ export default {
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
       tsconfig: 'tsconfig.test.json',
-      useESM: false
-    }]
+    }],
   },
+  transformIgnorePatterns: [
+    '/node_modules/',
+  ],
 
   // Extensions to recognize
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
