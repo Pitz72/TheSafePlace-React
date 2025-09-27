@@ -13,6 +13,9 @@ import { useNotificationStore } from './stores/notifications/notificationStore';
 import { itemDatabase } from './data/items/itemDatabase';
 import { GameErrorBoundary } from './utils/errorHandler';
 import { GameEngineProvider, useGameEngine } from './contexts/GameEngineContext';
+import { FEATURE_FLAGS, isFeatureEnabled, logFeatureFlags } from './config/featureFlags';
+
+// Static imports for core components
 import NarrativeManager from './components/narrative/NarrativeManager';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import CharacterSheetScreen from './components/CharacterSheetScreen';
@@ -29,12 +32,14 @@ import GameJournal from './components/GameJournal';
 import InventoryPanel from './components/InventoryPanel';
 import LevelUpScreen from './components/LevelUpScreen';
 import ShelterScreen from './components/ShelterScreen';
-import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
 import WeatherDisplay from './components/WeatherDisplay';
-import CombatScreen from './components/combat/CombatScreen';
-import PostCombatScreen from './components/combat/PostCombatScreen';
 import KeyboardCommandsPanel from './components/KeyboardCommandsPanel';
 import BootSequenceManager from './components/boot/BootSequenceManager';
+
+// Conditional imports for features that can be disabled
+import CraftingScreenRedesigned from './components/CraftingScreenRedesigned';
+import CombatScreen from './components/combat/CombatScreen';
+import PostCombatScreen from './components/combat/PostCombatScreen';
 
 // LootItem interface for PostCombatScreen
 interface LootItem {
@@ -114,6 +119,14 @@ const GameScreenInputHandler = () => {
 
 const GameContent = () => {
   const { viewportWidth, viewportHeight } = useGameScale();
+  
+  // Initialize feature flags logging in development
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      logFeatureFlags();
+    }
+  }, []);
+
   // Optimized selectors to prevent re-render loops
   const currentScreen = useGameStore(state => state.currentScreen);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
@@ -160,6 +173,7 @@ const GameContent = () => {
     // Boot sequence screens are handled by BootSequenceManager
     if (currentScreen.startsWith('boot-')) return null;
 
+    // Core screens (always available)
     if (currentScreen === 'menu') return <StartScreen />;
     if (currentScreen === 'instructions') return <InstructionsScreen />;
     if (currentScreen === 'story') return <StoryScreen />;
@@ -169,9 +183,20 @@ const GameContent = () => {
     if (currentScreen === 'inventory') return <InventoryScreen />;
     if (currentScreen === 'levelUp') return <LevelUpScreen />;
     if (currentScreen === 'shelter') return <ShelterScreen />;
-    if (currentScreen === 'crafting') return <CraftingScreenRedesigned onExit={() => setCurrentScreen('shelter')} />;
     if (currentScreen === 'event') return <EventScreen />;
     if (currentScreen === 'loadGame') return <LoadScreen />;
+
+    // Feature-flagged screens
+    if (currentScreen === 'crafting') {
+      if (!isFeatureEnabled('CRAFTING_SYSTEM') || !CraftingScreenRedesigned) {
+        // Fallback: redirect to shelter if crafting is disabled
+        setCurrentScreen('shelter');
+        return <div className="flex-1 flex items-center justify-center">
+          <div className="text-phosphor-400">Sistema crafting temporaneamente disabilitato</div>
+        </div>;
+      }
+      return <CraftingScreenRedesigned onExit={() => setCurrentScreen('shelter')} />;
+    }
 
     if (currentScreen === 'game') {
       return (
@@ -218,8 +243,12 @@ const GameContent = () => {
                       <li>Luogo: {currentLocation}</li>
                       <li className={isNight ? 'text-blue-900' : ''}>Ora: {formattedTime} Giorno {timeState?.day || 1}</li>
                     </ul>
-                    <h2 className="panel-title mt-4">METEO</h2>
-                    <WeatherDisplay />
+                    {isFeatureEnabled('WEATHER_SYSTEM') && (
+                      <>
+                        <h2 className="panel-title mt-4">METEO</h2>
+                        <WeatherDisplay />
+                      </>
+                    )}
                     <h2 className="panel-title mt-6">STATISTICHE</h2>
                     <div className="space-y-1 text-uniform">
                       <div>Potenza: {characterSheet.stats.potenza} ({getModifier('potenza') >= 0 ? '+' : ''}{getModifier('potenza')})</div>
@@ -258,8 +287,10 @@ const GameContent = () => {
           onRemove={removeNotification}
         />
         <div className="h-full flex flex-col">
-          <NarrativeManager isGameActive={currentScreen === 'game' && !isGameOver} />
-          {combatResult ? (
+          {isFeatureEnabled('NARRATIVE_SYSTEM') && (
+            <NarrativeManager isGameActive={currentScreen === 'game' && !isGameOver} />
+          )}
+          {isFeatureEnabled('COMBAT_SYSTEM') && combatResult && PostCombatScreen ? (
             <PostCombatScreen
               result={combatResult}
               xpGained={combatResult.xpGained || 0}
