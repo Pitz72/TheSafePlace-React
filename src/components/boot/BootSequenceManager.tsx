@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useGameStore } from '@/stores/gameStore';
 import BlackScreen from './BlackScreen';
 import ProductionScreen from './ProductionScreen';
@@ -7,18 +7,24 @@ import BootSimulation from './BootSimulation';
 const BootSequenceManager: React.FC = () => {
   const { bootPhase, advanceBootPhase, skipBootSequence, isBootSequenceActive } = useGameStore();
 
+  const handlePhaseComplete = useCallback(() => {
+    // Use setTimeout to avoid setState during render
+    setTimeout(() => {
+      advanceBootPhase();
+    }, 0);
+  }, [advanceBootPhase]);
+
+  const handleSkip = useCallback(() => {
+    // Use setTimeout to avoid setState during render
+    setTimeout(() => {
+      skipBootSequence();
+    }, 0);
+  }, [skipBootSequence]);
+
   // Don't render if boot sequence is not active
   if (!isBootSequenceActive) {
     return null;
   }
-
-  const handlePhaseComplete = () => {
-    advanceBootPhase();
-  };
-
-  const handleSkip = () => {
-    skipBootSequence();
-  };
 
   switch (bootPhase) {
     case 'black-screen-1':
