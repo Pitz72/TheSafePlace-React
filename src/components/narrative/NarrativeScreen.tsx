@@ -13,7 +13,9 @@ const NarrativeScreen: React.FC<NarrativeScreenProps> = ({
   onChoiceSelected,
   onClose
 }) => {
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  if (!currentEvent) return null;
 
   useEffect(() => {
     setIsAnimating(true);
@@ -24,8 +26,6 @@ const NarrativeScreen: React.FC<NarrativeScreenProps> = ({
   const handleContinue = () => {
     onChoiceSelected();
   };
-
-  if (!currentEvent) return null;
 
   return (
     <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-50">

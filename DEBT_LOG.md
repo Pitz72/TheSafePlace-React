@@ -9,7 +9,7 @@ Questo documento traccia le principali aree di debito tecnico identificate duran
 - [x] **Refactoring Import Relativi:** Mancanza di alias di percorso (`@/`) che ha portato a un codice fragile con import complessi (`../../..`). (Configurazione alias completata, refactoring import applicato a eventBus, characterStore, worldStore, inventoryStore, survivalStore) **COMPLETATO:** Tutti gli store principali utilizzano ora gli alias @/ per gli import, eliminando la fragilità degli import relativi.
 - [ ] **Funzionalità Incomplete:** Numerosi `TODO` e `FIXME` nel codice indicano che meccaniche chiave (Crafting, Eventi) non sono state completate.
 - [ ] **Copertura Test:** La suite di test è quantitativamente insufficiente (rapporto 1/7) e qualitativamente inconsistente.
-- [ ] **Documentazione Inattendibile:** Il `README.md` e altri documenti di design non riflettono lo stato reale del progetto. (Aggiornato con contenuto onesto)
+- [x] **Documentazione Inattendibile:** ~~README e documenti di architettura da riscrivere.~~ **(README.md bonificato. Documenti architetturali da rivedere in Fase 4)**.
 ## Risultati Fase 3: Completamento Refactoring Store
 
 **Data Completamento:** 26 Settembre 2025
