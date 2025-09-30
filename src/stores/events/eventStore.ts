@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import type { GameEvent, EventChoice, Sequence, SequencePage } from '@/interfaces/events';
 import { MessageType } from '@/data/MessageArchive';
-import { useCharacterStore } from '@/stores/character/characterStore';
-import { useCombatStore } from '@/stores/combatStore';
 import { useGameStore } from '@/stores/gameStore';
-import { CharacterStatus } from '@/rules/types';
 import {
   resolveChoice as resolveChoiceUtil,
   checkForRandomEvent as checkForRandomEventUtil,
@@ -45,9 +42,18 @@ interface EventState {
 interface EventActions {
   loadEventDatabase: () => Promise<void>;
   loadSequences: () => Promise<Record<string, Sequence>>;
+  startSequence: (sequenceId: string) => Promise<boolean>;
+  advanceSequence: () => void;
+  endSequence: () => void;
   triggerEvent: (event: GameEvent) => void;
   dismissCurrentEvent: () => void;
   resolveChoice: (choice: EventChoice, addLogEntry: (type: MessageType, context?: any) => void, advanceTime: (minutes: number) => void) => void;
+  markEventAsSeen: (eventId: string) => void;
+  markEncounterAsCompleted: (encounterId: string) => void;
+  isEventSeen: (eventId: string) => boolean;
+  isEncounterCompleted: (encounterId: string) => boolean;
+  getRandomEventFromBiome: (biome: string) => GameEvent | null;
+  getRandomEvent: () => GameEvent | null;
   checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
   forceBiomeEvent: (biome: string) => void;
   forceRandomEvent: () => void;
@@ -130,7 +136,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
         return database;
       },
       category: GameErrorCategory.NARRATIVE,
-      context: 'loadEventDatabase',
+      context: { operation: 'loadEventDatabase' },
       onSuccess: () => {
         console.log('Database eventi caricato con successo');
       },
@@ -172,7 +178,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
         return data.SEQUENCES as Record<string, Sequence>;
       },
       category: GameErrorCategory.NARRATIVE,
-      context: 'loadSequences',
+      context: { operation: 'loadSequences' },
       onSuccess: (sequences) => {
         console.log(`Caricate ${Object.keys(sequences).length} sequenze`);
       },
@@ -212,7 +218,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
         return true;
       },
       category: GameErrorCategory.NARRATIVE,
-      context: 'startSequence',
+      context: { operation: 'startSequence', sequenceId },
       onSuccess: () => {
         // Già gestito nel try block
       },
@@ -395,6 +401,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
   },
 
   checkForRandomEvent: (biome, weatherEffects) => {
+    // La utility già triggera l'evento internamente, non serve fare altro
     checkForRandomEventUtil(biome, weatherEffects);
   },
 

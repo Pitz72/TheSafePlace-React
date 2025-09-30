@@ -8,11 +8,15 @@ const BootSequenceManager: React.FC = () => {
   const { bootPhase, advanceBootPhase, skipBootSequence, isBootSequenceActive } = useGameStore();
 
   const handlePhaseComplete = useCallback(() => {
+    // DEBUG: Log per tracciare avanzamento fasi
+    console.log('[BOOT MANAGER] Phase complete:', bootPhase, '→ advancing to next phase');
+    
     // Use setTimeout to avoid setState during render
     setTimeout(() => {
+      console.log('[BOOT MANAGER] Calling advanceBootPhase()');
       advanceBootPhase();
     }, 0);
-  }, [advanceBootPhase]);
+  }, [advanceBootPhase, bootPhase]);
 
   const handleSkip = useCallback(() => {
     // Use setTimeout to avoid setState during render
@@ -21,8 +25,12 @@ const BootSequenceManager: React.FC = () => {
     }, 0);
   }, [skipBootSequence]);
 
+  // DEBUG: Log stato boot sequence
+  console.log('[BOOT MANAGER] Rendering - bootPhase:', bootPhase, 'isActive:', isBootSequenceActive);
+  
   // Don't render if boot sequence is not active
   if (!isBootSequenceActive) {
+    console.log('[BOOT MANAGER] Boot sequence not active, returning null');
     return null;
   }
 

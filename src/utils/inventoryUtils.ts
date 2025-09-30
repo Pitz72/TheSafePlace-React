@@ -1,11 +1,9 @@
 import type { ICharacterSheet } from '@/rules/types';
 import { itemDatabase } from '@/data/items/itemDatabase';
+import type { IInventorySlot } from '@/interfaces/items';
 
-export type InventorySlot = {
-  itemId: string;
-  quantity: number;
-  portions?: number;
-} | null;
+// Re-export for compatibility
+export type InventorySlot = IInventorySlot | null;
 
 export const findEmptySlot = (inventory: InventorySlot[]): number => {
   return inventory.findIndex(slot => slot === null);

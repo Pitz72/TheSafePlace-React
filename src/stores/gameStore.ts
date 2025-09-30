@@ -11,7 +11,8 @@ import { useNotificationStore } from './notifications/notificationStore';
 import { useNarrativeStore } from './narrative/narrativeStore';
 import { narrativeIntegration } from '../services/narrativeIntegration';
 import type { TimeState, WeatherType } from '../interfaces/gameState';
-import type { LogEntry, MessageType } from '../data/MessageArchive';
+import type { LogEntry } from '../data/MessageArchive';
+import { MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { GameEvent } from '../interfaces/events';
 import type { IItem } from '../interfaces/items';
@@ -107,7 +108,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   },
 
   get inventory() {
-    return useInventoryStore.getState().getInventory();
+    return useInventoryStore.getState().getInventory;
   },
 
   get items() {
@@ -131,8 +132,14 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       const currentIndex = phaseOrder.indexOf(state.bootPhase);
       const nextIndex = currentIndex + 1;
 
+      // DEBUG: Log transizione fase
+      console.log('[GAME STORE] advanceBootPhase called');
+      console.log('[GAME STORE] Current phase:', state.bootPhase, 'index:', currentIndex);
+      console.log('[GAME STORE] Next index:', nextIndex, '/', phaseOrder.length);
+
       if (nextIndex >= phaseOrder.length) {
         // Boot sequence complete - FINE SEQUENZA
+        console.log('[GAME STORE] Boot sequence COMPLETE - transitioning to menu');
         return {
           isBootSequenceActive: false,
           bootPhase: 'menu',
@@ -141,6 +148,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       }
 
       const nextPhase = phaseOrder[nextIndex];
+      console.log('[GAME STORE] Advancing to next phase:', nextPhase);
       return {
         bootPhase: nextPhase,
         currentScreen: `boot-${nextPhase}`
@@ -248,11 +256,12 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   },
 
   addItem: (itemId: string, quantity: number) => {
-    return useInventoryStore.getState().addItem(itemId, quantity);
+    const result = useInventoryStore.getState().addItem(itemId, quantity);
+    return result.success;
   },
 
   addExperience: (xpGained: number) => {
-    useCharacterStore.getState().addExperience(xpGained);
+    useCharacterStore.getState().gainExperience(xpGained);
   },
 
   // Implementazione del metodo useItem
@@ -368,7 +377,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
         console.log('Inizializzazione del gioco completata con successo');
       },
       category: GameErrorCategory.GAME_LOGIC,
-      context: 'initializeGame',
+      context: { operation: 'initializeGame' },
       onFailure: (error) => {
         console.error('Errore critico durante l\'inizializzazione del gioco:', error);
         useNotificationStore.getState().addLogEntry(MessageType.SYSTEM_ERROR, { 

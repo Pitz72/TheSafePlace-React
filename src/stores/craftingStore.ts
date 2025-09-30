@@ -23,7 +23,8 @@ import {
   getMaterialStatus,
   validateCraftingAttempt,
   calculateCraftingXP,
-  groupRecipesByAvailability
+  groupRecipesByAvailability,
+  debugLog
 } from '../utils/craftingUtils';
 import { createLogger } from '../services/loggerService';
 import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
@@ -541,6 +542,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         }
 
         // Notifica per ogni ricetta sbloccata
+        const notificationStore = useNotificationStore.getState();
         recipesToUnlock.forEach(recipe => {
           const resultItem = gameStore.items[recipe.resultItemId];
           const itemName = resultItem?.name || 'Oggetto Sconosciuto';

@@ -26,7 +26,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
   // World state from the correct source of truth
   const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
   // Character actions
-  const { performAbilityCheck, updateHP } = useCharacterStore();
+  const { performAbilityCheck, takeDamage } = useCharacterStore();
   // Game actions
   const { advanceTime } = useGameStore();
   // Notification system
@@ -106,7 +106,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
         const success = performAbilityCheck('agilita', 15);
         if (!success.success) {
           const damage = Math.floor(Math.random() * 4) + 1;
-          updateHP(-damage);
+          takeDamage(damage);
         }
       }
     } else {
@@ -141,7 +141,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
     // Controlla se il movimento ha attivato un incontro
     checkForEncounter(nextX, nextY);
 
-  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, updateHP, updatePlayerPosition, addLogEntry, advanceTime, movementState]);
+  }, [mapData, playerPosition, canMoveToPosition, getTerrainAt, performAbilityCheck, takeDamage, updatePlayerPosition, addLogEntry, advanceTime, movementState]);
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Previeni il comportamento di default per i tasti di movimento

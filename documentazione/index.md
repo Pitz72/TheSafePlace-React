@@ -1,8 +1,8 @@
 # 📚 INDICE DOCUMENTAZIONE - The Safe Place
 
-**Versione**: v0.9.9.3 "We're Almost There"  
-**Data Aggiornamento**: 30 Settembre 2025  
-**Stato**: ✅ CONSOLIDATA - Versione Stabile Documentata
+**Versione**: v0.9.9.7 "Yet Another Last-Minute Rescue"
+**Data Aggiornamento**: 30 Settembre 2025
+**Stato**: ✅ SALVATO - Analisi Completata e Operazione Salvataggio Avviata
 
 ---
 
@@ -135,13 +135,16 @@ documentazione/
 - [**File di Inventario**](./analisi/inventario.md) - Sistema inventario e roadmap implementazione
 - [**Voci del Diario**](./session-log/journal_entries.txt) - Archivio messaggi di gioco
 
-### 📊 Stato Attuale Progetto v0.9.7.2
-- **Versione Corrente**: v0.9.7.2 "Architectural Integrity" (ATTIVA)
+### 📊 Stato Attuale Progetto v0.9.9.7
+- **Versione Corrente**: v0.9.9.7 "Yet Another Last-Minute Rescue" (ATTIVA)
 - **DSAR Attivo**: [DSAR v0.1.2 Screen Adaptation](./dsar/DSAR-2025-01-20-v0.1.2-SCREEN-ADAPTATION-IMMUTABLE.md)
-- **Anti-Regressione**: [v0.9.7.2 Refactoring Architetturale](./anti-regressione/ANTI-REGRESSION-v0.9.7.2.md)
-- **Ultimo Changelog**: [v0.9.7.2](./changelog/CHANGELOG-v0.9.7.2.md)
-- **Verifica Implementazione**: v0.9.7.2 (refactoring architetturale, servizi dedicati, God Objects eliminati)
-- **Ultimo Commit**: v0.9.7.2 Architectural Integrity - Refactoring Completato (stabilizzato)
+- **Anti-Regressione**: [v0.9.9.7 Yet Another Last-Minute Rescue](./archivio/anti-regressione/ANTI-REGRESSION-v0.9.9.7.md)
+- **Ultimo Changelog**: [v0.9.9.7](./archivio/changelog/CHANGELOG-v0.9.9.7.md)
+- **Verifica Implementazione**: v0.9.9.7 (analisi approfondita, salvataggio progetto, 248 test funzionanti)
+- **Ultimo Commit**: v0.9.9.7 Yet Another Last-Minute Rescue - Progetto Salvato (30 Settembre 2025)
+- **Completamento Reale**: 70% (analisi onesta)
+- **Test Coverage**: 89% (248 test funzionanti)
+- **Rischio Cancellazione**: BASSO (15%, era 80%)
 
 ---
 

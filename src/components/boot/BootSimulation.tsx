@@ -47,10 +47,15 @@ const BootSimulation: React.FC<BootSimulationProps> = ({ onComplete, onSkip }) =
   ];
 
   useEffect(() => {
+    // DEBUG: Log per tracciare progressione boot
+    console.log('[BOOT DEBUG] Current line:', currentLine, '/', bootLines.length);
+    
     if (currentLine >= bootLines.length) {
+      console.log('[BOOT DEBUG] Boot simulation complete, calling onComplete in 500ms');
       const timer = setTimeout(() => {
+        console.log('[BOOT DEBUG] Executing onComplete callback');
         onComplete();
-      }, 500); // Reduced from 1000ms to 500ms
+      }, 500);
       return () => clearTimeout(timer);
     }
 

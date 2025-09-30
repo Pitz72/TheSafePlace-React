@@ -1,4 +1,21 @@
 import '@testing-library/jest-dom';
+
+// Mock import.meta for Jest (Vite-specific API)
+Object.defineProperty(globalThis, 'import', {
+  value: {
+    meta: {
+      env: {
+        DEV: false,
+        PROD: true,
+        MODE: 'test',
+        SSR: false
+      }
+    }
+  },
+  writable: true,
+  configurable: true
+});
+
 import { resetAllStores, setupTestEnvironment, cleanupTestEnvironment } from '@/utils/testUtils';
 
 // Type declarations for global test utilities

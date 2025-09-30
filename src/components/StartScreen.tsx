@@ -129,7 +129,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione e stato pausa */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
-          v0.9.9.3 - We're Almost There
+          v0.9.9.7 - Yet Another Last-Minute Rescue
         </p>
         
         {/* Indicatore di pausa */}

@@ -3,9 +3,26 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  
+  // Global setup for import.meta
+  globals: {
+    'import.meta': {
+      env: {
+        DEV: false,
+        PROD: true,
+        MODE: 'test'
+      }
+    }
+  },
 
   // Module resolution
   moduleNameMapper: {
+    // Mock Vite-specific modules first (before general @ mapping)
+    '^@/services/loggerService$': '<rootDir>/src/tests/__mocks__/loggerService.ts',
+    '^@/config/featureFlags$': '<rootDir>/src/tests/__mocks__/featureFlags.ts',
+    '^../config/featureFlags$': '<rootDir>/src/tests/__mocks__/featureFlags.ts',
+    '^../../config/featureFlags$': '<rootDir>/src/tests/__mocks__/featureFlags.ts',
+    // General @ mapping
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'jest-transform-stub'

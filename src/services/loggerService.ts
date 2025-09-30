@@ -3,6 +3,37 @@ import { FEATURE_FLAGS } from '../config/featureFlags';
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 export type LogCategory = 'CRAFTING' | 'NARRATIVE' | 'WORLD' | 'EVENTS' | 'PERFORMANCE' | 'GENERAL';
 
+// Helper to safely access import.meta (Jest-compatible)
+const getImportMeta = (): { env: Record<string, any> } => {
+  // Check if we're in a test environment (Jest)
+  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
+    return {
+      env: {
+        DEV: false,
+        PROD: true,
+        MODE: 'test',
+        VITE_LOG_LEVEL: 'warn'
+      }
+    };
+  }
+  
+  // In browser/Vite environment - use dynamic access to avoid parse error
+  try {
+    // @ts-ignore - Dynamic access for Jest compatibility
+    const meta = (0, eval)('import.meta');
+    return meta as { env: Record<string, any> };
+  } catch {
+    // Fallback for environments without import.meta
+    return {
+      env: {
+        DEV: false,
+        PROD: true,
+        MODE: 'production'
+      }
+    };
+  }
+};
+
 interface LogContext {
   [key: string]: any;
 }
@@ -129,15 +160,17 @@ class LoggerService {
   private loggers: Map<LogCategory, Logger> = new Map();
 
   constructor() {
+    const meta = getImportMeta();
     this.config = {
       minLevel: this.getEnvironmentLogLevel(),
       enabledCategories: new Set(['CRAFTING', 'NARRATIVE', 'WORLD', 'EVENTS', 'PERFORMANCE', 'GENERAL']),
-      isProduction: import.meta.env.PROD
+      isProduction: meta.env.PROD
     };
   }
 
   private getEnvironmentLogLevel(): LogLevel {
-    const envLevel = import.meta.env.VITE_LOG_LEVEL?.toLowerCase() as LogLevel;
+    const meta = getImportMeta();
+    const envLevel = meta.env.VITE_LOG_LEVEL?.toLowerCase() as LogLevel;
     const validLevels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
     
     if (envLevel && validLevels.includes(envLevel)) {
@@ -145,7 +178,7 @@ class LoggerService {
     }
 
     // Default based on environment
-    return import.meta.env.PROD ? 'warn' : 'debug';
+    return meta.env.PROD ? 'warn' : 'debug';
   }
 
   createLogger(category: LogCategory): Logger {

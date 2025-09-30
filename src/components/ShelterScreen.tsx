@@ -16,11 +16,12 @@ import { MessageType } from '../data/MessageArchive';
 
 
 const ShelterScreen: React.FC = () => {
-  const { setCurrentScreen, playerPosition, advanceTime } = useGameStore();
+  const { setCurrentScreen, advanceTime } = useGameStore();
+  const { playerPosition } = useWorldStore();
   const { addLogEntry } = useNotificationStore();
-  const { performAbilityCheck, updateHP } = useCharacterStore();
+  const { performAbilityCheck, characterSheet } = useCharacterStore();
   const { getInventory } = useInventoryStore();
-  const { triggerEvent } = useEventStore();
+  const { triggerEvent, seenEventIds } = useEventStore();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -28,9 +29,8 @@ const ShelterScreen: React.FC = () => {
   // Per ora, l'investigazione è temporanea per sessione
 
   // Controlla se è notte per mostrare l'opzione speciale
-  const { timeState } = useTimeStore();
-  const isNight = timeState?.currentTime ?
-    (timeState.currentTime >= 1200 || timeState.currentTime < 360) : false;
+  const { currentTime } = useTimeStore();
+  const isNight = currentTime >= 1200 || currentTime < 360;
 
   const options = [
     {
@@ -124,20 +124,21 @@ const ShelterScreen: React.FC = () => {
 
     if (isNight) {
       // Dormire fino al mattino (06:00)
-      const currentTime = timeState?.currentTime || 0;
+      const timeStore = useTimeStore.getState();
+      const currentTimeValue = timeStore.currentTime;
       let sleepTime;
 
-      if (currentTime >= 1200) {
+      if (currentTimeValue >= 1200) {
         // È dopo le 20:00, dormi fino alle 06:00 del giorno successivo
-        sleepTime = (24 * 60 - currentTime) + 360; // fino alle 06:00
+        sleepTime = (24 * 60 - currentTimeValue) + 360; // fino alle 06:00
       } else {
         // È prima delle 06:00, dormi fino alle 06:00
-        sleepTime = 360 - currentTime;
+        sleepTime = 360 - currentTimeValue;
       }
 
       const healingAmount = Math.floor(Math.random() * 8) + 5; // 5-12 HP (più recupero per notte intera)
 
-      updateHP(healingAmount);
+      useCharacterStore.getState().healDamage(healingAmount);
       advanceTime(sleepTime);
       addLogEntry(MessageType.REST_SUCCESS, {
         healingAmount,
@@ -149,7 +150,7 @@ const ShelterScreen: React.FC = () => {
       const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
       const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
 
-      updateHP(healingAmount);
+      useCharacterStore.getState().healDamage(healingAmount);
       advanceTime(restTime);
       addLogEntry(MessageType.REST_SUCCESS, {
         healingAmount,
@@ -180,8 +181,7 @@ const ShelterScreen: React.FC = () => {
     if (playerPosition.x < eastThreshold) return false;
 
     // 4. L'evento deve essere unico (non già vissuto)
-    const eventState = useEventStore.getState();
-    if (eventState.isEncounterCompleted('lore_ash_lullaby')) return false;
+    if (seenEventIds.includes('lore_ash_lullaby')) return false;
 
     console.log('🎭 Condizioni soddisfatte per "La Ninnananna della Cenere"');
     return true;
