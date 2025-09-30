@@ -46,6 +46,31 @@ export const rollDamage = (diceString: string): { rolls: number[], total: number
 };
 
 
+/**
+ * Determines if a weapon is ranged based on its characteristics.
+ * @param weapon The weapon to check.
+ * @returns True if the weapon is ranged, false if melee.
+ */
+export const isWeaponRanged = (weapon: IItem): boolean => {
+  // Check weapon name for ranged indicators
+  const rangedKeywords = ['pistola', 'fucile', 'balestra', 'fionda', 'arco', 'rifle', 'crossbow', 'sling', 'bow', 'gun'];
+  const weaponName = weapon.name?.toLowerCase() || '';
+  const weaponId = weapon.id?.toLowerCase() || '';
+  
+  // Check if weapon name or ID contains ranged keywords
+  const hasRangedKeyword = rangedKeywords.some(keyword => 
+    weaponName.includes(keyword) || weaponId.includes(keyword)
+  );
+  
+  // Additional check for weapon description if available
+  const weaponDescription = weapon.description?.toLowerCase() || '';
+  const hasRangedDescription = rangedKeywords.some(keyword => 
+    weaponDescription.includes(keyword)
+  );
+  
+  return hasRangedKeyword || hasRangedDescription;
+};
+
 // --- Combat Calculation Interfaces ---
 
 export interface AttackResult {
@@ -79,12 +104,12 @@ export const rollToHit = (
 ): AttackResult => {
   const roll = rollDice(20);
 
-  // TODO: Differentiate between melee (potenza) and ranged (agilita) attacks
-  // For now, we'll use a placeholder check on the weapon type and default to potenza.
-  let modifier = getStatModifier(attackerStats.potenza);
-  if (weapon.type === 'Ranged') { // Assuming a 'Ranged' type could exist
-      modifier = getStatModifier(attackerStats.agilita);
-  }
+  // Differentiate between melee (potenza) and ranged (agilita) attacks
+  // Determine weapon type based on weapon characteristics and name patterns
+  const isRangedWeapon = isWeaponRanged(weapon);
+  let modifier = isRangedWeapon 
+    ? getStatModifier(attackerStats.agilita)
+    : getStatModifier(attackerStats.potenza);
 
   const total = roll + modifier;
 

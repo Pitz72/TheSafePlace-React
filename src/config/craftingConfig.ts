@@ -11,12 +11,14 @@ import type { CraftingConfig } from '../types/crafting';
 
 /**
  * Configurazione di default per il sistema di crafting
+ * 
+ * NOTA: Il debug logging è ora controllato dal sistema di feature flags centralizzato.
+ * Vedere src/config/featureFlags.ts per CRAFTING_DEBUG_LOGS e DEBUG_LOGGING_ENABLED.
  */
 export const CRAFTING_CONFIG: CraftingConfig = {
   baseXpPerCraft: 15,           // XP base per ogni crafting completato
   complexityXpMultiplier: 2.0,  // Moltiplicatore per ricette complesse
-  minAnimationTime: 800,        // Tempo minimo animazioni (ms)
-  enableDebugLogging: false     // Debug logging (solo sviluppo)
+  minAnimationTime: 800         // Tempo minimo animazioni (ms)
 };
 
 // ===== COSTANTI UI =====

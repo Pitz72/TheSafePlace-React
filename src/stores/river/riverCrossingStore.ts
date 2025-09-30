@@ -24,6 +24,7 @@ export interface RiverCrossingState {
   calculateEquipmentModifierForRiver: () => number;
   getEquipmentModifierDescription: () => string[];
   resetRiverCrossingState: () => void;
+  resetRiverCrossing: () => void;
 }
 
 export const useRiverCrossingStore = create<RiverCrossingState>((set, get) => ({
@@ -321,5 +322,13 @@ export const useRiverCrossingStore = create<RiverCrossingState>((set, get) => ({
       lastCrossingTime: 0,
       crossingHistory: []
     });
+  },
+
+  /**
+   * Alias per resetRiverCrossingState per coerenza con gli altri store.
+   * Resetta tutti i dati di attraversamento fiume allo stato iniziale.
+   */
+  resetRiverCrossing: () => {
+    get().resetRiverCrossingState();
   }
 }));

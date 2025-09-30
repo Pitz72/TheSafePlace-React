@@ -5,8 +5,12 @@ import { useCharacterStore } from '../stores/character/characterStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { useShelterStore } from '../stores/shelter/shelterStore';
 import { checkForEncounter } from '../utils/encounterUtils';
+import { createLogger } from '../services/loggerService';
 
 import { MessageType, JOURNAL_CONFIG } from '../data/MessageArchive';
+
+// Create logger instance for player movement operations
+const logger = createLogger('WORLD');
 
 interface MovementState {
   isExitingRiver: boolean;
@@ -55,7 +59,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
 
   const canMoveToPosition = useCallback((x: number, y: number): boolean => {
     if (!isValidPosition(x, y)) {
-      console.log(`🚫 Movimento bloccato: fuori dai confini (${x}, ${y})`);
+      logger.debug(`Movimento bloccato: fuori dai confini`, { position: { x, y } });
       return false;
     }
 
@@ -63,7 +67,7 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
 
     // Terreno invalicabile: Montagne
     if (terrain === 'M') {
-      console.log(`🏔️ Movimento bloccato: montagna a (${x}, ${y})`);
+      logger.debug(`Movimento bloccato: montagna`, { position: { x, y }, terrain });
       // Gestisci il messaggio di movimento fallito tramite worldStore
       const { handleFailedMovement } = useWorldStore.getState();
       handleFailedMovement(x, y, terrain);

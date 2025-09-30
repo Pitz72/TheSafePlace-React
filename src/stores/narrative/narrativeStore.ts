@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type { EmotionalState, LoreEvent, QuestFragment, MoralChoice } from '../../interfaces/narrative';
+import { createLogger } from '../../services/loggerService';
+
+const logger = createLogger('NARRATIVE');
 
 // Interfaccia semplificata per la Main Quest secondo il GDD canonico
 export interface MainQuestState {
@@ -184,31 +187,31 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
       set({ mainQuestEvents: events });
       return events;
     } catch (error) {
-      console.error('Errore nel caricamento degli eventi della main quest:', error);
+      logger.error('Failed to load main quest events', { error });
       return [];
     }
   },
 
   // Caricamento degli eventi lore
   loadLoreEvents: async () => {
-    console.log('📚 NARRATIVE STORE DEBUG - Loading lore events...');
+    logger.debug('Loading lore events');
     try {
       const response = await fetch('/events/lore_events.json');
-      console.log('📚 NARRATIVE STORE DEBUG - Fetch response:', response.status, response.ok);
+      logger.debug('Fetch response received', { status: response.status, ok: response.ok });
 
       const data = await response.json();
-      console.log('📚 NARRATIVE STORE DEBUG - Raw data:', data);
+      logger.debug('Raw data received', { data });
 
       const events = data.LORE_EVENTS as LoreEvent[];
-      console.log('📚 NARRATIVE STORE DEBUG - Parsed events:', {
+      logger.debug('Parsed events', {
         count: events?.length || 0,
         events: events?.map(e => ({ id: e.id, biome: e.locationRequirement })) || []
       });
 
       set({ availableLoreEvents: events || [] });
-      console.log('📚 NARRATIVE STORE DEBUG - Events loaded successfully');
+      logger.info('Lore events loaded successfully', { eventCount: events?.length || 0 });
     } catch (error) {
-      console.error('📚 NARRATIVE STORE ERROR - Failed to load lore events:', error);
+      logger.error('Failed to load lore events', { error });
       set({ availableLoreEvents: [] });
     }
   },

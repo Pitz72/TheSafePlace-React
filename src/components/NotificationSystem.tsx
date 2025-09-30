@@ -73,7 +73,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications, 
             </span>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm mb-1">
-                {notification.title}
+                {notification.title || 'Notifica'}
               </div>
               <div className="text-xs opacity-90">
                 {notification.message}

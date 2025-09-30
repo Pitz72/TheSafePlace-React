@@ -16,8 +16,12 @@ import type {
 import { CRAFTING_ERRORS, DEFAULT_CRAFTING_CONFIG } from '../types/crafting';
 import type { IInventorySlot } from '../interfaces/items';
 import type { ICharacterSheet } from '../rules/types';
+import { createLogger } from '../services/loggerService';
 
 // ===== CONFIGURATION =====
+
+// Create logger instance for crafting operations
+const logger = createLogger('CRAFTING');
 
 let craftingConfig: CraftingConfig = { ...DEFAULT_CRAFTING_CONFIG };
 
@@ -274,8 +278,8 @@ export function getRecipesUnlockedByManual(
 // ===== SKILL SYSTEM INTEGRATION =====
 
 /**
- * Ottiene il livello di abilità del giocatore
- * TODO: Integrare con il sistema di abilità esistente quando disponibile
+ * Ottiene il livello di abilità del giocatore basato sulle statistiche del personaggio
+ * Utilizza le statistiche base come proxy per le diverse abilità di crafting
  */
 function getPlayerSkillLevel(skill: string, characterSheet: ICharacterSheet): number {
   // Per ora, usiamo le statistiche base come proxy per le abilità
@@ -346,11 +350,6 @@ export function validateCraftingAttempt(
     return CRAFTING_ERRORS.INSUFFICIENT_SKILL;
   }
 
-  // TODO: Verifica spazio inventario quando implementato
-  // if (!hasInventorySpace(recipe.resultQuantity)) {
-  //   return CRAFTING_ERRORS.INVENTORY_FULL;
-  // }
-
   return null; // Nessun errore
 }
 
@@ -411,13 +410,22 @@ export async function executeCrafting(
     const resultItem = gameStore.items[recipe.resultItemId];
     const itemName = resultItem?.name || 'Oggetto Sconosciuto';
 
-    debugLog(`Crafting successful: ${itemName} x${recipe.resultQuantity}, XP gained: ${xpGained}`);
+    logger.info(`Crafting successful: ${itemName} x${recipe.resultQuantity}, XP gained: ${xpGained}`, {
+      itemName,
+      quantity: recipe.resultQuantity,
+      xpGained,
+      recipeId: recipe.id
+    });
 
     return createSuccessResult(itemName, recipe.resultQuantity, xpGained);
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown crafting error';
-    debugLog(`Crafting failed: ${errorMessage}`);
+    logger.error(`Crafting failed: ${errorMessage}`, {
+      errorMessage,
+      recipeId: recipe.id,
+      error: error instanceof Error ? error : undefined
+    });
 
     if (errorMessage === 'Failed to add crafted item to inventory') {
       return createFailureResult(CRAFTING_ERRORS.INVENTORY_FULL);
@@ -510,11 +518,11 @@ export function simulateCrafting(
 // ===== DEBUG UTILITIES =====
 
 /**
- * Log di debug per il crafting (solo se abilitato)
+ * Funzione di debug per il logging del crafting
  */
 export function debugLog(message: string, data?: any): void {
   if (craftingConfig.enableDebugLogging) {
-    console.log(`[CRAFTING DEBUG] ${message}`, data || '');
+    logger.debug(message, data);
   }
 }
 
@@ -526,7 +534,7 @@ export function getRecipeDebugInfo(
   inventory: IInventorySlot[],
   characterSheet: ICharacterSheet
 ): Record<string, any> {
-  return {
+  const debugInfo = {
     recipeId: recipe.id,
     canCraft: canCraftRecipe(recipe, inventory, characterSheet),
     hasMaterials: hasRequiredMaterials(recipe, inventory),
@@ -535,4 +543,7 @@ export function getRecipeDebugInfo(
     estimatedXP: calculateCraftingXP(recipe),
     estimatedTime: calculateCraftingTime(recipe)
   };
+
+  debugLog('Recipe debug info generated', debugInfo);
+  return debugInfo;
 }

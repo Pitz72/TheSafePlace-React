@@ -240,8 +240,7 @@ export interface CraftingConfig {
   complexityXpMultiplier: number;
   /** Tempo minimo per animazioni (ms) */
   minAnimationTime: number;
-  /** Se abilitare debug logging */
-  enableDebugLogging: boolean;
+  // Note: Debug logging is now controlled by the centralized feature flags system
 }
 
 // ===== CONSTANTS =====
@@ -277,8 +276,8 @@ export const RECIPE_CATEGORIES = {
 export const DEFAULT_CRAFTING_CONFIG: CraftingConfig = {
   baseXpPerCraft: 10,
   complexityXpMultiplier: 1.5,
-  minAnimationTime: 500,
-  enableDebugLogging: false
+  minAnimationTime: 500
+  // Note: Debug logging is now controlled by the centralized feature flags system
 };
 
 // ===== TYPE GUARDS =====

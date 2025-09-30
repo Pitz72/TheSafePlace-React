@@ -161,6 +161,8 @@ export function resetJournalState(): void {
 export enum MessageType {
   // Sistema base
   GAME_START = 'GAME_START',
+  SYSTEM_ERROR = 'SYSTEM_ERROR',
+  SYSTEM_WARNING = 'SYSTEM_WARNING',
   BIOME_ENTER = 'BIOME_ENTER',
   AMBIANCE_RANDOM = 'AMBIANCE_RANDOM',
 
@@ -233,6 +235,18 @@ export const MESSAGE_ARCHIVE: Record<string, any> = {
     "Ogni passo è una decisione. Muoviti con i comandi di movimento.",
     "L'esplorazione e le tue azioni ti renderanno più forte.",
     "Il viaggio inizia ora. Che la fortuna ti accompagni."
+  ],
+  [MessageType.SYSTEM_ERROR]: [
+    "Si è verificato un errore di sistema.",
+    "Errore durante l'operazione richiesta.",
+    "Il sistema ha riscontrato un problema.",
+    "Operazione fallita a causa di un errore interno."
+  ],
+  [MessageType.SYSTEM_WARNING]: [
+    "Attenzione: il sistema ha rilevato un problema.",
+    "Avviso di sistema: operazione parzialmente completata.",
+    "Il sistema segnala una condizione anomala.",
+    "Avvertimento: alcune funzionalità potrebbero non essere disponibili."
   ],
   [MessageType.BIOME_ENTER]: {
     'FOREST': [

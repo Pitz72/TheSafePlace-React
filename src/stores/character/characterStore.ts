@@ -16,6 +16,8 @@ import { takeDamage, healDamage } from '@/utils/healthUtils';
 import { gainExperience, gainMovementXP } from '@/utils/experienceUtils';
 import { itemDatabase } from '@/data/items/itemDatabase';
 import { MessageType, JOURNAL_STATE } from '@/data/MessageArchive';
+import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
+import type { Consequence } from '@/interfaces/events';
 
 export interface CharacterState {
   characterSheet: ICharacterSheet;
@@ -44,7 +46,7 @@ export interface CharacterActions {
   gainExperience: (amount: number) => void;
   gainMovementXP: () => void;
   // --- UTILITY ---
-  handleConsequence: (consequence: any) => void; // TODO: Define consequence type
+  handleConsequence: (consequence: Consequence) => void;
 }
 
 export type CharacterStore = CharacterState & CharacterActions;
@@ -93,107 +95,206 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   // --- INVENTORY MANAGEMENT ---
   addItemToInventory: (itemId, quantity) => {
-    const { characterSheet, updateCharacterSheet } = get();
-    const item = itemDatabase[itemId];
-    if (!item) return false;
+    return executeWithRetry(
+      () => {
+        const { characterSheet, updateCharacterSheet } = get();
+        const item = itemDatabase[itemId];
+        
+        if (!item) {
+          throw new Error(`Oggetto ${itemId} non trovato nel database`);
+        }
 
-    let newInventory: InventorySlot[] = [...characterSheet.inventory];
-    let added = false;
+        let newInventory: InventorySlot[] = [...characterSheet.inventory];
+        let added = false;
 
-    if (item.stackable) {
-      const stackableSlotIndex = findStackableSlot(newInventory, itemId);
-      if (stackableSlotIndex !== -1) {
-        newInventory = addItemToStack(newInventory, stackableSlotIndex, quantity);
-        added = true;
+        if (item.stackable) {
+          const stackableSlotIndex = findStackableSlot(newInventory, itemId);
+          if (stackableSlotIndex !== -1) {
+            newInventory = addItemToStack(newInventory, stackableSlotIndex, quantity);
+            added = true;
+          }
+        }
+
+        if (!added) {
+          const emptySlotIndex = findEmptySlot(newInventory);
+          if (emptySlotIndex !== -1) {
+            newInventory = addNewItem(newInventory, emptySlotIndex, itemId, quantity);
+            added = true;
+          }
+        }
+
+        if (added) {
+          updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
+          return true;
+        }
+
+        return false; // Inventario pieno
+      },
+      {
+        onSuccess: () => {
+          // Successo già gestito nel return
+        },
+        onFailure: (error) => {
+          handleStoreError(error, GameErrorCategory.INVENTORY, {
+            operation: 'addItemToInventory',
+            itemId,
+            quantity,
+            context: 'Aggiunta oggetto all\'inventario del personaggio'
+          });
+        },
+        onFallback: () => {
+          return false;
+        }
       }
-    }
-
-    if (!added) {
-      const emptySlotIndex = findEmptySlot(newInventory);
-      if (emptySlotIndex !== -1) {
-        newInventory = addNewItem(newInventory, emptySlotIndex, itemId, quantity);
-        added = true;
-      }
-    }
-
-    if (added) {
-      updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
-      return true;
-    }
-
-    return false; // Inventory is full
+    );
   },
 
   removeItemFromInventory: (slotIndex, quantity) => {
-    const { characterSheet, updateCharacterSheet } = get();
-    const slot = characterSheet.inventory[slotIndex];
-    if (!slot || slot.quantity < quantity) return false;
+    return executeWithRetry(
+      () => {
+        const { characterSheet, updateCharacterSheet } = get();
+        const slot = characterSheet.inventory[slotIndex];
+        
+        if (!slot) {
+          throw new Error(`Slot ${slotIndex} vuoto`);
+        }
+        
+        if (slot.quantity < quantity) {
+          throw new Error(`Quantità insufficiente nello slot ${slotIndex} (richiesta: ${quantity}, disponibile: ${slot.quantity})`);
+        }
 
-    const newInventory = removeItemFromSlot(characterSheet.inventory, slotIndex, quantity);
-    updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
-    return true;
+        const newInventory = removeItemFromSlot(characterSheet.inventory, slotIndex, quantity);
+        updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
+        return true;
+      },
+      {
+        onSuccess: () => {
+          // Successo già gestito nel return
+        },
+        onFailure: (error) => {
+          handleStoreError(error, GameErrorCategory.INVENTORY, {
+            operation: 'removeItemFromInventory',
+            slotIndex,
+            quantity,
+            context: 'Rimozione oggetto dall\'inventario del personaggio'
+          });
+        },
+        onFallback: () => {
+          return false;
+        }
+      }
+    );
   },
 
   // --- STATUS MANAGEMENT ---
   applyStatus: (status, duration = 0) => {
-    const { characterSheet } = get();
-    const newStatusEffects = [...characterSheet.status.statusEffects];
+    return executeWithRetry(
+      () => {
+        const { characterSheet } = get();
+        
+        if (!Object.values(CharacterStatus).includes(status)) {
+          throw new Error(`Status ${status} non valido`);
+        }
 
-    if (!newStatusEffects.includes(status)) {
-      newStatusEffects.push(status);
-    }
+        const newStatusEffects = [...characterSheet.status.statusEffects];
 
-    const newStatusDuration = { ...characterSheet.status.statusDuration };
-    if (duration > 0) {
-      newStatusDuration[status] = duration;
-    }
+        if (!newStatusEffects.includes(status)) {
+          newStatusEffects.push(status);
+        }
 
-    const updatedStatus: ICharacterStatus = {
-      ...characterSheet.status,
-      currentStatus: status,
-      statusEffects: newStatusEffects,
-      statusDuration: newStatusDuration
-    };
+        const newStatusDuration = { ...characterSheet.status.statusDuration };
+        if (duration > 0) {
+          newStatusDuration[status] = duration;
+        }
 
-    get().updateCharacterSheet({
-      ...characterSheet,
-      status: updatedStatus
-    });
+        const updatedStatus: ICharacterStatus = {
+          ...characterSheet.status,
+          currentStatus: status,
+          statusEffects: newStatusEffects,
+          statusDuration: newStatusDuration
+        };
 
-    // Log status application
-    const notificationStore = useNotificationStore.getState();
-    notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
-      status: status,
-      action: 'applicato'
-    });
+        get().updateCharacterSheet({
+          ...characterSheet,
+          status: updatedStatus
+        });
+
+        // Log status application
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
+          status: status,
+          action: 'applicato'
+        });
+      },
+      {
+        onSuccess: () => {
+          // Successo già gestito nel return
+        },
+        onFailure: (error) => {
+          handleStoreError(error, GameErrorCategory.SURVIVAL, {
+            operation: 'applyStatus',
+            status,
+            duration,
+            context: 'Applicazione status al personaggio'
+          });
+        },
+        onFallback: () => {
+          console.log(`Impossibile applicare lo status ${status}`);
+        }
+      }
+    );
   },
 
   removeStatus: (status) => {
-    const { characterSheet } = get();
-    const newStatusEffects = characterSheet.status.statusEffects.filter(s => s !== status);
-    const newStatusDuration = { ...characterSheet.status.statusDuration };
-    delete newStatusDuration[status];
+    return executeWithRetry(
+      () => {
+        const { characterSheet } = get();
+        
+        if (!characterSheet.status.statusEffects.includes(status)) {
+          throw new Error(`Status ${status} non presente sul personaggio`);
+        }
 
-    const currentStatus = newStatusEffects.length > 0 ? newStatusEffects[0] : CharacterStatus.NORMAL;
+        const newStatusEffects = characterSheet.status.statusEffects.filter(s => s !== status);
+        const newStatusDuration = { ...characterSheet.status.statusDuration };
+        delete newStatusDuration[status];
 
-    const updatedStatus: ICharacterStatus = {
-      ...characterSheet.status,
-      currentStatus,
-      statusEffects: newStatusEffects,
-      statusDuration: newStatusDuration
-    };
+        const currentStatus = newStatusEffects.length > 0 ? newStatusEffects[0] : CharacterStatus.NORMAL;
 
-    get().updateCharacterSheet({
-      ...characterSheet,
-      status: updatedStatus
-    });
+        const updatedStatus: ICharacterStatus = {
+          ...characterSheet.status,
+          currentStatus,
+          statusEffects: newStatusEffects,
+          statusDuration: newStatusDuration
+        };
 
-    // Log status removal
-    const notificationStore = useNotificationStore.getState();
-    notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
-      status: status,
-      action: 'rimosso'
-    });
+        get().updateCharacterSheet({
+          ...characterSheet,
+          status: updatedStatus
+        });
+
+        // Log status removal
+        const notificationStore = useNotificationStore.getState();
+        notificationStore.addLogEntry(MessageType.STATUS_CHANGE, {
+          status: status,
+          action: 'rimosso'
+        });
+      },
+      {
+        onSuccess: () => {
+          // Successo già gestito nel return
+        },
+        onFailure: (error) => {
+          handleStoreError(error, GameErrorCategory.SURVIVAL, {
+            operation: 'removeStatus',
+            status,
+            context: 'Rimozione status dal personaggio'
+          });
+        },
+        onFallback: () => {
+          console.log(`Impossibile rimuovere lo status ${status}`);
+        }
+      }
+    );
   },
 
   hasStatus: (status) => {
@@ -218,5 +319,30 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       characterSheet: createTestCharacter(),
       lastShortRestTime: null,
     });
+  },
+
+  // Test utility method for store isolation
+  resetStore: () => {
+    set(initialState);
+  },
+
+  /**
+   * Handles event consequences that affect the character.
+   * Currently supports sequence consequences and end_event consequences.
+   * @param consequence - The consequence to handle
+   */
+  handleConsequence: (consequence: Consequence) => {
+    switch (consequence.type) {
+      case 'sequence':
+        // Sequence consequences are typically handled by the event store
+        console.log(`Character store received sequence consequence: ${consequence.sequenceId}`);
+        break;
+      case 'end_event':
+        // End event consequences don't require character-specific handling
+        console.log('Character store received end_event consequence');
+        break;
+      default:
+        console.warn('Unknown consequence type received by character store:', consequence);
+    }
   },
 }));

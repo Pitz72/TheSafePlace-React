@@ -1,5 +1,5 @@
 import { SurvivalState } from '@/interfaces/gameState';
-import { CharacterSheet } from '@/interfaces/character';
+import { ICharacterSheet } from '@/rules/types';
 
 export const calculateRestResults = (survivalState: SurvivalState) => {
   let fatigueReduction = 15;
@@ -75,7 +75,7 @@ export const getSurvivalStatus = (survivalState: SurvivalState) => {
   };
 };
 
-export const applySurvivalPenalties = (survivalState: SurvivalState, characterSheet: CharacterSheet) => {
+export const applySurvivalPenalties = (survivalState: SurvivalState, characterSheet: ICharacterSheet) => {
   const penalties = {
     damage: 0,
     messages: [],

@@ -26,6 +26,7 @@ export interface GameSaveData {
   shelterAccessState?: Record<string, any>; // v0.6.1 - sistema rifugi
   weatherState?: any; // v0.6.1 - sistema meteo
   seenEventIds?: string[]; // eventi già visti
+  completedEncounters?: string[]; // incontri completati
   gameFlags: Record<string, any>; // for future quest/event tracking
 }
 

@@ -9,7 +9,10 @@
  */
 
 import type { Recipe } from '../types/crafting';
-import { debugLog } from './craftingUtils';
+import { createLogger } from '../services/loggerService';
+
+// ===== LOGGER =====
+const logger = createLogger('CRAFTING');
 
 // ===== TYPES =====
 
@@ -45,7 +48,7 @@ export const handleCreationCrafting = (
   _character: any,
   _itemDatabase: Record<string, ItemData>
 ): CraftingResult => {
-  debugLog('handleCreationCrafting', `Processing creation recipe: ${recipe.id}`);
+  logger.debug('Processing creation recipe', { recipeId: recipe.id });
   
   return {
     success: true,
@@ -66,7 +69,10 @@ export const processCraftingByType = (
 ): CraftingResult => {
   const recipeType = recipe.type || 'creation';
   
-  debugLog('processCraftingByType', `Processing recipe ${recipe.id} of type ${recipeType}`);
+  logger.debug('Processing recipe by type', { 
+    recipeId: recipe.id, 
+    recipeType 
+  });
   
   return handleCreationCrafting(recipe, inventory, character, itemDatabase);
 };

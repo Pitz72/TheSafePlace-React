@@ -7,6 +7,7 @@ import { useTimeStore } from '@/stores/time/timeStore';
 interface Notification {
   id: string;
   type: 'info' | 'warning' | 'error' | 'success';
+  title?: string;
   message: string;
   timestamp: number;
   duration?: number;
@@ -21,10 +22,11 @@ interface NotificationActions {
   addLogEntry: (type: MessageType, context?: any) => void;
   clearLog: () => void;
   getRecentEntries: (count?: number) => LogEntry[];
-  addNotification: (type: 'info' | 'warning' | 'error' | 'success', message: string, duration?: number) => void;
+  addNotification: (notification: { type: 'info' | 'warning' | 'error' | 'success'; title?: string; message: string; duration?: number }) => void;
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
   resetNotificationState: () => void;
+  resetNotifications: () => void;
   restoreState: (state: NotificationState) => void;
 }
 
@@ -75,19 +77,19 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     switch (type) {
       case MessageType.HP_DAMAGE:
         if (context?.damage > 10) {
-          addNotification('warning', `Hai subito ${context.damage} danni!`, 3000);
+          addNotification({ type: 'warning', message: `Hai subito ${context.damage} danni!`, duration: 3000 });
         }
         break;
       case MessageType.HP_RECOVERY:
         if (context?.healing > 5) {
-          addNotification('success', `Hai recuperato ${context.healing} HP!`, 2000);
+          addNotification({ type: 'success', message: `Hai recuperato ${context.healing} HP!`, duration: 2000 });
         }
         break;
       case MessageType.LEVEL_UP:
-        addNotification('success', 'Hai raggiunto un nuovo livello!', 5000);
+        addNotification({ type: 'success', message: 'Hai raggiunto un nuovo livello!', duration: 5000 });
         break;
       case MessageType.ITEM_FOUND:
-        addNotification('info', `Hai trovato: ${context?.itemName || 'un oggetto'}`, 2000);
+        addNotification({ type: 'info', message: `Hai trovato: ${context?.itemName || 'un oggetto'}`, duration: 2000 });
         break;
     }
   },
@@ -101,20 +103,22 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     return logEntries.slice(-count);
   },
 
-  addNotification: (type: 'info' | 'warning' | 'error' | 'success', message: string, duration = 3000) => {
+  addNotification: (notification: { type: 'info' | 'warning' | 'error' | 'success'; title?: string; message: string; duration?: number }) => {
     const id = `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = Date.now();
+    const duration = notification.duration ?? 3000;
     
-    const notification = {
+    const newNotification = {
       id,
-      type,
-      message,
+      type: notification.type,
+      title: notification.title,
+      message: notification.message,
       timestamp,
       duration
     };
     
     set(state => ({
-      notifications: [...state.notifications, notification]
+      notifications: [...state.notifications, newNotification]
     }));
     
     // Auto-rimuovi la notifica dopo la durata specificata
@@ -137,6 +141,14 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   resetNotificationState: () => {
     set({ logEntries: [], notifications: [] });
+  },
+
+  /**
+   * Alias per resetNotificationState per coerenza con gli altri store.
+   * Resetta tutte le notifiche e i log entries allo stato iniziale.
+   */
+  resetNotifications: () => {
+    get().resetNotificationState();
   },
 
   restoreState: (state) => {

@@ -7,6 +7,7 @@ import { MessageType } from '@/data/MessageArchive';
 import type { IInventorySlot, IItem } from '@/interfaces/items';
 import { CharacterStatus } from '@/rules/types';
 import { attemptStatusHealing } from '@/services/healingService';
+import { handleStoreError, GameErrorCategory } from '@/services/errorService';
 
 // Helper function to get display name for status
 const getStatusDisplayName = (status: CharacterStatus): string => {
@@ -61,87 +62,137 @@ export const useInventoryStore = create<InventoryStore>((set, get) => ({
   },
 
   addItem: (itemId: string, quantity: number = 1) => {
-    const item = itemDatabase[itemId];
-    if (!item) return { success: false, message: "Item not found in database." };
+    try {
+      const item = itemDatabase[itemId];
+      if (!item) {
+        throw new Error(`Item ${itemId} non trovato nel database`);
+      }
 
-    const characterStore = useCharacterStore.getState();
-    const success = characterStore.addItemToInventory(itemId, quantity);
+      const characterStore = useCharacterStore.getState();
+      const success = characterStore.addItemToInventory(itemId, quantity);
 
-    if (success) {
-      useNotificationStore
-        .getState()
-        .addLogEntry(MessageType.ITEM_FOUND, { item: item.name, quantity });
-      return { success: true, message: `Added ${quantity} ${item.name}.`};
-    } else {
-      useNotificationStore
-        .getState()
-        .addLogEntry(MessageType.INVENTORY_FULL, { item: item.name });
-      return { success: false, message: "Inventory is full."};
+      if (success) {
+        useNotificationStore.getState().addLogEntry(MessageType.ITEM_FOUND, {
+          item: item.name,
+          quantity
+        });
+        return { success: true, message: `${item.name} aggiunto all'inventario` };
+      } else {
+        return { success: false, message: 'Inventario pieno' };
+      }
+    } catch (error) {
+      const gameError = handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'addItem',
+        itemId,
+        quantity
+      });
+      return { success: false, message: `Errore: ${gameError.message}` };
     }
   },
 
   removeItem: (slotIndex: number, quantity: number = 1) => {
-    const characterStore = useCharacterStore.getState();
-    const inventory = characterStore.characterSheet.inventory;
-    const slot = inventory[slotIndex];
-    if (!slot) return { success: false, message: "Slot is empty." };
+    try {
+      const characterStore = useCharacterStore.getState();
+      const inventory = characterStore.characterSheet.inventory;
+      
+      if (slotIndex < 0 || slotIndex >= inventory.length) {
+        throw new Error(`Indice slot non valido: ${slotIndex}`);
+      }
 
-    const itemName = itemDatabase[slot.itemId]?.name || 'Unknown Item';
-    const success = characterStore.removeItemFromInventory(slotIndex, quantity);
+      const slot = inventory[slotIndex];
+      if (!slot || slot.quantity === 0) {
+        return { success: false, message: 'Slot vuoto' };
+      }
 
-    if (success) {
-      useNotificationStore
-        .getState()
-        .addLogEntry(MessageType.INVENTORY_REMOVE, { item: itemName, quantity });
-      return { success: true, message: `${quantity} ${itemName} removed.` };
-    } else {
-      return { success: false, message: `Could not remove ${itemName}.` };
+      const item = itemDatabase[slot.itemId];
+      if (!item) {
+        throw new Error(`Item ${slot.itemId} non trovato nel database`);
+      }
+
+      const actualQuantity = Math.min(quantity, slot.quantity);
+      const success = characterStore.removeItemFromInventory(slotIndex, actualQuantity);
+
+      if (success) {
+        useNotificationStore.getState().addLogEntry(MessageType.ITEM_LOST, {
+          item: item.name,
+          quantity: actualQuantity
+        });
+        return { success: true, message: `${item.name} rimosso dall'inventario` };
+      } else {
+        return { success: false, message: 'Impossibile rimuovere l\'item' };
+      }
+    } catch (error) {
+      const gameError = handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'removeItem',
+        slotIndex,
+        quantity
+      });
+      return { success: false, message: `Errore: ${gameError.message}` };
     }
   },
 
   removeItems: (itemId: string, quantity: number) => {
-    const characterStore = useCharacterStore.getState();
-    const inventory = characterStore.characterSheet.inventory;
-    
-    // Trova tutti gli slot con l'itemId specificato
-    let remainingToRemove = quantity;
-    const slotsToUpdate = [];
-    
-    for (let i = 0; i < inventory.length; i++) {
-      const slot = inventory[i];
-      if (slot && slot.itemId === itemId && remainingToRemove > 0) {
-        const toRemove = Math.min(slot.quantity, remainingToRemove);
-        slotsToUpdate.push({ index: i, quantity: toRemove });
-        remainingToRemove -= toRemove;
+    try {
+      const characterStore = useCharacterStore.getState();
+      const inventory = characterStore.characterSheet.inventory;
+      
+      // Trova tutti gli slot con l'itemId specificato
+      let remainingToRemove = quantity;
+      const slotsToUpdate = [];
+      
+      for (let i = 0; i < inventory.length; i++) {
+        const slot = inventory[i];
+        if (slot && slot.itemId === itemId && remainingToRemove > 0) {
+          const toRemove = Math.min(slot.quantity, remainingToRemove);
+          slotsToUpdate.push({ index: i, quantity: toRemove });
+          remainingToRemove -= toRemove;
+        }
       }
+      
+      if (remainingToRemove > 0) {
+        throw new Error(`Non abbastanza ${itemId} disponibili (richiesti: ${quantity}, disponibili: ${quantity - remainingToRemove})`);
+      }
+      
+      // Rimuovi gli item dagli slot
+      for (const update of slotsToUpdate) {
+        characterStore.removeItemFromInventory(update.index, update.quantity);
+      }
+      
+      return true;
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'removeItems',
+        itemId,
+        quantity
+      });
+      return false;
     }
-    
-    if (remainingToRemove > 0) {
-      return false; // Non abbastanza item disponibili
-    }
-    
-    // Rimuovi gli item dagli slot
-    for (const update of slotsToUpdate) {
-      characterStore.removeItemFromInventory(update.index, update.quantity);
-    }
-    
-    return true;
   },
 
   equipItemFromInventory: (slotIndex: number) => {
-    const characterStore = useCharacterStore.getState();
-    const { characterSheet } = characterStore;
-    const notificationStore = useNotificationStore.getState();
+    try {
+      const characterStore = useCharacterStore.getState();
+      const { characterSheet } = characterStore;
+      const notificationStore = useNotificationStore.getState();
 
-    const result = equipItem(characterSheet, itemDatabase, slotIndex);
+      const result = equipItem(characterSheet, itemDatabase, slotIndex);
 
-    if (result.success) {
-      characterStore.updateCharacterSheet(result.updatedCharacterSheet);
-      notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
-    } else {
-      notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
+      if (result.success) {
+        characterStore.updateCharacterSheet(result.updatedCharacterSheet);
+        notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, { action: result.message });
+      } else {
+        notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: result.message });
+      }
+      return result;
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'equipItemFromInventory',
+        slotIndex
+      });
+      const notificationStore = useNotificationStore.getState();
+      notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: 'Errore durante l\'equipaggiamento' });
+      return { success: false, message: 'Errore durante l\'equipaggiamento' };
     }
-    return result;
   },
 
   setSelectedInventoryIndex: (index: number | null) => {
@@ -149,14 +200,22 @@ export const useInventoryStore = create<InventoryStore>((set, get) => ({
   },
 
   useItem: (slotIndex: number) => {
-    const characterStore = useCharacterStore.getState();
-    const notificationStore = useNotificationStore.getState();
-    const inventory = characterStore.characterSheet.inventory;
-    const slot = inventory[slotIndex];
+    try {
+      const characterStore = useCharacterStore.getState();
+      const notificationStore = useNotificationStore.getState();
+      const inventory = characterStore.characterSheet.inventory;
+      const slot = inventory[slotIndex];
 
-    if (slot && slot.itemId) {
+      if (!slot || !slot.itemId) {
+        throw new Error(`Slot ${slotIndex} vuoto o non valido`);
+      }
+
       const item = itemDatabase[slot.itemId];
-      if (item && item.type === 'consumable') {
+      if (!item) {
+        throw new Error(`Oggetto ${slot.itemId} non trovato nel database`);
+      }
+
+      if (item.type === 'consumable') {
         // Handle healing effects for status conditions
         if (item.effect === 'heal' && attemptStatusHealing(item, slotIndex)) {
           return; // Status healing handled, item already consumed
@@ -165,20 +224,38 @@ export const useInventoryStore = create<InventoryStore>((set, get) => ({
         // Default consumable behavior
         get().removeItem(slotIndex, 1);
         notificationStore.addLogEntry(MessageType.ITEM_USED, { itemName: item.name });
+      } else {
+        throw new Error(`L'oggetto ${item.name} non è utilizzabile`);
       }
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'useItem',
+        slotIndex
+      });
+      console.log(`Impossibile utilizzare l'oggetto nello slot ${slotIndex}`);
     }
   },
 
   dropItem: (slotIndex: number) => {
-    const notificationStore = useNotificationStore.getState();
-    const characterStore = useCharacterStore.getState();
-    const inventory = characterStore.characterSheet.inventory;
-    const slot = inventory[slotIndex];
-    
-    if (slot && slot.itemId) {
+    try {
+      const notificationStore = useNotificationStore.getState();
+      const characterStore = useCharacterStore.getState();
+      const inventory = characterStore.characterSheet.inventory;
+      const slot = inventory[slotIndex];
+      
+      if (!slot || !slot.itemId) {
+        throw new Error(`Slot ${slotIndex} vuoto`);
+      }
+
       const item = itemDatabase[slot.itemId];
       get().removeItem(slotIndex, slot.quantity);
-      notificationStore.addLogEntry(MessageType.INVENTORY_REMOVE, { itemName: item?.name || 'Unknown' });
+      notificationStore.addLogEntry(MessageType.INVENTORY_REMOVE, { itemName: item?.name || 'Sconosciuto' });
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'dropItem',
+        slotIndex
+      });
+      console.log(`Impossibile rilasciare l'oggetto nello slot ${slotIndex}`);
     }
   },
 }));

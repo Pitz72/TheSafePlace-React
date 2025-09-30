@@ -15,6 +15,8 @@ import { useCharacterStore } from '../stores/character/characterStore';
  * 
  * Qualsiasi modifica non autorizzata a questo componente
  * costituisce una violazione del patto di sviluppo.
+ * 
+ * MODIFICA AUTORIZZATA: Aggiunta gestione errori per initializeGame() - 16 Gennaio 2025
  */
 
 const CharacterCreationScreen: React.FC = () => {
@@ -24,6 +26,8 @@ const CharacterCreationScreen: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSkipHint, setShowSkipHint] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [initializationError, setInitializationError] = useState<string | null>(null);
 
   const creationSteps = useMemo(() => [
     { text: 'Generazione personaggio "Ultimo"...', duration: 1000 },
@@ -38,9 +42,22 @@ const CharacterCreationScreen: React.FC = () => {
   ], [characterSheet]);
 
   const handleConfirm = useCallback(async () => {
-    await initializeGame();
-    enterGame();
-  }, [enterGame, initializeGame]);
+    if (isInitializing) return; // Previeni chiamate multiple
+    
+    setIsInitializing(true);
+    setInitializationError(null);
+    
+    try {
+      await initializeGame();
+      enterGame();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto durante l\'inizializzazione';
+      setInitializationError(errorMessage);
+      console.error('Errore inizializzazione gioco:', error);
+    } finally {
+      setIsInitializing(false);
+    }
+  }, [enterGame, initializeGame, isInitializing]);
 
   useEffect(() => {
     if (!isAnimating) return;
@@ -61,6 +78,8 @@ const CharacterCreationScreen: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isInitializing) return; // Disabilita input durante inizializzazione
+      
       if (event.code === 'Space') {
         event.preventDefault();
         handleConfirm();
@@ -75,7 +94,7 @@ const CharacterCreationScreen: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isAnimating, handleConfirm]);
+  }, [isAnimating, handleConfirm, isInitializing]);
 
   return (
     <div className="h-full flex items-center justify-center p-8">
@@ -100,12 +119,35 @@ const CharacterCreationScreen: React.FC = () => {
                   {step.text}
                 </div>
               ))}
-              {!isAnimating && (
+              
+              {/* Stato di inizializzazione */}
+              {isInitializing && (
+                <div className="mt-8 text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
+                  Inizializzazione del mondo in corso...
+                </div>
+              )}
+              
+              {/* Errore di inizializzazione */}
+              {initializationError && (
+                <div className="mt-8 space-y-2">
+                  <div className="text-red-400 glow-red text-shadow-red animate-pulse" style={{ fontSize: '16px' }}>
+                    ERRORE: {initializationError}
+                  </div>
+                  <div className="text-phosphor-700 animate-pulse" style={{ fontSize: '13px' }}>
+                    Premi [ENTER] per riprovare
+                  </div>
+                </div>
+              )}
+              
+              {/* Prompt normale */}
+              {!isAnimating && !isInitializing && !initializationError && (
                 <div className="mt-8 text-phosphor-400 glow-phosphor-bright text-shadow-phosphor-bright animate-pulse" style={{ fontSize: '16px' }}>
                   Premi [ENTER] per iniziare l'avventura
                 </div>
               )}
-              {isAnimating && showSkipHint && (
+              
+              {/* Hint per saltare animazione */}
+              {isAnimating && showSkipHint && !isInitializing && (
                 <div className="mt-4 text-phosphor-700 animate-pulse" style={{ fontSize: '13px' }}>
                   Premi [SPAZIO] per saltare
                 </div>

@@ -41,6 +41,18 @@ export interface FeatureFlags {
   LOADING_STATES: boolean;
   NOTIFICATIONS: boolean;
   KEYBOARD_SHORTCUTS: boolean;
+
+  // === LOGGING CONFIGURATION ===
+  // Master switch for debug logging - controls all debug output
+  DEBUG_LOGGING_ENABLED: boolean;
+  
+  // Granular logging controls for specific systems
+  // These allow fine-tuned control over debug output from different game systems
+  CRAFTING_DEBUG_LOGS: boolean;      // Debug logs for crafting system operations
+  NARRATIVE_DEBUG_LOGS: boolean;     // Debug logs for narrative and story events
+  WORLD_DEBUG_LOGS: boolean;         // Debug logs for world state and movement
+  EVENT_DEBUG_LOGS: boolean;         // Debug logs for event system processing
+  PERFORMANCE_DEBUG_LOGS: boolean;   // Debug logs for performance monitoring
 }
 
 /**
@@ -82,6 +94,18 @@ export const FEATURE_FLAGS: FeatureFlags = {
   LOADING_STATES: true,          // ATTIVO - migliora UX
   NOTIFICATIONS: true,           // ATTIVO - feedback utente importante
   KEYBOARD_SHORTCUTS: true,      // ATTIVO - parte del core gameplay
+
+  // === LOGGING CONFIGURATION ===
+  // Production-ready defaults: disable debug logging for performance
+  DEBUG_LOGGING_ENABLED: false,    // DISABILITATO - master switch for debug logs
+  
+  // Individual system debug controls (all disabled by default for production readiness)
+  // These can be enabled individually during development for targeted debugging
+  CRAFTING_DEBUG_LOGS: false,      // DISABILITATO - crafting system debug output
+  NARRATIVE_DEBUG_LOGS: false,     // DISABILITATO - narrative system debug output  
+  WORLD_DEBUG_LOGS: false,         // DISABILITATO - world/movement debug output
+  EVENT_DEBUG_LOGS: false,         // DISABILITATO - event system debug output
+  PERFORMANCE_DEBUG_LOGS: false,   // DISABILITATO - performance monitoring debug output
 };
 
 /**
@@ -145,14 +169,55 @@ export const setPhase = (phase: keyof typeof PHASE_CONFIGS) => {
 };
 
 /**
+ * Utility per verificare se il debug logging è abilitato per una categoria specifica
+ */
+export const isDebugLoggingEnabled = (category?: string): boolean => {
+  if (!FEATURE_FLAGS.DEBUG_LOGGING_ENABLED) {
+    return false;
+  }
+
+  if (!category) {
+    return FEATURE_FLAGS.DEBUG_LOGGING_ENABLED;
+  }
+
+  switch (category.toUpperCase()) {
+    case 'CRAFTING':
+      return FEATURE_FLAGS.CRAFTING_DEBUG_LOGS;
+    case 'NARRATIVE':
+      return FEATURE_FLAGS.NARRATIVE_DEBUG_LOGS;
+    case 'WORLD':
+      return FEATURE_FLAGS.WORLD_DEBUG_LOGS;
+    case 'EVENTS':
+      return FEATURE_FLAGS.EVENT_DEBUG_LOGS;
+    case 'PERFORMANCE':
+      return FEATURE_FLAGS.PERFORMANCE_DEBUG_LOGS;
+    default:
+      return FEATURE_FLAGS.DEBUG_LOGGING_ENABLED;
+  }
+};
+
+/**
  * Log delle feature flags per debugging
+ * Ora utilizza il sistema di logging centralizzato invece di console.log diretto
  */
 export const logFeatureFlags = () => {
-  if (process.env.NODE_ENV === 'development') {
-    console.group('🚩 Feature Flags Status');
-    Object.entries(FEATURE_FLAGS).forEach(([key, value]) => {
-      console.log(`${key}: ${value ? '✅' : '❌'}`);
+  if (import.meta.env.DEV) {
+    // Import dinamico per evitare dipendenze circolari
+    import('../services/loggerService').then(({ createLogger }) => {
+      const logger = createLogger('GENERAL');
+      logger.info('🚩 Feature Flags Status', {
+        flags: Object.entries(FEATURE_FLAGS).reduce((acc, [key, value]) => {
+          acc[key] = value ? '✅' : '❌';
+          return acc;
+        }, {} as Record<string, string>)
+      });
+    }).catch(() => {
+      // Fallback se il logger service non è disponibile
+      console.group('🚩 Feature Flags Status');
+      Object.entries(FEATURE_FLAGS).forEach(([key, value]) => {
+        console.log(`${key}: ${value ? '✅' : '❌'}`);
+      });
+      console.groupEnd();
     });
-    console.groupEnd();
   }
 };

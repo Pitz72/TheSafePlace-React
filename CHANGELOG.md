@@ -1,11 +1,34 @@
-# Changelog
+# 📋 CHANGELOG - The Safe Place Chronicles
 
-Tutte le modifiche notevoli a questo progetto saranno documentate in questo file.
+**Progetto**: The Safe Place Chronicles: The Echo of the Journey  
+**Versione Corrente**: v0.9.9.5 "Resolution of LLM Aberration"  
+**Ultimo Aggiornamento**: 27 Gennaio 2025
 
-Il formato è basato su [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-e questo progetto aderisce al [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+---
 
-## Versione Corrente: v0.9.9.2 "The Computer Boot System"
+## 🚀 v0.9.9.5 "Resolution of LLM Aberration" - CORRENTE
+**Data**: 27 Gennaio 2025  
+**Tipo**: Maintenance & Documentation Release
+
+### ✨ Novità
+- **Documentazione Riorganizzata**: Struttura semplificata e allineata
+- **Archivio Completo**: Materiale obsoleto organizzato sistematicamente
+- **Indice Centrale**: Navigazione documentazione migliorata
+
+### 🔧 Miglioramenti
+- **Allineamento Versioni**: Tutti i documenti sincronizzati con package.json
+- **Eliminazione Duplicazioni**: GDD consolidato da 4 versioni separate
+- **Struttura Semplificata**: Ridotta complessità navigazione
+
+### 📚 Documentazione
+- **INDEX.md**: Indice centrale aggiornato
+- **GDD-CONSOLIDATO.md**: Game Design Document unificato
+- **ROADMAP_CURRENT.md**: Roadmap allineata con stato reale
+- **Archivio**: 14 roadmap + 15+ changelog + analisi microscopica
+
+---
+
+## 📈 v0.9.9.2 "The Computer Boot System"
 
 Questa versione introduce un sistema di avvio computer completo con effetti CRT su tutte le schermate, immagini ASCII artistiche personalizzate e un'esperienza visiva immersiva. Il gioco viene rinominato "THE SAFE PLACE CHRONICLES: THE ECHO OF THE JOURNEY".
 
@@ -23,8 +46,8 @@ Questa versione introduce un sistema di avvio computer completo con effetti CRT 
 ---
 
 ## Versioni Recenti
-- [v0.9.9.2 "The Computer Boot System"](documentazione/changelog/CHANGELOG-v0.9.9.2.md) - **CORRENTE** - Sistema boot cinematografico e rebranding
-- [v0.9.9.5 "Critical Bug Fixes"](documentazione/changelog/CHANGELOG-v0.9.9.5.md) - Risoluzione bug critici e stabilizzazione test
+- [v0.9.9.5 "Resolution of LLM Aberration"](documentazione/changelog/CHANGELOG-v0.9.9.5.md) - **CORRENTE** - Documentazione riorganizzata e archivio completo
+- [v0.9.9.2 "The Computer Boot System"](documentazione/changelog/CHANGELOG-v0.9.9.2.md) - Sistema boot cinematografico e rebranding
 - [v0.9.9.0 "Architecture Reset"](documentazione/changelog/CHANGELOG-v0.9.9.0.md) - Rifattorizzazione architetturale completa
 - [v0.9.8 "Lullaby of Ashes"](documentazione/changelog/CHANGELOG-v0.9.8.md) - Evento narrativo principale
 - [v0.9.7.7 "Fix Era Part 3"](documentazione/changelog/CHANGELOG-v0.9.7.7.md) - Sistema coda eventi

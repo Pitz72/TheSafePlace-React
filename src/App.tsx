@@ -122,7 +122,7 @@ const GameContent = () => {
   
   // Initialize feature flags logging in development
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       logFeatureFlags();
     }
   }, []);
@@ -328,10 +328,16 @@ const GameContent = () => {
                     NUOVA PARTITA
                   </button>
                   <button
-                    onClick={() => {
-                      const { initializeGame } = useGameStore.getState();
-                      initializeGame();
-                      setCurrentScreen('menu');
+                    onClick={async () => {
+                      try {
+                        const { initializeGame } = useGameStore.getState();
+                        await initializeGame();
+                        setCurrentScreen('menu');
+                      } catch (error) {
+                        console.error('Errore durante l\'inizializzazione del gioco:', error);
+                        // Fallback: ricarica la pagina se l'inizializzazione fallisce
+                        window.location.reload();
+                      }
                     }}
                     className="px-6 py-3 border border-phosphor-600 hover:bg-phosphor-600 hover:text-black text-phosphor-400 font-bold rounded transition-colors"
                   >
@@ -385,9 +391,19 @@ function App() {
   const { isMapLoading } = useWorldStore();
 
   useEffect(() => {
-    if (!isMapLoading) {
-      initializeGame();
-    }
+    const initializeAsync = async () => {
+      if (!isMapLoading) {
+        try {
+          await initializeGame();
+        } catch (error) {
+          console.error('Errore durante l\'inizializzazione automatica del gioco:', error);
+          // L'errore viene gestito silenziosamente qui poiché l'inizializzazione
+          // può essere richiamata manualmente dall'utente se necessario
+        }
+      }
+    };
+
+    initializeAsync();
   }, [initializeGame, isMapLoading]);
 
   return (

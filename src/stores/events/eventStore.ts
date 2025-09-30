@@ -9,6 +9,7 @@ import {
   resolveChoice as resolveChoiceUtil,
   checkForRandomEvent as checkForRandomEventUtil,
 } from '@/utils/eventUtils';
+import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
 
 // Esponi funzioni di debug globalmente
 if (typeof window !== 'undefined') {
@@ -47,20 +48,12 @@ interface EventActions {
   triggerEvent: (event: GameEvent) => void;
   dismissCurrentEvent: () => void;
   resolveChoice: (choice: EventChoice, addLogEntry: (type: MessageType, context?: any) => void, advanceTime: (minutes: number) => void) => void;
-  startSequence: (sequenceId: string) => Promise<void>;
-  advanceSequence: () => void;
-  endSequence: () => void;
-  markEventAsSeen: (eventId: string) => void;
-  markEncounterAsCompleted: (encounterId: string) => void;
-  isEventSeen: (eventId: string) => boolean;
-  isEncounterCompleted: (encounterId: string) => boolean;
-  getRandomEventFromBiome: (biome: string) => GameEvent | undefined;
-  getRandomEvent: () => GameEvent | undefined;
   checkForRandomEvent: (biome: string, weatherEffects: WeatherEffects) => void;
   forceBiomeEvent: (biome: string) => void;
   forceRandomEvent: () => void;
   debugEventSystem: () => void;
   resetEventState: () => void;
+  resetEvents: () => void;
   restoreState: (state: { seenEventIds: string[]; completedEncounters: string[] }) => void;
 }
 
@@ -87,77 +80,154 @@ export const useEventStore = create<EventStore>((set, get) => ({
   // --- ACTIONS ---
   
   loadEventDatabase: async () => {
-    try {
-      const eventFiles = [
-        'city_events.json',
-        'forest_events.json',
-        'plains_events.json',
-        'rest_stop_events.json',
-        'river_events.json',
-        'unique_events.json',
-        'village_events.json',
-        'random_events.json',
-        'lore_events.json'
-      ];
+    return executeWithRetry({
+      operation: async () => {
+        const eventFiles = [
+          'city_events.json',
+          'forest_events.json',
+          'plains_events.json',
+          'rest_stop_events.json',
+          'river_events.json',
+          'unique_events.json',
+          'village_events.json',
+          'random_events.json',
+          'lore_events.json'
+        ];
 
-      const database: Record<string, GameEvent[]> = {};
+        const database: Record<string, GameEvent[]> = {};
+        const failedFiles: string[] = [];
 
-      for (const file of eventFiles) {
-        try {
-          const res = await fetch(`/events/${file}`);
-          if (!res.ok) {
-            console.error(`Failed to fetch ${file}: ${res.status} ${res.statusText}`);
-            continue;
+        for (const file of eventFiles) {
+          try {
+            const res = await fetch(`/events/${file}`);
+            if (!res.ok) {
+              throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            const data = await res.json();
+            const key = Object.keys(data)[0];
+            const events = Object.values(data)[0] as GameEvent[];
+            database[key] = events;
+          } catch (fileError) {
+            failedFiles.push(file);
+            handleStoreError(fileError as Error, GameErrorCategory.NARRATIVE, {
+              operation: 'loadEventFile',
+              fileName: file,
+              context: 'Caricamento database eventi'
+            });
           }
-          const data = await res.json();
-          const key = Object.keys(data)[0];
-          const events = Object.values(data)[0] as GameEvent[];
-          database[key] = events;
-        } catch (fileError) {
-          console.error(`Error loading ${file}:`, fileError);
         }
-      }
 
-      set({ eventDatabase: database });
-    } catch (error) {
-      console.error('Failed to load event database:', error);
-    }
+        if (Object.keys(database).length === 0) {
+          throw new Error('Nessun file di eventi caricato con successo');
+        }
+
+        set({ eventDatabase: database });
+        
+        if (failedFiles.length > 0) {
+          console.warn(`Eventi caricati parzialmente. File falliti: ${failedFiles.join(', ')}`);
+        }
+        
+        return database;
+      },
+      category: GameErrorCategory.NARRATIVE,
+      context: 'loadEventDatabase',
+      onSuccess: () => {
+        console.log('Database eventi caricato con successo');
+      },
+      onFailure: (error) => {
+        handleStoreError(error, GameErrorCategory.NARRATIVE, {
+          operation: 'loadEventDatabase',
+          context: 'Caricamento completo database eventi'
+        });
+      },
+      onFallback: () => {
+        // Fallback: carica eventi di base hardcoded
+        const fallbackDatabase = {
+          RANDOM: [{
+            id: 'fallback_event',
+            title: 'Momento di Riflessione',
+            description: 'Ti fermi un momento a riflettere sulla tua situazione.',
+            choices: [{
+              id: 'continue',
+              text: 'Continua',
+              consequences: []
+            }]
+          }]
+        };
+        set({ eventDatabase: fallbackDatabase });
+        console.log('Utilizzando database eventi di fallback');
+        return fallbackDatabase;
+      }
+    });
   },
 
   loadSequences: async () => {
-    try {
-      const res = await fetch('/events/sequences.json');
-      const data = await res.json();
-      return data.SEQUENCES as Record<string, Sequence>;
-    } catch (error) {
-      console.error('Failed to load sequences:', error);
-      return {};
-    }
+    return executeWithRetry({
+      operation: async () => {
+        const res = await fetch('/events/sequences.json');
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        const data = await res.json();
+        return data.SEQUENCES as Record<string, Sequence>;
+      },
+      category: GameErrorCategory.NARRATIVE,
+      context: 'loadSequences',
+      onSuccess: (sequences) => {
+        console.log(`Caricate ${Object.keys(sequences).length} sequenze`);
+      },
+      onFailure: (error) => {
+        handleStoreError(error, GameErrorCategory.NARRATIVE, {
+          operation: 'loadSequences',
+          context: 'Caricamento sequenze narrative'
+        });
+      },
+      onFallback: () => {
+        console.log('Utilizzando sequenze vuote come fallback');
+        return {};
+      }
+    });
   },
 
   startSequence: async (sequenceId: string) => {
-    try {
-      const sequences = await get().loadSequences();
-      const sequence = sequences[sequenceId];
+    return executeWithRetry({
+      operation: async () => {
+        const sequences = await get().loadSequences();
+        const sequence = sequences[sequenceId];
 
-      if (!sequence) {
-        console.error(`Sequence ${sequenceId} not found`);
-        return;
-      }
-
-      set({
-        activeSequence: {
-          sequenceId,
-          currentPage: 1, // Start from page 1
-          totalPages: sequence.pages.length,
-          pages: sequence.pages
+        if (!sequence) {
+          throw new Error(`Sequenza ${sequenceId} non trovata`);
         }
-      });
 
-      console.log(`🎭 Sequence "${sequenceId}" started - ${sequence.pages.length} pages`);
-    } catch (error) {
-      console.error('Failed to start sequence:', error);
-    }
+        set({
+          activeSequence: {
+            sequenceId,
+            currentPage: 1, // Start from page 1
+            totalPages: sequence.pages.length,
+            pages: sequence.pages
+          }
+        });
+
+        console.log(`🎭 Sequenza "${sequenceId}" avviata - ${sequence.pages.length} pagine`);
+        return true;
+      },
+      category: GameErrorCategory.NARRATIVE,
+      context: 'startSequence',
+      onSuccess: () => {
+        // Già gestito nel try block
+      },
+      onFailure: (error) => {
+        handleStoreError(error, GameErrorCategory.NARRATIVE, {
+          operation: 'startSequence',
+          sequenceId,
+          context: 'Avvio sequenza narrativa'
+        });
+      },
+      onFallback: () => {
+        console.log(`Impossibile avviare la sequenza ${sequenceId}`);
+        return false;
+      }
+    });
   },
 
   advanceSequence: () => {
@@ -343,6 +413,14 @@ export const useEventStore = create<EventStore>((set, get) => ({
         pages: []
       }
     });
+  },
+
+  /**
+   * Alias per resetEventState per coerenza con gli altri store.
+   * Resetta tutti gli eventi allo stato iniziale.
+   */
+  resetEvents: () => {
+    get().resetEventState();
   },
 
   restoreState: (state) => {

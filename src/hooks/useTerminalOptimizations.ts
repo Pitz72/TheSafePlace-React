@@ -115,7 +115,7 @@ export const useTerminalOptimizations = () => {
     performanceRef.current.averageRenderTime = (prevAvg * (count - 1) + renderTime) / count;
     
     // Log performance in development
-    if (process.env.NODE_ENV === 'development' && renderTime > 16) {
+    if (import.meta.env.DEV && renderTime > 16) {
       console.warn(`Slow terminal render: ${renderTime.toFixed(2)}ms`);
     }
     

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
+import { resetAllStores, setupTestEnvironment, cleanupTestEnvironment } from '@/utils/testUtils';
 
-/*
 // Type declarations for global test utilities
 declare global {
   var createMockPlayer: () => any;
@@ -157,11 +157,12 @@ global.createMockInventoryItem = (overrides = {}) => ({
   ...overrides
 });
 
-// Console error suppression removed - let tests handle their own console output
-
-// Setup cleanup
-afterEach(() => {
-  jest.clearAllMocks();
-  localStorageMock.clear.mockClear();
+// Setup test environment before each test
+beforeEach(() => {
+  setupTestEnvironment();
 });
-*/
+
+// Cleanup after each test
+afterEach(() => {
+  cleanupTestEnvironment();
+});

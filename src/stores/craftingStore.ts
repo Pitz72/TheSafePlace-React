@@ -23,9 +23,10 @@ import {
   getMaterialStatus,
   validateCraftingAttempt,
   calculateCraftingXP,
-  debugLog,
   groupRecipesByAvailability
 } from '../utils/craftingUtils';
+import { createLogger } from '../services/loggerService';
+import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
 
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './character/characterStore';
@@ -33,6 +34,9 @@ import { useNotificationStore } from './notifications/notificationStore';
 import { MessageType } from '../data/MessageArchive';
 import type { IInventorySlot } from '../interfaces/items';
 import { ensureStarterKit, SURVIVOR_STARTER_KIT } from '../rules/characterGenerator';
+
+// Create logger instance for crafting store operations
+const logger = createLogger('CRAFTING');
 
 // ===== SINGLETON RECIPE MANAGER =====
 
@@ -240,83 +244,95 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           discovery: `Nuova ricetta sbloccata: ${recipeId}`
         });
 
-        debugLog(`Recipe unlocked: ${recipeId}`);
+        logger.info('Recipe unlocked', { recipeId });
       }
     },
 
     craftItem: async (recipeId: string): Promise<boolean> => {
-      set({ isCrafting: true, craftingError: null });
-      const { allRecipes, knownRecipeIds } = get();
-      const gameStore = useGameStore.getState();
+      return executeWithRetry({
+        operation: async () => {
+          set({ isCrafting: true, craftingError: null });
+          const { allRecipes, knownRecipeIds } = get();
+          const gameStore = useGameStore.getState();
 
-      debugLog(`Attempting to craft: ${recipeId}`);
+          logger.info('Attempting to craft recipe', { recipeId });
 
-      const failCraft = (error: string) => {
-        debugLog(`Crafting failed: ${error}`);
-        set({ isCrafting: false, craftingError: error });
-        const notificationStore = useNotificationStore.getState();
-        notificationStore.addLogEntry(MessageType.ACTION_FAIL, { reason: error });
-        return false;
-      };
+          const recipe = getRecipeById(allRecipes, recipeId);
+          if (!recipe) {
+            throw new Error(CRAFTING_ERRORS.RECIPE_NOT_FOUND);
+          }
 
-      const recipe = getRecipeById(allRecipes, recipeId);
-      if (!recipe) {
-        return failCraft(CRAFTING_ERRORS.RECIPE_NOT_FOUND);
-      }
+          const inventory = (gameStore.characterSheet?.inventory || []).filter((item: any): item is IInventorySlot => item !== null);
+          const characterSheet = gameStore.characterSheet;
 
-      const inventory = (gameStore.characterSheet?.inventory || []).filter((item: any): item is IInventorySlot => item !== null);
-      const characterSheet = gameStore.characterSheet;
+          if (!characterSheet) {
+            throw new Error(CRAFTING_ERRORS.NO_CHARACTER);
+          }
 
-      if (!characterSheet) {
-        return failCraft(CRAFTING_ERRORS.NO_CHARACTER);
-      }
+          const validationError = validateCraftingAttempt(
+            recipe,
+            inventory,
+            characterSheet,
+            knownRecipeIds
+          );
 
-      const validationError = validateCraftingAttempt(
-        recipe,
-        inventory,
-        characterSheet,
-        knownRecipeIds
-      );
+          if (validationError) {
+            throw new Error(validationError);
+          }
 
-      if (validationError) {
-        return failCraft(validationError);
-      }
-
-      try {
-        // Rimuovi materiali
-        recipe.components.forEach(component => {
-          gameStore.removeItems(component.itemId, component.quantity);
-        });
-
-        // Aggiungi oggetto risultante
-        const addSuccess = gameStore.addItem(recipe.resultItemId, recipe.resultQuantity);
-        if (!addSuccess) {
-          // Tenta di ripristinare i materiali
+          // Rimuovi materiali
           recipe.components.forEach(component => {
-            gameStore.addItem(component.itemId, component.quantity);
+            gameStore.removeItems(component.itemId, component.quantity);
           });
-          return failCraft(CRAFTING_ERRORS.INVENTORY_FULL);
+
+          // Aggiungi oggetto risultante
+          const addSuccess = gameStore.addItem(recipe.resultItemId, recipe.resultQuantity);
+          if (!addSuccess) {
+            // Tenta di ripristinare i materiali
+            recipe.components.forEach(component => {
+              gameStore.addItem(component.itemId, component.quantity);
+            });
+            throw new Error(CRAFTING_ERRORS.INVENTORY_FULL);
+          }
+
+          const xpGained = calculateCraftingXP(recipe);
+          gameStore.addExperience(xpGained);
+
+          const resultItem = gameStore.items[recipe.resultItemId];
+          const itemName = resultItem?.name || 'Oggetto Sconosciuto';
+
+          const notificationStore = useNotificationStore.getState();
+          notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, {
+            action: `Usando il banco di lavoro, hai creato: ${itemName} (x${recipe.resultQuantity}).`
+          });
+
+          logger.info('Crafting successful', { 
+            itemName, 
+            quantity: recipe.resultQuantity, 
+            xpGained 
+          });
+          
+          set({ isCrafting: false });
+          return true;
+        },
+        category: GameErrorCategory.CRAFTING,
+        context: { recipeId },
+        onSuccess: (result) => {
+          set({ craftingError: null });
+        },
+        onFailure: (error) => {
+          handleStoreError(error, GameErrorCategory.CRAFTING, { 
+            recipeId, 
+            operation: 'craftItem' 
+          });
+          set({ isCrafting: false, craftingError: error.message });
+        },
+        onFallback: () => {
+          // Fallback sicuro: ripristina stato e restituisci false
+          set({ isCrafting: false, craftingError: 'Operazione annullata per sicurezza' });
+          return false;
         }
-
-        const xpGained = calculateCraftingXP(recipe);
-        gameStore.addExperience(xpGained);
-
-        const resultItem = gameStore.items[recipe.resultItemId];
-        const itemName = resultItem?.name || 'Oggetto Sconosciuto';
-
-        const notificationStore = useNotificationStore.getState();
-        notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, {
-          action: `Usando il banco di lavoro, hai creato: ${itemName} (x${recipe.resultQuantity}).`
-        });
-
-        debugLog(`Crafting successful: ${itemName} x${recipe.resultQuantity}, XP gained: ${xpGained}`);
-        set({ isCrafting: false });
-        return true;
-
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : CRAFTING_ERRORS.UNKNOWN_ERROR;
-        return failCraft(errorMessage);
-      }
+      });
     },
 
     // ===== SELECTORS =====
@@ -324,8 +340,12 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     getAvailableRecipes: () => {
       const { allRecipes, knownRecipeIds } = get();
       const available = getAvailableRecipes(allRecipes, knownRecipeIds);
-      debugLog(`[GET AVAILABLE DEBUG] Total recipes: ${allRecipes.length}, Known IDs: ${knownRecipeIds.length}, Available: ${available.length}`);
-      debugLog(`[GET AVAILABLE DEBUG] Known recipe IDs: ${JSON.stringify(knownRecipeIds)}`);
+      logger.debug('Available recipes calculated', { 
+        totalRecipes: allRecipes.length, 
+        knownRecipeIds: knownRecipeIds.length, 
+        availableCount: available.length,
+        knownIds: knownRecipeIds 
+      });
       return available;
     },
 
@@ -372,11 +392,14 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         debugLog('[INIT DEBUG] RecipeManager instance obtained');
         
         const recipes = await recipeManager.getRecipes();
-        debugLog(`[INIT DEBUG] RecipeManager returned ${recipes.length} recipes`);
+        logger.debug('RecipeManager returned recipes', { recipeCount: recipes.length });
         
         // Log delle prime 3 ricette per debug
         if (recipes.length > 0) {
-          debugLog(`[INIT DEBUG] First recipe: ${recipes[0].id}, unlockedByLevel: ${recipes[0].unlockedByLevel}`);
+          logger.debug('First recipe details', { 
+            recipeId: recipes[0].id, 
+            unlockedByLevel: recipes[0].unlockedByLevel 
+          });
         }
 
         set({
@@ -385,7 +408,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           loadError: null
         });
 
-        debugLog(`Recipes initialized: ${recipes.length} recipes loaded`);
+        logger.info('Recipes initialized', { recipeCount: recipes.length });
 
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -404,7 +427,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
               allRecipes: emergencyRecipes,
               loadError: `${errorMessage} (usando ricette di emergenza)`
             });
-            debugLog('Loaded emergency recipes as fallback');
+            logger.info('Loaded emergency recipes as fallback');
           }
         } catch (fallbackError) {
           console.error('Failed to load emergency recipes:', fallbackError);
@@ -413,7 +436,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
     },
 
     reloadRecipes: async () => {
-      debugLog('Reloading recipes');
+      logger.info('Reloading recipes');
       await get().initializeRecipes();
     },
 
@@ -502,7 +525,11 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         !knownRecipeIds.includes(recipe.id)
       );
       
-      debugLog(`[UNLOCK DEBUG] Recipes to unlock: ${recipesToUnlock.length} - ${recipesToUnlock.map(r => r.id).join(', ')}`);
+      logger.debug('Recipes to unlock by level', { 
+        level, 
+        recipesToUnlock: recipesToUnlock.length, 
+        recipeIds: recipesToUnlock.map(r => r.id) 
+      });
 
       if (recipesToUnlock.length > 0) {
         const newKnownRecipes = [...knownRecipeIds, ...recipesToUnlock.map(r => r.id)];
@@ -523,7 +550,10 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
           });
         });
 
-        debugLog(`Unlocked ${recipesToUnlock.length} recipes for level ${level}`);
+        logger.info('Unlocked recipes by level', { 
+          level, 
+          unlockedCount: recipesToUnlock.length 
+        });
       }
     },
 
@@ -576,7 +606,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         notificationStore.addLogEntry(MessageType.ACTION_FAIL, {
           reason: 'Questo manuale non contiene ricette che non conosci già.'
         });
-        debugLog(`No new recipes to unlock from manual ${manualId}`);
+        logger.info('No new recipes to unlock from manual', { manualId });
       }
     },
 
@@ -586,17 +616,21 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const gameStore = useGameStore.getState();
       
       if (!gameStore.characterSheet) {
-        debugLog('[STARTER DEBUG] No character sheet available for starter recipes');
+        logger.debug('No character sheet available for starter recipes');
         return;
       }
 
-      debugLog('[STARTER DEBUG] Unlocking starter recipes');
-      debugLog(`[STARTER DEBUG] Current knownRecipes: ${gameStore.characterSheet.knownRecipes?.length || 0}`);
+      logger.debug('Unlocking starter recipes');
+      logger.debug('Current known recipes', { 
+        knownRecipesCount: gameStore.characterSheet.knownRecipes?.length || 0 
+      });
 
       // Assicura che il personaggio abbia lo starter kit
       const updatedCharacter = ensureStarterKit(gameStore.characterSheet);
-      debugLog(`[STARTER DEBUG] After ensureStarterKit, knownRecipes: ${updatedCharacter.knownRecipes?.length || 0}`);
-      debugLog(`[STARTER DEBUG] Known recipe IDs: ${JSON.stringify(updatedCharacter.knownRecipes)}`);
+      logger.debug('After ensureStarterKit', { 
+        knownRecipesCount: updatedCharacter.knownRecipes?.length || 0,
+        knownRecipeIds: updatedCharacter.knownRecipes 
+      });
       
       // SEMPRE sincronizza le ricette, anche se il personaggio non è cambiato
       if (updatedCharacter.knownRecipes && updatedCharacter.knownRecipes.length > 0) {
@@ -610,15 +644,21 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
             discovery: `Kit di sopravvivenza ricevuto! Hai imparato ${SURVIVOR_STARTER_KIT.knownRecipes.length} ricette di base.`
           });
           
-          debugLog(`[STARTER DEBUG] Starter kit applied: ${SURVIVOR_STARTER_KIT.knownRecipes.length} recipes unlocked`);
+          logger.info('Starter kit applied', { 
+            starterRecipeCount: SURVIVOR_STARTER_KIT.knownRecipes.length 
+          });
         }
         
         // SEMPRE sincronizza le ricette nel crafting store
         set({ knownRecipeIds: [...updatedCharacter.knownRecipes] });
-        debugLog(`[STARTER DEBUG] Set knownRecipeIds in crafting store: ${updatedCharacter.knownRecipes.length}`);
-        debugLog(`[STARTER DEBUG] Final knownRecipeIds: ${JSON.stringify(get().knownRecipeIds)}`);
+        logger.debug('Set knownRecipeIds in crafting store', { 
+          recipeCount: updatedCharacter.knownRecipes.length 
+        });
+        logger.debug('Final knownRecipeIds', { 
+          knownRecipeIds: get().knownRecipeIds 
+        });
       } else {
-        debugLog('[STARTER DEBUG] No known recipes found after ensureStarterKit');
+        logger.debug('No known recipes found after ensureStarterKit');
       }
     },
 
@@ -641,7 +681,7 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         // Sincronizza solo se diversi
         if (JSON.stringify(currentKnownRecipes) !== JSON.stringify(gameStoreRecipes)) {
           set({ knownRecipeIds: [...gameStoreRecipes] });
-          debugLog('Synced known recipes with game store');
+          logger.debug('Synced known recipes with game store');
         }
       }
     },
@@ -653,14 +693,14 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       const success = gameStore.addItem(manualId, 1);
       
       if (success) {
-        debugLog(`Added manual ${manualId} to inventory for testing`);
+        logger.debug('Added manual to inventory for testing', { manualId });
         const notificationStore = useNotificationStore.getState();
         notificationStore.addLogEntry(MessageType.ITEM_FOUND, { 
           item: gameStore.items[manualId]?.name || 'Manuale Sconosciuto',
           quantity: 1 
         });
       } else {
-        debugLog(`Failed to add manual ${manualId} - inventory full`);
+        logger.debug('Failed to add manual - inventory full', { manualId });
       }
       
       return success;
@@ -684,17 +724,20 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
         }
       });
       
-      debugLog(`Added ${addedCount}/${manuals.length} manuals for testing`);
+      logger.debug('Added manuals for testing', { 
+        addedCount, 
+        totalManuals: manuals.length 
+      });
       return addedCount;
     },
 
     testManualDiscovery: (manualId: string) => {
-      debugLog(`Testing manual discovery for: ${manualId}`);
+      logger.debug('Testing manual discovery', { manualId });
       
       // Aggiungi il manuale all'inventario
       const added = get().addManualToInventory(manualId);
       if (!added) {
-        debugLog('Failed to add manual - inventory full');
+        logger.debug('Failed to add manual - inventory full');
         return false;
       }
       
@@ -710,10 +753,10 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       if (manualSlotIndex !== -1) {
         // Usa il manuale
         gameStore.useItem(manualSlotIndex);
-        debugLog(`Manual ${manualId} used successfully`);
+        logger.debug('Manual used successfully', { manualId });
         return true;
       } else {
-        debugLog(`Manual ${manualId} not found in inventory`);
+        logger.debug('Manual not found in inventory', { manualId });
         return false;
       }
     },

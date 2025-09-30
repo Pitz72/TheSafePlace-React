@@ -4,6 +4,9 @@ import { useWorldStore } from '../stores/world/worldStore';
 import { useCombatStore } from '../stores/combatStore';
 import { useTimeStore } from '../stores/time/timeStore';
 import { QuestStage, EmotionalState, LoreEvent } from '../interfaces/narrative';
+import { createLogger } from './loggerService';
+
+const logger = createLogger('STORY_PROGRESSION');
 
 export class StoryProgressionService {
   private static instance: StoryProgressionService;
@@ -27,7 +30,7 @@ export class StoryProgressionService {
       this.checkStoryProgression();
     }, this.PROGRESSION_INTERVAL);
 
-    console.log('Sistema di progressione narrativa avviato');
+    logger.info('Sistema di progressione narrativa avviato');
   }
 
   stopProgressionSystem(): void {
@@ -165,7 +168,7 @@ export class StoryProgressionService {
         details: nextStage.description
       });
 
-      console.log(`Quest avanzata al stage: ${nextStage.title}`);
+      logger.info('Quest avanzata al stage', { stageTitle: nextStage.title });
     } else {
       // Quest completata
       addLogEntry({
@@ -176,7 +179,7 @@ export class StoryProgressionService {
         details: 'La storia principale è giunta al termine.'
       });
 
-      console.log('Quest principale completata!');
+      logger.info('Quest principale completata!');
     }
   }
 
@@ -251,7 +254,7 @@ export class StoryProgressionService {
       details: event.title
     });
 
-    console.log(`Evento lore triggerato: ${event.title}`);
+    logger.info('Evento lore triggerato', { eventTitle: event.title });
   }
 
   private updateEmotionalProgression(

@@ -4,6 +4,10 @@ import { useCharacterStore } from '@/stores/character/characterStore';
 import { useCombatStore } from '@/stores/combatStore';
 import { useEventStore } from '@/stores/events/eventStore';
 import { CharacterStatus } from '@/rules/types';
+import { createLogger } from '@/services/loggerService';
+
+// Create event-specific logger instance
+const logger = createLogger('EVENTS');
 
 export const resolveChoice = (
   choice: EventChoice,
@@ -101,7 +105,11 @@ export const resolveChoice = (
           addLogEntry(MessageType.AMBIANCE_RANDOM, { text: `Effetto speciale: ${choice.penalty.effect}` });
           break;
         default:
-          console.warn('Unknown penalty type:', choice.penalty.type);
+          logger.warn('Unknown penalty type', { 
+            penaltyType: choice.penalty.type,
+            eventId: currentEvent.id,
+            choiceText: choice.text 
+          });
       }
     }
 
@@ -128,7 +136,11 @@ export const resolveChoice = (
           }
           break;
         default:
-          console.warn('Unknown reward type:', (reward as any).type);
+          logger.warn('Unknown reward type', { 
+            rewardType: (reward as any).type,
+            eventId: currentEvent.id,
+            choiceText: choice.text 
+          });
       }
     }
 
@@ -137,13 +149,20 @@ export const resolveChoice = (
       if (typeof consequence === 'object' && 'type' in consequence) {
         switch (consequence.type) {
           case 'sequence':
-            console.log(`🎭 Starting sequence: ${(consequence as any).sequenceId}`);
+            logger.info('🎭 Starting sequence', { 
+              sequenceId: (consequence as any).sequenceId,
+              eventId: currentEvent.id 
+            });
             eventStore.startSequence((consequence as any).sequenceId);
             return;
           case 'end_event':
             break;
           default:
-            console.warn('Unknown consequence type:', (consequence as any).type);
+            logger.warn('Unknown consequence type', { 
+              consequenceType: (consequence as any).type,
+              eventId: currentEvent.id,
+              choiceText: choice.text 
+            });
         }
       }
     }
@@ -183,43 +202,58 @@ export const checkForRandomEvent = (biome: string, weatherEffects: WeatherEffect
   const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.20;
   const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
-  console.log(`🎲 [EVENT DEBUG] Checking for random event in ${biome}`);
-  console.log(`🎲 [EVENT DEBUG] Base chance: ${baseEventChance}, Weather modifier: ${weatherEffects.eventProbabilityModifier}, Adjusted: ${adjustedEventChance}`);
+  logger.debug('🎲 Checking for random event', { 
+    biome,
+    baseChance: baseEventChance,
+    weatherModifier: weatherEffects.eventProbabilityModifier,
+    adjustedChance: adjustedEventChance 
+  });
 
   if (biome && Math.random() < adjustedEventChance) {
-      console.log(`🎲 [EVENT DEBUG] Biome event triggered!`);
+      logger.debug('🎲 Biome event triggered', { biome });
       setTimeout(() => {
         const { getRandomEventFromBiome, getRandomEvent, triggerEvent } = useEventStore.getState();
 
         let randomEvent;
         if (Math.random() < 0.3) {
           randomEvent = getRandomEvent();
-          console.log(`🎲 [EVENT DEBUG] Chose random global event`);
+          logger.debug('🎲 Chose random global event');
         } else {
           randomEvent = getRandomEventFromBiome(biome);
-          console.log(`🎲 [EVENT DEBUG] Chose biome event for ${biome}`);
+          logger.debug('🎲 Chose biome event', { biome });
         }
 
         if (randomEvent) {
-          console.log(`🎲 [EVENT DEBUG] Triggering event: ${randomEvent.title}`);
+          logger.info('🎲 Triggering event', { 
+            eventTitle: randomEvent.title,
+            eventId: randomEvent.id,
+            biome 
+          });
           triggerEvent(randomEvent);
         } else {
-          console.log(`🎲 [EVENT DEBUG] No event found for ${biome}`);
+          logger.debug('🎲 No event found', { biome });
         }
       }, 150);
   } else if (Math.random() < RANDOM_EVENT_CHANCE) {
-    console.log(`🎲 [EVENT DEBUG] Random global event triggered!`);
+    logger.debug('🎲 Random global event triggered');
     setTimeout(() => {
       const { getRandomEvent, triggerEvent } = useEventStore.getState();
       const randomEvent = getRandomEvent();
       if (randomEvent) {
-        console.log(`🎲 [EVENT DEBUG] Triggering random event: ${randomEvent.title}`);
+        logger.info('🎲 Triggering random event', { 
+          eventTitle: randomEvent.title,
+          eventId: randomEvent.id 
+        });
         triggerEvent(randomEvent);
       } else {
-        console.log(`🎲 [EVENT DEBUG] No random event found`);
+        logger.debug('🎲 No random event found');
       }
     }, 150);
   } else {
-    console.log(`🎲 [EVENT DEBUG] No event triggered this time`);
+    logger.debug('🎲 No event triggered this time', { 
+      biome,
+      adjustedChance: adjustedEventChance,
+      randomEventChance: RANDOM_EVENT_CHANCE 
+    });
   }
 };

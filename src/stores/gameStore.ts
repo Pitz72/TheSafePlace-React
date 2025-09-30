@@ -11,10 +11,11 @@ import { useNotificationStore } from './notifications/notificationStore';
 import { useNarrativeStore } from './narrative/narrativeStore';
 import { narrativeIntegration } from '../services/narrativeIntegration';
 import type { TimeState, WeatherType } from '../interfaces/gameState';
-import type { LogEntry } from '../data/MessageArchive';
+import type { LogEntry, MessageType } from '../data/MessageArchive';
 import type { ICharacterSheet } from '../rules/types';
 import type { GameEvent } from '../interfaces/events';
 import type { IItem } from '../interfaces/items';
+import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
 
 // Boot sequence states
 export type BootPhase = 'black-screen-1' | 'production' | 'black-screen-2' | 'boot-simulation' | 'black-screen-3' | 'menu';
@@ -38,6 +39,11 @@ export interface CoreGameState {
 
   // Callback per ricette
   unlockRecipesCallback?: (manualId: string) => void;
+
+  // Proxy Getters (READ-ONLY)
+  characterSheet: ICharacterSheet;
+  inventory: ReturnType<typeof useInventoryStore.getState>['getInventory'];
+  items: Record<string, IItem>;
 
   // Core Actions
   updateCameraPosition: (viewportSize: { width: number; height: number }) => void;
@@ -80,21 +86,6 @@ export interface CoreGameState {
   addItem: (itemId: string, quantity: number) => boolean;
   addExperience: (xpGained: number) => void;
   useItem: (slotIndex: number) => boolean;
-
-  // Facade Properties (delegano ai store specializzati) con tipi corretti
-  get characterSheet(): ICharacterSheet;
-  get timeState(): TimeState;
-  get playerPosition(): { x: number; y: number };
-  get mapData(): any;
-  get isMapLoading(): boolean;
-  get weatherState(): any;
-  get currentWeather(): WeatherType;
-  get survivalState(): any;
-  get logEntries(): LogEntry[];
-  get items(): Record<string, IItem>;
-  get inventory(): any[];
-  get currentEvent(): GameEvent | null;
-  get notifications(): any[];
 }
 
 export const useGameStore = create<CoreGameState>((set, get) => ({
@@ -110,263 +101,22 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   isBootSequenceActive: true,
   unlockRecipesCallback: undefined,
 
-  // --- FACADE PROPERTIES (delegano ai store specializzati) ---
+  // --- PROXY GETTERS ---
   get characterSheet() {
     return useCharacterStore.getState().characterSheet;
   },
 
-  get timeState(): TimeState {
-    const timeStore = useTimeStore.getState();
-    // Ensure timeStore exists and has the required properties
-    if (!timeStore || typeof timeStore.currentTime === 'undefined') {
-      // Return default time state if timeStore is not initialized
-      return {
-        currentTime: 480, // 8:00 AM
-        day: 1,
-        isDay: true
-      };
-    }
-    
-    return {
-      currentTime: timeStore.currentTime,
-      day: timeStore.day,
-      isDay: timeStore.timeOfDay === 'morning' || timeStore.timeOfDay === 'afternoon'
-    };
-  },
-
-  get playerPosition() {
-    const worldStore = useWorldStore.getState();
-    return worldStore?.playerPosition || { x: 0, y: 0 };
-  },
-
-  get mapData() {
-    const worldStore = useWorldStore.getState();
-    return worldStore?.mapData || [];
-  },
-
-  get isMapLoading() {
-    const worldStore = useWorldStore.getState();
-    return worldStore?.isMapLoading || false;
-  },
-
-  get weatherState() {
-    return useWeatherStore.getState() || {};
-  },
-
-  get currentWeather() {
-    const weatherStore = useWeatherStore.getState();
-    return weatherStore?.currentWeather || 'clear';
-  },
-
-  get survivalState() {
-    const survivalStore = useSurvivalStore.getState();
-    return survivalStore?.survivalState || { hunger: 100, thirst: 100, fatigue: 0 };
-  },
-
-  get logEntries() {
-    const notificationStore = useNotificationStore.getState();
-    return notificationStore?.logEntries || [];
-  },
-
-  get items(): Record<string, any> {
-    const inventoryStore = useInventoryStore.getState();
-    return inventoryStore?.items || {};
-  },
-
   get inventory() {
-    const inventoryStore = useInventoryStore.getState();
-    return inventoryStore?.getInventory ? inventoryStore.getInventory() : [];
+    return useInventoryStore.getState().getInventory();
   },
 
-  get currentEvent() {
-    const eventStore = useEventStore.getState();
-    return eventStore?.currentEvent || null;
+  get items() {
+    return useInventoryStore.getState().items;
   },
 
-  get notifications() {
-    const notificationStore = useNotificationStore.getState();
-    return notificationStore?.notifications || [];
-  },
+  // --- ACTIONS ---
 
-  // --- CORE ACTIONS ---
-  
-  updateCameraPosition: (viewportSize: { width: number; height: number }) => {
-    // Logica per aggiornare la posizione della camera
-    const worldStore = useWorldStore.getState();
-    const newPosition = {
-      x: worldStore.playerPosition.x - viewportSize.width / 2,
-      y: worldStore.playerPosition.y - viewportSize.height / 2
-    };
-    set({ cameraPosition: newPosition });
-  },
-
-  initializeGame: async () => {
-    try {
-      // Inizializza tutti i store specializzati
-      await useEventStore.getState().loadEventDatabase();
-      
-      // Carica la mappa del mondo
-      await useWorldStore.getState().loadMap();
-      
-      // Inizializza il sistema narrativo
-      const narrativeStore = useNarrativeStore.getState();
-      narrativeStore.initializeNarrative();
-      
-      // Inizializza l'integrazione narrativa
-      narrativeIntegration.initialize();
-
-      // Non cambiare currentScreen qui - lascia che sia gestito dal chiamante
-      // set({ currentScreen: 'menu' }); // RIMOSSO: causava il redirect al menu
-      
-    } catch (error) {
-      console.error('Failed to initialize game:', error);
-    }
-  },
-
-  // --- SCREEN NAVIGATION ---
-  
-  setCurrentScreen: (screen: string) => {
-    set(state => ({ 
-      currentScreen: screen, 
-      previousScreen: state.currentScreen 
-    }));
-  },
-  
-  // --- GAME STATE MANAGEMENT ---
-  
-  pauseGame: () => {
-    set({ 
-      isPaused: true, 
-      currentScreen: 'menu',
-      previousScreen: 'game'
-    });
-  },
-  
-  resumeGame: () => {
-    set({ 
-      isPaused: false, 
-      currentScreen: 'game',
-      previousScreen: 'menu'
-    });
-  },
-  
-  startNewGame: () => {
-    // Reset completo di tutti gli store per iniziare una nuova partita
-    const worldStore = useWorldStore.getState();
-    const characterStore = useCharacterStore.getState();
-    const eventStore = useEventStore.getState();
-    const shelterStore = useShelterStore.getState();
-
-    // Reset degli store che hanno metodi di reset
-    worldStore.resetWorld();
-    characterStore.resetCharacter();
-    eventStore.resetEventState();
-    shelterStore.resetShelterInvestigations();
-
-    set({
-      gameInProgress: true,
-      isPaused: false,
-      currentScreen: 'characterCreation',
-      previousScreen: 'menu'
-    });
-  },
-
-  goBack: () => {
-    set(state => {
-      const newScreen = state.previousScreen || 'menu';
-      return {
-        currentScreen: newScreen,
-        previousScreen: null
-      };
-    });
-  },
-
-  setMenuSelectedIndex: (index: number) => {
-    set({ menuSelectedIndex: index });
-  },
-
-  setSelectedInventoryIndex: (index: number) => {
-    set({ selectedInventoryIndex: index });
-  },
-
-  // --- MENU ACTIONS ---
-  
-  handleNewGame: () => {
-    get().startNewGame();
-  },
-
-  handleLoadGame: () => {
-    get().setCurrentScreen('loadGame');
-  },
-  
-  // Chiamata quando si entra effettivamente nel gioco
-  enterGame: () => {
-    set({ 
-      gameInProgress: true,
-      isPaused: false,
-      currentScreen: 'game'
-    });
-  },
-
-  handleStory: () => {
-    get().setCurrentScreen('story');
-  },
-
-  handleInstructions: () => {
-    get().setCurrentScreen('instructions');
-  },
-
-  handleOptions: () => {
-    get().setCurrentScreen('options');
-  },
-
-  handleBackToMenu: () => {
-    get().setCurrentScreen('menu');
-  },
-
-  handleExit: () => {
-    if (typeof window !== 'undefined' && window.close) {
-      window.close();
-    } else {
-      console.log('Exit game requested');
-    }
-  },
-
-  // --- UTILITY ---
-  
-  setUnlockRecipesCallback: (callback: (manualId: string) => void) => {
-    set({ unlockRecipesCallback: callback });
-  },
-  
-  // Time Actions
-  advanceTime: (hours: number) => {
-    useTimeStore.getState().advanceTime(hours);
-  },
-
-  // --- INVENTORY AND CHARACTER DELEGATES ---
-  removeItems: (itemId: string, quantity: number) => {
-    return useInventoryStore.getState().removeItems(itemId, quantity);
-  },
-
-  addItem: (itemId: string, quantity: number) => {
-    return useInventoryStore.getState().addItem(itemId, quantity);
-  },
-
-  addExperience: (xpGained: number) => {
-    useCharacterStore.getState().addExperience(xpGained);
-  },
-
-  useItem: (slotIndex: number): boolean => {
-    try {
-      useInventoryStore.getState().useItem(slotIndex);
-      return true;
-    } catch (error) {
-      console.error('Failed to use item:', error);
-      return false;
-    }
-  },
-
-  // --- BOOT SEQUENCE ACTIONS ---
+  // Boot sequence actions
   startBootSequence: () => {
     set({
       isBootSequenceActive: true,
@@ -404,6 +154,249 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
       bootPhase: 'menu',
       currentScreen: 'menu'
     });
+  },
+
+  // Screen Navigation Actions
+  setCurrentScreen: (screen: string) => {
+    set(state => ({
+      previousScreen: state.currentScreen,
+      currentScreen: screen
+    }));
+  },
+
+  goBack: () => {
+    set(state => ({
+      currentScreen: state.previousScreen || 'menu',
+      previousScreen: null
+    }));
+  },
+
+  setMenuSelectedIndex: (index: number) => {
+    set({ menuSelectedIndex: index });
+  },
+
+  setSelectedInventoryIndex: (index: number) => {
+    set({ selectedInventoryIndex: index });
+  },
+
+  // Game State Management
+  pauseGame: () => {
+    set({ isPaused: true });
+  },
+
+  resumeGame: () => {
+    set({ isPaused: false, currentScreen: 'game' });
+  },
+
+  startNewGame: () => {
+    set({ 
+      gameInProgress: true, 
+      isPaused: false, 
+      currentScreen: 'characterCreation' 
+    });
+  },
+
+  enterGame: () => {
+    set({ currentScreen: 'game' });
+  },
+
+  // Menu Actions
+  handleNewGame: () => {
+    get().startNewGame();
+  },
+
+  handleLoadGame: () => {
+    get().setCurrentScreen('load');
+  },
+
+  handleStory: () => {
+    get().setCurrentScreen('story');
+  },
+
+  handleInstructions: () => {
+    get().setCurrentScreen('instructions');
+  },
+
+  handleOptions: () => {
+    get().setCurrentScreen('options');
+  },
+
+  handleBackToMenu: () => {
+    get().setCurrentScreen('menu');
+  },
+
+  handleExit: () => {
+    // In un'applicazione web, potremmo chiudere la finestra o mostrare un messaggio
+    if (window.confirm('Sei sicuro di voler uscire dal gioco?')) {
+      window.close();
+    }
+  },
+
+  // Utility
+  setUnlockRecipesCallback: (callback: (manualId: string) => void) => {
+    set({ unlockRecipesCallback: callback });
+  },
+
+  // Time Actions
+  advanceTime: (hours: number) => {
+    useTimeStore.getState().advanceTime(hours);
+  },
+
+  // Inventory and Character Management
+  removeItems: (itemId: string, quantity: number) => {
+    return useInventoryStore.getState().removeItems(itemId, quantity);
+  },
+
+  addItem: (itemId: string, quantity: number) => {
+    return useInventoryStore.getState().addItem(itemId, quantity);
+  },
+
+  addExperience: (xpGained: number) => {
+    useCharacterStore.getState().addExperience(xpGained);
+  },
+
+  // Implementazione del metodo useItem
+  useItem: (slotIndex: number) => {
+    try {
+      useInventoryStore.getState().useItem(slotIndex);
+      return true;
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.INVENTORY, {
+        operation: 'useItem',
+        slotIndex,
+        context: 'Utilizzo oggetto dall\'inventario'
+      });
+      console.log(`Impossibile utilizzare l'oggetto nello slot ${slotIndex}`);
+      return false;
+    }
+  },
+
+  // Test utility method for store isolation
+  resetStore: () => {
+    set({
+      currentScreen: 'boot-black-screen-1',
+      previousScreen: null,
+      menuSelectedIndex: 0,
+      selectedInventoryIndex: 0,
+      cameraPosition: { x: 0, y: 0 },
+      gameInProgress: false,
+      isPaused: false,
+      bootPhase: 'black-screen-1',
+      isBootSequenceActive: true,
+      unlockRecipesCallback: undefined,
+    });
+  },
+
+  // --- CORE GAME INITIALIZATION ---
+  
+  /**
+   * Orchestratore principale per l'inizializzazione del gioco.
+   * Resetta e inizializza tutti gli store in sequenza corretta per una nuova partita.
+   * Deve essere chiamato dopo la creazione del personaggio.
+   */
+  initializeGame: async () => {
+    return executeWithRetry({
+      operation: async () => {
+        // Ottieni riferimenti a tutti gli store necessari
+        const notificationStore = useNotificationStore.getState();
+        const characterStore = useCharacterStore.getState();
+        const survivalStore = useSurvivalStore.getState();
+        const worldStore = useWorldStore.getState();
+        const narrativeStore = useNarrativeStore.getState();
+        const timeStore = useTimeStore.getState();
+        const weatherStore = useWeatherStore.getState();
+        const eventStore = useEventStore.getState();
+        const shelterStore = useShelterStore.getState();
+
+        // Fase 1 - Reset Notification Store per log pulito
+        if (notificationStore.resetNotifications) {
+          notificationStore.resetNotifications();
+        }
+
+        // Fase 2 - Inizializza Character Store
+        characterStore.initialize();
+
+        // Fase 3 - Reset Survival State
+        survivalStore.resetSurvivalState();
+
+        // Fase 4 - Reset Time Store
+        if (timeStore.resetTime) {
+          timeStore.resetTime();
+        }
+
+        // Fase 5 - Reset Weather Store
+        if (weatherStore.resetWeather) {
+          weatherStore.resetWeather();
+        }
+
+        // Fase 6 - Carica Mappa (operazione asincrona)
+        try {
+          await worldStore.loadMap();
+        } catch (error) {
+          console.warn('Errore nel caricamento della mappa, continuando con mappa vuota:', error);
+          notificationStore.addLogEntry(MessageType.SYSTEM_ERROR, { 
+            message: 'Errore nel caricamento della mappa. Utilizzando mappa di fallback.' 
+          });
+        }
+
+        // Fase 7 - Inizializza Narrative Store (operazione asincrona)
+        try {
+          narrativeStore.initializeNarrative();
+        } catch (error) {
+          console.warn('Errore nell\'inizializzazione del sistema narrativo:', error);
+          notificationStore.addLogEntry(MessageType.SYSTEM_WARNING, { 
+            message: 'Sistema narrativo non disponibile.' 
+          });
+        }
+
+        // Fase 8 - Reset Altri Store
+        if (eventStore.resetEvents) {
+          eventStore.resetEvents();
+        }
+        if (shelterStore.resetShelters) {
+          shelterStore.resetShelters();
+        }
+
+        // Fase 9 - Aggiorna Camera Position con dimensioni default
+        get().updateCameraPosition({ width: 1920, height: 1080 });
+
+        // Fase 10 - Messaggio di Benvenuto
+        notificationStore.addLogEntry(MessageType.GAME_START, { 
+          message: 'Benvenuto in The Safe Place. La tua avventura inizia ora.' 
+        });
+
+        console.log('Inizializzazione del gioco completata con successo');
+      },
+      category: GameErrorCategory.GAME_LOGIC,
+      context: 'initializeGame',
+      onFailure: (error) => {
+        console.error('Errore critico durante l\'inizializzazione del gioco:', error);
+        useNotificationStore.getState().addLogEntry(MessageType.SYSTEM_ERROR, { 
+          message: 'Errore durante l\'inizializzazione del gioco. Riprova.' 
+        });
+      }
+    });
+  },
+
+  /**
+   * Delegatore per l'aggiornamento della posizione della camera.
+   * Delega al worldStore per mantenere la separazione delle responsabilità.
+   */
+  updateCameraPosition: (viewportSize: { width: number; height: number }) => {
+    try {
+      const worldStore = useWorldStore.getState();
+      worldStore.updateCameraPosition(viewportSize);
+      
+      // Sincronizza la posizione della camera nel gameStore se necessario
+      const { cameraPosition } = worldStore;
+      set({ cameraPosition });
+    } catch (error) {
+      handleStoreError(error as Error, GameErrorCategory.WORLD, {
+        operation: 'updateCameraPosition',
+        viewportSize,
+        context: 'Aggiornamento posizione camera'
+      });
+    }
   },
 
 }));

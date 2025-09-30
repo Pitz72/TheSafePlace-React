@@ -1,6 +1,6 @@
 # The Safe Place - Piano di Recupero
 
-**Versione Attuale:** 0.9.9.5 (in  fase di revisione)
+**Versione Attuale:** 0.9.9.3 "We're Almost There"
 **Stato:** ⚠️ **In fase di recupero tecnico e refactoring architetturale.**
 
 Questo progetto sta attraversando un'importante fase di stabilizzazione per allineare il codice a standard di alta qualità e risolvere criticità architetturali identificate da un' analisi approfondita.

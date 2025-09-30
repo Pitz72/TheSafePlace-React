@@ -3,6 +3,7 @@ import { useWorldStore } from '../world/worldStore';
 import { useNotificationStore } from '../notifications/notificationStore';
 import { MessageType } from '../../data/MessageArchive';
 import type { TimeState } from '../../interfaces/gameState';
+import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
 
 export enum WeatherType {
   CLEAR = 'clear',
@@ -38,6 +39,7 @@ export interface WeatherState {
   getWeatherPatterns: () => any;
   getTimeBasedWeatherModifiers: (timeState: TimeState) => string;
   selectWeatherWithModifiers: (possibleTransitions: WeatherType[], timeModifier: string) => WeatherType;
+  resetWeather: () => void;
 }
 
 export const useWeatherStore = create<WeatherState>((set, get) => ({
@@ -56,64 +58,100 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
   // --- ACTIONS ---
 
   updateWeather: () => {
-    const currentTime = Date.now();
-    if (currentTime >= get().nextWeatherChange) {
-      const newWeather = get().generateWeatherChange();
-      set(newWeather);
+    return executeWithRetry({
+      operation: () => {
+        const currentTime = Date.now();
+        if (currentTime >= get().nextWeatherChange) {
+          const newWeather = get().generateWeatherChange();
+          set(newWeather);
 
-      useNotificationStore.getState().addLogEntry(MessageType.AMBIANCE_RANDOM, {
-        weather: newWeather.currentWeather,
-        text: get().getRandomWeatherMessage(newWeather.currentWeather),
-      });
-    }
+          useNotificationStore.getState().addLogEntry(MessageType.AMBIANCE_RANDOM, {
+            weather: newWeather.currentWeather,
+            text: get().getRandomWeatherMessage(newWeather.currentWeather),
+          });
+        }
+        return { success: true };
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'updateWeather',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante l\'aggiornamento del tempo atmosferico'),
+      onFallback: () => ({ success: false })
+    });
   },
 
   getWeatherEffects: (): WeatherEffects => {
-    return get().effects;
+    return executeWithRetry({
+      operation: () => get().effects,
+      category: GameErrorCategory.WEATHER,
+      context: 'getWeatherEffects',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante il recupero degli effetti meteorologici'),
+      onFallback: () => ({
+        movementModifier: 1.0,
+        survivalModifier: 1.0,
+        skillCheckModifier: 0,
+        eventProbabilityModifier: 1.0,
+      })
+    });
   },
 
   generateWeatherChange: (): Omit<WeatherState, 'actions'> => {
-    const worldStore = useWorldStore.getState();
-    const timeState = worldStore?.timeState;
-    
-    // If timeState is not available, return clear weather
-    if (!timeState || typeof timeState.currentTime === 'undefined') {
-      return get().createClearWeather();
-    }
-    
-    const weatherPatterns = get().getWeatherPatterns();
-    const currentWeather = get().currentWeather;
-    const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
-    const timeModifiers = get().getTimeBasedWeatherModifiers(timeState);
-    const newWeatherType = get().selectWeatherWithModifiers(possibleTransitions, timeModifiers);
-    const newPattern = weatherPatterns[newWeatherType];
+    return executeWithRetry({
+      operation: () => {
+        const worldStore = useWorldStore.getState();
+        const timeState = worldStore?.timeState;
+        
+        // If timeState is not available, return clear weather
+        if (!timeState || typeof timeState.currentTime === 'undefined') {
+          return get().createClearWeather();
+        }
+        
+        const weatherPatterns = get().getWeatherPatterns();
+        const currentWeather = get().currentWeather;
+        const possibleTransitions = weatherPatterns[currentWeather]?.transitionsTo || ['clear'];
+        const timeModifiers = get().getTimeBasedWeatherModifiers(timeState);
+        const newWeatherType = get().selectWeatherWithModifiers(possibleTransitions, timeModifiers);
+        const newPattern = weatherPatterns[newWeatherType];
 
-    if (!newPattern) {
-      return get().createClearWeather();
-    }
+        if (!newPattern) {
+          return get().createClearWeather();
+        }
 
-    const [minIntensity, maxIntensity] = newPattern.intensityRange;
-    const intensity = Math.floor(Math.random() * (maxIntensity - minIntensity + 1)) + minIntensity;
-    const baseDuration = newPattern.averageDuration;
-    const variation = baseDuration * 0.3;
-    const duration = Math.floor(baseDuration + Math.random() * variation * 2 - variation);
+        const [minIntensity, maxIntensity] = newPattern.intensityRange;
+        const intensity = Math.floor(Math.random() * (maxIntensity - minIntensity + 1)) + minIntensity;
+        const baseDuration = newPattern.averageDuration;
+        const variation = baseDuration * 0.3;
+        const duration = Math.floor(baseDuration + Math.random() * variation * 2 - variation);
 
-    return {
-      currentWeather: newWeatherType,
-      intensity,
-      duration,
-      nextWeatherChange: Date.now() + duration * 60 * 1000,
-      effects: { ...newPattern.effects },
-    };
+        return {
+          currentWeather: newWeatherType,
+          intensity,
+          duration,
+          nextWeatherChange: Date.now() + duration * 60 * 1000,
+          effects: { ...newPattern.effects },
+        };
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'generateWeatherChange',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante la generazione del cambiamento meteorologico'),
+      onFallback: () => get().createClearWeather()
+    });
   },
 
   applyWeatherEffects: (baseValue, effectType) => {
-    const modifier = get().effects[effectType];
-    if (effectType === 'skillCheckModifier') {
-      return baseValue + (modifier as number);
-    } else {
-      return baseValue * (modifier as number);
-    }
+    return executeWithRetry({
+      operation: () => {
+        const modifier = get().effects[effectType];
+        if (effectType === 'skillCheckModifier') {
+          return baseValue + (modifier as number);
+        } else {
+          return baseValue * (modifier as number);
+        }
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'applyWeatherEffects',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante l\'applicazione degli effetti meteorologici'),
+      onFallback: () => baseValue
+    });
   },
 
   getWeatherPatterns: () => ({
@@ -156,34 +194,50 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
   }),
 
   getTimeBasedWeatherModifiers: (timeState) => {
-    // Add null safety check for timeState
-    if (!timeState || typeof timeState.currentTime === 'undefined') {
-      return 'day'; // Default to day if timeState is not available
-    }
-    
-    const hour = Math.floor(timeState.currentTime / 60);
-    if (hour >= 5 && hour < 8) return 'dawn';
-    if (hour >= 8 && hour < 18) return 'day';
-    if (hour >= 18 && hour < 21) return 'dusk';
-    return 'night';
+    return executeWithRetry({
+      operation: () => {
+        // Add null safety check for timeState
+        if (!timeState || typeof timeState.currentTime === 'undefined') {
+          return 'day'; // Default to day if timeState is not available
+        }
+        
+        const hour = Math.floor(timeState.currentTime / 60);
+        if (hour >= 5 && hour < 8) return 'dawn';
+        if (hour >= 8 && hour < 18) return 'day';
+        if (hour >= 18 && hour < 21) return 'dusk';
+        return 'night';
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'getTimeBasedWeatherModifiers',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante il calcolo dei modificatori temporali'),
+      onFallback: () => 'day'
+    });
   },
 
   selectWeatherWithModifiers: (possibleTransitions, timeModifier) => {
-    const timeWeights: Record<string, Record<WeatherType, number>> = {
-      dawn: { [WeatherType.FOG]: 2.0 },
-      day: { [WeatherType.CLEAR]: 1.5, [WeatherType.FOG]: 0.3 },
-      dusk: { [WeatherType.FOG]: 1.8 },
-      night: { [WeatherType.STORM]: 2.0, [WeatherType.HEAVY_RAIN]: 1.6 },
-    };
-    const weights = timeWeights[timeModifier] || {};
-    const weightedOptions: WeatherType[] = [];
-    possibleTransitions.forEach(weather => {
-      const weight = (weights[weather] || 1.0) * 10;
-      for (let i = 0; i < weight; i++) {
-        weightedOptions.push(weather);
-      }
+    return executeWithRetry({
+      operation: () => {
+        const timeWeights: Record<string, Record<WeatherType, number>> = {
+          dawn: { [WeatherType.FOG]: 2.0 },
+          day: { [WeatherType.CLEAR]: 1.5, [WeatherType.FOG]: 0.3 },
+          dusk: { [WeatherType.FOG]: 1.8 },
+          night: { [WeatherType.STORM]: 2.0, [WeatherType.HEAVY_RAIN]: 1.6 },
+        };
+        const weights = timeWeights[timeModifier] || {};
+        const weightedOptions: WeatherType[] = [];
+        possibleTransitions.forEach(weather => {
+          const weight = (weights[weather] || 1.0) * 10;
+          for (let i = 0; i < weight; i++) {
+            weightedOptions.push(weather);
+          }
+        });
+        return weightedOptions[Math.floor(Math.random() * weightedOptions.length)] || WeatherType.CLEAR;
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'selectWeatherWithModifiers',
+      onFailure: (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante la selezione del tempo con modificatori'),
+      onFallback: () => WeatherType.CLEAR
     });
-    return weightedOptions[Math.floor(Math.random() * weightedOptions.length)] || WeatherType.CLEAR;
   },
 
   createClearWeather: () => ({
@@ -200,27 +254,73 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
   }),
 
   getWeatherDescription: (weather) => {
-    const descriptions = {
-      [WeatherType.CLEAR]: 'Il cielo si schiarisce...',
-      [WeatherType.LIGHT_RAIN]: 'Gocce sottili iniziano a cadere...',
-      [WeatherType.HEAVY_RAIN]: 'La pioggia battente trasforma il paesaggio...',
-      [WeatherType.STORM]: 'Una tempesta furiosa scuote la terra...',
-      [WeatherType.FOG]: 'Una nebbia spettrale avvolge tutto...',
-      [WeatherType.WIND]: 'Raffiche violente sollevano nuvole di polvere...'
-    };
-    return descriptions[weather] || 'Il tempo cambia...';
+    return executeWithRetry(
+      () => {
+        const descriptions = {
+          [WeatherType.CLEAR]: 'Il cielo si schiarisce...',
+          [WeatherType.LIGHT_RAIN]: 'Gocce sottili iniziano a cadere...',
+          [WeatherType.HEAVY_RAIN]: 'La pioggia battente trasforma il paesaggio...',
+          [WeatherType.STORM]: 'Una tempesta furiosa scuote la terra...',
+          [WeatherType.FOG]: 'Una nebbia spettrale avvolge tutto...',
+          [WeatherType.WIND]: 'Raffiche violente sollevano nuvole di polvere...'
+        };
+        return descriptions[weather] || 'Il tempo cambia...';
+      },
+      (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante il recupero della descrizione meteorologica'),
+      () => 'Il tempo si comporta in modo strano...'
+    );
   },
 
   getRandomWeatherMessage: (weather) => {
-    const messages = {
-      [WeatherType.CLEAR]: ['I raggi del sole filtrano...'],
-      [WeatherType.LIGHT_RAIN]: ['Le gocce di pioggia tamburellano...'],
-      [WeatherType.HEAVY_RAIN]: ['La pioggia torrenziale rende il terreno...'],
-      [WeatherType.STORM]: ['Un fulmine illumina il paesaggio...'],
-      [WeatherType.FOG]: ['Forme indistinte emergono...'],
-      [WeatherType.WIND]: ['Il vento porta con sé frammenti...']
-    };
-    const weatherMessages = messages[weather] || ['Il tempo si comporta in modo strano.'];
-    return weatherMessages[Math.floor(Math.random() * weatherMessages.length)];
+    return executeWithRetry(
+      () => {
+        const messages = {
+          [WeatherType.CLEAR]: ['I raggi del sole filtrano...'],
+          [WeatherType.LIGHT_RAIN]: ['Le gocce di pioggia tamburellano...'],
+          [WeatherType.HEAVY_RAIN]: ['La pioggia torrenziale rende il terreno...'],
+          [WeatherType.STORM]: ['Un fulmine illumina il paesaggio...'],
+          [WeatherType.FOG]: ['Forme indistinte emergono...'],
+          [WeatherType.WIND]: ['Il vento porta con sé frammenti...']
+        };
+        const weatherMessages = messages[weather] || ['Il tempo si comporta in modo strano.'];
+        return weatherMessages[Math.floor(Math.random() * weatherMessages.length)];
+      },
+      (error) => handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante il recupero del messaggio meteorologico'),
+      () => 'Il tempo si comporta in modo strano.'
+    );
+  },
+
+  /**
+   * Resetta il meteo allo stato iniziale per una nuova partita.
+   * Imposta condizioni serene con modificatori neutrali.
+   */
+  resetWeather: () => {
+    return executeWithRetry({
+      operation: () => {
+        const clearWeatherState = get().createClearWeather();
+        set({
+          currentWeather: WeatherType.CLEAR,
+          intensity: 50,
+          duration: 240,
+          nextWeatherChange: Date.now() + 240 * 60 * 1000,
+          effects: {
+            movementModifier: 1.0,
+            survivalModifier: 1.0,
+            skillCheckModifier: 0,
+            eventProbabilityModifier: 1.0
+          }
+        });
+        return { success: true };
+      },
+      category: GameErrorCategory.WEATHER,
+      context: 'resetWeather',
+      onFailure: (error) => {
+        handleStoreError(error, GameErrorCategory.WEATHER, 'Errore durante il reset del meteo');
+        // Fallback: usa createClearWeather come stato di sicurezza
+        const clearWeatherState = get().createClearWeather();
+        set(clearWeatherState);
+      },
+      onFallback: () => ({ success: false })
+    });
   },
 }));

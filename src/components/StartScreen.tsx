@@ -40,7 +40,7 @@
  * 
  * ULTIMA MODIFICA: 16 Gennaio 2025 - Aggiunto avviso critico di immutabilità
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 
 const StartScreen: React.FC = () => {
@@ -57,20 +57,22 @@ const StartScreen: React.FC = () => {
   const resumeGame = useGameStore(state => state.resumeGame);
   const startNewGame = useGameStore(state => state.startNewGame);
   
-  // Menu diverso se il gioco è in pausa
-  const menuItems = isPaused && gameInProgress ? [
-    { key: 'R', label: 'Riprendi Partita', action: resumeGame },
-    { key: 'N', label: 'Nuova Partita', action: startNewGame },
-    { key: 'O', label: 'Opzioni', action: handleOptions },
-    { key: 'E', label: 'Esci', action: handleExit }
-  ] : [
-    { key: 'N', label: 'Nuova Partita', action: handleNewGame },
-    { key: 'C', label: 'Carica Partita', action: handleLoadGame },
-    { key: 'I', label: 'Istruzioni', action: handleInstructions },
-    { key: 'T', label: 'Storia', action: handleStory },
-    { key: 'O', label: 'Opzioni', action: handleOptions },
-    { key: 'E', label: 'Esci', action: handleExit }
-  ];
+  // Menu diverso se il gioco è in pausa - stabilizzato con useMemo
+  const menuItems = useMemo(() => {
+    return isPaused && gameInProgress ? [
+      { key: 'R', label: 'Riprendi Partita', action: resumeGame },
+      { key: 'N', label: 'Nuova Partita', action: startNewGame },
+      { key: 'O', label: 'Opzioni', action: handleOptions },
+      { key: 'E', label: 'Esci', action: handleExit }
+    ] : [
+      { key: 'N', label: 'Nuova Partita', action: handleNewGame },
+      { key: 'C', label: 'Carica Partita', action: handleLoadGame },
+      { key: 'I', label: 'Istruzioni', action: handleInstructions },
+      { key: 'T', label: 'Storia', action: handleStory },
+      { key: 'O', label: 'Opzioni', action: handleOptions },
+      { key: 'E', label: 'Esci', action: handleExit }
+    ];
+  }, [isPaused, gameInProgress, resumeGame, startNewGame, handleOptions, handleExit, handleNewGame, handleLoadGame, handleInstructions, handleStory]);
 
   // Listener per input da tastiera locale a questa schermata
   useEffect(() => {
@@ -89,7 +91,7 @@ const StartScreen: React.FC = () => {
         setMenuSelectedIndex(newIndex);
       } else if (key === 'enter') {
         event.preventDefault();
-        // L'array menuItems è stabile e contiene già le azioni corrette
+        // L'array menuItems è ora stabile e contiene già le azioni corrette
         menuItems[currentIndex].action();
       }
     };
@@ -99,7 +101,7 @@ const StartScreen: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
     // L'array di dipendenze ora è stabile e non causerà nuove esecuzioni
-  }, [setMenuSelectedIndex, handleNewGame, handleLoadGame, handleInstructions, handleStory, handleOptions, handleExit, resumeGame, startNewGame, menuItems]);
+  }, [setMenuSelectedIndex, menuItems]);
 
   return (
     <div className="h-full flex items-center justify-center overflow-hidden crt-screen scan-lines">
@@ -127,7 +129,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione e stato pausa */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
-          v0.9.9.2 - The Computer Boot System
+          v0.9.9.3 - We're Almost There
         </p>
         
         {/* Indicatore di pausa */}

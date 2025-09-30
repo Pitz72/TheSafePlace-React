@@ -1,14 +1,54 @@
-# 📚 DOCUMENTAZIONE - The Safe Place
+# 📚 INDICE DOCUMENTAZIONE - The Safe Place
 
-**Versione**: v0.9.7.3 "We shore up the building"  
-**Data Aggiornamento**: 16 Gennaio 2025  
-**Status**: ✅ SINCRONIZZATA CON CODICE - Consolidamento Architetturale e Immutabilità
+**Versione**: v0.9.9.3 "We're Almost There"  
+**Data Aggiornamento**: 30 Settembre 2025  
+**Stato**: ✅ CONSOLIDATA - Versione Stabile Documentata
 
 ---
 
-## 🎯 PANORAMICA v0.9.7.3
+## 🎯 STRUTTURA DOCUMENTAZIONE
 
-Questa documentazione è stata **sincronizzata con la versione v0.9.7.3** per riflettere il consolidamento architetturale e l'implementazione di componenti immutabili. Le **protezioni runtime sono state aggiunte**, i componenti critici resi immutabili, e la stabilità ulteriormente rinforzata. Tutti i documenti sono aggiornati con le nuove protezioni.
+### 📋 **DOCUMENTI ESSENZIALI**
+- **[GDD-CONSOLIDATO.md](./GDD-CONSOLIDATO.md)** - Game Design Document Unificato *(Versione Consolidata)*
+- **[PROJECT_STATUS.md](./PROJECT_STATUS.md)** - Stato Corrente del Progetto  
+- **[ROADMAP_CURRENT.md](./ROADMAP_CURRENT.md)** - Roadmap Attuale
+- **[ARCHITECTURE_DESIGN.md](./ARCHITECTURE_DESIGN.md)** - Design Architetturale
+- **[README.md](./README.md)** - Panoramica Documentazione
+
+### 🔧 **DOCUMENTAZIONE TECNICA**
+- **[api/](./api/)** - Documentazione API e Guide Utente
+  - **[api-documentation.md](./api/api-documentation.md)** - Documentazione API Completa
+  - **[crafting-system.md](./api/crafting-system.md)** - Sistema di Crafting
+  - **[crafting-user-guide.md](./api/crafting-user-guide.md)** - Guida Utente Crafting
+  - **[CRAFTING-SYSTEM-GUIDE.md](./api/CRAFTING-SYSTEM-GUIDE.md)** - Guida Sistema Crafting
+  - **[TROUBLESHOOTING-GUIDE.md](./api/TROUBLESHOOTING-GUIDE.md)** - Risoluzione Problemi
+  - **[knownRecipeIds-fix-documentation.md](./api/knownRecipeIds-fix-documentation.md)** - Fix Ricette
+
+### 📦 **ARCHIVIO**
+- **[archivio/](./archivio/)** - Documentazione Obsoleta e Storica
+  - **[versioni-obsolete/](./archivio/versioni-obsolete/)** - GDD Precedenti (GDD.md, GDD2.md, GDD3.md, GDD4.md)
+  - **[gdd/](./archivio/gdd/)** - Duplicati GDD Archiviati
+  - **[roadmap/](./archivio/roadmap/)** - Roadmap Storiche e Archiviate
+  - **[changelog/](./archivio/changelog/)** - Changelog Versioni Precedenti
+  - **[anti-regressione/](./archivio/anti-regressione/)** - File Anti-Regressione
+  - **[analisi/](./archivio/analisi/)** - Analisi e Report Storici
+  - **[session-log/](./archivio/session-log/)** - Log Sessioni di Sviluppo
+  - **[incidenti/](./archivio/incidenti/)** - Report Incidenti e Correzioni
+  - **[test-plans/](./archivio/test-plans/)** - Piani di Test Archiviati
+
+---
+
+## ✅ STATO RIORGANIZZAZIONE
+
+**COMPLETATO**:
+- ✅ Consolidamento GDD multipli in **GDD-CONSOLIDATO.md**
+- ✅ Archiviazione documentazione obsoleta (15+ cartelle archiviate)
+- ✅ Eliminazione duplicazioni e ridondanze
+- ✅ Struttura semplificata (da 25+ cartelle a 2 essenziali)
+- ✅ Navigazione centralizzata e link aggiornati
+- ✅ Sincronizzazione versioni a v0.9.9.5
+
+**RISULTATO**: Documentazione drasticamente semplificata da una struttura complessa e frammentata a una struttura pulita e organizzata, con tutti i contenuti obsoleti archiviati e facilmente accessibili.
 
 ### 📊 Documenti Unificati - AGGIORNATI v0.9.7.3
 
@@ -114,12 +154,13 @@ Documentazione API e sistema:
 - [Crafting System API](./api/crafting-system.md) - API del sistema crafting
 - [Crafting User Guide](./api/crafting-user-guide.md) - Guida utente crafting
 
-### 🛡️ [Anti-Regressione](./anti-regressione/) (50+ documenti)
+### 🛡️ [Anti-Regressione](./archivio/anti-regressione/) (50+ documenti)
 
 Documenti di protezione che definiscono baseline immutabili e procedure di test per prevenire regressioni. Include:
-- **Documenti v0.0.x - v0.6.0**: Protezioni progressive per ogni versione
+- **Documenti v0.0.x - v0.9.9.2**: Protezioni progressive per ogni versione
 - **Protezioni Speciali**: FINALE, BASEPOPUP
-- **Ultimo Attivo**: [ANTI-REGRESSIONE-v0.6.4.md](./anti-regressione/ANTI-REGRESSIONE-v0.6.4.md) (HOW HARD IS IT TO WADE ACROSS A RIVER?)
+- **✅ NUOVO**: [ANTI-REGRESSION-v0.9.9.3.md](./archivio/anti-regressione/ANTI-REGRESSION-v0.9.9.3.md) - **CRITICO** - Protezione sistemi stabilizzati
+- **Ultimo Attivo**: [ANTI-REGRESSION-v0.9.9.3.md](./archivio/anti-regressione/ANTI-REGRESSION-v0.9.9.3.md) ("We're Almost There" - Protezione Massima)
 
 ### 📊 [Analisi](./analisi/) (26 documenti)
 
@@ -143,12 +184,13 @@ Documenti completati, roadmap concluse e analisi storiche:
   - **Consolidamento**: 3 documenti di consolidamento obsoleti
   - **Varie**: 5 documenti commit e altri file obsoleti
 
-### 📝 [Changelog](./changelog/) (20 documenti)
+### 📝 [Changelog](./archivio/changelog/) (20+ documenti)
 
 Storico completo delle modifiche per ogni versione:
-- **Changelog Generale**: [CHANGELOG.md](./changelog/CHANGELOG.md)
-- **Versioni Specifiche**: v0.0.1 → v0.6.0
-- **Ultimo**: [CHANGELOG-v0.6.4.md](./changelog/CHANGELOG-v0.6.4.md) (HOW HARD IS IT TO WADE ACROSS A RIVER?)
+- **Changelog Generale**: [CHANGELOG.md](./CHANGELOG.md)
+- **Versioni Specifiche**: v0.0.1 → v0.9.9.3
+- **✅ NUOVO**: [CHANGELOG-v0.9.9.3.md](./archivio/changelog/CHANGELOG-v0.9.9.3.md) - **CRITICO** - "We're Almost There" - Stabilizzazione Completa
+- **Ultimo**: [CHANGELOG-v0.9.9.3.md](./archivio/changelog/CHANGELOG-v0.9.9.3.md) (Trasformazione da progetto instabile a gioco funzionante)
 
 ### 🔧 [Commit](./commit/) (2 documenti)
 

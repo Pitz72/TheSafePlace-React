@@ -5,6 +5,9 @@ import { useWorldStore } from '../stores/world/worldStore';
 import { QuestStage } from '../interfaces/narrative';
 import type { LoreEvent, QuestFragment, EmotionalState } from '../interfaces/narrative';
 import type { GameEvent } from '../interfaces/events';
+import { createLogger } from './loggerService';
+
+const logger = createLogger('NARRATIVE');
 
 /**
  * Servizio per integrare il sistema narrativo con gli eventi esistenti
@@ -47,7 +50,7 @@ export class NarrativeIntegrationService {
   private setupCombatListeners(): void {
     // Nota: Il sistema di combattimento è cambiato e ora usa un approccio diverso
     // per gestire gli eventi post-combattimento. Rimuoviamo l'intercettazione diretta.
-    console.log('🔧 NARRATIVE DEBUG - Combat listeners setup skipped (API changed)');
+    logger.debug('Combat listeners setup skipped (API changed)');
   }
 
   /**
@@ -56,7 +59,7 @@ export class NarrativeIntegrationService {
    * quando cambia bioma, quindi non serve intercettare updateBiome
    */
   private setupWorldListeners(): void {
-    console.log('🔧 NARRATIVE DEBUG - setupWorldListeners: worldStore già gestisce i cambi bioma');
+    logger.debug('setupWorldListeners: worldStore already handles biome changes');
     // Non serve intercettare updateBiome perché updatePlayerPosition già chiama
     // narrativeIntegration.checkForNarrativeEvents quando hasChangedBiome è true
   }
@@ -81,10 +84,10 @@ export class NarrativeIntegrationService {
    */
   private async loadNarrativeData(): Promise<void> {
     try {
-      console.log('📚 NARRATIVE DEBUG - Loading narrative data...');
+      logger.debug('Loading narrative data');
       const narrativeStore = useNarrativeStore.getState();
       
-      console.log('📚 NARRATIVE DEBUG - Before initialization:', {
+      logger.debug('Before initialization', {
         availableEvents: narrativeStore.availableLoreEvents.length,
         currentStage: narrativeStore.currentStage,
         emotionalState: narrativeStore.emotionalState
@@ -96,7 +99,7 @@ export class NarrativeIntegrationService {
       await new Promise(resolve => setTimeout(resolve, 100));
       
       const updatedStore = useNarrativeStore.getState();
-      console.log('📚 NARRATIVE DEBUG - After initialization:', {
+      logger.debug('After initialization', {
         availableEvents: updatedStore.availableLoreEvents.length,
         currentStage: updatedStore.currentStage,
         emotionalState: updatedStore.emotionalState,
@@ -109,7 +112,7 @@ export class NarrativeIntegrationService {
       });
       
     } catch (error) {
-      console.error('❌ NARRATIVE DEBUG - Errore nel caricamento dei dati narrativi:', error);
+      logger.error('Failed to load narrative data', { error });
     }
   }
 
@@ -141,7 +144,7 @@ export class NarrativeIntegrationService {
     const worldStore = useWorldStore.getState();
     const currentBiome = worldStore.currentBiome;
 
-    console.log('🎭 NARRATIVE DEBUG - checkForNarrativeEvents called:', {
+    logger.debug('checkForNarrativeEvents called', {
       eventType,
       context,
       currentStage,
@@ -153,7 +156,7 @@ export class NarrativeIntegrationService {
 
     // Filtra eventi disponibili per il tipo e le condizioni
     const eligibleEvents = availableLoreEvents.filter(event => {
-      console.log(`🔍 Checking event ${event.id}:`, {
+      logger.debug(`Checking event ${event.id}`, {
         questStageReq: event.questStageRequirement,
         currentStage,
         locationReq: event.locationRequirement,
@@ -166,7 +169,7 @@ export class NarrativeIntegrationService {
 
       // Controlla requisiti di stage (deve essere un array che include lo stage corrente)
       if (event.questStageRequirement && !event.questStageRequirement.includes(currentStage)) {
-        console.log(`❌ Event ${event.id} rejected: stage requirement not met`);
+        logger.debug(`Event ${event.id} rejected: stage requirement not met`);
         return false;
       }
 
@@ -174,33 +177,36 @@ export class NarrativeIntegrationService {
       // TEMPORANEAMENTE SEMPLIFICATO PER DEBUG
       if (event.emotionalPrerequisites) {
         const prereq = event.emotionalPrerequisites;
-        console.log(`🔍 Checking emotional prerequisites for ${event.id}:`, {
+        logger.debug(`Checking emotional prerequisites for ${event.id}`, {
           required: prereq,
           current: emotionalState
         });
         
         // Per ora, accetta tutti gli eventi per il debug
         if (event.id === 'thematic_river_reflection') {
-          console.log(`✅ Event ${event.id} - DEBUG MODE: accepting river event regardless of emotional state`);
+          logger.debug(`Event ${event.id} - DEBUG MODE: accepting river event regardless of emotional state`);
         } else {
           if (prereq.compassionLevel && emotionalState.compassionLevel < prereq.compassionLevel) {
-            console.log(`❌ Event ${event.id} rejected: compassion level too low (${emotionalState.compassionLevel} < ${prereq.compassionLevel})`);
+            logger.debug(`Event ${event.id} rejected: compassion level too low`, { 
+              current: emotionalState.compassionLevel, 
+              required: prereq.compassionLevel 
+            });
             return false;
           }
           if (prereq.pragmatismLevel && emotionalState.pragmatismLevel < prereq.pragmatismLevel) {
-            console.log(`❌ Event ${event.id} rejected: pragmatism level too low`);
+            logger.debug(`Event ${event.id} rejected: pragmatism level too low`);
             return false;
           }
           if (prereq.understandingLevel && emotionalState.understandingLevel < prereq.understandingLevel) {
-            console.log(`❌ Event ${event.id} rejected: understanding level too low`);
+            logger.debug(`Event ${event.id} rejected: understanding level too low`);
             return false;
           }
           if (prereq.lenaMemoryStrength && emotionalState.lenaMemoryStrength < prereq.lenaMemoryStrength) {
-            console.log(`❌ Event ${event.id} rejected: lena memory strength too low`);
+            logger.debug(`Event ${event.id} rejected: lena memory strength too low`);
             return false;
           }
           if (prereq.elianEmpathy && emotionalState.elianEmpathy < prereq.elianEmpathy) {
-            console.log(`❌ Event ${event.id} rejected: elian empathy too low`);
+            logger.debug(`Event ${event.id} rejected: elian empathy too low`);
             return false;
           }
         }
@@ -209,7 +215,10 @@ export class NarrativeIntegrationService {
       // Controlla requisiti di location
       if (event.locationRequirement && event.locationRequirement.length > 0 && currentBiome) {
         if (!event.locationRequirement.includes(currentBiome)) {
-          console.log(`❌ Event ${event.id} rejected: location requirement not met (needs ${event.locationRequirement}, current: ${currentBiome})`);
+          logger.debug(`Event ${event.id} rejected: location requirement not met`, { 
+            needs: event.locationRequirement, 
+            current: currentBiome 
+          });
           return false;
         }
       }
@@ -219,18 +228,18 @@ export class NarrativeIntegrationService {
         // Per cambio bioma, accetta eventi che hanno requisiti di location
         const isValid = event.locationRequirement && currentBiome && event.locationRequirement.includes(currentBiome);
         if (isValid) {
-          console.log(`✅ Event ${event.id} passed all checks for biome_change`);
+          logger.debug(`Event ${event.id} passed all checks for biome_change`);
         } else {
-          console.log(`❌ Event ${event.id} rejected: not valid for biome_change trigger`);
+          logger.debug(`Event ${event.id} rejected: not valid for biome_change trigger`);
         }
         return isValid;
       }
 
-      console.log(`✅ Event ${event.id} passed all checks`);
+      logger.debug(`Event ${event.id} passed all checks`);
       return true;
     });
 
-    console.log('🎯 NARRATIVE DEBUG - Eligible events found:', {
+    logger.debug('Eligible events found', {
       count: eligibleEvents.length,
       events: eligibleEvents.map(e => ({ id: e.id, priority: e.priority }))
     });
@@ -238,14 +247,14 @@ export class NarrativeIntegrationService {
     // Se ci sono eventi eligibili, trigger il primo (ordinato per priorità)
     if (eligibleEvents.length > 0) {
       const selectedEvent = eligibleEvents.sort((a, b) => b.priority - a.priority)[0];
-      console.log('🚀 NARRATIVE DEBUG - Triggering narrative event:', {
+      logger.info('Triggering narrative event', {
         eventId: selectedEvent.id,
         title: selectedEvent.title,
         priority: selectedEvent.priority
       });
       this.triggerNarrativeEvent(selectedEvent);
     } else {
-      console.log('⚠️ NARRATIVE DEBUG - No eligible events found for trigger');
+      logger.debug('No eligible events found for trigger');
     }
   }
 
@@ -381,13 +390,13 @@ export class NarrativeIntegrationService {
    * Metodo di debug per testare manualmente gli eventi narrativi
    */
   public debugTriggerRiverEvent(): void {
-    console.log('🧪 DEBUG - Forcing river event trigger...');
+    logger.debug('DEBUG - Forcing river event trigger...');
     const worldStore = useWorldStore.getState();
-    console.log('🧪 DEBUG - Current biome:', worldStore.currentBiome);
+    logger.debug('DEBUG - Current biome', { currentBiome: worldStore.currentBiome });
     
     // Forza il bioma a river se non lo è già
     if (worldStore.currentBiome !== 'river') {
-      console.log('🧪 DEBUG - Cannot force biome change - worldStore.setBiome not available');
+      logger.debug('DEBUG - Cannot force biome change - worldStore.setBiome not available');
     }
     
     // Trigger manuale dell'evento
@@ -401,7 +410,7 @@ export class NarrativeIntegrationService {
     const narrativeStore = useNarrativeStore.getState();
     const worldStore = useWorldStore.getState();
     
-    console.log('🧪 NARRATIVE DEBUG STATUS:', {
+    logger.debug('NARRATIVE DEBUG STATUS', {
       currentBiome: worldStore.currentBiome,
       currentStage: narrativeStore.currentStage,
       availableEvents: narrativeStore.availableLoreEvents.length,

@@ -52,19 +52,31 @@ const LoadScreen: React.FC = () => {
       // Mostra notifica se ci sono salvataggi corrotti
       const corruptedSlots = mainSlots.filter(slot => slot.corrupted);
       if (corruptedSlots.length > 0) {
-        addNotification('warning', `${corruptedSlots.length} salvataggio/i corrotto/i. Usa [R] per tentare il recupero.`, 5000);
+        addNotification({ 
+          type: 'warning', 
+          message: `${corruptedSlots.length} salvataggio/i corrotto/i. Usa [R] per tentare il recupero.`, 
+          duration: 5000 
+        });
       }
 
       // Mostra suggerimento se non ci sono salvataggi
       const validSlots = mainSlots.filter(slot => slot.exists && !slot.corrupted);
       if (validSlots.length === 0) {
-        addNotification('info', 'Nessun salvataggio trovato. Inizia una nuova partita o importa un salvataggio esistente.', 4000);
+        addNotification({ 
+          type: 'info', 
+          message: 'Nessun salvataggio trovato. Inizia una nuova partita o importa un salvataggio esistente.', 
+          duration: 4000 
+        });
       }
     } catch (err) {
       setError('Errore nel caricamento degli slot di salvataggio');
       console.error('Error loading save slots:', err);
       
-      addNotification('error', 'Impossibile accedere al sistema di salvataggio. Controlla le impostazioni del browser.', 6000);
+      addNotification({ 
+        type: 'error', 
+        message: 'Impossibile accedere al sistema di salvataggio. Controlla le impostazioni del browser.', 
+        duration: 6000 
+      });
     }
   }, [getSaveSlots, addNotification]);
 
@@ -201,12 +213,20 @@ const LoadScreen: React.FC = () => {
           setSelectedIndex(Math.max(0, updatedSlots.length - 1));
         }
         
-        addNotification('success', 'Salvataggio eliminato con successo', 2000);
+        addNotification({ 
+          type: 'success', 
+          message: 'Salvataggio eliminato con successo', 
+          duration: 2000 
+        });
         
         setError(null);
       } else {
         setError('Errore nell\'eliminazione del salvataggio');
-        addNotification('error', 'Impossibile eliminare il salvataggio', 3000);
+        addNotification({ 
+          type: 'error', 
+          message: 'Impossibile eliminare il salvataggio', 
+          duration: 3000 
+        });
       }
     } catch (err) {
       setError('Errore nell\'eliminazione del salvataggio');
