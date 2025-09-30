@@ -21,10 +21,15 @@ export interface TimeState {
 
 export type Screen = 'menu' | 'game' | 'instructions' | 'story' | 'options' | 'characterCreation' | 'characterSheet' | 'inventory' | 'levelUp' | 'shelter' | 'event' | 'loadGame' | 'crafting';
 
+// Esportato esplicitamente per compatibilità Rollup
 export interface SurvivalState {
   hunger: number;
   thirst: number;
-  lastNightConsumption: { day: number; consumed: boolean };
+  fatigue: number;
+  shelter: boolean;
+  fire: boolean;
+  waterSource: boolean;
+  lastNightConsumption?: { day: number; consumed: boolean };
 }
 
 export interface ShelterAccessInfo {

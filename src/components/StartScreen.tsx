@@ -81,6 +81,7 @@ const StartScreen: React.FC = () => {
       // Ottiene lo stato più recente direttamente dallo store per evitare loop
       const currentIndex = useGameStore.getState().menuSelectedIndex;
 
+      // Navigazione con frecce o W/S
       if (key === 'arrowup' || key === 'w') {
         event.preventDefault();
         const newIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
@@ -89,10 +90,19 @@ const StartScreen: React.FC = () => {
         event.preventDefault();
         const newIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
         setMenuSelectedIndex(newIndex);
-      } else if (key === 'enter') {
+      }
+      // Conferma con Enter
+      else if (key === 'enter') {
         event.preventDefault();
-        // L'array menuItems è ora stabile e contiene già le azioni corrette
         menuItems[currentIndex].action();
+      }
+      // Accesso rapido con lettere (N, C, I, T, O, E, R)
+      else {
+        const menuItem = menuItems.find(item => item.key.toLowerCase() === key);
+        if (menuItem) {
+          event.preventDefault();
+          menuItem.action();
+        }
       }
     };
 
@@ -129,7 +139,7 @@ const StartScreen: React.FC = () => {
         
         {/* Versione e stato pausa */}
         <p className="text-phosphor-700 text-base tracking-wider glow-phosphor-dim" style={{ marginBottom: '1rem' }}>
-          v0.9.9.7 - Yet Another Last-Minute Rescue
+          v0.9.9.8 - Fix Era Part 4
         </p>
         
         {/* Indicatore di pausa */}

@@ -35,6 +35,7 @@ export interface IEquipment {
 
 /**
  * Scheda completa del personaggio
+ * Esportato esplicitamente per compatibilità Rollup
  */
 export interface ICharacterSheet {
   name: string;

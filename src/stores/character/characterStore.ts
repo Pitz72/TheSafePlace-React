@@ -9,13 +9,12 @@ import {
   addItemToStack,
   addNewItem,
   removeItemFromSlot,
-  InventorySlot,
 } from '@/utils/inventoryUtils';
+import type { InventorySlot } from '@/utils/inventoryUtils';
 import { performAbilityCheck } from '@/utils/abilityUtils';
-import { takeDamage, healDamage } from '@/utils/healthUtils';
 import { gainExperience, gainMovementXP } from '@/utils/experienceUtils';
 import { itemDatabase } from '@/data/items/itemDatabase';
-import { MessageType, JOURNAL_STATE } from '@/data/MessageArchive';
+import { MessageType } from '@/data/MessageArchive';
 import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
 import type { Consequence } from '@/interfaces/events';
 
@@ -33,8 +32,8 @@ export interface CharacterActions {
   performAbilityCheck: (ability: AbilityType, difficulty: number) => { roll: number; success: boolean };
   getModifier: (ability: AbilityType) => number;
   // --- INVENTORY MANAGEMENT ---
-  addItemToInventory: (itemId: string, quantity: number) => boolean;
-  removeItemFromInventory: (slotIndex: number, quantity: number) => boolean;
+  addItemToInventory: (itemId: string, quantity: number) => Promise<boolean>;
+  removeItemFromInventory: (slotIndex: number, quantity: number) => Promise<boolean>;
   // --- STATUS MANAGEMENT ---
   addStatus: (status: CharacterStatus, duration: number) => void;
   removeStatus: (status: CharacterStatus) => void;
@@ -55,7 +54,19 @@ const initialState: CharacterState = {
   characterSheet: createTestCharacter(),
   isDead: false,
   isComatose: false,
-  status: { effects: [] }, // Initialize with an empty effects array
+  status: {
+    currentStatus: CharacterStatus.NORMAL,
+    statusEffects: [],
+    statusDuration: {
+      [CharacterStatus.NORMAL]: 0,
+      [CharacterStatus.SICK]: 0,
+      [CharacterStatus.WOUNDED]: 0,
+      [CharacterStatus.POISONED]: 0,
+      [CharacterStatus.STARVING]: 0,
+      [CharacterStatus.DEHYDRATED]: 0,
+      [CharacterStatus.DEAD]: 0
+    }
+  }
 };
 
 export const useCharacterStore = create<CharacterStore>((set, get) => ({
@@ -95,8 +106,8 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   // --- INVENTORY MANAGEMENT ---
   addItemToInventory: (itemId, quantity) => {
-    return executeWithRetry(
-      () => {
+    return executeWithRetry({
+      operation: () => {
         const { characterSheet, updateCharacterSheet } = get();
         const item = itemDatabase[itemId];
         
@@ -130,11 +141,16 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
 
         return false; // Inventario pieno
       },
-      {
-        onSuccess: () => {
-          // Successo già gestito nel return
-        },
-        onFailure: (error) => {
+      category: GameErrorCategory.INVENTORY,
+      context: {
+        operation: 'addItemToInventory',
+        itemId,
+        quantity
+      },
+      onSuccess: () => {
+        // Successo già gestito nel return
+      },
+      onFailure: (error: Error) => {
           handleStoreError(error, GameErrorCategory.INVENTORY, {
             operation: 'addItemToInventory',
             itemId,
@@ -142,16 +158,15 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
             context: 'Aggiunta oggetto all\'inventario del personaggio'
           });
         },
-        onFallback: () => {
-          return false;
-        }
+      onFallback: () => {
+        return false;
       }
-    );
+    });
   },
 
   removeItemFromInventory: (slotIndex, quantity) => {
-    return executeWithRetry(
-      () => {
+    return executeWithRetry({
+      operation: () => {
         const { characterSheet, updateCharacterSheet } = get();
         const slot = characterSheet.inventory[slotIndex];
         
@@ -167,11 +182,16 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
         updateCharacterSheet({ ...characterSheet, inventory: newInventory as (typeof characterSheet.inventory) });
         return true;
       },
-      {
-        onSuccess: () => {
-          // Successo già gestito nel return
-        },
-        onFailure: (error) => {
+      category: GameErrorCategory.INVENTORY,
+      context: {
+        operation: 'removeItemFromInventory',
+        slotIndex,
+        quantity
+      },
+      onSuccess: () => {
+        // Successo già gestito nel return
+      },
+      onFailure: (error: Error) => {
           handleStoreError(error, GameErrorCategory.INVENTORY, {
             operation: 'removeItemFromInventory',
             slotIndex,
@@ -179,17 +199,16 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
             context: 'Rimozione oggetto dall\'inventario del personaggio'
           });
         },
-        onFallback: () => {
-          return false;
-        }
+      onFallback: () => {
+        return false;
       }
-    );
+    });
   },
 
   // --- STATUS MANAGEMENT ---
-  applyStatus: (status, duration = 0) => {
-    return executeWithRetry(
-      () => {
+  addStatus: (status: CharacterStatus, duration = 0) => {
+    return executeWithRetry({
+      operation: () => {
         const { characterSheet } = get();
         
         if (!Object.values(CharacterStatus).includes(status)) {
@@ -226,11 +245,16 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
           action: 'applicato'
         });
       },
-      {
-        onSuccess: () => {
-          // Successo già gestito nel return
-        },
-        onFailure: (error) => {
+      category: GameErrorCategory.SURVIVAL,
+      context: {
+        operation: 'applyStatus',
+        status,
+        duration
+      },
+      onSuccess: () => {
+        // Successo già gestito nel return
+      },
+      onFailure: (error: Error) => {
           handleStoreError(error, GameErrorCategory.SURVIVAL, {
             operation: 'applyStatus',
             status,
@@ -238,16 +262,15 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
             context: 'Applicazione status al personaggio'
           });
         },
-        onFallback: () => {
-          console.log(`Impossibile applicare lo status ${status}`);
-        }
+      onFallback: () => {
+        console.log(`Impossibile applicare lo status ${status}`);
       }
-    );
+    });
   },
 
-  removeStatus: (status) => {
-    return executeWithRetry(
-      () => {
+  removeStatus: (status: CharacterStatus) => {
+    return executeWithRetry({
+      operation: () => {
         const { characterSheet } = get();
         
         if (!characterSheet.status.statusEffects.includes(status)) {
@@ -279,29 +302,49 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
           action: 'rimosso'
         });
       },
-      {
-        onSuccess: () => {
-          // Successo già gestito nel return
-        },
-        onFailure: (error) => {
+      category: GameErrorCategory.SURVIVAL,
+      context: {
+        operation: 'removeStatus',
+        status
+      },
+      onSuccess: () => {
+        // Successo già gestito nel return
+      },
+      onFailure: (error: Error) => {
           handleStoreError(error, GameErrorCategory.SURVIVAL, {
             operation: 'removeStatus',
             status,
             context: 'Rimozione status dal personaggio'
           });
         },
-        onFallback: () => {
-          console.log(`Impossibile rimuovere lo status ${status}`);
-        }
+      onFallback: () => {
+        console.log(`Impossibile rimuovere lo status ${status}`);
       }
-    );
+    });
   },
 
   hasStatus: (status) => {
     return get().characterSheet.status.statusEffects.includes(status);
   },
 
-  getStatusDescription: (status) => {
+  // --- HEALTH & DAMAGE ---
+  takeDamage: (amount: number) => {
+    const { characterSheet, updateCharacterSheet } = get();
+    const newHP = Math.max(0, characterSheet.currentHP - amount);
+    updateCharacterSheet({ ...characterSheet, currentHP: newHP });
+    
+    if (newHP === 0) {
+      set({ isDead: true });
+    }
+  },
+
+  healDamage: (amount: number) => {
+    const { characterSheet, updateCharacterSheet } = get();
+    const newHP = Math.min(characterSheet.maxHP, characterSheet.currentHP + amount);
+    updateCharacterSheet({ ...characterSheet, currentHP: newHP });
+  },
+
+  getStatusDescription: (status: CharacterStatus) => {
     const descriptions = {
       [CharacterStatus.NORMAL]: 'Normale',
       [CharacterStatus.SICK]: 'Malato - Debole e vulnerabile',
@@ -317,7 +360,9 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   resetCharacter: () => {
     set({
       characterSheet: createTestCharacter(),
-      lastShortRestTime: null,
+      isDead: false,
+      isComatose: false,
+      status: initialState.status
     });
   },
 

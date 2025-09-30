@@ -29,8 +29,8 @@ export class MainQuestTriggerService {
     const narrativeStore = useNarrativeStore.getState();
     const { characterSheet } = useCharacterStore.getState();
     const worldStore = useWorldStore.getState();
-    const { timeState } = useTimeStore.getState();
-    const { survivalState } = useSurvivalStore.getState();
+    const timeStore = useTimeStore.getState();
+    const survivalStore = useSurvivalStore.getState();
     
     // Trova l'evento corrente basato sullo stage
     const currentEvent = narrativeStore.mainQuestEvents.find(
@@ -50,10 +50,10 @@ export class MainQuestTriggerService {
         break;
       
       case 'survival_stat':
-        if (trigger.stat === 'thirst' && survivalState.thirst <= (trigger.value || 0)) {
+        if (trigger.stat === 'thirst' && survivalStore.survivalState.thirst <= (trigger.value || 0)) {
           return currentEvent;
         }
-        if (trigger.stat === 'hunger' && survivalState.hunger <= (trigger.value || 0)) {
+        if (trigger.stat === 'hunger' && survivalStore.survivalState.hunger <= (trigger.value || 0)) {
           return currentEvent;
         }
         if (trigger.stat === 'health' && characterSheet.currentHP <= (trigger.value || 0)) {
@@ -71,7 +71,7 @@ export class MainQuestTriggerService {
         break;
       
       case 'survival_days':
-        if (timeState.day >= (trigger.value || 0)) {
+        if (timeStore.day >= (trigger.value || 0)) {
           return currentEvent;
         }
         break;
@@ -151,7 +151,7 @@ export class MainQuestTriggerService {
     const worldStore = useWorldStore.getState();
 
     // Controlla trigger basati su giorni di sopravvivenza
-    const currentDay = timeStore.timeState?.day || 0;
+    const currentDay = timeStore.day || 0;
     if (currentDay >= 2 || currentDay >= 7) { // Per mq_04_darkness e mq_09_name
       const eventToTrigger = this.checkMainQuestTrigger();
       if (eventToTrigger) {

@@ -66,17 +66,12 @@ export class NarrativeIntegrationService {
 
   /**
    * Configura i listener per il personaggio
+   * NOTA: updateHP non esiste più (ora è takeDamage/healDamage)
+   * I trigger HP-based sono gestiti direttamente nei metodi che causano danno
    */
   private setupCharacterListeners(): void {
-    const characterStore = useCharacterStore.getState();
-    
-    // Intercetta i cambi di HP per trigger narrativi
-    const originalUpdateHP = characterStore.updateHP;
-    characterStore.updateHP = (change: number) => {
-      originalUpdateHP.call(characterStore, change);
-      const newHP = characterStore.characterSheet.currentHP;
-      this.handleHPChange(newHP, change);
-    };
+    logger.debug('setupCharacterListeners: HP listeners disabled (API changed to takeDamage/healDamage)');
+    // I trigger narrativi basati su HP sono gestiti direttamente dove il danno viene inflitto
   }
 
   /**

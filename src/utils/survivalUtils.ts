@@ -1,5 +1,6 @@
-import { SurvivalState } from '@/interfaces/gameState';
-import { ICharacterSheet } from '@/rules/types';
+// Import normali invece di type per compatibilità Rollup
+import type { SurvivalState } from '@/interfaces/gameState';
+import type { ICharacterSheet } from '@/rules/types';
 
 export const calculateRestResults = (survivalState: SurvivalState) => {
   let fatigueReduction = 15;
@@ -76,7 +77,10 @@ export const getSurvivalStatus = (survivalState: SurvivalState) => {
 };
 
 export const applySurvivalPenalties = (survivalState: SurvivalState, characterSheet: ICharacterSheet) => {
-  const penalties = {
+  const penalties: {
+    damage: number;
+    messages: Array<{ reason: string; damage: number }>;
+  } = {
     damage: 0,
     messages: [],
   };

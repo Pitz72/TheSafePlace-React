@@ -45,14 +45,14 @@ export const resolveChoice = (
             addLogEntry(MessageType.AMBIANCE_RANDOM, { text: action.payload.message });
             break;
           case 'damage_player':
-            characterStore.updateHP(-action.payload.damage);
+            characterStore.takeDamage(action.payload.damage);
             addLogEntry(MessageType.HP_DAMAGE, {
               damage: action.payload.damage,
               reason: action.payload.reason || 'evento',
             });
             break;
           case 'heal_player':
-            characterStore.updateHP(action.payload.healing);
+            characterStore.healDamage(action.payload.healing);
             addLogEntry(MessageType.HP_RECOVERY, {
               healing: action.payload.healing,
               reason: action.payload.reason || 'evento',
@@ -77,7 +77,7 @@ export const resolveChoice = (
       switch (choice.penalty.type) {
         case 'damage':
           if (choice.penalty.amount) {
-            characterStore.updateHP(-choice.penalty.amount);
+            characterStore.takeDamage(choice.penalty.amount);
             addLogEntry(MessageType.HP_DAMAGE, {
               damage: choice.penalty.amount,
               reason: 'evento',
@@ -91,11 +91,11 @@ export const resolveChoice = (
           break;
         case 'status':
           if (choice.penalty.status === 'SICK') {
-            characterStore.applyStatus(CharacterStatus.SICK);
+            characterStore.addStatus(CharacterStatus.SICK, 0);
           } else if (choice.penalty.status === 'WOUNDED') {
-            characterStore.applyStatus(CharacterStatus.WOUNDED);
+            characterStore.addStatus(CharacterStatus.WOUNDED, 0);
           } else if (choice.penalty.status === 'POISONED') {
-            characterStore.applyStatus(CharacterStatus.POISONED);
+            characterStore.addStatus(CharacterStatus.POISONED, 0);
           }
           break;
         case 'stat_reduction':
@@ -127,12 +127,12 @@ export const resolveChoice = (
           break;
         case 'xp_gain':
           if ('amount' in reward && reward.amount) {
-            characterStore.addExperience(reward.amount);
+            characterStore.gainExperience(reward.amount);
           }
           break;
         case 'hp_gain':
           if ('amount' in reward && reward.amount) {
-            characterStore.updateHP(reward.amount);
+            characterStore.healDamage(reward.amount);
           }
           break;
         default:

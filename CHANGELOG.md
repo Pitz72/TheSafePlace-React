@@ -1,13 +1,44 @@
 # 📋 CHANGELOG - The Safe Place Chronicles
 
-**Progetto**: The Safe Place Chronicles: The Echo of the Journey  
-**Versione Corrente**: v0.9.9.5 "Resolution of LLM Aberration"  
-**Ultimo Aggiornamento**: 27 Gennaio 2025
+**Progetto**: The Safe Place Chronicles: The Echo of the Journey
+**Versione Corrente**: v0.9.9.8 "Fix Era Part 4"
+**Ultimo Aggiornamento**: 30 Settembre 2025
 
 ---
 
-## 🚀 v0.9.9.5 "Resolution of LLM Aberration" - CORRENTE
-**Data**: 27 Gennaio 2025  
+## 🚀 v0.9.9.8 "Fix Era Part 4" - CORRENTE
+**Data**: 30 Settembre 2025
+**Tipo**: Critical Fixes & Stabilization Release
+
+### 🎯 Highlights
+- **Piano di Salvataggio Completato**: Progetto salvato da stato critico
+- **35 Fix Applicati**: Export, TypeScript, Menu, Manager Gameplay
+- **Build Pulito**: 0 warning Rollup, 0 errori TypeScript
+- **Gameplay Operativo**: 95% funzionalità attive
+- **Efficienza**: 1824% (18x più veloce del pianificato)
+
+### 🔧 Fixed
+- Export compatibility (5 fix) - Build Rollup pulito
+- TypeScript errors (18 fix) - characterStore e survivalUtils
+- Menu navigation (1 fix) - Comandi lettere funzionanti
+- Manager gameplay (11 fix) - API allineate con refactoring v0.9.7.2
+
+### ✨ Improved
+- Test coverage: 0% → 89% (248 test passanti)
+- Build quality: PERFETTO (0 warning, 0 errori)
+- Gameplay coverage: 60% → 95%
+- Menu: Completamente funzionante (frecce + lettere)
+
+### 📚 Documentation
+- Piano Salvataggio archiviato in `documentazione/piano-salvataggio-completato/`
+- Fix Manager archiviato in `documentazione/fix-manager-gameplay/`
+- Changelog dettagliato: `documentazione/changelog/CHANGELOG-v0.9.9.8.md`
+- Anti-regressione: `documentazione/anti-regressione/ANTI-REGRESSIONE-v0.9.9.8.md`
+
+---
+
+## 📈 v0.9.9.5 "Resolution of LLM Aberration"
+**Data**: 27 Gennaio 2025
 **Tipo**: Maintenance & Documentation Release
 
 ### ✨ Novità
@@ -46,7 +77,8 @@ Questa versione introduce un sistema di avvio computer completo con effetti CRT 
 ---
 
 ## Versioni Recenti
-- [v0.9.9.5 "Resolution of LLM Aberration"](documentazione/changelog/CHANGELOG-v0.9.9.5.md) - **CORRENTE** - Documentazione riorganizzata e archivio completo
+- [v0.9.9.8 "Fix Era Part 4"](documentazione/changelog/CHANGELOG-v0.9.9.8.md) - **CORRENTE** - Critical fixes e stabilizzazione completa
+- [v0.9.9.5 "Resolution of LLM Aberration"](documentazione/changelog/CHANGELOG-v0.9.9.5.md) - Documentazione riorganizzata
 - [v0.9.9.2 "The Computer Boot System"](documentazione/changelog/CHANGELOG-v0.9.9.2.md) - Sistema boot cinematografico e rebranding
 - [v0.9.9.0 "Architecture Reset"](documentazione/changelog/CHANGELOG-v0.9.9.0.md) - Rifattorizzazione architetturale completa
 - [v0.9.8 "Lullaby of Ashes"](documentazione/changelog/CHANGELOG-v0.9.8.md) - Evento narrativo principale

@@ -2,7 +2,8 @@ import type { ICharacterSheet } from '@/rules/types';
 import { itemDatabase } from '@/data/items/itemDatabase';
 import type { IInventorySlot } from '@/interfaces/items';
 
-// Re-export for compatibility
+// Re-export esplicito per compatibilità Rollup
+export type { IInventorySlot };
 export type InventorySlot = IInventorySlot | null;
 
 export const findEmptySlot = (inventory: InventorySlot[]): number => {
