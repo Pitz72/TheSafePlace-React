@@ -181,25 +181,30 @@ interface ExtendedCraftingState extends CraftingState {
   // ===== ERROR RECOVERY =====
   recoverFromCorruptedData: () => boolean;
   validateCraftingData: () => boolean;
+  resetCraftingState: () => void;
 }
 
 // ===== STORE IMPLEMENTATION =====
 
+const initialCraftingState = {
+  selectedRecipeIndex: 0,
+  isOpen: false,
+  allRecipes: [],
+  recipes: [],
+  selectedRecipe: null,
+  craftingQueue: [],
+  isInitialized: false,
+  knownRecipeIds: [],
+  isLoading: false,
+  loadError: null,
+  isCrafting: false,
+  craftingError: null,
+};
+
 export const useCraftingStore = create<ExtendedCraftingState>()(
   subscribeWithSelector((set, get) => ({
     // ===== INITIAL STATE =====
-    selectedRecipeIndex: 0,
-    isOpen: false,
-    allRecipes: [],
-    recipes: [],
-    selectedRecipe: null,
-    craftingQueue: [],
-    isInitialized: false,
-    knownRecipeIds: [],
-    isLoading: false,
-    loadError: null,
-    isCrafting: false,
-    craftingError: null,
+    ...initialCraftingState,
 
     // ===== BASIC ACTIONS =====
 
@@ -841,6 +846,12 @@ export const useCraftingStore = create<ExtendedCraftingState>()(
       }
 
       return issues.length === 0;
+    },
+
+    resetCraftingState: () => {
+      set(initialCraftingState);
+      // Anche il singleton delle ricette va resettato per un test pulito
+      RecipeManager.getInstance().reset();
     }
   }))
 );

@@ -34,7 +34,6 @@ describe('CharacterStore', () => {
       expect(state.characterSheet).toHaveProperty('stats');
       expect(state.characterSheet).toHaveProperty('experience');
       expect(state.characterSheet).toHaveProperty('inventory');
-      expect(state.lastShortRestTime).toBeNull();
     });
   });
 

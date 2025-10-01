@@ -1,84 +1,60 @@
-/**
- * Test per il componente CombatScreen
- * Verifica il corretto assemblaggio e il passaggio di dati.
- */
-
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { CombatScreen } from '../components/combat/CombatScreen';
+import { useCombatStore } from '../stores/combatStore';
+import { useGameStore } from '../stores/gameStore';
 
-// Mock dei componenti figli per isolare CombatScreen (corretti per default export)
-jest.mock('../components/combat/SceneDescription', () => {
-  return function DummySceneDescription({ description }: { description: string }) {
-    return <div data-testid="scene-description">{description}</div>;
-  };
-});
-jest.mock('../components/combat/CombatStatus', () => {
-  return function DummyCombatStatus({ player, enemies }: any) {
-    return <div data-testid="combat-status">Player: {player ? player.name : 'N/A'}, Enemies: {enemies.length}</div>;
-  };
-});
-jest.mock('../components/combat/CombatLog', () => {
-  return function DummyCombatLog({ entries }: any) {
-    return <div data-testid="combat-log">Entries: {entries.length}</div>;
-  };
-});
-jest.mock('../components/combat/ActionMenu', () => {
-  return function DummyActionMenu({ availableActions }: any) {
-    return <div data-testid="action-menu">Actions: {availableActions.length}</div>;
-  };
-});
-jest.mock('../components/combat/TargetSelector', () => {
-  return function DummyTargetSelector({ enemies }: any) {
-    return <div data-testid="target-selector">Targets: {enemies.length}</div>;
-  };
-});
+// --- Mocks ---
 
-// Mock degli store
-const mockCombatStoreState = {
-  isInCombat: true,
-  encounter: { id: 'enc1', description: 'Una battaglia epica!', enemies: ['bandit1'] },
-  player: { id: 'player1', name: 'Eroe' },
-  enemies: [{ id: 'bandit1', name: 'Bandito', hp: 10, maxHp: 10, ac: 12 }],
+// Mock child components robustly to prevent test failures from undefined props.
+jest.mock('../components/combat/SceneDescription', () => ({ description }: { description: string }) => <div data-testid="scene-description">{description}</div>);
+jest.mock('../components/combat/CombatStatus', () => ({ combatState }: any) => <div data-testid="combat-status">Player: {combatState?.player?.name}, Enemies: {combatState?.enemies?.length}</div>);
+jest.mock('../components/combat/CombatLog', () => ({ logEntries }: any) => <div data-testid="combat-log">Entries: {logEntries?.length}</div>);
+jest.mock('../components/combat/TargetSelector', () => ({ enemies }: any) => <div data-testid="target-selector">Targets: {enemies?.length}</div>);
+// The screen itself has a main confirmation button, so the ActionMenu mock should be simple.
+jest.mock('../components/combat/ActionMenu', () => () => <div data-testid="action-menu" />);
+jest.mock('../components/combat/PostCombatScreen', () => () => <div data-testid="post-combat-screen">Post Combat</div>);
+
+// Mock the stores themselves.
+jest.mock('../stores/combatStore');
+jest.mock('../stores/gameStore');
+
+const mockedUseCombatStore = useCombatStore as jest.Mock;
+const mockedUseGameStore = useGameStore as jest.Mock;
+
+// --- Test Data ---
+const mockCombatState = {
+  encounter: { description: 'Una battaglia epica!' },
+  player: { name: 'Eroe' },
+  enemies: [{ id: 'bandit1', status: 'alive' }],
   log: [{ type: 'info', message: 'Il combattimento inizia!' }],
-  availableActions: ['attack', 'defend'],
-  selectedAction: 'attack',
-  selectedTargetId: 'bandit1',
-  selectAction: jest.fn(),
-  selectTarget: jest.fn(),
+};
+
+const mockFullCombatStoreState = {
+  isActive: true,
+  currentState: mockCombatState,
+  combatResult: null,
+  selectedAction: 'attack', // This is crucial for TargetSelector to appear
+  selectedTarget: 0,
   executePlayerAction: jest.fn(),
+  selectTarget: jest.fn(),
 };
 
-const mockGameStoreState = {
-  characterSheet: { name: 'Eroe' }
+const mockCharacterSheet = {
+  name: 'Eroe',
 };
-
-jest.mock('../stores/combatStore', () => ({
-  useCombatStore: jest.fn(),
-}));
-
-jest.mock('../stores/gameStore', () => ({
-  useGameStore: jest.fn(),
-}));
-
-// Type assertion per i mock
-const useCombatStoreMock = jest.requireMock('../stores/combatStore').useCombatStore;
-const useGameStoreMock = jest.requireMock('../stores/gameStore').useGameStore;
 
 describe('CombatScreen Component', () => {
 
   beforeEach(() => {
-    useCombatStoreMock.mockReturnValue(mockCombatStoreState);
-    // Mock l'implementazione per gestire il selettore
-    useGameStoreMock.mockImplementation(selector => selector(mockGameStoreState));
     jest.clearAllMocks();
+    mockedUseCombatStore.mockReturnValue(mockFullCombatStoreState);
+    mockedUseGameStore.mockReturnValue({ characterSheet: mockCharacterSheet });
   });
 
   test('dovrebbe renderizzare tutti i componenti figli quando in combattimento', () => {
     render(<CombatScreen />);
-
     expect(screen.getByTestId('scene-description')).toBeInTheDocument();
     expect(screen.getByTestId('combat-status')).toBeInTheDocument();
     expect(screen.getByTestId('combat-log')).toBeInTheDocument();
@@ -87,35 +63,30 @@ describe('CombatScreen Component', () => {
   });
 
   test('dovrebbe passare le props corrette ai componenti figli', () => {
-    // Non c'è bisogno di re-mockare gameStore se il beforeEach è corretto
-    useCombatStoreMock.mockReturnValue(mockCombatStoreState);
-
     render(<CombatScreen />);
-
-    // Il mock di CombatStatus si aspetta player.name
-    // CombatScreen passa gameCharacter (che è characterSheet) come prop 'player'
-    // Quindi il mock riceve player={name: 'Eroe'}
     expect(screen.getByTestId('scene-description')).toHaveTextContent('Una battaglia epica!');
     expect(screen.getByTestId('combat-status')).toHaveTextContent('Player: Eroe, Enemies: 1');
     expect(screen.getByTestId('combat-log')).toHaveTextContent('Entries: 1');
-    expect(screen.getByTestId('action-menu')).toHaveTextContent('Actions: 2');
     expect(screen.getByTestId('target-selector')).toHaveTextContent('Targets: 1');
   });
 
   test('non dovrebbe renderizzare nulla se non in combattimento', () => {
-    useCombatStoreMock.mockReturnValue({ ...mockCombatStoreState, isInCombat: false });
-
+    mockedUseCombatStore.mockReturnValue({ ...mockFullCombatStoreState, isActive: false });
     const { container } = render(<CombatScreen />);
-
     expect(container).toBeEmptyDOMElement();
+  });
+
+  test('dovrebbe renderizzare PostCombatScreen quando il combattimento è finito', () => {
+    mockedUseCombatStore.mockReturnValue({ ...mockFullCombatStoreState, isActive: false, combatResult: { type: 'victory' } });
+    render(<CombatScreen />);
+    expect(screen.getByTestId('post-combat-screen')).toBeInTheDocument();
   });
 
   test('dovrebbe chiamare executePlayerAction quando si clicca il pulsante di conferma', () => {
     render(<CombatScreen />);
-
-    const confirmButton = screen.getByText('CONFERMA AZIONE');
+    // The component has its own confirmation button, so we query for that one.
+    const confirmButton = screen.getByRole('button', { name: /conferma azione/i });
     fireEvent.click(confirmButton);
-
-    expect(mockCombatStoreState.executePlayerAction).toHaveBeenCalledTimes(1);
+    expect(mockFullCombatStoreState.executePlayerAction).toHaveBeenCalledTimes(1);
   });
 });

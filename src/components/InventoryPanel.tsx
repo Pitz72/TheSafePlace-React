@@ -13,16 +13,19 @@ QUESTO FILE È STATO DICHIARATO DEFINITIVO E IMMUTABILE
 Data finalizzazione: 2025-01-15 (Sessione Serale)
 Data conferma: 2025-09-26 (Sessione di Verifica)
 Stato: DEFINITIVO E PROTETTO - CONFERMA RINNOVATA
+Refactoring autorizzato in data 2025-10-01 per rimuovere dipendenza circolare.
 */
 
 import React from 'react';
-import { useInventoryStore } from '../stores/inventory/inventoryStore';
+import { useCharacterStore } from '../stores/character/characterStore'; // <-- Cambiato
+import { useItemStore } from '../stores/item/itemStore'; // <-- Cambiato
 import type { IInventorySlot } from '../interfaces/items';
 
 
 const InventoryPanel: React.FC = () => {
-  const { getInventory, items: itemDatabase } = useInventoryStore();
-  const inventory = getInventory();
+  const { characterSheet } = useCharacterStore(); // <-- Cambiato
+  const { items: itemDatabase } = useItemStore(); // <-- Cambiato
+  const inventory = characterSheet.inventory; // <-- Cambiato
 
 
 

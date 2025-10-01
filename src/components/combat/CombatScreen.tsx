@@ -14,13 +14,19 @@ import CombatStatus from './CombatStatus';
 import CombatLog from './CombatLog';
 import ActionMenu from './ActionMenu';
 import TargetSelector from './TargetSelector';
+import PostCombatScreen from './PostCombatScreen';
 
 export const CombatScreen: React.FC = () => {
   const combatState = useCombatStore();
   const gameCharacter = useGameStore((state: any) => state.characterSheet);
 
+  // La schermata post-combattimento ha la priorità
+  if (combatState.combatResult) {
+    return <PostCombatScreen />;
+  }
+
+  // Se il combattimento non è attivo e non ci sono risultati, non renderizzare nulla
   if (!combatState.isActive || !gameCharacter) {
-    // TODO: Aggiungere una schermata di caricamento o errore più robusta
     return null;
   }
 
@@ -62,7 +68,7 @@ export const CombatScreen: React.FC = () => {
               availableActions={availableActions}
               selectedActionIndex={selectedActionIndex}
             />
-            {combatState.selectedAction && combatState.currentState?.enemies && combatState.currentState.enemies.length > 0 && combatState.selectedAction !== 'flee' && (
+            {combatState.selectedAction === 'attack' && combatState.currentState?.enemies && combatState.currentState.enemies.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-lg text-yellow-400 mb-2">Seleziona Bersaglio:</h3>
                 <TargetSelector
@@ -79,7 +85,7 @@ export const CombatScreen: React.FC = () => {
             <button
               className="w-full p-3 text-lg bg-green-700 hover:bg-green-600 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors duration-200"
               onClick={handleExecuteAction}
-              disabled={!combatState.selectedAction || (combatState.selectedAction !== 'flee' && combatState.selectedTarget === null)}
+              disabled={!combatState.selectedAction || (combatState.selectedAction === 'attack' && combatState.selectedTarget === null)}
             >
               {combatState.selectedAction === 'flee' ? 'TENTA LA FUGA' : 'CONFERMA AZIONE'}
             </button>

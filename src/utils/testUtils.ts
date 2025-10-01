@@ -5,7 +5,7 @@
 
 import { useGameStore } from '@/stores/gameStore';
 import { useCharacterStore } from '@/stores/character/characterStore';
-import { useInventoryStore } from '@/stores/inventory/inventoryStore';
+import { useItemStore } from '@/stores/item/itemStore'; // <-- Cambiato
 import { useWorldStore } from '@/stores/world/worldStore';
 import { useTimeStore } from '@/stores/time/timeStore';
 import { useWeatherStore } from '@/stores/weather/weatherStore';
@@ -29,7 +29,7 @@ export const resetAllStores = () => {
   // Reset core stores
   useGameStore.getState().resetStore?.();
   useCharacterStore.getState().resetStore?.();
-  useInventoryStore.getState().resetStore?.();
+  useItemStore.getState().resetStore?.(); // <-- Cambiato
   useWorldStore.getState().resetStore?.();
   useTimeStore.getState().resetStore?.();
   useWeatherStore.getState().resetStore?.();
@@ -137,7 +137,7 @@ export const verifyStoreIsolation = () => {
   // Capture initial states
   initialStates.game = useGameStore.getState();
   initialStates.character = useCharacterStore.getState();
-  initialStates.inventory = useInventoryStore.getState();
+  initialStates.item = useItemStore.getState(); // <-- Cambiato
   initialStates.world = useWorldStore.getState();
   initialStates.time = useTimeStore.getState();
   initialStates.weather = useWeatherStore.getState();
@@ -161,7 +161,7 @@ export const verifyStoreIsolation = () => {
       const currentStates = {
         game: useGameStore.getState(),
         character: useCharacterStore.getState(),
-        inventory: useInventoryStore.getState(),
+        item: useItemStore.getState(), // <-- Cambiato
         world: useWorldStore.getState(),
         time: useTimeStore.getState(),
         weather: useWeatherStore.getState(),

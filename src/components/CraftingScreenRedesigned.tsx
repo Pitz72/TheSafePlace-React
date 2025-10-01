@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useCraftingStore } from '../stores/craftingStore';
 import { useGameStore } from '../stores/gameStore';
-import { useInventoryStore } from '../stores/inventory/inventoryStore';
+import { useItemStore } from '../stores/item/itemStore'; // <-- Cambiato
 import { canCraftRecipe, meetsSkillRequirement, getMaterialStatus } from '../utils/craftingUtils';
 import type { Recipe } from '../types/crafting';
 import type { IInventorySlot } from '../interfaces/items';
@@ -69,28 +69,20 @@ const MATERIAL_COLORS = {
 };
 
 const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit }) => {
-  // Validazione della funzione onExit
   const safeOnExit = useCallback(() => {
     if (typeof onExit === 'function') {
       onExit();
     } else {
       console.error('CraftingScreen: onExit is not a function');
-      // In caso di emergenza, prova a tornare al menu principale
-      // Questo è più sicuro di window.history.back()
       if (window.location.hash) {
         window.location.hash = '#menu';
       }
     }
   }, [onExit]);
 
-  // State locale per navigazione
   const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  // State per prevenire re-inizializzazioni
   const [isInitialized, setIsInitialized] = useState(false);
   const [initializationError, setInitializationError] = useState<string | null>(null);
-  
-  // State per feedback crafting
   const [craftingFeedback, setCraftingFeedback] = useState<{
     message: string;
     type: 'success' | 'error' | 'info';
@@ -103,22 +95,18 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
 
   // Store hooks
   const craftingStore = useCraftingStore();
-  const gameStore = useGameStore();
-  const inventoryStore = useInventoryStore();
+  const { characterSheet } = useGameStore();
+  const { items } = useItemStore(); // <-- Cambiato
 
   // Computed values
   const allRecipes = craftingStore.allRecipes;
-  const characterSheet = gameStore.characterSheet;
-  const items = inventoryStore.items;
-  const inventory: IInventorySlot[] = inventoryStore.getInventory().filter((item): item is IInventorySlot => item !== null);
+  const inventory: IInventorySlot[] = characterSheet.inventory.filter((item): item is IInventorySlot => item !== null); // <-- Cambiato
 
-  // Funzione per ottenere il nome tradotto di un oggetto
   const getTranslatedItemName = useCallback((itemId: string): string => {
     const item = items[itemId];
     return item?.name || itemId;
   }, [items]);
 
-  // Funzione per determinare lo status di una ricetta
   const getRecipeStatus = useCallback((recipe: Recipe): RecipeStatus => {
     if (!characterSheet) return RecipeStatus.INSUFFICIENT_LEVEL;
     
@@ -131,7 +119,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     return RecipeStatus.CRAFTABLE;
   }, [characterSheet, inventory]);
 
-  // Ricette disponibili con status (memoizzate per performance)
   const recipesWithStatus = useMemo(() => {
     if (!isInitialized || !characterSheet || allRecipes.length === 0) {
       return [];
@@ -147,11 +134,9 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     });
   }, [allRecipes, characterSheet, inventory, isInitialized, getRecipeStatus]);
 
-  // Ricetta selezionata
   const selectedRecipe = recipesWithStatus[selectedIndex]?.recipe || null;
   const selectedRecipeStatus = recipesWithStatus[selectedIndex]?.status || RecipeStatus.INSUFFICIENT_LEVEL;
 
-  // Inizializzazione ricette sicura (una sola volta)
   useEffect(() => {
     let isMounted = true;
     
@@ -164,16 +149,12 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
       setInitializationError(null);
       
       try {
-        // Inizializza ricette solo se non sono già caricate
         if (craftingStore.allRecipes.length === 0) {
           await craftingStore.initializeRecipes();
         }
         
-        // Sblocca ricette starter se necessario
         if (isMounted && characterSheet) {
           craftingStore.unlockStarterRecipes();
-          
-          // Poi sblocca ricette per livello
           const currentLevel = Math.floor(characterSheet.experience.currentXP / 100) + 1;
           craftingStore.unlockRecipesByLevel(currentLevel);
         }
@@ -181,7 +162,7 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         if (isMounted) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           setInitializationError(errorMessage);
-          setIsInitialized(false); // Permetti retry
+          setIsInitialized(false);
         }
       }
     };
@@ -191,20 +172,17 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     return () => {
       isMounted = false;
     };
-  }, []); // Dipendenze vuote per eseguire solo al mount
-  
-  // Gestione separata per cambiamenti del character sheet
+  }, []);
+
   useEffect(() => {
     if (isInitialized && characterSheet && craftingStore.allRecipes.length > 0) {
       const currentLevel = Math.floor(characterSheet.experience.currentXP / 100) + 1;
       craftingStore.unlockRecipesByLevel(currentLevel);
     }
-  }, [characterSheet?.experience.currentXP, isInitialized]); // Solo quando cambia XP o inizializzazione completa
+  }, [characterSheet?.experience.currentXP, isInitialized]);
 
-  // Gestione input da tastiera
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Non intercettare input se l'utente sta scrivendo
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         return;
       }
@@ -216,16 +194,11 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
             safeOnExit();
           } catch (error) {
             console.error('Error during crafting screen exit:', error);
-            // Log dell'errore senza fallback pericoloso
-            // L'onExit dovrebbe sempre funzionare correttamente
-            // Se fallisce, è meglio rimanere nella schermata corrente
             setCraftingFeedback({
               message: '⚠️ Errore nell\'uscita - riprova',
               type: 'error',
               visible: true
             });
-            
-            // Nascondi il messaggio dopo 3 secondi
             setTimeout(() => {
               setCraftingFeedback(prev => ({ ...prev, visible: false }));
             }, 3000);
@@ -246,7 +219,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         case 'Enter':
           event.preventDefault();
           if (selectedRecipe && selectedRecipeStatus === RecipeStatus.CRAFTABLE) {
-            // Mostra feedback "crafting in corso"
             setCraftingFeedback({
               message: 'Crafting in corso...',
               type: 'info',
@@ -269,13 +241,11 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
                 });
               }
               
-              // Nascondi il messaggio dopo 3 secondi
               setTimeout(() => {
                 setCraftingFeedback(prev => ({ ...prev, visible: false }));
               }, 3000);
             });
           } else {
-            // Mostra messaggio di errore per ricetta non craftabile
             let errorMessage = '❌ Impossibile craftare questo oggetto';
             if (!selectedRecipe) {
               errorMessage = '❌ Nessuna ricetta selezionata';
@@ -291,7 +261,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
               visible: true
             });
             
-            // Nascondi dopo 2 secondi per errori
             setTimeout(() => {
               setCraftingFeedback(prev => ({ ...prev, visible: false }));
             }, 2000);
@@ -304,7 +273,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedRecipe, selectedRecipeStatus, recipesWithStatus.length, safeOnExit, craftingStore]);
 
-  // Aggiusta l'indice se fuori range (con protezione)
   useEffect(() => {
     if (recipesWithStatus.length > 0 && selectedIndex >= recipesWithStatus.length) {
       setSelectedIndex(Math.max(0, recipesWithStatus.length - 1));
@@ -313,7 +281,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     }
   }, [recipesWithStatus.length, selectedIndex]);
 
-  // Auto-scroll per mantenere la ricetta selezionata visibile
   useEffect(() => {
     const selectedElement = document.getElementById(`recipe-${selectedIndex}`);
     if (selectedElement) {
@@ -324,13 +291,11 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     }
   }, [selectedIndex]);
 
-  // Status materiali per ricetta selezionata
   const materialStatus = useMemo(() => {
     if (!selectedRecipe || !characterSheet) return [];
     return getMaterialStatus(selectedRecipe, inventory, items);
   }, [selectedRecipe, characterSheet, inventory, items]);
 
-  // Mostra errore di inizializzazione se presente
   if (initializationError) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
@@ -347,7 +312,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
     );
   }
 
-  // Mostra loading se sta inizializzando
   if (!isInitialized || craftingStore.isLoading) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
@@ -359,20 +323,16 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-8 bg-black text-phosphor-500 font-mono">
-      {/* Header */}
       <h2 className="text-5xl font-bold mb-8 tracking-wider glow-phosphor-bright text-shadow-phosphor-bright">
         BANCO DI LAVORO
       </h2>
       
-      {/* Status Info */}
       <div className="text-2xl text-phosphor-400 mb-6">
         {recipesWithStatus.length} ricett{recipesWithStatus.length === 1 ? 'a' : 'e'} disponibil{recipesWithStatus.length === 1 ? 'e' : 'i'}
       </div>
 
-      {/* Main Layout - 2 Colonne */}
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         
-        {/* Colonna Sinistra - Lista Ricette */}
         <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80">
           <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider">
             RICETTE
@@ -426,7 +386,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
           </div>
         </div>
 
-        {/* Colonna Destra - Dettagli Ricetta */}
         <div className="border border-phosphor-500 p-6 bg-gray-900 bg-opacity-80">
           <h3 className="text-phosphor-400 font-bold mb-4 text-center text-3xl tracking-wider">
             DETTAGLI
@@ -434,7 +393,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
           
           {selectedRecipe ? (
             <div className="space-y-4 text-2xl">
-              {/* Nome oggetto */}
               <div>
                 <span className="text-phosphor-400 font-bold">Oggetto: </span>
                 <span className={RECIPE_COLORS[selectedRecipeStatus]}>
@@ -445,7 +403,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
                 )}
               </div>
 
-              {/* Descrizione */}
               {items[selectedRecipe.resultItemId]?.description && (
                 <div>
                   <span className="text-phosphor-400 font-bold">Descrizione: </span>
@@ -455,7 +412,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
                 </div>
               )}
 
-              {/* Requisiti livello */}
               {selectedRecipe.skillRequirement && (
                 <div>
                   <span className="text-phosphor-400 font-bold">Requisiti: </span>
@@ -469,7 +425,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
                 </div>
               )}
 
-              {/* Materiali richiesti */}
               <div>
                 <div className="text-phosphor-400 font-bold mb-2">Materiali:</div>
                 <div className="space-y-1 pl-4">
@@ -491,7 +446,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
                 </div>
               </div>
 
-              {/* Status crafting */}
               <div className="pt-4 border-t border-phosphor-700">
                 <span className="text-phosphor-400 font-bold">Status: </span>
                 <span className={RECIPE_COLORS[selectedRecipeStatus]}>
@@ -509,7 +463,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         </div>
       </div>
 
-      {/* Feedback Crafting */}
       {craftingFeedback.visible && (
         <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg border-2 font-mono text-2xl font-bold tracking-wider transition-all duration-300 ${
           craftingFeedback.type === 'success' 
@@ -522,7 +475,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
         </div>
       )}
 
-      {/* Footer - Comandi */}
       <div className="text-2xl text-phosphor-400 font-mono tracking-wider text-center">
         [↑↓] o [W/S] Naviga | [ENTER] Crafta | [ESC] Esci
       </div>
@@ -530,7 +482,6 @@ const CraftingScreenCore: React.FC<CraftingScreenRedesignedProps> = ({ onExit })
   );
 };
 
-// Componente principale con Error Boundary
 const CraftingScreenRedesigned: React.FC<CraftingScreenRedesignedProps> = ({ onExit }) => {
   const handleError = useCallback((error: Error) => {
     console.error('Critical crafting error, attempting to exit:', error);
@@ -542,8 +493,6 @@ const CraftingScreenRedesigned: React.FC<CraftingScreenRedesignedProps> = ({ onE
       }
     } catch (exitError) {
       console.error('Failed to exit crafting screen:', exitError);
-      // Non usare window.history.back() - è pericoloso
-      // Meglio rimanere nella schermata corrente con errore visibile
     }
   }, [onExit]);
 

@@ -40,57 +40,28 @@ export const useSaveStore = create<SaveStore>((set, get) => ({
                 const survivalStore = useSurvivalStore.getState();
                 const eventStore = useEventStore.getState();
 
+                // Costruisce un oggetto di salvataggio aggregando lo stato dai vari store.
+                // Questa è la nuova "Fonte della Verità" per la struttura del salvataggio.
                 const gameData = {
-                    game: {
-                        isGameStarted: gameStore.isGameStarted,
-                        currentLocation: gameStore.currentLocation,
-                        gameMode: gameStore.gameMode,
-                        difficulty: gameStore.difficulty,
-                        gameStats: gameStore.gameStats,
-                        isGamePaused: gameStore.isGamePaused,
-                        lastSaveTime: Date.now()
-                    },
-                    character: {
-                        name: characterStore.name,
-                        status: characterStore.status,
-                        stats: characterStore.stats,
-                        skills: characterStore.skills,
-                        inventory: characterStore.inventory,
-                        equipment: characterStore.equipment,
-                        conditions: characterStore.conditions,
-                        level: characterStore.level,
-                        experience: characterStore.experience
-                    },
-                    world: {
+                    characterSheet: characterStore.characterSheet,
+                    survivalState: survivalStore.survivalState,
+                    logEntries: useNotificationStore.getState().logEntries,
+                    gameData: {
                         playerPosition: worldStore.playerPosition,
-                        currentBiome: worldStore.currentBiome
-                    },
-                    time: {
-                        currentTime: timeStore.currentTime,
-                        day: timeStore.day,
-                        hour: timeStore.hour,
-                        minute: timeStore.minute,
-                        timeOfDay: timeStore.timeOfDay
-                    },
-                    shelter: {
-                        currentShelter: shelterStore.currentShelter,
-                        shelterInventory: shelterStore.shelterInventory,
-                        shelterUpgrades: shelterStore.shelterUpgrades,
-                        isInShelter: shelterStore.isInShelter
-                    },
-                    survival: {
-                        hunger: survivalStore.hunger,
-                        thirst: survivalStore.thirst,
-                        fatigue: survivalStore.fatigue,
-                        health: survivalStore.health,
-                        temperature: survivalStore.temperature,
-                        mood: survivalStore.mood,
-                        lastRestTime: survivalStore.lastRestTime,
-                        restQuality: survivalStore.restQuality
-                    },
-                    events: {
+                        currentBiome: worldStore.currentBiome,
+                        timeState: {
+                            currentTime: timeStore.currentTime,
+                            day: timeStore.day,
+                            hour: timeStore.hour,
+                            minute: timeStore.minute,
+                        },
+                        shelterAccessState: shelterStore.shelterAccessState,
                         seenEventIds: eventStore.seenEventIds,
-                        completedEncounters: eventStore.completedEncounters
+                        completedEncounters: eventStore.completedEncounters,
+                    },
+                    metadata: {
+                        saveVersion: "1.0.0",
+                        timestamp: Date.now(),
                     }
                 };
 
@@ -165,10 +136,11 @@ export const useSaveStore = create<SaveStore>((set, get) => ({
                 if (saveData.gameData.timeState) {
                     const timeStore = useTimeStore.getState();
                     timeStore.setTime(
-                        saveData.gameData.timeState.day,
                         saveData.gameData.timeState.hour,
                         saveData.gameData.timeState.minute
                     );
+                    // Manually set day as setTime doesn't handle it
+                    useTimeStore.setState({ day: saveData.gameData.timeState.day });
                 }
                 
                 shelterStore.restoreState({ 

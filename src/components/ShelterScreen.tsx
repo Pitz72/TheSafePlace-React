@@ -7,7 +7,6 @@ import { useGameStore } from '../stores/gameStore';
 import { useWorldStore } from '../stores/world/worldStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
 import { useCharacterStore } from '../stores/character/characterStore';
-import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { useEventStore } from '../stores/events/eventStore';
 import { useNarrativeStore } from '../stores/narrative/narrativeStore';
 import { useShelterStore } from '../stores/shelter/shelterStore';
@@ -20,13 +19,9 @@ const ShelterScreen: React.FC = () => {
   const { playerPosition } = useWorldStore();
   const { addLogEntry } = useNotificationStore();
   const { performAbilityCheck, characterSheet } = useCharacterStore();
-  const { getInventory } = useInventoryStore();
   const { triggerEvent, seenEventIds } = useEventStore();
   const [selectedOption, setSelectedOption] = useState(0);
   const [searchResult, setSearchResult] = useState<string | null>(null);
-
-  // TODO: Implementare sistema di investigazione rifugi persistente
-  // Per ora, l'investigazione è temporanea per sessione
 
   // Controlla se è notte per mostrare l'opzione speciale
   const { currentTime } = useTimeStore();
@@ -51,14 +46,12 @@ const ShelterScreen: React.FC = () => {
       
       const key = event.key.toLowerCase();
       
-      // Gestione ESC standardizzata - torna alla mappa di gioco
       if (key === 'escape' || key === 'b' || key === 'backspace') {
         event.preventDefault();
         setCurrentScreen('game');
         return;
       }
 
-      // Navigazione con frecce e WASD
       if (key === 'arrowup' || key === 'w') {
         event.preventDefault();
         setSelectedOption(prev => Math.max(0, prev - 1));
@@ -67,13 +60,11 @@ const ShelterScreen: React.FC = () => {
         setSelectedOption(prev => Math.min(options.length - 1, prev + 1));
       }
 
-      // Selezione con ENTER
       if (key === 'enter') {
         event.preventDefault();
         handleOptionSelect(options[selectedOption].id);
       }
 
-      // Scorciatoie dirette per azioni
       switch (key) {
         case 'r':
           event.preventDefault();
@@ -116,27 +107,23 @@ const ShelterScreen: React.FC = () => {
   };
 
   const handleRest = () => {
-    // Controllo condizioni per l'evento "La Ninnananna della Cenere"
     if (checkAshLullabyConditions()) {
       triggerAshLullabyEvent();
       return;
     }
 
     if (isNight) {
-      // Dormire fino al mattino (06:00)
       const timeStore = useTimeStore.getState();
       const currentTimeValue = timeStore.currentTime;
       let sleepTime;
 
       if (currentTimeValue >= 1200) {
-        // È dopo le 20:00, dormi fino alle 06:00 del giorno successivo
-        sleepTime = (24 * 60 - currentTimeValue) + 360; // fino alle 06:00
+        sleepTime = (24 * 60 - currentTimeValue) + 360;
       } else {
-        // È prima delle 06:00, dormi fino alle 06:00
         sleepTime = 360 - currentTimeValue;
       }
 
-      const healingAmount = Math.floor(Math.random() * 8) + 5; // 5-12 HP (più recupero per notte intera)
+      const healingAmount = Math.floor(Math.random() * 8) + 5;
 
       useCharacterStore.getState().healDamage(healingAmount);
       advanceTime(sleepTime);
@@ -146,9 +133,8 @@ const ShelterScreen: React.FC = () => {
         time: 'fino al mattino'
       });
     } else {
-      // Riposo normale diurno (2-3 ore)
-      const restTime = Math.floor(Math.random() * 60) + 120; // 120-180 minuti
-      const healingAmount = Math.floor(Math.random() * 5) + 3; // 3-7 HP
+      const restTime = Math.floor(Math.random() * 60) + 120;
+      const healingAmount = Math.floor(Math.random() * 5) + 3;
 
       useCharacterStore.getState().healDamage(healingAmount);
       advanceTime(restTime);
@@ -163,24 +149,20 @@ const ShelterScreen: React.FC = () => {
   };
 
   const checkAshLullabyConditions = (): boolean => {
-    // 1. Il giocatore deve possedere il "Carillon Annerito"
-    const inventory = getInventory();
+    const inventory = characterSheet.inventory; // <-- Cambiato
     const hasMusicBox = inventory.some(slot => slot?.itemId === 'quest_music_box');
     if (!hasMusicBox) return false;
 
-    // 2. Deve essere allo Stage 10 ("L'Eco di una Scelta") della quest principale
     const narrativeState = useNarrativeStore.getState();
     if (narrativeState.currentStage !== 10) {
       return false;
     }
 
-    // 3. Il rifugio deve essere nella metà più a est della mappa
     const worldState = useWorldStore.getState();
     const mapWidth = worldState.mapData[0]?.length || 0;
-    const eastThreshold = Math.floor(mapWidth * 0.5); // Metà est della mappa
+    const eastThreshold = Math.floor(mapWidth * 0.5);
     if (playerPosition.x < eastThreshold) return false;
 
-    // 4. L'evento deve essere unico (non già vissuto)
     if (seenEventIds.includes('lore_ash_lullaby')) return false;
 
     console.log('🎭 Condizioni soddisfatte per "La Ninnananna della Cenere"');
@@ -188,7 +170,6 @@ const ShelterScreen: React.FC = () => {
   };
 
   const triggerAshLullabyEvent = () => {
-    // Trigger dell'evento lore
     const loreEvent = {
       id: 'lore_ash_lullaby',
       title: 'Un Suono nel Silenzio',
@@ -211,7 +192,6 @@ const ShelterScreen: React.FC = () => {
       ]
     };
 
-    // Converte in GameEvent per il sistema esistente
     const gameEvent = {
       id: 'lore_ash_lullaby',
       title: loreEvent.title,
@@ -221,7 +201,7 @@ const ShelterScreen: React.FC = () => {
         resultText: choice.resultText,
         consequences: choice.consequences
       })),
-      isUnique: true // L'evento è unico per sessione
+      isUnique: true
     };
 
     triggerEvent(gameEvent);
@@ -231,7 +211,6 @@ const ShelterScreen: React.FC = () => {
     const shelterStore = useShelterStore.getState();
     const { x, y } = playerPosition;
 
-    // Difficoltà più bassa per permettere successi
     const checkResult = performAbilityCheck('percezione', 12);
     let outcomeMessage: string;
 
@@ -247,7 +226,6 @@ const ShelterScreen: React.FC = () => {
       }
       addLogEntry(MessageType.SKILL_CHECK_SUCCESS, { action: 'investigazione rifugio' });
 
-      // Aggiungi i risultati dell'investigazione (senza bloccare future investigazioni)
       const existingInfo = shelterStore.getShelterInfo(x, y);
       const currentResults = existingInfo?.investigationResults || [];
       shelterStore.updateShelterAccess(x, y, {
@@ -262,13 +240,10 @@ const ShelterScreen: React.FC = () => {
   };
 
   const handleWorkbench = () => {
-    // Verifica se il crafting è disponibile (solo nei rifugi)
-    // Usa direttamente il worldStore per evitare problemi di sincronizzazione
     const worldStore = useWorldStore.getState();
     const { x, y } = worldStore.playerPosition;
     const currentTile = worldStore.mapData[y]?.[x];
     
-    // Verifica che la mappa sia caricata e la posizione sia valida
     if (!worldStore.mapData || worldStore.mapData.length === 0) {
       addLogEntry(MessageType.ACTION_FAIL, {
         reason: 'mappa non caricata correttamente'
@@ -290,7 +265,6 @@ const ShelterScreen: React.FC = () => {
       return;
     }
     
-    // Apri la schermata di crafting
     setCurrentScreen('crafting');
     
     addLogEntry(MessageType.ACTION_SUCCESS, {

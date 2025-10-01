@@ -3,7 +3,6 @@ import type { SurvivalState as SurvivalStateType } from '@/interfaces/gameState'
 import { MessageType } from '@/data/MessageArchive';
 import { useCharacterStore } from '@/stores/character/characterStore';
 import { useTimeStore } from '@/stores/time/timeStore';
-import { useInventoryStore } from '@/stores/inventory/inventoryStore';
 import { useNotificationStore } from '@/stores/notifications/notificationStore';
 import { calculateRestResults, calculateNightConsumption, getSurvivalStatus, applySurvivalPenalties } from '@/utils/survivalUtils';
 import { handleStoreError, executeWithRetry, GameErrorCategory } from '@/services/errorService';
@@ -64,7 +63,6 @@ export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
       operation: () => {
         const timeStore = useTimeStore.getState();
         const characterStore = useCharacterStore.getState();
-        const inventoryStore = useInventoryStore.getState();
         const { survivalState, updateSurvival } = get();
         
         // Avanza il tempo di 1 ora
@@ -82,7 +80,7 @@ export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
         // Recupero HP se le condizioni sono buone
         if (newHunger > 50 && newThirst > 50 && newFatigue < 50) {
           const hpRecovery = Math.floor(characterStore.characterSheet.maxHP * 0.1);
-          characterStore.updateHP(hpRecovery);
+          characterStore.healDamage(hpRecovery);
           addLogEntry(MessageType.HP_RECOVERY, {
             healing: hpRecovery,
             reason: 'riposo'
@@ -136,7 +134,7 @@ export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
           if (survivalState.shelter) totalRecovery += Math.floor(baseRecovery * 0.5);
           if (survivalState.fire) totalRecovery += Math.floor(baseRecovery * 0.3);
           
-          characterStore.updateHP(totalRecovery);
+          characterStore.healDamage(totalRecovery);
           addLogEntry(MessageType.HP_RECOVERY, {
             healing: totalRecovery,
             reason: 'riposo notturno'
@@ -191,7 +189,7 @@ export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
         const penalties = applySurvivalPenalties(survivalState, characterStore.characterSheet);
 
         if (penalties.damage > 0) {
-          characterStore.updateHP(-penalties.damage);
+          characterStore.takeDamage(penalties.damage);
           penalties.messages.forEach(msg => {
             addLogEntry(MessageType.HP_DAMAGE, { damage: msg.damage, reason: msg.reason });
           });
@@ -229,7 +227,7 @@ export const useSurvivalStore = create<SurvivalStore>((set, get) => ({
         updateSurvival(newSurvivalState);
 
         if (newSurvivalState.hunger <= 0 || newSurvivalState.thirst <= 0) {
-          characterStore.updateHP(-1);
+          characterStore.takeDamage(1);
           notificationStore.addLogEntry(MessageType.HP_DAMAGE, { damage: 1, reason: 'fame e sete' });
         }
         

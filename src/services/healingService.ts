@@ -1,5 +1,5 @@
 import { useCharacterStore } from '@/stores/character/characterStore';
-import { useInventoryStore } from '@/stores/inventory/inventoryStore';
+import { useGameStore } from '@/stores/gameStore'; // <-- Cambiato
 import { useNotificationStore } from '@/stores/notifications/notificationStore';
 import { getStatusDisplayName } from '@/utils/formatUtils';
 import { MessageType } from '@/data/MessageArchive';
@@ -34,7 +34,7 @@ const calculateHealingSuccessRate = (item: IItem, status: CharacterStatus): numb
 
 export const attemptStatusHealing = (item: IItem, slotIndex: number): boolean => {
   const characterStore = useCharacterStore.getState();
-  const inventoryStore = useInventoryStore.getState();
+  const gameStore = useGameStore.getState(); // <-- Cambiato
   const notificationStore = useNotificationStore.getState();
   const { characterSheet } = characterStore;
 
@@ -55,7 +55,7 @@ export const attemptStatusHealing = (item: IItem, slotIndex: number): boolean =>
   if (Math.random() < successRate) {
     // Success - remove status
     characterStore.removeStatus(currentStatus);
-    inventoryStore.removeItem(slotIndex, 1);
+    gameStore.removeItemBySlot(slotIndex, 1); // <-- Cambiato
 
     notificationStore.addLogEntry(MessageType.ACTION_SUCCESS, {
       action: `${item.name} ha curato con successo il tuo status "${getStatusDisplayName(currentStatus)}"`
@@ -63,7 +63,7 @@ export const attemptStatusHealing = (item: IItem, slotIndex: number): boolean =>
 
     // Apply healing if item has healing value
     if (item.effectValue && item.effectValue > 0) {
-      characterStore.updateHP(item.effectValue);
+      characterStore.healDamage(item.effectValue);
       notificationStore.addLogEntry(MessageType.HP_RECOVERY, {
         healing: item.effectValue,
         reason: item.name.toLowerCase()
@@ -73,10 +73,10 @@ export const attemptStatusHealing = (item: IItem, slotIndex: number): boolean =>
     return true;
   } else {
     // Failure - consume item anyway
-    inventoryStore.removeItem(slotIndex, 1);
+    gameStore.removeItemBySlot(slotIndex, 1); // <-- Cambiato
     notificationStore.addLogEntry(MessageType.ACTION_FAIL, {
       reason: `${item.name} non è riuscito a curare il tuo status "${getStatusDisplayName(currentStatus)}"`
     });
-    return true;
+    return true; // Item is consumed even on failure
   }
 };

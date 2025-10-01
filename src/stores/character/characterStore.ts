@@ -42,7 +42,7 @@ export interface CharacterActions {
   takeDamage: (amount: number) => void;
   healDamage: (amount: number) => void;
   // --- EXPERIENCE & PROGRESSION ---
-  gainExperience: (amount: number) => void;
+  addExperience: (amount: number) => void;
   gainMovementXP: () => void;
   // --- UTILITY ---
   handleConsequence: (consequence: Consequence) => void;
@@ -92,7 +92,7 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   },
 
   // --- EXPERIENCE & PROGRESSION ---
-  gainExperience: (amount) => {
+  addExperience: (amount) => {
     const { characterSheet, updateCharacterSheet } = get();
     const updatedSheet = gainExperience(characterSheet, amount);
     updateCharacterSheet(updatedSheet);
@@ -359,7 +359,7 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   resetCharacter: () => {
     set({
-      characterSheet: createTestCharacter(),
+      characterSheet: createTestCharacter({}, false), // Crea un personaggio senza lo starter kit per un reset pulito
       isDead: false,
       isComatose: false,
       status: initialState.status

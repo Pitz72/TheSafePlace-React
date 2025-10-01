@@ -157,7 +157,7 @@ export const useNarrativeStore = create<NarrativeState>()(subscribeWithSelector(
         return state.flags[`reached_level_${trigger.level}`] ? currentEvent : null;
       
       case 'use_item':
-        // Verificato tramite inventoryStore
+        // Verificato tramite flag impostato da gameStore dopo l'uso dell'oggetto
         return state.flags[`used_item_${trigger.itemId}`] ? currentEvent : null;
       
       case 'event_choice':

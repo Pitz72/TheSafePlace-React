@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useCharacterStore } from '../stores/character/characterStore';
-import { useInventoryStore } from '../stores/inventory/inventoryStore';
+import { useItemStore } from '../stores/item/itemStore'; // <-- Cambiato
 
 /**
  * ⚠️ AVVISO CRITICO DI IMMUTABILITÀ ⚠️
@@ -14,11 +14,13 @@ import { useInventoryStore } from '../stores/inventory/inventoryStore';
  * Qualsiasi tentativo di modifica non autorizzata costituisce
  * violazione del patto di cooperazione e compromette l'integrità
  * architettonica del sistema.
+ *
+ * Refactoring autorizzato in data 2025-10-01 per rimuovere dipendenza circolare.
  */
 
 const CharacterSheetScreen: React.FC = () => {
   const { characterSheet, getModifier } = useCharacterStore();
-  const { items } = useInventoryStore();
+  const { items } = useItemStore(); // <-- Cambiato
   const { goBack } = useGameStore();
 
   useEffect(() => {

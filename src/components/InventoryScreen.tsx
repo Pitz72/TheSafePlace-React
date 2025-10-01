@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { useInventoryStore } from '../stores/inventory/inventoryStore';
 import { useCharacterStore } from '../stores/character/characterStore';
+import { useItemStore } from '../stores/item/itemStore'; // <-- Cambiato
 import { getItemColorClass } from '../utils/itemColors';
 import { getAvailableActions, executeItemAction, getDetailedExamination } from '../utils/itemActions';
 import { getPortionDescription } from '../utils/portionSystem';
-import { itemDatabase } from '../data/items/itemDatabase';
 
 const InventoryScreen: React.FC = () => {
   const { characterSheet } = useCharacterStore();
-  const { selectedInventoryIndex, setSelectedInventoryIndex, useItem, equipItemFromInventory, dropItem } = useInventoryStore();
-  const { goBack } = useGameStore();
+  // --- Recupera stato e azioni dal gameStore centralizzato ---
+  const {
+    selectedInventoryIndex,
+    setSelectedInventoryIndex,
+    useItem,
+    equipItem, // <-- Cambiato
+    dropItem,
+    goBack
+  } = useGameStore();
+
+  // --- Recupera il database degli oggetti dal nuovo itemStore ---
+  const { items } = useItemStore(); // <-- Cambiato
 
   const [showActions, setShowActions] = useState(false);
   const [examinationText, setExaminationText] = useState<string[] | null>(null);
 
   const selectedItemStack = selectedInventoryIndex !== null ? characterSheet.inventory[selectedInventoryIndex] : null;
-  const selectedItem = selectedItemStack ? itemDatabase[selectedItemStack.itemId] : null;
+  const selectedItem = selectedItemStack ? items[selectedItemStack.itemId] : null; // <-- Usa 'items' da itemStore
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -33,17 +42,18 @@ const InventoryScreen: React.FC = () => {
         return;
       }
 
-      if (showActions && selectedItemStack && selectedItem) {
+      if (showActions && selectedItemStack && selectedItem && selectedInventoryIndex !== null) {
         const actions = getAvailableActions(selectedItem);
         const action = actions.find(a => a.key.toLowerCase() === key);
         if (action?.available) {
           event.preventDefault();
+          // Esegue l'azione passando le funzioni dal gameStore
           executeItemAction(
              action,
              selectedItem,
              selectedInventoryIndex,
              useItem,
-             (_, slotIndex) => equipItemFromInventory(slotIndex),
+             equipItem, // <-- Passa la nuova funzione equipItem
             (item) => { setExaminationText(getDetailedExamination(item)); setShowActions(false); },
              dropItem
            );
@@ -72,7 +82,7 @@ const InventoryScreen: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goBack, showActions, examinationText, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, equipItemFromInventory, dropItem, setSelectedInventoryIndex]);
+  }, [goBack, showActions, examinationText, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, equipItem, dropItem, setSelectedInventoryIndex]);
 
   const availableActions = selectedItem ? getAvailableActions(selectedItem) : [];
 
@@ -85,7 +95,7 @@ const InventoryScreen: React.FC = () => {
             <h3 className="text-3xl font-bold mb-4 text-center text-phosphor-300">ZAINO</h3>
             <ul className="space-y-2 text-2xl pl-4">
               {characterSheet.inventory.map((itemStack, index) => {
-                const item = itemStack ? itemDatabase[itemStack.itemId] : null;
+                const item = itemStack ? items[itemStack.itemId] : null; // <-- Usa 'items' da itemStore
                 let label = '[Vuoto]';
                 if (itemStack && item) {
                   const portionDesc = getPortionDescription(item, itemStack);
