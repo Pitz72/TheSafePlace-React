@@ -1,29 +1,33 @@
-# The Safe Place - Piano di Recupero
+# The Safe Place Chronicles - Piano di Recupero Attivo
 
-**Versione Attuale:** 0.9.9.3 "We're Almost There"
-**Stato:** ⚠️ **In fase di recupero tecnico e refactoring architetturale.**
-
-Questo progetto sta attraversando un'importante fase di stabilizzazione per allineare il codice a standard di alta qualità e risolvere criticità architetturali identificate da un' analisi approfondita.
+**Versione Corrente:** 0.9.9.8
+**Stato:** 🆘 **Recupero Tecnico Critico in Corso**
 
 ---
 
-## 🎮 Che Cos'è "The Safe Place"?
+## ⚠️ Attenzione: Progetto in Fase di Stabilizzazione
 
-"The Safe Place" è un prototipo avanzato di Gioco di Ruolo (GDR) post-apocalittico, costruito con tecnologie web moderne (React, TypeScript, Vite). La visione è quella di creare un'esperienza immersiva, `keyboard-only`, con un'estetica retrocomputazionale ispirata ai monitor a fosfori verdi degli anni '80.
+Questo progetto sta attraversando una fase critica di recupero e stabilizzazione. Un'analisi approfondita ha rivelato che un recente refactoring architetturale, pur avendo migliorato la struttura del codice, ha introdotto **regressioni funzionali significative** che hanno compromesso le meccaniche di gioco principali.
 
-## 🚧 Stato Attuale del Progetto (Analisi di Settembre 2025)
+La documentazione precedente è stata archiviata in quanto inaffidabile. Questa e le nuove schede di stato (`STATUS_REPORT.md`, `RECOVERY_ROADMAP.md`) sono ora l'unica fonte di verità.
 
-Un' analisi strutturale ha rivelato diverse criticità che stiamo affrontando sistematicamente. Per una trasparenza totale, il registro completo del nostro debito tecnico è tracciato nel file [DEBT_LOG.md](./DEBT_LOG.md).
+L'obiettivo primario attuale **non è lo sviluppo di nuove funzionalità**, ma la riparazione della suite di test e la stabilizzazione della codebase esistente.
 
-Le sfide principali includono:
-- **Debito Tecnico:** Dipendenze obsolete, import relativi fragili.
-- **Qualità del Codice:** Uso non sicuro dei tipi (`any`) e funzionalità incomplete.
-- **Testing:** Copertura dei test  insufficiente.
-- **Architettura:** Componenti e store monolitici ("God Objects" ) da refattorizzare.
+## 🎮 Che Cos'è "The Safe Place Chronicles"?
 
-Questa roadmap ha lo scopo di risolvere questi problemi per creare una base di codice stabile e manutenibile per il futuro.
+"The Safe Place Chronicles" è un prototipo di Gioco di Ruolo (GDR) post-apocalittico, costruito con React e TypeScript. La visione è quella di creare un'esperienza immersiva, `keyboard-only`, con un'estetica retro ispirata ai monitor a fosfori verdi.
 
-## 🚀 Quick Start (Per lo Sviluppo)
+## 🚧 Stato Attuale del Progetto (Analisi di Ottobre 2025)
+
+*   **Architettura:** La struttura del codice è moderna e ben organizzata (Domain-Driven), ma l'integrazione tra i vari moduli (store) è difettosa.
+*   **Funzionalità:** Meccaniche chiave come il **combattimento**, l'**inventario** e il **sistema di salvataggio** sono attualmente **non funzionanti** a causa di incoerenze nelle API interne e bug di integrazione.
+*   **Test:** La suite di test è il nostro strumento principale per monitorare lo stato del progetto. Attualmente, **28 test stanno fallendo**. La risoluzione di questi fallimenti è la priorità assoluta.
+
+Per un'analisi dettagliata dello stato di ogni sistema e per la roadmap tecnica, fare riferimento a:
+*   `documentazione/STATUS_REPORT.md` (da creare)
+*   `documentazione/RECOVERY_ROADMAP.md` (da creare)
+
+## 🚀 Quick Start (Per Sviluppo e Riparazione)
 
 ### Prerequisiti
 - **Node.js** (versione 18 o superiore)
@@ -32,14 +36,16 @@ Questa roadmap ha lo scopo di risolvere questi problemi per creare una base di c
 ### Installazione e Avvio
 ```bash
 # 1. Clona il repository
-git clone  [URL_DEL_TUO_REPOSITORY]
-cd  TheSafePlace-React
+git clone [URL_DEL_REPOSITORY]
+cd the-safe-place-chronicles
 
-# 2. Passa al branch di recupero (IMPORTANTE!)
-git checkout recovery/architecture-reset
-
-# 3. Installa le dipendenze
+# 2. Installa le dipendenze (Passo Fondamentale!)
 npm install
+
+# 3. Verifica l'ambiente eseguendo i test
+# (ATTENZIONE: Attualmente falliscono, l'obiettivo è farli passare)
+npm test
 
 # 4. Avvia il server di sviluppo
 npm run dev
+```
