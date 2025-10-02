@@ -97,26 +97,30 @@ export function executeItemAction(
   onEquip?: (item: IItem, slotIndex: number) => void,
   onExamine?: (item: IItem) => void,
   onDrop?: (slotIndex: number) => void
-): boolean {
+): string {
   if (!action.available) {
-    return false;
+    return `Non puoi ${action.label.toLowerCase()} questo oggetto.`;
   }
 
   switch (action.key) {
     case 'U':
       if (onUse) onUse(slotIndex);
-      return true; // Close actions menu
+      return `Hai utilizzato ${item.name}.`;
+
     case 'E':
       if (onEquip) onEquip(item, slotIndex);
-      return true; // Close actions menu
+      return `Hai equipaggiato ${item.name}.`;
+
     case 'X':
       if (onExamine) onExamine(item);
-      return false; // Do not close, examine shows new text
+      return `Esamini attentamente ${item.name}.`;
+
     case 'G':
       if (onDrop) onDrop(slotIndex);
-      return true; // Close actions menu
+      return `Hai gettato ${item.name}.`;
+
     default:
-      return false;
+      return 'Azione non riconosciuta.';
   }
 }
 

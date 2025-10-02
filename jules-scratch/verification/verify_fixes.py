@@ -3,8 +3,8 @@ import time
 
 def run_verification(page: Page):
     """
-    This script verifies the core bug fixes, including a wait condition
-    to prevent race conditions when interacting with the inventory.
+    This script verifies the core bug fixes, correctly handling all navigation
+    via keyboard presses as the UI is designed for it.
     """
     try:
         # 1. Navigate to the application
@@ -50,7 +50,6 @@ def run_verification(page: Page):
 
         page.keyboard.press("e")
 
-        # *** CRITICAL STEP ***
         # Wait for the action menu to disappear to prevent a race condition.
         expect(equip_action_locator).not_to_be_visible()
 

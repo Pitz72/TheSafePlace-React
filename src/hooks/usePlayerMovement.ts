@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useTimeStore } from '../stores/time/timeStore';
 import { useWorldStore } from '../stores/world/worldStore';
 import { useCharacterStore } from '../stores/character/characterStore';
 import { useNotificationStore } from '../stores/notifications/notificationStore';
@@ -27,8 +27,8 @@ export const usePlayerMovement = ({ setCurrentScreen }: UsePlayerMovementProps) 
   const { mapData, playerPosition, updatePlayerPosition } = useWorldStore();
   // Character actions
   const { performAbilityCheck, takeDamage } = useCharacterStore();
-  // Game actions
-  const { advanceTime } = useGameStore();
+  // Time actions
+  const { advanceTime } = useTimeStore();
   // Notification system
   const { addLogEntry } = useNotificationStore();
   const [movementState, setMovementState] = useState<MovementState>({

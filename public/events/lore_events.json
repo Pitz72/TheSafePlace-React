@@ -3,6 +3,7 @@
     {
       "id": "lore_ash_lullaby",
       "isUnique": true,
+      "isRepeatable": false,
       "title": "Un Suono nel Silenzio",
       "description": "La stanchezza ti pesa sulle ossa come un macigno. Qui, nel silenzio di questo rifugio, il mondo là fuori sembra lontano. Dalla tasca interna, le tue dita sfiorano il metallo gelido del carillon. Ricordi le parole di tuo padre, quasi un ringhio di terrore represso: 'Non aprirlo mai. Il suo suono 'attira i ricordi sbagliati.' Ma la solitudine, stanotte, è un nemico più vicino di qualsiasi ricordo.",
       "choices": [

@@ -31,9 +31,9 @@ export interface WeatherState {
   // Actions
   updateWeather: () => void;
   getWeatherEffects: () => WeatherEffects;
-  generateWeatherChange: () => Promise<Omit<WeatherState, 'actions'>>;
+  generateWeatherChange: () => WeatherState;
   applyWeatherEffects: (baseValue: number, effectType: keyof WeatherEffects) => number;
-  createClearWeather: () => Omit<WeatherState, 'actions'>;
+  createClearWeather: () => WeatherState;
   getWeatherDescription: (weather: WeatherType) => string;
   getRandomWeatherMessage: (weather: WeatherType) => string;
   getWeatherPatterns: () => any;
@@ -59,10 +59,10 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
 
   updateWeather: () => {
     return executeWithRetry({
-      operation: async () => {
+      operation: () => {
         const currentTime = Date.now();
         if (currentTime >= get().nextWeatherChange) {
-          const newWeather = await get().generateWeatherChange();
+          const newWeather = get().generateWeatherChange();
           set(newWeather);
 
           useNotificationStore.getState().addLogEntry(MessageType.AMBIANCE_RANDOM, {
@@ -94,9 +94,9 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
     });
   },
 
-  generateWeatherChange: (): Promise<Omit<WeatherState, 'actions'>> => {
+  generateWeatherChange: (): Omit<WeatherState, 'actions'> => {
     return executeWithRetry({
-      operation: async () => {
+      operation: () => {
         const worldStore = useWorldStore.getState();
         const timeState = worldStore?.timeState;
         

@@ -42,33 +42,27 @@ const InventoryScreen: React.FC = () => {
         return;
       }
 
-      // Use a local copy of state to avoid stale closures
-      const currentSelectedInventoryIndex = selectedInventoryIndex;
-      const currentSelectedItemStack = characterSheet.inventory[currentSelectedInventoryIndex];
-      const currentSelectedItem = currentSelectedItemStack ? items[currentSelectedItemStack.itemId] : null;
-
-      if (showActions && currentSelectedItemStack && currentSelectedItem && currentSelectedInventoryIndex !== null) {
-        const actions = getAvailableActions(currentSelectedItem);
+      if (showActions && selectedItemStack && selectedItem && selectedInventoryIndex !== null) {
+        const actions = getAvailableActions(selectedItem);
         const action = actions.find(a => a.key.toLowerCase() === key);
         if (action?.available) {
           event.preventDefault();
-          const shouldCloseActions = executeItemAction(
-            action,
-            currentSelectedItem,
-            currentSelectedInventoryIndex,
-            useItem,
-            (_item, index) => equipItem(index),
+          // Esegue l'azione passando le funzioni dal gameStore
+          executeItemAction(
+             action,
+             selectedItem,
+             selectedInventoryIndex,
+             useItem,
+             (item, slotIndex) => equipItem(slotIndex),
             (item) => { setExaminationText(getDetailedExamination(item)); setShowActions(false); },
-            dropItem
-          );
-          if (shouldCloseActions) {
-            setShowActions(false);
-          }
+             dropItem
+           );
+          if (action.key !== 'X') setShowActions(false);
         }
         return;
       }
 
-      if (key === 'enter' && currentSelectedItemStack && currentSelectedItem) {
+      if (key === 'enter' && selectedItemStack && selectedItem) {
         event.preventDefault();
         setShowActions(true);
         setExaminationText(null);
@@ -77,18 +71,18 @@ const InventoryScreen: React.FC = () => {
 
       if (key === 'arrowup' || key === 'w') {
         event.preventDefault();
-        setSelectedInventoryIndex((prevIndex) => (prevIndex ?? 0) > 0 ? (prevIndex ?? 0) - 1 : 9);
+        const currentIndex = selectedInventoryIndex ?? 0;
+        setSelectedInventoryIndex(currentIndex > 0 ? currentIndex - 1 : 9);
       } else if (key === 'arrowdown' || key === 's') {
         event.preventDefault();
-        setSelectedInventoryIndex((prevIndex) => (prevIndex ?? 0) < 9 ? (prevIndex ?? 0) + 1 : 0);
+        const currentIndex = selectedInventoryIndex ?? 0;
+        setSelectedInventoryIndex(currentIndex < 9 ? currentIndex + 1 : 0);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [goBack, showActions, examinationText, characterSheet.inventory, items, useItem, equipItem, dropItem, setSelectedInventoryIndex, selectedInventoryIndex]);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goBack, showActions, examinationText, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, equipItem, dropItem, setSelectedInventoryIndex]);
 
   const availableActions = selectedItem ? getAvailableActions(selectedItem) : [];
 
