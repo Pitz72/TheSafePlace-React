@@ -252,6 +252,7 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   initializeGame: async () => {
     return executeWithRetry({
       operation: async () => {
+        // Reset all relevant stores to their initial state for a new game.
         useCharacterStore.getState().initialize();
         useSurvivalStore.getState().resetSurvivalState();
         useTimeStore.getState().resetTime();
@@ -260,6 +261,8 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
         useNarrativeStore.getState().initializeNarrative();
         useEventStore.getState().resetEvents();
         useShelterStore.getState().resetShelters();
+        // Do NOT reset the main gameStore, as it controls the UI flow.
+
         get().updateCameraPosition({ width: 1920, height: 1080 });
         useNotificationStore.getState().addLogEntry(MessageType.GAME_START, { message: 'Benvenuto in The Safe Place.' });
       },
