@@ -199,7 +199,7 @@ export const checkForRandomEvent = (biome: string, weatherEffects: WeatherEffect
   };
   const RANDOM_EVENT_CHANCE = 0.03;
 
-  const baseEventChance = BIOME_EVENT_CHANCES[biome] || 0.20;
+  const baseEventChance = BIOME_EVENT_CHANCES[biome.toUpperCase()] || 0.20;
   const adjustedEventChance = baseEventChance * weatherEffects.eventProbabilityModifier;
 
   logger.debug('🎲 Checking for random event', { 

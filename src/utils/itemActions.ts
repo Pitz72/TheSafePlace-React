@@ -90,37 +90,33 @@ export function getDefaultAction(item: IItem): ItemAction | null {
  * Esegue un'azione su un oggetto
  */
 export function executeItemAction(
-  action: ItemAction, 
-  item: IItem, 
+  action: ItemAction,
+  item: IItem,
   slotIndex: number,
   onUse?: (slotIndex: number) => void,
   onEquip?: (item: IItem, slotIndex: number) => void,
   onExamine?: (item: IItem) => void,
   onDrop?: (slotIndex: number) => void
-): string {
+): boolean {
   if (!action.available) {
-    return `Non puoi ${action.label.toLowerCase()} questo oggetto.`;
+    return false;
   }
-  
+
   switch (action.key) {
     case 'U':
       if (onUse) onUse(slotIndex);
-      return `Hai utilizzato ${item.name}.`;
-      
+      return true; // Close actions menu
     case 'E':
       if (onEquip) onEquip(item, slotIndex);
-      return `Hai equipaggiato ${item.name}.`;
-      
+      return true; // Close actions menu
     case 'X':
       if (onExamine) onExamine(item);
-      return `Esamini attentamente ${item.name}.`;
-      
+      return false; // Do not close, examine shows new text
     case 'G':
       if (onDrop) onDrop(slotIndex);
-      return `Hai gettato ${item.name}.`;
-      
+      return true; // Close actions menu
     default:
-      return 'Azione non riconosciuta.';
+      return false;
   }
 }
 

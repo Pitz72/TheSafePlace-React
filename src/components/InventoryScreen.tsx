@@ -42,27 +42,33 @@ const InventoryScreen: React.FC = () => {
         return;
       }
 
-      if (showActions && selectedItemStack && selectedItem && selectedInventoryIndex !== null) {
-        const actions = getAvailableActions(selectedItem);
+      // Use a local copy of state to avoid stale closures
+      const currentSelectedInventoryIndex = selectedInventoryIndex;
+      const currentSelectedItemStack = characterSheet.inventory[currentSelectedInventoryIndex];
+      const currentSelectedItem = currentSelectedItemStack ? items[currentSelectedItemStack.itemId] : null;
+
+      if (showActions && currentSelectedItemStack && currentSelectedItem && currentSelectedInventoryIndex !== null) {
+        const actions = getAvailableActions(currentSelectedItem);
         const action = actions.find(a => a.key.toLowerCase() === key);
         if (action?.available) {
           event.preventDefault();
-          // Esegue l'azione passando le funzioni dal gameStore
-          executeItemAction(
-             action,
-             selectedItem,
-             selectedInventoryIndex,
-             useItem,
-             equipItem, // <-- Passa la nuova funzione equipItem
+          const shouldCloseActions = executeItemAction(
+            action,
+            currentSelectedItem,
+            currentSelectedInventoryIndex,
+            useItem,
+            (_item, index) => equipItem(index),
             (item) => { setExaminationText(getDetailedExamination(item)); setShowActions(false); },
-             dropItem
-           );
-          if (action.key !== 'X') setShowActions(false);
+            dropItem
+          );
+          if (shouldCloseActions) {
+            setShowActions(false);
+          }
         }
         return;
       }
 
-      if (key === 'enter' && selectedItemStack && selectedItem) {
+      if (key === 'enter' && currentSelectedItemStack && currentSelectedItem) {
         event.preventDefault();
         setShowActions(true);
         setExaminationText(null);
@@ -71,18 +77,18 @@ const InventoryScreen: React.FC = () => {
 
       if (key === 'arrowup' || key === 'w') {
         event.preventDefault();
-        const currentIndex = selectedInventoryIndex ?? 0;
-        setSelectedInventoryIndex(currentIndex > 0 ? currentIndex - 1 : 9);
+        setSelectedInventoryIndex((prevIndex) => (prevIndex ?? 0) > 0 ? (prevIndex ?? 0) - 1 : 9);
       } else if (key === 'arrowdown' || key === 's') {
         event.preventDefault();
-        const currentIndex = selectedInventoryIndex ?? 0;
-        setSelectedInventoryIndex(currentIndex < 9 ? currentIndex + 1 : 0);
+        setSelectedInventoryIndex((prevIndex) => (prevIndex ?? 0) < 9 ? (prevIndex ?? 0) + 1 : 0);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goBack, showActions, examinationText, selectedInventoryIndex, selectedItemStack, selectedItem, useItem, equipItem, dropItem, setSelectedInventoryIndex]);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [goBack, showActions, examinationText, characterSheet.inventory, items, useItem, equipItem, dropItem, setSelectedInventoryIndex, selectedInventoryIndex]);
 
   const availableActions = selectedItem ? getAvailableActions(selectedItem) : [];
 

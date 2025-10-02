@@ -69,7 +69,7 @@ export function equipItem(
     };
   }
   
-  const newCharacterSheet = { ...characterSheet };
+  const newCharacterSheet = JSON.parse(JSON.stringify(characterSheet));
   const currentEquipment = newCharacterSheet.equipment[slotType];
   let unequippedItem: { item: IItem; slot: IInventorySlot } | undefined;
   
@@ -168,7 +168,7 @@ export function unequipItem(
     };
   }
   
-  const newCharacterSheet = { ...characterSheet };
+  const newCharacterSheet = JSON.parse(JSON.stringify(characterSheet));
   
   // Metti l'oggetto nell'inventario
   newCharacterSheet.inventory[emptySlotIndex] = {
