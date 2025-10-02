@@ -252,7 +252,6 @@ export const useGameStore = create<CoreGameState>((set, get) => ({
   initializeGame: async () => {
     return executeWithRetry({
       operation: async () => {
-        get().resetStore();
         useCharacterStore.getState().initialize();
         useSurvivalStore.getState().resetSurvivalState();
         useTimeStore.getState().resetTime();
