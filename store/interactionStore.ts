@@ -253,9 +253,12 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
             const nextChapter = mainQuestChapters.find(c => c.stage === mainQuestStage);
             if (nextChapter && nextChapter.trigger.type === 'firstRefugeEntry') {
-                useGameStore.setState({ activeMainQuestEvent: nextChapter, gameState: GameState.MAIN_QUEST });
-                // Don't show the refuge menu until the quest is resolved
-                return;
+                const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
+                if (!isNight || nextChapter.allowNightTrigger) {
+                    useGameStore.setState({ activeMainQuestEvent: nextChapter, gameState: GameState.MAIN_QUEST });
+                    // Don't show the refuge menu until the quest is resolved
+                    return;
+                }
             }
         }
 

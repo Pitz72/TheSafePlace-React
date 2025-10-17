@@ -29,6 +29,9 @@ import InGameMenuScreen from './components/InGameMenuScreen';
 import SaveLoadScreen from './components/SaveLoadScreen';
 import { useInteractionStore } from './store/interactionStore';
 import { useTalentDatabaseStore } from './data/talentDatabase';
+import GameOverScreen from './components/GameOverScreen';
+import TrophyScreen from './components/TrophyScreen';
+import { useTrophyDatabaseStore } from './data/trophyDatabase';
 
 const App: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
@@ -47,6 +50,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadMainQuestDatabase, isLoaded: mainQuestLoaded } = useMainQuestDatabaseStore();
   const { loadDatabase: loadCutsceneDatabase, isLoaded: cutscenesLoaded } = useCutsceneDatabaseStore();
   const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
+  const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
@@ -65,12 +69,13 @@ const App: React.FC = () => {
     loadMainQuestDatabase();
     loadCutsceneDatabase();
     loadTalentDatabase();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainQuestDatabase, loadCutsceneDatabase, loadTalentDatabase]);
+    loadTrophyDatabase();
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainQuestDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase]);
 
   useEffect(() => {
     // The game should not automatically start a new game on load.
     // This will be handled by the "New Game" option in the main menu.
-  }, [itemsLoaded, eventsLoaded, recipesLoaded, enemiesLoaded, mainQuestLoaded, cutscenesLoaded, talentsLoaded, setMap, initCharacter]);
+  }, [itemsLoaded, eventsLoaded, recipesLoaded, enemiesLoaded, mainQuestLoaded, cutscenesLoaded, talentsLoaded, trophiesLoaded, setMap, initCharacter]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -87,6 +92,8 @@ const App: React.FC = () => {
         return <StoryScreen />;
       case GameState.OPTIONS_SCREEN:
         return <OptionsScreen />;
+      case GameState.TROPHY_SCREEN:
+        return <TrophyScreen />;
       case GameState.SAVE_GAME:
         return <SaveLoadScreen mode="save" />;
       case GameState.LOAD_GAME:
@@ -103,6 +110,8 @@ const App: React.FC = () => {
         return <MainQuestScreen />;
       case GameState.ASH_LULLABY_CHOICE:
         return <AshLullabyChoiceScreen />;
+      case GameState.GAME_OVER:
+        return <GameOverScreen />;
       case GameState.COMBAT:
         return (
           <>

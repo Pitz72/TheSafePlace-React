@@ -32,6 +32,7 @@ export const MENU_ITEMS = [
     "Storia",
     "Istruzioni",
     "Opzioni",
+    "Trofei",
     "Esci",
 ];
 
@@ -85,6 +86,7 @@ export const JOURNAL_ENTRY_COLORS: Record<JournalEntryType, string> = {
   [JournalEntryType.COMBAT]: '#ef4444', // Rosso (red-500)
   [JournalEntryType.XP_GAIN]: '#f59e0b', // Oro/Giallo Scuro (amber-500)
   [JournalEntryType.EVENT]: '#a78bfa', // Viola (violet-400)
+  [JournalEntryType.TROPHY_UNLOCKED]: '#eab308', // Giallo/Oro (yellow-500)
 };
 
 export const MOUNTAIN_MESSAGES = [

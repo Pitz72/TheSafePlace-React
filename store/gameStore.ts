@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainQuestChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition } from '../types';
+import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainQuestChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause } from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -45,6 +45,13 @@ const migrateSaveData = (saveData: any): SaveFile => {
      if (Array.isArray(saveData.characterStoreState.status)) {
         saveData.characterStoreState.status = new Set<PlayerStatusCondition>(saveData.characterStoreState.status);
     }
+    // For Trophy system
+    if (Array.isArray(saveData.characterStoreState.unlockedTrophies)) {
+        saveData.characterStoreState.unlockedTrophies = new Set<string>(saveData.characterStoreState.unlockedTrophies);
+    }
+    if (Array.isArray(saveData.gameStoreState.visitedBiomes)) {
+        saveData.gameStoreState.visitedBiomes = new Set<string>(saveData.gameStoreState.visitedBiomes);
+    }
     return saveData as SaveFile;
 };
 
@@ -87,6 +94,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   activeCutscene: null,
   gameFlags: new Set(),
   mainQuestsToday: { day: 0, count: 0 },
+  deathCause: null,
+  visitedBiomes: new Set(),
 
   // --- Actions ---
   setGameState: (newState) => set(state => {
@@ -96,6 +105,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         gameState: newState 
     };
   }),
+
+  setGameOver: (cause: DeathCause) => {
+    const { unlockTrophy } = useCharacterStore.getState();
+    unlockTrophy('trophy_misc_first_death');
+    if(cause === 'STARVATION') unlockTrophy('trophy_misc_death_by_starvation');
+    if(cause === 'DEHYDRATION') unlockTrophy('trophy_misc_death_by_dehydration');
+    
+    audioManager.playSound('defeat');
+    get().addJournalEntry({ text: "Sei stato sconfitto...", type: JournalEntryType.SYSTEM_ERROR });
+    set({ gameState: GameState.GAME_OVER, deathCause: cause });
+  },
   
   setVisualTheme: (theme) => {
     set({ visualTheme: theme });
@@ -152,6 +172,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         gameFlags: new Set(),
         activeCutscene: null,
         mainQuestsToday: { day: 1, count: 0 },
+        deathCause: null,
+        visitedBiomes: new Set(['S']),
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
@@ -159,7 +181,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   movePlayer: (dx, dy) => {
     const { map, playerPos, playerStatus, addJournalEntry, visitedRefuges, currentBiome: previousBiome, checkMainQuestTriggers, checkCutsceneTriggers } = get();
-    const { advanceTime } = useTimeStore.getState();
+    const { advanceTime, gameTime } = useTimeStore.getState();
+    const { unlockTrophy } = useCharacterStore.getState();
 
     if (playerStatus.isExitingWater) {
         set({ playerStatus: { ...playerStatus, isExitingWater: false } });
@@ -196,7 +219,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         const biomeMessage = BIOME_MESSAGES[destinationTile];
         if (biomeMessage) {
             addJournalEntry({ text: biomeMessage, type: JournalEntryType.NARRATIVE, color: BIOME_COLORS[destinationTile] });
-            set({ currentBiome: destinationTile });
+            const newVisitedBiomes = new Set(get().visitedBiomes).add(destinationTile);
+            set({ currentBiome: destinationTile, visitedBiomes: newVisitedBiomes });
+
+            if(newVisitedBiomes.has('.') && newVisitedBiomes.has('F') && newVisitedBiomes.has('C') && newVisitedBiomes.has('V') && newVisitedBiomes.has('~')) {
+              unlockTrophy('trophy_explore_all_biomes');
+            }
         }
     }
 
@@ -207,7 +235,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         } else {
             const damage = 2;
             addJournalEntry({ text: "La corrente è più forte del previsto. Scivoli e urti una roccia.", type: JournalEntryType.SKILL_CHECK_FAILURE });
-            useCharacterStore.getState().takeDamage(damage);
+            useCharacterStore.getState().takeDamage(damage, 'ENVIRONMENT');
             addJournalEntry({ text: `Subisci ${damage} danni.`, type: JournalEntryType.COMBAT });
         }
         set({ playerStatus: { ...get().playerStatus, isExitingWater: true } });
@@ -216,7 +244,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     let timeCost = BASE_TIME_COST_PER_MOVE;
     if (destinationTile === 'F') timeCost += 10;
     
-    const { weather, gameTime } = useTimeStore.getState();
+    const { weather } = useTimeStore.getState();
     let weatherPenalty = 0;
     if (weather.type === 'Pioggia') weatherPenalty = 5;
     if (weather.type === 'Tempesta') weatherPenalty = 10;
@@ -227,19 +255,23 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
     const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
     if (isNight && Math.random() < 0.20) {
-        useCharacterStore.getState().takeDamage(1);
+        useCharacterStore.getState().takeDamage(1, 'ENVIRONMENT');
         addJournalEntry({ text: "L'oscurità ti fa inciampare. (-1 HP)", type: JournalEntryType.COMBAT });
     }
     if (weather.type === 'Tempesta' && Math.random() < 0.15) {
-        useCharacterStore.getState().takeDamage(1);
+        useCharacterStore.getState().takeDamage(1, 'ENVIRONMENT');
         addJournalEntry({ text: "Il vento violento ti fa inciampare. (-1 HP)", type: JournalEntryType.COMBAT });
     }
     if (weather.type === 'Pioggia' && Math.random() < 0.08) {
-        useCharacterStore.getState().takeDamage(1);
+        useCharacterStore.getState().takeDamage(1, 'ENVIRONMENT');
         addJournalEntry({ text: "Il terreno scivoloso ti fa cadere. (-1 HP)", type: JournalEntryType.COMBAT });
     }
 
-    set(state => ({ playerPos: newPos, totalSteps: state.totalSteps + 1 }));
+    const newTotalSteps = get().totalSteps + 1;
+    set({ playerPos: newPos, totalSteps: newTotalSteps });
+    if (newTotalSteps === 100) unlockTrophy('trophy_explore_100_steps');
+    if (newTotalSteps === 500) unlockTrophy('trophy_explore_500_steps');
+
     advanceTime(timeCost);
     useCharacterStore.getState().gainExplorationXp();
     
@@ -324,12 +356,16 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   checkMainQuestTriggers: () => {
     const { gameTime } = useTimeStore.getState();
+    const { unlockTrophy } = useCharacterStore.getState();
     const state = get();
 
     // Reset daily quest counter if the day has changed
     if (state.mainQuestsToday.day !== gameTime.day) {
         set({ mainQuestsToday: { day: gameTime.day, count: 0 } });
     }
+    
+    if (gameTime.day >= 7) unlockTrophy('trophy_survive_7_days');
+    if (gameTime.day >= 30) unlockTrophy('trophy_survive_30_days');
 
     const currentState = get();
 
@@ -342,6 +378,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
     const nextChapter = mainQuestChapters.find(c => c.stage === currentState.mainQuestStage);
     if (!nextChapter) return;
+
+    const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
+    if (isNight && !nextChapter.allowNightTrigger) {
+        return; // Non attivare eventi diurni durante la notte
+    }
 
     let conditionMet = false;
     const trigger = nextChapter.trigger;
@@ -369,6 +410,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   resolveMainQuest: () => {
+    const completedStage = get().mainQuestStage;
+    useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
     set(state => ({
         mainQuestStage: state.mainQuestStage + 1,
         activeMainQuestEvent: null,
@@ -384,14 +427,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   processCutsceneConsequences: (consequences) => {
-    const { addItem, equipItem } = useCharacterStore.getState();
+    const { addItem, equipItem, unlockTrophy } = useCharacterStore.getState();
     const { addJournalEntry } = get();
     const { advanceTime } = useTimeStore.getState();
     consequences.forEach(consequence => {
         switch (consequence.type) {
             case 'addItem': addItem(consequence.payload.itemId, consequence.payload.quantity); break;
-            case 'equipItem': equipItem(consequence.payload); break;
-            case 'setFlag': set(state => ({ gameFlags: new Set(state.gameFlags).add(consequence.payload) })); break;
+            // FIX: The CutsceneConsequence type is 'equipItemByIndex', not 'equipItem'. This aligns the implementation with the type definition.
+            case 'equipItemByIndex': equipItem(consequence.payload); break;
+            case 'setFlag': {
+              const flag = consequence.payload;
+              set(state => ({ gameFlags: new Set(state.gameFlags).add(flag) }));
+              if (flag === 'FATHERS_LETTER_DESTROYED') unlockTrophy('trophy_secret_destroy_letter');
+              break;
+            }
             case 'performModifiedRest': {
                 addJournalEntry({ text: "Il sonno è leggero, agitato.", type: JournalEntryType.NARRATIVE });
                 advanceTime(60, true);
@@ -405,10 +454,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   endCutscene: () => {
+    const { unlockTrophy } = useCharacterStore.getState();
     const currentSceneId = get().activeCutscene?.id;
     let nextState = GameState.IN_GAME;
     if (currentSceneId === 'CS_OPENING') {
         nextState = GameState.CHARACTER_CREATION;
+    }
+    if(currentSceneId === 'CS_ASH_LULLABY') {
+      unlockTrophy('trophy_secret_ash_lullaby');
     }
     set({ activeCutscene: null, gameState: nextState });
   },
@@ -469,8 +522,16 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
           
           const serializableSaveFile = {
               ...saveFile,
-              gameStoreState: { ...saveFile.gameStoreState, gameFlags: Array.from(saveFile.gameStoreState.gameFlags), },
-              characterStoreState: { ...saveFile.characterStoreState, status: Array.from(saveFile.characterStoreState.status as Set<any>), }
+              gameStoreState: { 
+                ...saveFile.gameStoreState, 
+                gameFlags: Array.from(saveFile.gameStoreState.gameFlags),
+                visitedBiomes: Array.from(saveFile.gameStoreState.visitedBiomes),
+              },
+              characterStoreState: { 
+                ...saveFile.characterStoreState, 
+                status: Array.from(saveFile.characterStoreState.status as Set<any>), 
+                unlockedTrophies: Array.from(saveFile.characterStoreState.unlockedTrophies as Set<any>),
+              }
           };
           localStorage.setItem(`tspc_save_slot_${slot}`, JSON.stringify(serializableSaveFile));
           localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
@@ -510,7 +571,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   restoreState: (newState) => {
       // Hydrate gameStore itself
       const ownState: Partial<GameStoreState> = {};
-      const ownKeys: (keyof GameStoreState)[] = ['gameState', 'previousGameState', 'visualTheme', 'map', 'playerPos', 'playerStatus', 'journal', 'currentBiome', 'lastRestTime', 'lastEncounterTime', 'lastLoreEventDay', 'lootedRefuges', 'visitedRefuges', 'mainQuestStage', 'totalSteps', 'totalCombatWins', 'activeMainQuestEvent', 'activeCutscene', 'gameFlags', 'mainQuestsToday'];
+      const ownKeys: (keyof GameStoreState)[] = ['gameState', 'previousGameState', 'visualTheme', 'map', 'playerPos', 'playerStatus', 'journal', 'currentBiome', 'lastRestTime', 'lastEncounterTime', 'lastLoreEventDay', 'lootedRefuges', 'visitedRefuges', 'mainQuestStage', 'totalSteps', 'totalCombatWins', 'activeMainQuestEvent', 'activeCutscene', 'gameFlags', 'mainQuestsToday', 'deathCause', 'visitedBiomes'];
       ownKeys.forEach(key => {
         if (key in newState) (ownState as any)[key] = (newState as any)[key];
       });

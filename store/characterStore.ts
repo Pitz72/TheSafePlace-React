@@ -12,12 +12,14 @@ import {
   Alignment,
   JournalEntryType,
   PlayerStatusCondition,
+  DeathCause,
 } from '../types';
 import { SKILLS, XP_PER_LEVEL } from '../constants';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useGameStore } from './gameStore';
 import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { audioManager } from '../utils/audio';
+import { useTrophyDatabaseStore } from '../data/trophyDatabase';
 
 const BASE_STAT_VALUE = 100;
 
@@ -60,6 +62,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     levelUpPending: false,
     knownRecipes: [],
     unlockedTalents: [],
+    unlockedTrophies: new Set<string>(),
 
     // --- Actions ---
     initCharacter: () => {
@@ -93,6 +96,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             equippedArmor: null,
             knownRecipes: ['recipe_makeshift_knife', 'recipe_bandage_adv', 'recipe_repair_kit_basic'],
             unlockedTalents: [],
+            unlockedTrophies: new Set<string>(),
         });
     },
 
@@ -417,10 +421,14 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
-    takeDamage: (amount) => {
-        set(state => ({
-            hp: { ...state.hp, current: Math.max(0, state.hp.current - amount) }
-        }));
+    takeDamage: (amount, cause: DeathCause = 'UNKNOWN') => {
+        set(state => {
+            const newHp = Math.max(0, state.hp.current - amount);
+            if (newHp <= 0 && state.hp.current > 0) {
+                useGameStore.getState().setGameOver(cause);
+            }
+            return { hp: { ...state.hp, current: newHp } };
+        });
     },
     
     calculateSurvivalCost: (minutes) => {
@@ -434,50 +442,64 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     updateSurvivalStats: (minutes, weather) => {
-        set(state => {
-            let satietyDecay = 3.0; 
-            let hydrationDecay = 4.5;
+        const { setGameOver, addJournalEntry } = useGameStore.getState();
+        const currentState = get();
+        if (currentState.hp.current <= 0) return;
 
-            if (weather === WeatherType.TEMPESTA) {
-                hydrationDecay *= 1.5;
-            }
+        let satietyDecay = 3.0;
+        let hydrationDecay = 4.5;
 
-            const satietyLoss = (minutes / 60) * satietyDecay;
-            const hydrationLoss = (minutes / 60) * hydrationDecay;
-            
-            const newSatiety = Math.max(0, state.satiety.current - satietyLoss);
-            const newHydration = Math.max(0, state.hydration.current - hydrationLoss);
-            
-            let hpLossFromSurvival = 0;
-            if (newSatiety === 0) hpLossFromSurvival += (minutes / 60) * 2;
-            if (newHydration === 0) hpLossFromSurvival += (minutes / 60) * 3;
-            
-            // Status-based damage
-            let hpLossFromStatus = 0;
-            if (state.status.has('MALATO')) {
-                const damage = (minutes / 60) * 0.5; // Slow drain
-                hpLossFromStatus += damage;
-                useGameStore.getState().addJournalEntry({
-                    text: `Il tuo stato di MALATO ti indebolisce... (-${Math.ceil(damage)} HP)`,
-                    type: JournalEntryType.COMBAT
-                });
-            }
-            if (state.status.has('AVVELENATO')) {
-                const damage = (minutes / 60) * 2; // Fast drain
-                hpLossFromStatus += damage;
-                useGameStore.getState().addJournalEntry({
-                    text: `Il tuo stato di AVVELENATO ti consuma... (-${Math.ceil(damage)} HP)`,
-                    type: JournalEntryType.COMBAT
-                });
-            }
+        if (weather === WeatherType.TEMPESTA) {
+            hydrationDecay *= 1.5;
+        }
 
-            const newHp = Math.max(0, state.hp.current - hpLossFromSurvival - hpLossFromStatus);
-            
-            return {
-                satiety: { ...state.satiety, current: newSatiety },
-                hydration: { ...state.hydration, current: newHydration },
-                hp: { ...state.hp, current: newHp }
-            };
+        const satietyLoss = (minutes / 60) * satietyDecay;
+        const hydrationLoss = (minutes / 60) * hydrationDecay;
+
+        const newSatiety = Math.max(0, currentState.satiety.current - satietyLoss);
+        const newHydration = Math.max(0, currentState.hydration.current - hydrationLoss);
+
+        let hpLossFromSurvival = 0;
+        if (newSatiety === 0) hpLossFromSurvival += (minutes / 60) * 2;
+        if (newHydration === 0) hpLossFromSurvival += (minutes / 60) * 3;
+
+        let hpLossFromStatus = 0;
+        let deathCause: DeathCause | null = null;
+
+        if (currentState.status.has('AVVELENATO')) {
+            const damage = (minutes / 60) * 2;
+            hpLossFromStatus += damage;
+            deathCause = 'POISON';
+            addJournalEntry({
+                text: `Il tuo stato di AVVELENATO ti consuma... (-${Math.ceil(damage)} HP)`,
+                type: JournalEntryType.COMBAT
+            });
+        }
+        if (currentState.status.has('MALATO')) {
+            const damage = (minutes / 60) * 0.5;
+            hpLossFromStatus += damage;
+            deathCause = deathCause || 'SICKNESS'; // Don't override poison
+            addJournalEntry({
+                text: `Il tuo stato di MALATO ti indebolisce... (-${Math.ceil(damage)} HP)`,
+                type: JournalEntryType.COMBAT
+            });
+        }
+        
+        if (hpLossFromSurvival > 0) {
+            deathCause = deathCause || (newSatiety === 0 ? 'STARVATION' : 'DEHYDRATION');
+        }
+
+        const totalHpLoss = hpLossFromSurvival + hpLossFromStatus;
+        const newHp = Math.max(0, currentState.hp.current - totalHpLoss);
+
+        if (newHp <= 0 && currentState.hp.current > 0) {
+            setGameOver(deathCause || 'UNKNOWN');
+        }
+
+        set({
+            satiety: { ...currentState.satiety, current: newSatiety },
+            hydration: { ...currentState.hydration, current: newHydration },
+            hp: { ...currentState.hp, current: newHp }
         });
     },
     
@@ -581,6 +603,28 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const armorDetails = itemDatabase[armorItem.itemId];
         const armorBonus = armorDetails?.defense || 0;
         return 10 + dexMod + armorBonus;
+    },
+    unlockTrophy: (trophyId: string) => {
+        set(state => {
+            if (state.unlockedTrophies.has(trophyId)) {
+                return {}; // Already unlocked, do nothing
+            }
+            
+            const { trophies } = useTrophyDatabaseStore.getState();
+            const trophy = trophies.find(t => t.id === trophyId);
+            
+            if (trophy) {
+                audioManager.playSound('level_up');
+                useGameStore.getState().addJournalEntry({
+                    text: `Trofeo sbloccato: ${trophy.name}!`,
+                    type: JournalEntryType.TROPHY_UNLOCKED
+                });
+            }
+
+            const newTrophies = new Set(state.unlockedTrophies);
+            newTrophies.add(trophyId);
+            return { unlockedTrophies: newTrophies };
+        });
     },
     restoreState: (newState) => {
         set(newState);

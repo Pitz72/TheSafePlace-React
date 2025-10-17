@@ -180,5 +180,25 @@
     "value": 0,
     "stackable": false,
     "rarity": "quest"
+  },
+  {
+    "id": "pixeldebh_plate",
+    "name": "Placca di PixelDebh",
+    "description": "Una placca di metallo lucido con un simbolo stilizzato e la scritta 'PixelDebh'. Un frammento di un'era tecnologica dimenticata.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "rare_music_cassettes",
+    "name": "Musicassetta Rara",
+    "description": "Una vecchia musicassetta con un frammento di musica registrato dall'etere. Un tesoro in un mondo silenzioso.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
   }
 ]

@@ -253,14 +253,14 @@ const TravelJournalPanel: React.FC = () => {
 
     return (
         <Panel title="DIARIO DI VIAGGIO" className="h-full">
-            <div ref={journalRef} className="h-full overflow-y-auto space-y-2" style={{ scrollbarWidth: 'none' }}>
+            <div ref={journalRef} className="h-full overflow-y-auto space-y-2 text-[var(--text-secondary)]" style={{ scrollbarWidth: 'none' }}>
                 {journal.length > 0 ? (
                     journal.map((entry, index) => (
                         <div key={index}>
                            <span className="text-[var(--text-primary)]/60 mr-2">
                                 [{String(entry.time.hour).padStart(2, '0')}:{String(entry.time.minute).padStart(2, '0')}]
                            </span>
-                           <span style={{ color: entry.color || JOURNAL_ENTRY_COLORS[entry.type] || 'var(--text-secondary)' }}>
+                           <span style={{ color: entry.color || JOURNAL_ENTRY_COLORS[entry.type] }}>
                                 {entry.text}
                            </span>
                         </div>

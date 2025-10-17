@@ -21,19 +21,22 @@
     "stage": 4,
     "trigger": { "type": "daysSurvived", "value": 2 },
     "title": "Ricordo: Imparare il Buio",
-    "text": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'."
+    "text": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'.",
+    "allowNightTrigger": true
   },
   {
     "stage": 5,
     "trigger": { "type": "firstRefugeEntry" },
     "title": "Ricordo: La Domanda Senza Risposta",
-    "text": "Questo fragile barlume di sicurezza ti ricorda la vecchia fattoria. E la fattoria ti ricorda le domande. Quelle che ponevi a tuo padre nelle notti fredde. 'E mamma? Cosa le è successo?'. Elian non rispondeva mai veramente. La sua voce si incrinava, i suoi occhi si perdevano in un abisso di sofferenza. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. 'Questo è quello che devi sapere.' Ma tu iniziavi a leggere tra le righe. C'era un segreto, un peso che tuo padre portava da solo. Un segreto che lo stava consumando da dentro."
+    "text": "Questo fragile barlume di sicurezza ti ricorda la vecchia fattoria. E la fattoria ti ricorda le domande. Quelle che ponevi a tuo padre nelle notti fredde. 'E mamma? Cosa le è successo?'. Elian non rispondeva mai veramente. La sua voce si incrinava, i suoi occhi si perdevano in un abisso di sofferenza. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. 'Questo è quello che devi sapere.' Ma tu iniziavi a leggere tra le righe. C'era un segreto, un peso che tuo padre portava da solo. Un segreto che lo stava consumando da dentro.",
+    "allowNightTrigger": true
   },
   {
     "stage": 6,
     "trigger": { "type": "stepsTaken", "value": 80 },
     "title": "Ricordo: Gli Angeli della Cenere",
-    "text": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame."
+    "text": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame.",
+    "allowNightTrigger": true
   },
   {
     "stage": 7,
@@ -51,7 +54,8 @@
     "stage": 9,
     "trigger": { "type": "daysSurvived", "value": 7 },
     "title": "Ricordo: Il Significato di un Nome",
-    "text": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco."
+    "text": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco.",
+    "allowNightTrigger": true
   },
   {
     "stage": 10,

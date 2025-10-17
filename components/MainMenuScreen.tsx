@@ -54,6 +54,9 @@ const MainMenuScreen: React.FC = () => {
         case "Opzioni":
             setGameState(GameState.OPTIONS_SCREEN);
             break;
+        case "Trofei":
+            setGameState(GameState.TROPHY_SCREEN);
+            break;
         case "Esci":
             // In a real app, you might close the window or go to a goodbye screen.
             // For this prototype, we'll just log it.

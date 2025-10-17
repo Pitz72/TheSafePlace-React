@@ -66,9 +66,8 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         // FIX: Use JournalEntryType enum instead of string.
         else if (result === 'flee') addJournalEntry({ text: "Sei fuggito dal combattimento.", type: JournalEntryType.NARRATIVE });
         else if (result === 'lose') {
-            audioManager.playSound('defeat');
-            // FIX: Use JournalEntryType enum instead of string.
-            addJournalEntry({ text: "Sei stato sconfitto...", type: JournalEntryType.SYSTEM_ERROR });
+             useGameStore.getState().setGameOver('COMBAT');
+             return; // Game over handles the rest
         }
         set({ activeCombat: null });
         // FIX: Use GameState enum instead of string.
@@ -210,16 +209,13 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     audioManager.playSound('hit_player');
                     damageEquippedItem('armor', 1);
                     const damage = enemy.attack.damage + Math.floor(Math.random() * 3) - 1;
-                    takeDamage(damage);
+                    takeDamage(damage, 'COMBAT');
                     addEnemyLog(`${getRandom(N.ENEMY_HIT_DESCRIPTIONS)} Subisci ${damage} danni.`, '#ef4444');
                 } else {
                     addEnemyLog(getRandom(N.ENEMY_MISS_DESCRIPTIONS), '#60BF77');
                 }
 
-                if (useCharacterStore.getState().hp.current <= 0) {
-                    addEnemyLog("Sei stato sconfitto...", '#ff0000');
-                    get().endCombat('lose');
-                } else {
+                if (useCharacterStore.getState().hp.current > 0) {
                      set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, playerTurn: true } }));
                 }
             }, 1500);

@@ -77,7 +77,12 @@ const CharacterCreationScreen: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-4">
       <h1 className="text-5xl md:text-6xl mb-8 text-center">═══ CREAZIONE PERSONAGGIO ═══</h1>
-      <p className="text-2xl md:text-3xl mb-12 text-center text-[var(--text-secondary)]">Generazione statistiche in corso...</p>
+      <p 
+        className="text-2xl md:text-3xl mb-12 text-center"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        Generazione statistiche in corso...
+      </p>
       
       <div className="w-full max-w-2xl text-4xl space-y-4 border-2 border-[var(--border-primary)] p-8">
         {ATTRIBUTES.map((attr) => {

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameEvent, EventResult, AttributeName, JournalEntryType, GameState, Enemy } from '../types';
+import { GameEvent, EventResult, AttributeName, JournalEntryType, GameState, Enemy, DeathCause } from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
 import { useEventDatabaseStore } from '../data/eventDatabase';
@@ -35,7 +35,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         const { gameTime } = useTimeStore.getState();
         const { startCombat } = useCombatStore.getState();
         const { eventHistory } = get();
-        const { loreEvents, biomeEvents, globalEncounters } = useEventDatabaseStore.getState();
+        const { loreEvents, biomeEvents, globalEncounters, easterEggEvents } = useEventDatabaseStore.getState();
 
         const biomeCharToName: Record<string, string> = { '.': 'Pianura', 'F': 'Foresta', 'V': 'Villaggio', 'C': 'Città', '~': 'Acqua' };
         const currentBiomeName = biomeCharToName[currentBiome] || 'Global';
@@ -45,8 +45,26 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             if (lastEncounterTime && (timeToMinutes(gameTime) - timeToMinutes(lastEncounterTime) < cooldownMinutes)) {
                 return;
             }
+
+            const EASTER_EGG_PROBABILITY = 0.02; // 2% chance
+            if (Math.random() < EASTER_EGG_PROBABILITY) {
+                const possibleEasterEggs = (easterEggEvents as GameEvent[]).filter(event =>
+                    event.biomes.includes(currentBiomeName) && !eventHistory.includes(event.id)
+                );
+                if (possibleEasterEggs.length > 0) {
+                    const eventToTrigger = getRandom(possibleEasterEggs);
+                    useGameStore.setState({ lastEncounterTime: gameTime });
+                    set({ activeEvent: eventToTrigger, eventResolutionText: null });
+                    setGameState(GameState.EVENT_SCREEN);
+                    addJournalEntry({ text: `EVENTO: ${eventToTrigger.title}`, type: JournalEntryType.EVENT });
+                    return;
+                }
+            }
+
             const ENCOUNTER_PROBABILITY = 0.20;
-            if (Math.random() > ENCOUNTER_PROBABILITY) return;
+            if (Math.random() > ENCOUNTER_PROBABILITY) {
+                return;
+            }
         }
 
         useGameStore.setState({ lastEncounterTime: gameTime });
@@ -138,7 +156,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     message = `Hai perso: ${itemDatabase[result.value.itemId].name} x${result.value.quantity}.`;
                     break;
                 case 'addXp': addXp(result.value); message = `Hai guadagnato ${result.value} XP.`; break;
-                case 'takeDamage': takeDamage(result.value); message = `Subisci ${result.value} danni.`; break;
+                case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
                 case 'advanceTime': advanceTime(result.value, true); message = `Passano ${result.value} minuti.`; break;
                 case 'journalEntry': if (result.text) message = result.text; break;
                 case 'alignmentChange': changeAlignment(result.value.type, result.value.amount); message = `La tua bussola morale si sposta verso ${result.value.type}.`; break;
@@ -149,7 +167,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     message = `La tua statistica ${stat.toUpperCase()} è aumentata permanentemente di ${amount}!`;
                     break;
                 }
-                case 'revealMapPOI': message = "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
+                case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
                 case 'special': message = result.text || `Si è verificato un evento speciale.`; break;
             }

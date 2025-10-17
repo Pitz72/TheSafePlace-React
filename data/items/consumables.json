@@ -1,3 +1,4 @@
+
 [
     { "id": "CONS_001", "name": "Razione di cibo", "description": "Cibo in scatola per un giorno. Ripristina una piccola quantità di sazietà.", "type": "consumable", "weight": 0.5, "value": 5, "stackable": true, "rarity": "common", "effects": [{ "type": "satiety", "value": 25 }] },
     { "id": "CONS_002", "name": "Bottiglia d'acqua", "description": "Acqua potabile. Essenziale per la sopravvivenza.", "type": "consumable", "weight": 1, "value": 3, "stackable": true, "rarity": "common", "effects": [{ "type": "hydration", "value": 25 }] },
@@ -49,5 +50,49 @@
     { "id": "multitool", "name": "Multiuso", "description": "Un attrezzo compatto con pinze, cacciaviti e una piccola lama. Incredibilmente versatile.", "type": "consumable", "weight": 0.3, "value": 80, "stackable": false, "rarity": "rare", "effects": [{ "type": "repair", "value": 10 }] },
     { "id": "precision_tools", "name": "Strumenti di Precisione", "description": "Un set di piccoli cacciaviti e pinzette per lavori delicati su componenti elettronici.", "type": "consumable", "weight": 0.4, "value": 70, "stackable": false, "rarity": "rare", "effects": [{ "type": "repair", "value": 15 }] },
     { "id": "sewing_kit_professional", "name": "Kit da Cucito Professionale", "description": "Un kit completo con aghi, fili resistenti e toppe. Perfetto per riparare vestiti e armature.", "type": "consumable", "weight": 0.2, "value": 45, "stackable": false, "rarity": "uncommon", "effects": [{ "type": "repair", "value": 12 }] },
-    { "id": "gourmet_canned_food", "name": "Cibo Gourmet in Scatola", "description": "Una prelibatezza del mondo passato. Estremamente nutriente e un lusso per il morale.", "type": "consumable", "weight": 0.5, "value": 50, "stackable": true, "rarity": "rare", "effects": [{ "type": "satiety", "value": 60 }, { "type": "heal", "value": 5 }] }
+    { "id": "gourmet_canned_food", "name": "Cibo Gourmet in Scatola", "description": "Una prelibatezza del mondo passato. Estremamente nutriente e un lusso per il morale.", "type": "consumable", "weight": 0.5, "value": 50, "stackable": true, "rarity": "rare", "effects": [{ "type": "satiety", "value": 60 }, { "type": "heal", "value": 5 }] },
+    { 
+      "id": "energy_drink_nuclear", 
+      "name": "Bevanda Energetica Nucleare", 
+      "description": "Una lattina di una bevanda energetica dai colori vivaci e dal nome sospetto. Promette 'una carica atomica'.", 
+      "type": "consumable", 
+      "weight": 0.4, 
+      "value": 30, 
+      "stackable": true, 
+      "rarity": "uncommon", 
+      "effects": [{ "type": "satiety", "value": 10 }, { "type": "hydration", "value": 20 }, { "type": "heal", "value": 5 }] 
+    },
+    { 
+      "id": "cigarettes_pack", 
+      "name": "Pacchetto di Sigarette", 
+      "description": "Un pacchetto di sigarette pre-catastrofe, ancora sigillato. Una merce di scambio preziosa, o un vizio da concedersi.", 
+      "type": "consumable", 
+      "weight": 0.1, 
+      "value": 25, 
+      "stackable": false, 
+      "rarity": "uncommon", 
+      "effects": [] 
+    },
+    { 
+      "id": "stimpak_military", 
+      "name": "Iniettore Medico Militare", 
+      "description": "Un auto-iniettore riempito con un cocktail di farmaci ad azione rapida. Cura le ferite gravi in pochi secondi.", 
+      "type": "consumable", 
+      "weight": 0.2, 
+      "value": 150, 
+      "stackable": true, 
+      "rarity": "rare", 
+      "effects": [{ "type": "heal", "value": 75 }, { "type": "cureStatus", "value": "FERITO" }] 
+    },
+    { 
+      "id": "high_energy_bar", 
+      "name": "Barretta Iper-Energetica", 
+      "description": "Una barretta densa e compatta, progettata per fornire il massimo apporto calorico in una situazione di sopravvivenza estrema.", 
+      "type": "consumable", 
+      "weight": 0.3, 
+      "value": 60, 
+      "stackable": true, 
+      "rarity": "rare", 
+      "effects": [{ "type": "satiety", "value": 80 }, { "type": "heal", "value": 10 }] 
+    }
 ]

@@ -140,5 +140,15 @@
   { "id": "metal_piece", "name": "Pezzo di Metallo Piccolo", "description": "Piccoli pezzi di metallo, utili per il crafting.", "type": "material", "weight": 0.2, "value": 2, "stackable": true, "rarity": "common" },
   { "id": "grain_sack", "name": "Sacco di Grano", "description": "Un sacco di grano secco, ancora commestibile se macinato.", "type": "material", "weight": 5.0, "value": 15, "stackable": false, "rarity": "uncommon" },
   { "id": "cleaning_supplies", "name": "Prodotti per Pulizia", "description": "Solventi e reagenti chimici, utili per creare composti.", "type": "material", "weight": 1.0, "value": 10, "stackable": false, "rarity": "uncommon" },
-  { "id": "dry_paper", "name": "Carta Secca", "description": "Fogli di carta secca, perfetti per accendere un fuoco o come materiale per il crafting.", "type": "material", "weight": 0.1, "value": 1, "stackable": true, "rarity": "common" }
+  { "id": "dry_paper", "name": "Carta Secca", "description": "Fogli di carta secca, perfetti per accendere un fuoco o come materiale per il crafting.", "type": "material", "weight": 0.1, "value": 1, "stackable": true, "rarity": "common" },
+  {
+    "id": "military_grade_electronics",
+    "name": "Elettronica di Grado Militare",
+    "description": "Componenti elettronici robusti e schermati, recuperati da equipaggiamento militare. Estremamente rari e preziosi per il crafting avanzato.",
+    "type": "material",
+    "weight": 0.3,
+    "value": 150,
+    "stackable": true,
+    "rarity": "rare"
+  }
 ]

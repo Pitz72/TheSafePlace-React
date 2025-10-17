@@ -10,6 +10,7 @@ export enum GameState {
   INSTRUCTIONS_SCREEN,
   STORY_SCREEN,
   OPTIONS_SCREEN,
+  TROPHY_SCREEN,
   CUTSCENE,
   CHARACTER_CREATION,
   IN_GAME,
@@ -21,6 +22,7 @@ export enum GameState {
   COMBAT,
   MAIN_QUEST,
   ASH_LULLABY_CHOICE,
+  GAME_OVER,
 }
 
 export enum JournalEntryType {
@@ -35,6 +37,13 @@ export enum JournalEntryType {
   COMBAT,
   XP_GAIN,
   EVENT,
+  TROPHY_UNLOCKED,
+}
+
+export interface Trophy {
+  id: string;
+  name: string;
+  description: string;
 }
 
 export interface Position {
@@ -98,6 +107,7 @@ export interface MainQuestChapter {
   title: string;
   text: string;
   trigger: QuestTrigger;
+  allowNightTrigger?: boolean;
 }
 
 
@@ -141,6 +151,7 @@ export interface CutscenePage {
 export interface Cutscene {
     id: string;
     title: string;
+
     pages: CutscenePage[];
 }
 
@@ -266,11 +277,12 @@ export interface PlayerStatus {
     isExitingWater: boolean;
 }
 
-// FIX: Extracted the combat action payload into a dedicated type to be reused across stores.
 export type PlayerCombatActionPayload =
   | { type: 'attack' | 'analyze' | 'flee' }
   | { type: 'tactic', tacticId: string }
   | { type: 'use_item', itemId: string };
+
+export type DeathCause = 'COMBAT' | 'STARVATION' | 'DEHYDRATION' | 'SICKNESS' | 'POISON' | 'ENVIRONMENT' | 'UNKNOWN';
 
 export interface GameStoreState {
   gameState: GameState;
@@ -293,9 +305,12 @@ export interface GameStoreState {
   activeCutscene: Cutscene | null;
   gameFlags: Set<string>;
   mainQuestsToday: { day: number; count: number };
+  deathCause: DeathCause | null;
+  visitedBiomes: Set<string>;
   
   // Actions
   setGameState: (newState: GameState) => void;
+  setGameOver: (cause: DeathCause) => void;
   setVisualTheme: (theme: VisualTheme) => void;
   addJournalEntry: (entry: { text: string; type: JournalEntryType; color?: string }) => void;
   setMap: () => void;
@@ -393,6 +408,7 @@ export interface CharacterState {
     levelUpPending: boolean;
     knownRecipes: string[];
     unlockedTalents: string[];
+    unlockedTrophies: Set<string>;
 
     // Actions
     initCharacter: () => void;
@@ -411,7 +427,7 @@ export interface CharacterState {
     damageEquippedItem: (slot: 'weapon' | 'armor', amount: number) => void;
     repairItem: (inventoryIndex: number, amount: number) => void;
     salvageItem: (inventoryIndex: number) => void;
-    takeDamage: (amount: number) => void;
+    takeDamage: (amount: number, cause?: DeathCause) => void;
     updateSurvivalStats: (minutes: number, weather: WeatherType) => void;
     calculateSurvivalCost: (minutes: number) => { satietyCost: number; hydrationCost: number };
     heal: (amount: number) => void;
@@ -423,6 +439,7 @@ export interface CharacterState {
     boostAttribute: (attribute: AttributeName, amount: number) => void;
     learnRecipe: (recipeId: string) => void;
     getPlayerAC: () => number;
+    unlockTrophy: (trophyId: string) => void;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
 }
