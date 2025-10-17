@@ -1,62 +1,42 @@
-{
-  "AMMO_001": {
-    "id": "AMMO_001",
+[
+  {
+    "id": "ammo_9mm",
     "name": "Munizioni 9mm",
-    "description": "Una scatola di munizioni per pistole 9mm.",
-    "type": "ammo",
-    "weight": 0.5,
-    "value": 10,
-    "stackable": true,
-    "rarity": "Common"
-  },
-  "rifle_ammo": {
-    "id": "rifle_ammo",
-    "name": "Munizioni fucile",
-    "description": "Munizioni per fucili da caccia o militari.",
-    "type": "ammo",
-    "weight": 0.8,
-    "value": 25,
-    "stackable": true,
-    "rarity": "Uncommon"
-  },
-  "shotgun_shells": {
-    "id": "shotgun_shells",
-    "name": "Cartucce shotgun",
-    "description": "Munizioni per fucili a pompa.",
-    "type": "ammo",
-    "weight": 0.6,
-    "value": 20,
-    "stackable": true,
-    "rarity": "Uncommon"
-  },
-  "ammo_pistol": {
-    "id": "ammo_pistol",
-    "name": "Munizioni pistola",
-    "description": "Munizioni per pistole di vario calibro.",
+    "description": "Una scatola di comuni proiettili calibro 9mm, adatti per la maggior parte delle pistole semiautomatiche.",
     "type": "ammo",
     "weight": 0.4,
     "value": 15,
     "stackable": true,
-    "rarity": "Common"
+    "rarity": "common"
   },
-  "pistol_ammo": {
-    "id": "pistol_ammo",
-    "name": "Munizioni pistola 9mm",
-    "description": "Munizioni standard per pistole 9mm.",
+  {
+    "id": "ammo_rifle",
+    "name": "Munizioni per Fucile",
+    "description": "Munizioni di calibro superiore, progettate per fucili da caccia o d'assalto. Potenti e precise sulla lunga distanza.",
     "type": "ammo",
-    "weight": 0.4,
-    "value": 12,
+    "weight": 0.8,
+    "value": 25,
     "stackable": true,
-    "rarity": "Common"
+    "rarity": "uncommon"
   },
-  "special_ammo": {
+  {
+    "id": "ammo_shotgun",
+    "name": "Cartucce per Fucile a Pompa",
+    "description": "Cartucce calibro 12 caricate a pallettoni. Devastanti a corto raggio, ma inefficaci sulla distanza.",
+    "type": "ammo",
+    "weight": 0.6,
+    "value": 20,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
     "id": "special_ammo",
-    "name": "Munizioni speciali",
-    "description": "Munizioni avanzate con proprietà speciali.",
+    "name": "Munizioni Speciali",
+    "description": "Munizioni avanzate con proprietà uniche, come proiettili perforanti o incendiari. Estremamente rare e preziose.",
     "type": "ammo",
     "weight": 0.3,
     "value": 40,
     "stackable": true,
-    "rarity": "Rare"
+    "rarity": "rare"
   }
-}
+]

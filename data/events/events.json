@@ -1,0 +1,119 @@
+[
+  {
+    "id": "due_stranieri",
+    "title": "Due Stranieri nel Bisogno",
+    "description": "Attraversando una radura spazzata dal vento, noti due figure accasciate a terra. Avvicinandoti con cautela, vedi un uomo che cerca disperatamente di tamponare una brutta ferita alla gamba di una donna, chiaramente in stato di shock. L'uomo alza lo sguardo, i suoi occhi pieni di paura e speranza.\n\n\"Ti prego,\" sussurra, \"Abbiamo finito le bende e l'acqua. Puoi aiutarci? Qualsiasi cosa...\"",
+    "biomes": ["."],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "[Lena] Offri loro una benda e una bottiglia d'acqua.",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "removeItem", "value": { "itemId": "CONS_003", "quantity": 1 } },
+              { "type": "removeItem", "value": { "itemId": "CONS_002", "quantity": 1 } },
+              { "type": "journalEntry", "text": "L'uomo ti ringrazia con le lacrime agli occhi. Usi le tue risorse per aiutarli." },
+              { "type": "addXp", "value": 50 },
+              { "type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[Elian] Ignorali e prosegui. Non puoi fidarti e le tue risorse sono troppo preziose.",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Indurisci il cuore e prosegui per la tua strada, lasciandoli al loro destino. La sopravvivenza viene prima di tutto." },
+              { "type": "alignmentChange", "value": {"type": "elian", "amount": 1} }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Avvicinati con l'arma in pugno e derubali di ciò che hanno.",
+        "outcomes": [
+           {
+            "type": "skillCheck",
+            "skill": "intimidire",
+            "dc": 12,
+            "success": [
+                { "type": "journalEntry", "text": "La tua minaccia è efficace. L'uomo, terrorizzato, ti porge una piccola sacca. Dentro trovi delle munizioni."},
+                { "type": "addItem", "value": { "itemId": "ammo_9mm", "quantity": 5 } },
+                { "type": "alignmentChange", "value": {"type": "elian", "amount": 2} }
+            ],
+            "failure": [
+                { "type": "journalEntry", "text": "L'uomo non si lascia intimidire. Vede la tua esitazione e estrae un coltello. Ne nasce una breve colluttazione."},
+                { "type": "takeDamage", "value": 10 },
+                { "type": "alignmentChange", "value": {"type": "elian", "amount": 1} }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "animale_ferito",
+    "title": "La Creatura Sofferente",
+    "description": "Un lamento pietoso attira la tua attenzione. Nascosto tra l'erba alta, trovi un cerbiatto con una zampa anteriore chiaramente spezzata, intrappolata in una vecchia tagliola arrugginita. L'animale ti guarda con occhi grandi e terrorizzati, incapace di fuggire.\n\nUn ricordo affiora: tua madre che ti insegnava a rispettare ogni creatura. Ma senti anche l'eco delle parole di tuo padre: 'Nel mondo di oggi, la pietà è un lusso che non possiamo permetterci.'",
+    "biomes": ["."],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "[Lena] Usa del tempo e delle risorse per liberare e medicare l'animale.",
+        "alignment": "Lena",
+        "outcomes": [
+            {
+                "type": "skillCheck",
+                "skill": "medicina",
+                "dc": 10,
+                "success": [
+                    { "type": "journalEntry", "text": "Con mano ferma e pazienza, riesci a liberare la zampa del cerbiatto e a steccarla con dei rami e una benda. L'animale zoppica via, scomparendo nell'erba alta." },
+                    { "type": "removeItem", "value": { "itemId": "CONS_003", "quantity": 1 } },
+                    { "type": "advanceTime", "value": 30 },
+                    { "type": "addXp", "value": 35 },
+                    { "type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+                ],
+                "failure": [
+                    { "type": "journalEntry", "text": "Provi ad aiutare, ma i tuoi tentativi sono goffi. Il cerbiatto, spaventato, si divincola peggiorando la ferita. Sei costretto a lasciarlo al suo destino, avendo sprecato tempo e una benda." },
+                    { "type": "removeItem", "value": { "itemId": "CONS_003", "quantity": 1 } },
+                    { "type": "advanceTime", "value": 30 }
+                ]
+            }
+        ]
+      },
+      {
+        "text": "[Elian] Sopprimi l'animale per porre fine alla sua sofferenza e recuperare la carne.",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "È una scelta difficile ma pragmatica. Poni fine alle sofferenze del cerbiatto e recuperi carne e pelle utili alla sopravvivenza." },
+              { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
+              { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 1 } },
+              { "type": "advanceTime", "value": 15 },
+              { "type": "alignmentChange", "value": {"type": "elian", "amount": 1} }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignora la scena e prosegui. Non è un tuo problema.",
+        "outcomes": [
+            {
+                "type": "direct",
+                "results": [
+                    { "type": "journalEntry", "text": "Decidi di non intervenire. La natura farà il suo corso. Prosegui il tuo cammino." }
+                ]
+            }
+        ]
+      }
+    ]
+  }
+]

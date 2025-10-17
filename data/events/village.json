@@ -1,0 +1,147 @@
+[
+  {
+    "id": "village_water_mill", "title": "La Ruota Silenziosa", "isUnique": true, "biomes": ["Villaggio"],
+    "description": "Ti imbatti nelle rovine di un vecchio mulino ad acqua. La struttura sembra solida e potresti ispezionare i meccanismi interni o cercare nel granaio adiacente.",
+    "choices": [
+      { "text": "Ispeziona il meccanismo interno", "outcomes": [{
+        "type": "skillCheck", "skill": "investigare", "dc": 13,
+        "successText": "Tra ingranaggi arrugginiti, trovi una piccola cassetta degli attrezzi da meccanico di ottima fattura.",
+        "failureText": "I meccanismi sono un groviglio incomprensibile di metallo corroso. Non trovi nulla di utile.",
+        "success": [{ "type": "addItem", "value": { "itemId": "mechanic_toolkit", "quantity": 1 } }, { "type": "addXp", "value": 30 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Cerca nel granaio adiacente", "outcomes": [{
+        "type": "direct", "results": [
+          { "type": "journalEntry", "text": "Sotto un telo cerato, trovi alcuni sacchi di grano secco ancora commestibili." },
+          { "type": "addItem", "value": { "itemId": "grain_sack", "quantity": 2 } },
+          { "type": "addXp", "value": 20 }
+        ]
+      }] }
+    ]
+  },
+  {
+    "id": "village_post_office", "title": "Corrispondenza Incompiuta", "isUnique": true, "biomes": ["Villaggio"],
+    "description": "Trovi un ufficio postale abbandonato, con lettere e pacchi sparsi ovunque.",
+    "choices": [
+      { "text": "Cerca tra i pacchi non consegnati", "outcomes": [{
+        "type": "direct", "results": [
+          { "type": "journalEntry", "text": "La maggior parte dei pacchi è rovinata, ma ne trovi uno piccolo e pesante. Dentro c'è un set di coltelli da lancio." },
+          { "type": "addItem", "value": { "itemId": "throwing_knives", "quantity": 3 } },
+          { "type": "addXp", "value": 25 }
+        ]
+      }] },
+      { "text": "Leggi alcune delle lettere", "outcomes": [{
+        "type": "skillCheck", "skill": "investigare", "dc": 11,
+        "successText": "Una lettera attira la tua attenzione: un abitante scrive di una 'scorta di famiglia nascosta sotto il vecchio pozzo'.",
+        "failureText": "Le lettere sono per lo più illeggibili, l'inchiostro sbavato.",
+        "success": [{ "type": "special", "value": { "effect": "lore_clue", "clueId": "village_well_cache" } }, { "type": "addXp", "value": 30 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] }
+    ]
+  },
+  {
+    "id": "village_general_store",
+    "title": "L'Emporio Silenzioso",
+    "isUnique": true,
+    "biomes": [
+      "Villaggio"
+    ],
+    "description": "Ti trovi di fronte a un vecchio emporio. La vetrina è coperta di polvere e l'insegna di legno è quasi illeggibile. La porta è socchiusa.",
+    "choices": [
+      {
+        "text": "Fruga dietro al bancone",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Sotto il bancone, in un cassetto nascosto, trovi un manuale di sopravvivenza e una scatola di sigari.",
+            "failureText": "Cerchi ovunque, ma trovi solo scontrini sbiaditi e polvere.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "manual_survival_basics",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "cigars_box",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 30
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ispeziona il magazzino sul retro",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il magazzino è umido e buio. Trovi un piede di porco appoggiato a un muro e alcuni rottami metallici."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "crowbar",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "scrap_metal",
+                  "quantity": 3
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_doctor_clinic", "title": "Il Giuramento Silenzioso", "isUnique": true, "biomes": ["Villaggio"],
+    "description": "La porta della clinica di un medico di campagna è socchiusa.",
+    "choices": [
+      { "text": "Cerca nell'armadietto dei farmaci", "outcomes": [{
+        "type": "skillCheck", "skill": "medicina", "dc": 12,
+        "successText": "Identifichi alcuni antidolorifici e antibiotici ancora efficaci.",
+        "failureText": "Trovi solo boccette vuote e scatole strappate. Qualcuno ha fatto pulizia.",
+        "success": [
+          { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 1 } },
+          { "type": "addItem", "value": { "itemId": "antibiotics_expired", "quantity": 1 } },
+          { "type": "addXp", "value": 25 }
+        ],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Leggi gli appunti sulla scrivania", "outcomes": [{
+        "type": "direct", "results": [
+          { "type": "journalEntry", "text": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia. Impari qualcosa sulle minacce biologiche." },
+          { "type": "special", "value": { "effect": "learn_disease_symptoms" } },
+          { "type": "addXp", "value": 20 }
+        ]
+      }] }
+    ]
+  }
+]

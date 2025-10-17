@@ -1,0 +1,58 @@
+[
+  {
+    "id": "city_military_checkpoint", "title": "Posto di Blocco Militare", "isUnique": true, "biomes": ["Città"],
+    "description": "Barricate di cemento e filo spinato bloccano una strada. Ci sono segnali di un vecchio checkpoint militare, con postazioni di guardia abbandonate e un container sigillato.",
+    "choices": [
+      { "text": "Cerca negli armadietti della postazione", "outcomes": [{
+        "type": "skillCheck", "skill": "investigare", "dc": 12,
+        "successText": "La maggior parte sono vuoti, ma in uno trovi un kit di pronto soccorso militare e un paio di granate fumogene.",
+        "failureText": "I posti di guardia sono stati saccheggiati a fondo e ora rivelano solo detriti e spazzatura.",
+        "success": [{ "type": "addItem", "value": { "itemId": "first_aid_kit", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "smoke_grenade", "quantity": 2 } }, { "type": "addXp", "value": 35 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Forza il container chiuso", "outcomes": [{
+        "type": "skillCheck", "skill": "atletica", "dc": 14,
+        "successText": "Con uno sforzo immenso, riesci a far leva sulla serratura, che si spezza. All'interno trovi una cassa di munizioni per fucile e alcune razioni a lunga conservazione.",
+        "failureText": "Il container è sigillato ermeticamente. Le serrature sono troppo resistenti anche per i tuoi sforzi.",
+        "success": [{ "type": "addItem", "value": { "itemId": "ammo_rifle", "quantity": 10 } }, { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } }, { "type": "addXp", "value": 40 }],
+        "failure": [{ "type": "addXp", "value": 15 }]
+      }] }
+    ]
+  },
+  {
+    "id": "city_broken_pharmacy", "title": "Farmacia Saccheggiata", "isUnique": true, "biomes": ["Città"],
+    "description": "Una farmacia con la vetrina infranta. Gli scaffali sono stati quasi completamente svuotati, ma qualcosa potrebbe essere sfuggito ai saccheggiatori.",
+    "choices": [
+      { "text": "Cerca tra gli scaffali rimasti", "outcomes": [{
+        "type": "skillCheck", "skill": "investigare", "dc": 11,
+        "successText": "Dietro una scatola di cotone idrofilo rovesciata, recuperi una scatola di antibiotici scaduti e alcune bende ancora sigillate.",
+        "failureText": "Hai cercato ovunque, ma non è rimasto assolutamente nulla di utile.",
+        "success": [{ "type": "addItem", "value": { "itemId": "antibiotics_expired", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 2 } }, { "type": "addXp", "value": 25 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Controlla il retrobottega", "outcomes": [{
+        "type": "skillCheck", "skill": "acrobazia", "dc": 12,
+        "successText": "Sgattaioli oltre uno scaffale pericolante nel retro e trovi un armadietto del personale. Dentro ci sono degli antidolorifici e un manuale di medicina.",
+        "failureText": "Nel tentativo di passare, urti lo scaffale che crolla con un boato, facendo rumore e costringendoti a una rapida ritirata.",
+        "success": [{ "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 2 } }, { "type": "addItem", "value": { "itemId": "manual_field_medicine", "quantity": 1 } }, { "type": "addXp", "value": 20 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] }
+    ]
+  },
+  {
+    "id": "city_subway_entrance", "title": "Ingresso della Metropolitana", "isUnique": true, "biomes": ["Città"],
+    "description": "Una scala porta nel buio di una stazione sotterranea. Si sentono gocce d'acqua e un ronzio lontano. L'aria è umida e fredda.",
+    "choices": [
+      { "text": "Scendi e esplora", "outcomes": [{
+        "type": "skillCheck", "skill": "acrobazia", "dc": 13,
+        "successText": "Ti muovi con cautela nell'oscurità, trovando i resti di rifugi improvvisati. Recuperi un pacco di batterie e un vecchio radio portatile.",
+        "failureText": "Scivoli sui gradini bagnati e ti perdi nei corridoi bui. Dopo aver vagato per un po', decidi che è troppo pericoloso e risali.",
+        "success": [{ "type": "addItem", "value": { "itemId": "batteries_pack", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "walkie_talkie", "quantity": 1 } }, { "type": "addXp", "value": 30 }],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Evita i sotterranei", "outcomes": [{
+        "type": "direct", "results": [{ "type": "journalEntry", "text": "Un'ondata di presentimento ti assale. Meglio non rischiare imboscate nel buio." }]
+      }] }
+    ]
+  }
+]

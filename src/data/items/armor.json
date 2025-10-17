@@ -1,22 +1,38 @@
-{
-  "ARMOR_001": {
-    "id": "ARMOR_001",
-    "name": "Giubbotto di pelle",
-    "description": "Un semplice giubbotto di pelle che offre una protezione minima.",
+[
+  {
+    "id": "leather_jacket",
+    "name": "Giubbotto di Pelle",
+    "description": "Un semplice giubbotto di pelle che offre una protezione minima ma un look classico. Meglio di niente contro i pericoli del mondo.",
     "type": "armor",
-    "weight": 5,
-    "value": 20,
-    "armor": 1,
-    "rarity": "Common"
+    "slot": "chest",
+    "defense": 5,
+    "weight": 3.0,
+    "value": 50,
+    "stackable": false,
+    "rarity": "common"
   },
-  "kevlar_vest": {
+  {
     "id": "kevlar_vest",
-    "name": "Giubbotto antiproiettile",
-    "description": "Un giubbotto tattico con inserti in kevlar. Offre ottima protezione contro proiettili.",
+    "name": "Giubbotto Antiproiettile",
+    "description": "Un giubbotto tattico con inserti in kevlar. Offre un'eccellente protezione contro proiettili e attacchi perforanti.",
     "type": "armor",
-    "weight": 8,
-    "value": 150,
-    "armor": 4,
-    "rarity": "Rare"
+    "slot": "chest",
+    "defense": 15,
+    "weight": 8.0,
+    "value": 350,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "combat_helmet",
+    "name": "Elmetto da Combattimento",
+    "description": "Un elmetto militare standard. Offre una buona protezione alla testa da impatti e schegge.",
+    "type": "armor",
+    "slot": "head",
+    "defense": 8,
+    "weight": 1.5,
+    "value": 120,
+    "stackable": false,
+    "rarity": "uncommon"
   }
-}
+]

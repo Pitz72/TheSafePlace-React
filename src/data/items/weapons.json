@@ -1,132 +1,110 @@
-{
-  "WEAP_KNIFE_IMPROVISED": {
-    "id": "WEAP_KNIFE_IMPROVISED",
-    "name": "Coltello improvvisato",
-    "description": "Una lama rudimentale creata legando rottami metallici a un manico di fortuna. Fragile ma meglio di niente.",
+[
+  {
+    "id": "combat_knife",
+    "name": "Coltello da Combattimento",
+    "description": "Un coltello militare standard, robusto e affidabile. Progettato per il combattimento ravvicinato, è un compagno essenziale per ogni sopravvissuto.",
     "type": "weapon",
-    "weight": 0.8,
-    "value": 5,
-    "damage": "1d3",
-    "durability": 50,
-    "rarity": "Common"
-  },
-  "WEAP_KNIFE_REINFORCED": {
-    "id": "WEAP_KNIFE_REINFORCED",
-    "name": "Coltello rinforzato",
-    "description": "Un coltello improvvisato migliorato con materiali di qualità superiore. Più resistente e affilato.",
-    "type": "weapon",
-    "weight": 1.2,
-    "value": 15,
-    "damage": "1d4+1",
-    "durability": 120,
-    "rarity": "Uncommon"
-  },
-  "WEAP_SPEAR_MAKESHIFT": {
-    "id": "WEAP_SPEAR_MAKESHIFT",
-    "name": "Lancia di fortuna",
-    "description": "Un bastone appuntito con una punta metallica legata. Utile per tenere i nemici a distanza.",
-    "type": "weapon",
-    "weight": 2.5,
-    "value": 8,
-    "damage": "1d4",
-    "durability": 80,
-    "rarity": "Common"
-  },
-  "WEAP_CLUB_SPIKED": {
-    "id": "WEAP_CLUB_SPIKED",
-    "name": "Mazza chiodata",
-    "description": "Un pezzo di legno con chiodi e rottami metallici conficcati. Brutale ed efficace.",
-    "type": "weapon",
-    "weight": 3.0,
-    "value": 12,
-    "damage": "1d6",
-    "durability": 100,
-    "rarity": "Common"
-  },
-  "WEAP_SLING": {
-    "id": "WEAP_SLING",
-    "name": "Fionda",
-    "description": "Una semplice fionda fatta di cuoio e corda. Silenziosa e precisa per piccoli bersagli.",
-    "type": "weapon",
-    "weight": 0.3,
-    "value": 6,
-    "damage": "1d2",
-    "durability": 200,
-    "rarity": "Common"
-  },
-  "WEAP_CROSSBOW_IMPROVISED": {
-    "id": "WEAP_CROSSBOW_IMPROVISED",
-    "name": "Balestra improvvisata",
-    "description": "Una balestra assemblata con molle e materiali di recupero. Potente ma lenta da ricaricare.",
-    "type": "weapon",
-    "weight": 4.5,
-    "value": 35,
-    "damage": "1d8",
-    "durability": 150,
-    "rarity": "Rare"
-  },
-  "WEAP_KNIFE_TACTICAL": {
-    "id": "WEAP_KNIFE_TACTICAL",
-    "name": "Coltello tattico",
-    "description": "Un coltello da combattimento di qualità militare, perfettamente bilanciato e affilato come un rasoio.",
-    "type": "weapon",
-    "weight": 1.5,
-    "value": 45,
-    "damage": "1d6+2",
-    "durability": 300,
-    "rarity": "Epic"
-  },
-  "WEAP_001": {
-    "id": "WEAP_001",
-    "name": "Coltello da combattimento",
-    "description": "Un coltello affidabile per il combattimento ravvicinato.",
-    "type": "weapon",
-    "weight": 1,
-    "value": 10,
-    "damage": "1d4",
-    "rarity": "Common"
-  },
-  "WEAP_002": {
-    "id": "WEAP_002",
-    "name": "Pistola 9mm",
-    "description": "Una pistola semiautomatica comune.",
-    "type": "weapon",
-    "weight": 3,
-    "value": 50,
-    "damage": "1d6",
-    "rarity": "Uncommon"
-  },
-  "hunting_knife": {
-    "id": "hunting_knife",
-    "name": "Coltello da caccia",
-    "description": "Un coltello robusto progettato per la caccia e la sopravvivenza.",
-    "type": "weapon",
-    "weight": 1.0,
-    "value": 20,
-    "damage": "1d4",
-    "durability": 200,
-    "rarity": "Uncommon"
-  },
-  "folding_knife": {
-    "id": "folding_knife",
-    "name": "Coltello pieghevole",
-    "description": "Un coltello compatto che si chiude in tasca. Pratico e discreto.",
-    "type": "weapon",
+    "weaponType": "melee",
+    "damage": 12,
     "weight": 0.5,
-    "value": 15,
-    "damage": "1d3",
-    "durability": 150,
-    "rarity": "Common"
+    "value": 75,
+    "stackable": false,
+    "rarity": "uncommon"
   },
-  "kitchen_knife": {
-    "id": "kitchen_knife",
-    "name": "Coltello da cucina",
-    "description": "Un coltello affilato originariamente per cucinare, ora utile per difesa.",
+  {
+    "id": "folding_knife",
+    "name": "Coltello Pieghevole",
+    "description": "Un piccolo e pratico coltello, utile sia come attrezzo che come arma di difesa dell'ultimo minuto.",
     "type": "weapon",
-    "weight": 0.6,
-    "value": 8,
-    "damage": "1d3",
-    "durability": 100,
-    "rarity": "Common"
+    "weaponType": "melee",
+    "damage": 8,
+    "weight": 0.2,
+    "value": 40,
+    "stackable": false,
+    "rarity": "common"
+  },
+  {
+    "id": "antlers",
+    "name": "Corna di Cervo",
+    "description": "Le corna intatte di un cervo. Possono essere usate come un'arma da taglio improvvisata, affilata e pericolosa.",
+    "type": "weapon",
+    "weaponType": "melee",
+    "damage": 10,
+    "weight": 1.5,
+    "value": 30,
+    "stackable": false,
+    "rarity": "common"
+  },
+  {
+    "id": "crowbar",
+    "name": "Piede di Porco",
+    "description": "Un solido pezzo di metallo, perfetto per forzare porte o come rozza ma efficace arma contundente.",
+    "type": "weapon",
+    "weaponType": "melee",
+    "damage": 15,
+    "weight": 2.5,
+    "value": 60,
+    "stackable": false,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "giant_bone_club",
+    "name": "Clava d'Osso di Gigante",
+    "description": "Un pezzo massiccio di una costola di una creatura enorme. È incredibilmente denso e resistente, perfetto per essere usato come una clava pesante.",
+    "type": "weapon",
+    "weaponType": "melee",
+    "damage": 25,
+    "weight": 15.0,
+    "value": 150,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "pistol_small_caliber",
+    "name": "Pistola di Piccolo Calibro",
+    "description": "Una pistola di piccolo calibro, probabilmente l'arma di difesa personale di un civile. Facile da nascondere, ma con un potere d'arresto limitato.",
+    "type": "weapon",
+    "weaponType": "ranged",
+    "damage": 14,
+    "weight": 0.8,
+    "value": 120,
+    "stackable": false,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pistol_military",
+    "name": "Pistola Militare",
+    "description": "Una pistola semiautomatica di fabbricazione militare, robusta e affidabile. Un'arma seria per un sopravvissuto.",
+    "type": "weapon",
+    "weaponType": "ranged",
+    "damage": 18,
+    "weight": 1.2,
+    "value": 250,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "sniper_rifle_disassembled",
+    "name": "Fucile di Precisione (Smontato)",
+    "description": "Le parti di un fucile di precisione, nascoste con cura. Richiede assemblaggio per poter essere utilizzato.",
+    "type": "weapon",
+    "weaponType": "ranged",
+    "damage": 0,
+    "weight": 8.0,
+    "value": 400,
+    "stackable": false,
+    "rarity": "epic"
+  },
+  {
+    "id": "throwing_knives",
+    "name": "Coltelli da Lancio",
+    "description": "Un set di coltelli perfettamente bilanciati, progettati per essere lanciati con precisione. Un attacco silenzioso da lontano.",
+    "type": "weapon",
+    "weaponType": "thrown",
+    "damage": 10,
+    "weight": 0.1,
+    "value": 25,
+    "stackable": true,
+    "rarity": "uncommon"
   }
-}
+]

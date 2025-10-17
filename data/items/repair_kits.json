@@ -1,0 +1,24 @@
+[
+  {
+    "id": "tool_repair_kit_basic",
+    "name": "Kit di Riparazione Base",
+    "description": "Un set di attrezzi rudimentali e materiali di consumo per la manutenzione di base di armi e armature. Ripristina una piccola quantità di durabilità.",
+    "type": "tool",
+    "weight": 1.0,
+    "value": 40,
+    "stackable": true,
+    "rarity": "common",
+    "effects": [{ "type": "repair", "value": 25 }]
+  },
+  {
+    "id": "tool_repair_kit_advanced",
+    "name": "Kit di Riparazione Avanzato",
+    "description": "Strumenti di precisione e materiali di alta qualità per riparazioni complesse. Ripristina una grande quantità di durabilità.",
+    "type": "tool",
+    "weight": 1.5,
+    "value": 100,
+    "stackable": true,
+    "rarity": "uncommon",
+    "effects": [{ "type": "repair", "value": 75 }]
+  }
+]

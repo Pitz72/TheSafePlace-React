@@ -1,0 +1,23 @@
+[
+  {
+    "id": "scavenger",
+    "name": "Scavenger",
+    "description": "Aumenta la quantità di oggetti trovati durante la ricerca nei rifugi.",
+    "requiredSkill": "sopravvivenza",
+    "levelRequirement": 2
+  },
+  {
+    "id": "field_medic",
+    "name": "Medico da Campo",
+    "description": "Aumenta del 25% l'efficacia di tutti gli oggetti curativi.",
+    "requiredSkill": "medicina",
+    "levelRequirement": 2
+  },
+  {
+    "id": "guerrilla_fighter",
+    "name": "Guerrigliero",
+    "description": "Se inizi un combattimento in una foresta, esegui un attacco a sorpresa prima dell'inizio del primo turno.",
+    "requiredSkill": "furtivita",
+    "levelRequirement": 2
+  }
+]
