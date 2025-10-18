@@ -149,7 +149,7 @@ const CommandsPanel: React.FC = () => (
       <div className="flex justify-between"><span>[L]</span> <span>Level Up</span></div>
       <div className="flex justify-between"><span>[ESC]</span> <span>Menu/Indietro</span></div>
     </div>
-  </CommandsPanel>
+  </Panel>
 );
 
 
