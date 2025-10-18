@@ -4,6 +4,11 @@ import { GameState } from '../types';
 import { STORY_TEXT } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
+/**
+ * StoryScreen component.
+ * This component displays the story of the game.
+ * @returns {JSX.Element} The rendered StoryScreen component.
+ */
 const StoryScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const [displayedText, setDisplayedText] = useState('');

@@ -43,6 +43,11 @@ const WEATHER_TRANSITIONS: Record<WeatherType, { to: WeatherType; probability: n
     ],
 };
 
+/**
+ * Picks the next weather type based on the current weather.
+ * @param {WeatherType} current - The current weather type.
+ * @returns {WeatherType} The next weather type.
+ */
 export const pickNextWeather = (current: WeatherType): WeatherType => {
     const transitions = WEATHER_TRANSITIONS[current];
     const roll = Math.random();

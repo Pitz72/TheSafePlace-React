@@ -4,6 +4,11 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { CutscenePage } from '../types';
 import { audioManager } from '../utils/audio';
 
+/**
+ * CutsceneScreen component.
+ * This component renders the cutscene screen.
+ * @returns {JSX.Element | null} The rendered CutsceneScreen component or null.
+ */
 const CutsceneScreen: React.FC = () => {
     const { activeCutscene, processCutsceneConsequences, endCutscene } = useGameStore();
     const [pageIndex, setPageIndex] = useState(0);

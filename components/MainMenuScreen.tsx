@@ -7,6 +7,11 @@ import { useCharacterStore } from '../store/characterStore';
 import { GameState, JournalEntryType } from '../types';
 import { audioManager } from '../utils/audio';
 
+/**
+ * MainMenuScreen component.
+ * This component renders the main menu screen.
+ * @returns {JSX.Element} The rendered MainMenuScreen component.
+ */
 const MainMenuScreen: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { setGameState, setMap, startCutscene, loadGame, addJournalEntry } = useGameStore();

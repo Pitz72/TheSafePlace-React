@@ -34,6 +34,11 @@ const ASCII_SKULL = `
           █████           █████
 `;
 
+/**
+ * GameOverScreen component.
+ * This component renders the game over screen.
+ * @returns {JSX.Element} The rendered GameOverScreen component.
+ */
 const GameOverScreen: React.FC = () => {
     const { deathCause, setGameState } = useGameStore();
 

@@ -4,6 +4,11 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 import { useEventStore } from '../store/eventStore';
 
+/**
+ * EventScreen component.
+ * This component renders the event screen, which displays an event and allows the player to make a choice.
+ * @returns {JSX.Element | null} The rendered EventScreen component or null.
+ */
 const EventScreen: React.FC = () => {
     const { activeEvent, resolveEventChoice, eventResolutionText, dismissEventResolution } = useEventStore();
     const inventory = useCharacterStore(state => state.inventory);

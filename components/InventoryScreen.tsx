@@ -5,6 +5,14 @@ import { useItemDatabaseStore } from '../data/itemDatabase';
 import { IItem, InventoryItem } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
 
+/**
+ * DetailLine component.
+ * This component renders a line of detail with a label and a value.
+ * @param {object} props - The props for the component.
+ * @param {string} props.label - The label for the detail.
+ * @param {React.ReactNode} props.value - The value for the detail.
+ * @returns {JSX.Element} The rendered DetailLine component.
+ */
 const DetailLine: React.FC<{ label: string, value: React.ReactNode }> = ({ label, value }) => (
     <div className="flex">
         <span className="w-36 flex-shrink-0 opacity-70">{label}:</span>
@@ -12,6 +20,14 @@ const DetailLine: React.FC<{ label: string, value: React.ReactNode }> = ({ label
     </div>
 );
 
+/**
+ * ItemDetails component.
+ * This component renders the details of a selected item.
+ * @param {object} props - The props for the component.
+ * @param {IItem | null} props.item - The item to display details for.
+ * @param {InventoryItem | null} props.invItem - The inventory item to display details for.
+ * @returns {JSX.Element} The rendered ItemDetails component.
+ */
 const ItemDetails: React.FC<{ item: IItem | null, invItem: InventoryItem | null }> = ({ item, invItem }) => {
     if (!item) {
         return (
@@ -47,6 +63,11 @@ const ItemDetails: React.FC<{ item: IItem | null, invItem: InventoryItem | null 
     );
 };
 
+/**
+ * ActionMenu component.
+ * This component renders the action menu for an item.
+ * @returns {JSX.Element} The rendered ActionMenu component.
+ */
 const ActionMenu: React.FC = () => {
     const { options, selectedIndex } = useInteractionStore(state => state.actionMenuState);
 
@@ -63,6 +84,11 @@ const ActionMenu: React.FC = () => {
     );
 };
 
+/**
+ * InventoryScreen component.
+ * This component renders the inventory screen.
+ * @returns {JSX.Element} The rendered InventoryScreen component.
+ */
 
 const InventoryScreen: React.FC = () => {
     const { 

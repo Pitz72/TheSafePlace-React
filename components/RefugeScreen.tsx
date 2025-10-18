@@ -2,6 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { useInteractionStore } from '../store/interactionStore';
 
+/**
+ * RefugeScreen component.
+ * This component renders the refuge screen.
+ * @returns {JSX.Element} The rendered RefugeScreen component.
+ */
 const RefugeScreen: React.FC = () => {
     const { refugeMenuState, navigateRefugeMenu, confirmRefugeMenuSelection, refugeActionMessage } = useInteractionStore();
     const { options, selectedIndex } = refugeMenuState;

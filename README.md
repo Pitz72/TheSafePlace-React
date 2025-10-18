@@ -105,6 +105,22 @@ Le prossime, importanti implementazioni previste sono:
     *   **Pianura:** L'assenza di coperture potrebbe rendere la fuga più difficile.
     *   **Immersione Totale:** L'ambiente diventerà una risorsa (o un ostacolo) attiva anche durante gli scontri.
 
+### Configurazione
+
+1.  **Clonare il repository:**
+    ```bash
+    git clone https://github.com/SimonePizzi/the-safe-place-chronicles.git
+    ```
+2.  **Installare le dipendenze:**
+    ```bash
+    npm install
+    ```
+3.  **Avviare il server di sviluppo:**
+    ```bash
+    npm run dev
+    ```
+Il gioco sarà disponibile all'indirizzo `http://localhost:3000`.
+
 ### Ringraziamenti
 
 Un ringraziamento speciale a Michela, mia moglie, per la pazienza e il sostegno, a PixelDebh, Giuseppe "MagnetarMan" Pugliese e al Prof. Leonardo Boselli per aver creduto e dato spazio a questa visione. Un grazie speciale anche a tutti gli amici e i membri del gruppo Telegram "Progetto GDR Anni 80 (WIP)".

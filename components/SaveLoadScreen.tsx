@@ -5,6 +5,16 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
 const NUM_SLOTS = 5;
 
+/**
+ * @interface SaveMetadata
+ * @description Represents the metadata of a save file.
+ * @property {number} slot - The slot number of the save file.
+ * @property {number} level - The player's level.
+ * @property {number} day - The current day in the game.
+ * @property {number} hour - The current hour in the game.
+ * @property {number} minute - The current minute in the game.
+ * @property {number} timestamp - The timestamp of the save file.
+ */
 interface SaveMetadata {
     slot: number;
     level: number;
@@ -14,6 +24,11 @@ interface SaveMetadata {
     timestamp: number;
 }
 
+/**
+ * Gets the metadata of a save file.
+ * @param {number} slot - The slot number of the save file.
+ * @returns {SaveMetadata | null} The metadata of the save file, or null if it doesn't exist.
+ */
 const getSaveMetadata = (slot: number): SaveMetadata | null => {
     const data = localStorage.getItem(`tspc_save_slot_${slot}`);
     if (!data) return null;
@@ -28,6 +43,13 @@ const getSaveMetadata = (slot: number): SaveMetadata | null => {
     }
 };
 
+/**
+ * SaveLoadScreen component.
+ * This component renders the save/load screen.
+ * @param {object} props - The props for the component.
+ * @param {'save' | 'load'} props.mode - The mode of the screen ('save' or 'load').
+ * @returns {JSX.Element} The rendered SaveLoadScreen component.
+ */
 const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
     const { setGameState, saveGame, loadGame } = useGameStore();
     const previousGameState = useGameStore(state => state.previousGameState);

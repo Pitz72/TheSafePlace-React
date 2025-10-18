@@ -8,6 +8,17 @@ import { useEnemyDatabaseStore } from '../data/enemyDatabase';
 import { useCombatStore } from './combatStore';
 import { useTimeStore } from './timeStore';
 
+/**
+ * @interface EventStoreState
+ * @description Represents the state of the event store.
+ * @property {GameEvent | null} activeEvent - The currently active event, or null if no event is active.
+ * @property {string[]} eventHistory - A list of IDs of events that have already occurred.
+ * @property {string | null} eventResolutionText - The text to display after an event has been resolved.
+ * @property {(forceBiomeEvent?: boolean) => void} triggerEncounter - Function to trigger a new encounter.
+ * @property {(choiceIndex: number) => void} resolveEventChoice - Function to resolve a choice made during an event.
+ * @property {() => void} dismissEventResolution - Function to dismiss the event resolution text.
+ * @property {() => void} reset - Function to reset the event store to its initial state.
+ */
 interface EventStoreState {
     activeEvent: GameEvent | null;
     eventHistory: string[];
@@ -30,6 +41,11 @@ const initialState = {
 export const useEventStore = create<EventStoreState>((set, get) => ({
     ...initialState,
 
+    /**
+     * @function triggerEncounter
+     * @description Triggers a new encounter, which can be either a combat or a narrative event.
+     * @param {boolean} [forceBiomeEvent=false] - Whether to force a biome-specific event.
+     */
     triggerEncounter: (forceBiomeEvent = false) => {
         const { lastEncounterTime, currentBiome, lastLoreEventDay, addJournalEntry, setGameState } = useGameStore.getState();
         const { gameTime } = useTimeStore.getState();
@@ -115,6 +131,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         }
     },
 
+    /**
+     * @function dismissEventResolution
+     * @description Dismisses the event resolution text and returns to the game.
+     */
     dismissEventResolution: () => {
         const activeEventId = get().activeEvent?.id;
         if (!activeEventId) {
@@ -130,6 +150,11 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         useGameStore.getState().setGameState(GameState.IN_GAME);
     },
 
+    /**
+     * @function resolveEventChoice
+     * @description Resolves a choice made during an event.
+     * @param {number} choiceIndex - The index of the choice made.
+     */
     resolveEventChoice: (choiceIndex: number) => {
         const { activeEvent } = get();
         const { addJournalEntry } = useGameStore.getState();
@@ -199,6 +224,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         }
         set({ eventResolutionText: resolutionSummary.join('\\n') });
     },
+    /**
+     * @function reset
+     * @description Resets the event store to its initial state.
+     */
     reset: () => {
         set(initialState);
     }

@@ -8,6 +8,16 @@ import { useItemDatabaseStore } from '../data/itemDatabase';
 import { audioManager } from '../utils/audio';
 import * as N from '../data/combatNarrative';
 
+/**
+ * @interface CombatStoreState
+ * @description Represents the state of the combat store.
+ * @property {CombatState | null} activeCombat - The currently active combat, or null if no combat is active.
+ * @property {(enemyId: string) => void} startCombat - Function to start a new combat.
+ * @property {(result: 'win' | 'flee' | 'lose') => void} endCombat - Function to end the current combat.
+ * @property {(action: PlayerCombatActionPayload) => void} playerCombatAction - Function to handle a player's combat action.
+ * @property {() => void} cleanupCombat - Function to clean up after a combat has ended.
+ * @property {() => void} reset - Function to reset the combat store to its initial state.
+ */
 interface CombatStoreState {
     activeCombat: CombatState | null;
     startCombat: (enemyId: string) => void;
@@ -25,6 +35,11 @@ const initialState = {
 
 export const useCombatStore = create<CombatStoreState>((set, get) => ({
     ...initialState,
+    /**
+     * @function startCombat
+     * @description Starts a new combat with a specified enemy.
+     * @param {string} enemyId - The ID of the enemy to start combat with.
+     */
     startCombat: (enemyId) => {
         const enemy = useEnemyDatabaseStore.getState().enemyDatabase[enemyId];
         if (!enemy) return;
@@ -60,6 +75,11 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         // FIX: Use GameState enum instead of string.
         useGameStore.getState().setGameState(GameState.COMBAT);
     },
+    /**
+     * @function endCombat
+     * @description Ends the current combat.
+     * @param {'win' | 'flee' | 'lose'} result - The result of the combat.
+     */
     endCombat: (result) => {
         const { addJournalEntry, setGameState } = useGameStore.getState();
         if (result === 'win') audioManager.playSound('victory');
@@ -73,11 +93,20 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         // FIX: Use GameState enum instead of string.
         setGameState(GameState.IN_GAME);
     },
+    /**
+     * @function cleanupCombat
+     * @description Cleans up after a combat has ended.
+     */
     cleanupCombat: () => {
         set({ activeCombat: null });
         // FIX: Use GameState enum instead of string.
         useGameStore.getState().setGameState(GameState.IN_GAME);
     },
+    /**
+     * @function playerCombatAction
+     * @description Handles a player's combat action.
+     * @param {PlayerCombatActionPayload} action - The action taken by the player.
+     */
     playerCombatAction: (action) => {
         const combatState = get().activeCombat;
         if (!combatState || !combatState.playerTurn || combatState.victory) return;
@@ -221,6 +250,10 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             }, 1500);
         }
     },
+    /**
+     * @function reset
+     * @description Resets the combat store to its initial state.
+     */
     reset: () => {
         set(initialState);
     }

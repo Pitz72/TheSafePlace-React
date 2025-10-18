@@ -8,6 +8,35 @@ import { audioManager } from '../utils/audio';
 import { useMainQuestDatabaseStore } from '../data/mainQuestDatabase';
 import { useTimeStore } from './timeStore';
 
+/**
+ * @interface InteractionStoreState
+ * @description Represents the state of the interaction store.
+ * @property {boolean} isInventoryOpen - Whether the inventory is open.
+ * @property {boolean} isInRefuge - Whether the player is in a refuge.
+ * @property {boolean} isCraftingOpen - Whether the crafting menu is open.
+ * @property {number} inventorySelectedIndex - The index of the selected item in the inventory.
+ * @property {ActionMenuState} actionMenuState - The state of the action menu.
+ * @property {RefugeMenuState} refugeMenuState - The state of the refuge menu.
+ * @property {CraftingMenuState} craftingMenuState - The state of the crafting menu.
+ * @property {string | null} refugeActionMessage - A message to display after a refuge action.
+ * @property {boolean} refugeJustSearched - Whether the refuge has just been searched.
+ * @property {() => void} toggleInventory - Toggles the inventory open or closed.
+ * @property {(updater: (prev: number) => number) => void} setInventorySelectedIndex - Sets the selected index in the inventory.
+ * @property {() => void} openActionMenu - Opens the action menu for the selected item.
+ * @property {() => void} closeActionMenu - Closes the action menu.
+ * @property {(direction: number) => void} navigateActionMenu - Navigates the action menu.
+ * @property {() => void} confirmActionMenuSelection - Confirms the selected action in the action menu.
+ * @property {() => void} enterRefuge - Enters a refuge.
+ * @property {() => void} leaveRefuge - Leaves a refuge.
+ * @property {(direction: number) => void} navigateRefugeMenu - Navigates the refuge menu.
+ * @property {() => void} confirmRefugeMenuSelection - Confirms the selected action in the refuge menu.
+ * @property {() => void} searchRefuge - Searches the current refuge for items.
+ * @property {() => void} clearRefugeActionMessage - Clears the refuge action message.
+ * @property {() => void} toggleCrafting - Toggles the crafting menu open or closed.
+ * @property {(direction: number) => void} navigateCraftingMenu - Navigates the crafting menu.
+ * @property {() => void} performCrafting - Performs the selected crafting recipe.
+ * @property {() => void} reset - Resets the store to its initial state.
+ */
 interface InteractionStoreState {
     isInventoryOpen: boolean;
     isInRefuge: boolean;
@@ -55,6 +84,10 @@ const initialState = {
 export const useInteractionStore = create<InteractionStoreState>((set, get) => ({
     ...initialState,
     
+    /**
+     * @function toggleInventory
+     * @description Toggles the inventory open or closed.
+     */
     toggleInventory: () => {
         set(state => {
             if (state.actionMenuState.isOpen) {
@@ -67,6 +100,11 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         });
     },
 
+    /**
+     * @function setInventorySelectedIndex
+     * @description Sets the selected index in the inventory.
+     * @param {function} updater - A function that takes the previous index and returns the new index.
+     */
     setInventorySelectedIndex: (updater) => {
         const inventory = useCharacterStore.getState().inventory;
         if (inventory.length === 0) { set({ inventorySelectedIndex: 0 }); return; }
@@ -79,6 +117,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('navigate');
     },
 
+    /**
+     * @function openActionMenu
+     * @description Opens the action menu for the selected item.
+     */
     openActionMenu: () => {
         const { inventorySelectedIndex } = get();
         const { inventory, equippedWeapon, equippedArmor } = useCharacterStore.getState();
@@ -118,11 +160,20 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('confirm');
     },
 
+    /**
+     * @function closeActionMenu
+     * @description Closes the action menu.
+     */
     closeActionMenu: () => {
         set({ actionMenuState: { isOpen: false, options: [], selectedIndex: 0 } });
         audioManager.playSound('cancel');
     },
 
+    /**
+     * @function navigateActionMenu
+     * @description Navigates the action menu.
+     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
+     */
     navigateActionMenu: (direction) => {
         set(state => {
             const { options, selectedIndex } = state.actionMenuState;
@@ -134,6 +185,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('navigate');
     },
     
+    /**
+     * @function confirmActionMenuSelection
+     * @description Confirms the selected action in the action menu.
+     */
     confirmActionMenuSelection: () => {
         const { actionMenuState, inventorySelectedIndex } = get();
         const charState = useCharacterStore.getState();
@@ -241,8 +296,16 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         }
     },
 
+    /**
+     * @function clearRefugeActionMessage
+     * @description Clears the refuge action message.
+     */
     clearRefugeActionMessage: () => set({ refugeActionMessage: null }),
 
+    /**
+     * @function enterRefuge
+     * @description Enters a refuge.
+     */
     enterRefuge: () => {
         const { visitedRefuges, mainQuestStage, setGameState, activeMainQuestEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
         const { gameTime } = useTimeStore.getState();
@@ -279,6 +342,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         addJournalEntry({ text: "Sei entrato in un rifugio. Sei al sicuro.", type: JournalEntryType.NARRATIVE });
     },
 
+    /**
+     * @function leaveRefuge
+     * @description Leaves a refuge.
+     */
     leaveRefuge: () => {
         set(state => {
             useGameStore.setState(gs => {
@@ -297,6 +364,11 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('cancel');
     },
 
+    /**
+     * @function navigateRefugeMenu
+     * @description Navigates the refuge menu.
+     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
+     */
     navigateRefugeMenu: (direction) => {
         get().clearRefugeActionMessage();
         set(state => {
@@ -310,6 +382,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('navigate');
     },
 
+    /**
+     * @function searchRefuge
+     * @description Searches the current refuge for items.
+     */
     searchRefuge: () => {
         const { addJournalEntry, playerPos } = useGameStore.getState();
         const { advanceTime } = useTimeStore.getState();
@@ -346,6 +422,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         set(state => ({ refugeMenuState: { ...state.refugeMenuState, options: newOptions, selectedIndex: 0 } }));
     },
 
+    /**
+     * @function confirmRefugeMenuSelection
+     * @description Confirms the selected action in the refuge menu.
+     */
     confirmRefugeMenuSelection: () => {
         get().clearRefugeActionMessage();
         const { refugeMenuState } = get();
@@ -413,6 +493,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         }
     },
 
+    /**
+     * @function toggleCrafting
+     * @description Toggles the crafting menu open or closed.
+     */
     toggleCrafting: () => {
         set(state => {
             if (state.isInventoryOpen) return {};
@@ -422,6 +506,11 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         });
     },
 
+    /**
+     * @function navigateCraftingMenu
+     * @description Navigates the crafting menu.
+     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
+     */
     navigateCraftingMenu: (direction) => {
         const { knownRecipes } = useCharacterStore.getState();
         const displayableRecipes = useRecipeDatabaseStore.getState().recipes.filter(r => knownRecipes.includes(r.id));
@@ -436,6 +525,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         audioManager.playSound('navigate');
     },
     
+    /**
+     * @function performCrafting
+     * @description Performs the selected crafting recipe.
+     */
     performCrafting: () => {
         const { craftingMenuState } = get();
         const { addJournalEntry } = useGameStore.getState();
@@ -479,6 +572,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         }
     },
 
+    /**
+     * @function reset
+     * @description Resets the store to its initial state.
+     */
     reset: () => {
         set(initialState);
     }

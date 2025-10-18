@@ -2,6 +2,12 @@
 
 const AUDIO_SETTINGS_KEY = 'tspc_audio_settings';
 
+/**
+ * @interface AudioSettings
+ * @description Represents the audio settings.
+ * @property {number} volume - The volume level, from 0 to 10.
+ * @property {boolean} isMuted - Whether the audio is muted.
+ */
 interface AudioSettings {
     volume: number; // Stored as 0-10
     isMuted: boolean;
@@ -56,11 +62,19 @@ class AudioManager {
     }
 
     // Public methods for UI control
+    /**
+     * Sets the volume.
+     * @param {number} uiVolume - The volume level, from 0 to 10.
+     */
     public setVolume(uiVolume: number) {
         this.volume = this.uiVolumeToGain(uiVolume);
         this.saveSettings();
     }
 
+    /**
+     * Sets whether the audio is muted.
+     * @param {boolean} muted - Whether the audio is muted.
+     */
     public setMuted(muted: boolean) {
         this.isMuted = muted;
         this.saveSettings();
@@ -70,10 +84,18 @@ class AudioManager {
         }
     }
     
+    /**
+     * Gets the volume for the UI.
+     * @returns {number} The volume level, from 0 to 10.
+     */
     public getVolumeForUI(): number {
         return this.gainToUiVolume(this.volume);
     }
 
+    /**
+     * Gets whether the audio is muted for the UI.
+     * @returns {boolean} Whether the audio is muted.
+     */
     public getIsMutedForUI(): boolean {
         return this.isMuted;
     }
@@ -189,6 +211,10 @@ class AudioManager {
         this.musicBoxSource = oscillator;
     }
 
+    /**
+     * Plays a sound.
+     * @param {string} sound - The name of the sound to play.
+     */
 
     public playSound(sound: string) {
         // This is now a fire-and-forget wrapper around the new async methods

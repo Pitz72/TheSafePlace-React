@@ -19,6 +19,12 @@ const STATUS_COLORS: Record<PlayerStatusCondition, string> = {
 };
 
 // --- Left Column Panels ---
+
+/**
+ * SurvivalPanel component.
+ * This component displays the player's survival stats (HP, satiety, hydration, and status).
+ * @returns {JSX.Element} The rendered SurvivalPanel component.
+ */
 const SurvivalPanel: React.FC = () => {
     const hp = useCharacterStore((state) => state.hp);
     const satiety = useCharacterStore((state) => state.satiety);
@@ -53,6 +59,11 @@ const SurvivalPanel: React.FC = () => {
     );
 };
 
+/**
+ * InventoryPanel component.
+ * This component displays the player's inventory.
+ * @returns {JSX.Element} The rendered InventoryPanel component.
+ */
 const InventoryPanel: React.FC = () => {
   const inventory = useCharacterStore((state) => state.inventory);
   const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
@@ -101,6 +112,11 @@ const InventoryPanel: React.FC = () => {
   );
 };
 
+/**
+ * CommandsPanel component.
+ * This component displays the available commands.
+ * @returns {JSX.Element} The rendered CommandsPanel component.
+ */
 const CommandsPanel: React.FC = () => (
   <Panel title="COMANDI">
     <div className="space-y-1.5">
@@ -115,6 +131,12 @@ const CommandsPanel: React.FC = () => (
 
 
 // --- Right Column Panels ---
+
+/**
+ * InfoPanel component.
+ * This component displays information about the player's current location, time, and weather.
+ * @returns {JSX.Element} The rendered InfoPanel component.
+ */
 const InfoPanel: React.FC = () => {
     const playerPos = useGameStore((state) => state.playerPos);
     const gameTime = useTimeStore((state) => state.gameTime);
@@ -169,6 +191,11 @@ const InfoPanel: React.FC = () => {
     );
 };
 
+/**
+ * EquipmentPanel component.
+ * This component displays the player's equipped items.
+ * @returns {JSX.Element} The rendered EquipmentPanel component.
+ */
 const EquipmentPanel: React.FC = () => {
     const inventory = useCharacterStore((state) => state.inventory);
     const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
@@ -204,6 +231,11 @@ const EquipmentPanel: React.FC = () => {
     );
 };
 
+/**
+ * StatsPanel component.
+ * This component displays the player's stats.
+ * @returns {JSX.Element} The rendered StatsPanel component.
+ */
 const StatsPanel: React.FC = () => {
     const level = useCharacterStore((state) => state.level);
     const xp = useCharacterStore((state) => state.xp);
@@ -240,6 +272,12 @@ const StatsPanel: React.FC = () => {
 
 
 // --- Bottom Panel ---
+
+/**
+ * TravelJournalPanel component.
+ * This component displays the player's travel journal.
+ * @returns {JSX.Element} The rendered TravelJournalPanel component.
+ */
 const TravelJournalPanel: React.FC = () => {
     const journal = useGameStore((state) => state.journal);
     const journalRef = useRef<HTMLDivElement>(null);
@@ -276,6 +314,11 @@ const TravelJournalPanel: React.FC = () => {
     );
 };
 
+/**
+ * GameScreen component.
+ * This component renders the main game screen, including the map, panels, and journal.
+ * @returns {JSX.Element} The rendered GameScreen component.
+ */
 
 const GameScreen: React.FC = () => {
   const { setGameState, movePlayer, performQuickRest, openLevelUpScreen } = useGameStore();

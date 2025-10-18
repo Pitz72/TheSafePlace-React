@@ -6,6 +6,15 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Recipe } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
 
+/**
+ * DetailLine component.
+ * This component renders a line of detail with a label and a value.
+ * @param {object} props - The props for the component.
+ * @param {string} props.label - The label for the detail.
+ * @param {React.ReactNode} props.value - The value for the detail.
+ * @param {string} [props.color] - The color of the value.
+ * @returns {JSX.Element} The rendered DetailLine component.
+ */
 const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: string }> = ({ label, value, color }) => (
     <div className="flex">
         <span className="w-48 flex-shrink-0 opacity-70">{label}:</span>
@@ -13,6 +22,13 @@ const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: stri
     </div>
 );
 
+/**
+ * RecipeDetails component.
+ * This component renders the details of a selected recipe.
+ * @param {object} props - The props for the component.
+ * @param {Recipe | null} props.recipe - The recipe to display details for.
+ * @returns {JSX.Element} The rendered RecipeDetails component.
+ */
 const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     const { itemDatabase } = useItemDatabaseStore();
 
@@ -57,6 +73,11 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     );
 };
 
+/**
+ * CraftingScreen component.
+ * This component renders the crafting screen.
+ * @returns {JSX.Element} The rendered CraftingScreen component.
+ */
 
 const CraftingScreen: React.FC = () => {
     const { toggleCrafting, craftingMenuState, navigateCraftingMenu, performCrafting } = useInteractionStore();

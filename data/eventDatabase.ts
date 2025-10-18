@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { GameEvent } from '../types';
 
+/**
+ * Loads all events from the events directory.
+ * @returns {Promise<{ biomeEvents: GameEvent[], globalEncounters: GameEvent[], loreEvents: GameEvent[], easterEggEvents: GameEvent[] }>} A promise that resolves to an object containing all events.
+ */
 async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounters: GameEvent[], loreEvents: GameEvent[], easterEggEvents: GameEvent[] }> {
     const biomeFiles = [
         './data/events/plains.json',
@@ -40,7 +44,16 @@ async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounter
     }
 }
 
-
+/**
+ * @interface EventDatabaseState
+ * @description Represents the state of the event database store.
+ * @property {boolean} isLoaded - Whether the event database has been loaded.
+ * @property {GameEvent[]} biomeEvents - An array of biome-specific events.
+ * @property {GameEvent[]} globalEncounters - An array of global encounters.
+ * @property {GameEvent[]} loreEvents - An array of lore events.
+ * @property {GameEvent[]} easterEggEvents - An array of easter egg events.
+ * @property {() => Promise<void>} loadDatabase - Function to load the event database.
+ */
 interface EventDatabaseState {
     isLoaded: boolean;
     biomeEvents: GameEvent[];

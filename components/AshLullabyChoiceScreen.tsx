@@ -4,6 +4,11 @@ import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 
+/**
+ * AshLullabyChoiceScreen component.
+ * This component renders a screen where the player can choose to open the music box or ignore it.
+ * @returns {JSX.Element} The rendered AshLullabyChoiceScreen component.
+ */
 const AshLullabyChoiceScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const setGameState = useGameStore(state => state.setGameState);

@@ -17,6 +17,19 @@ import { useCombatStore } from './combatStore';
 const SAVE_VERSION = "1.0.0";
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
+/**
+ * @interface SaveFile
+ * @description Represents the structure of a save file.
+ * @property {string} saveVersion - The version of the save file.
+ * @property {number} timestamp - The timestamp when the game was saved.
+ * @property {object} metadata - Additional information about the saved game.
+ * @property {number} metadata.level - The character's level.
+ * @property {number} metadata.day - The current day in the game.
+ * @property {number} metadata.hour - The current hour in the game.
+ * @property {number} metadata.minute - The current minute in the game.
+ * @property {Omit<any, 'saveGame' | 'loadGame' | 'restoreState'>} gameStoreState - The state of the game store.
+ * @property {Omit<CharacterState, 'restoreState'>} characterStoreState - The state of the character store.
+ */
 interface SaveFile {
     saveVersion: string;
     timestamp: number;
@@ -32,6 +45,12 @@ interface SaveFile {
     characterStoreState: Omit<CharacterState, 'restoreState'>;
 }
 
+/**
+ * @function migrateSaveData
+ * @description Migrates save data to the current version.
+ * @param {any} saveData - The save data to migrate.
+ * @returns {SaveFile} The migrated save data.
+ */
 const migrateSaveData = (saveData: any): SaveFile => {
     if (!saveData.saveVersion) {
         throw new Error("Invalid save file: missing version.");
@@ -56,10 +75,22 @@ const migrateSaveData = (saveData: any): SaveFile => {
 };
 
 // --- Helper Functions ---
+/**
+ * @function timeToMinutes
+ * @description Converts a GameTime object to minutes.
+ * @param {GameTime} time - The GameTime object to convert.
+ * @returns {number} The time in minutes.
+ */
 const timeToMinutes = (time: GameTime): number => {
     return (time.day - 1) * 1440 + time.hour * 60 + time.minute;
 };
 
+/**
+ * @function getRandom
+ * @description Gets a random element from an array.
+ * @param {T[]} arr - The array to get a random element from.
+ * @returns {T} A random element from the array.
+ */
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 
@@ -98,6 +129,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   visitedBiomes: new Set(),
 
   // --- Actions ---
+  /**
+   * @function setGameState
+   * @description Sets the current state of the game.
+   * @param {GameState} newState - The new state of the game.
+   */
   setGameState: (newState) => set(state => {
     if (state.gameState === newState) return { gameState: newState };
     return { 
@@ -106,6 +142,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     };
   }),
 
+  /**
+   * @function setGameOver
+   * @description Sets the game state to GAME_OVER.
+   * @param {DeathCause} cause - The cause of death.
+   */
   setGameOver: (cause: DeathCause) => {
     const { unlockTrophy } = useCharacterStore.getState();
     unlockTrophy('trophy_misc_first_death');
@@ -117,12 +158,22 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ gameState: GameState.GAME_OVER, deathCause: cause });
   },
   
+  /**
+   * @function setVisualTheme
+   * @description Sets the visual theme of the game.
+   * @param {string} theme - The theme to set.
+   */
   setVisualTheme: (theme) => {
     set({ visualTheme: theme });
     document.documentElement.className = `theme-${theme}`;
     localStorage.setItem('tspc_visual_theme', theme);
   },
 
+  /**
+   * @function addJournalEntry
+   * @description Adds a new entry to the journal.
+   * @param {JournalEntry} entry - The journal entry to add.
+   */
   addJournalEntry: (entry) => {
     const gameTime = useTimeStore.getState().gameTime;
     set(state => ({
@@ -138,6 +189,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * @function setMap
+   * @description Initializes the game map and player position.
+   */
   setMap: () => {
     const newMap = MAP_DATA;
     let startPos = { x: 0, y: 0 };
@@ -179,6 +234,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
   },
 
+  /**
+   * @function movePlayer
+   * @description Moves the player on the map.
+   * @param {number} dx - The change in the x-coordinate.
+   * @param {number} dy - The change in the y-coordinate.
+   */
   movePlayer: (dx, dy) => {
     const { map, playerPos, playerStatus, addJournalEntry, visitedRefuges, currentBiome: previousBiome, checkMainQuestTriggers, checkCutsceneTriggers } = get();
     const { advanceTime, gameTime } = useTimeStore.getState();
@@ -313,6 +374,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * @function getTileInfo
+   * @description Gets information about a tile on the map.
+   * @param {number} x - The x-coordinate of the tile.
+   * @param {number} y - The y-coordinate of the tile.
+   * @returns {TileInfo} Information about the tile.
+   */
   getTileInfo: (x, y) => {
     const { map } = get();
     if (y < 0 || y >= map.length || x < 0 || x >= map[y].length) {
@@ -322,6 +390,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     return { char, name: TILE_NAMES[char] || 'Terreno Misterioso' };
   },
   
+  /**
+   * @function performQuickRest
+   * @description Performs a quick rest, advancing time and healing the player.
+   */
   performQuickRest: () => {
     const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
     if (isInventoryOpen || isInRefuge) return;
@@ -345,6 +417,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Hai recuperato 20 HP.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
   },
 
+  /**
+   * @function openLevelUpScreen
+   * @description Opens the level up screen if the player has enough XP.
+   */
   openLevelUpScreen: () => {
       if (useCharacterStore.getState().levelUpPending) {
           audioManager.playSound('confirm');
@@ -354,6 +430,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       }
   },
 
+  /**
+   * @function checkMainQuestTriggers
+   * @description Checks if any main quest triggers have been met.
+   */
   checkMainQuestTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
@@ -409,6 +489,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * @function resolveMainQuest
+   * @description Resolves the current main quest and advances to the next stage.
+   */
   resolveMainQuest: () => {
     const completedStage = get().mainQuestStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
@@ -419,6 +503,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }));
   },
   
+  /**
+   * @function startCutscene
+   * @description Starts a cutscene.
+   * @param {string} id - The ID of the cutscene to start.
+   */
   startCutscene: (id) => {
     const { cutscenes } = useCutsceneDatabaseStore.getState();
     if (cutscenes[id]) {
@@ -426,6 +515,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * @function processCutsceneConsequences
+   * @description Processes the consequences of a cutscene.
+   * @param {CutsceneConsequence[]} consequences - The consequences to process.
+   */
   processCutsceneConsequences: (consequences) => {
     const { addItem, equipItem, unlockTrophy } = useCharacterStore.getState();
     const { addJournalEntry } = get();
@@ -453,6 +547,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     });
   },
 
+  /**
+   * @function endCutscene
+   * @description Ends the current cutscene.
+   */
   endCutscene: () => {
     const { unlockTrophy } = useCharacterStore.getState();
     const currentSceneId = get().activeCutscene?.id;
@@ -466,6 +564,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ activeCutscene: null, gameState: nextState });
   },
 
+  /**
+   * @function checkCutsceneTriggers
+   * @description Checks if any cutscene triggers have been met.
+   */
   checkCutsceneTriggers: () => {
     const { playerPos, map, gameFlags, startCutscene } = get();
     if (!gameFlags.has('RIVER_INTRO_PLAYED')) {
@@ -488,6 +590,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * @function saveGame
+   * @description Saves the current game state to a specified slot.
+   * @param {number} slot - The slot to save the game to.
+   * @returns {boolean} Whether the game was saved successfully.
+   */
   saveGame: (slot) => {
       try {
           const characterStoreState = { ...useCharacterStore.getState() };
@@ -545,6 +653,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       }
   },
 
+  /**
+   * @function loadGame
+   * @description Loads a game from a specified slot.
+   * @param {number} slot - The slot to load the game from.
+   * @returns {boolean} Whether the game was loaded successfully.
+   */
   loadGame: (slot) => {
       try {
           const savedDataString = localStorage.getItem(`tspc_save_slot_${slot}`);
@@ -568,6 +682,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       }
   },
 
+  /**
+   * @function restoreState
+   * @description Restores the state of the game from a saved state.
+   * @param {any} newState - The state to restore.
+   */
   restoreState: (newState) => {
       // Hydrate gameStore itself
       const ownState: Partial<GameStoreState> = {};

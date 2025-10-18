@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { Enemy } from '../types';
 
+/**
+ * Loads all enemies from the enemies.json file.
+ * @returns {Promise<Record<string, Enemy>>} A promise that resolves to a record of enemies.
+ */
 async function loadAllEnemies(): Promise<Record<string, Enemy>> {
     try {
         const response = await fetch('./data/enemies.json');
@@ -19,6 +23,13 @@ async function loadAllEnemies(): Promise<Record<string, Enemy>> {
     }
 }
 
+/**
+ * @interface EnemyDatabaseState
+ * @description Represents the state of the enemy database store.
+ * @property {boolean} isLoaded - Whether the enemy database has been loaded.
+ * @property {Record<string, Enemy>} enemyDatabase - A record of enemies.
+ * @property {() => Promise<void>} loadDatabase - Function to load the enemy database.
+ */
 interface EnemyDatabaseState {
     isLoaded: boolean;
     enemyDatabase: Record<string, Enemy>;

@@ -5,6 +5,11 @@ import { Stat, InventoryItem } from '../types';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useCombatStore } from '../store/combatStore';
 
+/**
+ * Returns a description of the enemy's health based on the current HP.
+ * @param {Stat} hpState - The current HP state of the enemy.
+ * @returns {string} The description of the enemy's health.
+ */
 const getEnemyHealthDescription = (hpState: Stat): string => {
     const ratio = hpState.current / hpState.max;
     if (ratio > 0.9) return "Illeso";
@@ -14,10 +19,21 @@ const getEnemyHealthDescription = (hpState: Stat): string => {
     return "Sconfitto";
 };
 
+/**
+ * @typedef {object} CombatAction
+ * @property {'attack' | 'analyze' | 'use_item' | 'flee' | 'tactic'} type - The type of the combat action.
+ * @property {string} name - The name of the combat action.
+ * @property {string} [id] - The ID of the tactic, if the action is a tactic.
+ */
 type CombatAction = 
     | { type: 'attack' | 'analyze' | 'use_item' | 'flee'; name: string }
     | { type: 'tactic'; name: string; id: string };
 
+/**
+ * CombatScreen component.
+ * This component renders the combat screen.
+ * @returns {JSX.Element | null} The rendered CombatScreen component or null.
+ */
 const CombatScreen: React.FC = () => {
     const { activeCombat, playerCombatAction, cleanupCombat } = useCombatStore();
     const hp = useCharacterStore(state => state.hp);

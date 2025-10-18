@@ -30,6 +30,14 @@ const OPTIONS_CONFIG: readonly OptionRow[] = [
 
 const firstSelectableRow = OPTIONS_CONFIG.findIndex(opt => opt.type === 'option');
 
+/**
+ * VolumeBar component.
+ * This component renders a volume bar.
+ * @param {object} props - The props for the component.
+ * @param {number} props.level - The current volume level.
+ * @param {number} props.max - The maximum volume level.
+ * @returns {JSX.Element} The rendered VolumeBar component.
+ */
 const VolumeBar: React.FC<{ level: number, max: number }> = ({ level, max }) => {
   const filled = '█';
   const empty = '░';
@@ -40,6 +48,11 @@ const VolumeBar: React.FC<{ level: number, max: number }> = ({ level, max }) => 
   return <span className="font-mono">{`[${bar}]`}</span>;
 };
 
+/**
+ * OptionsScreen component.
+ * This component renders the options screen.
+ * @returns {JSX.Element} The rendered OptionsScreen component.
+ */
 
 const OptionsScreen: React.FC = () => {
     const setGameState = useGameStore((state) => state.setGameState);
