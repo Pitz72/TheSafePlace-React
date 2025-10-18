@@ -27,6 +27,8 @@ interface EventStoreState {
     resolveEventChoice: (choiceIndex: number) => void;
     dismissEventResolution: () => void;
     reset: () => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 const timeToMinutes = (time: any) => (time.day - 1) * 1440 + time.hour * 60 + time.minute;
@@ -230,5 +232,23 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
      */
     reset: () => {
         set(initialState);
+    },
+
+    /**
+     * @function toJSON
+     * @description Serializes the store's state to a JSON object.
+     * @returns {object} The serialized state.
+     */
+    toJSON: () => {
+        return get();
+    },
+
+    /**
+     * @function fromJSON
+     * @description Deserializes the store's state from a JSON object.
+     * @param {object} json - The JSON object to deserialize.
+     */
+    fromJSON: (json) => {
+        set(json);
     }
 }));

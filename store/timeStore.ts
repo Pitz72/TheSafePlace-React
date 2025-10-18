@@ -18,6 +18,8 @@ interface TimeStoreState {
     weather: WeatherState;
     advanceTime: (minutes: number, bypassPause?: boolean) => void;
     reset: () => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 const initialState = {
@@ -76,5 +78,13 @@ export const useTimeStore = create<TimeStoreState>((set, get) => ({
      */
     reset: () => {
         set(initialState);
+    },
+
+    toJSON: () => {
+        return get();
+    },
+
+    fromJSON: (json) => {
+        set(json);
     }
 }));

@@ -3,9 +3,9 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { MENU_ITEMS } from '../constants';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
-// FIX: Imported JournalEntryType to use the correct enum for journal entries.
 import { GameState, JournalEntryType } from '../types';
 import { audioManager } from '../utils/audio';
+import { handleLoadGame } from '../services/saveGameService';
 
 /**
  * MainMenuScreen component.
@@ -14,7 +14,7 @@ import { audioManager } from '../utils/audio';
  */
 const MainMenuScreen: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { setGameState, setMap, startCutscene, loadGame, addJournalEntry } = useGameStore();
+  const { setGameState, setMap, startCutscene, addJournalEntry } = useGameStore();
   const initCharacter = useCharacterStore((state) => state.initCharacter);
 
   const handleArrowUp = useCallback(() => {
@@ -40,9 +40,8 @@ const MainMenuScreen: React.FC = () => {
         case "Continua Partita": {
             const lastSaveSlot = localStorage.getItem('tspc_last_save_slot');
             if (lastSaveSlot) {
-                loadGame(parseInt(lastSaveSlot, 10));
+                handleLoadGame(parseInt(lastSaveSlot, 10));
             } else {
-                // FIX: Used the correct enum JournalEntryType for the journal entry type.
                 addJournalEntry({ text: "Nessun salvataggio precedente trovato.", type: JournalEntryType.SYSTEM_ERROR });
             }
             break;
@@ -68,7 +67,7 @@ const MainMenuScreen: React.FC = () => {
             console.log("Exiting game...");
             break;
     }
-  }, [selectedIndex, setGameState, setMap, initCharacter, startCutscene, loadGame, addJournalEntry]);
+  }, [selectedIndex, setGameState, setMap, initCharacter, startCutscene, addJournalEntry]);
 
   const handlerMap = useMemo(() => ({
     ArrowUp: handleArrowUp,

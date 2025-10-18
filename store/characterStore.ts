@@ -51,6 +51,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     hp: { current: 100, max: 100 },
     satiety: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
     hydration: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
+    fatigue: { current: 0, max: 100 },
     attributes: { ...initialAttributes },
     skills: { ...initialSkills },
     inventory: [],
@@ -85,6 +86,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             hp: { current: maxHp, max: maxHp },
             satiety: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
             hydration: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
+            fatigue: { current: 0, max: 100 },
             skills: newSkills,
             alignment: { ...initialAlignment },
             // FIX: Explicitly type new Set() to avoid it being inferred as Set<unknown>.
@@ -144,10 +146,18 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const skillDef = SKILLS[skill];
         if (!skillDef) return 0;
         
-        const { alignment, level, skills, status } = get();
+        const { alignment, level, skills, status, fatigue } = get();
         const attributeModifier = get().getAttributeModifier(skillDef.attribute);
         const proficiencyBonus = skills[skill].proficient ? Math.floor((level - 1) / 4) + 2 : 0;
         
+        // --- Fatigue Penalty ---
+        let fatiguePenalty = 0;
+        if (fatigue.current > 75) {
+            fatiguePenalty = -2;
+        } else if (fatigue.current > 50) {
+            fatiguePenalty = -1;
+        }
+
         // --- Moral Compass Bonus ---
         let alignmentBonus = 0;
         const alignmentDifference = alignment.lena - alignment.elian;
@@ -172,7 +182,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
         }
 
-        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty;
+        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty + fatiguePenalty;
     },
 
     /**
@@ -522,6 +532,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
+            if (amount > 0) {
+                useGameStore.getState().triggerDamageFlash();
+            }
             return { hp: { ...state.hp, current: newHp } };
         });
     },
@@ -603,10 +616,19 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             setGameOver(deathCause || 'UNKNOWN');
         }
 
+        let fatigueGain = (minutes / 60) * 1;
+        const totalWeight = get().getTotalWeight();
+        const maxCarryWeight = get().getMaxCarryWeight();
+        if (totalWeight > maxCarryWeight) {
+            fatigueGain *= 2;
+        }
+        const newFatigue = Math.min(currentState.fatigue.max, currentState.fatigue.current + fatigueGain);
+
         set({
             satiety: { ...currentState.satiety, current: newSatiety },
             hydration: { ...currentState.hydration, current: newHydration },
-            hp: { ...currentState.hp, current: newHp }
+            hp: { ...currentState.hp, current: newHp },
+            fatigue: { ...currentState.fatigue, current: newFatigue }
         });
     },
     
@@ -640,6 +662,28 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     restoreHydration: (amount) => {
         set(state => ({
             hydration: { ...state.hydration, current: Math.min(state.hydration.max, state.hydration.current + amount) }
+        }));
+    },
+
+    /**
+     * @function updateFatigue
+     * @description Updates the character's fatigue level.
+     * @param {number} amount - The amount to increase fatigue by.
+     */
+    updateFatigue: (amount) => {
+        set(state => ({
+            fatigue: { ...state.fatigue, current: Math.min(state.fatigue.max, state.fatigue.current + amount) }
+        }));
+    },
+
+    /**
+     * @function rest
+     * @description Reduces the character's fatigue level.
+     * @param {number} amount - The amount to decrease fatigue by.
+     */
+    rest: (amount) => {
+        set(state => ({
+            fatigue: { ...state.fatigue, current: Math.max(0, state.fatigue.current - amount) }
         }));
     },
     /**
@@ -792,5 +836,56 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      */
     restoreState: (newState) => {
         set(newState);
+    },
+
+    /**
+     * @function toJSON
+     * @description Serializes the character's state to a JSON object.
+     * @returns {object} The serialized state.
+     */
+    toJSON: () => {
+        const state = get();
+        return {
+            ...state,
+            status: Array.from(state.status),
+            unlockedTrophies: Array.from(state.unlockedTrophies),
+        };
+    },
+
+    /**
+     * @function fromJSON
+     * @description Deserializes the character's state from a JSON object.
+     * @param {object} json - The JSON object to deserialize.
+     */
+    fromJSON: (json) => {
+        set({
+            ...json,
+            status: new Set(json.status),
+            unlockedTrophies: new Set(json.unlockedTrophies),
+        });
+    },
+
+    /**
+     * @function getTotalWeight
+     * @description Calculates the total weight of the character's inventory.
+     * @returns {number} The total weight of the inventory.
+     */
+    getTotalWeight: () => {
+        const { inventory } = get();
+        const { itemDatabase } = useItemDatabaseStore.getState();
+        return inventory.reduce((total, item) => {
+            const itemDetails = itemDatabase[item.itemId];
+            return total + (itemDetails ? itemDetails.weight * item.quantity : 0);
+        }, 0);
+    },
+
+    /**
+     * @function getMaxCarryWeight
+     * @description Calculates the maximum weight the character can carry.
+     * @returns {number} The maximum weight the character can carry.
+     */
+    getMaxCarryWeight: () => {
+        const { attributes } = get();
+        return attributes.for * 10;
     }
 }));

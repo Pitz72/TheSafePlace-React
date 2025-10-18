@@ -25,6 +25,8 @@ interface CombatStoreState {
     playerCombatAction: (action: PlayerCombatActionPayload) => void;
     cleanupCombat: () => void;
     reset: () => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
@@ -111,9 +113,11 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         const combatState = get().activeCombat;
         if (!combatState || !combatState.playerTurn || combatState.victory) return;
 
-        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, addXp, damageEquippedItem } = useCharacterStore.getState();
+        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, addXp, damageEquippedItem, updateFatigue } = useCharacterStore.getState();
         const { itemDatabase } = useItemDatabaseStore.getState();
         
+        updateFatigue(1);
+
         let newLog = [...combatState.log];
         let newEnemyHp = { ...combatState.enemyHp };
         let newPlayerTurn = false;
@@ -256,5 +260,23 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
      */
     reset: () => {
         set(initialState);
+    },
+
+    /**
+     * @function toJSON
+     * @description Serializes the store's state to a JSON object.
+     * @returns {object} The serialized state.
+     */
+    toJSON: () => {
+        return get();
+    },
+
+    /**
+     * @function fromJSON
+     * @description Deserializes the store's state from a JSON object.
+     * @param {object} json - The JSON object to deserialize.
+     */
+    fromJSON: (json) => {
+        set(json);
     }
 }));

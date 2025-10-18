@@ -10,7 +10,7 @@
       { "itemId": "CONS_003", "quantity": 1 },
       { "itemId": "MED_ANTISEPTIC", "quantity": 1 }
     ],
-    "result": { "itemId": "MED_BANDAGE_ADVANCED", "quantity": 1 }
+    "results": [{ "itemId": "MED_BANDAGE_ADVANCED", "quantity": 1 }]
   },
   {
     "id": "recipe_soup",
@@ -24,7 +24,7 @@
       { "itemId": "carrot", "quantity": 1 },
       { "itemId": "potato", "quantity": 1 }
     ],
-    "result": { "itemId": "FOOD_SOUP", "quantity": 1 }
+    "results": [{ "itemId": "FOOD_SOUP", "quantity": 1 }]
   },
   {
     "id": "recipe_makeshift_knife",
@@ -37,7 +37,7 @@
       { "itemId": "scrap_metal", "quantity": 2 },
       { "itemId": "durable_cloth", "quantity": 1 }
     ],
-    "result": { "itemId": "makeshift_knife", "quantity": 1 }
+    "results": [{ "itemId": "makeshift_knife", "quantity": 1 }]
   },
   {
     "id": "recipe_arrows",
@@ -50,7 +50,7 @@
       { "itemId": "firewood", "quantity": 1 },
       { "itemId": "scrap_metal", "quantity": 1 }
     ],
-    "result": { "itemId": "ammo_arrow", "quantity": 5 }
+    "results": [{ "itemId": "ammo_arrow", "quantity": 5 }]
   },
   {
     "id": "recipe_repair_kit_basic",
@@ -63,7 +63,7 @@
       { "itemId": "scrap_metal", "quantity": 3 },
       { "itemId": "durable_cloth", "quantity": 1 }
     ],
-    "result": { "itemId": "tool_repair_kit_basic", "quantity": 1 }
+    "results": [{ "itemId": "tool_repair_kit_basic", "quantity": 1 }]
   },
   {
     "id": "recipe_repair_kit_advanced",
@@ -77,6 +77,6 @@
       { "itemId": "tech_components", "quantity": 1 },
       { "itemId": "durable_cloth", "quantity": 1 }
     ],
-    "result": { "itemId": "tool_repair_kit_advanced", "quantity": 1 }
+    "results": [{ "itemId": "tool_repair_kit_advanced", "quantity": 1 }]
   }
 ]

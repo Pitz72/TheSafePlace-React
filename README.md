@@ -121,6 +121,30 @@ Le prossime, importanti implementazioni previste sono:
     ```
 Il gioco sarà disponibile all'indirizzo `http://localhost:3000`.
 
+### Aggiunta di Nuovi Contenuti
+
+Il gioco è progettato per essere facilmente espandibile. Tutti i dati di gioco, come oggetti, ricette, eventi e nemici, sono archiviati in file JSON nella directory `data`.
+
+#### Struttura dei Dati
+
+*   **Oggetti:** `data/items/*.json` - I file degli oggetti sono separati per categoria (armi, armature, consumabili, ecc.).
+*   **Ricette:** `data/recipes.json`
+*   **Eventi:** `data/events.json`
+*   **Nemici:** `data/enemies.json`
+*   **Trama Principale:** `data/main_quest.json`
+*   **Scene d'intermezzo:** `data/cutscenes.json`
+*   **Trofei:** `data/trophies.json`
+
+#### Convalida dei Dati
+
+Per garantire la coerenza e prevenire errori, è disponibile uno script di convalida. Dopo aver aggiunto o modificato i file di dati, esegui il seguente comando per verificare la presenza di problemi:
+
+```bash
+npm run validate:data
+```
+
+Lo script verificherà che tutti i file di dati abbiano il formato corretto e che tutti gli ID degli oggetti a cui si fa riferimento esistano.
+
 ### Ringraziamenti
 
 Un ringraziamento speciale a Michela, mia moglie, per la pazienza e il sostegno, a PixelDebh, Giuseppe "MagnetarMan" Pugliese e al Prof. Leonardo Boselli per aver creduto e dato spazio a questa visione. Un grazie speciale anche a tutti gli amici e i membri del gruppo Telegram "Progetto GDR Anni 80 (WIP)".

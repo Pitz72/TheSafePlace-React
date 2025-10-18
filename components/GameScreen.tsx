@@ -29,9 +29,22 @@ const SurvivalPanel: React.FC = () => {
     const hp = useCharacterStore((state) => state.hp);
     const satiety = useCharacterStore((state) => state.satiety);
     const hydration = useCharacterStore((state) => state.hydration);
+    const fatigue = useCharacterStore((state) => state.fatigue);
     const status = useCharacterStore((state) => state.status);
+    const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
+    const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
 
     const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
+    const isHigh = (stat: Stat) => stat.current / stat.max >= 0.75;
+
+    const totalWeight = getTotalWeight();
+    const maxCarryWeight = getMaxCarryWeight();
+    const isOverEncumbered = totalWeight > maxCarryWeight;
+
+    const allStatuses = Array.from(status);
+    if (isOverEncumbered) {
+        allStatuses.push('SOVRACCARICO' as PlayerStatusCondition);
+    }
 
     return (
         <Panel title="SOPRAVVIVENZA">
@@ -39,15 +52,16 @@ const SurvivalPanel: React.FC = () => {
                 <div className={isCritical(hp) ? 'text-[var(--text-danger)] animate-pulse' : ''}>HP: {Math.floor(hp.current)}/{hp.max}</div>
                 <div className={isCritical(satiety) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Sazietà: {Math.floor(satiety.current)}/{satiety.max}</div>
                 <div className={isCritical(hydration) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Idratazione: {Math.floor(hydration.current)}/{hydration.max}</div>
+                <div className={isHigh(fatigue) ? 'text-[var(--text-accent)]' : ''}>Stanchezza: {Math.floor(fatigue.current)}/{fatigue.max}</div>
                 <div>
                     Status:
-                    {status.size > 0 ? (
-                        Array.from(status).map((s: PlayerStatusCondition, index) => (
+                    {allStatuses.length > 0 ? (
+                        allStatuses.map((s: PlayerStatusCondition, index) => (
                             <React.Fragment key={s}>
-                                <span style={{ color: STATUS_COLORS[s] }}>
+                                <span style={{ color: STATUS_COLORS[s] || '#f59e0b' }}>
                                     {` ${s}`}
                                 </span>
-                                {index < Array.from(status).length - 1 ? ',' : ''}
+                                {index < allStatuses.length - 1 ? ',' : ''}
                             </React.Fragment>
                         ))
                     ) : (
@@ -68,11 +82,20 @@ const InventoryPanel: React.FC = () => {
   const inventory = useCharacterStore((state) => state.inventory);
   const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
   const equippedArmorIndex = useCharacterStore((state) => state.equippedArmor);
+  const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
+  const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
   const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
   const isLoaded = useItemDatabaseStore((state) => state.isLoaded);
 
+  const totalWeight = getTotalWeight();
+  const maxCarryWeight = getMaxCarryWeight();
+  const isOverEncumbered = totalWeight > maxCarryWeight;
+
   return (
     <Panel title="INVENTARIO" className="flex-grow">
+      <div className={`flex justify-between text-xl mb-1 px-1 ${isOverEncumbered ? 'text-[var(--text-danger)] animate-pulse' : ''}`}>
+        <span>Peso: {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)}</span>
+      </div>
       <div className="border border-[var(--border-primary)] p-2 h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
         {isLoaded && inventory.length > 0 ? (
           <ul className="space-y-1.5">
@@ -320,8 +343,10 @@ const TravelJournalPanel: React.FC = () => {
  * @returns {JSX.Element} The rendered GameScreen component.
  */
 
+import { gameService } from '../services/gameService';
+
 const GameScreen: React.FC = () => {
-  const { setGameState, movePlayer, performQuickRest, openLevelUpScreen } = useGameStore();
+  const { setGameState, performQuickRest, openLevelUpScreen } = useGameStore();
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
   const gameState = useGameStore((state) => state.gameState);
 
@@ -331,9 +356,9 @@ const GameScreen: React.FC = () => {
 
   const handleMove = useCallback((dx: number, dy: number) => {
     if (!isInventoryOpen && !isInRefuge) {
-      movePlayer(dx, dy);
+      gameService.movePlayer(dx, dy);
     }
-  }, [isInventoryOpen, isInRefuge, movePlayer]);
+  }, [isInventoryOpen, isInRefuge]);
 
   const handleQuickRest = useCallback(() => {
     if (!isInventoryOpen && !isInRefuge) {

@@ -67,6 +67,8 @@ interface InteractionStoreState {
     performCrafting: () => void;
 
     reset: () => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 const initialState = {
@@ -450,8 +452,14 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
           case "Aspetta un'ora": {
             addJournalEntry({ text: "Decidi di riposare per un'ora.", type: JournalEntryType.NARRATIVE });
             advanceTime(60, true);
-            useCharacterStore.getState().heal(5);
-            set({ refugeActionMessage: `Hai recuperato 5 HP.` });
+            const { fatigue, heal, rest } = useCharacterStore.getState();
+            let healAmount = 5;
+            if (fatigue.current > 75) {
+                healAmount = Math.floor(healAmount / 2);
+            }
+            heal(healAmount);
+            rest(10);
+            set({ refugeActionMessage: `Hai recuperato ${healAmount} HP e ti senti meno stanco.` });
             break;
           }
           case "Dormi fino all'alba": {
@@ -468,7 +476,9 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             }
             addJournalEntry({ text: "Ti addormenti profondamente...", type: JournalEntryType.NARRATIVE });
             advanceTime(minutesToRest, true);
-            useCharacterStore.getState().heal(useCharacterStore.getState().hp.max);
+            const { heal, rest, hp } = useCharacterStore.getState();
+            heal(hp.max);
+            rest(100);
             set({ refugeActionMessage: "Ti svegli all'alba, completamente rinvigorito." });
             break;
           }
@@ -555,8 +565,13 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             audioManager.playSound('confirm');
             journalText += "SUCCESSO.";
             recipe.ingredients.forEach(ing => removeItem(ing.itemId, ing.quantity));
-            addItem(recipe.result.itemId, recipe.result.quantity);
-            journalText += ` Hai creato: ${itemDatabase[recipe.result.itemId].name} x${recipe.result.quantity}.`;
+
+            const createdItemsText = recipe.results.map(result => {
+                addItem(result.itemId, result.quantity);
+                return `${itemDatabase[result.itemId].name} x${result.quantity}`;
+            }).join(', ');
+
+            journalText += ` Hai creato: ${createdItemsText}.`;
             addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
         } else {
             audioManager.playSound('error');
@@ -578,5 +593,23 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      */
     reset: () => {
         set(initialState);
+    },
+
+    /**
+     * @function toJSON
+     * @description Serializes the store's state to a JSON object.
+     * @returns {object} The serialized state.
+     */
+    toJSON: () => {
+        return get();
+    },
+
+    /**
+     * @function fromJSON
+     * @description Deserializes the store's state from a JSON object.
+     * @param {object} json - The JSON object to deserialize.
+     */
+    fromJSON: (json) => {
+        set(json);
     }
 }));

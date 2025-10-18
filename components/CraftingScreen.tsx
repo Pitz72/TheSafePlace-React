@@ -39,8 +39,6 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
             </div>
         );
     }
-    
-    const resultItem = itemDatabase[recipe.result.itemId];
 
     return (
         <div className="space-y-4 text-3xl h-full flex flex-col">
@@ -65,7 +63,10 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
                  <div className="pt-2">
                     <span className="w-48 flex-shrink-0 opacity-70">Risultato:</span>
                      <ul className="ml-6 space-y-1">
-                        <li style={{color: resultItem?.color}}>- {resultItem?.name || recipe.result.itemId} x{recipe.result.quantity}</li>
+                        {recipe.results.map(result => {
+                            const item = itemDatabase[result.itemId];
+                            return <li key={result.itemId} style={{color: item?.color}}>- {item?.name || result.itemId} x{result.quantity}</li>
+                        })}
                     </ul>
                 </div>
             </div>

@@ -208,10 +208,10 @@ export interface Recipe {
     dc: number;
     timeCost: number; // in minutes
     ingredients: Ingredient[];
-    result: {
+    results: {
         itemId: string;
         quantity: number;
-    };
+    }[];
 }
 
 // --- Talent System ---
@@ -307,8 +307,10 @@ export interface GameStoreState {
   mainQuestsToday: { day: number; count: number };
   deathCause: DeathCause | null;
   visitedBiomes: Set<string>;
+  damageFlash: boolean;
   
   // Actions
+  triggerDamageFlash: () => void;
   setGameState: (newState: GameState) => void;
   setGameOver: (cause: DeathCause) => void;
   setVisualTheme: (theme: VisualTheme) => void;
@@ -398,6 +400,7 @@ export interface CharacterState {
     hp: Stat;
     satiety: Stat;
     hydration: Stat;
+    fatigue: Stat;
     attributes: Attributes;
     skills: Record<SkillName, Skill>;
     inventory: InventoryItem[];
