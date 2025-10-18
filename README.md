@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.0.3)
+# The Safe Place Chronicles: The Echo of the Journey (v1.1.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
