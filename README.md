@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.1.1)
+# The Safe Place Chronicles: The Echo of the Journey (v1.1.3)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -77,9 +77,47 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.1.1** - Rilascio di Stabilità e Bug Fix Critici
+**Versione Corrente: v1.1.3** - Stabile e Funzionante
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La v1.1.1 risolve bug critici che impedivano il corretto funzionamento di rifugi e sistema di crafting, garantendo un'esperienza di gioco stabile e senza crash.
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. Le versioni successive (1.1.x) si concentrano su stabilizzazione, bug fixing e ottimizzazioni.
+
+## ⚠️ ATTENZIONE CRITICA PER SVILUPPATORI
+
+### 🚨 NON AGGIORNARE MAI TAILWIND CSS
+
+**Questo progetto usa Tailwind CSS v4.1.14 tramite CDN.**
+
+**MOTIVO:** Tailwind v4 ha un'architettura completamente diversa da v3 e richiede una configurazione PostCSS complessa che è incompatibile con il setup attuale. Qualsiasi tentativo di:
+- ❌ Aggiornare Tailwind a versioni successive
+- ❌ Rimuovere il CDN per usare build locale
+- ❌ Installare `@tailwindcss/postcss`
+
+...causerà la **perdita completa del layout, stili e funzionalità visive**.
+
+**SE NECESSARIO** ottimizzare per produzione:
+1. Creare branch separato per test
+2. Effettuare downgrade a Tailwind CSS v3.x
+3. Testare approfonditamente TUTTO prima di merge
+4. Mantenere backup del codice funzionante
+
+**REGOLA D'ORO:** "Don't fix what isn't broken" - Il CDN funziona perfettamente.
+
+---
+
+**Novità v1.1.3 (19 Ottobre 2025):**
+- 🐛 **Fix Critico:** Risolto errore "Database oggetti vuoto" in build preview
+- 🔧 **Path JSON:** Corretti tutti i path da `./data/` a `/data/` per compatibilità build
+- 🎨 **Rollback CSS:** Ripristinato CDN Tailwind + CSS inline dopo tentativo fallito di ottimizzazione
+- 🛠️ **Debug Tools:** Aggiunto logging dettagliato per diagnostica futura
+- ✅ **Layout:** Completamente ripristinato (font, colori, animazioni, mappa tileset)
+- 📚 **Documentazione:** Changelog epico della sessione di debugging più lunga della storia
+
+**Novità v1.1.2 (19 Ottobre 2025):**
+- 🔒 **Security:** Rimosso potenziale rischio security (GEMINI_API_KEY)
+- 🎨 **Branding:** Favicon personalizzata con logo del gioco
+- 🌐 **SEO:** Meta tags ottimizzati per condivisione e ricerca
+- 🛡️ **Robustezza:** Sistema di error handling con UI dedicata
+- 📦 **Deploy:** Configurazione base path per deploy flessibile
 
 **Novità v1.1.1 (19 Ottobre 2025):**
 - ✅ **Fix Critico:** Risolto errore import che impediva l'avvio del gioco

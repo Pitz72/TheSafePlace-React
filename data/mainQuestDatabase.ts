@@ -7,7 +7,7 @@ import { MainQuestChapter } from '../types';
  */
 async function loadMainQuest(): Promise<MainQuestChapter[]> {
     try {
-        const response = await fetch('./data/mainQuest.json');
+        const response = await fetch('/data/mainQuest.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch main quest: ${response.statusText}`);
         }

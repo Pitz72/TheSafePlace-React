@@ -7,7 +7,7 @@ import { Enemy } from '../types';
  */
 async function loadAllEnemies(): Promise<Record<string, Enemy>> {
     try {
-        const response = await fetch('./data/enemies.json');
+        const response = await fetch('/data/enemies.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch enemies: ${response.statusText}`);
         }

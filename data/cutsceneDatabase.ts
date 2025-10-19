@@ -7,7 +7,7 @@ import { Cutscene } from '../types';
  */
 async function loadAllCutscenes(): Promise<Record<string, Cutscene>> {
     try {
-        const response = await fetch('./data/cutscenes.json');
+        const response = await fetch('/data/cutscenes.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch cutscenes: ${response.statusText}`);
         }

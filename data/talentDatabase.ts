@@ -7,7 +7,7 @@ import { Talent } from '../types';
  */
 async function loadAllTalents(): Promise<Talent[]> {
     try {
-        const response = await fetch('./data/talents.json');
+        const response = await fetch('/data/talents.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch talents: ${response.statusText}`);
         }

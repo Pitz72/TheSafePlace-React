@@ -7,14 +7,14 @@ import { GameEvent } from '../types';
  */
 async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounters: GameEvent[], loreEvents: GameEvent[], easterEggEvents: GameEvent[] }> {
     const biomeFiles = [
-        './data/events/plains.json',
-        './data/events/forest.json',
-        './data/events/village.json',
-        './data/events/city.json'
+        '/data/events/plains.json',
+        '/data/events/forest.json',
+        '/data/events/village.json',
+        '/data/events/city.json'
     ];
-    const encounterFile = './data/events/encounters.json';
-    const loreFile = './data/events/lore.json';
-    const easterEggFile = './data/events/easter_eggs.json';
+    const encounterFile = '/data/events/encounters.json';
+    const loreFile = '/data/events/lore.json';
+    const easterEggFile = '/data/events/easter_eggs.json';
 
     try {
         const biomeResponses = await Promise.all(biomeFiles.map(file => fetch(file)));

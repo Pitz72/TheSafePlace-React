@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Safe Place Chronicles</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
     <style>
       body {
         font-family: 'VT323', monospace;
@@ -36,26 +39,25 @@
         --text-glow: 0 0 5px var(--shadow-primary);
       }
 
-      /* 2. Green Phosphor CRT Theme - REWORKED */
+      /* 2. Green Phosphor CRT Theme */
       .theme-crt {
         --bg-primary: #0a140a;
-        --text-primary: #4ade80; /* Consistent green color */
+        --text-primary: #4ade80;
         --text-secondary: #4ade80;
-        --text-accent: #86efac; /* Lighter green for accents */
-        --text-danger: #86efac; /* Danger is also green, but can be distinguished by context */
+        --text-accent: #86efac;
+        --text-danger: #86efac;
         --border-primary: rgba(74, 222, 128, 0.3);
         --border-accent: rgba(134, 239, 172, 0.4);
         --highlight-bg: var(--text-primary);
         --highlight-text: #000;
         --shadow-primary: rgba(74, 222, 128, 0.5);
         --shadow-accent: rgba(134, 239, 172, 0.3);
-        --scanline-opacity: 0.15; /* A bit more visible */
+        --scanline-opacity: 0.15;
         --vignette-opacity: 1;
-        /* Phosphor glow with persistence/aberration */
         --text-glow: 0 0 7px var(--text-primary), 0 0 2px rgba(255, 80, 80, 0.6);
       }
-      
-      /* 3. High Contrast Theme - FIXED */
+
+      /* 3. High Contrast Theme */
       .theme-high_contrast {
         --bg-primary: #000;
         --text-primary: #fff;
@@ -72,24 +74,22 @@
         --vignette-opacity: 0;
         --text-glow: none;
       }
-      /* Removed problematic !important rules that likely broke the negative hover effect */
 
-      /* --- Base Game Styles using Variables --- */
+      /* --- Base Game Styles --- */
       #game-container {
         color: var(--text-primary);
         text-shadow: var(--text-glow);
         border-color: var(--border-primary);
         position: relative;
       }
-      
-      /* Apply CRT-specific filters and animations */
-      .theme-crt #game-container > .w-full.h-full.relative { /* Target the content wrapper div */
+
+      .theme-crt #game-container > .w-full.h-full.relative {
         animation: text-wobble 0.15s linear infinite;
         filter: blur(0.4px);
       }
 
       /* --- CRT Effects --- */
-      #game-container::before { /* Scrolling Scanlines */
+      #game-container::before {
         content: '';
         position: absolute;
         top: 0;
@@ -104,7 +104,7 @@
         z-index: 100;
       }
 
-      #game-container::after { /* Vignette & Flicker */
+      #game-container::after {
         content: '';
         position: absolute;
         top: 0;
@@ -119,9 +119,8 @@
         z-index: 99;
       }
 
-
-      /* Custom animations for the game */
-      @keyframes text-wobble { /* Simulates CRT instability */
+      /* Custom animations */
+      @keyframes text-wobble {
         0% { transform: translate3d(0,0,0); }
         25% { transform: translate3d(0.4px, -0.4px, 0); }
         50% { transform: translate3d(-0.4px, 0.4px, 0); }
@@ -130,9 +129,9 @@
       }
 
       @keyframes scanline-scroll {
-        to { background-position-y: -100px; } /* Scroll by a large amount to ensure seamless loop */
+        to { background-position-y: -100px; }
       }
-      
+
       @keyframes yellow-flash {
         50% {
           color: var(--text-accent);
@@ -141,11 +140,9 @@
       }
 
       @keyframes cursor-blink {
-        50% {
-          opacity: 0;
-        }
+        50% { opacity: 0; }
       }
-      
+
       @keyframes flicker {
         0%, 100% { opacity: var(--vignette-opacity); }
         50% { opacity: calc(var(--vignette-opacity) * 0.9); }
@@ -154,25 +151,33 @@
       .animate-yellow-flash {
         animation: yellow-flash 1.5s infinite;
       }
-      
+
       .animate-cursor-blink {
         animation: cursor-blink 1s step-end infinite;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "zustand": "https://aistudiocdn.com/zustand@^5.0.8"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Un gioco Retrocomputazionale in stile PC anni 80 che omaggia i GDR testuali dell'epoca" />
+    <meta name="keywords" content="GDR testuale, retro gaming, RPG, anni 80, text adventure, retrocomputing" />
+    <meta name="author" content="The Safe Place Chronicles Team" />
+    
+    <!-- Open Graph (condivisione social) -->
+    <meta property="og:title" content="THE SAFE PLACE CHRONICLES: The Echo of the Journey" />
+    <meta property="og:description" content="Un gioco Retrocomputazionale in stile PC anni 80 che omaggia i GDR testuali dell'epoca" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/android-chrome-192.png" />
+    
+    <title>THE SAFE PLACE CHRONICLES: The Echo of the Journey</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  </head>
   <body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>

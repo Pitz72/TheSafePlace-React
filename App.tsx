@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { useCharacterStore } from './store/characterStore';
 import { GameState, VisualTheme } from './types';
@@ -32,6 +32,7 @@ import { useTalentDatabaseStore } from './data/talentDatabase';
 import GameOverScreen from './components/GameOverScreen';
 import TrophyScreen from './components/TrophyScreen';
 import { useTrophyDatabaseStore } from './data/trophyDatabase';
+import ErrorScreen from './components/ErrorScreen';
 
 /**
  * App component.
@@ -48,7 +49,10 @@ const App: React.FC = () => {
   const initCharacter = useCharacterStore((state) => state.initCharacter);
   const scaleStyle = useGameScale();
 
-  const { loadDatabase: loadItemDatabase, isLoaded: itemsLoaded } = useItemDatabaseStore();
+  const [loadingError, setLoadingError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { loadDatabase: loadItemDatabase, isLoaded: itemsLoaded, itemDatabase } = useItemDatabaseStore();
   const { loadDatabase: loadEventDatabase, isLoaded: eventsLoaded } = useEventDatabaseStore();
   const { loadDatabase: loadRecipeDatabase, isLoaded: recipesLoaded } = useRecipeDatabaseStore();
   const { loadDatabase: loadEnemyDatabase, isLoaded: enemiesLoaded } = useEnemyDatabaseStore();
@@ -67,20 +71,34 @@ const App: React.FC = () => {
   }, [setVisualTheme]);
 
   useEffect(() => {
-    loadItemDatabase();
-    loadEventDatabase();
-    loadRecipeDatabase();
-    loadEnemyDatabase();
-    loadMainQuestDatabase();
-    loadCutsceneDatabase();
-    loadTalentDatabase();
-    loadTrophyDatabase();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainQuestDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase]);
+    const loadAllDatabases = async () => {
+      try {
+        setIsLoading(true);
+        setLoadingError(null);
 
-  useEffect(() => {
-    // The game should not automatically start a new game on load.
-    // This will be handled by the "New Game" option in the main menu.
-  }, [itemsLoaded, eventsLoaded, recipesLoaded, enemiesLoaded, mainQuestLoaded, cutscenesLoaded, talentsLoaded, trophiesLoaded, setMap, initCharacter]);
+        await loadItemDatabase();
+        await loadEventDatabase();
+        await loadRecipeDatabase();
+        await loadEnemyDatabase();
+        await loadMainQuestDatabase();
+        await loadCutsceneDatabase();
+        await loadTalentDatabase();
+        await loadTrophyDatabase();
+
+        console.log('✅ Tutti i database caricati con successo!');
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Errore caricamento database:", error);
+        setLoadingError(
+          "Impossibile caricare i dati di gioco. " +
+          "Verifica la tua connessione internet e riprova."
+        );
+        setIsLoading(false);
+      }
+    };
+
+    loadAllDatabases();
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainQuestDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, itemDatabase]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -144,6 +162,27 @@ const App: React.FC = () => {
         return null;
     }
   };
+
+  // Mostra schermata di errore se il caricamento fallisce
+  if (loadingError) {
+    return <ErrorScreen message={loadingError} onRetry={() => window.location.reload()} />;
+  }
+
+  // Mostra schermata di caricamento durante il caricamento iniziale
+  if (isLoading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center bg-black">
+        <div className="text-center">
+          <p className="text-5xl text-[var(--text-primary)] font-bold animate-pulse mb-4">
+            CARICAMENTO...
+          </p>
+          <p className="text-2xl text-[var(--text-secondary)] opacity-70">
+            Inizializzazione database di gioco
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-screen h-screen relative bg-black">

@@ -9,24 +9,29 @@ type RawItem = Omit<IItem, 'color'>;
  */
 async function loadAllItems(): Promise<Record<string, IItem>> {
     const files = [
-        './data/items/weapons.json',
-        './data/items/armor.json',
-        './data/items/consumables.json',
-        './data/items/materials.json',
-        './data/items/quest.json',
-        './data/items/ammo.json',
-        './data/items/repair_kits.json'
+        '/data/items/weapons.json',
+        '/data/items/armor.json',
+        '/data/items/consumables.json',
+        '/data/items/materials.json',
+        '/data/items/quest.json',
+        '/data/items/ammo.json',
+        '/data/items/repair_kits.json'
     ];
     try {
+        console.log('[ITEM DB] Inizio caricamento file JSON...', files);
         const responses = await Promise.all(files.map(file => fetch(file)));
+        console.log('[ITEM DB] Risposte ricevute:', responses.length);
         for(const res of responses) {
             if (!res.ok) {
                 throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
             }
         }
+        console.log('[ITEM DB] Tutte le risposte OK, parsing JSON...');
         const jsonDataArrays = await Promise.all(responses.map(res => res.json()));
+        console.log('[ITEM DB] JSON parsati, array ricevuti:', jsonDataArrays.length);
 
         const allRawItems: RawItem[] = jsonDataArrays.flat();
+        console.log('[ITEM DB] Items totali:', allRawItems.length);
         
         const finalDatabase: Record<string, IItem> = {};
 
@@ -58,9 +63,10 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
             finalDatabase[item.id] = { ...item, color };
         });
 
+        console.log('[ITEM DB] ✅ Database creato con successo! Items:', Object.keys(finalDatabase).length);
         return finalDatabase;
     } catch (error) {
-        console.error("Error loading item database:", error);
+        console.error("[ITEM DB] ❌ ERRORE durante il caricamento:", error);
         return {}; // Return empty DB on error
     }
 }
@@ -82,8 +88,15 @@ export const useItemDatabaseStore = create<ItemDatabaseState>((set, get) => ({
     isLoaded: false,
     itemDatabase: {},
     loadDatabase: async () => {
-        if (get().isLoaded) return;
+        console.log('[ITEM STORE] loadDatabase chiamato, isLoaded:', get().isLoaded);
+        if (get().isLoaded) {
+            console.log('[ITEM STORE] Già caricato, skip');
+            return;
+        }
+        console.log('[ITEM STORE] Caricamento in corso...');
         const db = await loadAllItems();
+        console.log('[ITEM STORE] loadAllItems completato, items ricevuti:', Object.keys(db).length);
         set({ itemDatabase: db, isLoaded: true });
+        console.log('[ITEM STORE] ✅ Store aggiornato! Stato finale:', Object.keys(get().itemDatabase).length);
     }
 }));
