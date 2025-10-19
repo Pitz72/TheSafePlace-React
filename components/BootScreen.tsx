@@ -85,27 +85,24 @@ const BootScreen: React.FC = () => {
   if (gameState === GameState.PRESENTS_SCREEN) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center p-8 text-3xl">
-        <div className="w-full max-w-7xl h-[80%] border-2 border-[var(--border-primary)] p-6 overflow-y-auto text-left" style={{ scrollbarWidth: 'none' }}>
-          <p className="text-center text-4xl mb-4 text-[var(--text-accent)]">[ ATTENZIONE ]</p>
+        <div className="w-[90%] h-[80%] border-2 border-[var(--border-primary)] p-6 overflow-y-auto text-left presents-screen-content-box" style={{ scrollbarWidth: 'none' }}>
+          <p className="text-center mb-4 text-[var(--text-accent)] presents-title">[ ATTENZIONE ]</p>
           <p className="text-center mb-6">Benvenuti in The Safe Place Chronicles: The Echo of the Journey</p>
           
-          <p className="mb-4">Questo progetto nasce come esperimento tecnico e narrativo, iniziato mesi fa con l’obiettivo di mettere alla prova la tecnologia LLM allora più avanzata: Gemini 2.5 Pro.</p>
-          <p className="mb-4">La mia sfida era semplice e ambiziosa allo stesso tempo: scoprire se un modello linguistico potesse contribuire alla creazione di un progetto strutturato, coerente e dotato di un’anima.</p>
+          <p className="mb-4">Questo progetto nasce come esperimento tecnico e narrativo, iniziato mesi fa con l'obiettivo di mettere alla prova la tecnologia LLM allora più avanzata: Gemini 2.5 Pro. La mia sfida era semplice e ambiziosa allo stesso tempo: scoprire se un modello linguistico potesse contribuire alla creazione di un progetto strutturato, coerente e dotato di un'anima.</p>
           <p className="mb-4">La risposta? Non posso riassumerla in queste poche righe — ne parlerò presto nei miei podcast, nelle dirette di chi vorrà ospitarmi e in un libro tecnico (e non solo) di prossima pubblicazione.</p>
           
-          <p className="mb-4">Questo che state per giocare è un prototipo concettuale, arricchito con elementi narrativi e meccaniche sperimentali.</p>
-          <p className="mb-4">Nei prossimi mesi il progetto crescerà, si evolverà e darà vita ad altre opere.</p>
-          <p className="mb-4">Non aspettatevi un prodotto definitivo, ma un viaggio dentro un’idea in divenire.</p>
+          <p className="mb-4">Questo che state per giocare è un prototipo concettuale, arricchito con elementi narrativi e meccaniche sperimentali. Nei prossimi mesi il progetto crescerà, si evolverà e darà vita ad altre opere. Non aspettatevi un prodotto definitivo, ma un viaggio dentro un'idea in divenire.</p>
           
           <p className="mb-4">Per feedback, suggerimenti o segnalazioni, potete scrivere a:<br/>[E-MAIL] runtimeradio@gmail.com</p>
           
           <p className="mb-4">Un ringraziamento speciale a Michela, mia moglie, per la pazienza e il sostegno anche quando vorrebbe tirarmi una ciabatta, a PixelDebh, Giuseppe "MagnetarMan" Pugliese e al Prof. Leonardo Boselli per aver creduto e dato spazio a questa visione. Un grazie speciale anche a tutti gli amici e i membri del gruppo Telegram Progetto GDR Anni 80 (WIP).</p>
           
-          <p className="text-center mt-6">Simone Pizzi<br/>© Runtime Radio 2025<br/>The Safe Place Chronicles: The Echo of the Journey</p>
+          <p className="text-center mt-6 presents-signature">Simone Pizzi<br/>© Runtime Radio 2025<br/>The Safe Place Chronicles: The Echo of the Journey</p>
         </div>
         <p className="whitespace-pre mt-8 animate-pulse text-4xl">
           PREMI UN TASTO PER PARTIRE
-          {showCursor && <span className="bg-green-400 w-6 h-10 inline-block ml-2 align-bottom"></span>}
+          <span className="bg-green-400 w-6 h-10 inline-block ml-2 align-bottom" style={{ opacity: showCursor ? 1 : 0 }}></span>
         </p>
       </div>
     );
@@ -120,10 +117,10 @@ const BootScreen: React.FC = () => {
         {bootComplete ? (
           <p className="whitespace-pre mt-4 animate-pulse">
             PREMI UN TASTO PER INIZIARE
-            {showCursor && <span className="bg-green-400 w-6 h-10 inline-block ml-2 align-bottom"></span>}
+            <span className="bg-green-400 w-6 h-10 inline-block ml-2 align-bottom" style={{ opacity: showCursor ? 1 : 0 }}></span>
           </p>
         ) : (
-          showCursor && <span className="bg-green-400 w-6 h-10 inline-block align-bottom"></span>
+          <span className="bg-green-400 w-6 h-10 inline-block align-bottom" style={{ opacity: showCursor ? 1 : 0 }}></span>
         )}
       </div>
     );

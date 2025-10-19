@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.2.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.2.1)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -57,11 +57,17 @@ Il prototipo vanta un ciclo di gameplay robusto, con tutti i pilastri fondamenta
 *   **Sistema Audio Retrò Programmato:** Ogni suono è generato in tempo reale tramite la Web Audio API per emulare l'audio dei PC dei primi anni '80.
 *   **Sistema di Temi Visivi Dinamici:** Il giocatore può scegliere tra un tema Standard, un'emulazione ad alta fedeltà di un monitor CRT (con scanline, glow e wobble) e un tema ad Alto Contrasto.
 *   **Leggibilità e Coerenza Visiva:** Il sistema di temi è stato perfezionato per garantire che tutti gli elementi dell'interfaccia, in particolare il diario di viaggio, mantengano i loro colori distintivi e la loro leggibilità in ogni modalità visiva.
-*   **Salvataggio e Caricamento Robusto:** Supporto a 5 slot di salvataggio, con funzionalità di import/export dei file di salvataggio per la massima portabilità.
+*   **Sistema di Salvataggio Professionale (v2.0.0):** 
+    * **5 Slot di Salvataggio** con metadata dettagliati (livello, giorno, bioma)
+    * **Export/Import JSON** per backup manuali e trasferimento tra dispositivi
+    * **Migrazione Automatica** delle versioni precedenti
+    * **Validazione Robusta** con error handling completo
+    * **Eliminazione Sicura** dei salvataggi non più necessari
 *   **Game Over Contestuale:** La morte del personaggio non è solo la fine della partita, ma viene presentata con una schermata dedicata che varia in base alla causa del decesso (combattimento, fame, malattia, ecc.), con l'aggiunta di una rara schermata easter egg per un tocco di umorismo nero.
 
 #### 8. Sistema di Trofei e Obiettivi a Lungo Termine
 *   **50 Trofei Unici:** È stato implementato un sistema di achievement completo con 50 trofei che coprono ogni aspetto del gioco: Missione Principale, Esplorazione, Combattimento, Sopravvivenza, Crafting, Sviluppo del Personaggio e Segreti.
+*   **Persistenza Globale (v1.2.1):** I trofei sbloccati vengono salvati **permanentemente nel browser**, indipendentemente dai salvataggi. Una volta conquistato un trofeo, resta per sempre, anche senza salvare la partita o eliminando tutti i file di salvataggio.
 *   **Tracciamento dei Progressi:** Una nuova schermata "Trofei", accessibile dal menu principale, permette al giocatore di visualizzare i traguardi sbloccati e quelli ancora nascosti.
 *   **Feedback Immediato:** Lo sblocco di un trofeo viene celebrato in tempo reale con una notifica speciale nel diario di viaggio.
 *   **Rigiocabilità:** Il sistema è progettato per premiare la maestria, incoraggiare stili di gioco differenti e aumentare significativamente la longevità e la rigiocabilità del titolo.
@@ -77,9 +83,9 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.2.0** - Espansione Contenuti Massiva
+**Versione Corrente: v1.2.1** - Quality of Life & Global Trophy System
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 introduce un'espansione massiva di contenuti con:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, e la v1.2.1 si concentra su miglioramenti alla qualità della vita e sistemi richiesti dalla community:
 
 #### 🎯 Novità v1.2.0 (Ottobre 2025)
 
@@ -147,6 +153,33 @@ Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narr
 - ✅ Tutti i pannelli visibili senza overflow
 
 **Risultato:** Il gioco ora offre **~100 ore di contenuti potenziali** con rigiocabilità massima, progressione bilanciata e narrativa emotivamente profonda.
+
+#### 🏆 Novità v1.2.1 (19 Ottobre 2025)
+
+**UI/UX Improvements:**
+- ✅ **Schermata Disclaimer Ottimizzata:** Font ridotto del 25%, box allargato, firma visibile senza scroll
+- ✅ **Cursore Lampeggiante Fixato:** Eliminato fastidioso spostamento del testo (opacity invece di conditional rendering)
+- ✅ **Istruzioni Aggiornate:** Testo completamente riscritto con meccaniche v1.2.0, organizzato in sezioni tematiche (~+150% contenuti)
+
+**Save System v2.0.0 - Major Overhaul:**
+- ✅ **5 Slot Save** (era 3) con metadata dettagliati
+- ✅ **Export/Import JSON** per backup e trasferimento tra dispositivi
+- ✅ **Migrazione Automatica** da versioni precedenti (1.0.0 → 2.0.0)
+- ✅ **Validazione Robusta:** Multi-layer validation con error handling completo
+- ✅ **UI Migliorata:** Opzione "Importa da File JSON" sempre visibile, azioni Export/Delete con tasto [A]
+- ✅ **Messaggi di Errore Specifici:** Feedback chiaro per ogni tipo di problema
+
+**Global Trophy System - Feature Rivoluzionaria:**
+- ✅ **Persistenza Permanente:** Trofei salvati nel browser indipendentemente dai salvataggi
+- ✅ **Nessuna Perdita:** I trofei restano per sempre, anche senza salvare o eliminando i file
+- ✅ **Merge Automatico:** Caricando un save, i trofei si unificano con quelli globali
+- ✅ **Export/Import Backup:** Condivisione e protezione dei progressi trofei
+
+**Impatto Utente:**
+- 🎮 Esperienza più sicura e flessibile
+- 💾 3 metodi di backup dati (5 slot + JSON + trofei globali)
+- 🏆 Motivazione aumentata (nessun trofeo viene mai perso)
+- 🔄 Rigiocabilità massimizzata (accumulo trofei tra run diverse)
 
 ## ⚠️ ATTENZIONE CRITICA PER SVILUPPATORI
 

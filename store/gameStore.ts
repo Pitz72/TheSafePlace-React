@@ -17,6 +17,71 @@ import { useCombatStore } from './combatStore';
 const SAVE_VERSION = "2.0.0"; // Version for the modular save system
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
+/**
+ * @function migrateSaveData
+ * @description Migrates save data from older versions to the current version.
+ * @param {any} saveData - The save data to migrate.
+ * @returns {any} The migrated save data.
+ */
+const migrateSaveData = (saveData: any): any => {
+  const version = saveData.saveVersion || "1.0.0";
+  
+  // Migration from 1.0.0 to 2.0.0
+  if (version === "1.0.0") {
+    console.log("Migrating save from 1.0.0 to 2.0.0...");
+    
+    // Add any missing store data with defaults
+    if (!saveData.interaction) {
+      saveData.interaction = {
+        isInventoryOpen: false,
+        isInRefuge: false,
+        isCraftingOpen: false,
+      };
+    }
+    
+    if (!saveData.event) {
+      saveData.event = {
+        availableEvents: [],
+        eventHistory: [],
+      };
+    }
+    
+    if (!saveData.combat) {
+      saveData.combat = {
+        currentEnemy: null,
+        combatLog: [],
+      };
+    }
+    
+    // Ensure gameFlags and visitedBiomes are arrays (not Sets)
+    if (saveData.game) {
+      if (!Array.isArray(saveData.game.gameFlags)) {
+        saveData.game.gameFlags = [];
+      }
+      if (!Array.isArray(saveData.game.visitedBiomes)) {
+        saveData.game.visitedBiomes = [];
+      }
+    }
+    
+    // Ensure character status and trophies are arrays
+    if (saveData.character) {
+      if (!Array.isArray(saveData.character.status)) {
+        saveData.character.status = [];
+      }
+      if (!Array.isArray(saveData.character.unlockedTrophies)) {
+        saveData.character.unlockedTrophies = [];
+      }
+    }
+    
+    saveData.saveVersion = "2.0.0";
+  }
+  
+  // Future migrations can be added here
+  // if (version === "2.0.0") { ... migrate to 3.0.0 ... }
+  
+  return saveData;
+};
+
 // --- Helper Functions ---
 /**
  * @function timeToMinutes
@@ -474,6 +539,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       const characterState = useCharacterStore.getState();
       const timeState = useTimeStore.getState();
 
+      // Validate slot number
+      if (slot < 1 || slot > 5) {
+        console.error("Invalid slot number:", slot);
+        get().addJournalEntry({ text: "Slot di salvataggio non valido.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
+
+      // Collect all save data
       const saveData = {
         saveVersion: SAVE_VERSION,
         timestamp: Date.now(),
@@ -491,13 +564,44 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         combat: useCombatStore.getState().toJSON(),
       };
 
-      localStorage.setItem(`tspc_save_${slot}`, JSON.stringify(saveData));
-      localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
+      // Validate save data before saving
+      if (!saveData.character || !saveData.game || !saveData.time) {
+        console.error("Invalid save data structure");
+        get().addJournalEntry({ text: "Errore: dati di salvataggio incompleti.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
+
+      // Try to stringify to catch any serialization errors
+      let saveDataJSON: string;
+      try {
+        saveDataJSON = JSON.stringify(saveData);
+      } catch (stringifyError) {
+        console.error("Error stringifying save data:", stringifyError);
+        get().addJournalEntry({ text: "Errore durante la serializzazione dei dati.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
+
+      // Check localStorage space
+      try {
+        localStorage.setItem(`tspc_save_${slot}`, saveDataJSON);
+        localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
+      } catch (storageError) {
+        if (storageError instanceof DOMException && storageError.name === 'QuotaExceededError') {
+          console.error("localStorage quota exceeded");
+          get().addJournalEntry({ text: "Spazio di archiviazione insufficiente. Elimina altri salvataggi.", type: JournalEntryType.SYSTEM_ERROR });
+        } else {
+          console.error("localStorage error:", storageError);
+          get().addJournalEntry({ text: "Errore durante l'accesso allo storage.", type: JournalEntryType.SYSTEM_ERROR });
+        }
+        return false;
+      }
+
+      audioManager.playSound('confirm');
       get().addJournalEntry({ text: `Partita salvata nello slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
       return true;
     } catch (error) {
-      console.error("Error saving game:", error);
-      get().addJournalEntry({ text: "Errore durante il salvataggio della partita.", type: JournalEntryType.SYSTEM_ERROR });
+      console.error("Unexpected error saving game:", error);
+      get().addJournalEntry({ text: "Errore imprevisto durante il salvataggio.", type: JournalEntryType.SYSTEM_ERROR });
       return false;
     }
   },
@@ -510,28 +614,58 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         return false;
       }
 
-      const savedData = JSON.parse(savedDataJSON);
+      let savedData;
+      try {
+        savedData = JSON.parse(savedDataJSON);
+      } catch (parseError) {
+        console.error("Error parsing save data:", parseError);
+        get().addJournalEntry({ text: "File di salvataggio corrotto. Impossibile caricare.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
 
+      // Validate save data structure
+      if (!savedData.metadata || !savedData.character || !savedData.game || !savedData.time) {
+        console.error("Invalid save data structure");
+        get().addJournalEntry({ text: "File di salvataggio incompleto o non valido.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
+
+      // Migrate save data if needed
       if (savedData.saveVersion !== SAVE_VERSION) {
-          console.warn(`Save file version (${savedData.saveVersion}) does not match game version (${SAVE_VERSION}). Trying to load anyway.`);
-          // Here you could implement migration logic for different versions if needed.
+        console.warn(`Save file version (${savedData.saveVersion || '1.0.0'}) does not match game version (${SAVE_VERSION}). Attempting migration...`);
+        try {
+          savedData = migrateSaveData(savedData);
+          console.log("Migration successful!");
+        } catch (migrationError) {
+          console.error("Migration failed:", migrationError);
+          get().addJournalEntry({ text: "Impossibile migrare il salvataggio alla versione corrente.", type: JournalEntryType.SYSTEM_ERROR });
+          return false;
+        }
       }
       
-      useCharacterStore.getState().fromJSON(savedData.character);
-      get().fromJSON(savedData.game);
-      useTimeStore.getState().fromJSON(savedData.time);
-      useInteractionStore.getState().fromJSON(savedData.interaction);
-      useEventStore.getState().fromJSON(savedData.event);
-      useCombatStore.getState().fromJSON(savedData.combat);
+      // Restore all stores
+      try {
+        useCharacterStore.getState().fromJSON(savedData.character);
+        get().fromJSON(savedData.game);
+        useTimeStore.getState().fromJSON(savedData.time);
+        useInteractionStore.getState().fromJSON(savedData.interaction);
+        useEventStore.getState().fromJSON(savedData.event);
+        useCombatStore.getState().fromJSON(savedData.combat);
+      } catch (restoreError) {
+        console.error("Error restoring game state:", restoreError);
+        get().addJournalEntry({ text: "Errore durante il ripristino dello stato di gioco.", type: JournalEntryType.SYSTEM_ERROR });
+        return false;
+      }
 
       localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
       get().addJournalEntry({ text: `Partita caricata dallo slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
+      
       // Ensure the game is in a playable state after loading
       get().setGameState(GameState.IN_GAME);
       return true;
     } catch (error) {
-      console.error("Error loading game:", error);
-      get().addJournalEntry({ text: "Errore durante il caricamento della partita. Il file potrebbe essere corrotto.", type: JournalEntryType.SYSTEM_ERROR });
+      console.error("Unexpected error loading game:", error);
+      get().addJournalEntry({ text: "Errore imprevisto durante il caricamento. Riprova.", type: JournalEntryType.SYSTEM_ERROR });
       return false;
     }
   },

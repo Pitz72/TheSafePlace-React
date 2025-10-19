@@ -179,3 +179,18 @@ html {
 .animate-cursor-blink {
   animation: cursor-blink 1s step-end infinite;
 }
+
+/* --- Riduzione Font Specifica per PRESENTS_SCREEN --- */
+.presents-screen-content-box {
+  font-size: 0.95rem !important; /* Dimensione assoluta ridotta per il contenuto del box */
+}
+.presents-screen-content-box p {
+  font-size: 0.95rem !important; /* Forza la dimensione su tutti i paragrafi */
+  line-height: 1.4 !important; /* Riduce anche l'interlinea */
+}
+.presents-screen-content-box .presents-title {
+  font-size: 1.3rem !important; /* Titolo "ATTENZIONE" più piccolo */
+}
+.presents-screen-content-box .presents-signature {
+  font-size: 0.9rem !important; /* Firma ancora più piccola */
+}

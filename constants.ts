@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = "1.2.0";
+export const GAME_VERSION = "1.2.1";
 
 export const BOOT_TEXT = [
     'Runtime Radio BIOS v1.02',
@@ -42,26 +42,42 @@ export const INSTRUCTIONS_TEXT = `Figlio Mio, Ultimo...
 
 Se stai leggendo queste parole, significa che non sono tornato in tempo, e le scorte che ti ho lasciato stanno per finire. Il mio cuore è pesante, ma non c'è tempo per il dolore adesso. Devi essere forte, come ti ho insegnato. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.
 
-Ricorda le basi, sempre. La mappa è la tua guida; la E segna la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (o W, A, S, D) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. Vigila sulla tua Condizione – ferite, malanni, veleni – sono nemici silenziosi.
+═══ MOVIMENTO E SOPRAVVIVENZA ═══
 
-Il tempo è un fiume crudele, il giorno un breve respiro prima del gelo e dei pericoli della notte. Prima che il sole muoia, cerca un Rifugio ('R'). Lì troverai riposo fino all'alba e, con un po' di fortuna, qualcosa di utile. Esplorali di giorno, ma ricorda che ogni azione costa tempo. Villaggi ('V') e Città ('C') sono rovine piene di echi e pericoli, non fidarti ciecamente del loro apparente riparo notturno.
+Ricorda le basi, sempre. La mappa è la tua guida; segui la E segnata, è la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (W, A, S, D o le frecce) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. 
 
-Il tuo Inventario è piccolo, riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti direzionali. Premi il numero corrispondente per usare un oggetto.
+Vigila sulla tua Condizione – ferite, malanni, veleni, ipotermia – sono nemici silenziosi che ti indeboliranno. Alcune ti prosciugheranno lentamente la vita, altre falciranno le tue capacità. Trova o crea rimedi, non ignorarle mai.
 
-La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute; a volte, la saggezza sta nel sapere quando fuggire.
+═══ IL CICLO DEL TEMPO ═══
 
-Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. Con tutto l'amore che un padre può dare, Papà.
+Il tempo è un fiume crudele. Il giorno è un breve respiro prima del gelo e dei pericoli della notte. Camminare sotto le stelle ti esporrà a danni costanti – il freddo e l'oscurità sono spietati. Prima che il sole muoia, cerca un Rifugio. Lì troverai riposo sicuro fino all'alba e, con fortuna, qualcosa di utile. 
 
-Leggenda mappa:
+Esplorali di giorno, ma ricorda: ogni azione costa tempo. Anche il meteo è capriccioso – pioggia e tempesta ralenteranno il tuo cammino. Usa 'R' per un riposo rapido quando sei esausto, ma usalo con parsimonia.
 
-@ = Giocatore
-C = Città
-F = Foresta
-~ = Acqua
-M = Montagna
-R = Rifugio
-S = Start
-E = End`;
+═══ INVENTARIO E CRAFTING ═══
+
+Il tuo Inventario è limitato. Riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti. Usa i numeri per consumare oggetti rapidamente. Le armi e le armature si degradano – riparale o smontale per recuperare materiali.
+
+Cerca Manuali di Crafting nel mondo: ti insegneranno ricette vitali. Nei Rifugi troverai banchi da lavoro. Lì potrai creare armi, armature, medicine e strumenti di sopravvivenza. La creazione è la chiave per progredire.
+
+═══ COMBATTIMENTO E CRESCITA ═══
+
+La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute. A volte, la saggezza sta nel sapere quando fuggire o quando negoziare.
+
+Quando combatti, usa 'Analizza' per studiare il nemico e scoprirne le debolezze. Ogni vittoria ti darà esperienza. Quando accumuli abbastanza XP, premi 'L' per salire di livello: scegli un attributo da potenziare e un Talento che definirà il tuo stile. Pianifica bene – alcuni talenti si sbloccano solo ai livelli 5 e 8.
+
+═══ SCELTE MORALI ═══
+
+Le tue decisioni plasmeranno chi sei. La compassione e il pragmatismo sono entrambi validi, ma portano a percorsi diversi. Segui la Via di Lena (cuore) o quella di Elian (ragione) – o cerca un equilibrio. Quando una bilancia penderà abbastanza, otterrai nuove capacità.
+
+Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. 
+
+Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. 
+
+Con tutto l'amore che un padre può dare,
+Papà
+
+P.S. – Ricorda: ESC per mettere in pausa, salva spesso (5 slot disponibili), e non dimenticare di esplorare. Il mondo nasconde segreti e trofei per i più coraggiosi.`;
 
 export const STORY_TEXT = `L'Eco del Silenzio
 

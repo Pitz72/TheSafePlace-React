@@ -20,6 +20,7 @@ import { useGameStore } from './gameStore';
 import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { audioManager } from '../utils/audio';
 import { useTrophyDatabaseStore } from '../data/trophyDatabase';
+import { addGlobalTrophy, loadGlobalTrophies, mergeWithGlobalTrophies } from '../services/globalTrophyService';
 
 const BASE_STAT_VALUE = 100;
 
@@ -80,6 +81,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         newSkills.medicina.proficient = true;
         newSkills.furtivita.proficient = true;
 
+        // Carica i trofei globali all'inizio di una nuova partita
+        const globalTrophies = loadGlobalTrophies();
 
         set({
             level: 1,
@@ -106,7 +109,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             equippedLegs: null,
             knownRecipes: ['recipe_makeshift_knife', 'recipe_bandage_adv', 'recipe_repair_kit_basic'],
             unlockedTalents: [],
-            unlockedTrophies: new Set<string>(),
+            unlockedTrophies: globalTrophies, // Inizia con i trofei globali
         });
     },
 
@@ -959,6 +962,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
             const newTrophies = new Set(state.unlockedTrophies);
             newTrophies.add(trophyId);
+            
+            // Salva immediatamente in localStorage globale
+            addGlobalTrophy(trophyId);
+            
             return { unlockedTrophies: newTrophies };
         });
     },
@@ -991,10 +998,14 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      * @param {object} json - The JSON object to deserialize.
      */
     fromJSON: (json) => {
+        // Merge dei trofei del save con quelli globali
+        const saveTrophies = new Set(json.unlockedTrophies);
+        const mergedTrophies = mergeWithGlobalTrophies(saveTrophies);
+        
         set({
             ...json,
             status: new Set(json.status),
-            unlockedTrophies: new Set(json.unlockedTrophies),
+            unlockedTrophies: mergedTrophies, // Usa il set unificato
         });
     },
 
