@@ -19,5 +19,54 @@
     "description": "Se inizi un combattimento in una foresta, esegui un attacco a sorpresa prima dell'inizio del primo turno.",
     "requiredSkill": "furtivita",
     "levelRequirement": 2
+  },
+  {
+    "id": "expert_hunter",
+    "name": "Cacciatore Esperto",
+    "description": "+50% risorse da animali uccisi e rivela automaticamente le debolezze delle creature.",
+    "requiredSkill": "sopravvivenza",
+    "levelRequirement": 2
+  },
+  {
+    "id": "field_armorer",
+    "name": "Armaiolo da Campo",
+    "description": "Le armi craftate hanno +10 durabilità e richiedono -20% tempo di creazione.",
+    "requiredSkill": "investigare",
+    "levelRequirement": 2
+  },
+  {
+    "id": "wasteland_runner",
+    "name": "Corridore delle Terre Desolate",
+    "description": "Il movimento richiede 2 minuti in meno e +25% resistenza alla fatica.",
+    "requiredSkill": "atletica",
+    "levelRequirement": 2
+  },
+  {
+    "id": "combat_master",
+    "name": "Maestro del Combattimento",
+    "description": "+1 danno con tutte le armi melee. Le armi perdono il 50% in meno di durabilità.",
+    "requiredSkill": "atletica",
+    "levelRequirement": 5
+  },
+  {
+    "id": "hawks_eye",
+    "name": "Occhio di Falco",
+    "description": "+2 bonus ai tiri per colpire ranged. Rivela automaticamente le trappole.",
+    "requiredSkill": "percezione",
+    "levelRequirement": 5
+  },
+  {
+    "id": "veteran_survivor",
+    "name": "Sopravvissuto Veterano",
+    "description": "+50% HP dalle cure. -25% consumo di sazietà e idratazione.",
+    "requiredSkill": "sopravvivenza",
+    "levelRequirement": 8
+  },
+  {
+    "id": "twilight_shadow",
+    "name": "Ombra del Crepuscolo",
+    "description": "+4 alle prove di fuga. Il primo attacco in combattimento è sempre un colpo critico.",
+    "requiredSkill": "furtivita",
+    "levelRequirement": 8
   }
 ]

@@ -104,7 +104,9 @@ const InventoryScreen: React.FC = () => {
     
     const inventory = useCharacterStore(s => s.inventory);
     const equippedWeapon = useCharacterStore(s => s.equippedWeapon);
+    const equippedHead = useCharacterStore(s => s.equippedHead);
     const equippedArmor = useCharacterStore(s => s.equippedArmor);
+    const equippedLegs = useCharacterStore(s => s.equippedLegs);
     const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
 
     const displayInventory = inventory;
@@ -186,7 +188,10 @@ const InventoryScreen: React.FC = () => {
                                    if (!itemDetails) return null;
                                    
                                    const isSelected = index === inventorySelectedIndex;
-                                   const isEquipped = index === equippedWeapon || index === equippedArmor;
+                                   const isEquipped = index === equippedWeapon || 
+                                                     index === equippedHead || 
+                                                     index === equippedArmor || 
+                                                     index === equippedLegs;
                                    
                                    let displayName = itemDetails.name;
                                    if (invItem.durability) {

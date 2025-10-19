@@ -557,34 +557,26 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             return;
         }
 
+        // Crafting sempre con successo (skillcheck rimosso)
         advanceTime(recipe.timeCost, true);
-        const skillCheck = performSkillCheck(recipe.skill, recipe.dc);
-        let journalText = `Tenti di creare: ${recipe.name}. Prova di ${recipe.skill} (CD ${recipe.dc}): ${skillCheck.roll} + ${skillCheck.bonus} = ${skillCheck.total}. `;
+        audioManager.playSound('confirm');
         
-        if (skillCheck.success) {
-            audioManager.playSound('confirm');
-            journalText += "SUCCESSO.";
-            recipe.ingredients.forEach(ing => removeItem(ing.itemId, ing.quantity));
+        // Rimuovi ingredienti
+        recipe.ingredients.forEach(ing => removeItem(ing.itemId, ing.quantity));
 
-            const createdItemsText = recipe.results.map(result => {
-                addItem(result.itemId, result.quantity);
-                return `${itemDatabase[result.itemId].name} x${result.quantity}`;
-            }).join(', ');
+        // Crea gli item
+        const createdItemsText = (recipe.results || []).map(result => {
+            addItem(result.itemId, result.quantity);
+            const item = itemDatabase[result.itemId];
+            if (!item) {
+                console.error(`Item ${result.itemId} not found in database`);
+                return `${result.itemId} x${result.quantity}`;
+            }
+            return `${item.name} x${result.quantity}`;
+        }).join(', ');
 
-            journalText += ` Hai creato: ${createdItemsText}.`;
-            addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
-        } else {
-            audioManager.playSound('error');
-            journalText += "FALLIMENTO.";
-            let lostItemsText: string[] = [];
-            recipe.ingredients.forEach(ing => {
-                const quantityToRemove = Math.max(1, Math.floor(ing.quantity / 2));
-                removeItem(ing.itemId, quantityToRemove);
-                lostItemsText.push(`${itemDatabase[ing.itemId].name} x${quantityToRemove}`);
-            });
-            journalText += ` Hai sprecato parte dei materiali: ${lostItemsText.join(', ')}.`;
-            addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_FAILURE });
-        }
+        const journalText = `Hai creato: ${createdItemsText}.`;
+        addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
     },
 
     /**

@@ -219,6 +219,16 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             addLog(`Hai guadagnato ${combatState.enemy.xp} XP.`, '#f59e0b');
             victory = true;
             audioManager.playSound('victory');
+            
+            // Trigger CS_FIRST_KILL cutscene after first combat victory
+            const { totalCombatWins, gameFlags, startCutscene } = useGameStore.getState();
+            if (totalCombatWins === 0 && !gameFlags.has('FIRST_KILL_PLAYED')) {
+                setTimeout(() => {
+                    const gameStore = useGameStore.getState();
+                    gameStore.setGameFlags(new Set(gameStore.gameFlags).add('FIRST_KILL_PLAYED'));
+                    startCutscene('CS_FIRST_KILL');
+                }, 2000); // 2 second delay after combat ends
+            }
         }
 
         set(state => ({ activeCombat: { ...state.activeCombat!, log: newLog, enemyHp: newEnemyHp, playerTurn: newPlayerTurn, victory } }));

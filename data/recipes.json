@@ -78,5 +78,189 @@
       { "itemId": "durable_cloth", "quantity": 1 }
     ],
     "results": [{ "itemId": "tool_repair_kit_advanced", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_wooden_spear",
+    "name": "Lancia di Legno",
+    "description": "Una lancia rudimentale ma efficace. Buona per mantenere la distanza dai nemici.",
+    "skill": "sopravvivenza",
+    "dc": 10,
+    "timeCost": 25,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 2 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_wooden_spear", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_bow",
+    "name": "Arco Improvvisato",
+    "description": "Un arco semplice ma funzionale. Richiede frecce per essere utilizzato.",
+    "skill": "sopravvivenza",
+    "dc": 14,
+    "timeCost": 35,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_makeshift_bow", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_molotov",
+    "name": "Molotov",
+    "description": "Una bottiglia incendiaria improvvisata. Devastante ma ad uso singolo.",
+    "skill": "investigare",
+    "dc": 12,
+    "timeCost": 15,
+    "ingredients": [
+      { "itemId": "bottle_empty", "quantity": 1 },
+      { "itemId": "strong_liquor", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_molotov", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_sharp_dagger",
+    "name": "Pugnale Affilato",
+    "description": "Un pugnale ben bilanciato e affilato. Richiede materiali di qualità.",
+    "skill": "investigare",
+    "dc": 15,
+    "timeCost": 40,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_sharp_dagger", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_slingshot",
+    "name": "Fionda",
+    "description": "Una fionda semplice ma sorprendentemente efficace a distanza ravvicinata.",
+    "skill": "sopravvivenza",
+    "dc": 9,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 1 },
+      { "itemId": "rubber_gasket", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_slingshot", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_leather_chestpiece",
+    "name": "Pettorale di Cuoio",
+    "description": "Una protezione toracica robusta realizzata con pelli animali conciate.",
+    "skill": "sopravvivenza",
+    "dc": 13,
+    "timeCost": 50,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 3 }
+    ],
+    "results": [{ "itemId": "armor_leather_chestpiece", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_reinforced_leggings",
+    "name": "Gambali Rinforzati",
+    "description": "Protezioni per le gambe con inserti metallici per maggiore difesa.",
+    "skill": "investigare",
+    "dc": 14,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 2 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "leather_leggings", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_helmet",
+    "name": "Elmo Improvvisato",
+    "description": "Un elmetto di fortuna realizzato con rottami metallici e imbottiture di stoffa.",
+    "skill": "investigare",
+    "dc": 13,
+    "timeCost": 35,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 2 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "armor_makeshift_helmet", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_durable_boots",
+    "name": "Stivali Resistenti",
+    "description": "Stivali robusti che proteggono i piedi e migliorano la mobilità.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 40,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "armor_durable_boots", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_natural_antidote",
+    "name": "Antidoto Naturale",
+    "description": "Un rimedio naturale contro veleni e tossine, preparato con funghi medicinali.",
+    "skill": "medicina",
+    "dc": 14,
+    "timeCost": 25,
+    "ingredients": [
+      { "itemId": "edible_mushrooms", "quantity": 2 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_ANTIDOTE", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_improvised_stimpack",
+    "name": "Stimpack Improvvisato",
+    "description": "Una pozione curativa di emergenza, combinando medicine scadute con disinfettante.",
+    "skill": "medicina",
+    "dc": 15,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "expired_medicine", "quantity": 1 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 1 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_STIMPACK", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_preserved_meat",
+    "name": "Carne Conservata",
+    "description": "Conserva la carne o il pesce con sostanze chimiche per prolungarne la durata.",
+    "skill": "sopravvivenza",
+    "dc": 11,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "fresh_fish", "quantity": 1 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "FOOD_PRESERVED_MEAT", "quantity": 2 }]
+  },
+  {
+    "id": "recipe_upgraded_backpack",
+    "name": "Zaino Migliorato",
+    "description": "Un grande zaino rinforzato che aumenta significativamente la capacità di carico.",
+    "skill": "investigare",
+    "dc": 16,
+    "timeCost": 60,
+    "ingredients": [
+      { "itemId": "durable_cloth", "quantity": 3 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "tool_upgraded_backpack", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_fishing_kit",
+    "name": "Kit Pesca Improvvisato",
+    "description": "Un semplice kit da pesca con lenza e ami improvvisati.",
+    "skill": "sopravvivenza",
+    "dc": 10,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "nylon_wire", "quantity": 1 },
+      { "itemId": "metal_piece", "quantity": 3 }
+    ],
+    "results": [{ "itemId": "tool_fishing_kit", "quantity": 1 }]
   }
 ]

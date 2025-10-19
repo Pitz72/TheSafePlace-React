@@ -50,5 +50,57 @@
     "value": 120,
     "stackable": false,
     "rarity": "uncommon"
+  },
+  {
+    "id": "tattered_pants",
+    "name": "Pantaloni Logori",
+    "description": "Pantaloni consunti e pieni di toppe. Offrono poca protezione, ma sono meglio di niente.",
+    "type": "armor",
+    "slot": "legs",
+    "defense": 1,
+    "durability": 15,
+    "weight": 0.8,
+    "value": 5,
+    "stackable": false,
+    "rarity": "common"
+  },
+  {
+    "id": "reinforced_jeans",
+    "name": "Jeans Rinforzati",
+    "description": "Jeans in denim pesante con rinforzi in fibra sintetica. Resistenti e pratici per viaggiare.",
+    "type": "armor",
+    "slot": "legs",
+    "defense": 3,
+    "durability": 40,
+    "weight": 1.5,
+    "value": 40,
+    "stackable": false,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "leather_leggings",
+    "name": "Gambali di Cuoio",
+    "description": "Protezioni per le gambe realizzate in cuoio spesso, cucite con cura. Offrono una buona difesa contro attacchi fisici.",
+    "type": "armor",
+    "slot": "legs",
+    "defense": 5,
+    "durability": 60,
+    "weight": 2.5,
+    "value": 80,
+    "stackable": false,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tactical_leg_armor",
+    "name": "Protezioni Tattiche",
+    "description": "Protezioni per le gambe di tipo militare con piastre rinforzate. Equipaggiamento tattico di alta qualità.",
+    "type": "armor",
+    "slot": "legs",
+    "defense": 8,
+    "durability": 80,
+    "weight": 4.0,
+    "value": 200,
+    "stackable": false,
+    "rarity": "rare"
   }
 ]

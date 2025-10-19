@@ -22,19 +22,19 @@ const AlignmentPanel: React.FC = () => {
 
     return (
         <Panel title="BUSSOLA MORALE">
-            <div className="flex flex-col items-center justify-center h-full px-2 space-y-3">
-                <div className="w-full flex justify-between text-2xl">
+            <div className="flex flex-col items-center justify-center h-full px-2 space-y-1 text-sm">
+                <div className="w-full flex justify-between">
                     <span className="text-blue-400">Lena</span>
                     <span className="text-red-400">Elian</span>
                 </div>
-                <div className="w-full h-2 bg-gray-700 rounded-full relative">
+                <div className="w-full h-1.5 bg-gray-700 rounded-full relative">
                     <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-gray-400 to-red-500 rounded-full w-full"></div>
                     <div 
-                        className="absolute -top-1 w-1 h-4 bg-yellow-400 border border-black rounded"
+                        className="absolute -top-0.5 w-1 h-2.5 bg-yellow-400 border border-black rounded"
                         style={{ left: `calc(${positionPercent}% - 2px)` }}
                     ></div>
                 </div>
-                <div className="text-center text-xl pt-1">
+                <div className="text-center text-xs">
                     {dominantAlignment}
                 </div>
             </div>

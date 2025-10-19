@@ -17,6 +17,26 @@ body {
   overflow: hidden;
 }
 
+/* Riduzione font globale - 40% (era 50%, aumentato del 20%) */
+html {
+  font-size: 60%; /* Riduzione base del 40% rispetto all'originale */
+}
+
+/* Sovrascrittura forzata di TUTTE le classi Tailwind con riduzione del 40% */
+.text-xs { font-size: 0.75rem !important; }    /* Tailwind: 0.75rem */
+.text-sm { font-size: 0.875rem !important; }   /* Tailwind: 0.875rem */
+.text-base { font-size: 1rem !important; }     /* Tailwind: 1rem */
+.text-lg { font-size: 1.125rem !important; }   /* Tailwind: 1.125rem */
+.text-xl { font-size: 1.25rem !important; }    /* Tailwind: 1.25rem */
+.text-2xl { font-size: 1.5rem !important; }    /* Tailwind: 1.5rem */
+.text-3xl { font-size: 1.875rem !important; }  /* Tailwind: 1.875rem */
+.text-4xl { font-size: 2.25rem !important; }   /* Tailwind: 2.25rem */
+.text-5xl { font-size: 3rem !important; }      /* Tailwind: 3rem */
+.text-6xl { font-size: 3.75rem !important; }   /* Tailwind: 3.75rem */
+.text-7xl { font-size: 4.5rem !important; }    /* Tailwind: 4.5rem */
+.text-8xl { font-size: 6rem !important; }      /* Tailwind: 6rem */
+.text-9xl { font-size: 8rem !important; }      /* Tailwind: 8rem */
+
 /* --- Theme System using CSS Variables --- */
 
 /* 1. Standard Theme (Default) */

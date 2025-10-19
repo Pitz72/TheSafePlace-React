@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.1.3)
+# The Safe Place Chronicles: The Echo of the Journey (v1.2.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -77,9 +77,76 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.1.3** - Stabile e Funzionante
+**Versione Corrente: v1.2.0** - Espansione Contenuti Massiva
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. Le versioni successive (1.1.x) si concentrano su stabilizzazione, bug fixing e ottimizzazioni.
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 introduce un'espansione massiva di contenuti con:
+
+#### 🎯 Novità v1.2.0 (Ottobre 2025)
+
+**Espansione Eventi (+741%):**
+- **88 nuovi eventi** distribuiti su tutti i biomi
+- Pianura: 25 eventi totali (23 nuovi)
+- Foresta: 25 eventi totali (22 nuovi)  
+- Città: 26 eventi totali (23 nuovi + 1 speciale)
+- Villaggio: 25 eventi totali (21 nuovi)
+
+**Nuovi Nemici (+240%):**
+- **12 nuovi avversari** con tattiche uniche analizzabili
+- Distribuzione bilanciata per bioma (Pianura, Foresta, Città)
+- HP: 20-60, AC: 10-15, XP: 60-120
+- Ogni nemico con descrizioni narrative immersive
+
+**Sistema Talenti Espanso (+233%):**
+- **7 nuovi talenti** (totale: 10)
+- 3 tier di progressione (Livello 2, 5, 8)
+- Bonus strategici non solo numerici
+- Synergy con diversi playstyle (stealth, combat, survival)
+
+**Crafting Completo (+233%):**
+- **14 nuove ricette** (totale: 20)
+- Armi, armature, consumabili, utility
+- 2 nuovi manuali aggiunti e distribuiti
+- Tutti i materiali trovabili nell'esplorazione
+
+**Nuove Cutscene (+100%):**
+- **4 cutscene narrative emotive** (17 pagine totali)
+- CS_FIRST_KILL: Riflessione sulla violenza necessaria
+- CS_HALF_JOURNEY: Solitudine e dubbio esistenziale
+- CS_MOTHERS_ECHO: Scoperta del nome della madre (Lena)
+- CS_POINT_OF_NO_RETURN: Scelta morale finale prima della destinazione
+
+**Sistema Status Completo (+166%):**
+- **5 nuovi status** con meccaniche uniche (totale: 8)
+- IPOTERMIA, ESAUSTO, AFFAMATO, DISIDRATATO, INFEZIONE
+- Effetti su skill checks e HP
+- Auto-applicazione/rimozione basata su condizioni
+
+**Slot Armor Completo (+50%):**
+- **4 nuove armature per legs** (common → rare)
+- Sistema multi-slot (head, chest, legs)
+- AC ora somma tutti gli slot
+- Progressione naturale di equipaggiamento
+
+**Varietà Narrativa (+200%):**
+- **60+ nuove descrizioni combattimento**
+- Attacchi, colpi, miss, morti nemici
+- Ogni combattimento narrativamente unico
+
+**Bilanciamento Progressione:**
+- XP requisiti ridotti ~50-70% (livello 2-6)
+- XP da esplorazione: 1 → 3 (+200%)
+- Requisiti day 7 ridotti per accessibilità contenuti
+- Easter eggs: 2% → 7% (+250%)
+
+**Bug Fix Critici:**
+- ✅ Crafting rifugio (error handling robusto)
+- ✅ Stage 11 main quest (trigger dinamico `nearEnd`)
+- ✅ 2 manuali crafting incompleti aggiunti
+- ✅ Sistema font e UI ottimizzati (font -40%, layout compatto)
+- ✅ Equipment panel completo con visualizzazione 4 slot
+- ✅ Tutti i pannelli visibili senza overflow
+
+**Risultato:** Il gioco ora offre **~100 ore di contenuti potenziali** con rigiocabilità massima, progressione bilanciata e narrativa emotivamente profonda.
 
 ## ⚠️ ATTENZIONE CRITICA PER SVILUPPATORI
 

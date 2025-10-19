@@ -32,6 +32,28 @@
     "unlocksRecipe": "recipe_soup"
   },
   {
+    "id": "manual_archery_basics",
+    "name": "Manuale: Fondamenti di Tiro con l'Arco",
+    "description": "Un vecchio manuale militare che spiega come costruire frecce rudimentali ma efficaci da materiali di scarto.",
+    "type": "manual",
+    "weight": 0.5,
+    "value": 100,
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": "recipe_arrows"
+  },
+  {
+    "id": "manual_advanced_repairs",
+    "name": "Manuale: Riparazioni Avanzate",
+    "description": "Un manuale tecnico sulla manutenzione avanzata di equipaggiamenti da campo, con istruzioni per creare kit di riparazione professionali.",
+    "type": "manual",
+    "weight": 0.5,
+    "value": 150,
+    "stackable": false,
+    "rarity": "rare",
+    "unlocksRecipe": "recipe_repair_kit_advanced"
+  },
+  {
     "id": "sealed_package_quest",
     "name": "Pacco Sigillato",
     "description": "Un pacco avvolto in tela cerata e sigillato con cura. Non sai cosa contenga, ma sembra importante. È indirizzato a un 'avamposto a nord'.",
@@ -195,6 +217,16 @@
     "id": "rare_music_cassettes",
     "name": "Musicassetta Rara",
     "description": "Una vecchia musicassetta con un frammento di musica registrato dall'etere. Un tesoro in un mondo silenzioso.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "lena_cloth_fragment",
+    "name": "Frammento di Tessuto",
+    "description": "Un pezzo di stoffa bianca, un tempo parte di un camice medico. Cucito con cura sul tessuto c'è un nome in filo azzurro: «Lena». Il nome di tua madre.",
     "type": "quest",
     "weight": 0.1,
     "value": 0,

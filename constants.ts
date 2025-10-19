@@ -1,5 +1,7 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
+export const GAME_VERSION = "1.2.0";
+
 export const BOOT_TEXT = [
     'Runtime Radio BIOS v1.02',
     'Copyright (C) 1983 Runtime Radio Corp.',
@@ -188,27 +190,28 @@ export const SKILLS: Record<SkillName, SkillDefinition> = {
 };
 
 // XP needed to reach the next level. Index represents the level you are trying to reach.
-// e.g., XP_PER_LEVEL[2] = 300 XP to reach level 2.
+// e.g., XP_PER_LEVEL[2] = 150 XP to reach level 2.
+// v1.2.0: Reduced XP requirements to allow players to reach level 6-8 by endgame
 export const XP_PER_LEVEL = [
   0,      // Livello 0 (non usato)
   0,      // Livello 1
-  300,    // Livello 2
-  900,    // Livello 3
-  2700,   // Livello 4
-  6500,   // Livello 5
-  14000,  // ...e così via
-  23000,
-  34000,
-  48000,
-  64000,
-  85000,
+  150,    // Livello 2 (was 300)
+  400,    // Livello 3 (was 900)
+  900,    // Livello 4 (was 2700)
+  2000,   // Livello 5 (was 6500)
+  4000,   // Livello 6 (was 14000)
+  7000,   // Livello 7 (was 23000)
+  11000,  // Livello 8 (was 34000)
+  16000,  // Livello 9 (was 48000)
+  22000,  // Livello 10 (was 64000)
+  30000,  // ...e così via
+  40000,
+  52000,
+  66000,
+  82000,
   100000,
   120000,
-  140000,
-  165000,
-  195000,
-  225000,
-  265000,
-  305000,
-  355000,
+  142000,
+  166000,
+  192000,
 ];

@@ -57,6 +57,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     inventory: [],
     equippedWeapon: null,
     equippedArmor: null,
+    equippedHead: null,
+    equippedLegs: null,
     alignment: { ...initialAlignment },
     // FIX: Explicitly typed the Set to ensure correct type inference downstream.
     status: new Set<PlayerStatusCondition>(),
@@ -100,6 +102,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ],
             equippedWeapon: null,
             equippedArmor: null,
+            equippedHead: null,
+            equippedLegs: null,
             knownRecipes: ['recipe_makeshift_knife', 'recipe_bandage_adv', 'recipe_repair_kit_basic'],
             unlockedTalents: [],
             unlockedTrophies: new Set<string>(),
@@ -175,11 +179,29 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         
         // --- Status Penalty ---
         let statusPenalty = 0;
-        if (status.has('FERITO')) {
-            const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita', 'rapiditaDiMano'];
-            if (physicalSkills.includes(skill)) {
-                statusPenalty = -2;
+        const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita', 'rapiditaDiMano'];
+        const perceptionSkills: SkillName[] = ['percezione', 'intuizione', 'medicina', 'sopravvivenza', 'addestrareAnimali'];
+        const intelligenceSkills: SkillName[] = ['arcanismo', 'storia', 'investigare', 'natura', 'religione'];
+        
+        if (status.has('FERITO') && physicalSkills.includes(skill)) {
+            statusPenalty -= 2;
+        }
+        if (status.has('IPOTERMIA')) {
+            statusPenalty -= 3;
+        }
+        if (status.has('ESAUSTO') && physicalSkills.includes(skill)) {
+            statusPenalty -= 2;
+        }
+        if (status.has('AFFAMATO')) {
+            statusPenalty -= 1;
+        }
+        if (status.has('DISIDRATATO')) {
+            if (perceptionSkills.includes(skill) || intelligenceSkills.includes(skill)) {
+                statusPenalty -= 2;
             }
+        }
+        if (status.has('INFEZIONE')) {
+            statusPenalty -= 2;
         }
 
         return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty + fatiguePenalty;
@@ -203,9 +225,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     /**
      * @function gainExplorationXp
      * @description Adds exploration experience to the character.
+     * v1.2.0: Increased from 1 to 3 XP per step for better progression
      */
     gainExplorationXp: () => {
-        get().addXp(1);
+        get().addXp(3);
     },
 
     /**
@@ -271,7 +294,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
             // Cannot call check triggers inside set state, so we do it after
             Promise.resolve().then(() => {
-                useGameStore.getState().checkMainQuestTriggers();
+                const gameStore = useGameStore.getState();
+                gameStore.checkMainQuestTriggers();
+                gameStore.checkCutsceneTriggers();
             });
 
             return newState;
@@ -361,14 +386,21 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             if (!itemInInventory) return {};
         
             const newInventory = [...state.inventory];
-            const isEquipped = state.equippedWeapon === inventoryIndex || state.equippedArmor === inventoryIndex;
+            const isEquipped = state.equippedWeapon === inventoryIndex || 
+                             state.equippedArmor === inventoryIndex ||
+                             state.equippedHead === inventoryIndex ||
+                             state.equippedLegs === inventoryIndex;
             
             let newEquippedWeapon = state.equippedWeapon;
             let newEquippedArmor = state.equippedArmor;
+            let newEquippedHead = state.equippedHead;
+            let newEquippedLegs = state.equippedLegs;
             
             if (isEquipped) {
                  if(state.equippedWeapon === inventoryIndex) newEquippedWeapon = null;
                  if(state.equippedArmor === inventoryIndex) newEquippedArmor = null;
+                 if(state.equippedHead === inventoryIndex) newEquippedHead = null;
+                 if(state.equippedLegs === inventoryIndex) newEquippedLegs = null;
             }
             
             if (newInventory[inventoryIndex].quantity > quantity) {
@@ -378,9 +410,17 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 // After removing an item, equipped indices might shift
                 if (newEquippedWeapon !== null && newEquippedWeapon > inventoryIndex) newEquippedWeapon--;
                 if (newEquippedArmor !== null && newEquippedArmor > inventoryIndex) newEquippedArmor--;
+                if (newEquippedHead !== null && newEquippedHead > inventoryIndex) newEquippedHead--;
+                if (newEquippedLegs !== null && newEquippedLegs > inventoryIndex) newEquippedLegs--;
             }
 
-            return { inventory: newInventory, equippedWeapon: newEquippedWeapon, equippedArmor: newEquippedArmor };
+            return { 
+                inventory: newInventory, 
+                equippedWeapon: newEquippedWeapon, 
+                equippedArmor: newEquippedArmor,
+                equippedHead: newEquippedHead,
+                equippedLegs: newEquippedLegs
+            };
         });
     },
 
@@ -427,6 +467,15 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 return { equippedWeapon: inventoryIndex };
             }
             if (itemDetails.type === 'armor') {
+                // Determine which slot based on armor's slot property
+                if (itemDetails.slot === 'chest') {
+                    return { equippedArmor: inventoryIndex };
+                } else if (itemDetails.slot === 'head') {
+                    return { equippedHead: inventoryIndex };
+                } else if (itemDetails.slot === 'legs') {
+                    return { equippedLegs: inventoryIndex };
+                }
+                // Default to chest if slot is not specified
                 return { equippedArmor: inventoryIndex };
             }
             return {};
@@ -436,12 +485,14 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     /**
      * @function unequipItem
      * @description Unequips an item from a specified slot.
-     * @param {'weapon' | 'armor'} slot - The slot to unequip.
+     * @param {'weapon' | 'armor' | 'head' | 'chest' | 'legs'} slot - The slot to unequip.
      */
     unequipItem: (slot) => {
         set(() => {
             if (slot === 'weapon') return { equippedWeapon: null };
-            if (slot === 'armor') return { equippedArmor: null };
+            if (slot === 'armor' || slot === 'chest') return { equippedArmor: null };
+            if (slot === 'head') return { equippedHead: null };
+            if (slot === 'legs') return { equippedLegs: null };
             return {};
         });
     },
@@ -598,9 +649,27 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         if (currentState.status.has('MALATO')) {
             const damage = (minutes / 60) * 0.5;
             hpLossFromStatus += damage;
-            deathCause = deathCause || 'SICKNESS'; // Don't override poison
+            deathCause = deathCause || 'SICKNESS';
             addJournalEntry({
                 text: `Il tuo stato di MALATO ti indebolisce... (-${Math.ceil(damage)} HP)`,
+                type: JournalEntryType.COMBAT
+            });
+        }
+        if (currentState.status.has('IPOTERMIA')) {
+            const damage = (minutes / 60) * 1;
+            hpLossFromStatus += damage;
+            deathCause = deathCause || 'ENVIRONMENT';
+            addJournalEntry({
+                text: `L'IPOTERMIA ti gela le ossa... (-${Math.ceil(damage)} HP)`,
+                type: JournalEntryType.COMBAT
+            });
+        }
+        if (currentState.status.has('INFEZIONE')) {
+            const damage = (minutes / 60) * 1;
+            hpLossFromStatus += damage;
+            deathCause = deathCause || 'SICKNESS';
+            addJournalEntry({
+                text: `L'INFEZIONE si diffonde nel tuo corpo... (-${Math.ceil(damage)} HP)`,
                 type: JournalEntryType.COMBAT
             });
         }
@@ -624,11 +693,60 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         }
         const newFatigue = Math.min(currentState.fatigue.max, currentState.fatigue.current + fatigueGain);
 
+        // Auto-apply/remove status conditions based on stats
+        const newStatus = new Set(currentState.status);
+        
+        // ESAUSTO: Fatigue > 80
+        if (newFatigue > 80 && !newStatus.has('ESAUSTO')) {
+            newStatus.add('ESAUSTO');
+            addJournalEntry({
+                text: `Sei completamente ESAUSTO. La fatica ti opprime.`,
+                type: JournalEntryType.SYSTEM_WARNING
+            });
+        } else if (newFatigue <= 60 && newStatus.has('ESAUSTO')) {
+            newStatus.delete('ESAUSTO');
+            addJournalEntry({
+                text: `Ti senti meno esausto. Lo stato ESAUSTO è svanito.`,
+                type: JournalEntryType.NARRATIVE
+            });
+        }
+        
+        // AFFAMATO: Satiety < 20
+        if (newSatiety < 20 && !newStatus.has('AFFAMATO')) {
+            newStatus.add('AFFAMATO');
+            addJournalEntry({
+                text: `La fame ti consuma. Sei AFFAMATO.`,
+                type: JournalEntryType.SYSTEM_WARNING
+            });
+        } else if (newSatiety >= 40 && newStatus.has('AFFAMATO')) {
+            newStatus.delete('AFFAMATO');
+            addJournalEntry({
+                text: `La fame si attenua. Lo stato AFFAMATO è svanito.`,
+                type: JournalEntryType.NARRATIVE
+            });
+        }
+        
+        // DISIDRATATO: Hydration < 20
+        if (newHydration < 20 && !newStatus.has('DISIDRATATO')) {
+            newStatus.add('DISIDRATATO');
+            addJournalEntry({
+                text: `La sete ti tormenta. Sei DISIDRATATO.`,
+                type: JournalEntryType.SYSTEM_WARNING
+            });
+        } else if (newHydration >= 40 && newStatus.has('DISIDRATATO')) {
+            newStatus.delete('DISIDRATATO');
+            addJournalEntry({
+                text: `La sete si placa. Lo stato DISIDRATATO è svanito.`,
+                type: JournalEntryType.NARRATIVE
+            });
+        }
+
         set({
             satiety: { ...currentState.satiety, current: newSatiety },
             hydration: { ...currentState.hydration, current: newHydration },
             hp: { ...currentState.hp, current: newHp },
-            fatigue: { ...currentState.fatigue, current: newFatigue }
+            fatigue: { ...currentState.fatigue, current: newFatigue },
+            status: newStatus
         });
     },
     
@@ -784,23 +902,38 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
     /**
      * @function getPlayerAC
-     * @description Gets the player's armor class.
+     * @description Gets the player's armor class, summing defense from all equipped armor slots.
      * @returns {number} The player's armor class.
      */
     getPlayerAC: () => {
-        const { getAttributeModifier, equippedArmor, inventory } = get();
+        const { getAttributeModifier, equippedArmor, equippedHead, equippedLegs, inventory } = get();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
         const dexMod = getAttributeModifier('des');
         
-        const armorItem = equippedArmor !== null ? inventory[equippedArmor] : null;
-        if (!armorItem) return 10 + dexMod;
-
-        const isBroken = armorItem.durability && armorItem.durability.current <= 0;
-        if(isBroken) return 10 + dexMod;
-
-        const armorDetails = itemDatabase[armorItem.itemId];
-        const armorBonus = armorDetails?.defense || 0;
-        return 10 + dexMod + armorBonus;
+        let totalArmorBonus = 0;
+        
+        // Check chest armor
+        const chestItem = equippedArmor !== null ? inventory[equippedArmor] : null;
+        if (chestItem && (!chestItem.durability || chestItem.durability.current > 0)) {
+            const chestDetails = itemDatabase[chestItem.itemId];
+            totalArmorBonus += chestDetails?.defense || 0;
+        }
+        
+        // Check head armor
+        const headItem = equippedHead !== null ? inventory[equippedHead] : null;
+        if (headItem && (!headItem.durability || headItem.durability.current > 0)) {
+            const headDetails = itemDatabase[headItem.itemId];
+            totalArmorBonus += headDetails?.defense || 0;
+        }
+        
+        // Check legs armor
+        const legsItem = equippedLegs !== null ? inventory[equippedLegs] : null;
+        if (legsItem && (!legsItem.durability || legsItem.durability.current > 0)) {
+            const legsDetails = itemDatabase[legsItem.itemId];
+            totalArmorBonus += legsDetails?.defense || 0;
+        }
+        
+        return 10 + dexMod + totalArmorBonus;
     },
     /**
      * @function unlockTrophy

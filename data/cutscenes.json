@@ -118,5 +118,122 @@
         "nextPage": null
       }
     ]
+  },
+  {
+    "id": "CS_FIRST_KILL",
+    "title": "Il Peso della Sopravvivenza",
+    "pages": [
+      {
+        "text": "Il corpo giace immobile ai tuoi piedi. Il sangue forma una pozza scura che si espande lentamente, tingendo la polvere di un rosso quasi nero. Le tue mani tremano ancora, strette all'arma. Il metallo è caldo, quasi febbrile, come se avesse assorbito la vita che ha appena spento.\n\nNon era un mostro. Era una persona. Forse disperata come te. Forse solo più affamata, più veloce, più disposta a uccidere per sopravvivere.\n\nMa ora è solo un cadavere. E tu sei vivo.\n\nQuesta è la sopravvivenza.",
+        "nextPage": 1
+      },
+      {
+        "text": "Tuo padre ti aveva preparato a questo momento. Ogni esercizio, ogni lezione brutale, ogni simulazione. \"Un giorno dovrai uccidere o essere ucciso,\" diceva con quella sua voce piatta e pragmatica. \"Non c'è spazio per i deboli. Non c'è spazio per il rimorso.\"\n\nMa ora che è successo, le sue parole suonano vuote. Teoriche. Come può averti preparato a questo peso nel petto? A questo vuoto nello stomaco? Al modo in cui il mondo sembra essere diventato improvvisamente più freddo, più silenzioso?\n\nGuardi le tue mani. Sono le stesse che tuo padre ti ha insegnato a usare per sopravvivere. Ora sono le mani di un assassino.",
+        "nextPage": 2
+      },
+      {
+        "text": "Un pensiero ti attraversa la mente, improvviso e lacerante: tua madre non avrebbe mai voluto questo per te.\n\nNon la ricordi. Non davvero. Solo frammenti: calore, una voce dolce, il profumo di qualcosa che non riesci a identificare. Ma sai, nel profondo, che lei non avrebbe mai allenato un bambino a diventare questo.\n\nTuo padre invece sì. E ora capisci perché. Perché questo mondo non perdona. Non dà seconde possibilità. Non c'è spazio per la gentilezza quando la fame ti rosicchia le viscere e la disperazione ti acceca.\n\nMa a quale prezzo?",
+        "nextPage": 3
+      },
+      {
+        "text": "Ti costringe a voltarti, ad allontanarti dal corpo. Ogni passo è un'eternità. Il mondo continua a girare, indifferente. Il vento soffia. Il cielo resta grigio. La desolazione resta desolazione.\n\nMa qualcosa dentro di te è cambiato. Una linea è stata attraversata. Non puoi più tornare indietro.\n\nForse tuo padre aveva ragione. Forse la sopravvivenza è questa: uccidere la parte di te che esita, che prova pietà, che si aggrappa all'umanità.\n\nO forse lui aveva torto. Forse puoi sopravvivere senza perdere te stesso.\n\nSolo il tempo te lo dirà. Ma per ora, sei vivo. E devi continuare a camminare.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_HALF_JOURNEY",
+    "title": "La Strada è Lunga",
+    "pages": [
+      {
+        "text": "Ti fermi.\n\nNon perché sei stanco. Non perché hai fame o sete. Ti fermi perché, per un momento, non riesci a ricordare perché stai camminando.\n\nI tuoi piedi hanno macinato chilometri di terra morta. Hai attraversato rovine che una volta erano città, foreste che erano giardini, pianure che erano campi. Hai visto il mondo ridotto a un'ombra di se stesso. Hai combattuto, saccheggiato, sopravvissuto.\n\nMa per cosa?\n\nLa risposta dovrebbe essere semplice: il Safe Place. La destinazione che tuo padre ti ha imposto. Ma quella parola, \"Safe Place\", suona sempre più vuota, più assurda. Un miraggio in un deserto di cenere.",
+        "nextPage": 1
+      },
+      {
+        "text": "Ti siedi su una roccia fredda e guardi l'orizzonte. Non c'è nulla lì. Solo più grigio, più desolazione, più niente.\n\nI ricordi di tuo padre iniziano a sfaldarsi nei dettagli. Il suono esatto della sua voce. La forma precisa del suo viso. Sono stati solo pochi giorni? Sembra un'eternità. La solitudine ha un modo di dilatare il tempo, di trasformare ore in anni.\n\nTi chiedi se lui pensasse a te, quando è partito. Se gli sia costato qualcosa, lasciarti. O se per lui sia stato solo un'altra decisione pragmatica, calcolata. \"Sopravvivenza prima di tutto.\"\n\nTi chiedi se ti abbia mai amato davvero, o se tu sia sempre stato solo un progetto. Un esperimento di sopravvivenza.",
+        "nextPage": 2
+      },
+      {
+        "text": "E tua madre? Quella figura fantasma che non hai mai conosciuto, ridotta a un Angelo della Cenere?\n\nSe lei fosse qui, cosa ti direbbe? Ti direbbe di continuare? Di arrenderti? Di trovare un altro scopo, una ragione diversa da quella che tuo padre ti ha imposto?\n\nUn pensiero terribile si fa strada nella tua mente: forse non c'è nessun Safe Place. Forse è solo un'altra bugia, un'altra lezione crudele. \"Cammina finché non puoi più. Questa è la sopravvivenza.\"\n\nMa se ti fermi ora, tutto ciò che hai passato non avrà avuto senso. Ogni ferita, ogni sacrificio, ogni vita che hai preso. Tutto inutile.",
+        "nextPage": 3
+      },
+      {
+        "text": "Prendi una decisione. Non è facile. Non è nemmeno consapevole. È solo un movimento: ti alzi.\n\nLe gambe protestano. Il corpo è stanco. Ma ti alzi comunque. Perché forse il Safe Place esiste. O forse no. Ma l'unica cosa peggiore di continuare è fermarsi qui, in mezzo al nulla, e arrendersi.\n\nNon per tuo padre. Non più.\n\nPer te stesso. Per quella parte di te che ancora crede, contro ogni evidenza, che ci sia qualcosa oltre questa desolazione. Qualcosa che valga la pena di raggiungere.\n\nE se quel qualcosa non esiste, allora lo troverai comunque. Perché devi. Perché l'alternativa è l'abisso.",
+        "nextPage": 4
+      },
+      {
+        "text": "Riprendi a camminare. Un passo dopo l'altro. La strada è lunga. Forse infinita.\n\nMa sei Ultimo. E finché respiri, finché puoi muoverti, continuerai.\n\nNon perché è giusto. Non perché è nobile.\n\nMa perché è l'unica cosa che sai fare.\n\nE forse, solo forse, questo basta.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_MOTHERS_ECHO",
+    "title": "Un Nome Sul Vento",
+    "pages": [
+      {
+        "text": "Stai frugando tra i detriti di un edificio crollato quando lo vedi: un pezzo di tessuto intrappolato sotto una trave. Non è diverso da mille altri stracci che hai trovato nel tuo viaggio.\n\nEppure, qualcosa ti spinge a tirarlo fuori.\n\nIl tessuto è sorprendentemente intatto. Un lembo di stoffa pesante, un tempo bianca, ora macchiata di grigio e ruggine. Ma quando lo giri, vedi qualcosa che ti ferma il respiro.\n\nUn nome, cucito con filo azzurro sbiadito. Lettere curve, fatte a mano, con cura. Con amore.\n\n«Lena»",
+        "nextPage": 1
+      },
+      {
+        "text": "Il mondo sembra fermarsi. Il rumore del vento si attenua. Il freddo pungente diventa irrilevante.\n\nLena.\n\nTuo padre non ha mai pronunciato quel nome. Mai. Tua madre era solo \"lei\". Un'entità astratta, un fantasma senza volto. \"Tua madre è andata perduta,\" diceva. Niente di più. Nessun dettaglio. Nessun ricordo condiviso. Come se cancellarla dalla memoria fosse più facile che affrontare il dolore.\n\nMa ora hai un nome. Una prova tangibile che lei era reale. Che esisteva. Che era una persona, non solo un'idea.\n\nLena.",
+        "nextPage": 2
+      },
+      {
+        "text": "Le tue dita tremano mentre stringi il tessuto. È un frammento di un camice medico, realizzi. Il tipo che indossavano i dottori prima della guerra. Il tipo che potrebbe aver indossato lei.\n\nNella tua mente, pezzi iniziano a combaciare. Gli Angeli della Cenere. Le creature che tuo padre ti ha sempre detto di evitare. Esseri ibridi, metà umani e metà macchine, creati per... cosa? Non lo sai. Nessuno lo sa.\n\nMa se tua madre è diventata uno di loro, allora era viva. In qualche modo, in qualche forma. E forse...\n\nNo. Non puoi permetterti speranze. Le speranze sono pericolose. Ti distraggono. Ti indeboliscono.",
+        "nextPage": 3
+      },
+      {
+        "text": "Eppure, un pensiero si insinua, testardo e cocciuto: e se potessi trovarla? Non per salvarla. Non sei così ingenuo. Ma per... sapere. Per avere risposte.\n\nPerché tuo padre non è mai tornato per lei? Cosa è successo davvero quel giorno? Perché ti ha dato il nome \"Ultimo\"? È una profezia? Un presagio? O solo la crudele ammissione che tutto ciò che avevano è finito con te?\n\nStringi il tessuto e lo infili nella tasca più interna del tuo zaino. È solo un pezzo di stoffa. Non cambierà nulla. Non ti riporterà indietro tua madre. Non renderà tuo padre meno distante.\n\nMa è tuo. Un frammento di verità in un mondo di bugie.",
+        "nextPage": 4
+      },
+      {
+        "text": "Quando esci dall'edificio, il mondo sembra diverso. Non più bello. Non meno ostile. Ma più... complesso. Come se le rovine nascondessero storie che non hai mai considerato. Come se ogni pezzo di detriti fosse l'eco di una vita vissuta, di un amore perduto, di un nome dimenticato.\n\nLena.\n\nRipeti il nome sottovoce, assaporandolo. È la prima volta che pronunci il nome di tua madre. Sembra strano. Intimo. Sacro.\n\nNon sai cosa significhi questo. Non sai se cambierà qualcosa. Ma una parte di te, quella parte che tuo padre ha cercato di soffocare con l'addestramento, si sente più leggera.\n\nPerché ora sai. Ora hai un nome.",
+        "nextPage": 5
+      },
+      {
+        "text": "Mentre cammini, una figura solitaria ti osserva da lontano, immobile come una statua di pietra.\n\nUn Angelo della Cenere.\n\nNon si muove. Non ti segue. Resta solo lì, un'ombra contro l'orizzonte grigio. Ma sotto il cappuccio, due occhi — uno umano, uno meccanico — ti seguono.\n\nE se potessi vederli da vicino, forse riconosceresti qualcosa in quello sguardo. Non minaccia. Non fame.\n\nQualcosa che assomiglia, pericolosamente, a un ricordo.\n\nA un dolore.",
+        "consequences": [{ "type": "addItem", "payload": { "itemId": "lena_cloth_fragment", "quantity": 1 } }],
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_POINT_OF_NO_RETURN",
+    "title": "L'Ultima Scelta",
+    "pages": [
+      {
+        "text": "La vedi.\n\nDall'alto di una collina, attraverso la foschia perenne, la vedi finalmente. La lettera \"E\" marcata sul terreno, visibile persino a questa distanza. Grande, tracciata con pietre bianche disposte con cura geometrica. Un segnale. Una promessa. O una trappola.\n\nIl Safe Place.\n\nSe esiste davvero, è lì. Pochi chilometri. Poche ore di cammino. Dopo tutto questo tempo, dopo tutto ciò che hai passato, la fine è vicina.\n\nMa non provi sollievo. Non provi gioia.\n\nProvi paura.",
+        "nextPage": 1
+      },
+      {
+        "text": "Ti siedi sulla collina e guardi la \"E\" in lontananza. È reale. Non è un miraggio. Ma questo solleva più domande di quante ne risolva.\n\nCosa ti aspetta lì? Un rifugio, come promesso? Un'oasi di sicurezza in questo mondo morto? O qualcosa di peggio? Un inganno elaborato. Un esperimento. Una tomba.\n\nE tuo padre? È lì? È vivo? Ti sta aspettando? O è morto da giorni, e tu hai camminato verso il nulla?\n\nE se è vivo... vuoi davvero vederlo? Dopo tutto ciò che ti ha fatto passare? Dopo tutto ciò che ti ha nascosto?",
+        "nextPage": 2
+      },
+      {
+        "text": "Pensi al viaggio. Ogni passo, ogni lotta, ogni scelta. Non sei più la persona che eri quando hai lasciato il rifugio. Quella persona era spaventata, indifesa, persa.\n\nTu ora sei... diverso. Più forte, forse. Più cinico, sicuramente. Hai ucciso. Hai rubato. Hai fatto cose che quella persona non avrebbe mai immaginato di dover fare.\n\nMa sei anche sopravvissuto. Hai trovato un nome per tua madre. Hai resistito alla solitudine, alla fame, alla disperazione. Hai attraversato la desolazione e sei ancora in piedi.\n\nForse non hai bisogno del Safe Place. Forse non hai bisogno di tuo padre.",
+        "choices": [
+          { "text": "[1] No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.", "targetPage": 3 },
+          { "text": "[2] Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.", "targetPage": 4 }
+        ]
+      },
+      {
+        "text": "Ti alzi. Le gambe protestano, ma obbediscono. Inizi a scendere dalla collina, verso la \"E\", verso le risposte.\n\nNon per tuo padre. Non più. Lo fai per te stesso. Perché devi sapere. Perché questa incertezza ti divorerebbe dall'interno.\n\nSe è una trappola, la affronterai. Se è un inganno, lo smaschererai. Se tuo padre è lì, gli chiederai conto di ogni bugia, di ogni verità nascosta.\n\nE se non c'è niente... almeno saprai.\n\nLa paura non scompare. Ma la sostituisci con qualcosa di più forte: determinazione.",
+        "consequences": [{ "type": "setFlag", "payload": "CHOSE_TRUTH" }],
+        "nextPage": 5
+      },
+      {
+        "text": "Ti alzi e guardi la \"E\" un'ultima volta. Poi ti volti.\n\nNo. Non così. Non correndo verso un'altra delle illusioni di tuo padre. Non vivendo per le sue aspettative, per i suoi piani.\n\nHai sopravvissuto. Hai camminato. Hai imparato. Ma la vera domanda non è \"dov'è il Safe Place?\". È \"cosa vuoi tu?\"\n\nE forse, in questo mondo morto, l'unica sicurezza vera è quella che ti costruisci da solo. Con le tue mani. Con le tue scelte.\n\nScendi dalla collina, ma non verso la \"E\". Verso un altro sentiero. Verso l'ignoto.\n\nForse è follia. Forse è libertà.\n\nMa è tua.",
+        "consequences": [
+          { "type": "setFlag", "payload": "CHOSE_FREEDOM" },
+          { "type": "alignmentChange", "value": {"type": "elian", "amount": 3} }
+        ],
+        "nextPage": 5
+      },
+      {
+        "text": "Qualunque cosa ti aspetti al Safe Place — salvezza, delusione, morte — ormai è irrilevante.\n\nCiò che conta è che hai scelto. Non tuo padre. Non il destino. Tu.\n\nE in questo mondo in cui tutto è stato deciso da altri — dalla guerra, dalla fame, dalla necessità — quella scelta, per quanto piccola, è la cosa più preziosa che possiedi.\n\nL'orizzonte si stende davanti a te, grigio e infinito.\n\nMa per la prima volta, non ti sembra una prigione.\n\nSembra una strada.\n\nE tu sei pronto a percorrerla.",
+        "nextPage": null
+      }
+    ]
   }
 ]

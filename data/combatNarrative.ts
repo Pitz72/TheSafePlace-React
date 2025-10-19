@@ -1,4 +1,5 @@
 // data/combatNarrative.ts
+// v1.2.0: Expanded combat narrative variety with 15+ descriptions per category
 
 export const PLAYER_ATTACK_DESCRIPTIONS = [
   "Ti lanci in avanti, arma in pugno...",
@@ -6,6 +7,16 @@ export const PLAYER_ATTACK_DESCRIPTIONS = [
   "Cerchi un'apertura nella sua difesa...",
   "Scatti in avanti per un attacco fulmineo...",
   "Sfrutti un attimo di distrazione per attaccare...",
+  "Colpisci con precisione chirurgica...",
+  "Un affondo disperato ma efficace...",
+  "Sfrutti un'apertura nella guardia...",
+  "Fai roteare l'arma con violenza...",
+  "Ti muovi con agilità felina, cercando il colpo giusto...",
+  "Un attacco calcolato, nulla al caso...",
+  "Sfrutti il terreno a tuo vantaggio...",
+  "Con un grido di battaglia, colpisci...",
+  "Premi l'offensiva senza pietà...",
+  "Ogni fibra del tuo corpo è concentrata sull'attacco...",
 ];
 
 export const PLAYER_HIT_DESCRIPTIONS = [
@@ -14,6 +25,16 @@ export const PLAYER_HIT_DESCRIPTIONS = [
   "La tua arma trova un varco!",
   "Colpito! Il nemico barcolla.",
   "Un impatto solido!",
+  "La lama affonda nella carne...",
+  "Un colpo devastante che lo fa traballare...",
+  "Il suono dell'impatto è spaventoso!",
+  "Senti la resistenza cedere sotto il colpo...",
+  "Un attacco perfettamente eseguito!",
+  "Il nemico non se lo aspettava!",
+  "Sangue! Il colpo ha fatto male.",
+  "Vedi il dolore nei suoi occhi...",
+  "Un colpo che lascerà il segno!",
+  "La tua arma morde profondo!",
 ];
 
 export const PLAYER_MISS_DESCRIPTIONS = [
@@ -22,6 +43,16 @@ export const PLAYER_MISS_DESCRIPTIONS = [
   "Il colpo viene parato!",
   "Un sibilo a vuoto. Mancato.",
   "Il tuo avversario è troppo veloce.",
+  "Il nemico si sposta all'ultimo istante...",
+  "Il colpo passa a un soffio dal bersaglio...",
+  "Una finta! Hai colpito l'aria...",
+  "L'avversario anticipa la tua mossa...",
+  "Troppo lento! Lui è già altrove.",
+  "Il colpo rimbalza sulla sua armatura...",
+  "Un momento di esitazione... e l'opportunità sfuma.",
+  "La stanchezza ti fa sbagliare il colpo...",
+  "Il terreno sotto i tuoi piedi cede, rovinando il tiro...",
+  "Maledizione! Troppo in alto!",
 ];
 
 export const ENEMY_ATTACK_DESCRIPTIONS = [
@@ -30,6 +61,16 @@ export const ENEMY_ATTACK_DESCRIPTIONS = [
   "Il {enemy} tenta un colpo selvaggio...",
   "Il {enemy} si lancia all'attacco...",
   "Senza preavviso, il {enemy} scatta...",
+  "Il {enemy} carica con ferocia cieca...",
+  "Gli occhi del {enemy} brillano di follia mentre attacca...",
+  "Il {enemy} colpisce con violenza disperata...",
+  "Un movimento fulmineo dal {enemy}...",
+  "Il {enemy} affonda l'attacco senza esitazione...",
+  "La bestialità del {enemy} si scatena...",
+  "Il {enemy} cerca di sopraffarti con la forza bruta...",
+  "Un attacco a tradimento dal {enemy}...",
+  "Il {enemy} sfrutta la tua distrazione...",
+  "Il {enemy} cerca di finirla rapidamente...",
 ];
 
 export const ENEMY_HIT_DESCRIPTIONS = [
@@ -38,6 +79,16 @@ export const ENEMY_HIT_DESCRIPTIONS = [
   "Un dolore acuto! Sei stato colpito.",
   "Non sei riuscito a schivare!",
   "L'attacco del nemico va a segno.",
+  "Il colpo ti toglie il respiro...",
+  "Senti le costole che cedono sotto l'impatto...",
+  "Un dolore lancinante ti attraversa...",
+  "Sangue! La ferita è profonda.",
+  "La tua visione si offusca per un istante...",
+  "Il colpo ti fa barcollare...",
+  "Maledizione! Ti ha preso in pieno!",
+  "Cadi a terra dall'impatto...",
+  "La tua armatura non ha retto...",
+  "Il dolore è quasi insopportabile...",
 ];
 
 export const ENEMY_MISS_DESCRIPTIONS = [
@@ -46,10 +97,27 @@ export const ENEMY_MISS_DESCRIPTIONS = [
   "Il colpo ti sfiora, ma non ti ferisce.",
   "Schivi per un soffio!",
   "L'attacco del nemico va a vuoto.",
+  "La tua agilità ti salva!",
+  "Prevedi la mossa e ti sposti appena in tempo...",
+  "L'attacco passa a millimetri dal tuo volto...",
+  "Un passo di lato... e il pericolo è passato.",
+  "Il nemico ha sottovalutato la tua velocità...",
+  "Rotoli via dall'attacco!",
+  "Un movimento istintivo ti salva la vita...",
+  "La tua esperienza fa la differenza!",
+  "Il colpo fende l'aria dove eri un istante prima...",
+  "Per fortuna sei più veloce!",
 ];
 
 export const ENEMY_DEATH_DESCRIPTIONS = [
   "Il {enemy} crolla a terra in un ammasso scomposto, sconfitto.",
   "Con un ultimo rantolo, il {enemy} esala il suo ultimo respiro.",
   "Il colpo finale è decisivo. Il {enemy} cade senza vita.",
+  "Il {enemy} si accascia, la luce nei suoi occhi si spegne...",
+  "Un ultimo gemito, poi il silenzio. Il {enemy} è morto.",
+  "Il {enemy} crolla in avanti, la battaglia è finita.",
+  "Gli ultimi spasmi del {enemy} cessano. Sei il vincitore.",
+  "Il {enemy} giace immobile, la tua vittoria è completa.",
+  "Con un tonfo sordo, il {enemy} cade definitivamente.",
+  "È finita. Il {enemy} non si rialzerà più.",
 ];

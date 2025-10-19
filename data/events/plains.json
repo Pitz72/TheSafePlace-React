@@ -93,5 +93,798 @@
         "outcomes": [{ "type": "direct", "results": [{ "type": "journalEntry", "text": "Decidi di non intervenire. La natura farà il suo corso." }] }]
       }
     ]
+  },
+  {
+    "id": "plains_abandoned_truck",
+    "title": "Camion Abbandonato",
+    "description": "Un vecchio camion arrugginito giace su un fianco, le gomme mezze sepolte nella terra. Il rimorchio è ancora chiuso.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Forza la serratura del rimorchio",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "rapiditaDiMano", "dc": 11,
+          "successText": "La serratura cede. All'interno trovi casse di provviste militari ancora sigillate.",
+          "failureText": "La serratura non cede. Ti fai male alle mani nel tentativo.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "ammo_9mm", "quantity": 10 } },
+            { "type": "addXp", "value": 40 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 5 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Cerca nella cabina del guidatore",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Trovi una vecchia mappa stradale e alcuni CD musicali. Niente di utile." },
+            { "type": "advanceTime", "value": 15 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_wild_horses",
+    "title": "Cavalli Selvatici",
+    "description": "Un piccolo branco di cavalli selvatici pascola in lontananza. Sembrano in buona salute.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Prova ad avvicinarti per domarli",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "addestrareAnimali", "dc": 15,
+          "successText": "Un cavallo si lascia avvicinare. Passi del tempo insieme prima che si allontani. Hai imparato qualcosa.",
+          "failureText": "I cavalli si spaventano e galoppano via. Uno ti colpisce con uno zoccolo.",
+          "success": [
+            { "type": "addXp", "value": 50 },
+            { "type": "advanceTime", "value": 45 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Osservali da lontano",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "È bello vedere la vita ancora libera in questo mondo devastato. Ti concedi un momento di pace." },
+            { "type": "heal", "value": 5 },
+            { "type": "advanceTime", "value": 10 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_raider_ambush",
+    "title": "Imboscata",
+    "description": "Senti voci in lontananza. Avvicinandoti con cautela, vedi tre predoni che dividono il bottino di una rapina.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Attaccali di sorpresa",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "furtivita", "dc": 14,
+          "successText": "Li sorprendi completamente. Fuggono lasciando parte del loro bottino.",
+          "failureText": "Ti sentono arrivare. Ne nasce uno scontro violento.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "scrap_metal", "quantity": 5 } },
+            { "type": "addItem", "value": { "itemId": "CONS_002", "quantity": 2 } },
+            { "type": "addXp", "value": 60 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 25 },
+            { "type": "addXp", "value": 20 }
+          ]
+        }]
+      },
+      {
+        "text": "Evitali",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Tre contro uno non sono buone probabilità. Fai un ampio giro per evitarli." },
+            { "type": "advanceTime", "value": 30 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_old_windmill",
+    "title": "Vecchio Mulino a Vento",
+    "description": "Un mulino a vento in rovina si erge contro il cielo. Le sue pale cigolano nel vento.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali alla sommità per avere una vista migliore",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "atletica", "dc": 12,
+          "successText": "Dalla cima vedi per chilometri. Noti un rifugio a est che potrebbe essere utile.",
+          "failureText": "Una tavola marcia cede sotto il tuo peso. Cadi dolorosamente.",
+          "success": [
+            { "type": "addXp", "value": 35 },
+            { "type": "advanceTime", "value": 20 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 20 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Esplora la base del mulino",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Alla base trovi vecchi attrezzi agricoli e una scorta di semi ormai inutili." },
+            { "type": "addItem", "value": { "itemId": "scrap_metal", "quantity": 2 } },
+            { "type": "advanceTime", "value": 15 },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_dust_storm",
+    "title": "Tempesta di Polvere",
+    "description": "All'orizzonte si alza una densa nuvola di polvere che si avvicina rapidamente. Hai pochi minuti.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Cerca riparo immediato",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "sopravvivenza", "dc": 11,
+          "successText": "Trovi una depressione nel terreno e ti copri con il telo. La tempesta passa.",
+          "failureText": "Non trovi riparo adeguato. La polvere ti entra negli occhi e nei polmoni.",
+          "success": [
+            { "type": "advanceTime", "value": 60 },
+            { "type": "addXp", "value": 25 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "statusChange", "value": "MALATO" },
+            { "type": "advanceTime", "value": 60 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Corri attraverso la tempesta",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Ti copri il volto e corri. È doloroso ma esci dall'altra parte." },
+            { "type": "takeDamage", "value": 10 },
+            { "type": "advanceTime", "value": 30 },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_crashed_plane",
+    "title": "Relitto Aereo",
+    "description": "I resti di un piccolo aereo da turismo sono sparsi in una vasta area. Risale chiaramente a prima della guerra.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Esplora i rottami",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "investigare", "dc": 12,
+          "successText": "Trovi il kit di emergenza dell'aereo ancora intatto e alcuni strumenti utili.",
+          "failureText": "I rottami sono pericolosi. Ti tagli su un bordo affilato.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 2 } },
+            { "type": "addItem", "value": { "itemId": "tool_repair_kit_basic", "quantity": 1 } },
+            { "type": "addXp", "value": 45 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 10 },
+            { "type": "statusChange", "value": "FERITO" },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Prosegui oltre",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "È solo un altro monumento alla tragedia. Non c'è niente per te qui." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_merchant_caravan",
+    "title": "Carovana di Mercanti",
+    "description": "Tre persone con zaini pesanti camminano in fila. Uno di loro ti nota e alza una mano in segno di saluto cauto.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Avvicinati e prova a commerciare",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "persuasione", "dc": 13,
+          "successText": "Sono disposti a fare scambi. Ti offrono medicine in cambio di metallo.",
+          "failureText": "Sono sospettosi e si rifiutano di trattare. Si allontanano rapidamente.",
+          "success": [
+            { "type": "removeItem", "value": { "itemId": "scrap_metal", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 2 } },
+            { "type": "addXp", "value": 30 }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Ignorali e prosegui",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Non hai bisogno di problemi. Continui per la tua strada." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_old_battlefield",
+    "title": "Campo di Battaglia",
+    "description": "Scheletri umani e rottami metallici coprono un'ampia area. Dev'essere stato uno scontro terribile.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca tra i resti",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "percezione", "dc": 11,
+          "successText": "Trovi armi e munizioni ancora utilizzabili tra i resti.",
+          "failureText": "È tutto troppo corroso o rotto. Perdi solo tempo in questo luogo macabro.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "makeshift_knife", "quantity": 1 } },
+            { "type": "addItem", "value": { "itemId": "ammo_9mm", "quantity": 15 } },
+            { "type": "addXp", "value": 40 }
+          ],
+          "failure": [
+            { "type": "advanceTime", "value": 30 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Allontanati con rispetto",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Questi erano persone una volta. Lasci in pace i loro resti." },
+            { "type": "alignmentChange", "value": {"type": "lena", "amount": 1} }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_wild_dog_pack",
+    "title": "Branco di Cani Selvatici",
+    "description": "Un branco di cinque cani randagi ti ha notato. Stanno decidendo se attaccare o meno.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Intimidiscili",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "intimidire", "dc": 12,
+          "successText": "Alzi le braccia e urli. I cani si spaventano e fuggono.",
+          "failureText": "Non funziona. Il branco attacca.",
+          "success": [
+            { "type": "addXp", "value": 25 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 20 },
+            { "type": "statusChange", "value": "FERITO" },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      },
+      {
+        "text": "Lancia loro del cibo",
+        "itemRequirements": [{ "itemId": "CONS_001", "quantity": 1 }],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "I cani divorano il cibo e ti lasciano passare senza problemi." },
+            { "type": "removeItem", "value": { "itemId": "CONS_001", "quantity": 1 } },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_scarecrow_field",
+    "title": "Campo di Spaventapasseri",
+    "description": "Decine di spaventapasseri sono disposti in un vecchio campo. Alcuni sembrano... vestiti con abiti veri.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina gli spaventapasseri",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "investigare", "dc": 13,
+          "successText": "Trovi oggetti utili nelle tasche degli abiti. Qualcuno li ha usati come nascondiglio.",
+          "failureText": "Uno degli spaventapasseri... si muove. Non è uno spaventapasseri! È una trappola!",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "old_coins", "quantity": 5 } },
+            { "type": "addItem", "value": { "itemId": "durable_cloth", "quantity": 2 } },
+            { "type": "addXp", "value": 35 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Il posto ti dà i brividi. Vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "C'è qualcosa di profondamente sbagliato qui. Te ne vai rapidamente." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_travelling_doctor",
+    "title": "Medico Itinerante",
+    "description": "Un uomo anziano con uno zaino medico ti saluta. 'Offro cure in cambio di cibo o acqua,' dice con un sorriso stanco.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Accetta le sue cure",
+        "itemRequirements": [{ "itemId": "CONS_002", "quantity": 1 }],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Il medico lavora con competenza. Ti senti meglio e hai imparato qualcosa." },
+            { "type": "removeItem", "value": { "itemId": "CONS_002", "quantity": 1 } },
+            { "type": "heal", "value": 30 },
+            { "type": "removeStatus", "value": "FERITO" },
+            { "type": "addXp", "value": 40 }
+          ]
+        }]
+      },
+      {
+        "text": "Declina e prosegui",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Non hai risorse da condividere. Il medico annuisce comprensivo e si allontana." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_radio_tower",
+    "title": "Torre Radio Abbandonata",
+    "description": "Una vecchia torre per trasmissioni radio si erge solitaria. La porta è aperta.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali alla sala trasmissioni",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "investigare", "dc": 14,
+          "successText": "Trovi registrazioni audio pre-guerra e componenti elettroniche ancora funzionanti.",
+          "failureText": "L'impianto elettrico è pericoloso. Prendi una scossa.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "tech_components", "quantity": 2 } },
+            { "type": "addItem", "value": { "itemId": "rare_music_cassettes", "quantity": 1 } },
+            { "type": "addXp", "value": 50 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Troppo pericoloso. Vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Le strutture abbandonate possono essere mortali. Decidi di non rischiare." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_lone_child",
+    "title": "Bambino Solitario",
+    "description": "Un bambino di forse 8 anni siede da solo vicino a un fuoco spento. Ti guarda con occhi spalancati.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "[Lena] Offrigli cibo e conforto",
+        "alignment": "Lena",
+        "itemRequirements": [{ "itemId": "CONS_001", "quantity": 1 }],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Il bambino mangia avidamente. Ti racconta che i suoi genitori sono morti. Ti ringrazia e si allontana verso sud." },
+            { "type": "removeItem", "value": { "itemId": "CONS_001", "quantity": 1 } },
+            { "type": "alignmentChange", "value": {"type": "lena", "amount": 2} },
+            { "type": "addXp", "value": 40 }
+          ]
+        }]
+      },
+      {
+        "text": "[Elian] Lascialo. Non puoi salvare tutti",
+        "alignment": "Elian",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "È duro, ma nel mondo di oggi ognuno deve farcela da solo. Prosegui." },
+            { "type": "alignmentChange", "value": {"type": "elian", "amount": 1} }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_bee_swarm",
+    "title": "Sciame d'Api",
+    "description": "Un alveare selvatico è caduto da un albero morto. Le api sono furiose.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Scappa velocemente",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "atletica", "dc": 11,
+          "successText": "Corri più veloce che puoi. Le api non ti raggiungono.",
+          "failureText": "Non sei abbastanza veloce. Le api ti attaccano.",
+          "success": [
+            { "type": "addXp", "value": 15 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 20 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Usa il fumo per calmarle",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "natura", "dc": 13,
+          "successText": "Il fumo funziona. Riesci a raccogliere del miele prezioso.",
+          "failureText": "Non funziona. Le api ti attaccano comunque.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "food_honey", "quantity": 2 } },
+            { "type": "addXp", "value": 35 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_strange_monolith",
+    "title": "Monolite Misterioso",
+    "description": "Una struttura di metallo lucido si erge dal terreno. Non sembra naturale né pre-guerra. Cosa potrebbe essere?",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Esaminalo da vicino",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "arcanismo", "dc": 16,
+          "successText": "È arte moderna! Un'installazione artistica pre-guerra. Niente di misterioso.",
+          "failureText": "Non riesci a capirlo. Forse è meglio non saperlo.",
+          "success": [
+            { "type": "addXp", "value": 30 }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Sta' lontano da quella cosa",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Qualcosa di quella struttura ti mette a disagio. Decidi di non avvicinarti." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_quicksand",
+    "title": "Sabbie Mobili",
+    "description": "Il terreno sotto i tuoi piedi diventa improvvisamente cedevole. Stai sprofondando!",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Mantieni la calma e muoviti lentamente",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "sopravvivenza", "dc": 12,
+          "successText": "Ricordi le lezioni di tuo padre. Ti distendi e rotoli fuori dalle sabbie mobili.",
+          "failureText": "Il panico ti fa muovere male. Sprofondi ulteriormente prima di liberarti.",
+          "success": [
+            { "type": "addXp", "value": 35 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 15 },
+            { "type": "advanceTime", "value": 30 },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      },
+      {
+        "text": "Dibattiti con forza",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Più ti agiti, più sprofondi. Solo con grande fatica riesci a liberarti." },
+            { "type": "takeDamage", "value": 20 },
+            { "type": "advanceTime", "value": 45 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_supply_cache",
+    "title": "Nascondiglio di Provviste",
+    "description": "Noti terra smossa e segni di scavo recente. Qualcuno ha nascosto qualcosa qui.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Scava per vedere cosa c'è",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "percezione", "dc": 11,
+          "successText": "Trovi una cassa di metallo sigillata piena di provviste!",
+          "failureText": "Scavi per un'ora senza trovare nulla. Forse ti sei sbagliato.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "CONS_002", "quantity": 2 } },
+            { "type": "advanceTime", "value": 30 },
+            { "type": "addXp", "value": 40 }
+          ],
+          "failure": [
+            { "type": "advanceTime", "value": 60 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "Potrebbe essere una trappola. Prosegui",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Nel dubbio, è meglio non rischiare. Lasci il nascondiglio intatto." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_vultures_circle",
+    "title": "Avvoltoi nel Cielo",
+    "description": "Un gruppo di avvoltoi volteggia in cerchio più avanti. Hanno trovato qualcosa.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Vai a vedere cosa hanno trovato",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "È un cadavere in decomposizione. Cerchi tra i resti e trovi qualcosa di utile." },
+            { "type": "addItem", "value": { "itemId": "scrap_metal", "quantity": 3 } },
+            { "type": "advanceTime", "value": 20 },
+            { "type": "addXp", "value": 20 }
+          ]
+        }]
+      },
+      {
+        "text": "Lascia i morti in pace",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Non hai bisogno di saccheggiare i morti. Continui per la tua strada." },
+            { "type": "alignmentChange", "value": {"type": "lena", "amount": 1} }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_refugee_family",
+    "title": "Famiglia di Rifugiati",
+    "description": "Una famiglia di quattro persone cammina lentamente verso sud. Sembrano esausti e affamati.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "[Lena] Condividi le tue provviste",
+        "alignment": "Lena",
+        "itemRequirements": [{ "itemId": "CONS_001", "quantity": 2 }, { "itemId": "CONS_002", "quantity": 2 }],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "La famiglia ti ringrazia con le lacrime agli occhi. Il padre ti offre una vecchia mappa in cambio." },
+            { "type": "removeItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
+            { "type": "removeItem", "value": { "itemId": "CONS_002", "quantity": 2 } },
+            { "type": "addItem", "value": { "itemId": "local_map", "quantity": 1 } },
+            { "type": "alignmentChange", "value": {"type": "lena", "amount": 2} },
+            { "type": "addXp", "value": 50 }
+          ]
+        }]
+      },
+      {
+        "text": "[Elian] Non hai abbastanza per te stesso",
+        "alignment": "Elian",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Le tue risorse sono limitate. Devi pensare prima a te stesso." },
+            { "type": "alignmentChange", "value": {"type": "elian", "amount": 1} }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_lightning_strike",
+    "title": "Fulmine",
+    "description": "Un temporale improvviso si scatena. Un fulmine colpisce un albero vicino, incendiandolo.",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Cerca riparo immediatamente",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Ti rifugi e aspetti che il temporale passi. Sei fradicio ma illeso." },
+            { "type": "advanceTime", "value": 45 },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      },
+      {
+        "text": "Raccogli legna bruciata dall'albero",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "sopravvivenza", "dc": 10,
+          "successText": "Raccogli legna ancora ardente prima che il fuoco si spenga. Utile per accendere fuochi.",
+          "failureText": "Ti bruci la mano raccogliendo la legna troppo velocemente.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "firewood", "quantity": 5 } },
+            { "type": "addXp", "value": 25 }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 10 },
+            { "type": "addXp", "value": 5 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_buried_bunker",
+    "title": "Bunker Sepolto",
+    "description": "Una porta d'acciaio semi-sepolta sporge dal terreno. Sembra condurre sottoterra.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Scava e apri la porta",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "atletica", "dc": 13,
+          "successText": "Dopo un'ora di scavo faticoso, riesci ad aprire la porta. Dentro trovi un piccolo bunker con provviste militari.",
+          "failureText": "La porta è troppo pesante e il terreno troppo compatto. Non riesci ad aprirla.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 4 } },
+            { "type": "addItem", "value": { "itemId": "ammo_9mm", "quantity": 20 } },
+            { "type": "addItem", "value": { "itemId": "kevlar_vest", "quantity": 1 } },
+            { "type": "advanceTime", "value": 90 },
+            { "type": "addXp", "value": 80 }
+          ],
+          "failure": [
+            { "type": "advanceTime", "value": 60 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Non vale la fatica. Prosegui",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Scavare richiederebbe troppe energie. Decidi di proseguire." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_hermit_trader",
+    "title": "Eremita Commerciante",
+    "description": "Un vecchio dall'aspetto strano emerge da dietro una roccia. 'Compro e vendo. Hai qualcosa per me?'",
+    "biomes": ["Pianura"], "isUnique": false,
+    "choices": [
+      {
+        "text": "Scambia metallo per medicine",
+        "itemRequirements": [{ "itemId": "scrap_metal", "quantity": 5 }],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "L'eremita accetta lo scambio. Ti dà medicine e un sorriso sdentato." },
+            { "type": "removeItem", "value": { "itemId": "scrap_metal", "quantity": 5 } },
+            { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 3 } },
+            { "type": "addXp", "value": 30 }
+          ]
+        }]
+      },
+      {
+        "text": "Non ti fidi. Vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "C'è qualcosa di strano in quel vecchio. Preferisci non rischiare." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "plains_solar_panels",
+    "title": "Pannelli Solari Abbandonati",
+    "description": "Una vecchia installazione di pannelli solari giace in rovina. Alcuni pannelli sembrano ancora intatti.",
+    "biomes": ["Pianura"], "isUnique": true,
+    "choices": [
+      {
+        "text": "Smonta i componenti utili",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "investigare", "dc": 14,
+          "successText": "Riesci a recuperare componenti elettronici di valore e materiali utili.",
+          "failureText": "I pannelli sono troppo danneggiati. Recuperi solo rottami.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "tech_components", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "scrap_metal_high_quality", "quantity": 2 } },
+            { "type": "advanceTime", "value": 45 },
+            { "type": "addXp", "value": 50 }
+          ],
+          "failure": [
+            { "type": "addItem", "value": { "itemId": "scrap_metal", "quantity": 2 } },
+            { "type": "advanceTime", "value": 30 },
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      },
+      {
+        "text": "Troppo pesanti. Lascia perdere",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Trasportare tutto quel metallo sarebbe impossibile. Prosegui." }
+          ]
+        }]
+      }
+    ]
   }
 ]

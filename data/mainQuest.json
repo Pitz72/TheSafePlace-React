@@ -52,7 +52,7 @@
   },
   {
     "stage": 9,
-    "trigger": { "type": "daysSurvived", "value": 7 },
+    "trigger": { "type": "daysSurvived", "value": 4 },
     "title": "Ricordo: Il Significato di un Nome",
     "text": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco.",
     "allowNightTrigger": true
@@ -65,7 +65,7 @@
   },
   {
     "stage": 11,
-    "trigger": { "type": "reachLocation", "value": { "x": 140, "y": 140 } },
+    "trigger": { "type": "nearEnd", "distance": 15 },
     "title": "Frammento: La Confessione",
     "text": "In un vecchio terminale dati ancora funzionante, trovi un file audio corrotto. È la voce di tuo padre. '...Lena... intrappolata... il palazzo crollava... fumo... mi disse: \"Porta via il bambino. Salvalo. E torna\"...' La voce si spezza. '...Io ti ho preso. E sono corso. E non sono tornato. Non potevo. Tornare indietro significava sacrificare anche te. Ho scelto. Ho sacrificato lei per salvare te...'. Il file finisce. Ora sai. La tua sopravvivenza non è stata un dono. È stata una scelta. E il prezzo è stato tua madre."
   },

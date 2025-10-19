@@ -54,6 +54,7 @@ export const useTimeStore = create<TimeStoreState>((set, get) => ({
 
         if(newDay > oldDay) {
             checkMainQuestTriggers();
+            checkCutsceneTriggers();
         }
 
         let newWeather = { ...get().weather };

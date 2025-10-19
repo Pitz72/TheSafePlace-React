@@ -218,7 +218,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     if (isInventoryOpen || isInRefuge) return;
     const { lastRestTime, addJournalEntry, gameFlags, startCutscene } = get();
     const { gameTime, advanceTime } = useTimeStore.getState();
-    if (gameTime.day >= 3 && !gameFlags.has('BEING_WATCHED_PLAYED')) {
+    if (gameTime.day >= 2 && !gameFlags.has('BEING_WATCHED_PLAYED')) {
         set(state => ({ gameFlags: new Set(state.gameFlags).add('BEING_WATCHED_PLAYED') }));
         startCutscene('CS_BEING_WATCHED');
         return;
@@ -253,6 +253,70 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
    * @function checkMainQuestTriggers
    * @description Checks if any main quest triggers have been met.
    */
+  /**
+   * @function checkCutsceneTriggers
+   * @description Checks if any cutscene triggers have been met.
+   */
+  checkCutsceneTriggers: () => {
+    const { gameTime } = useTimeStore.getState();
+    const state = get();
+    
+    if (state.gameState !== GameState.IN_GAME) return;
+    
+    // CS_RIVER_INTRO: Near water tiles
+    if (!state.gameFlags.has('RIVER_INTRO_PLAYED')) {
+        let riverFound = false;
+        for (let dy = -2; dy <= 2; dy++) {
+            for (let dx = -2; dx <= 2; dx++) {
+                const checkY = state.playerPos.y + dy;
+                const checkX = state.playerPos.x + dx;
+                if (checkY >= 0 && checkY < state.map.length && checkX >= 0 && checkX < state.map[checkY].length && state.map[checkY][checkX] === '~') {
+                    riverFound = true;
+                    break;
+                }
+            }
+            if (riverFound) break;
+        }
+        if (riverFound) {
+            set(s => ({ gameFlags: new Set(s.gameFlags).add('RIVER_INTRO_PLAYED') }));
+            state.startCutscene('CS_RIVER_INTRO');
+            return;
+        }
+    }
+    
+    // CS_HALF_JOURNEY: stepsTaken >= 100 AND daysSurvived >= 3
+    if (state.totalSteps >= 100 && gameTime.day >= 3 && !state.gameFlags.has('HALF_JOURNEY_PLAYED')) {
+        set(s => ({ gameFlags: new Set(s.gameFlags).add('HALF_JOURNEY_PLAYED') }));
+        state.startCutscene('CS_HALF_JOURNEY');
+        return;
+    }
+    
+    // CS_POINT_OF_NO_RETURN: distance < 20 tiles from 'E'
+    if (!state.gameFlags.has('POINT_OF_NO_RETURN_PLAYED')) {
+        let endPos: { x: number; y: number } | null = null;
+        for (let y = 0; y < state.map.length; y++) {
+            for (let x = 0; x < state.map[y].length; x++) {
+                if (state.map[y][x] === 'E') {
+                    endPos = { x, y };
+                    break;
+                }
+            }
+            if (endPos) break;
+        }
+        if (endPos) {
+            const distance = Math.sqrt(
+                Math.pow(state.playerPos.x - endPos.x, 2) +
+                Math.pow(state.playerPos.y - endPos.y, 2)
+            );
+            if (distance <= 20) {
+                set(s => ({ gameFlags: new Set(s.gameFlags).add('POINT_OF_NO_RETURN_PLAYED') }));
+                state.startCutscene('CS_POINT_OF_NO_RETURN');
+                return;
+            }
+        }
+    }
+  },
+
   checkMainQuestTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
@@ -263,7 +327,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         set({ mainQuestsToday: { day: gameTime.day, count: 0 } });
     }
     
-    if (gameTime.day >= 7) unlockTrophy('trophy_survive_7_days');
+    if (gameTime.day >= 5) unlockTrophy('trophy_survive_7_days');
     if (gameTime.day >= 30) unlockTrophy('trophy_survive_30_days');
 
     const currentState = get();
@@ -294,6 +358,27 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         case 'combatWins': conditionMet = currentState.totalCombatWins >= trigger.value; break;
         case 'reachLocation': conditionMet = currentState.playerPos.x === trigger.value.x && currentState.playerPos.y === trigger.value.y; break;
         case 'reachEnd': conditionMet = currentState.map[currentState.playerPos.y][currentState.playerPos.x] === 'E'; break;
+        case 'nearEnd': {
+            // Find position of 'E' in the map
+            let endPos: { x: number; y: number } | null = null;
+            for (let y = 0; y < currentState.map.length; y++) {
+                for (let x = 0; x < currentState.map[y].length; x++) {
+                    if (currentState.map[y][x] === 'E') {
+                        endPos = { x, y };
+                        break;
+                    }
+                }
+                if (endPos) break;
+            }
+            if (endPos) {
+                const distance = Math.sqrt(
+                    Math.pow(currentState.playerPos.x - endPos.x, 2) +
+                    Math.pow(currentState.playerPos.y - endPos.y, 2)
+                );
+                conditionMet = distance <= trigger.distance;
+            }
+            break;
+        }
         case 'firstRefugeEntry': break;
     }
     if (conditionMet) {
@@ -383,31 +468,6 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ activeCutscene: null, gameState: nextState });
   },
 
-  /**
-   * @function checkCutsceneTriggers
-   * @description Checks if any cutscene triggers have been met.
-   */
-  checkCutsceneTriggers: () => {
-    const { playerPos, map, gameFlags, startCutscene } = get();
-    if (!gameFlags.has('RIVER_INTRO_PLAYED')) {
-        let riverFound = false;
-        for (let dy = -2; dy <= 2; dy++) {
-            for (let dx = -2; dx <= 2; dx++) {
-                const checkY = playerPos.y + dy;
-                const checkX = playerPos.x + dx;
-                if (checkY >= 0 && checkY < map.length && checkX >= 0 && checkX < map[checkY].length && map[checkY][checkX] === '~') {
-                    riverFound = true;
-                    break;
-                }
-            }
-            if (riverFound) break;
-        }
-        if (riverFound) {
-            startCutscene('CS_RIVER_INTRO');
-            set(state => ({ gameFlags: new Set(state.gameFlags).add('RIVER_INTRO_PLAYED') }));
-        }
-    }
-  },
 
   saveGame: (slot) => {
     try {

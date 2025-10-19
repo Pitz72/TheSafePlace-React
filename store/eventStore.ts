@@ -64,7 +64,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 return;
             }
 
-            const EASTER_EGG_PROBABILITY = 0.02; // 2% chance
+            const EASTER_EGG_PROBABILITY = 0.07; // 7% chance (v1.2.0: increased from 2%)
             if (Math.random() < EASTER_EGG_PROBABILITY) {
                 const possibleEasterEggs = (easterEggEvents as GameEvent[]).filter(event =>
                     event.biomes.includes(currentBiomeName) && !eventHistory.includes(event.id)

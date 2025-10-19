@@ -91,7 +91,8 @@ export type QuestTriggerType =
   | 'combatWins'
   | 'firstRefugeEntry'
   | 'reachLocation'
-  | 'reachEnd';
+  | 'reachEnd'
+  | 'nearEnd';
 
 export type QuestTrigger =
   | { type: 'stepsTaken'; value: number }
@@ -100,7 +101,8 @@ export type QuestTrigger =
   | { type: 'combatWins'; value: number }
   | { type: 'firstRefugeEntry' }
   | { type: 'reachLocation'; value: Position }
-  | { type: 'reachEnd' };
+  | { type: 'reachEnd' }
+  | { type: 'nearEnd'; distance: number };
 
 export interface MainQuestChapter {
   stage: number;
@@ -342,7 +344,15 @@ export type SkillName =
   | 'addestrareAnimali' | 'intuizione' | 'medicina' | 'percezione' | 'sopravvivenza'
   | 'inganno' | 'intimidire' | 'persuasione' | 'spettacolo';
 
-export type PlayerStatusCondition = 'FERITO' | 'MALATO' | 'AVVELENATO';
+export type PlayerStatusCondition = 
+  | 'FERITO'          // -2 skill fisiche
+  | 'MALATO'          // -0.5 HP/ora
+  | 'AVVELENATO'      // -2 HP/ora
+  | 'IPOTERMIA'       // -1 HP/ora, -3 a tutte le skill
+  | 'ESAUSTO'         // -2 a skill fisiche, movimento +5 minuti
+  | 'AFFAMATO'        // -1 a tutte le skill
+  | 'DISIDRATATO'     // -2 a percezione e intelligenza
+  | 'INFEZIONE';      // -1 HP/ora, -2 a tutte le skill
 
 export interface Attributes {
   for: number;
@@ -405,7 +415,9 @@ export interface CharacterState {
     skills: Record<SkillName, Skill>;
     inventory: InventoryItem[];
     equippedWeapon: number | null; // Index in inventory array
-    equippedArmor: number | null;  // Index in inventory array
+    equippedArmor: number | null;  // Index in inventory array (chest slot)
+    equippedHead: number | null;   // Index in inventory array
+    equippedLegs: number | null;   // Index in inventory array
     alignment: Alignment;
     status: Set<PlayerStatusCondition>;
     levelUpPending: boolean;
@@ -426,7 +438,7 @@ export interface CharacterState {
     removeItem: (itemId: string, quantity?: number) => void;
     discardItem: (inventoryIndex: number, quantity?: number) => void;
     equipItem: (inventoryIndex: number) => void;
-    unequipItem: (slot: 'weapon' | 'armor') => void;
+    unequipItem: (slot: 'weapon' | 'armor' | 'head' | 'chest' | 'legs') => void;
     damageEquippedItem: (slot: 'weapon' | 'armor', amount: number) => void;
     repairItem: (inventoryIndex: number, amount: number) => void;
     salvageItem: (inventoryIndex: number) => void;
@@ -442,6 +454,8 @@ export interface CharacterState {
     boostAttribute: (attribute: AttributeName, amount: number) => void;
     learnRecipe: (recipeId: string) => void;
     getPlayerAC: () => number;
+    getTotalWeight: () => number;
+    getMaxCarryWeight: () => number;
     unlockTrophy: (trophyId: string) => void;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;

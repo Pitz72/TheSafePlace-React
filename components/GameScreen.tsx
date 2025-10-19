@@ -16,6 +16,11 @@ const STATUS_COLORS: Record<PlayerStatusCondition, string> = {
     'FERITO': '#ef4444', // red-500
     'MALATO': '#f97316', // orange-500
     'AVVELENATO': '#a855f7', // purple-500
+    'IPOTERMIA': '#06b6d4', // cyan-500
+    'ESAUSTO': '#78716c', // stone-500
+    'AFFAMATO': '#eab308', // yellow-500
+    'DISIDRATATO': '#f59e0b', // amber-500
+    'INFEZIONE': '#dc2626', // red-600
 };
 
 // --- Left Column Panels ---
@@ -31,14 +36,14 @@ const SurvivalPanel: React.FC = () => {
     const hydration = useCharacterStore((state) => state.hydration);
     const fatigue = useCharacterStore((state) => state.fatigue);
     const status = useCharacterStore((state) => state.status);
-    const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
-    const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
+    const inventory = useCharacterStore((state) => state.inventory);
+    const attributes = useCharacterStore((state) => state.attributes);
 
     const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
     const isHigh = (stat: Stat) => stat.current / stat.max >= 0.75;
 
-    const totalWeight = getTotalWeight();
-    const maxCarryWeight = getMaxCarryWeight();
+    const totalWeight = useCharacterStore.getState().getTotalWeight();
+    const maxCarryWeight = useCharacterStore.getState().getMaxCarryWeight();
     const isOverEncumbered = totalWeight > maxCarryWeight;
 
     const allStatuses = Array.from(status);
@@ -48,7 +53,7 @@ const SurvivalPanel: React.FC = () => {
 
     return (
         <Panel title="SOPRAVVIVENZA">
-            <div>
+            <div className="space-y-0.5 text-sm">
                 <div className={isCritical(hp) ? 'text-[var(--text-danger)] animate-pulse' : ''}>HP: {Math.floor(hp.current)}/{hp.max}</div>
                 <div className={isCritical(satiety) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Sazietà: {Math.floor(satiety.current)}/{satiety.max}</div>
                 <div className={isCritical(hydration) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Idratazione: {Math.floor(hydration.current)}/{hydration.max}</div>
@@ -81,29 +86,32 @@ const SurvivalPanel: React.FC = () => {
 const InventoryPanel: React.FC = () => {
   const inventory = useCharacterStore((state) => state.inventory);
   const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
+  const equippedHeadIndex = useCharacterStore((state) => state.equippedHead);
   const equippedArmorIndex = useCharacterStore((state) => state.equippedArmor);
-  const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
-  const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
+  const equippedLegsIndex = useCharacterStore((state) => state.equippedLegs);
   const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
   const isLoaded = useItemDatabaseStore((state) => state.isLoaded);
 
-  const totalWeight = getTotalWeight();
-  const maxCarryWeight = getMaxCarryWeight();
+  const totalWeight = useCharacterStore.getState().getTotalWeight();
+  const maxCarryWeight = useCharacterStore.getState().getMaxCarryWeight();
   const isOverEncumbered = totalWeight > maxCarryWeight;
 
   return (
     <Panel title="INVENTARIO" className="flex-grow">
-      <div className={`flex justify-between text-xl mb-1 px-1 ${isOverEncumbered ? 'text-[var(--text-danger)] animate-pulse' : ''}`}>
+      <div className={`flex justify-between text-sm mb-0.5 px-1 ${isOverEncumbered ? 'text-[var(--text-danger)] animate-pulse' : ''}`}>
         <span>Peso: {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)}</span>
       </div>
-      <div className="border border-[var(--border-primary)] p-2 h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+      <div className="border border-[var(--border-primary)] p-1 h-full overflow-y-auto text-sm" style={{ scrollbarWidth: 'none' }}>
         {isLoaded && inventory.length > 0 ? (
-          <ul className="space-y-1.5">
+          <ul className="space-y-0.5">
             {inventory.map((invItem, index) => {
               const itemDetails = itemDatabase[invItem.itemId];
               if (!itemDetails) return null;
               
-              const isEquipped = index === equippedWeaponIndex || index === equippedArmorIndex;
+              const isEquipped = index === equippedWeaponIndex || 
+                                index === equippedHeadIndex || 
+                                index === equippedArmorIndex || 
+                                index === equippedLegsIndex;
               let displayName = itemDetails.name;
 
               if (invItem.durability) {
@@ -142,7 +150,7 @@ const InventoryPanel: React.FC = () => {
  */
 const CommandsPanel: React.FC = () => (
   <Panel title="COMANDI">
-    <div className="space-y-1.5">
+    <div className="space-y-0.5 text-xs">
       <div className="flex justify-between"><span>[WASD/↑↓←→]</span> <span>Movimento/Navigazione</span></div>
       <div className="flex justify-between"><span>[I]</span> <span>Inventario</span></div>
       <div className="flex justify-between"><span>[R]</span> <span>Riposo Breve</span></div>
@@ -187,7 +195,7 @@ const InfoPanel: React.FC = () => {
 
     return (
         <Panel title="INFORMAZIONI">
-            <div className="space-y-2">
+            <div className="space-y-1 text-sm">
                 <div>
                     <div className="flex justify-between">
                         <span>Posizione:</span> 
@@ -201,7 +209,7 @@ const InfoPanel: React.FC = () => {
                         <span>{formattedTime}</span> 
                         <span>Giorno {gameTime.day}</span>
                     </div>
-                    <div className="border-t border-[var(--border-primary)] my-1"></div>
+                    <div className="border-t border-[var(--border-primary)] my-0.5"></div>
                     <div className="flex justify-between items-center">
                         <span className={weatherInfo.color}>* {weatherInfo.name}</span>
                          <div className="text-right">
@@ -222,14 +230,20 @@ const InfoPanel: React.FC = () => {
 const EquipmentPanel: React.FC = () => {
     const inventory = useCharacterStore((state) => state.inventory);
     const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
+    const equippedHeadIndex = useCharacterStore((state) => state.equippedHead);
     const equippedArmorIndex = useCharacterStore((state) => state.equippedArmor);
+    const equippedLegsIndex = useCharacterStore((state) => state.equippedLegs);
     const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
 
     const weaponItem = equippedWeaponIndex !== null ? inventory[equippedWeaponIndex] : null;
-    const armorItem = equippedArmorIndex !== null ? inventory[equippedArmorIndex] : null;
+    const headItem = equippedHeadIndex !== null ? inventory[equippedHeadIndex] : null;
+    const chestItem = equippedArmorIndex !== null ? inventory[equippedArmorIndex] : null;
+    const legsItem = equippedLegsIndex !== null ? inventory[equippedLegsIndex] : null;
 
     const weaponDetails = weaponItem ? itemDatabase[weaponItem.itemId] : null;
-    const armorDetails = armorItem ? itemDatabase[armorItem.itemId] : null;
+    const headDetails = headItem ? itemDatabase[headItem.itemId] : null;
+    const chestDetails = chestItem ? itemDatabase[chestItem.itemId] : null;
+    const legsDetails = legsItem ? itemDatabase[legsItem.itemId] : null;
 
     const getDisplayName = (item: InventoryItem | null, details: IItem | null): string => {
         if (!item || !details) return 'Nessuna';
@@ -246,9 +260,12 @@ const EquipmentPanel: React.FC = () => {
 
     return (
         <Panel title="EQUIPAGGIAMENTO">
-            <div>
+            <div className="space-y-0.5 text-sm">
                 <div>ARMA: {getDisplayName(weaponItem, weaponDetails)}</div>
-                <div>ARMATURA: {getDisplayName(armorItem, armorDetails)}</div>
+                <div className="border-t border-[var(--border-primary)] my-0.5"></div>
+                <div>TESTA: {getDisplayName(headItem, headDetails)}</div>
+                <div>TORSO: {getDisplayName(chestItem, chestDetails)}</div>
+                <div>GAMBE: {getDisplayName(legsItem, legsDetails)}</div>
             </div>
         </Panel>
     );
@@ -273,14 +290,14 @@ const StatsPanel: React.FC = () => {
 
     return (
         <Panel title="STATISTICHE">
-            <div className="space-y-2">
+            <div className="space-y-1 text-sm">
                 <div>Livello: {level}</div>
                 <div>
                     XP: {xp.current} / {xp.next}
                     {levelUpPending && <span className="text-[var(--text-accent)] animate-yellow-flash ml-2">*</span>}
                 </div>
-                <div className="border-t border-[var(--border-primary)] my-1"></div>
-                <div className="grid grid-cols-2 gap-x-4">
+                <div className="border-t border-[var(--border-primary)] my-0.5"></div>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
                     <div className="flex justify-between"><span>FOR:</span><span>{attributes.for} {renderModifier('for')}</span></div>
                     <div className="flex justify-between"><span>DES:</span><span>{attributes.des} {renderModifier('des')}</span></div>
                     <div className="flex justify-between"><span>COS:</span><span>{attributes.cos} {renderModifier('cos')}</span></div>
@@ -314,11 +331,11 @@ const TravelJournalPanel: React.FC = () => {
 
     return (
         <Panel title="DIARIO DI VIAGGIO" className="h-full">
-            <div ref={journalRef} className="h-full overflow-y-auto space-y-2 text-[var(--text-secondary)]" style={{ scrollbarWidth: 'none' }}>
+            <div ref={journalRef} className="h-full overflow-y-auto space-y-0.5 text-sm text-[var(--text-secondary)]" style={{ scrollbarWidth: 'none' }}>
                 {journal.length > 0 ? (
                     journal.map((entry, index) => (
                         <div key={index}>
-                           <span className="text-[var(--text-primary)]/60 mr-2">
+                           <span className="text-[var(--text-primary)]/60 mr-1 text-xs">
                                 [{String(entry.time.hour).padStart(2, '0')}:{String(entry.time.minute).padStart(2, '0')}]
                            </span>
                            <span style={{ color: entry.color || JOURNAL_ENTRY_COLORS[entry.type] }}>
@@ -328,8 +345,8 @@ const TravelJournalPanel: React.FC = () => {
                     ))
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-[var(--text-primary)]/60 text-center">
-                        <p className="text-4xl">Il tuo viaggio inizierà presto...</p>
-                        <p className="text-2xl">Le tue avventure saranno registrate qui</p>
+                        <p className="text-2xl">Il tuo viaggio inizierà presto...</p>
+                        <p className="text-base">Le tue avventure saranno registrate qui</p>
                     </div>
                 )}
             </div>
@@ -402,26 +419,26 @@ const GameScreen: React.FC = () => {
   return (
     <div className="w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
       {/* Left Column (25%) */}
-      <div className="w-1/4 h-full flex flex-col space-y-2">
+      <div className="w-1/4 h-full flex flex-col space-y-1">
         <SurvivalPanel />
         <InventoryPanel />
         <CommandsPanel />
       </div>
 
       {/* Main Content Area (Center + Right Columns & Journal) (75%) */}
-      <div className="w-3/4 h-full flex flex-col space-y-2">
+      <div className="w-3/4 h-full flex flex-col space-y-1">
         {/* Top part of Main Content (Map + Right Panels) */}
         <div className="flex-grow flex space-x-2 overflow-hidden">
           {/* Center Column (50% of total width) */}
           <div className="w-2/3 h-full flex flex-col border border-[var(--border-primary)] bg-black/20">
-             <h2 className="text-center bg-[var(--text-primary)]/10 py-1 font-bold tracking-widest uppercase text-2xl flex-shrink-0">MAPPA DEL MONDO</h2>
+             <h2 className="text-center bg-[var(--text-primary)]/10 py-0.5 font-bold tracking-widest uppercase text-base flex-shrink-0">MAPPA DEL MONDO</h2>
              <div className="flex-grow relative">
                 <CanvasMap />
              </div>
           </div>
 
           {/* Right Column (25% of total width) */}
-          <div className="w-1/3 h-full flex flex-col space-y-2">
+          <div className="w-1/3 h-full flex flex-col space-y-1">
             <InfoPanel />
             <EquipmentPanel />
             <StatsPanel />
