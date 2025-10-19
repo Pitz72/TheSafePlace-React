@@ -17,8 +17,25 @@ body {
   overflow: hidden;
 }
 
-/* NOTA: Riduzione globale RIMOSSA - causava problemi a tutte le schermate */
-/* Ora SOLO il GameScreen ha dimensioni aumentate tramite .game-screen-container */
+/* Riduzione font globale - 40% (era 50%, aumentato del 20%) */
+html {
+  font-size: 60%; /* Riduzione base del 40% rispetto all'originale */
+}
+
+/* Sovrascrittura forzata di TUTTE le classi Tailwind con riduzione del 40% */
+.text-xs { font-size: 0.75rem !important; }    /* Tailwind: 0.75rem */
+.text-sm { font-size: 0.875rem !important; }   /* Tailwind: 0.875rem */
+.text-base { font-size: 1rem !important; }     /* Tailwind: 1rem */
+.text-lg { font-size: 1.125rem !important; }   /* Tailwind: 1.125rem */
+.text-xl { font-size: 1.25rem !important; }    /* Tailwind: 1.25rem */
+.text-2xl { font-size: 1.5rem !important; }    /* Tailwind: 1.5rem */
+.text-3xl { font-size: 1.875rem !important; }  /* Tailwind: 1.875rem */
+.text-4xl { font-size: 2.25rem !important; }   /* Tailwind: 2.25rem */
+.text-5xl { font-size: 3rem !important; }      /* Tailwind: 3rem */
+.text-6xl { font-size: 3.75rem !important; }   /* Tailwind: 3.75rem */
+.text-7xl { font-size: 4.5rem !important; }    /* Tailwind: 4.5rem */
+.text-8xl { font-size: 6rem !important; }      /* Tailwind: 6rem */
+.text-9xl { font-size: 8rem !important; }      /* Tailwind: 8rem */
 
 /* --- Theme System using CSS Variables --- */
 
@@ -163,29 +180,17 @@ body {
   animation: cursor-blink 1s step-end infinite;
 }
 
-/* --- Aumento Font Specifico per PRESENTS_SCREEN --- */
-/* Sovrascrivo le classi Tailwind SOLO per questa schermata */
-.presents-screen-content-box p,
+/* --- Riduzione Font Specifica per PRESENTS_SCREEN --- */
 .presents-screen-content-box {
-  font-size: 1.68rem !important; /* Aumentato +20% per leggibilità ottimale */
-  line-height: 1.5 !important;
+  font-size: 0.95rem !important; /* Dimensione assoluta ridotta per il contenuto del box */
+}
+.presents-screen-content-box p {
+  font-size: 0.95rem !important; /* Forza la dimensione su tutti i paragrafi */
+  line-height: 1.4 !important; /* Riduce anche l'interlinea */
 }
 .presents-screen-content-box .presents-title {
-  font-size: 2.4rem !important; /* Titolo +20% più grande */
+  font-size: 1.3rem !important; /* Titolo "ATTENZIONE" più piccolo */
 }
 .presents-screen-content-box .presents-signature {
-  font-size: 1.44rem !important; /* Firma +20% più leggibile */
+  font-size: 0.9rem !important; /* Firma ancora più piccola */
 }
-
-/* --- Aumento Font Specifico per GAME_SCREEN (Interfaccia di Gioco) --- */
-/* Sovrascrivo le classi Tailwind SOLO per la schermata di gioco */
-/* Questo aumenta la leggibilità dei pannelli statistiche, inventario, ecc. */
-.game-screen-container .text-xs { font-size: 1.27rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-sm { font-size: 1.45rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-base { font-size: 1.65rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-lg { font-size: 1.90rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-xl { font-size: 2.16rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-2xl { font-size: 2.53rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-3xl { font-size: 3.17rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-4xl { font-size: 3.80rem !important; }  /* +10% aggiuntivo */
-/* Nota: Aumento finale del ~69% rispetto ai valori standard Tailwind */

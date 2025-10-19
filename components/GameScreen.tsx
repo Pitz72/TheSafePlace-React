@@ -417,7 +417,7 @@ const GameScreen: React.FC = () => {
 
 
   return (
-    <div className="w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
+    <div className="game-screen-container w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
       {/* Left Column (25%) */}
       <div className="w-1/4 h-full flex flex-col space-y-1">
         <SurvivalPanel />

@@ -18,6 +18,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
     const [showActions, setShowActions] = useState(false);
+    const [exportMode, setExportMode] = useState(false); // Modalità selezione slot per esportazione
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const refreshSlots = useCallback(() => {
@@ -31,17 +32,27 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
     const handleNavigate = useCallback((direction: number) => {
         setFeedbackMessage(null);
         setShowActions(false);
-        // NUM_SLOTS + 2 perché abbiamo: 5 slot + "Importa da File" + "Torna Indietro"
-        setSelectedIndex(prev => (prev + direction + (NUM_SLOTS + 2)) % (NUM_SLOTS + 2));
-    }, []);
+        if (exportMode) {
+            // In export mode, naviga solo tra gli slot (0 to NUM_SLOTS-1)
+            setSelectedIndex(prev => (prev + direction + NUM_SLOTS) % NUM_SLOTS);
+        } else {
+            // NUM_SLOTS + 2 perché abbiamo: 5 slot + "Importa/Esporta da File" + "Torna Indietro"
+            setSelectedIndex(prev => (prev + direction + (NUM_SLOTS + 2)) % (NUM_SLOTS + 2));
+        }
+    }, [exportMode]);
 
     const goBack = useCallback(() => {
-        if (previousGameState === GameState.PAUSE_MENU) {
+        if (exportMode) {
+            // Esci dalla modalità export
+            setExportMode(false);
+            setSelectedIndex(NUM_SLOTS); // Torna su "Esporta Slot in File JSON"
+            setFeedbackMessage(null);
+        } else if (previousGameState === GameState.PAUSE_MENU) {
             setGameState(GameState.PAUSE_MENU);
         } else {
             setGameState(GameState.MAIN_MENU);
         }
-    }, [previousGameState, setGameState]);
+    }, [exportMode, previousGameState, setGameState]);
 
     const handleExport = useCallback((slotNumber: number) => {
         try {
@@ -106,6 +117,25 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
 
     const handleConfirm = useCallback(() => {
         setFeedbackMessage(null);
+        
+        if (exportMode) {
+            // In export mode, esporta lo slot selezionato
+            const slotNumber = selectedIndex + 1;
+            const slot = slots[selectedIndex];
+            if (!slot.isEmpty) {
+                try {
+                    handleExport(slotNumber);
+                    setExportMode(false);
+                    setSelectedIndex(NUM_SLOTS); // Torna su "Esporta Slot"
+                } catch (error) {
+                    // L'errore è già gestito in handleExport
+                }
+            } else {
+                setFeedbackMessage('Questo slot è vuoto. Seleziona uno slot con un salvataggio.');
+            }
+            return;
+        }
+        
         if (selectedIndex < NUM_SLOTS) { // One of the slots is selected
             const slotNumber = selectedIndex + 1;
             if (mode === 'save') {
@@ -123,12 +153,19 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                     setFeedbackMessage('Questo slot è vuoto.');
                 }
             }
-        } else if (selectedIndex === NUM_SLOTS) { // "Importa da File"
-            handleImport();
+        } else if (selectedIndex === NUM_SLOTS) { // "Importa/Esporta da File"
+            if (mode === 'load') {
+                handleImport();
+            } else {
+                // mode === 'save' - Entra in modalità selezione export
+                setExportMode(true);
+                setSelectedIndex(0); // Vai al primo slot
+                setFeedbackMessage('Seleziona lo slot da esportare e premi INVIO');
+            }
         } else { // "Torna Indietro"
             goBack();
         }
-    }, [selectedIndex, mode, slots, goBack, refreshSlots, handleImport]);
+    }, [exportMode, selectedIndex, mode, slots, goBack, refreshSlots, handleImport, handleExport]);
 
     const toggleActions = useCallback(() => {
         if (selectedIndex < NUM_SLOTS) {
@@ -136,17 +173,43 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
         }
     }, [selectedIndex]);
 
+    const handleActionKey = useCallback((key: string) => {
+        if (!showActions || selectedIndex >= NUM_SLOTS) return;
+        
+        const slot = slots[selectedIndex];
+        const slotNumber = slot.slot;
+        
+        if (key === 'e' || key === 'E') {
+            if (!slot.isEmpty) {
+                handleExport(slotNumber);
+                setShowActions(false);
+            }
+        } else if (key === 'd' || key === 'D') {
+            if (!slot.isEmpty) {
+                handleDelete(slotNumber);
+            }
+        } else if (key === 'i' || key === 'I') {
+            if (slot.isEmpty) {
+                handleImport();
+                setShowActions(false);
+            }
+        }
+    }, [showActions, selectedIndex, slots, handleExport, handleDelete, handleImport]);
+
     const handlerMap = useMemo(() => ({
         'w': () => handleNavigate(-1), 'ArrowUp': () => handleNavigate(-1),
         's': () => handleNavigate(1), 'ArrowDown': () => handleNavigate(1),
         'Enter': handleConfirm,
         'Escape': goBack,
-        'a': toggleActions, 'A': toggleActions  // 'A' key for Actions menu
-    }), [handleNavigate, handleConfirm, goBack, toggleActions]);
+        'a': toggleActions, 'A': toggleActions,
+        'e': () => handleActionKey('e'), 'E': () => handleActionKey('E'),
+        'd': () => handleActionKey('d'), 'D': () => handleActionKey('D'),
+        'i': () => handleActionKey('i'), 'I': () => handleActionKey('I'),
+    }), [handleNavigate, handleConfirm, goBack, toggleActions, handleActionKey]);
 
     useKeyboardInput(handlerMap);
 
-    const title = mode === 'save' ? 'SALVA PARTITA' : 'CARICA PARTITA';
+    const title = exportMode ? 'ESPORTA SLOT' : (mode === 'save' ? 'SALVA PARTITA' : 'CARICA PARTITA');
 
     return (
         <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
@@ -171,29 +234,14 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                                         )}
                                     </div>
                                     {isSelected && showActions && !slot.isEmpty && (
-                                        <div className="flex gap-2 text-2xl">
-                                            <button
-                                                onClick={() => handleExport(slotNumber)}
-                                                className="px-3 py-1 border-2 border-[var(--highlight-text)] text-[var(--highlight-text)] hover:bg-[var(--highlight-text)] hover:text-[var(--highlight-bg)] transition-colors"
-                                            >
-                                                [E] Esporta
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(slotNumber)}
-                                                className="px-3 py-1 border-2 border-[var(--text-danger)] text-[var(--text-danger)] hover:bg-[var(--text-danger)] hover:text-[var(--bg-primary)] transition-colors"
-                                            >
-                                                [D] Elimina
-                                            </button>
+                                        <div className="flex gap-4 text-2xl text-[var(--text-accent)]">
+                                            <span>[E] Esporta</span>
+                                            <span className="text-[var(--text-danger)]">[D] Elimina</span>
                                         </div>
                                     )}
                                     {isSelected && showActions && slot.isEmpty && (
-                                        <div className="flex gap-2 text-2xl">
-                                            <button
-                                                onClick={handleImport}
-                                                className="px-3 py-1 border-2 border-[var(--highlight-text)] text-[var(--highlight-text)] hover:bg-[var(--highlight-text)] hover:text-[var(--highlight-bg)] transition-colors"
-                                            >
-                                                [I] Importa
-                                            </button>
+                                        <div className="text-2xl text-[var(--text-accent)]">
+                                            <span>[I] Importa</span>
                                         </div>
                                     )}
                                 </div>
@@ -201,18 +249,37 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                         );
                     })}
                     
-                    {/* Opzione Importa da File - sempre visibile */}
-                    <div className={`mt-6 pl-4 py-2 border-2 ${selectedIndex === NUM_SLOTS ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)] border-[var(--highlight-bg)]' : 'border-[var(--text-accent)]'}`}>
-                        {selectedIndex === NUM_SLOTS && '> '}Importa da File JSON
-                    </div>
-                    
-                    <div className={`pl-4 py-2 ${selectedIndex === NUM_SLOTS + 1 ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''}`}>
-                        {selectedIndex === NUM_SLOTS + 1 && '> '}Torna Indietro
-                    </div>
+                    {/* Opzione Importa/Esporta da File - nascosta in export mode */}
+                    {!exportMode && (
+                        <>
+                            <div className={`mt-6 pl-4 py-2 border-2 ${selectedIndex === NUM_SLOTS ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)] border-[var(--highlight-bg)]' : 'border-[var(--text-accent)]'}`}>
+                                {selectedIndex === NUM_SLOTS && '> '}
+                                {mode === 'load' ? 'Importa da File JSON' : 'Esporta Slot in File JSON'}
+                            </div>
+                            
+                            <div className={`pl-4 py-2 ${selectedIndex === NUM_SLOTS + 1 ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''}`}>
+                                {selectedIndex === NUM_SLOTS + 1 && '> '}Torna Indietro
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-[var(--border-primary)] pt-3">
-                    [↑↓] Seleziona | [INVIO] Conferma | [A] Azioni | [ESC] Indietro
+                    {exportMode ? (
+                        <>[↑↓] Seleziona Slot | [INVIO] Esporta | [ESC] Annulla</>
+                    ) : showActions && selectedIndex < NUM_SLOTS ? (
+                        mode === 'save' && !slots[selectedIndex].isEmpty ? (
+                            <>[E] Esporta | [D] Elimina | [A] Chiudi Menu | [ESC] Indietro</>
+                        ) : mode === 'load' && slots[selectedIndex].isEmpty ? (
+                            <>[I] Importa | [A] Chiudi Menu | [ESC] Indietro</>
+                        ) : mode === 'load' && !slots[selectedIndex].isEmpty ? (
+                            <>[D] Elimina | [A] Chiudi Menu | [ESC] Indietro</>
+                        ) : (
+                            <>[A] Chiudi Menu | [ESC] Indietro</>
+                        )
+                    ) : (
+                        <>[↑↓] Seleziona | [INVIO] Conferma | [A] Azioni Slot | [ESC] Indietro</>
+                    )}
                 </div>
             </div>
             

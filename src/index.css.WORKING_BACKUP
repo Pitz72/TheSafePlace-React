@@ -167,25 +167,25 @@ body {
 /* Sovrascrivo le classi Tailwind SOLO per questa schermata */
 .presents-screen-content-box p,
 .presents-screen-content-box {
-  font-size: 1.68rem !important; /* Aumentato +20% per leggibilità ottimale */
+  font-size: 1.4rem !important; /* Aumentato per leggibilità */
   line-height: 1.5 !important;
 }
 .presents-screen-content-box .presents-title {
-  font-size: 2.4rem !important; /* Titolo +20% più grande */
+  font-size: 2rem !important; /* Titolo più grande */
 }
 .presents-screen-content-box .presents-signature {
-  font-size: 1.44rem !important; /* Firma +20% più leggibile */
+  font-size: 1.2rem !important; /* Firma leggibile */
 }
 
 /* --- Aumento Font Specifico per GAME_SCREEN (Interfaccia di Gioco) --- */
 /* Sovrascrivo le classi Tailwind SOLO per la schermata di gioco */
 /* Questo aumenta la leggibilità dei pannelli statistiche, inventario, ecc. */
-.game-screen-container .text-xs { font-size: 1.27rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-sm { font-size: 1.45rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-base { font-size: 1.65rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-lg { font-size: 1.90rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-xl { font-size: 2.16rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-2xl { font-size: 2.53rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-3xl { font-size: 3.17rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-4xl { font-size: 3.80rem !important; }  /* +10% aggiuntivo */
-/* Nota: Aumento finale del ~69% rispetto ai valori standard Tailwind */
+.game-screen-container .text-xs { font-size: 1rem !important; }      /* Era 0.75rem */
+.game-screen-container .text-sm { font-size: 1.15rem !important; }   /* Era 0.875rem */
+.game-screen-container .text-base { font-size: 1.3rem !important; }  /* Era 1rem */
+.game-screen-container .text-lg { font-size: 1.5rem !important; }    /* Era 1.125rem */
+.game-screen-container .text-xl { font-size: 1.7rem !important; }    /* Era 1.25rem */
+.game-screen-container .text-2xl { font-size: 2rem !important; }     /* Era 1.5rem */
+.game-screen-container .text-3xl { font-size: 2.5rem !important; }   /* Era 1.875rem */
+.game-screen-container .text-4xl { font-size: 3rem !important; }     /* Era 2.25rem */
+/* Nota: Aumento del ~30-40% rispetto ai valori standard Tailwind */

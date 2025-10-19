@@ -88,7 +88,7 @@ const CharacterCreationScreen: React.FC = () => {
       <h1 className="text-5xl md:text-6xl mb-8 text-center">═══ CREAZIONE PERSONAGGIO ═══</h1>
       <p 
         className="text-2xl md:text-3xl mb-12 text-center"
-        style={{ color: 'var(--text-secondary)' }}
+        style={{ color: 'var(--text-primary)' }}
       >
         Generazione statistiche in corso...
       </p>
@@ -119,7 +119,7 @@ const CharacterCreationScreen: React.FC = () => {
         <div className="mt-12 text-3xl text-center">
             <p className="animate-pulse">
                 Creazione completata. [Premi INVIO per iniziare l'avventura]
-                {cursorVisible && <span className="bg-[var(--highlight-bg)] w-5 h-7 inline-block ml-2"></span>}
+                <span className="bg-[var(--highlight-bg)] w-5 h-7 inline-block ml-2" style={{ opacity: cursorVisible ? 1 : 0 }}></span>
             </p>
         </div>
       )}

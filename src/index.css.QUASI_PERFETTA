@@ -180,12 +180,12 @@ body {
 /* --- Aumento Font Specifico per GAME_SCREEN (Interfaccia di Gioco) --- */
 /* Sovrascrivo le classi Tailwind SOLO per la schermata di gioco */
 /* Questo aumenta la leggibilità dei pannelli statistiche, inventario, ecc. */
-.game-screen-container .text-xs { font-size: 1.27rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-sm { font-size: 1.45rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-base { font-size: 1.65rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-lg { font-size: 1.90rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-xl { font-size: 2.16rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-2xl { font-size: 2.53rem !important; }   /* +10% aggiuntivo */
-.game-screen-container .text-3xl { font-size: 3.17rem !important; }  /* +10% aggiuntivo */
-.game-screen-container .text-4xl { font-size: 3.80rem !important; }  /* +10% aggiuntivo */
-/* Nota: Aumento finale del ~69% rispetto ai valori standard Tailwind */
+.game-screen-container .text-xs { font-size: 1.15rem !important; }   /* +15% finale */
+.game-screen-container .text-sm { font-size: 1.32rem !important; }   /* +15% finale */
+.game-screen-container .text-base { font-size: 1.5rem !important; }  /* +15% finale */
+.game-screen-container .text-lg { font-size: 1.73rem !important; }   /* +15% finale */
+.game-screen-container .text-xl { font-size: 1.96rem !important; }   /* +15% finale */
+.game-screen-container .text-2xl { font-size: 2.3rem !important; }   /* +15% finale */
+.game-screen-container .text-3xl { font-size: 2.88rem !important; }  /* +15% finale */
+.game-screen-container .text-4xl { font-size: 3.45rem !important; }  /* +15% finale */
+/* Nota: Aumento finale del ~45-53% rispetto ai valori standard Tailwind */

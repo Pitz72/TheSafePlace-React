@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.2.1)
+# The Safe Place Chronicles: The Echo of the Journey (v1.2.2)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -83,9 +83,9 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.2.1** - Quality of Life & Global Trophy System
+**Versione Corrente: v1.2.2** - Leggibilità e Accessibilità
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, e la v1.2.1 si concentra su miglioramenti alla qualità della vita e sistemi richiesti dalla community:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, e la v1.2.2 risolve problemi critici di usabilità:
 
 #### 🎯 Novità v1.2.0 (Ottobre 2025)
 
@@ -153,6 +153,37 @@ Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narr
 - ✅ Tutti i pannelli visibili senza overflow
 
 **Risultato:** Il gioco ora offre **~100 ore di contenuti potenziali** con rigiocabilità massima, progressione bilanciata e narrativa emotivamente profonda.
+
+#### ✨ Novità v1.2.2 (19 Ottobre 2025)
+
+**UX Critical Fixes - Leggibilità Interfaccia:**
+- ✅ **Font Interfaccia di Gioco Aumentati del ~69%:** Pannelli Sopravvivenza, Inventario, Equipaggiamento, Statistiche e Diario finalmente leggibili
+- ✅ **Font Schermata Presentazione Aumentati del 20%:** Disclaimer, credits e informazioni perfettamente visibili
+- ✅ **Fix CSS Loading:** Risolto problema critico che impediva il caricamento di `src/index.css` (mancava import in `index.tsx`)
+- ✅ **Sistema Font Modulare:** Override CSS specifici solo per GameScreen, altre schermate invariate
+- ✅ **Coerenza Visiva:** Colore testo "Generazione statistiche" ora verde (era bianco)
+- ✅ **Cursore Stabile:** Fix cursore lampeggiante in creazione personaggio (nessuno spostamento testo)
+
+**Save System - Export Feature Complete:**
+- ✅ **Esportazione Salvataggi Keyboard-Driven:** Sistema completo per scaricare slot in file JSON
+- ✅ **Modalità Export Dedicata:** Interfaccia "═══ ESPORTA SLOT ═══" per selezione intuitiva dello slot
+- ✅ **Menu Contestuali Differenziati:**
+  - Menu SALVA PARTITA → "Esporta Slot in File JSON"
+  - Menu CARICA PARTITA → "Importa da File JSON"
+- ✅ **Keybindings Completi:** [E] Esporta, [I] Importa, [D] Elimina, [A] Azioni - tutto da tastiera
+- ✅ **Formato File Descrittivo:** `TSP_Save_Slot1_Lv5_Day10_2025-10-19.json`
+- ✅ **100% Keyboard-First:** Nessun mouse richiesto, coerente con filosofia del gioco
+
+**Backup e Documentazione:**
+- 📚 **CONFIGURAZIONE-FONT-FUNZIONANTE.md:** Documentazione tecnica completa della soluzione
+- 📚 **ROLLBACK-FONT-GAMESCREEN.md:** Guida per tornare indietro in caso di problemi
+- 💾 **3 Backup Incrementali:** `.backup`, `.WORKING_BACKUP`, `.QUASI_PERFETTA`
+
+**Impatto Utente:**
+- 🎮 Esperienza di gioco trasformata: da difficile a leggibile a perfettamente accessibile
+- 💾 Sistema backup completo: salvataggi interni + export JSON
+- ⌨️ Accessibilità totale: 100% keyboard-driven senza eccezioni
+- 🔒 Sicurezza dati: possibilità di backup manuale preventivo
 
 #### 🏆 Novità v1.2.1 (19 Ottobre 2025)
 
