@@ -1,0 +1,154 @@
+[
+  {
+    "id": "scrap_metal",
+    "name": "Rottame Metallico",
+    "description": "Un pezzo di metallo arrugginito di origine indeterminata. Utile per rinforzare strutture o creare armi rudimentali.",
+    "type": "material",
+    "weight": 0.8,
+    "value": 5,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "scrap_metal_high_quality",
+    "name": "Rottame Metallico di Alta Qualità",
+    "description": "Un pezzo di metallo di lega superiore, meno corroso e più resistente. Perfetto per riparazioni e creazioni di qualità.",
+    "type": "material",
+    "weight": 1.0,
+    "value": 15,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tech_components",
+    "name": "Componenti Tecnologici",
+    "description": "Circuiti, cavi e chip recuperati da vecchi dispositivi elettronici. Essenziali per riparare o creare oggetti tecnologici.",
+    "type": "material",
+    "weight": 0.2,
+    "value": 40,
+    "stackable": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "copper_wire",
+    "name": "Filo di Rame",
+    "description": "Un rotolo di filo di rame, ottimo conduttore. Utile per trappole elettriche o riparazioni elettroniche.",
+    "type": "material",
+    "weight": 0.3,
+    "value": 10,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "nylon_wire",
+    "name": "Filo di Nylon",
+    "description": "Un filo sintetico estremamente resistente e sottile. Ideale per trappole, lenze da pesca o suture di fortuna.",
+    "type": "material",
+    "weight": 0.1,
+    "value": 8,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "durable_cloth",
+    "name": "Stoffa Resistente",
+    "description": "Un pezzo di tela spessa e robusta, come quella usata per le vele o le tende militari. Ottima per riparare zaini o creare armature leggere.",
+    "type": "material",
+    "weight": 0.4,
+    "value": 12,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "animal_hide",
+    "name": "Pelle di Animale",
+    "description": "La pelle grezza di un animale. Se conciata, può essere trasformata in cuoio per armature e altri oggetti.",
+    "type": "material",
+    "weight": 1.5,
+    "value": 18,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "mutant_wolf_pelt",
+    "name": "Pelle di Lupo Mutato",
+    "description": "La pelle insolitamente spessa e resistente di un lupo mutato. Un materiale di alta qualità per armature.",
+    "type": "material",
+    "weight": 2.0,
+    "value": 45,
+    "stackable": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "meteorite_fragment",
+    "name": "Frammento di Meteorite",
+    "description": "Un pezzo di metallo di forma strana, non terrestre. È stranamente leggero e freddo al tatto.",
+    "type": "material",
+    "weight": 0.5,
+    "value": 200,
+    "stackable": false,
+    "rarity": "epic"
+  },
+  {
+    "id": "fulgurite_shard",
+    "name": "Scheggia di Fulgurite",
+    "description": "Un frammento di vetro naturale, creato da un fulmine che ha colpito la sabbia. Percorso da una strana energia, è caldo al tatto.",
+    "type": "material",
+    "weight": 0.3,
+    "value": 70,
+    "stackable": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "obsidian_shard",
+    "name": "Scheggia di Ossidiana",
+    "description": "Un pezzo di vetro vulcanico nero, affilato come un rasoio. Perfetto per creare punte di freccia o lame improvvisate.",
+    "type": "material",
+    "weight": 0.2,
+    "value": 10,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "ash_petals",
+    "name": "Petali di Cenere",
+    "description": "I petali di un fiore surreale dal colore della cenere. Il loro polline ha leggere proprietà soporifere e antisettiche.",
+    "type": "material",
+    "weight": 0.05,
+    "value": 25,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chemicals_basic",
+    "name": "Sostanze Chimiche di Base",
+    "description": "Un contenitore con varie sostanze chimiche recuperate. Potrebbero essere usate per creare esplosivi, solventi o farmaci.",
+    "type": "material",
+    "weight": 0.5,
+    "value": 30,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  { "id": "firewood", "name": "Legna Secca", "description": "Legna secca, perfetta per accendere un fuoco.", "type": "material", "weight": 1.0, "value": 2, "stackable": true, "rarity": "common" },
+  { "id": "spider_silk", "name": "Seta di Ragno", "description": "Filo di seta di ragno, incredibilmente resistente e leggero.", "type": "material", "weight": 0.1, "value": 15, "stackable": true, "rarity": "uncommon" },
+  { "id": "tool_hammer", "name": "Martello", "description": "Un martello da carpentiere, utile per costruire e distruggere.", "type": "material", "weight": 1.0, "value": 10, "stackable": false, "rarity": "common" },
+  { "id": "nails_box", "name": "Scatola di Chiodi", "description": "Una scatola piena di chiodi di varie misure.", "type": "material", "weight": 0.5, "value": 5, "stackable": true, "rarity": "common" },
+  { "id": "garden_tools", "name": "Attrezzi da Giardino", "description": "Un piccolo set di attrezzi per coltivare la terra.", "type": "material", "weight": 1.2, "value": 12, "stackable": false, "rarity": "common" },
+  { "id": "rubber_gasket", "name": "Guarnizione di Gomma", "description": "Una guarnizione di gomma, utile per riparazioni idrauliche.", "type": "material", "weight": 0.1, "value": 4, "stackable": true, "rarity": "common" },
+  { "id": "rubber_ball", "name": "Palla di Gomma", "description": "Una palla di gomma, può essere usata come distrazione.", "type": "material", "weight": 0.2, "value": 2, "stackable": false, "rarity": "common" },
+  { "id": "resistant_wire", "name": "Filo Resistente", "description": "Un filo metallico resistente, utile per trappole o riparazioni.", "type": "material", "weight": 0.3, "value": 8, "stackable": true, "rarity": "common" },
+  { "id": "metal_piece", "name": "Pezzo di Metallo Piccolo", "description": "Piccoli pezzi di metallo, utili per il crafting.", "type": "material", "weight": 0.2, "value": 2, "stackable": true, "rarity": "common" },
+  { "id": "grain_sack", "name": "Sacco di Grano", "description": "Un sacco di grano secco, ancora commestibile se macinato.", "type": "material", "weight": 5.0, "value": 15, "stackable": false, "rarity": "uncommon" },
+  { "id": "cleaning_supplies", "name": "Prodotti per Pulizia", "description": "Solventi e reagenti chimici, utili per creare composti.", "type": "material", "weight": 1.0, "value": 10, "stackable": false, "rarity": "uncommon" },
+  { "id": "dry_paper", "name": "Carta Secca", "description": "Fogli di carta secca, perfetti per accendere un fuoco o come materiale per il crafting.", "type": "material", "weight": 0.1, "value": 1, "stackable": true, "rarity": "common" },
+  {
+    "id": "military_grade_electronics",
+    "name": "Elettronica di Grado Militare",
+    "description": "Componenti elettronici robusti e schermati, recuperati da equipaggiamento militare. Estremamente rari e preziosi per il crafting avanzato.",
+    "type": "material",
+    "weight": 0.3,
+    "value": 150,
+    "stackable": true,
+    "rarity": "rare"
+  }
+]

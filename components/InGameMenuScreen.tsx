@@ -12,6 +12,11 @@ const MENU_ITEMS = [
     "Menu Principale",
 ];
 
+/**
+ * InGameMenuScreen component.
+ * This component renders the in-game menu screen.
+ * @returns {JSX.Element} The rendered InGameMenuScreen component.
+ */
 const InGameMenuScreen: React.FC = () => {
     const { gameState, setGameState } = useGameStore();
     const [selectedIndex, setSelectedIndex] = useState(0);

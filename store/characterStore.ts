@@ -51,6 +51,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     hp: { current: 100, max: 100 },
     satiety: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
     hydration: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
+    fatigue: { current: 0, max: 100 },
     attributes: { ...initialAttributes },
     skills: { ...initialSkills },
     inventory: [],
@@ -65,6 +66,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     unlockedTrophies: new Set<string>(),
 
     // --- Actions ---
+    /**
+     * @function initCharacter
+     * @description Initializes the character with default values.
+     */
     initCharacter: () => {
         const maxHp = 100; // Base HP for 10 COS
         const newSkills = { ...initialSkills };
@@ -81,6 +86,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             hp: { current: maxHp, max: maxHp },
             satiety: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
             hydration: { current: BASE_STAT_VALUE, max: BASE_STAT_VALUE },
+            fatigue: { current: 0, max: 100 },
             skills: newSkills,
             alignment: { ...initialAlignment },
             // FIX: Explicitly type new Set() to avoid it being inferred as Set<unknown>.
@@ -100,6 +106,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function setAttributes
+     * @description Sets the character's attributes.
+     * @param {Attributes} newAttributes - The new attributes to set.
+     */
     setAttributes: (newAttributes) => {
         set(state => {
             const newCos = newAttributes.cos;
@@ -114,19 +125,39 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function getAttributeModifier
+     * @description Gets the modifier for a given attribute.
+     * @param {AttributeName} attribute - The attribute to get the modifier for.
+     * @returns {number} The modifier for the attribute.
+     */
     getAttributeModifier: (attribute) => {
         const value = get().attributes[attribute];
         return Math.floor((value - 10) / 2);
     },
 
+    /**
+     * @function getSkillBonus
+     * @description Gets the bonus for a given skill.
+     * @param {SkillName} skill - The skill to get the bonus for.
+     * @returns {number} The bonus for the skill.
+     */
     getSkillBonus: (skill) => {
         const skillDef = SKILLS[skill];
         if (!skillDef) return 0;
         
-        const { alignment, level, skills, status } = get();
+        const { alignment, level, skills, status, fatigue } = get();
         const attributeModifier = get().getAttributeModifier(skillDef.attribute);
         const proficiencyBonus = skills[skill].proficient ? Math.floor((level - 1) / 4) + 2 : 0;
         
+        // --- Fatigue Penalty ---
+        let fatiguePenalty = 0;
+        if (fatigue.current > 75) {
+            fatiguePenalty = -2;
+        } else if (fatigue.current > 50) {
+            fatiguePenalty = -1;
+        }
+
         // --- Moral Compass Bonus ---
         let alignmentBonus = 0;
         const alignmentDifference = alignment.lena - alignment.elian;
@@ -151,9 +182,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
         }
 
-        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty;
+        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty + fatiguePenalty;
     },
 
+    /**
+     * @function performSkillCheck
+     * @description Performs a skill check.
+     * @param {SkillName} skill - The skill to check.
+     * @param {number} dc - The difficulty class of the check.
+     * @returns {SkillCheckResult} The result of the skill check.
+     */
     performSkillCheck: (skill, dc) => {
         const roll = Math.floor(Math.random() * 20) + 1;
         const bonus = get().getSkillBonus(skill);
@@ -162,10 +200,19 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         return { skill, roll, bonus, total, dc, success };
     },
 
+    /**
+     * @function gainExplorationXp
+     * @description Adds exploration experience to the character.
+     */
     gainExplorationXp: () => {
         get().addXp(1);
     },
 
+    /**
+     * @function addXp
+     * @description Adds experience points to the character.
+     * @param {number} amount - The amount of experience to add.
+     */
     addXp: (amount) => {
         if (get().levelUpPending) {
              set(state => ({ xp: { ...state.xp, current: state.xp.current + amount } }));
@@ -183,6 +230,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function applyLevelUp
+     * @description Applies the level up choices to the character.
+     * @param {object} choices - The choices made during level up.
+     * @param {AttributeName} choices.attribute - The attribute to increase.
+     * @param {string} choices.talentId - The ID of the talent to unlock.
+     */
     applyLevelUp: (choices) => {
         set(state => {
             if (!state.levelUpPending) return {};
@@ -224,6 +278,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function addItem
+     * @description Adds an item to the character's inventory.
+     * @param {string} itemId - The ID of the item to add.
+     * @param {number} [quantity=1] - The quantity of the item to add.
+     */
     addItem: (itemId, quantity = 1) => {
         set(state => {
             const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
@@ -253,6 +313,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function removeItem
+     * @description Removes an item from the character's inventory.
+     * @param {string} itemId - The ID of the item to remove.
+     * @param {number} [quantity=1] - The quantity of the item to remove.
+     */
     removeItem: (itemId, quantity = 1) => {
         set(state => {
             const itemDetails = useItemDatabaseStore.getState().itemDatabase[itemId];
@@ -283,6 +349,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
     
+    /**
+     * @function discardItem
+     * @description Discards an item from the character's inventory.
+     * @param {number} inventoryIndex - The index of the item in the inventory.
+     * @param {number} [quantity=1] - The quantity of the item to discard.
+     */
     discardItem: (inventoryIndex: number, quantity = 1) => {
         set(state => {
             const itemInInventory = state.inventory[inventoryIndex];
@@ -312,6 +384,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function equipItem
+     * @description Equips an item from the inventory.
+     * @param {number | string} inventoryIndexOrId - The index or ID of the item to equip.
+     */
     equipItem: (inventoryIndexOrId: number | string) => {
         set(state => {
             let inventoryIndex: number;
@@ -356,6 +433,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function unequipItem
+     * @description Unequips an item from a specified slot.
+     * @param {'weapon' | 'armor'} slot - The slot to unequip.
+     */
     unequipItem: (slot) => {
         set(() => {
             if (slot === 'weapon') return { equippedWeapon: null };
@@ -364,6 +446,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function damageEquippedItem
+     * @description Damages an equipped item.
+     * @param {'weapon' | 'armor'} slot - The slot of the item to damage.
+     * @param {number} amount - The amount of damage to inflict.
+     */
     damageEquippedItem: (slot, amount) => {
         set(state => {
             const equippedIndex = slot === 'weapon' ? state.equippedWeapon : state.equippedArmor;
@@ -390,6 +478,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function repairItem
+     * @description Repairs an item in the inventory.
+     * @param {number} inventoryIndex - The index of the item to repair.
+     * @param {number} amount - The amount to repair.
+     */
     repairItem: (inventoryIndex, amount) => {
         set(state => {
             const newInventory = [...state.inventory];
@@ -401,6 +495,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function salvageItem
+     * @description Salvages a broken item for materials.
+     * @param {number} inventoryIndex - The index of the item to salvage.
+     */
     salvageItem: (inventoryIndex) => {
         const { inventory, addItem, discardItem } = get();
         const item = inventory[inventoryIndex];
@@ -421,16 +520,31 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
 
+    /**
+     * @function takeDamage
+     * @description Inflicts damage to the character.
+     * @param {number} amount - The amount of damage to inflict.
+     * @param {DeathCause} [cause='UNKNOWN'] - The cause of death if the damage is fatal.
+     */
     takeDamage: (amount, cause: DeathCause = 'UNKNOWN') => {
         set(state => {
             const newHp = Math.max(0, state.hp.current - amount);
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
+            if (amount > 0) {
+                useGameStore.getState().triggerDamageFlash();
+            }
             return { hp: { ...state.hp, current: newHp } };
         });
     },
     
+    /**
+     * @function calculateSurvivalCost
+     * @description Calculates the survival cost for a given amount of time.
+     * @param {number} minutes - The number of minutes to calculate the cost for.
+     * @returns {{satietyCost: number, hydrationCost: number}} The survival cost.
+     */
     calculateSurvivalCost: (minutes) => {
         let satietyDecay = 3.0; 
         let hydrationDecay = 4.5;
@@ -441,6 +555,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         return { satietyCost, hydrationCost };
     },
 
+    /**
+     * @function updateSurvivalStats
+     * @description Updates the character's survival stats based on time passed and weather.
+     * @param {number} minutes - The number of minutes that have passed.
+     * @param {WeatherType} weather - The current weather.
+     */
     updateSurvivalStats: (minutes, weather) => {
         const { setGameOver, addJournalEntry } = useGameStore.getState();
         const currentState = get();
@@ -496,30 +616,82 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             setGameOver(deathCause || 'UNKNOWN');
         }
 
+        let fatigueGain = (minutes / 60) * 1;
+        const totalWeight = get().getTotalWeight();
+        const maxCarryWeight = get().getMaxCarryWeight();
+        if (totalWeight > maxCarryWeight) {
+            fatigueGain *= 2;
+        }
+        const newFatigue = Math.min(currentState.fatigue.max, currentState.fatigue.current + fatigueGain);
+
         set({
             satiety: { ...currentState.satiety, current: newSatiety },
             hydration: { ...currentState.hydration, current: newHydration },
-            hp: { ...currentState.hp, current: newHp }
+            hp: { ...currentState.hp, current: newHp },
+            fatigue: { ...currentState.fatigue, current: newFatigue }
         });
     },
     
+    /**
+     * @function heal
+     * @description Heals the character.
+     * @param {number} amount - The amount to heal.
+     */
     heal: (amount) => {
         set(state => ({
             hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + amount) }
         }));
     },
     
+    /**
+     * @function restoreSatiety
+     * @description Restores the character's satiety.
+     * @param {number} amount - The amount to restore.
+     */
     restoreSatiety: (amount) => {
         set(state => ({
             satiety: { ...state.satiety, current: Math.min(state.satiety.max, state.satiety.current + amount) }
         }));
     },
     
+    /**
+     * @function restoreHydration
+     * @description Restores the character's hydration.
+     * @param {number} amount - The amount to restore.
+     */
     restoreHydration: (amount) => {
         set(state => ({
             hydration: { ...state.hydration, current: Math.min(state.hydration.max, state.hydration.current + amount) }
         }));
     },
+
+    /**
+     * @function updateFatigue
+     * @description Updates the character's fatigue level.
+     * @param {number} amount - The amount to increase fatigue by.
+     */
+    updateFatigue: (amount) => {
+        set(state => ({
+            fatigue: { ...state.fatigue, current: Math.min(state.fatigue.max, state.fatigue.current + amount) }
+        }));
+    },
+
+    /**
+     * @function rest
+     * @description Reduces the character's fatigue level.
+     * @param {number} amount - The amount to decrease fatigue by.
+     */
+    rest: (amount) => {
+        set(state => ({
+            fatigue: { ...state.fatigue, current: Math.max(0, state.fatigue.current - amount) }
+        }));
+    },
+    /**
+     * @function changeAlignment
+     * @description Changes the character's alignment.
+     * @param {'lena' | 'elian'} type - The type of alignment to change.
+     * @param {number} amount - The amount to change the alignment by.
+     */
     changeAlignment: (type, amount) => {
         const oldAlignment = get().alignment;
         const oldDiff = oldAlignment.lena - oldAlignment.elian;
@@ -553,14 +725,30 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
              addJournalEntry({ text: "Il tuo percorso è ora più equilibrato. I bonus di allineamento sono svaniti.", type: JournalEntryType.SYSTEM_WARNING });
         }
     },
+    /**
+     * @function addStatus
+     * @description Adds a status condition to the character.
+     * @param {PlayerStatusCondition} newStatus - The status condition to add.
+     */
     addStatus: (newStatus) => set(state => ({
         status: new Set(state.status).add(newStatus)
     })),
+    /**
+     * @function removeStatus
+     * @description Removes a status condition from the character.
+     * @param {PlayerStatusCondition} statusToRemove - The status condition to remove.
+     */
     removeStatus: (statusToRemove) => set(state => {
         const newStatus = new Set(state.status);
         newStatus.delete(statusToRemove);
         return { status: newStatus };
     }),
+    /**
+     * @function boostAttribute
+     * @description Boosts an attribute of the character.
+     * @param {AttributeName} attribute - The attribute to boost.
+     * @param {number} amount - The amount to boost the attribute by.
+     */
     boostAttribute: (attribute, amount) => {
         set(state => ({
             attributes: {
@@ -569,6 +757,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
         }));
     },
+    /**
+     * @function learnRecipe
+     * @description Teaches the character a new recipe.
+     * @param {string} recipeId - The ID of the recipe to learn.
+     */
     learnRecipe: (recipeId) => {
         set(state => {
             if (state.knownRecipes.includes(recipeId)) {
@@ -589,6 +782,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             return {};
         });
     },
+    /**
+     * @function getPlayerAC
+     * @description Gets the player's armor class.
+     * @returns {number} The player's armor class.
+     */
     getPlayerAC: () => {
         const { getAttributeModifier, equippedArmor, inventory } = get();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
@@ -604,6 +802,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const armorBonus = armorDetails?.defense || 0;
         return 10 + dexMod + armorBonus;
     },
+    /**
+     * @function unlockTrophy
+     * @description Unlocks a trophy for the character.
+     * @param {string} trophyId - The ID of the trophy to unlock.
+     */
     unlockTrophy: (trophyId: string) => {
         set(state => {
             if (state.unlockedTrophies.has(trophyId)) {
@@ -626,7 +829,63 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             return { unlockedTrophies: newTrophies };
         });
     },
+    /**
+     * @function restoreState
+     * @description Restores the character's state from a saved state.
+     * @param {CharacterState} newState - The state to restore.
+     */
     restoreState: (newState) => {
         set(newState);
+    },
+
+    /**
+     * @function toJSON
+     * @description Serializes the character's state to a JSON object.
+     * @returns {object} The serialized state.
+     */
+    toJSON: () => {
+        const state = get();
+        return {
+            ...state,
+            status: Array.from(state.status),
+            unlockedTrophies: Array.from(state.unlockedTrophies),
+        };
+    },
+
+    /**
+     * @function fromJSON
+     * @description Deserializes the character's state from a JSON object.
+     * @param {object} json - The JSON object to deserialize.
+     */
+    fromJSON: (json) => {
+        set({
+            ...json,
+            status: new Set(json.status),
+            unlockedTrophies: new Set(json.unlockedTrophies),
+        });
+    },
+
+    /**
+     * @function getTotalWeight
+     * @description Calculates the total weight of the character's inventory.
+     * @returns {number} The total weight of the inventory.
+     */
+    getTotalWeight: () => {
+        const { inventory } = get();
+        const { itemDatabase } = useItemDatabaseStore.getState();
+        return inventory.reduce((total, item) => {
+            const itemDetails = itemDatabase[item.itemId];
+            return total + (itemDetails ? itemDetails.weight * item.quantity : 0);
+        }, 0);
+    },
+
+    /**
+     * @function getMaxCarryWeight
+     * @description Calculates the maximum weight the character can carry.
+     * @returns {number} The maximum weight the character can carry.
+     */
+    getMaxCarryWeight: () => {
+        const { attributes } = get();
+        return attributes.for * 10;
     }
 }));

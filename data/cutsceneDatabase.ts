@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { Cutscene } from '../types';
 
+/**
+ * Loads all cutscenes from the cutscenes.json file.
+ * @returns {Promise<Record<string, Cutscene>>} A promise that resolves to a record of cutscenes.
+ */
 async function loadAllCutscenes(): Promise<Record<string, Cutscene>> {
     try {
         const response = await fetch('./data/cutscenes.json');
@@ -19,6 +23,13 @@ async function loadAllCutscenes(): Promise<Record<string, Cutscene>> {
     }
 }
 
+/**
+ * @interface CutsceneDatabaseState
+ * @description Represents the state of the cutscene database store.
+ * @property {boolean} isLoaded - Whether the cutscene database has been loaded.
+ * @property {Record<string, Cutscene>} cutscenes - A record of cutscenes.
+ * @property {() => Promise<void>} loadDatabase - Function to load the cutscene database.
+ */
 interface CutsceneDatabaseState {
     isLoaded: boolean;
     cutscenes: Record<string, Cutscene>;

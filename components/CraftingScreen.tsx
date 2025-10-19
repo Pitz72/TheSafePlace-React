@@ -6,6 +6,15 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Recipe } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
 
+/**
+ * DetailLine component.
+ * This component renders a line of detail with a label and a value.
+ * @param {object} props - The props for the component.
+ * @param {string} props.label - The label for the detail.
+ * @param {React.ReactNode} props.value - The value for the detail.
+ * @param {string} [props.color] - The color of the value.
+ * @returns {JSX.Element} The rendered DetailLine component.
+ */
 const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: string }> = ({ label, value, color }) => (
     <div className="flex">
         <span className="w-48 flex-shrink-0 opacity-70">{label}:</span>
@@ -13,6 +22,13 @@ const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: stri
     </div>
 );
 
+/**
+ * RecipeDetails component.
+ * This component renders the details of a selected recipe.
+ * @param {object} props - The props for the component.
+ * @param {Recipe | null} props.recipe - The recipe to display details for.
+ * @returns {JSX.Element} The rendered RecipeDetails component.
+ */
 const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     const { itemDatabase } = useItemDatabaseStore();
 
@@ -23,8 +39,6 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
             </div>
         );
     }
-    
-    const resultItem = itemDatabase[recipe.result.itemId];
 
     return (
         <div className="space-y-4 text-3xl h-full flex flex-col">
@@ -40,16 +54,19 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
                 <div className="pt-2">
                     <span className="w-48 flex-shrink-0 opacity-70">Ingredienti:</span>
                     <ul className="ml-6 space-y-1">
-                        {recipe.ingredients.map(ing => {
+                        {recipe.ingredients?.map(ing => {
                             const item = itemDatabase[ing.itemId];
                             return <li key={ing.itemId} style={{color: item?.color}}>- {item?.name || ing.itemId} x{ing.quantity}</li>
-                        })}
+                        }) || <li className="opacity-50">Nessun ingrediente</li>}
                     </ul>
                 </div>
                  <div className="pt-2">
                     <span className="w-48 flex-shrink-0 opacity-70">Risultato:</span>
                      <ul className="ml-6 space-y-1">
-                        <li style={{color: resultItem?.color}}>- {resultItem?.name || recipe.result.itemId} x{recipe.result.quantity}</li>
+                        {recipe.results?.map(result => {
+                            const item = itemDatabase[result.itemId];
+                            return <li key={result.itemId} style={{color: item?.color}}>- {item?.name || result.itemId} x{result.quantity}</li>
+                        }) || <li className="opacity-50">Nessun risultato</li>}
                     </ul>
                 </div>
             </div>
@@ -57,6 +74,11 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     );
 };
 
+/**
+ * CraftingScreen component.
+ * This component renders the crafting screen.
+ * @returns {JSX.Element} The rendered CraftingScreen component.
+ */
 
 const CraftingScreen: React.FC = () => {
     const { toggleCrafting, craftingMenuState, navigateCraftingMenu, performCrafting } = useInteractionStore();

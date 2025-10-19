@@ -2,6 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
+/**
+ * MainQuestScreen component.
+ * This component renders the main quest screen.
+ * @returns {JSX.Element | null} The rendered MainQuestScreen component or null.
+ */
 const MainQuestScreen: React.FC = () => {
     const { activeMainQuestEvent, resolveMainQuest } = useGameStore();
 

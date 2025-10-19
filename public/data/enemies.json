@@ -1,0 +1,46 @@
+[
+  {
+    "id": "raider_desperate",
+    "name": "Predone Disperato",
+    "description": "Un uomo magro e dall'aspetto selvaggio, armato con un pezzo di tubo arrugginito. La fame nei suoi occhi lo rende imprevedibile.",
+    "hp": 30,
+    "ac": 12,
+    "attack": { "damage": 6, "bonus": 2 },
+    "xp": 50,
+    "biomes": ["Global"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "Noti che zoppica leggermente, favorendo la gamba destra. Sembra una vecchia ferita mai guarita del tutto.",
+      "actions": [
+        {
+          "id": "tactic_trip",
+          "name": "[Tattico] Sbilancialo",
+          "description": "Tenta di sbilanciare il predone colpendo la sua gamba ferita.",
+          "skillCheck": { "skill": "atletica", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mutated_wolf",
+    "name": "Lupo Mutato",
+    "description": "Un lupo più grosso del normale, con ciuffi di pelo mancanti che rivelano una pelle malata. I suoi occhi brillano di un'intelligenza innaturale e aggressiva.",
+    "hp": 25,
+    "ac": 13,
+    "attack": { "damage": 8, "bonus": 3 },
+    "xp": 60,
+    "biomes": ["Foresta", "Pianura"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "I suoi movimenti sono fulminei, ma noti che prima di ogni balzo, abbassa leggermente le orecchie. È un piccolo, ma rivelatore, tic.",
+      "actions": [
+        {
+          "id": "tactic_feint",
+          "name": "[Tattico] Finta per esporlo",
+          "description": "Fingi un attacco per costringere la bestia a una mossa avventata, lasciandola scoperta.",
+          "skillCheck": { "skill": "inganno", "dc": 14 }
+        }
+      ]
+    }
+  }
+]

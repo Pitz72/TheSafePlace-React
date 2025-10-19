@@ -19,13 +19,32 @@ const STATUS_COLORS: Record<PlayerStatusCondition, string> = {
 };
 
 // --- Left Column Panels ---
+
+/**
+ * SurvivalPanel component.
+ * This component displays the player's survival stats (HP, satiety, hydration, and status).
+ * @returns {JSX.Element} The rendered SurvivalPanel component.
+ */
 const SurvivalPanel: React.FC = () => {
     const hp = useCharacterStore((state) => state.hp);
     const satiety = useCharacterStore((state) => state.satiety);
     const hydration = useCharacterStore((state) => state.hydration);
+    const fatigue = useCharacterStore((state) => state.fatigue);
     const status = useCharacterStore((state) => state.status);
+    const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
+    const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
 
     const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
+    const isHigh = (stat: Stat) => stat.current / stat.max >= 0.75;
+
+    const totalWeight = getTotalWeight();
+    const maxCarryWeight = getMaxCarryWeight();
+    const isOverEncumbered = totalWeight > maxCarryWeight;
+
+    const allStatuses = Array.from(status);
+    if (isOverEncumbered) {
+        allStatuses.push('SOVRACCARICO' as PlayerStatusCondition);
+    }
 
     return (
         <Panel title="SOPRAVVIVENZA">
@@ -33,15 +52,16 @@ const SurvivalPanel: React.FC = () => {
                 <div className={isCritical(hp) ? 'text-[var(--text-danger)] animate-pulse' : ''}>HP: {Math.floor(hp.current)}/{hp.max}</div>
                 <div className={isCritical(satiety) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Sazietà: {Math.floor(satiety.current)}/{satiety.max}</div>
                 <div className={isCritical(hydration) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Idratazione: {Math.floor(hydration.current)}/{hydration.max}</div>
+                <div className={isHigh(fatigue) ? 'text-[var(--text-accent)]' : ''}>Stanchezza: {Math.floor(fatigue.current)}/{fatigue.max}</div>
                 <div>
                     Status:
-                    {status.size > 0 ? (
-                        Array.from(status).map((s: PlayerStatusCondition, index) => (
+                    {allStatuses.length > 0 ? (
+                        allStatuses.map((s: PlayerStatusCondition, index) => (
                             <React.Fragment key={s}>
-                                <span style={{ color: STATUS_COLORS[s] }}>
+                                <span style={{ color: STATUS_COLORS[s] || '#f59e0b' }}>
                                     {` ${s}`}
                                 </span>
-                                {index < Array.from(status).length - 1 ? ',' : ''}
+                                {index < allStatuses.length - 1 ? ',' : ''}
                             </React.Fragment>
                         ))
                     ) : (
@@ -53,15 +73,29 @@ const SurvivalPanel: React.FC = () => {
     );
 };
 
+/**
+ * InventoryPanel component.
+ * This component displays the player's inventory.
+ * @returns {JSX.Element} The rendered InventoryPanel component.
+ */
 const InventoryPanel: React.FC = () => {
   const inventory = useCharacterStore((state) => state.inventory);
   const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
   const equippedArmorIndex = useCharacterStore((state) => state.equippedArmor);
+  const getTotalWeight = useCharacterStore((state) => state.getTotalWeight);
+  const getMaxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight);
   const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
   const isLoaded = useItemDatabaseStore((state) => state.isLoaded);
 
+  const totalWeight = getTotalWeight();
+  const maxCarryWeight = getMaxCarryWeight();
+  const isOverEncumbered = totalWeight > maxCarryWeight;
+
   return (
     <Panel title="INVENTARIO" className="flex-grow">
+      <div className={`flex justify-between text-xl mb-1 px-1 ${isOverEncumbered ? 'text-[var(--text-danger)] animate-pulse' : ''}`}>
+        <span>Peso: {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)}</span>
+      </div>
       <div className="border border-[var(--border-primary)] p-2 h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
         {isLoaded && inventory.length > 0 ? (
           <ul className="space-y-1.5">
@@ -101,6 +135,11 @@ const InventoryPanel: React.FC = () => {
   );
 };
 
+/**
+ * CommandsPanel component.
+ * This component displays the available commands.
+ * @returns {JSX.Element} The rendered CommandsPanel component.
+ */
 const CommandsPanel: React.FC = () => (
   <Panel title="COMANDI">
     <div className="space-y-1.5">
@@ -110,11 +149,17 @@ const CommandsPanel: React.FC = () => (
       <div className="flex justify-between"><span>[L]</span> <span>Level Up</span></div>
       <div className="flex justify-between"><span>[ESC]</span> <span>Menu/Indietro</span></div>
     </div>
-  </CommandsPanel>
+  </Panel>
 );
 
 
 // --- Right Column Panels ---
+
+/**
+ * InfoPanel component.
+ * This component displays information about the player's current location, time, and weather.
+ * @returns {JSX.Element} The rendered InfoPanel component.
+ */
 const InfoPanel: React.FC = () => {
     const playerPos = useGameStore((state) => state.playerPos);
     const gameTime = useTimeStore((state) => state.gameTime);
@@ -169,6 +214,11 @@ const InfoPanel: React.FC = () => {
     );
 };
 
+/**
+ * EquipmentPanel component.
+ * This component displays the player's equipped items.
+ * @returns {JSX.Element} The rendered EquipmentPanel component.
+ */
 const EquipmentPanel: React.FC = () => {
     const inventory = useCharacterStore((state) => state.inventory);
     const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
@@ -204,6 +254,11 @@ const EquipmentPanel: React.FC = () => {
     );
 };
 
+/**
+ * StatsPanel component.
+ * This component displays the player's stats.
+ * @returns {JSX.Element} The rendered StatsPanel component.
+ */
 const StatsPanel: React.FC = () => {
     const level = useCharacterStore((state) => state.level);
     const xp = useCharacterStore((state) => state.xp);
@@ -240,6 +295,12 @@ const StatsPanel: React.FC = () => {
 
 
 // --- Bottom Panel ---
+
+/**
+ * TravelJournalPanel component.
+ * This component displays the player's travel journal.
+ * @returns {JSX.Element} The rendered TravelJournalPanel component.
+ */
 const TravelJournalPanel: React.FC = () => {
     const journal = useGameStore((state) => state.journal);
     const journalRef = useRef<HTMLDivElement>(null);
@@ -276,9 +337,16 @@ const TravelJournalPanel: React.FC = () => {
     );
 };
 
+/**
+ * GameScreen component.
+ * This component renders the main game screen, including the map, panels, and journal.
+ * @returns {JSX.Element} The rendered GameScreen component.
+ */
+
+import { gameService } from '../services/gameService';
 
 const GameScreen: React.FC = () => {
-  const { setGameState, movePlayer, performQuickRest, openLevelUpScreen } = useGameStore();
+  const { setGameState, performQuickRest, openLevelUpScreen } = useGameStore();
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
   const gameState = useGameStore((state) => state.gameState);
 
@@ -288,9 +356,9 @@ const GameScreen: React.FC = () => {
 
   const handleMove = useCallback((dx: number, dy: number) => {
     if (!isInventoryOpen && !isInRefuge) {
-      movePlayer(dx, dy);
+      gameService.movePlayer(dx, dy);
     }
-  }, [isInventoryOpen, isInRefuge, movePlayer]);
+  }, [isInventoryOpen, isInRefuge]);
 
   const handleQuickRest = useCallback(() => {
     if (!isInventoryOpen && !isInRefuge) {

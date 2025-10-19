@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { Trophy } from '../types';
 
+/**
+ * Loads all trophies from the trophies.json file.
+ * @returns {Promise<Trophy[]>} A promise that resolves to an array of trophies.
+ */
 async function loadAllTrophies(): Promise<Trophy[]> {
     try {
         const response = await fetch('./data/trophies.json');
@@ -15,6 +19,13 @@ async function loadAllTrophies(): Promise<Trophy[]> {
     }
 }
 
+/**
+ * @interface TrophyDatabaseState
+ * @description Represents the state of the trophy database store.
+ * @property {boolean} isLoaded - Whether the trophy database has been loaded.
+ * @property {Trophy[]} trophies - An array of trophies.
+ * @property {() => Promise<void>} loadDatabase - Function to load the trophy database.
+ */
 interface TrophyDatabaseState {
     isLoaded: boolean;
     trophies: Trophy[];

@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.0.3)
+# The Safe Place Chronicles: The Echo of the Journey (v1.1.1)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -77,7 +77,16 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. Il ciclo di gioco è robusto, bilanciato e l'arco narrativo è giocabile dall'inizio alla fine.
+**Versione Corrente: v1.1.1** - Rilascio di Stabilità e Bug Fix Critici
+
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La v1.1.1 risolve bug critici che impedivano il corretto funzionamento di rifugi e sistema di crafting, garantendo un'esperienza di gioco stabile e senza crash.
+
+**Novità v1.1.1 (19 Ottobre 2025):**
+- ✅ **Fix Critico:** Risolto errore import che impediva l'avvio del gioco
+- ✅ **Fix Rifugi:** I rifugi ora funzionano correttamente con tutte le opzioni
+- ✅ **Fix Crafting:** Eliminato crash dello schermo nero nel banco da lavoro
+- ✅ **Stabilità:** Zero crash durante gameplay normale
+- 📚 **Documentazione:** Analisi completa per distribuzione web inclusa
 
 Il progetto continuerà a essere aggiornato con fix e bilanciamenti basati sui feedback. Per suggerimenti o segnalazioni di bug, è possibile scrivere a: `runtimeradio@gmail.com`.
 
@@ -104,6 +113,46 @@ Le prossime, importanti implementazioni previste sono:
     *   **Città/Rovine:** Aggiungerà un'opzione "Cerca Copertura" (aumenta temporaneamente la Classe Armatura).
     *   **Pianura:** L'assenza di coperture potrebbe rendere la fuga più difficile.
     *   **Immersione Totale:** L'ambiente diventerà una risorsa (o un ostacolo) attiva anche durante gli scontri.
+
+### Configurazione
+
+1.  **Clonare il repository:**
+    ```bash
+    git clone https://github.com/SimonePizzi/the-safe-place-chronicles.git
+    ```
+2.  **Installare le dipendenze:**
+    ```bash
+    npm install
+    ```
+3.  **Avviare il server di sviluppo:**
+    ```bash
+    npm run dev
+    ```
+Il gioco sarà disponibile all'indirizzo `http://localhost:3000`.
+
+### Aggiunta di Nuovi Contenuti
+
+Il gioco è progettato per essere facilmente espandibile. Tutti i dati di gioco, come oggetti, ricette, eventi e nemici, sono archiviati in file JSON nella directory `data`.
+
+#### Struttura dei Dati
+
+*   **Oggetti:** `data/items/*.json` - I file degli oggetti sono separati per categoria (armi, armature, consumabili, ecc.).
+*   **Ricette:** `data/recipes.json`
+*   **Eventi:** `data/events.json`
+*   **Nemici:** `data/enemies.json`
+*   **Trama Principale:** `data/main_quest.json`
+*   **Scene d'intermezzo:** `data/cutscenes.json`
+*   **Trofei:** `data/trophies.json`
+
+#### Convalida dei Dati
+
+Per garantire la coerenza e prevenire errori, è disponibile uno script di convalida. Dopo aver aggiunto o modificato i file di dati, esegui il seguente comando per verificare la presenza di problemi:
+
+```bash
+npm run validate:data
+```
+
+Lo script verificherà che tutti i file di dati abbiano il formato corretto e che tutti gli ID degli oggetti a cui si fa riferimento esistano.
 
 ### Ringraziamenti
 

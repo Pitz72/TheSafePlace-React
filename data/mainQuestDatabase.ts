@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { MainQuestChapter } from '../types';
 
+/**
+ * Loads the main quest from the mainQuest.json file.
+ * @returns {Promise<MainQuestChapter[]>} A promise that resolves to an array of main quest chapters.
+ */
 async function loadMainQuest(): Promise<MainQuestChapter[]> {
     try {
         const response = await fetch('./data/mainQuest.json');
@@ -16,6 +20,13 @@ async function loadMainQuest(): Promise<MainQuestChapter[]> {
     }
 }
 
+/**
+ * @interface MainQuestDatabaseState
+ * @description Represents the state of the main quest database store.
+ * @property {boolean} isLoaded - Whether the main quest database has been loaded.
+ * @property {MainQuestChapter[]} mainQuestChapters - An array of main quest chapters.
+ * @property {() => Promise<void>} loadDatabase - Function to load the main quest database.
+ */
 interface MainQuestDatabaseState {
     isLoaded: boolean;
     mainQuestChapters: MainQuestChapter[];

@@ -5,6 +5,11 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { useTrophyDatabaseStore } from '../data/trophyDatabase';
 import { useCharacterStore } from '../store/characterStore';
 
+/**
+ * TrophyScreen component.
+ * This component displays the unlocked trophies.
+ * @returns {JSX.Element} The rendered TrophyScreen component.
+ */
 const TrophyScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const { trophies } = useTrophyDatabaseStore();

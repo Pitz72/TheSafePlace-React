@@ -4,6 +4,11 @@ import { GameState } from '../types';
 import { BOOT_TEXT } from '../constants';
 import { audioManager } from '../utils/audio';
 
+/**
+ * BootScreen component.
+ * This component renders the boot screen of the game.
+ * @returns {JSX.Element | null} The rendered BootScreen component or null.
+ */
 const BootScreen: React.FC = () => {
   const { gameState, setGameState } = useGameStore();
   const [bootLines, setBootLines] = useState<string[]>([]);

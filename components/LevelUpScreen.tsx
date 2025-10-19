@@ -6,6 +6,11 @@ import { GameState, AttributeName, Talent } from '../types';
 import { ATTRIBUTES, ATTRIBUTE_LABELS } from '../constants';
 import { useTalentDatabaseStore } from '../data/talentDatabase';
 
+/**
+ * LevelUpScreen component.
+ * This component renders the level up screen.
+ * @returns {JSX.Element} The rendered LevelUpScreen component.
+ */
 const LevelUpScreen: React.FC = () => {
     const { setGameState } = useGameStore();
     const { levelUpPending, applyLevelUp, skills, level } = useCharacterStore();

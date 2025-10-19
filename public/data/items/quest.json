@@ -1,0 +1,204 @@
+[
+  {
+    "id": "fathers_letter",
+    "name": "Lettera del Padre",
+    "description": "Le ultime parole di tuo padre, scritte su un foglio di carta sgualcito. Un testamento, una condanna, una speranza.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "manual_field_medicine",
+    "name": "Manuale: Medicina da Campo",
+    "description": "Un manuale illustrato che insegna tecniche di primo soccorso avanzate, inclusa la creazione di bende migliorate.",
+    "type": "manual",
+    "weight": 0.5,
+    "value": 100,
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": "recipe_bandage_adv"
+  },
+   {
+    "id": "manual_survival_basics",
+    "name": "Manuale: Sopravvivenza Base",
+    "description": "Un opuscolo su come sfruttare al meglio le risorse naturali, con istruzioni per cucinare zuppe nutrienti e costruire frecce.",
+    "type": "manual",
+    "weight": 0.5,
+    "value": 100,
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": "recipe_soup"
+  },
+  {
+    "id": "sealed_package_quest",
+    "name": "Pacco Sigillato",
+    "description": "Un pacco avvolto in tela cerata e sigillato con cura. Non sai cosa contenga, ma sembra importante. È indirizzato a un 'avamposto a nord'.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "sensitive_documents",
+    "name": "Documenti Sensibili",
+    "description": "Una cartella contenente documenti con il sigillo di un'agenzia governativa ormai defunta. Sembrano contenere informazioni riservate.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "rugged_laptop_military",
+    "name": "Laptop Militare Corazzato",
+    "description": "Un vecchio computer portatile di tipo militare, pesante e obsoleto. La sua batteria interna ha ancora una carica residua e potrebbe contenere dati preziosi.",
+    "type": "quest",
+    "weight": 5.0,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "local_map",
+    "name": "Mappa della Zona",
+    "description": "Una mappa disegnata a mano dell'area circostante, trovata in un accampamento abbandonato. Potrebbe rivelare punti di interesse sconosciuti.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "silver_medallion",
+    "name": "Medaglione d'Argento",
+    "description": "Un piccolo medaglione d'argento annerito dal tempo, trovato nella cassetta delle offerte di una vecchia chiesa. Potrebbe avere un valore sentimentale o storico.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 50,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "old_coins",
+    "name": "Vecchie Monete",
+    "description": "Una manciata di monete di un'era passata. Non hanno più corso legale, ma potrebbero essere usate come merce di scambio con qualche collezionista.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 5,
+    "stackable": true,
+    "rarity": "quest"
+  },
+  {
+    "id": "gold_coin",
+    "name": "Moneta d'Oro",
+    "description": "Una vecchia moneta d'oro, ancora brillante. Un piccolo tesoro del mondo passato.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 100,
+    "stackable": false,
+    "rarity": "quest"
+  },
+   {
+    "id": "precious_stone",
+    "name": "Pietra Preziosa",
+    "description": "Una piccola gemma grezza, probabilmente un rubino o un granato. Scintilla anche nella penombra.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 150,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "gold_bar",
+    "name": "Lingotto d'Oro",
+    "description": "Un piccolo ma pesante lingotto d'oro, trovato nel caveau di una banca. Un tesoro di inestimabile valore nel vecchio mondo, e forse anche in questo.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 1000,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "fathers_compass",
+    "name": "Bussola del Padre",
+    "description": "La vecchia bussola di tuo padre. È rovinata ma punta sempre a nord. Un ricordo di un tempo più semplice e delle lezioni che ti ha insegnato.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "mechanic_manual",
+    "name": "Manuale di Meccanica",
+    "description": "Un manuale tecnico su motori e macchinari semplici. Potrebbe sbloccare nuove ricette di crafting.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "first_aid_book",
+    "name": "Manuale di Primo Soccorso",
+    "description": "Un libro illustrato sulle procedure di primo soccorso. Leggerlo potrebbe migliorare le tue abilità mediche.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "code_list",
+    "name": "Lista di Codici",
+    "description": "Un foglio con una serie di codici numerici e frequenze radio. Potrebbe essere utile per accedere a luoghi o comunicazioni bloccate.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "rusty_key",
+    "name": "Chiave Arrugginita",
+    "description": "Una vecchia e arrugginita chiave. Chissà cosa potrebbe aprire.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "carillon_annerito",
+    "name": "Carillon Annerito",
+    "description": "Un piccolo carillon di legno, annerito dalla fuliggine. Un'etichetta sbiadita sul fondo riporta un avvertimento scritto da tuo padre: 'Non aprirlo mai. Il suo suono... attira i ricordi sbagliati'.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "pixeldebh_plate",
+    "name": "Placca di PixelDebh",
+    "description": "Una placca di metallo lucido con un simbolo stilizzato e la scritta 'PixelDebh'. Un frammento di un'era tecnologica dimenticata.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "rare_music_cassettes",
+    "name": "Musicassetta Rara",
+    "description": "Una vecchia musicassetta con un frammento di musica registrato dall'etere. Un tesoro in un mondo silenzioso.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  }
+]

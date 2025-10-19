@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { Talent } from '../types';
 
+/**
+ * Loads all talents from the talents.json file.
+ * @returns {Promise<Talent[]>} A promise that resolves to an array of talents.
+ */
 async function loadAllTalents(): Promise<Talent[]> {
     try {
         const response = await fetch('./data/talents.json');
@@ -15,6 +19,13 @@ async function loadAllTalents(): Promise<Talent[]> {
     }
 }
 
+/**
+ * @interface TalentDatabaseState
+ * @description Represents the state of the talent database store.
+ * @property {boolean} isLoaded - Whether the talent database has been loaded.
+ * @property {Talent[]} talents - An array of talents.
+ * @property {() => Promise<void>} loadDatabase - Function to load the talent database.
+ */
 interface TalentDatabaseState {
     isLoaded: boolean;
     talents: Talent[];

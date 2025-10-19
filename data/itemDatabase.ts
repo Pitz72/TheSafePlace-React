@@ -3,6 +3,10 @@ import { IItem } from '../types';
 
 type RawItem = Omit<IItem, 'color'>;
 
+/**
+ * Loads all items from the items directory.
+ * @returns {Promise<Record<string, IItem>>} A promise that resolves to a record of items.
+ */
 async function loadAllItems(): Promise<Record<string, IItem>> {
     const files = [
         './data/items/weapons.json',
@@ -61,7 +65,13 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
     }
 }
 
-
+/**
+ * @interface ItemDatabaseState
+ * @description Represents the state of the item database store.
+ * @property {boolean} isLoaded - Whether the item database has been loaded.
+ * @property {Record<string, IItem>} itemDatabase - A record of items.
+ * @property {() => Promise<void>} loadDatabase - Function to load the item database.
+ */
 interface ItemDatabaseState {
     isLoaded: boolean;
     itemDatabase: Record<string, IItem>;

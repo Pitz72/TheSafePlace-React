@@ -33,6 +33,11 @@ import GameOverScreen from './components/GameOverScreen';
 import TrophyScreen from './components/TrophyScreen';
 import { useTrophyDatabaseStore } from './data/trophyDatabase';
 
+/**
+ * App component.
+ * This is the main component of the application.
+ * @returns {JSX.Element} The rendered App component.
+ */
 const App: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
   const setVisualTheme = useGameStore((state) => state.setVisualTheme);

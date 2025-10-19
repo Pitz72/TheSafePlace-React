@@ -5,6 +5,10 @@ import { GameState, AttributeName, Attributes } from '../types';
 import { ATTRIBUTES, ATTRIBUTE_LABELS } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
+/**
+ * Simulates rolling 4d6 and dropping the lowest roll.
+ * @returns {number} The sum of the three highest rolls.
+ */
 // Simula il lancio di 4d6, scartando il più basso
 const rollStat = (): number => {  
   const rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
@@ -13,6 +17,11 @@ const rollStat = (): number => {
   return rolls.reduce((sum, current) => sum + current, 0);
 };
 
+/**
+ * CharacterCreationScreen component.
+ * This component renders the character creation screen.
+ * @returns {JSX.Element} The rendered CharacterCreationScreen component.
+ */
 
 const CharacterCreationScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);

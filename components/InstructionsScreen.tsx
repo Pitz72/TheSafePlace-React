@@ -4,6 +4,11 @@ import { GameState } from '../types';
 import { INSTRUCTIONS_TEXT } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
+/**
+ * InstructionsScreen component.
+ * This component displays the instructions for the game.
+ * @returns {JSX.Element} The rendered InstructionsScreen component.
+ */
 const InstructionsScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const [displayedText, setDisplayedText] = useState('');

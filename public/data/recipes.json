@@ -1,0 +1,82 @@
+[
+  {
+    "id": "recipe_bandage_adv",
+    "name": "Benda Migliorata",
+    "description": "Combina una benda con del disinfettante per creare un bendaggio molto più efficace.",
+    "skill": "medicina",
+    "dc": 10,
+    "timeCost": 5,
+    "ingredients": [
+      { "itemId": "CONS_003", "quantity": 1 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 1 }
+    ],
+    "result": { "itemId": "MED_BANDAGE_ADVANCED", "quantity": 1 }
+  },
+  {
+    "id": "recipe_soup",
+    "name": "Zuppa Riscaldante",
+    "description": "Una semplice zuppa calda con verdure e acqua. Nutriente e idratante.",
+    "skill": "sopravvivenza",
+    "dc": 8,
+    "timeCost": 15,
+    "ingredients": [
+      { "itemId": "CONS_002", "quantity": 1 },
+      { "itemId": "carrot", "quantity": 1 },
+      { "itemId": "potato", "quantity": 1 }
+    ],
+    "result": { "itemId": "FOOD_SOUP", "quantity": 1 }
+  },
+  {
+    "id": "recipe_makeshift_knife",
+    "name": "Coltello di Fortuna",
+    "description": "Assembla un'arma da taglio di base usando rottami metallici e un po' di stoffa per l'impugnatura.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 2 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "result": { "itemId": "makeshift_knife", "quantity": 1 }
+  },
+  {
+    "id": "recipe_arrows",
+    "name": "Frecce (x5)",
+    "description": "Intaglia dei dardi di legno e attacca delle punte affilate ricavate da rottami metallici.",
+    "skill": "sopravvivenza",
+    "dc": 11,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 1 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "result": { "itemId": "ammo_arrow", "quantity": 5 }
+  },
+  {
+    "id": "recipe_repair_kit_basic",
+    "name": "Kit Riparazione Base",
+    "description": "Assembla un kit di base per la manutenzione dell'equipaggiamento.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 3 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "result": { "itemId": "tool_repair_kit_basic", "quantity": 1 }
+  },
+  {
+    "id": "recipe_repair_kit_advanced",
+    "name": "Kit Riparazione Avanzato",
+    "description": "Costruisci un kit di riparazione di qualità superiore usando componenti migliori.",
+    "skill": "sopravvivenza",
+    "dc": 16,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 2 },
+      { "itemId": "tech_components", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "result": { "itemId": "tool_repair_kit_advanced", "quantity": 1 }
+  }
+]

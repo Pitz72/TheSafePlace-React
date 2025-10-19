@@ -4,6 +4,10 @@ import { useState, useEffect, CSSProperties } from 'react';
 const NATIVE_WIDTH = 1920;
 const NATIVE_HEIGHT = 1080;
 
+/**
+ * Custom hook to calculate the scale and position of the game container.
+ * @returns {CSSProperties} The CSS properties to apply to the game container.
+ */
 export const useGameScale = (): CSSProperties => {
   const [scaleStyle, setScaleStyle] = useState<CSSProperties>({});
 
