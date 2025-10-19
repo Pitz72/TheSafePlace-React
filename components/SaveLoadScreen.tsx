@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import { getSaveSlots, handleSaveGame, handleLoadGame, SaveSlot } from '../services/saveGameService';
+import { getSaveSlots, handleSaveGame, handleLoadGame, SaveSlot } from '../src/services/saveGameService';
 
 const NUM_SLOTS = 3;
 
