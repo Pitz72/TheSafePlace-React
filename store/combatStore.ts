@@ -113,7 +113,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         const combatState = get().activeCombat;
         if (!combatState || !combatState.playerTurn || combatState.victory) return;
 
-        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, addXp, damageEquippedItem, updateFatigue } = useCharacterStore.getState();
+        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, addXp, damageEquippedItem, updateFatigue, unlockedTalents, addItem } = useCharacterStore.getState();
         const { itemDatabase } = useItemDatabaseStore.getState();
         
         updateFatigue(1);

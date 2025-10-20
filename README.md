@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.2.2)
+# The Safe Place Chronicles: The Echo of the Journey (v1.3.2)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,11 +84,46 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.3.0** - The Survival Overhaul Update
+**Versione Corrente: v1.3.2** - The Medical Overhaul Update
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, e la **v1.3.0 rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, e la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse:
 
-#### ⚡ Novità v1.3.0 (21 Ottobre 2025) - **THE SURVIVAL OVERHAUL**
+#### ⚡ Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
+
+Questa versione risolve un problema critico nel sistema di cure degli status, rendendo ogni condizione negativa gestibile strategicamente.
+
+**🏥 SISTEMA CURE BILANCIATO:**
+- Nuovi oggetti: Antibiotici (cura MALATO), Erbe Curative (cura INFEZIONE)
+- Ogni status ora ha almeno 2 vie di accesso alla cura (crafting + eventi)
+- Descrizioni oggetti aggiornate per chiarezza immediata
+- Nessuno status è più incurabile
+
+**🧪 RICETTE MEDICHE:**
+- Antibiotici: 2x Antibiotici Scaduti + Sostanze Chimiche + Disinfettante (Medicina DC 16)
+- Erbe Curative: 2x Funghi Commestibili + Bacche Selvatiche (Medicina DC 12)
+- Il crafting medico diventa una via strategica per l'autosufficienza
+
+**🏙️ EVENTI CITTÀ POTENZIATI:**
+- Farmacia: Antibiotici validi + nuova opzione frigorifero con Antidoti
+- Ospedale Abbandonato (NUOVO): fonte ripetibile di cure avanzate
+- Eventi bilanciati per difficoltà e ricompense
+
+**🌲 EVENTI FORESTA/VILLAGGIO:**
+- Rifugio Eremita: orto con Erbe Curative
+- Clinica Medico: Antibiotici + giardino medicinale
+- Cure naturali accessibili con skill Sopravvivenza
+
+**📊 DISTRIBUZIONE LOGICA:**
+- Città: Medicine moderne (Antibiotici, Antidoti)
+- Foresta: Rimedi naturali (Erbe, Funghi)
+- Villaggio: Mix bilanciato di entrambi
+- Skill Medicina ora centrale per accesso cure migliori
+
+**Risultato:** Ogni status è curabile. La morte è sempre conseguenza di scelte, mai di impossibilità sistemica.
+
+---
+
+#### ⚡ Novità v1.3.1 (21 Ottobre 2025) - **THE SURVIVAL OVERHAUL**
 
 Questa versione risolve i problemi fondamentali di game design che rendevano il gioco eccessivamente dipendente dalla fortuna. Ora la sopravvivenza è una questione di decisioni strategiche, non di RNG.
 

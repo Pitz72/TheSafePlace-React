@@ -25,9 +25,9 @@
     "choices": [
       { "text": "Cerca tra gli scaffali rimasti", "outcomes": [{
         "type": "skillCheck", "skill": "investigare", "dc": 11,
-        "successText": "Dietro una scatola di cotone idrofilo rovesciata, recuperi una scatola di antibiotici scaduti e alcune bende ancora sigillate.",
+        "successText": "Dietro una scatola di cotone idrofilo rovesciata, recuperi una scatola di antibiotici ancora validi e alcune bende ancora sigillate.",
         "failureText": "Hai cercato ovunque, ma non è rimasto assolutamente nulla di utile.",
-        "success": [{ "type": "addItem", "value": { "itemId": "antibiotics_expired", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 2 } }, { "type": "addXp", "value": 25 }],
+        "success": [{ "type": "addItem", "value": { "itemId": "MED_ANTIBIOTICS", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 2 } }, { "type": "addXp", "value": 25 }],
         "failure": [{ "type": "addXp", "value": 10 }]
       }] },
       { "text": "Controlla il retrobottega", "outcomes": [{
@@ -36,6 +36,13 @@
         "failureText": "Nel tentativo di passare, urti lo scaffale che crolla con un boato, facendo rumore e costringendoti a una rapida ritirata.",
         "success": [{ "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 2 } }, { "type": "addItem", "value": { "itemId": "manual_field_medicine", "quantity": 1 } }, { "type": "addXp", "value": 20 }],
         "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Esamina il frigorifero farmaceutico", "outcomes": [{
+        "type": "skillCheck", "skill": "medicina", "dc": 13,
+        "successText": "Il frigorifero è alimentato da un generatore d'emergenza. Trovi sieri antidoti ancora conservati correttamente e antibiotici in ottimo stato.",
+        "failureText": "Il frigorifero è completamente vuoto. Probabilmente qualcun altro ha avuto la stessa idea prima di te.",
+        "success": [{ "type": "addItem", "value": { "itemId": "MED_ANTIDOTE", "quantity": 2 } }, { "type": "addItem", "value": { "itemId": "MED_ANTIBIOTICS", "quantity": 1 } }, { "type": "addXp", "value": 40 }],
+        "failure": [{ "type": "addXp", "value": 15 }]
       }] }
     ]
   },
@@ -52,6 +59,29 @@
       }] },
       { "text": "Evita i sotterranei", "outcomes": [{
         "type": "direct", "results": [{ "type": "journalEntry", "text": "Un'ondata di presentimento ti assale. Meglio non rischiare imboscate nel buio." }]
+      }] }
+    ]
+  },
+  {
+    "id": "city_abandoned_hospital", "title": "Ospedale Abbandonato", "isUnique": false, "biomes": ["Città"],
+    "description": "Ti trovi davanti a un vecchio ospedale. L'ingresso principale è bloccato, ma una finestra del piano terra è aperta.",
+    "choices": [
+      { "text": "Entra dall'ambulatorio del pronto soccorso", "outcomes": [{
+        "type": "skillCheck", "skill": "investigare", "dc": 12,
+        "successText": "Rovisti tra i cassetti e gli armadietti. Trovi medicine ancora utilizzabili: antidoti, antibiotici e kit medici.",
+        "failureText": "L'ambulatorio è stato devastato. Non c'è più nulla di recuperabile tra le macerie.",
+        "success": [{ "type": "addItem", "value": { "itemId": "MED_ANTIDOTE", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "MED_ANTIBIOTICS", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "first_aid_kit", "quantity": 1 } }, { "type": "addXp", "value": 40 }],
+        "failure": [{ "type": "addXp", "value": 15 }]
+      }] },
+      { "text": "Cerca nel deposito farmaceutico", "outcomes": [{
+        "type": "skillCheck", "skill": "medicina", "dc": 14,
+        "successText": "Con le tue conoscenze mediche, individui i farmaci ancora efficaci. Raccogli sieri antidoti, antibiotici e antidolorifici.",
+        "failureText": "Il deposito è in pessime condizioni. I farmaci sono scaduti o compromessi dall'umidità.",
+        "success": [{ "type": "addItem", "value": { "itemId": "MED_ANTIDOTE", "quantity": 2 } }, { "type": "addItem", "value": { "itemId": "MED_ANTIBIOTICS", "quantity": 2 } }, { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 2 } }, { "type": "addXp", "value": 50 }],
+        "failure": [{ "type": "addXp", "value": 15 }]
+      }] },
+      { "text": "Evita l'ospedale", "outcomes": [{
+        "type": "direct", "results": [{ "type": "journalEntry", "text": "Gli ospedali hanno sempre attirato sia i bisognosi che i predatori. Meglio non rischiare." }]
       }] }
     ]
   }

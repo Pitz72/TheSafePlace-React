@@ -87,6 +87,20 @@
         }]
       },
       {
+        "text": "Cerca nell'orto dell'eremita",
+        "outcomes": [{
+          "type": "skillCheck", "skill": "sopravvivenza", "dc": 11,
+          "successText": "Dietro la capanna trovi un piccolo orto con piante medicinali ancora vive. Raccogli un generoso mazzo di erbe curative.",
+          "failureText": "L'orto è completamente ricoperto di erbacce. Non riesci a identificare nulla di utile.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "MED_HEALING_HERBS", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "edible_mushrooms", "quantity": 2 } },
+            { "type": "addXp", "value": 30 }
+          ],
+          "failure": [{ "type": "addXp", "value": 10 }]
+        }]
+      },
+      {
         "text": "Riposati qui per un po'",
         "outcomes": [{
           "type": "direct",

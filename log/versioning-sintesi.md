@@ -145,3 +145,86 @@
 - Interfaccia: 100% keyboard-driven
 - Performance: Lighthouse ~92/100
 - Leggibilità: **RISOLTA** ✅
+
+---
+
+## **VERSIONE 1.2.3** - "Critical Bugfix & Game Balance"
+- Fix crafting bloccante: oggetti craftati appaiono correttamente, nessun disequipaggiamento
+- Validazione robusta database con error handling per race conditions
+- Database sincronizzati: recipes.json e talents.json allineati
+- Sistema stanchezza ribilanciato: Quick Rest recupera 15 fatica, cibo/bevande +10 fatica
+- Riposo notturno rifugi: 50 fatica (bilanciato), riposo diurno: 15 fatica
+- Status ESAUSTO: soglia aumentata a 85 fatica
+- Fix menu rifugio: cursore si resetta correttamente dopo riposo
+- Sistema RNG combattimenti verificato: 7% probabilità per step (corretto)
+- Gestione fatica sostenibile per 16 ore di esplorazione
+
+---
+
+## **VERSIONE 1.2.4** - "Quality of Life & Balance Fixes"
+- Fix bug cutscene: risolto crash dopo eventi narrativi
+- HP sempre numeri interi: eliminati decimali nei punti salute
+- Sonno rifugi sempre consentito: con risorse (100% HP + 50 fatica), senza risorse (30% HP + 25 fatica + MALATO)
+- Talenti duplicati: i talenti già appresi non compaiono più al level-up
+- Bussola morale visibile: barra allineamento Lena-Elian chiaramente leggibile
+- Acqua: drop rate +25%, quantità raddoppiata/triplicata negli eventi
+- Manuali crafting: probabilità rifugi aumentata dal 3% al 20%
+- Nuovo sistema loot: 15 oggetti diversi invece di 3, loot table pesata
+- Bilanciamento: sfidante ma elimina situazioni di stallo inevitabili
+
+---
+
+## **VERSIONE 1.3.0** - "The Survival Overhaul"
+- **Sistema Purificazione Acqua:** 3 nuove ricette, 4 nuovi materiali
+- Ricette: Purifica Acqua, Raccogli Acqua, Benda di Fortuna
+- Materiali: Acqua Contaminata, Bottiglia Vuota, Straccio Pulito, Nastro Adesivo
+- **Ricerca Attiva (Tasto F):** Nuova meccanica proattiva per cercare risorse
+- Loot specifico per bioma: acqua in pianura, legna in foresta, metallo in città, cibo in villaggio
+- Bonus tile Fiume: acqua garantita + idratazione immediata
+- Talento Scavenger raddoppia quantità trovate
+- **Starter Kit Completo:** 2 acqua, 2 cibo, 3 bende, materiali crafting
+- **5 Ricette Iniziali** (era 3): cure base e gestione acqua accessibili dall'inizio
+- **Loot da Combattimenti:** Nemici droppano materiali e consumabili
+- 3 tier loot (common/uncommon/rare) basati su potenza nemico
+- Loot rifugi ampliato: 15 oggetti nel pool (+50%)
+- Skill Sopravvivenza centrale per gameplay
+- Risultato: morte sempre conseguenza di decisioni, non di RNG
+
+---
+
+## **VERSIONE 1.3.1** - "The Survival Overhaul II"
+- Revisione completa sistema sopravvivenza
+- Sistema purificazione acqua con ciclo completo: raccolta, filtrazione, consumo
+- Ricerca Attiva (F): meccanica proattiva per cercare risorse (CD Sopravvivenza 10, 30 min)
+- Loot specifico per bioma: pianura (acqua), foresta (legna), città (metallo), villaggio (cibo)
+- Starter kit potenziato: 2 acqua, 2 cibo, 3 bende, materiali per crafting
+- 5 ricette iniziali invece di 3: cure base accessibili dall'inizio
+- Loot da combattimenti: materiali e consumabili da nemici sconfitti
+- 3 tier di loot (common/uncommon/rare) basati su potenza
+- Scavenger: 2 roll invece di 1 sui nemici
+- Loot rifugi espanso: 15 oggetti diversi (prima 10)
+- Skill Sopravvivenza diventa centrale invece che situazionale
+- Giocatore passa da passivo a proattivo nel controllo risorse
+
+---
+
+## **VERSIONE 1.3.2** - "The Medical Overhaul"
+- **Problema risolto:** Status incurabili (AVVELENATO quasi impossibile, INFEZIONE incurabile)
+- **2 Nuovi Oggetti Curativi:**
+  - Antibiotici (MED_ANTIBIOTICS): cura MALATO + 15 HP (uncommon)
+  - Erbe Curative (MED_HEALING_HERBS): cura INFEZIONE + 10 HP (uncommon)
+- **2 Nuove Ricette:**
+  - Antibiotici: 2x Antibiotici Scaduti + Sostanze Chimiche + Disinfettante (Medicina DC 16)
+  - Erbe Curative: 2x Funghi + Bacche (Medicina DC 12)
+- **Eventi Città Potenziati:**
+  - Farmacia: Antibiotici validi + opzione frigorifero con Antidoti
+  - Ospedale Abbandonato (NUOVO): fonte ripetibile di cure avanzate
+- **Eventi Foresta/Villaggio:**
+  - Rifugio Eremita: orto con Erbe Curative
+  - Clinica Medico: Antibiotici + giardino medicinale
+- Descrizioni oggetti aggiornate per chiarezza immediata
+- Distribuzione logica: Città (medicine moderne), Foresta (rimedi naturali), Villaggio (mix)
+- Skill Medicina diventa centrale per accesso cure migliori
+- Ogni status ha almeno 2 vie di cura (crafting + eventi)
+- **Bug Fix Critico:** Crash combattimento per `unlockedTalents` e `addItem` mancanti in combatStore
+- Risultato: nessuno status più incurabile, morte sempre conseguenza di scelte

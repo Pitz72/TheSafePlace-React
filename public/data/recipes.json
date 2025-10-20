@@ -299,5 +299,32 @@
       { "itemId": "metal_piece", "quantity": 3 }
     ],
     "results": [{ "itemId": "tool_fishing_kit", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_antibiotics",
+    "name": "Antibiotici",
+    "description": "Crea antibiotici efficaci combinando medicine scadute con sostanze chimiche per stabilizzarle.",
+    "skill": "medicina",
+    "dc": 16,
+    "timeCost": 40,
+    "ingredients": [
+      { "itemId": "antibiotics_expired", "quantity": 2 },
+      { "itemId": "chemicals_basic", "quantity": 1 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_ANTIBIOTICS", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_healing_herbs",
+    "name": "Erbe Curative",
+    "description": "Prepara un rimedio antisettico naturale con erbe medicinali e funghi.",
+    "skill": "medicina",
+    "dc": 12,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "edible_mushrooms", "quantity": 2 },
+      { "itemId": "wild_berries", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_HEALING_HERBS", "quantity": 2 }]
   }
 ]
