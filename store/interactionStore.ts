@@ -416,23 +416,32 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             // FIX v1.2.4: Expanded loot table with manuals and better balance
             const hasScavenger = useCharacterStore.getState().unlockedTalents.includes('scavenger');
             const lootTable = [
-                // Common items (60% combined)
-                { id: 'CONS_002', weight: 25, quantity: hasScavenger ? 3 : 2 }, // Water (increased)
-                { id: 'CONS_001', weight: 20, quantity: hasScavenger ? 2 : 1 }, // Food
-                { id: 'CONS_003', weight: 10, quantity: hasScavenger ? 2 : 1 }, // Bandages
-                { id: 'MED_BANDAGE_BASIC', weight: 5, quantity: hasScavenger ? 2 : 1 },
-                // Crafting materials (15%)
-                { id: 'scrap_metal', weight: 6, quantity: hasScavenger ? 3 : 2 },
-                { id: 'durable_cloth', weight: 5, quantity: hasScavenger ? 2 : 1 },
+                // Water & Food (35% combined)
+                { id: 'CONS_002', weight: 15, quantity: hasScavenger ? 3 : 2 }, // Clean water
+                { id: 'dirty_water', weight: 10, quantity: hasScavenger ? 4 : 2 }, // Dirty water (common)
+                { id: 'CONS_001', weight: 10, quantity: hasScavenger ? 2 : 1 }, // Food
+                
+                // Medical supplies (15%)
+                { id: 'CONS_003', weight: 7, quantity: hasScavenger ? 2 : 1 }, // Bandages
+                { id: 'MED_BANDAGE_BASIC', weight: 5, quantity: hasScavenger ? 3 : 2 },
+                { id: 'MED_ANTISEPTIC', weight: 3, quantity: 1 },
+                
+                // Crafting materials (25%)
+                { id: 'scrap_metal', weight: 7, quantity: hasScavenger ? 3 : 2 },
+                { id: 'clean_cloth', weight: 6, quantity: hasScavenger ? 3 : 2 }, // For water purification & bandages
+                { id: 'bottle_empty', weight: 5, quantity: hasScavenger ? 3 : 2 }, // For water collection
                 { id: 'adhesive_tape', weight: 4, quantity: 1 },
+                { id: 'durable_cloth', weight: 3, quantity: 1 },
+                
                 // Manuals (20% - significantly increased)
                 { id: 'manual_field_medicine', weight: 5, quantity: 1 },
                 { id: 'manual_survival_basics', weight: 5, quantity: 1 },
                 { id: 'manual_archery_basics', weight: 5, quantity: 1 },
                 { id: 'manual_advanced_repairs', weight: 5, quantity: 1 },
-                // Better consumables (5%)
-                { id: 'MED_ANTISEPTIC', weight: 3, quantity: 1 },
-                { id: 'MED_PAINKILLER', weight: 2, quantity: 1 },
+                
+                // Advanced consumables (5%)
+                { id: 'MED_PAINKILLER', weight: 3, quantity: 1 },
+                { id: 'first_aid_kit', weight: 2, quantity: 1 },
             ];
             
             const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);

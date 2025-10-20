@@ -154,6 +154,7 @@ const CommandsPanel: React.FC = () => (
       <div className="flex justify-between"><span>[WASD/↑↓←→]</span> <span>Movimento/Navigazione</span></div>
       <div className="flex justify-between"><span>[I]</span> <span>Inventario</span></div>
       <div className="flex justify-between"><span>[R]</span> <span>Riposo Breve</span></div>
+      <div className="flex justify-between"><span>[F]</span> <span>Cerca Risorse</span></div>
       <div className="flex justify-between"><span>[L]</span> <span>Level Up</span></div>
       <div className="flex justify-between"><span>[ESC]</span> <span>Menu/Indietro</span></div>
     </div>
@@ -363,7 +364,7 @@ const TravelJournalPanel: React.FC = () => {
 import { gameService } from '../services/gameService';
 
 const GameScreen: React.FC = () => {
-  const { setGameState, performQuickRest, openLevelUpScreen } = useGameStore();
+  const { setGameState, performQuickRest, performActiveSearch, openLevelUpScreen } = useGameStore();
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
   const gameState = useGameStore((state) => state.gameState);
 
@@ -383,6 +384,12 @@ const GameScreen: React.FC = () => {
     }
   }, [isInventoryOpen, isInRefuge, performQuickRest]);
 
+  const handleActiveSearch = useCallback(() => {
+    if (!isInventoryOpen && !isInRefuge) {
+      performActiveSearch();
+    }
+  }, [isInventoryOpen, isInRefuge, performActiveSearch]);
+
   const keyHandlerMap = useMemo(() => {
     // Questo gestore dovrebbe essere attivo solo nello stato di gioco principale
     // per evitare che gli input trapelino in modali come Combattimento, Eventi, ecc.
@@ -395,6 +402,8 @@ const GameScreen: React.FC = () => {
       I: toggleInventory,
       r: handleQuickRest,
       R: handleQuickRest,
+      f: handleActiveSearch,
+      F: handleActiveSearch,
       l: openLevelUpScreen,
       L: openLevelUpScreen,
       ArrowUp: () => handleMove(0, -1),
@@ -411,7 +420,7 @@ const GameScreen: React.FC = () => {
       map['Escape'] = handleOpenPauseMenu;
     }
     return map;
-  }, [gameState, toggleInventory, handleQuickRest, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen]);
+  }, [gameState, toggleInventory, handleQuickRest, handleActiveSearch, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen]);
   
   useKeyboardInput(keyHandlerMap);
 

@@ -297,6 +297,7 @@ export interface GameStoreState {
   currentBiome: string;
   lastRestTime: GameTime | null;
   lastEncounterTime: GameTime | null;
+  lastSearchedBiome: string | null;
   lastLoreEventDay: number | null;
   lootedRefuges: Position[];
   visitedRefuges: Position[];
@@ -321,6 +322,7 @@ export interface GameStoreState {
   movePlayer: (dx: number, dy: number) => void;
   getTileInfo: (x: number, y: number) => TileInfo;
   performQuickRest: () => void;
+  performActiveSearch: () => void;
   openLevelUpScreen: () => void;
   checkMainQuestTriggers: () => void;
   resolveMainQuest: () => void;

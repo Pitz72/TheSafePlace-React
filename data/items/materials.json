@@ -150,5 +150,45 @@
     "value": 150,
     "stackable": true,
     "rarity": "rare"
+  },
+  {
+    "id": "bottle_empty",
+    "name": "Bottiglia Vuota",
+    "description": "Una bottiglia di vetro o plastica vuota. Perfetta per raccogliere e purificare acqua.",
+    "type": "material",
+    "weight": 0.2,
+    "value": 2,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "dirty_water",
+    "name": "Acqua Contaminata",
+    "description": "Acqua di fonte incerta, torbida e potenzialmente pericolosa. Va purificata prima di berla.",
+    "type": "material",
+    "weight": 0.8,
+    "value": 1,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "adhesive_tape",
+    "name": "Nastro Adesivo",
+    "description": "Rotolo di nastro adesivo resistente. Utile per riparazioni rapide e improvvisazioni.",
+    "type": "material",
+    "weight": 0.1,
+    "value": 3,
+    "stackable": true,
+    "rarity": "common"
+  },
+  {
+    "id": "clean_cloth",
+    "name": "Straccio Pulito",
+    "description": "Un pezzo di stoffa pulito, ideale per bende di fortuna o filtri improvvisati.",
+    "type": "material",
+    "weight": 0.1,
+    "value": 2,
+    "stackable": true,
+    "rarity": "common"
   }
 ]

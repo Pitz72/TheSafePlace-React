@@ -123,6 +123,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   currentBiome: '',
   lastRestTime: null,
   lastEncounterTime: null,
+  lastSearchedBiome: null,
   lastLoreEventDay: null,
   lootedRefuges: [],
   visitedRefuges: [],
@@ -300,6 +301,168 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     useCharacterStore.getState().heal(20);
     useCharacterStore.getState().rest(15);
     addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Hai recuperato 20 HP e ti senti meno stanco.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+  },
+
+  /**
+   * @function performActiveSearch
+   * @description Searches the current area for resources. Consumes time and uses Survival skill.
+   */
+  performActiveSearch: () => {
+    const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
+    if (isInventoryOpen || isInRefuge) return;
+    
+    const { currentBiome, addJournalEntry, getTileInfo, playerPos, lastSearchedBiome } = get();
+    const { advanceTime } = useTimeStore.getState();
+    const { performSkillCheck, addItem, unlockedTalents, restoreHydration } = useCharacterStore.getState();
+    
+    const tileType = getTileInfo(playerPos.x, playerPos.y).char;
+    
+    // Can't search in water
+    if (tileType === '≈' || tileType === '~') {
+      addJournalEntry({ text: "Non puoi cercare risorse nell'acqua.", type: JournalEntryType.ACTION_FAILURE });
+      audioManager.playSound('error');
+      return;
+    }
+    
+    // Cooldown per bioma: puoi cercare solo una volta per bioma nuovo
+    if (lastSearchedBiome === currentBiome) {
+      addJournalEntry({ text: "Hai già perlustra questa zona. Esplora un nuovo bioma per cercare ancora.", type: JournalEntryType.ACTION_FAILURE });
+      audioManager.playSound('error');
+      return;
+    }
+    
+    // Update last searched biome
+    set({ lastSearchedBiome: currentBiome });
+    
+    addJournalEntry({ text: `Inizi a perlustrare l'area in cerca di risorse utili...`, type: JournalEntryType.NARRATIVE });
+    advanceTime(30, true);
+    
+    // Survival skill check
+    const dc = 10;
+    const skillCheck = performSkillCheck('sopravvivenza', dc);
+    
+    const hasScavenger = unlockedTalents.includes('scavenger');
+    const hasForager = unlockedTalents.includes('forager'); // If this talent exists
+    
+    if (skillCheck.success) {
+      audioManager.playSound('item_pickup');
+      addJournalEntry({ 
+        text: `[CHECK: Sopravvivenza] ${skillCheck.roll} + ${skillCheck.bonus} = ${skillCheck.total} vs CD ${dc}`, 
+        type: JournalEntryType.SKILL_CHECK_SUCCESS 
+      });
+      
+      // Biome-specific loot tables
+      let lootPool: Array<{ id: string; weight: number; quantity: number }> = [];
+      
+      switch (currentBiome) {
+        case 'Pianura':
+          lootPool = [
+            { id: 'dirty_water', weight: 30, quantity: hasScavenger ? 3 : 2 },
+            { id: 'wild_berries', weight: 25, quantity: hasScavenger ? 3 : 2 },
+            { id: 'bottle_empty', weight: 15, quantity: 1 },
+            { id: 'clean_cloth', weight: 10, quantity: 1 },
+            { id: 'firewood', weight: 10, quantity: hasScavenger ? 3 : 2 },
+            { id: 'animal_hide', weight: 10, quantity: 1 },
+          ];
+          break;
+          
+        case 'Foresta':
+          lootPool = [
+            { id: 'firewood', weight: 35, quantity: hasScavenger ? 4 : 3 },
+            { id: 'edible_mushrooms', weight: 20, quantity: hasScavenger ? 3 : 2 },
+            { id: 'wild_berries', weight: 15, quantity: hasScavenger ? 3 : 2 },
+            { id: 'animal_hide', weight: 15, quantity: 1 },
+            { id: 'dirty_water', weight: 10, quantity: 2 },
+            { id: 'clean_cloth', weight: 5, quantity: 1 },
+          ];
+          break;
+          
+        case 'Città':
+          lootPool = [
+            { id: 'scrap_metal', weight: 30, quantity: hasScavenger ? 4 : 2 },
+            { id: 'bottle_empty', weight: 25, quantity: hasScavenger ? 3 : 2 },
+            { id: 'clean_cloth', weight: 15, quantity: hasScavenger ? 2 : 1 },
+            { id: 'adhesive_tape', weight: 10, quantity: 1 },
+            { id: 'metal_piece', weight: 10, quantity: hasScavenger ? 4 : 2 },
+            { id: 'nylon_wire', weight: 5, quantity: 1 },
+            { id: 'tech_components', weight: 5, quantity: 1 },
+          ];
+          break;
+          
+        case 'Villaggio':
+          lootPool = [
+            { id: 'clean_cloth', weight: 25, quantity: hasScavenger ? 3 : 2 },
+            { id: 'bottle_empty', weight: 20, quantity: hasScavenger ? 2 : 1 },
+            { id: 'carrot', weight: 15, quantity: hasScavenger ? 3 : 2 },
+            { id: 'potato', weight: 15, quantity: hasScavenger ? 3 : 2 },
+            { id: 'dirty_water', weight: 10, quantity: 2 },
+            { id: 'garden_tools', weight: 10, quantity: 1 },
+            { id: 'nails_box', weight: 5, quantity: 1 },
+          ];
+          break;
+          
+        default:
+          // Fallback generic loot
+          lootPool = [
+            { id: 'dirty_water', weight: 30, quantity: 2 },
+            { id: 'bottle_empty', weight: 25, quantity: 1 },
+            { id: 'clean_cloth', weight: 20, quantity: 1 },
+            { id: 'scrap_metal', weight: 15, quantity: 1 },
+            { id: 'firewood', weight: 10, quantity: 2 },
+          ];
+      }
+      
+      // Water sources give bonus clean water
+      if (tileType === 'R') { // River tile
+        addItem('dirty_water', hasScavenger ? 4 : 3);
+        restoreHydration(10); // Drink some directly
+        addJournalEntry({ 
+          text: `Trovi una fonte d'acqua! Raccogli acqua e ne bevi un po'. [+${hasScavenger ? 4 : 3} Acqua Contaminata, +10 Idratazione]`, 
+          type: JournalEntryType.ITEM_ACQUIRED,
+          color: '#60BF77'
+        });
+        return;
+      }
+      
+      // Roll for loot
+      const totalWeight = lootPool.reduce((sum, item) => sum + item.weight, 0);
+      const roll = Math.random() * totalWeight;
+      let cumulativeWeight = 0;
+      let foundItem = lootPool[0];
+      
+      for (const item of lootPool) {
+        cumulativeWeight += item.weight;
+        if (roll < cumulativeWeight) {
+          foundItem = item;
+          break;
+        }
+      }
+      
+      // Always add the item - addItem() will handle validation
+      addItem(foundItem.id, foundItem.quantity);
+      
+      // Try to get item name for journal, fallback to ID
+      const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+      const itemDetails = itemDatabase[foundItem.id];
+      const itemName = itemDetails?.name || foundItem.id;
+      
+      addJournalEntry({ 
+        text: `Hai trovato: ${itemName} x${foundItem.quantity}.`, 
+        type: JournalEntryType.ITEM_ACQUIRED,
+        color: '#60BF77'
+      });
+      
+    } else {
+      audioManager.playSound('error');
+      addJournalEntry({ 
+        text: `[CHECK: Sopravvivenza] ${skillCheck.roll} + ${skillCheck.bonus} = ${skillCheck.total} vs CD ${dc} - FALLITO`, 
+        type: JournalEntryType.SKILL_CHECK_FAILURE 
+      });
+      addJournalEntry({ 
+        text: "Non trovi nulla di utile. Hai sprecato tempo ed energie.", 
+        type: JournalEntryType.ACTION_FAILURE 
+      });
+    }
   },
 
   /**

@@ -217,6 +217,64 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             addLog(getRandom(N.ENEMY_DEATH_DESCRIPTIONS).replace('{enemy}', combatState.enemy.name), '#f59e0b');
             addXp(combatState.enemy.xp);
             addLog(`Hai guadagnato ${combatState.enemy.xp} XP.`, '#f59e0b');
+            
+            // Enemy loot system
+            const hasScavenger = unlockedTalents.includes('scavenger');
+            const lootRolls = hasScavenger ? 2 : 1; // Scavenger gets 2 rolls
+            
+            // Calculate loot tier based on enemy power
+            const enemyTier = combatState.enemy.xp < 80 ? 'common' : combatState.enemy.xp < 120 ? 'uncommon' : 'rare';
+            
+            // Loot pools by tier
+            const lootTables = {
+                common: [
+                    { id: 'scrap_metal', weight: 30, quantity: [1, 3] },
+                    { id: 'clean_cloth', weight: 25, quantity: [1, 2] },
+                    { id: 'MED_BANDAGE_BASIC', weight: 20, quantity: [1, 2] },
+                    { id: 'bottle_empty', weight: 15, quantity: [1, 2] },
+                    { id: 'CONS_001', weight: 10, quantity: [1, 1] },
+                ],
+                uncommon: [
+                    { id: 'animal_hide', weight: 25, quantity: [1, 2] },
+                    { id: 'scrap_metal', weight: 20, quantity: [2, 4] },
+                    { id: 'CONS_003', weight: 15, quantity: [1, 2] },
+                    { id: 'durable_cloth', weight: 15, quantity: [1, 2] },
+                    { id: 'CONS_002', weight: 10, quantity: [1, 1] },
+                    { id: 'adhesive_tape', weight: 10, quantity: [1, 1] },
+                    { id: 'MED_ANTISEPTIC', weight: 5, quantity: [1, 1] },
+                ],
+                rare: [
+                    { id: 'scrap_metal_high_quality', weight: 20, quantity: [1, 2] },
+                    { id: 'animal_hide', weight: 20, quantity: [2, 3] },
+                    { id: 'first_aid_kit', weight: 15, quantity: [1, 1] },
+                    { id: 'CONS_003', weight: 15, quantity: [2, 3] },
+                    { id: 'MED_ANTISEPTIC', weight: 10, quantity: [1, 2] },
+                    { id: 'tech_components', weight: 10, quantity: [1, 1] },
+                    { id: 'MED_PAINKILLER', weight: 10, quantity: [1, 1] },
+                ]
+            };
+            
+            const lootTable = lootTables[enemyTier];
+            const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+            
+            for (let i = 0; i < lootRolls; i++) {
+                const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
+                const roll = Math.random() * totalWeight;
+                let cumulativeWeight = 0;
+                
+                for (const lootEntry of lootTable) {
+                    cumulativeWeight += lootEntry.weight;
+                    if (roll < cumulativeWeight) {
+                        const [min, max] = lootEntry.quantity;
+                        const quantity = Math.floor(Math.random() * (max - min + 1)) + min;
+                        addItem(lootEntry.id, quantity);
+                        const itemName = itemDatabase[lootEntry.id]?.name || lootEntry.id;
+                        addLog(`Hai recuperato: ${itemName} x${quantity}`, '#60BF77');
+                        break;
+                    }
+                }
+            }
+            
             victory = true;
             audioManager.playSound('victory');
             
