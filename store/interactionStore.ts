@@ -220,6 +220,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 if (itemDetails.type === 'consumable' && itemDetails.effects) {
                     let baseMessage = `Hai usato: ${itemDetails.name}.`;
                     let effectMessages: string[] = [];
+                    let hasFoodOrDrink = false;
                     itemDetails.effects.forEach(effect => {
                         switch(effect.type) {
                             case 'heal': {
@@ -232,8 +233,16 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                                 effectMessages.push(`Recuperi ${healAmount} HP.${hasFieldMedic ? ' [Medico da Campo]' : ''}`);
                                 break;
                             }
-                            case 'satiety': charState.restoreSatiety(effect.value as number); effectMessages.push(`Recuperi ${effect.value} sazietà.`); break;
-                            case 'hydration': charState.restoreHydration(effect.value as number); effectMessages.push(`Recuperi ${effect.value} idratazione.`); break;
+                            case 'satiety': 
+                                charState.restoreSatiety(effect.value as number); 
+                                effectMessages.push(`Recuperi ${effect.value} sazietà.`); 
+                                hasFoodOrDrink = true;
+                                break;
+                            case 'hydration': 
+                                charState.restoreHydration(effect.value as number); 
+                                effectMessages.push(`Recuperi ${effect.value} idratazione.`); 
+                                hasFoodOrDrink = true;
+                                break;
                             case 'cureStatus':
                                 if (charState.status.has(effect.value as PlayerStatusCondition)) {
                                     charState.removeStatus(effect.value as PlayerStatusCondition);
@@ -245,6 +254,11 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                             default: effectMessages.push(`Senti un effetto strano...`); break;
                         }
                     });
+                    // FIX: Mangiare/bere riduce la stanchezza di 10
+                    if (hasFoodOrDrink) {
+                        charState.rest(10);
+                        effectMessages.push(`Ti senti meno stanco.`);
+                    }
                     useGameStore.getState().addJournalEntry({ text: [baseMessage, ...effectMessages].join(' '), type: JournalEntryType.NARRATIVE });
                     charState.discardItem(inventorySelectedIndex, 1);
                 }
@@ -458,7 +472,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 healAmount = Math.floor(healAmount / 2);
             }
             heal(healAmount);
-            rest(10);
+            rest(15);
             set({ refugeActionMessage: `Hai recuperato ${healAmount} HP e ti senti meno stanco.` });
             break;
           }
@@ -478,8 +492,8 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             advanceTime(minutesToRest, true);
             const { heal, rest, hp } = useCharacterStore.getState();
             heal(hp.max);
-            rest(100);
-            set({ refugeActionMessage: "Ti svegli all'alba, completamente rinvigorito." });
+            rest(50);
+            set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
             break;
           }
           case "Cerca nei dintorni":
@@ -499,7 +513,8 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             const newOptions = [ isNight ? "Dormi fino all'alba" : "Aspetta un'ora" ];
             if (!isLooted && !refugeJustSearched) newOptions.push("Cerca nei dintorni");
             newOptions.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
-            set(state => ({ refugeMenuState: { ...state.refugeMenuState, options: newOptions } }));
+            // FIX: Reset selectedIndex a 0 quando il menu cambia per evitare confusione
+            set(state => ({ refugeMenuState: { options: newOptions, selectedIndex: 0 } }));
         }
     },
 
@@ -549,10 +564,29 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         
         const displayableRecipes = recipes.filter(r => knownRecipes.includes(r.id));
         const recipe = displayableRecipes[craftingMenuState.selectedIndex];
-        if (!recipe) return;
+        if (!recipe) {
+            console.error('[CRAFTING] Recipe not found at index', craftingMenuState.selectedIndex);
+            return;
+        }
+
+        // FIX: Validate recipe has results
+        if (!recipe.results || recipe.results.length === 0) {
+            console.error('[CRAFTING] Recipe has no results:', recipe.id);
+            addJournalEntry({ text: "Errore: ricetta senza risultato.", type: JournalEntryType.SYSTEM_ERROR });
+            audioManager.playSound('error');
+            return;
+        }
 
         if (!recipe.ingredients.every(ing => (inventory.find(i => i.itemId === ing.itemId)?.quantity || 0) >= ing.quantity)) {
             addJournalEntry({ text: "Ingredienti insufficienti.", type: JournalEntryType.ACTION_FAILURE });
+            audioManager.playSound('error');
+            return;
+        }
+
+        // FIX: Check if itemDatabase is loaded before crafting
+        if (Object.keys(itemDatabase).length === 0) {
+            console.error('[CRAFTING] Item database not loaded yet!');
+            addJournalEntry({ text: "Errore: database oggetti non caricato. Riprova.", type: JournalEntryType.SYSTEM_ERROR });
             audioManager.playSound('error');
             return;
         }
@@ -561,22 +595,31 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         advanceTime(recipe.timeCost, true);
         audioManager.playSound('confirm');
         
-        // Rimuovi ingredienti
+        // Rimuovi ingredienti PRIMA di aggiungere i risultati
         recipe.ingredients.forEach(ing => removeItem(ing.itemId, ing.quantity));
 
-        // Crea gli item
-        const createdItemsText = (recipe.results || []).map(result => {
-            addItem(result.itemId, result.quantity);
+        // Crea gli item e costruisci il messaggio
+        const createdItemsText = recipe.results.map(result => {
             const item = itemDatabase[result.itemId];
             if (!item) {
-                console.error(`Item ${result.itemId} not found in database`);
-                return `${result.itemId} x${result.quantity}`;
+                console.error(`[CRAFTING] Item ${result.itemId} not found in database. Available items:`, Object.keys(itemDatabase).slice(0, 10));
+                addJournalEntry({ text: `ERRORE: Oggetto ${result.itemId} non trovato nel database.`, type: JournalEntryType.SYSTEM_ERROR });
+                return null;
             }
+            
+            // Add item to inventory
+            addItem(result.itemId, result.quantity);
+            
+            // Return formatted string
             return `${item.name} x${result.quantity}`;
-        }).join(', ');
+        }).filter(text => text !== null).join(', ');
 
-        const journalText = `Hai creato: ${createdItemsText}.`;
-        addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+        if (createdItemsText.length > 0) {
+            const journalText = `Hai creato: ${createdItemsText}.`;
+            addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+        } else {
+            addJournalEntry({ text: "Crafting fallito: nessun oggetto creato.", type: JournalEntryType.SYSTEM_ERROR });
+        }
     },
 
     /**

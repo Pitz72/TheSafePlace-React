@@ -354,6 +354,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     
             let newInventory = [...state.inventory];
             let remainingToRemove = quantity;
+            let removedIndices: number[] = [];
+            
+            let newEquippedWeapon = state.equippedWeapon;
+            let newEquippedArmor = state.equippedArmor;
+            let newEquippedHead = state.equippedHead;
+            let newEquippedLegs = state.equippedLegs;
     
             if (itemDetails.stackable) {
                 const itemIndex = newInventory.findIndex(i => i.itemId === itemId);
@@ -362,6 +368,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                         newInventory[itemIndex].quantity -= remainingToRemove;
                     } else {
                         newInventory.splice(itemIndex, 1);
+                        removedIndices.push(itemIndex);
                     }
                 }
             } else {
@@ -369,11 +376,52 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 for (let i = newInventory.length - 1; i >= 0; i--) {
                     if (remainingToRemove > 0 && newInventory[i].itemId === itemId) {
                         newInventory.splice(i, 1);
+                        removedIndices.push(i);
                         remainingToRemove--;
                     }
                 }
             }
-            return { inventory: newInventory };
+            
+            // FIX: Recalculate equipped indices after removing items
+            removedIndices.sort((a, b) => a - b); // Sort in ascending order
+            for (const removedIndex of removedIndices) {
+                if (newEquippedWeapon !== null) {
+                    if (newEquippedWeapon === removedIndex) {
+                        newEquippedWeapon = null;
+                    } else if (newEquippedWeapon > removedIndex) {
+                        newEquippedWeapon--;
+                    }
+                }
+                if (newEquippedArmor !== null) {
+                    if (newEquippedArmor === removedIndex) {
+                        newEquippedArmor = null;
+                    } else if (newEquippedArmor > removedIndex) {
+                        newEquippedArmor--;
+                    }
+                }
+                if (newEquippedHead !== null) {
+                    if (newEquippedHead === removedIndex) {
+                        newEquippedHead = null;
+                    } else if (newEquippedHead > removedIndex) {
+                        newEquippedHead--;
+                    }
+                }
+                if (newEquippedLegs !== null) {
+                    if (newEquippedLegs === removedIndex) {
+                        newEquippedLegs = null;
+                    } else if (newEquippedLegs > removedIndex) {
+                        newEquippedLegs--;
+                    }
+                }
+            }
+            
+            return { 
+                inventory: newInventory,
+                equippedWeapon: newEquippedWeapon,
+                equippedArmor: newEquippedArmor,
+                equippedHead: newEquippedHead,
+                equippedLegs: newEquippedLegs
+            };
         });
     },
     
@@ -699,14 +747,14 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         // Auto-apply/remove status conditions based on stats
         const newStatus = new Set(currentState.status);
         
-        // ESAUSTO: Fatigue > 80
-        if (newFatigue > 80 && !newStatus.has('ESAUSTO')) {
+        // ESAUSTO: Fatigue >= 85
+        if (newFatigue >= 85 && !newStatus.has('ESAUSTO')) {
             newStatus.add('ESAUSTO');
             addJournalEntry({
                 text: `Sei completamente ESAUSTO. La fatica ti opprime.`,
                 type: JournalEntryType.SYSTEM_WARNING
             });
-        } else if (newFatigue <= 60 && newStatus.has('ESAUSTO')) {
+        } else if (newFatigue < 70 && newStatus.has('ESAUSTO')) {
             newStatus.delete('ESAUSTO');
             addJournalEntry({
                 text: `Ti senti meno esausto. Lo stato ESAUSTO è svanito.`,

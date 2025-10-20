@@ -83,9 +83,47 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.2.2** - Leggibilità e Accessibilità
+**Versione Corrente: v1.2.3** - Critical Bugfix & Game Balance
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, e la v1.2.2 risolve problemi critici di usabilità:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, la v1.2.2 ha risolto problemi critici di usabilità, e la v1.2.3 elimina bug bloccanti e riequilibra il gameplay:
+
+#### 🔧 Novità v1.2.3 (20 Ottobre 2025)
+
+**🐛 BUGFIX CRITICI - Giocabilità Ripristinata:**
+
+**Sistema Crafting - Bug Bloccante Risolto:**
+- ✅ **Fix Crafting Completo:** Risolto bug critico che impediva di craftare oggetti all'inizio del gioco
+- ✅ **Messaggio Vuoto:** Corretto "hai creato: ." → "Hai creato: Coltello di Fortuna x1."
+- ✅ **Oggetto Non Aggiunto:** Gli oggetti craftati ora appaiono correttamente nell'inventario
+- ✅ **Equipaggiamento Disequipaggiato:** Risolto bug che disequipaggiava armi/armature durante il crafting
+- ✅ **Validazione Robusta:** Aggiunto error handling per race condition nel caricamento database
+- ✅ **Database Sincronizzato:** `public/data/recipes.json` e `talents.json` allineati con versioni corrette
+
+**Sistema Stanchezza - Ribilanciamento Completo:**
+- ⚖️ **Quick Rest (R):** Ora recupera 15 fatica (prima: 0) + 20 HP
+- ⚖️ **Riposo Diurno Rifugi:** Recupero aumentato a 15 fatica (prima: 10)
+- ⚖️ **Riposo Notturno Rifugi:** Ribilanciato a 50 fatica (prima: 100) per creare scelte strategiche
+- ⚖️ **Cibo e Bevande:** Ora recuperano 10 fatica + messaggio "Ti senti meno stanco"
+- ⚖️ **Status ESAUSTO:** Soglia corretta a 85 fatica (prima: 80) per apparire in situazioni critiche
+- ⚖️ **Sistema Sostenibile:** 16 ore esplorazione ora gestibili con riposi brevi e alimentazione
+
+**Menu Rifugio - UX Fix:**
+- ✅ **Cursore Menu:** Dopo aver dormito fino all'alba, il menu si aggiorna correttamente e il cursore torna alla prima opzione
+- ✅ **Opzioni Dinamiche:** "Dormi fino all'alba" → "Aspetta un'ora" quando diventa giorno
+
+**📊 Analisi Combattimenti:**
+- ℹ️ **Sistema RNG Verificato:** Probabilità 7% per step è corretta (20% encounter × 35% combat)
+- ℹ️ **Cooldown:** 90-240 minuti tra encounter per evitare spam
+- ℹ️ **Normalità:** 10-15 step senza combattimenti = comportamento atteso
+
+**📚 Documentazione Tecnica Completa:**
+- 📄 **log/v1.2.3.md:** Documentazione completa della sessione di debugging con analisi tecnica dettagliata, changelog e test consigliati
+
+**🎯 Impatto Gameplay:**
+- Sistema crafting completamente funzionante fin dall'inizio
+- Gestione fatica strategica e sostenibile senza grind obbligatorio
+- UI rifugi più intuitiva e coerente
+- Zero bug bloccanti residui
 
 #### 🎯 Novità v1.2.0 (Ottobre 2025)
 

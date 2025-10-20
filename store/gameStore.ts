@@ -298,7 +298,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     advanceTime(60, true);
     set({ lastRestTime: useTimeStore.getState().gameTime });
     useCharacterStore.getState().heal(20);
-    addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Hai recuperato 20 HP.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+    useCharacterStore.getState().rest(15);
+    addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Hai recuperato 20 HP e ti senti meno stanco.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
   },
 
   /**
