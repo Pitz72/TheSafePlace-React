@@ -13,19 +13,21 @@ import { useTalentDatabaseStore } from '../data/talentDatabase';
  */
 const LevelUpScreen: React.FC = () => {
     const { setGameState } = useGameStore();
-    const { levelUpPending, applyLevelUp, skills, level } = useCharacterStore();
+    const { levelUpPending, applyLevelUp, skills, level, unlockedTalents } = useCharacterStore();
     const { talents: allTalents } = useTalentDatabaseStore();
 
     const [selectedSection, setSelectedSection] = useState<'attribute' | 'talent'>('attribute');
     const [attributeIndex, setAttributeIndex] = useState(0);
     const [talentIndex, setTalentIndex] = useState(0);
 
+    // FIX v1.2.4: Exclude already unlocked talents
     const availableTalents = useMemo(() => {
         return allTalents.filter(talent => 
             level + 1 >= talent.levelRequirement && 
-            skills[talent.requiredSkill]?.proficient
+            skills[talent.requiredSkill]?.proficient &&
+            !unlockedTalents.includes(talent.id)
         );
-    }, [allTalents, level, skills]);
+    }, [allTalents, level, skills, unlockedTalents]);
 
     // FIX: Imported useEffect to resolve "Cannot find name 'useEffect'" error.
     useEffect(() => {

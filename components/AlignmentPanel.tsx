@@ -27,11 +27,12 @@ const AlignmentPanel: React.FC = () => {
                     <span className="text-blue-400">Lena</span>
                     <span className="text-red-400">Elian</span>
                 </div>
-                <div className="w-full h-1.5 bg-gray-700 rounded-full relative">
-                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-gray-400 to-red-500 rounded-full w-full"></div>
+                {/* FIX v1.2.4: Increased bar size and marker visibility */}
+                <div className="w-full h-3 bg-gray-900 rounded-full relative border border-green-400/50">
+                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-gray-300 to-red-500 rounded-full w-full opacity-80"></div>
                     <div 
-                        className="absolute -top-0.5 w-1 h-2.5 bg-yellow-400 border border-black rounded"
-                        style={{ left: `calc(${positionPercent}% - 2px)` }}
+                        className="absolute -top-1 w-2 h-5 bg-yellow-400 border-2 border-green-400 rounded shadow-lg shadow-yellow-400/50"
+                        style={{ left: `calc(${positionPercent}% - 4px)` }}
                     ></div>
                 </div>
                 <div className="text-center text-xs">

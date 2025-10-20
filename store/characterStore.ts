@@ -630,11 +630,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      */
     takeDamage: (amount, cause: DeathCause = 'UNKNOWN') => {
         set(state => {
-            const newHp = Math.max(0, state.hp.current - amount);
+            // FIX v1.2.4: Always round damage to ensure HP remains integer
+            const roundedDamage = Math.floor(amount);
+            const newHp = Math.max(0, state.hp.current - roundedDamage);
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
-            if (amount > 0) {
+            if (roundedDamage > 0) {
                 useGameStore.getState().triggerDamageFlash();
             }
             return { hp: { ...state.hp, current: newHp } };
@@ -729,7 +731,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             deathCause = deathCause || (newSatiety === 0 ? 'STARVATION' : 'DEHYDRATION');
         }
 
-        const totalHpLoss = hpLossFromSurvival + hpLossFromStatus;
+        // FIX v1.2.4: Always round HP loss to ensure HP remains integer
+        const totalHpLoss = Math.floor(hpLossFromSurvival + hpLossFromStatus);
         const newHp = Math.max(0, currentState.hp.current - totalHpLoss);
 
         if (newHp <= 0 && currentState.hp.current > 0) {
@@ -808,7 +811,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      */
     heal: (amount) => {
         set(state => ({
-            hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + amount) }
+            // FIX v1.2.4: Always round healing to ensure HP remains integer
+            hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + Math.ceil(amount)) }
         }));
     },
     

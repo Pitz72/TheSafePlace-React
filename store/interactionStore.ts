@@ -412,14 +412,46 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
 
         if (skillCheckResult.success) {
             journalText += "SUCCESSO. ";
-            const foundItemId = ['CONS_001', 'CONS_002', 'CONS_003'][Math.floor(Math.random() * 3)];
-            const itemDetails = useItemDatabaseStore.getState().itemDatabase[foundItemId];
+            
+            // FIX v1.2.4: Expanded loot table with manuals and better balance
             const hasScavenger = useCharacterStore.getState().unlockedTalents.includes('scavenger');
-            const quantityFound = hasScavenger ? 2 : 1;
-
+            const lootTable = [
+                // Common items (60% combined)
+                { id: 'CONS_002', weight: 25, quantity: hasScavenger ? 3 : 2 }, // Water (increased)
+                { id: 'CONS_001', weight: 20, quantity: hasScavenger ? 2 : 1 }, // Food
+                { id: 'CONS_003', weight: 10, quantity: hasScavenger ? 2 : 1 }, // Bandages
+                { id: 'MED_BANDAGE_BASIC', weight: 5, quantity: hasScavenger ? 2 : 1 },
+                // Crafting materials (15%)
+                { id: 'scrap_metal', weight: 6, quantity: hasScavenger ? 3 : 2 },
+                { id: 'durable_cloth', weight: 5, quantity: hasScavenger ? 2 : 1 },
+                { id: 'adhesive_tape', weight: 4, quantity: 1 },
+                // Manuals (20% - significantly increased)
+                { id: 'manual_field_medicine', weight: 5, quantity: 1 },
+                { id: 'manual_survival_basics', weight: 5, quantity: 1 },
+                { id: 'manual_archery_basics', weight: 5, quantity: 1 },
+                { id: 'manual_advanced_repairs', weight: 5, quantity: 1 },
+                // Better consumables (5%)
+                { id: 'MED_ANTISEPTIC', weight: 3, quantity: 1 },
+                { id: 'MED_PAINKILLER', weight: 2, quantity: 1 },
+            ];
+            
+            const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
+            const roll = Math.random() * totalWeight;
+            let cumulativeWeight = 0;
+            let foundItem = lootTable[0];
+            
+            for (const item of lootTable) {
+                cumulativeWeight += item.weight;
+                if (roll < cumulativeWeight) {
+                    foundItem = item;
+                    break;
+                }
+            }
+            
+            const itemDetails = useItemDatabaseStore.getState().itemDatabase[foundItem.id];
             if(itemDetails) {
-                useCharacterStore.getState().addItem(foundItemId, quantityFound);
-                journalText += `Frugando sotto un'asse del pavimento, trovi: ${itemDetails.name} (x${quantityFound}).`;
+                useCharacterStore.getState().addItem(foundItem.id, foundItem.quantity);
+                journalText += `Frugando sotto un'asse del pavimento, trovi: ${itemDetails.name} (x${foundItem.quantity}).`;
                 if (hasScavenger) journalText += " [Scavenger]";
                 addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
             } else {
@@ -482,18 +514,41 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             const minutesToRest = (hoursToRest * 60) - gameTime.minute;
             const { satietyCost, hydrationCost } = useCharacterStore.getState().calculateSurvivalCost(minutesToRest);
             
-            if (satiety.current < satietyCost || hydration.current < hydrationCost) {
-                const message = "Sei troppo affamato o assetato per dormire così a lungo.";
-                addJournalEntry({ text: message, type: JournalEntryType.ACTION_FAILURE });
-                set({ refugeActionMessage: message });
-                return;
+            // FIX v1.2.4: Always allow sleep, but apply penalties if malnourished/dehydrated
+            const hasSufficientResources = satiety.current >= satietyCost && hydration.current >= hydrationCost;
+            
+            if (!hasSufficientResources) {
+                addJournalEntry({ 
+                    text: "Ti addormenti nonostante la fame e la sete...", 
+                    type: JournalEntryType.NARRATIVE 
+                });
+            } else {
+                addJournalEntry({ 
+                    text: "Ti addormenti profondamente...", 
+                    type: JournalEntryType.NARRATIVE 
+                });
             }
-            addJournalEntry({ text: "Ti addormenti profondamente...", type: JournalEntryType.NARRATIVE });
+            
             advanceTime(minutesToRest, true);
-            const { heal, rest, hp } = useCharacterStore.getState();
-            heal(hp.max);
-            rest(50);
-            set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
+            const { heal, rest, hp, addStatus } = useCharacterStore.getState();
+            
+            if (hasSufficientResources) {
+                // Full recovery
+                heal(hp.max);
+                rest(50);
+                set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
+            } else {
+                // Penalized recovery
+                const healAmount = Math.floor(hp.max * 0.3); // Only 30% HP recovery
+                heal(healAmount);
+                rest(25); // Only 25 fatigue recovery
+                addStatus('MALATO');
+                addJournalEntry({
+                    text: "Il sonno è stato inquieto. La mancanza di cibo e acqua ti ha lasciato debole.",
+                    type: JournalEntryType.SYSTEM_WARNING
+                });
+                set({ refugeActionMessage: "Ti svegli all'alba, ma sei debole e malato." });
+            }
             break;
           }
           case "Cerca nei dintorni":

@@ -83,9 +83,31 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.2.3** - Critical Bugfix & Game Balance
+**Versione Corrente: v1.2.4** - Critical Bugfix & Game Balance
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, la v1.2.2 ha risolto problemi critici di usabilità, e la v1.2.3 elimina bug bloccanti e riequilibra il gameplay:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, la v1.2.2 ha risolto problemi critici di usabilità, la v1.2.3 ha eliminato bug bloccanti e riequilibrato il gameplay, e la v1.2.4 perfeziona l'esperienza con correzioni mirate:
+
+#### 🔧 Novità v1.2.4 (20 Ottobre 2025)
+
+**Correzioni Critiche:**
+- **Bug Cutscene:** Risolto errore che causava crash dopo eventi narrativi
+- **HP Decimali:** Tutti i valori di salute ora sono numeri interi (era possibile vedere 56.25/98 HP)
+- **Sonno Rifugi:** Dormire sempre consentito, anche senza risorse (con penalità)
+- **Talenti Doppi:** I talenti già appresi non compaiono più durante il level-up
+- **Bussola Morale:** Barra allineamento Lena-Elian ora chiaramente visibile
+
+**Ribilanciamento Risorse:**
+- **Acqua:** Drop rate aumentato del 25%, quantità trovata raddoppiata/triplicata
+- **Manuali Crafting:** Probabilità aumentata dal ~3% al 20% nei rifugi
+- **Nuovo Sistema Loot:** Loot table pesata con 15 oggetti diversi invece di 3
+
+**Sistema Sonno Migliorato:**
+- Con risorse sufficienti: 100% HP + 50 fatica (come prima)
+- Senza risorse: 30% HP + 25 fatica + status MALATO (nuovo)
+
+**Impatto:** Il gioco rimane sfidante ma elimina situazioni di stallo inevitabili. La gestione delle risorse è ora strategica, non casuale.
+
+---
 
 #### 🔧 Novità v1.2.3 (20 Ottobre 2025)
 
