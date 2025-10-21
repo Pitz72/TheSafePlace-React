@@ -20,7 +20,7 @@ export enum GameState {
   EVENT_SCREEN,
   LEVEL_UP_SCREEN,
   COMBAT,
-  MAIN_QUEST,
+  MAIN_STORY,
   ASH_LULLABY_CHOICE,
   GAME_OVER,
 }
@@ -83,8 +83,8 @@ export interface WeatherState {
   duration: number; // in minutes
 }
 
-// --- Main Quest System ---
-export type QuestTriggerType =
+// --- Main Story System ---
+export type StoryTriggerType =
   | 'stepsTaken'
   | 'daysSurvived'
   | 'levelReached'
@@ -94,7 +94,7 @@ export type QuestTriggerType =
   | 'reachEnd'
   | 'nearEnd';
 
-export type QuestTrigger =
+export type StoryTrigger =
   | { type: 'stepsTaken'; value: number }
   | { type: 'daysSurvived'; value: number }
   | { type: 'levelReached'; value: number }
@@ -104,11 +104,11 @@ export type QuestTrigger =
   | { type: 'reachEnd' }
   | { type: 'nearEnd'; distance: number };
 
-export interface MainQuestChapter {
+export interface MainStoryChapter {
   stage: number;
   title: string;
   text: string;
-  trigger: QuestTrigger;
+  trigger: StoryTrigger;
   allowNightTrigger?: boolean;
 }
 
@@ -301,13 +301,13 @@ export interface GameStoreState {
   lastLoreEventDay: number | null;
   lootedRefuges: Position[];
   visitedRefuges: Position[];
-  mainQuestStage: number;
+  mainStoryStage: number;
   totalSteps: number;
   totalCombatWins: number;
-  activeMainQuestEvent: MainQuestChapter | null;
+  activeMainStoryEvent: MainStoryChapter | null;
   activeCutscene: Cutscene | null;
   gameFlags: Set<string>;
-  mainQuestsToday: { day: number; count: number };
+  mainStoryEventsToday: { day: number; count: number };
   deathCause: DeathCause | null;
   visitedBiomes: Set<string>;
   damageFlash: boolean;
@@ -324,8 +324,8 @@ export interface GameStoreState {
   performQuickRest: () => void;
   performActiveSearch: () => void;
   openLevelUpScreen: () => void;
-  checkMainQuestTriggers: () => void;
-  resolveMainQuest: () => void;
+  checkMainStoryTriggers: () => void;
+  resolveMainStory: () => void;
   startCutscene: (id: string) => void;
   processCutsceneConsequences: (consequences: CutsceneConsequence[]) => void;
   endCutscene: () => void;

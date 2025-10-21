@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainQuestChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause } from '../types';
+import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause } from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
-import { useMainQuestDatabaseStore } from '../data/mainQuestDatabase';
+import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from '../data/cutsceneDatabase';
 import { MOUNTAIN_MESSAGES, BIOME_MESSAGES, ATMOSPHERIC_MESSAGES, BIOME_COLORS } from '../constants';
 import { audioManager } from '../utils/audio';
@@ -127,13 +127,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lastLoreEventDay: null,
   lootedRefuges: [],
   visitedRefuges: [],
-  mainQuestStage: 1,
+  mainStoryStage: 1,
   totalSteps: 0,
   totalCombatWins: 0,
-  activeMainQuestEvent: null,
+  activeMainStoryEvent: null,
   activeCutscene: null,
   gameFlags: new Set(),
-  mainQuestsToday: { day: 0, count: 0 },
+  mainStoryEventsToday: { day: 0, count: 0 },
   deathCause: null,
   visitedBiomes: new Set(),
   damageFlash: false,
@@ -240,13 +240,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         lastLoreEventDay: 0,
         lootedRefuges: [],
         visitedRefuges: [],
-        mainQuestStage: 1,
+        mainStoryStage: 1,
         totalSteps: 0,
         totalCombatWins: 0,
-        activeMainQuestEvent: null,
+        activeMainStoryEvent: null,
         gameFlags: new Set(),
         activeCutscene: null,
-        mainQuestsToday: { day: 1, count: 0 },
+        mainStoryEventsToday: { day: 1, count: 0 },
         deathCause: null,
         visitedBiomes: new Set(['S']),
     });
@@ -479,8 +479,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   /**
-   * @function checkMainQuestTriggers
-   * @description Checks if any main quest triggers have been met.
+   * @function checkMainStoryTriggers
+   * @description Checks if any main story triggers have been met.
    */
   /**
    * @function checkCutsceneTriggers
@@ -546,14 +546,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
-  checkMainQuestTriggers: () => {
+  checkMainStoryTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
     const state = get();
 
-    // Reset daily quest counter if the day has changed
-    if (state.mainQuestsToday.day !== gameTime.day) {
-        set({ mainQuestsToday: { day: gameTime.day, count: 0 } });
+    // Reset daily story event counter if the day has changed
+    if (state.mainStoryEventsToday.day !== gameTime.day) {
+        set({ mainStoryEventsToday: { day: gameTime.day, count: 0 } });
     }
     
     if (gameTime.day >= 5) unlockTrophy('trophy_survive_7_days');
@@ -561,14 +561,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
     const currentState = get();
 
-    // Block if 2 quests already happened today
-    if (currentState.mainQuestsToday.count >= 2) {
+    // Block if 2 story events already happened today
+    if (currentState.mainStoryEventsToday.count >= 2) {
         return;
     }
 
-    if (currentState.activeMainQuestEvent || currentState.gameState !== GameState.IN_GAME) return;
-    const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
-    const nextChapter = mainQuestChapters.find(c => c.stage === currentState.mainQuestStage);
+    if (currentState.activeMainStoryEvent || currentState.gameState !== GameState.IN_GAME) return;
+    const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
+    const nextChapter = mainStoryChapters.find(c => c.stage === currentState.mainStoryStage);
     if (!nextChapter) return;
 
     const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
@@ -612,26 +612,26 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
     if (conditionMet) {
         set(prevState => ({
-            activeMainQuestEvent: nextChapter,
-            gameState: GameState.MAIN_QUEST,
-            mainQuestsToday: {
-                day: prevState.mainQuestsToday.day,
-                count: prevState.mainQuestsToday.count + 1
+            activeMainStoryEvent: nextChapter,
+            gameState: GameState.MAIN_STORY,
+            mainStoryEventsToday: {
+                day: prevState.mainStoryEventsToday.day,
+                count: prevState.mainStoryEventsToday.count + 1
             }
         }));
     }
   },
 
   /**
-   * @function resolveMainQuest
-   * @description Resolves the current main quest and advances to the next stage.
+   * @function resolveMainStory
+   * @description Resolves the current main story event and advances to the next stage.
    */
-  resolveMainQuest: () => {
-    const completedStage = get().mainQuestStage;
+  resolveMainStory: () => {
+    const completedStage = get().mainStoryStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
     set(state => ({
-        mainQuestStage: state.mainQuestStage + 1,
-        activeMainQuestEvent: null,
+        mainStoryStage: state.mainStoryStage + 1,
+        activeMainStoryEvent: null,
         gameState: GameState.IN_GAME,
     }));
   },

@@ -20,7 +20,7 @@ const BASE_TIME_COST_PER_MOVE = 10;
 
 export const gameService = {
   movePlayer: (dx: number, dy: number) => {
-    const { map, playerPos, playerStatus, addJournalEntry, visitedRefuges, currentBiome: previousBiome, checkMainQuestTriggers, checkCutsceneTriggers } = useGameStore.getState();
+    const { map, playerPos, playerStatus, addJournalEntry, visitedRefuges, currentBiome: previousBiome, checkMainStoryTriggers, checkCutsceneTriggers } = useGameStore.getState();
     const { advanceTime, gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
 
@@ -116,7 +116,7 @@ export const gameService = {
     useCharacterStore.getState().gainExplorationXp();
     useCharacterStore.getState().updateFatigue(0.1);
 
-    checkMainQuestTriggers();
+    checkMainStoryTriggers();
     if (useGameStore.getState().gameState !== GameState.IN_GAME) return;
 
     checkCutsceneTriggers();

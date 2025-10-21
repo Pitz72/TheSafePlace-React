@@ -309,7 +309,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             // Cannot call check triggers inside set state, so we do it after
             Promise.resolve().then(() => {
                 const gameStore = useGameStore.getState();
-                gameStore.checkMainQuestTriggers();
+                gameStore.checkMainStoryTriggers();
                 gameStore.checkCutsceneTriggers();
             });
 

@@ -13,7 +13,6 @@ const AshLullabyChoiceScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const setGameState = useGameStore(state => state.setGameState);
     const startCutscene = useGameStore(state => state.startCutscene);
-    const setGameFlags = useGameStore(state => state.gameFlags);
     
     const choices = [
         "Apri il carillon.",
