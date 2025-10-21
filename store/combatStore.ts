@@ -282,9 +282,10 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             const { totalCombatWins, gameFlags, startCutscene } = useGameStore.getState();
             if (totalCombatWins === 0 && !gameFlags.has('FIRST_KILL_PLAYED')) {
                 setTimeout(() => {
-                    const gameStore = useGameStore.getState();
-                    gameStore.setGameFlags(new Set(gameStore.gameFlags).add('FIRST_KILL_PLAYED'));
-                    startCutscene('CS_FIRST_KILL');
+                    useGameStore.setState(state => ({ 
+                        gameFlags: new Set(state.gameFlags).add('FIRST_KILL_PLAYED') 
+                    }));
+                    useGameStore.getState().startCutscene('CS_FIRST_KILL');
                 }, 2000); // 2 second delay after combat ends
             }
         }

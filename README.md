@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.3.2)
+# The Safe Place Chronicles: The Echo of the Journey (v1.4.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -39,7 +39,7 @@ Il prototipo vanta un ciclo di gameplay robusto, con tutti i pilastri fondamenta
 *   **Bussola Morale con Effetti:** Un sistema di allineamento (Lena/Elian) traccia le decisioni morali. Raggiungere una forte inclinazione verso la compassione o il pragmatismo sblocca bonus passivi permanenti a determinate abilità.
 
 #### 4. Sistemi Narrativi Stratificati
-*   **Missione Principale ("Main Quest"):** Una trama completa in 12 capitoli che guida il giocatore in un viaggio alla scoperta della verità. Gli eventi sono attivati da trigger organici legati al gameplay e rispettano il ciclo giorno/notte per una maggiore immersione (un ricordo del sole non si attiverà in piena notte, a meno che non sia tematicamente appropriato).
+*   **Storia Principale ("Main Story"):** Una trama completa in 12 capitoli chiamati "Echi della Memoria" che guida il giocatore in un viaggio emotivo alla scoperta della verità sul suo passato. Gli eventi sono attivati da trigger organici legati al gameplay e rispettano il ciclo giorno/notte per una maggiore immersione (un ricordo del sole non si attiverà in piena notte, a meno che non sia tematicamente appropriato).
 *   **Cutscene Cinematiche Testuali:** Momenti narrativi cruciali vengono presentati con un'interfaccia immersiva a schermo intero, con scelte che possono avere conseguenze permanenti.
 *   **Sistema di Eventi Intelligente:** Un gestore di incontri garantisce varietà e coerenza. Il primo passo in un'area speciale (Foresta, Villaggio) attiva sempre un evento a tema. Un cooldown dinamico previene la ripetitività, e un sistema di priorità assicura che gli eventi di trama vengano vissuti dal giocatore.
 *   **Eventi Segreti (Easter Egg):** Il mondo contiene eventi unici ed estremamente rari, progettati per sorprendere e deliziare i giocatori più attenti o fortunati. Offrono ricompense uniche e aggiungono strati di mistero o umorismo che alludono a un mondo pre-catastrofe più complesso.
@@ -84,11 +84,38 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.3.2** - The Medical Overhaul Update
+**Versione Corrente: v1.4.0** - The Story Transformation
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, e la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse, e la **v1.4.0 ridefinisce concettualmente la struttura narrativa** del gioco:
 
-#### ⚡ Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
+#### Novità v1.4.0 (21 Ottobre 2025) - **THE STORY TRANSFORMATION**
+
+Questa versione rappresenta una trasformazione strutturale fondamentale nella concezione narrativa del gioco, preparando il terreno per future espansioni del gameplay.
+
+**REFACTORING ARCHITETTURALE COMPLETO:**
+- Trasformazione da "Main Quest" a "Main Story" in tutto il codebase
+- Ridefinizione concettuale: la narrazione principale è ora chiaramente identificata come la storia emotiva di Ultimo, separata da future meccaniche di quest attive
+- Aggiornamento di tipi, interfacce, store, componenti e servizi per coerenza semantica totale
+
+**ESPANSIONE NARRATIVA:**
+- I 12 capitoli della Main Story sono stati riscritti e arricchiti con maggiore profondità emotiva
+- Nuova struttura: "Echi della Memoria" che svelano progressivamente il trauma rimosso del protagonista
+- Migliore progressione drammatica e connessioni narrative più forti tra gli eventi
+
+**ISTRUZIONI RIDISEGNATE:**
+- Schermata istruzioni completamente riscritta come guida professionale alla sopravvivenza
+- Organizzata per sezioni tematiche invece di formato lettera
+- Maggiore chiarezza per nuovi giocatori, separazione netta tra meccaniche e narrazione
+
+**APERTURA AL FUTURO:**
+- La distinzione tra "storia" (narrazione passiva) e "quest" (obiettivi attivi) prepara l'introduzione di vere e proprie quest secondarie
+- Sistema pronto per espansioni narrative e ludiche senza conflitti strutturali
+
+**Risultato:** Codebase più chiaro, coerente e pronto per l'evoluzione futura del gioco, con una narrazione emotivamente più profonda e un'architettura che supporta nuove possibilità di gameplay.
+
+---
+
+#### Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
 
 Questa versione risolve un problema critico nel sistema di cure degli status, rendendo ogni condizione negativa gestibile strategicamente.
 
