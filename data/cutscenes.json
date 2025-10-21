@@ -1,11 +1,10 @@
-
 [
   {
     "id": "CS_OPENING",
-    "title": "L'Ultima Lezione",
+    "title": "La Nobile Bugia",
     "pages": [
       {
-        "text": "La carta trema tra le tue dita, le ultime parole di tuo padre incise a fuoco nella tua mente: \"...sii forte, come ti ho insegnato. Con tutto l'amore che un padre può dare, Papà.\"\n\nL'amore. Una parola che suona strana, quasi estranea, dopo anni di addestramento spietato. E ora, quel silenzio. Un silenzio assordante che urla una sola, terribile verità: sei solo.\n\nLa rabbia e la paura si mescolano nel tuo petto, un groviglio soffocante. La lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto.\n\nCosa ne fai?",
+        "text": "Il silenzio nel rifugio è totale. L'unica cosa che senti è il fruscio della carta tra le tue dita tremanti. È la sua calligrafia. Ogni lettera, un piccolo monumento al dolore e alla necessità.\n\n> Ultimo, figlio mio...\n>\n> Se stai leggendo, significa che non sono tornato. E che non tornerò. La mia ultima ricognizione ha confermato i miei timori. Ho trovato le loro tracce, fresche. Un gruppo numeroso, e si stanno spostando verso questa valle. Non possiamo affrontarli insieme, e non possiamo fuggire entrambi. Il loro silenzio li precede.\n>\n> Io ho una missione da compiere. Devo portarli via da qui. Lontano dalla tua strada. È qualcosa che devo fare da solo, troppo pericoloso per trascinarti con me. Non provare a seguirmi. Sarebbe la tua fine, e renderebbe vano ogni mio sacrificio.\n>\n> Nel tuo sacco, sotto le provviste, troverai una mappa. È vecchia, ma è l'unica che ho. Ti condurrà a Est, verso un luogo chiamato “The Safe Place”. È una speranza flebile, lo so, forse solo una leggenda, ma è l'unica possibilità che ti resta.\n>\n> Ricorda tutto ciò che ti ho insegnato. L'acqua, il cibo, i rifugi. Fidati del tuo istinto, ma non della tua rabbia. Guarda sempre, ascolta sempre. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda. Non tutte le lotte vanno combattute. A volte, la più grande vittoria è saper quando sparire.\n>\n> Sii forte, Ultimo. Sii migliore di me. Sopravvivi. E forse, un giorno, capirai. O forse mi perdonerai.\n>\n> Con tutto l'amore che un padre distrutto può dare,\n>\n> Papà.\n\nLa lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto. Cosa ne fai?",
         "choices": [
           { "text": "[1] Strappi la lettera in un impeto di rabbia.", "targetPage": 1 },
           { "text": "[2] Pieghi la lettera con cura e la metti in tasca.", "targetPage": 2 }
@@ -27,27 +26,6 @@
       },
       {
         "text": "Ma le lacrime si fermano, quasi subito. La sua voce, dura e inflessibile, risuona nella tua testa, un'eco di mille lezioni impartite.\n\n\"La paura è un lusso che non puoi permetterti.\"\n\"Il sangue è prezioso. Non sprecarlo.\"\n\"La fame è un'insegnante. Ascoltala, ma non lasciare che ti comandi.\"\n\nPiangere non purificherà l'acqua. La rabbia non cuocerà la carne. La disperazione non medicherà una ferita.\n\nTi alzi. L'addestramento è finito. La sopravvivenza è iniziata.",
-        "nextPage": 5
-      },
-      {
-        "text": "Mentre i tuoi occhi si adattano alla penombra, ora non più velati dal dolore ma acuti per necessità, noti qualcosa vicino alla porta che prima avevi ignorato.\n\nÈ un fagotto di tela cerata, compatto e pesante, legato con uno spago robusto. Non era lì ieri. L'ha lasciato per te. Un ultimo, pragmatico gesto di cura.\n\nSopra, c'è un altro biglietto, più piccolo.",
-        "nextPage": 6
-      },
-      {
-        "text": "Lo apri. La sua calligrafia è più frettolosa, quasi un appunto.\n\n\"Ultimo,\nSe stai leggendo questo, hai superato la prima prova: scegliere di vivere. Dentro troverai il necessario per i primi giorni: due borracce d'acqua già purificata, tre razioni di cibo a lunga conservazione, delle bende pulite. Non è molto, ma tu sai come trovare il resto.\n\nIl coltello che porti alla cintura è arrugginito, ma affilato. Gli stracci che indossi non ti proteggeranno, ma ti terranno al caldo. Spera di trovare di meglio.\n\nLa strada la conosci. Te l'ho insegnata. Ci rivedremo. Forse al Safe Place.\"",
-        "consequences": [
-          { "type": "addItem", "payload": { "itemId": "CONS_002", "quantity": 2 } },
-          { "type": "addItem", "payload": { "itemId": "CONS_001", "quantity": 3 } },
-          { "type": "addItem", "payload": { "itemId": "CONS_003", "quantity": 2 } },
-          { "type": "addItem", "payload": { "itemId": "weapon_knife_rusty", "quantity": 1 } },
-          { "type": "addItem", "payload": { "itemId": "armor_rags", "quantity": 1 } },
-          { "type": "equipItem", "payload": "weapon_knife_rusty" },
-          { "type": "equipItem", "payload": "armor_rags" }
-        ],
-        "nextPage": 7
-      },
-      {
-        "text": "Raccogli il fagotto, sentendone il peso rassicurante. Controlli il coltello alla cintura, il suo freddo metallo un'estensione della tua mano. Ti guardi gli stracci che indossi, un promemoria della tua vulnerabilità.\n\nGuardi la stanza per l'ultima volta. Per anni, queste quattro mura sono state la tua scuola, la tua prigione, il tuo unico mondo protetto. Ora, sono solo un guscio vuoto. Un ricordo.\n\nApri la porta e un refolo di vento freddo ti dà il benvenuto nel mondo reale.\n\nIl tuo viaggio è iniziato.",
         "nextPage": null
       }
     ]
@@ -232,6 +210,90 @@
       },
       {
         "text": "Qualunque cosa ti aspetti al Safe Place — salvezza, delusione, morte — ormai è irrilevante.\n\nCiò che conta è che hai scelto. Non tuo padre. Non il destino. Tu.\n\nE in questo mondo in cui tutto è stato deciso da altri — dalla guerra, dalla fame, dalla necessità — quella scelta, per quanto piccola, è la cosa più preziosa che possiedi.\n\nL'orizzonte si stende davanti a te, grigio e infinito.\n\nMa per la prima volta, non ti sembra una prigione.\n\nSembra una strada.\n\nE tu sei pronto a percorrerla.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_FINAL_CONFRONTATION",
+    "title": "Il Peso della Verità",
+    "pages": [
+      {
+        "text": "Elian è lì, seduto su una branda, invecchiato e fragile. Alza lo sguardo e un sorriso stanco ma genuino gli illumina il volto. 'Ce l'hai fatta, Ultimo. Sapevo che ce l'avresti fatta.'\n\nTi chiede come stai. Tu rispondi:",
+        "choices": [
+          {
+            "text": "[1] 'Sono sopravvissuto. Come mi hai insegnato.'",
+            "targetPage": 1,
+            "alignmentRequirement": { "type": "Elian", "threshold": 2 }
+          },
+          {
+            "text": "[2] 'Perché? Perché mi hai lasciato solo?'",
+            "targetPage": 2,
+            "alignmentRequirement": { "type": "Lena", "threshold": 2 }
+          },
+          { "text": "[3] 'La minaccia che hai menzionato... sei riuscito a seminarla?'", "targetPage": 3 }
+        ]
+      },
+      {
+        "text": "Elian annuisce, sollevato. 'È tutto quello che contava.'",
+        "nextPage": 4
+      },
+      {
+        "text": "Il sorriso di Elian svanisce. 'Perché era l'unico modo. Loro... erano troppo vicini. Ho dovuto attirarli via.'",
+        "nextPage": 4
+      },
+      {
+        "text": "Elian abbassa lo sguardo. 'Sì. A caro prezzo.'",
+        "nextPage": 4
+      },
+      {
+        "text": "Indipendentemente dalle sue parole, ora è il tuo momento di confrontarlo con la verità che hai riscoperto.",
+        "choices": [
+            {
+                "text": "[1] 'Ho iniziato a ricordare, papà. La trave... la sua promessa. La scelta che hai dovuto fare. Ora capisco il peso che porti.'",
+                "targetPage": 5,
+                "alignmentRequirement": { "type": "Elian", "threshold": 5 }
+            },
+            {
+                "text": "[2] 'Smettila di mentire. Io ricordo tutto. L'hai lasciata lì. Hai scelto me.'",
+                "targetPage": 6,
+                "alignmentRequirement": { "type": "Lena", "threshold": 5 }
+            }
+        ]
+      },
+      {
+        "text": "Elian sussulta, gli occhi si riempiono di lacrime. È la prima volta che lo vedi piangere. 'Tu... tu ricordi? Ho passato ogni giorno a sperare che non accadesse mai.'",
+        "nextPage": 7
+      },
+      {
+        "text": "Elian impallidisce, distrutto. 'Non è stata una scelta. È stata... una reazione. Il suo ultimo desiderio. Non c'era tempo...'",
+        "nextPage": 7
+      },
+      {
+        "text": "C'è un'altra cosa che devi dirgli. La rivelazione che cambia tutto.\n\n'C'è un'altra cosa che devi sapere. Lei non è morta quel giorno. Io l'ho vista. O meglio... ho visto cosa è diventata. È uno di loro, papà. Un Angelo della Cenere. Ma mi ha riconosciuto. Non mi ha fatto del male.'",
+        "nextPage": 8
+      },
+      {
+        "text": "La reazione di Elian è un misto di shock, orrore e una scintilla di speranza malata e terribile. Il suo mondo, costruito sulla certezza del sacrificio di Lena, crolla.\n\n'No... non è possibile. Loro non... non lasciano superstiti. Trasformata? Ma... se ti ha riconosciuto... significa che una parte di lei è ancora lì?'\n\nSi aggrappa a questa idea con la forza della disperazione. Ora, la scelta finale spetta a te. Cosa definisce il tuo futuro?",
+        "choices": [
+            {
+                "text": "[Il Perdono Pragmatico] 'Hai fatto quello che dovevi per salvarmi. Entrambi. Ora dobbiamo sopravvivere. Insieme.'",
+                "targetPage": 9,
+                "alignmentRequirement": { "type": "Elian", "threshold": 8 }
+            },
+            {
+                "text": "[La Speranza Pericolosa] 'Non posso perdonarti per averla abbandonata. Ma se c'è una possibilità... io devo trovarla. Devo capire.'",
+                "targetPage": 10,
+                "alignmentRequirement": { "type": "Lena", "threshold": 8 }
+            }
+        ]
+      },
+      {
+        "text": "Scegli di accettare il passato e concentrarti sul futuro. Il tormento di Elian si attenua, sostituito da un nuovo, condiviso scopo: la sopravvivenza. È un finale di riconciliazione basato sulla filosofia di Elian.\n\nFINE.",
+        "nextPage": null
+      },
+      {
+        "text": "Rifiuti la filosofia di tuo padre. Il tuo nuovo scopo non è più sopravvivere, ma cercare la verità sugli Angeli e su tua madre. Elian è lasciato solo con il suo senso di colpa, ma forse con un nuovo, terribile scopo: aiutarti in questa missione impossibile. È un finale di rottura, ma che apre a una nuova speranza, in linea con la filosofia di Lena.\n\nFINE.",
         "nextPage": null
       }
     ]

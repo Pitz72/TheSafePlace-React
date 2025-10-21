@@ -99,15 +99,26 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             levelUpPending: false,
             inventory: [
                 { itemId: 'carillon_annerito', quantity: 1 },
-                // Add initial items for crafting
-                { itemId: 'scrap_metal', quantity: 2 },
-                { itemId: 'durable_cloth', quantity: 1 }
+                // Survival starter kit
+                { itemId: 'CONS_001', quantity: 2 }, // 2 razioni cibo
+                { itemId: 'CONS_002', quantity: 2 }, // 2 bottiglie acqua
+                { itemId: 'MED_BANDAGE_BASIC', quantity: 3 }, // 3 bende di fortuna
+                // Crafting materials
+                { itemId: 'scrap_metal', quantity: 3 },
+                { itemId: 'clean_cloth', quantity: 3 },
+                { itemId: 'bottle_empty', quantity: 2 }
             ],
             equippedWeapon: null,
             equippedArmor: null,
             equippedHead: null,
             equippedLegs: null,
-            knownRecipes: ['recipe_makeshift_knife', 'recipe_bandage_adv', 'recipe_repair_kit_basic'],
+            knownRecipes: [
+                'recipe_purify_water',
+                'recipe_makeshift_bandage',
+                'recipe_collect_water',
+                'recipe_makeshift_knife',
+                'recipe_repair_kit_basic'
+            ],
             unlockedTalents: [],
             unlockedTrophies: globalTrophies, // Inizia con i trofei globali
         });
@@ -298,7 +309,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             // Cannot call check triggers inside set state, so we do it after
             Promise.resolve().then(() => {
                 const gameStore = useGameStore.getState();
-                gameStore.checkMainQuestTriggers();
+                gameStore.checkMainStoryTriggers();
                 gameStore.checkCutsceneTriggers();
             });
 

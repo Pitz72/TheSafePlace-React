@@ -126,11 +126,23 @@
     "choices": [
       { "text": "Cerca nell'armadietto dei farmaci", "outcomes": [{
         "type": "skillCheck", "skill": "medicina", "dc": 12,
-        "successText": "Identifichi alcuni antidolorifici e antibiotici ancora efficaci.",
+        "successText": "Identifichi alcuni antidolorifici e antibiotici ancora efficaci. In fondo all'armadietto trovi anche un kit medico ben conservato.",
         "failureText": "Trovi solo boccette vuote e scatole strappate. Qualcuno ha fatto pulizia.",
         "success": [
-          { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 1 } },
-          { "type": "addItem", "value": { "itemId": "antibiotics_expired", "quantity": 1 } },
+          { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 2 } },
+          { "type": "addItem", "value": { "itemId": "MED_ANTIBIOTICS", "quantity": 1 } },
+          { "type": "addItem", "value": { "itemId": "first_aid_kit", "quantity": 1 } },
+          { "type": "addXp", "value": 35 }
+        ],
+        "failure": [{ "type": "addXp", "value": 10 }]
+      }] },
+      { "text": "Cerca nel giardino delle erbe medicinali", "outcomes": [{
+        "type": "skillCheck", "skill": "sopravvivenza", "dc": 10,
+        "successText": "Dietro la clinica trovi un piccolo giardino di piante medicinali. Riconosci alcune erbe curative e le raccogli con cura.",
+        "failureText": "Il giardino è invaso dalle erbacce. Non riesci a distinguere le piante medicinali da quelle comuni.",
+        "success": [
+          { "type": "addItem", "value": { "itemId": "MED_HEALING_HERBS", "quantity": 2 } },
+          { "type": "addItem", "value": { "itemId": "edible_mushrooms", "quantity": 1 } },
           { "type": "addXp", "value": 25 }
         ],
         "failure": [{ "type": "addXp", "value": 10 }]

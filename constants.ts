@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = "1.2.4";
+export const GAME_VERSION = "1.3.2";
 
 export const BOOT_TEXT = [
     'Runtime Radio BIOS v1.02',
@@ -38,46 +38,69 @@ export const MENU_ITEMS = [
     "Esci",
 ];
 
-export const INSTRUCTIONS_TEXT = `Figlio Mio, Ultimo...
+export const INSTRUCTIONS_TEXT = `
+  GUida di Gioco - The Safe Place Chronicles
 
-Se stai leggendo queste parole, significa che non sono tornato in tempo, e le scorte che ti ho lasciato stanno per finire. Il mio cuore è pesante, ma non c'è tempo per il dolore adesso. Devi essere forte, come ti ho insegnato. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.
+  Benvenuto. Questa guida ti fornirà le informazioni essenziali per sopravvivere.
 
-═══ MOVIMENTO E SOPRAVVIVENZA ═══
+  --- COMANDI PRINCIPALI ---
 
-Ricorda le basi, sempre. La mappa è la tua guida; segui la E segnata, è la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (W, A, S, D o le frecce) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. 
+  [W, A, S, D] o [Frecce Direzionali]
+  Muovi il personaggio sulla mappa e naviga nei menu.
 
-Vigila sulla tua Condizione – ferite, malanni, veleni, ipotermia – sono nemici silenziosi che ti indeboliranno. Alcune ti prosciugheranno lentamente la vita, altre falciranno le tue capacità. Trova o crea rimedi, non ignorarle mai.
+  [Invio]
+  Conferma una selezione o un'azione.
 
-═══ IL CICLO DEL TEMPO ═══
+  [ESC]
+  Annulla, torna indietro o apri il menu di pausa durante il gioco.
 
-Il tempo è un fiume crudele. Il giorno è un breve respiro prima del gelo e dei pericoli della notte. Camminare sotto le stelle ti esporrà a danni costanti – il freddo e l'oscurità sono spietati. Prima che il sole muoia, cerca un Rifugio. Lì troverai riposo sicuro fino all'alba e, con fortuna, qualcosa di utile. 
+  [I] - Inventario
+  Apre e chiude l'inventario.
 
-Esplorali di giorno, ma ricorda: ogni azione costa tempo. Anche il meteo è capriccioso – pioggia e tempesta ralenteranno il tuo cammino. Usa 'R' per un riposo rapido quando sei esausto, ma usalo con parsimonia.
+  [R] - Riposo Rapido
+  Esegui un riposo di un'ora all'aperto. Consuma tempo e recupera una piccola quantità di HP e fatica.
 
-═══ INVENTARIO E CRAFTING ═══
+  [F] - Ricerca Attiva
+  Esegui una ricerca di 30 minuti nel bioma attuale per trovare risorse. L'esito dipende dalla tua abilità di Sopravvivenza e dal tipo di ambiente.
 
-Il tuo Inventario è limitato. Riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti. Usa i numeri per consumare oggetti rapidamente. Le armi e le armature si degradano – riparale o smontale per recuperare materiali.
+  [L] - Level Up
+  Quando hai abbastanza XP, premi questo tasto per accedere alla schermata di aumento di livello.
 
-Cerca Manuali di Crafting nel mondo: ti insegneranno ricette vitali. Nei Rifugi troverai banchi da lavoro. Lì potrai creare armi, armature, medicine e strumenti di sopravvivenza. La creazione è la chiave per progredire.
+  --- MECCANICHE DI SOPRAVVIVENZA ---
 
-═══ COMBATTIMENTO E CRESCITA ═══
+  - SALUTE (HP): I tuoi Punti Ferita. Se raggiungono lo zero, il gioco finisce.
+  - SAZIETÀ: Diminuisce col tempo. Se arriva a zero, inizierai a perdere HP.
+  - IDRATAZIONE: Diminuisce col tempo, più velocemente della sazietà. Se arriva a zero, perderai HP rapidamente.
+  - FATICA: Aumenta con le azioni. Una fatica elevata applica penalità alle tue abilità e può portare allo stato "Esausto".
 
-La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute. A volte, la saggezza sta nel sapere quando fuggire o quando negoziare.
+  - TEMPO E NOTTE: Il tempo scorre con ogni azione. Esplorare di notte è pericoloso e causa una lenta perdita di HP a meno che tu non sia in un rifugio.
 
-Quando combatti, usa 'Analizza' per studiare il nemico e scoprirne le debolezze. Ogni vittoria ti darà esperienza. Quando accumuli abbastanza XP, premi 'L' per salire di livello: scegli un attributo da potenziare e un Talento che definirà il tuo stile. Pianifica bene – alcuni talenti si sbloccano solo ai livelli 5 e 8.
+  - RIFUGI: Luoghi sicuri dove puoi riposare fino all'alba, usare il banco da lavoro e cercare risorse.
 
-═══ SCELTE MORALI ═══
+  --- CRAFTING E INVENTARIO ---
 
-Le tue decisioni plasmeranno chi sei. La compassione e il pragmatismo sono entrambi validi, ma portano a percorsi diversi. Segui la Via di Lena (cuore) o quella di Elian (ragione) – o cerca un equilibrio. Quando una bilancia penderà abbastanza, otterrai nuove capacità.
+  - Il crafting è essenziale. Puoi creare oggetti presso un banco da lavoro in un rifugio.
+  - Inizi con 5 ricette di base per acqua, bende e strumenti.
+  - Trova "Manuali di Crafting" per imparare nuove ricette.
+  - Gestisci il tuo inventario: alcuni oggetti sono impilabili, altri no. Le armi e le armature hanno una durabilità che si consuma con l'uso.
 
-Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. 
+  --- COMBATTIMENTO E PROGRESSIONE ---
 
-Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. 
+  - Il combattimento è a turni e testuale.
+  - L'azione "Analizza" può rivelare le debolezze di un nemico.
+  - Sconfiggere nemici fornisce Punti Esperienza (XP) e a volte dei materiali.
+  - Accumula XP per salire di livello (tasto L), potenziare un attributo e scegliere un Talento.
+  - I Talenti sono abilità passive potenti che definiscono il tuo stile di gioco.
 
-Con tutto l'amore che un padre può dare,
-Papà
+  --- SCELTE MORALI ---
 
-P.S. – Ricorda: ESC per mettere in pausa, salva spesso (5 slot disponibili), e non dimenticare di esplorare. Il mondo nasconde segreti e trofei per i più coraggiosi.`;
+  - Le tue decisioni negli eventi influenzeranno il tuo allineamento.
+  - VIA DI LENA (Compassione): Privilegia l'aiuto agli altri e l'empatia.
+  - VIA DI ELIAN (Pragmatismo): Privilegia la sopravvivenza a ogni costo.
+  - Raggiungere una forte inclinazione in una delle due vie sbloccherà bonus passivi permanenti.
+
+  Buona fortuna. La tua sopravvivenza dipende dalle tue scelte.
+`;
 
 export const STORY_TEXT = `L'Eco del Silenzio
 
@@ -91,143 +114,4 @@ Poi, anche il padre era partito. Una missione avvolta nel mistero, un addio affr
 
 Ora, il silenzio è il suo unico compagno. Davanti a lui, un viaggio disperato attraverso un continente irriconoscibile, armato solo degli insegnamenti paterni e di una mappa verso un luogo che potrebbe essere leggenda, trappola, o forse, davvero, salvezza. Il peso della solitudine è grande, ma la volontà di onorare la memoria del padre, e la primordiale necessità di vivere, lo spingono a muovere il primo passo in quel mondo ostile. Il Safe Place attende, da qualche parte oltre la desolazione.`;
 
-// --- Journal System Constants ---
-export const JOURNAL_ENTRY_COLORS: Record<JournalEntryType, string> = {
-  [JournalEntryType.GAME_START]: '#00ff00', // Verde Brillante
-  [JournalEntryType.SKILL_CHECK_SUCCESS]: '#60BF77', // Verde
-  [JournalEntryType.SKILL_CHECK_FAILURE]: '#ff8c00', // Rosso/Arancione (darkorange)
-  [JournalEntryType.ACTION_FAILURE]: '#ffff00', // Giallo
-  [JournalEntryType.NARRATIVE]: '#d1d5db', // Bianco/Grigio Chiaro (gray-300)
-  [JournalEntryType.ITEM_ACQUIRED]: '#38bdf8', // Ciano/Azzurro (sky-400)
-  [JournalEntryType.SYSTEM_ERROR]: '#ff0000', // Rosso Brillante
-  [JournalEntryType.SYSTEM_WARNING]: '#fbbf24', // Giallo Brillante (amber-400)
-  [JournalEntryType.COMBAT]: '#ef4444', // Rosso (red-500)
-  [JournalEntryType.XP_GAIN]: '#f59e0b', // Oro/Giallo Scuro (amber-500)
-  [JournalEntryType.EVENT]: '#a78bfa', // Viola (violet-400)
-  [JournalEntryType.TROPHY_UNLOCKED]: '#eab308', // Giallo/Oro (yellow-500)
-};
-
-export const MOUNTAIN_MESSAGES = [
-    "Non puoi passare. È una montagna.",
-    "Scalare questa parete rocciosa a mani nude sarebbe un suicidio.",
-    "Anche le capre di montagna guarderebbero questa parete e direbbero 'No, grazie'.",
-    "La montagna ti osserva, impassibile. Non passerai."
-];
-
-export const BIOME_MESSAGES: Record<string, string> = {
-    '.': "Ti trovi in una vasta pianura aperta.",
-    'F': "Stai entrando in una fitta foresta.",
-    '~': "Le acque di un fiume si stendono davanti a te.",
-    'M': "Imponenti montagne bloccano il tuo cammino.",
-    'C': "Le rovine silenziose di una città si ergono all'orizzonte.",
-    'V': "Attraversi i resti di un piccolo villaggio.",
-    'R': "Hai trovato un rifugio. Sembra sicuro, per ora.",
-    'S': "Inizi il tuo viaggio in un punto relativamente tranquillo.",
-    'E': "La destinazione finale è vicina."
-};
-
-export const BIOME_COLORS: Record<string, string> = {
-    '.': '#a3a3a3', // neutral-400 (Pianura)
-    'F': '#22c55e', // green-500 (Foresta)
-    '~': '#38bdf8', // sky-400 (Acqua)
-    'M': '#9ca3af', // gray-400 (Montagna)
-    'C': '#78716c', // stone-500 (Città)
-    'V': '#a16207', // yellow-700 (Villaggio)
-    'R': '#d97706', // amber-600 (Rifugio)
-    'S': '#f59e0b', // amber-500 (Start)
-    'E': '#ef4444', // red-500 (End)
-};
-
-export const ATMOSPHERIC_MESSAGES: Record<string, { day: string[], night: string[], rain?: string[] }> = {
-    '.': { // Pianura
-        day: ["Il vento sibila tra l'erba alta.", "Un falco volteggia in alto nel cielo.", "Il sole picchia sulla tua pelle."],
-        night: ["Il richiamo lontano di un predatore notturno ti fa rabbrividire.", "Le stelle brillano intense nel cielo senza nubi.", "Un silenzio innaturale avvolge la pianura."],
-        rain: ["Le gocce di pioggia tamburellano sul tuo equipaggiamento.", "Il terreno aperto offre poco riparo dalla pioggia battente."]
-    },
-    'F': { // Foresta
-        day: ["Un raggio di sole filtra attraverso le fitte chiome degli alberi.", "Il fruscio di qualcosa tra i cespugli ti mette in allerta.", "L'odore di terra umida e muschio riempie l'aria."],
-        night: ["Il verso di un gufo rompe il silenzio della notte.", "Rami scricchiolano nelle vicinanze, spezzati da un peso invisibile.", "L'oscurità nella foresta è quasi totale."],
-        rain: ["La pioggia gocciola dalle foglie, creando una sinfonia costante.", "L'odore di pioggia e terra bagnata è intenso qui."]
-    },
-    'C': { // Città
-        day: ["Il vento ulula tra le rovine degli edifici.", "Un pezzo di metallo cade da un grattacielo scheletrico, echeggiando nel silenzio.", "La polvere si solleva ad ogni tua mossa."],
-        night: ["Ombre inquietanti danzano tra i palazzi distrutti.", "Un rumore metallico in lontananza ti fa sussultare.", "La luna illumina spettralmente le strade deserte."],
-        rain: ["L'acqua scorre in rivoli scuri lungo le strade dissestate.", "Il rumore della pioggia che colpisce le lamiere contorte è assordante."]
-    },
-     'V': { // Villaggio
-        day: ["Una porta sbatte per il vento in una casa abbandonata.", "Resti di vita quotidiana sono sparsi ovunque, congelati nel tempo.", "Un silenzio spettrale regna tra le case."],
-        night: ["Ogni ombra sembra nascondere una minaccia.", "Hai la strana sensazione di essere osservato dalle finestre vuote.", "Il vento fischia attraverso i tetti sfondati."],
-        rain: ["La pioggia trasforma le strade sterrate in fango.", "L'acqua gocciola tristemente dai tetti rotti."]
-    },
-    'R': { // Rifugio
-        day: ["Questo posto sembra offrire una tregua temporanea dal mondo esterno.", "Qualcuno ha lasciato delle provviste qui molto tempo fa.", "La polvere danza nei rari raggi di luce che filtrano dall'interno."],
-        night: ["I suoni del mondo esterno sembrano attutiti qui dentro.", "È un sollievo essere al riparo, anche se solo per poco.", "Il buio all'interno del rifugio è denso e quasi tangibile."],
-    }
-};
-
-
-// --- Character System Constants ---
-
-export const ATTRIBUTES: AttributeName[] = ['for', 'des', 'cos', 'int', 'sag', 'car'];
-export const ATTRIBUTE_LABELS: Record<AttributeName, string> = {
-  for: 'Forza',
-  des: 'Destrezza',
-  cos: 'Costituzione',
-  int: 'Intelligenza',
-  sag: 'Saggezza',
-  car: 'Carisma',
-};
-
-
-export const SKILLS: Record<SkillName, SkillDefinition> = {
-  // FOR
-  atletica: { attribute: 'for' },
-  // DES
-  acrobazia: { attribute: 'des' },
-  furtivita: { attribute: 'des' },
-  rapiditaDiMano: { attribute: 'des' },
-  // INT
-  arcanismo: { attribute: 'int' },
-  storia: { attribute: 'int' },
-  investigare: { attribute: 'int' },
-  natura: { attribute: 'int' },
-  religione: { attribute: 'int' },
-  // SAG
-  addestrareAnimali: { attribute: 'sag' },
-  intuizione: { attribute: 'sag' },
-  medicina: { attribute: 'sag' },
-  percezione: { attribute: 'sag' },
-  sopravvivenza: { attribute: 'sag' },
-  // CAR
-  inganno: { attribute: 'car' },
-  intimidire: { attribute: 'car' },
-  persuasione: { attribute: 'car' },
-  spettacolo: { attribute: 'car' },
-};
-
-// XP needed to reach the next level. Index represents the level you are trying to reach.
-// e.g., XP_PER_LEVEL[2] = 150 XP to reach level 2.
-// v1.2.0: Reduced XP requirements to allow players to reach level 6-8 by endgame
-export const XP_PER_LEVEL = [
-  0,      // Livello 0 (non usato)
-  0,      // Livello 1
-  150,    // Livello 2 (was 300)
-  400,    // Livello 3 (was 900)
-  900,    // Livello 4 (was 2700)
-  2000,   // Livello 5 (was 6500)
-  4000,   // Livello 6 (was 14000)
-  7000,   // Livello 7 (was 23000)
-  11000,  // Livello 8 (was 34000)
-  16000,  // Livello 9 (was 48000)
-  22000,  // Livello 10 (was 64000)
-  30000,  // ...e così via
-  40000,
-  52000,
-  66000,
-  82000,
-  100000,
-  120000,
-  142000,
-  166000,
-  192000,
-];
+// ... (resto del file constants.ts)

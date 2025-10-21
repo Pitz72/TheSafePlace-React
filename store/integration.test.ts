@@ -7,6 +7,9 @@ import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { GameState } from '../types';
 
+// Mock the constants module
+vi.mock('../constants', () => import('../test/mockConstants'));
+
 // Mock recipes for testing
 const mockRecipes = [
   {
@@ -80,38 +83,44 @@ describe('store integrations', () => {
   });
 
   it('should allow crafting when ingredients are available', () => {
-    const { addItem, learnRecipe, performSkillCheck } = useCharacterStore.getState();
+    const { addItem, learnRecipe, removeItem } = useCharacterStore.getState();
     const { performCrafting } = useInteractionStore.getState();
+
+    // Ensure a clean slate for the test
+    removeItem('scrap_metal', 100);
+    removeItem('test_item', 100);
 
     // Add ingredients for the test recipe
     addItem('scrap_metal', 1);
     learnRecipe('recipe_test_item');
 
-    let inventory = useCharacterStore.getState().inventory;
-    expect(inventory.find(i => i.itemId === 'scrap_metal')?.quantity).toBe(3);
+    const initialScrap = useCharacterStore.getState().inventory.find(i => i.itemId === 'scrap_metal')?.quantity ?? 0;
+    const initialTestItem = useCharacterStore.getState().inventory.find(i => i.itemId === 'test_item')?.quantity ?? 0;
 
     // Set the selected recipe to the test recipe
     useInteractionStore.setState({ craftingMenuState: { selectedIndex: 0 } });
 
     // This is a hack to ensure the skill check passes for the test
     vi.spyOn(Math, 'random').mockReturnValue(0.9); // Guarantees a roll of 19 or 20
-
     performCrafting();
-
     vi.spyOn(Math, 'random').mockRestore();
 
     // Check that the ingredient was consumed and the result was added
-    inventory = useCharacterStore.getState().inventory;
-    expect(inventory.find(i => i.itemId === 'scrap_metal')?.quantity).toBe(2);
-    expect(inventory.find(i => i.itemId === 'test_item')?.quantity).toBe(1);
+    const finalScrap = useCharacterStore.getState().inventory.find(i => i.itemId === 'scrap_metal')?.quantity ?? 0;
+    const finalTestItem = useCharacterStore.getState().inventory.find(i => i.itemId === 'test_item')?.quantity ?? 0;
+
+    expect(finalScrap).toBe(initialScrap - 1);
+    expect(finalTestItem).toBe(initialTestItem + 1);
   });
 
   it('should not allow crafting when ingredients are insufficient', () => {
-    const { inventory } = useCharacterStore.getState();
+    const { removeItem } = useCharacterStore.getState();
     const { performCrafting } = useInteractionStore.getState();
 
     // Ensure the player doesn't have the ingredients
-    expect(inventory.find(i => i.itemId === 'scrap_metal')?.quantity).toBe(2);
+    removeItem('scrap_metal', 100);
+
+    const initialInventory = useCharacterStore.getState().inventory;
 
     // Set the selected recipe to the test recipe
     useInteractionStore.setState({ craftingMenuState: { selectedIndex: 0 } });
@@ -119,7 +128,7 @@ describe('store integrations', () => {
     performCrafting();
 
     // Check that nothing changed
-    expect(inventory.find(i => i.itemId === 'scrap_metal')?.quantity).toBe(2);
-    expect(inventory.find(i => i.itemId === 'test_item')).toBeUndefined();
+    const finalInventory = useCharacterStore.getState().inventory;
+    expect(finalInventory).toEqual(initialInventory);
   });
 });

@@ -1,0 +1,78 @@
+[
+  {
+    "stage": 1,
+    "trigger": { "type": "stepsTaken", "value": 10 },
+    "title": "Eco: Il Silenzio",
+    "text": "Mentre cammini, un silenzio innaturale ti avvolge. Ti torna in mente il giorno in cui tutto finì. Non con un boato, ma con un respiro trattenuto. Tuo padre, Elian, ti strinse la mano, troppo forte. Nei suoi occhi non c'era solo paura, ma il riconoscimento di una fine."
+  },
+  {
+    "stage": 2,
+    "trigger": { "type": "stepsTaken", "value": 15 },
+    "title": "Eco: La Lezione dell'Acqua",
+    "text": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di morte. La mano di Elian ti afferrò, ferma. 'Il mondo non è più amico,' ti disse. 'Ogni sorso, ogni boccone, te lo devi conquistare'."
+  },
+  {
+    "stage": 3,
+    "trigger": { "type": "stepsTaken", "value": 30 },
+    "title": "Eco: La Fuga",
+    "text": "L'adrenalina di uno scontro ti riporta alla vecchia stazione. I predoni. L'ordine di tuo padre che ti squarciò l'anima: 'CORRI! NON VOLTARTI!'. Ore dopo, ti raggiunse, coperto di sangue. Quella notte capisti una lezione terribile: a volte, sopravvivere significa lasciare qualcuno indietro."
+  },
+  {
+    "stage": 4,
+    "trigger": { "type": "daysSurvived", "value": 2 },
+    "title": "Eco: Il Crollo",
+    "text": "Un tuono squarcia il cielo, così vicino da far tremare la terra. Per un istante, non sei qui. Sei piccolo, avvolto dal fumo, l'aria densa di polvere. C'è un rumore assordante di metallo e cemento che si contorcono. Qualcuno ti tiene stretto... tuo padre. Grida il tuo nome, ma la sua voce è un'eco lontana. Davanti a te, tra le macerie, una forma immobile... Il ricordo svanisce, lasciandoti con il cuore in gola e il sapore della polvere in bocca.",
+    "allowNightTrigger": true
+  },
+  {
+    "stage": 5,
+    "trigger": { "type": "firstRefugeEntry" },
+    "title": "Eco: Una Domanda",
+    "text": "Questo fragile barlume di sicurezza ti ricorda le domande che ponevi a tuo padre. 'E mamma?'. Lui non rispondeva mai veramente. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. C'era un segreto, un peso che tuo padre portava da solo.",
+    "allowNightTrigger": true
+  },
+  {
+    "stage": 6,
+    "trigger": { "type": "stepsTaken", "value": 80 },
+    "title": "Eco: Gli Angeli della Cenere",
+    "text": "Un odore acre, chimico. Ti torna in mente la radura, le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame.",
+    "allowNightTrigger": true
+  },
+  {
+    "stage": 7,
+    "trigger": { "type": "stepsTaken", "value": 120 },
+    "title": "Eco: Il Fardello",
+    "text": "La nuova forza che senti nelle tue membra ti riporta a un confronto. 'Perché non mi dici mai niente?', gli avevi urlato. 'Ci sono cose che un figlio non dovrebbe mai sapere,' ti aveva risposto. 'La verità, a volte, è un fardello troppo pesante'."
+  },
+  {
+    "stage": 8,
+    "trigger": { "type": "stepsTaken", "value": 160 },
+    "title": "Eco: La Mappa",
+    "text": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi la sua lettera. '...verso un luogo chiamato \"The Safe Place\". È una speranza flebile... ma è l'unica possibilità che ti resta.' Quella mappa non era solo carta. Era un testamento. L'inizio del tuo viaggio."
+  },
+  {
+    "stage": 9,
+    "trigger": { "type": "daysSurvived", "value": 4 },
+    "title": "Eco: Il Significato di un Nome",
+    "text": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Perché? Ora, in questo silenzio, quel nome assume un significato terribile. Sei davvero l'ultimo? L'ultimo a portare un fardello di speranze infrante?",
+    "allowNightTrigger": true
+  },
+  {
+    "stage": 10,
+    "trigger": { "type": "stepsTaken", "value": 200 },
+    "title": "Eco: La Scelta di un Padre",
+    "text": "Pragmatismo brutale o compassione rischiosa. All'improvviso, capisci. Questo è l'abisso in cui tuo padre ha guardato. Questa è la scelta che ha dovuto fare. La sua durezza, i suoi silenzi... forse non erano crudeltà. Forse erano solo le cicatrici lasciate da una scelta impossibile."
+  },
+  {
+    "stage": 11,
+    "trigger": { "type": "nearEnd", "distance": 15 },
+    "title": "Il Ricordo Completo",
+    "text": "Ti fermi, senza fiato. Non è la stanchezza a bloccarti. È un'ondata di gelo che ti parte dal petto. Il mondo intorno a te si dissolve.\nIl fumo. Denso, soffocante. L'odore di ozono e cenere.\nSei di nuovo lì. Piccolo. Impotente.\nMamma è a terra. Una trave di metallo le schiaccia una gamba. Ti sta guardando, un sorriso tirato dal dolore. \"Salva il bambino, Elian,\" la senti sussurrare, la voce un filo spezzato. \"Corri. Promettimelo.\"\nE poi vedi lo sguardo di tuo padre. Non guarda lei. Guarda te.\nNei suoi occhi, un universo di agonia si consuma in una frazione di secondo. La scelta.\nTi afferra. Ti solleva. Il mondo si capovolge.\nNon ti volti. Lui non si volta. Correte.\nAlle vostre spalle, solo il silenzio.\n\nOra ricordi. Non sei stato salvato da una tragedia. Sei stato la causa di una scelta."
+  },
+  {
+    "stage": 12,
+    "trigger": { "type": "reachEnd" },
+    "title": "Il Confronto",
+    "text": "Sei arrivato. È un piccolo bunker, pulito e sicuro. Elian è lì, seduto su una branda, invecchiato e fragile. Alza lo sguardo e un sorriso stanco ma genuino gli illumina il volto.\n\n'Ce l'hai fatta, Ultimo. Sapevo che ce l'avresti fatta.'\n\nLe sue parole ti colpiscono, ora che il velo della memoria è squarciato. Ora che sai."
+  }
+]

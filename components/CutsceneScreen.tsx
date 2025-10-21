@@ -1,26 +1,39 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useCharacterStore } from '../store/characterStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { CutscenePage } from '../types';
 import { audioManager } from '../utils/audio';
 
-/**
- * CutsceneScreen component.
- * This component renders the cutscene screen.
- * @returns {JSX.Element | null} The rendered CutsceneScreen component or null.
- */
 const CutsceneScreen: React.FC = () => {
     const { activeCutscene, processCutsceneConsequences, endCutscene } = useGameStore();
+    const { alignment } = useCharacterStore();
     const [pageIndex, setPageIndex] = useState(0);
     const [displayedText, setDisplayedText] = useState('');
     const [isTyping, setIsTyping] = useState(true);
 
     const currentPage: CutscenePage | null = activeCutscene ? activeCutscene.pages[pageIndex] : null;
 
+    const availableChoices = useMemo(() => {
+        if (!currentPage?.choices) return [];
+        return currentPage.choices.filter(choice => {
+            if (!choice.alignmentRequirement) return true;
+
+            const { type, threshold } = choice.alignmentRequirement;
+            // Calcola il dominio dell'allineamento
+            if (type === 'Lena') {
+                return (alignment.lena - alignment.elian) >= threshold;
+            }
+            if (type === 'Elian') {
+                return (alignment.elian - alignment.lena) >= threshold;
+            }
+            return true; // Se non c'è un requisito o il tipo non è riconosciuto
+        });
+    }, [currentPage, alignment]);
+
     useEffect(() => {
         if (!currentPage) return;
 
-        // Process consequences as soon as the page loads
         if (currentPage.consequences) {
             processCutsceneConsequences(currentPage.consequences);
         }
@@ -30,7 +43,7 @@ const CutsceneScreen: React.FC = () => {
         let charIndex = 0;
         const typingInterval = setInterval(() => {
             if (charIndex < currentPage.text.length) {
-                setDisplayedText(currentPage.text.substring(0, charIndex + 1));
+                setDisplayedText(prev => currentPage.text.substring(0, charIndex + 1));
                 charIndex++;
             } else {
                 clearInterval(typingInterval);
@@ -54,7 +67,7 @@ const CutsceneScreen: React.FC = () => {
             return;
         }
 
-        if (currentPage && !currentPage.choices) {
+        if (currentPage && availableChoices.length === 0) {
             if (currentPage.nextPage !== null && currentPage.nextPage !== undefined) {
                 audioManager.playSound('navigate');
                 setPageIndex(currentPage.nextPage);
@@ -63,29 +76,25 @@ const CutsceneScreen: React.FC = () => {
                 endCutscene();
             }
         }
-    }, [isTyping, finishTyping, currentPage, endCutscene]);
+    }, [isTyping, finishTyping, currentPage, availableChoices, endCutscene]);
 
     const handleChoice = useCallback((choiceIndex: number) => {
-        if (isTyping || !currentPage?.choices) return;
+        if (isTyping) return;
 
-        const choice = currentPage.choices[choiceIndex];
+        const choice = availableChoices[choiceIndex];
         if (choice) {
             audioManager.playSound('confirm');
             setPageIndex(choice.targetPage);
         }
-    }, [isTyping, currentPage]);
+    }, [isTyping, availableChoices]);
 
     const handlerMap = useMemo(() => {
-        const map: { [key: string]: () => void } = {
-            Enter: handleAdvance,
-        };
-        if (currentPage?.choices) {
-            currentPage.choices.forEach((_, index) => {
-                map[`${index + 1}`] = () => handleChoice(index);
-            });
-        }
+        const map: { [key: string]: () => void } = { Enter: handleAdvance };
+        availableChoices.forEach((_, index) => {
+            map[`${index + 1}`] = () => handleChoice(index);
+        });
         return map;
-    }, [handleAdvance, handleChoice, currentPage]);
+    }, [handleAdvance, handleChoice, availableChoices]);
 
     useKeyboardInput(handlerMap);
 
@@ -100,16 +109,16 @@ const CutsceneScreen: React.FC = () => {
                     </pre>
                 </div>
 
-                {!isTyping && currentPage.choices && (
+                {!isTyping && availableChoices.length > 0 && (
                     <div className="mt-12 text-center text-3xl space-y-4">
-                        {currentPage.choices.map((choice, index) => (
+                        {availableChoices.map((choice, index) => (
                             <p key={index}>{choice.text}</p>
                         ))}
                     </div>
                 )}
                 
                 <div className="mt-12 text-center text-3xl animate-pulse">
-                   {!isTyping && !currentPage.choices && "[INVIO per continuare]"}
+                   {!isTyping && availableChoices.length === 0 && "[INVIO per continuare]"}
                 </div>
             </div>
         </div>

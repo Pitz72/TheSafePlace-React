@@ -20,9 +20,9 @@ import { useItemDatabaseStore } from './data/itemDatabase';
 import { useEventDatabaseStore } from './data/eventDatabase';
 import { useRecipeDatabaseStore } from './data/recipeDatabase';
 import { useEnemyDatabaseStore } from './data/enemyDatabase';
-import { useMainQuestDatabaseStore } from './data/mainQuestDatabase';
+import { useMainStoryDatabaseStore } from './data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
-import MainQuestScreen from './components/MainQuestScreen';
+import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
 import InGameMenuScreen from './components/InGameMenuScreen';
@@ -56,7 +56,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadEventDatabase, isLoaded: eventsLoaded } = useEventDatabaseStore();
   const { loadDatabase: loadRecipeDatabase, isLoaded: recipesLoaded } = useRecipeDatabaseStore();
   const { loadDatabase: loadEnemyDatabase, isLoaded: enemiesLoaded } = useEnemyDatabaseStore();
-  const { loadDatabase: loadMainQuestDatabase, isLoaded: mainQuestLoaded } = useMainQuestDatabaseStore();
+  const { loadDatabase: loadMainStoryDatabase, isLoaded: mainStoryLoaded } = useMainStoryDatabaseStore();
   const { loadDatabase: loadCutsceneDatabase, isLoaded: cutscenesLoaded } = useCutsceneDatabaseStore();
   const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
   const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
@@ -80,7 +80,7 @@ const App: React.FC = () => {
         await loadEventDatabase();
         await loadRecipeDatabase();
         await loadEnemyDatabase();
-        await loadMainQuestDatabase();
+        await loadMainStoryDatabase();
         await loadCutsceneDatabase();
         await loadTalentDatabase();
         await loadTrophyDatabase();
@@ -98,7 +98,7 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainQuestDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, itemDatabase]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -129,8 +129,8 @@ const App: React.FC = () => {
         return <EventScreen />;
       case GameState.LEVEL_UP_SCREEN:
         return <LevelUpScreen />;
-       case GameState.MAIN_QUEST:
-        return <MainQuestScreen />;
+       case GameState.MAIN_STORY:
+        return <MainStoryScreen />;
       case GameState.ASH_LULLABY_CHOICE:
         return <AshLullabyChoiceScreen />;
       case GameState.GAME_OVER:

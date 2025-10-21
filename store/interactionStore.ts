@@ -5,7 +5,7 @@ import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { audioManager } from '../utils/audio';
-import { useMainQuestDatabaseStore } from '../data/mainQuestDatabase';
+import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
 import { useTimeStore } from './timeStore';
 
 /**
@@ -323,18 +323,18 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * @description Enters a refuge.
      */
     enterRefuge: () => {
-        const { visitedRefuges, mainQuestStage, setGameState, activeMainQuestEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
+        const { visitedRefuges, mainStoryStage, setGameState, activeMainStoryEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
         const { gameTime } = useTimeStore.getState();
         const { refugeJustSearched } = get();
 
         const isFirstRefuge = visitedRefuges.length === 0;
         if (isFirstRefuge) {
-            const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
-            const nextChapter = mainQuestChapters.find(c => c.stage === mainQuestStage);
+            const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
+            const nextChapter = mainStoryChapters.find(c => c.stage === mainStoryStage);
             if (nextChapter && nextChapter.trigger.type === 'firstRefugeEntry') {
                 const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
                 if (!isNight || nextChapter.allowNightTrigger) {
-                    useGameStore.setState({ activeMainQuestEvent: nextChapter, gameState: GameState.MAIN_QUEST });
+                    useGameStore.setState({ activeMainStoryEvent: nextChapter, gameState: GameState.MAIN_STORY });
                     // Don't show the refuge menu until the quest is resolved
                     return;
                 }
@@ -477,14 +477,14 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
     confirmRefugeMenuSelection: () => {
         get().clearRefugeActionMessage();
         const { refugeMenuState } = get();
-        const { addJournalEntry, setGameState, mainQuestStage, playerPos, gameFlags } = useGameStore.getState();
+        const { addJournalEntry, setGameState, mainStoryStage, playerPos, gameFlags } = useGameStore.getState();
         const { gameTime, advanceTime } = useTimeStore.getState();
         const { satiety, hydration } = useCharacterStore.getState();
         const selectedAction = refugeMenuState.options[refugeMenuState.selectedIndex];
         
         if (selectedAction === "Aspetta un'ora" || selectedAction === "Dormi fino all'alba") {
             const hasMusicBox = useCharacterStore.getState().inventory.some(i => i.itemId === 'carillon_annerito');
-            if ( mainQuestStage >= 10 && playerPos.x > 80 && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST') && hasMusicBox ) {
+            if ( mainStoryStage >= 10 && playerPos.x > 80 && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST') && hasMusicBox ) {
                 useGameStore.setState(state => ({ gameFlags: new Set(state.gameFlags).add('LULLABY_CHOICE_OFFERED_THIS_REST') }));
                 setGameState(GameState.ASH_LULLABY_CHOICE);
                 audioManager.playSound('confirm');

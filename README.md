@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.2.2)
+# The Safe Place Chronicles: The Echo of the Journey (v1.3.2)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -78,14 +78,91 @@ L'interazione avviene interamente tramite tastiera:
 *   **Movimento/Navigazione:** `W, A, S, D` o `Frecce Direzionali`.
 *   **Inventario:** `I`.
 *   **Riposo Rapido:** `R`.
+*   **Ricerca Attiva:** `F` (cerca risorse nell'area circostante).
 *   **Level Up:** `L` (quando disponibile).
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.2.4** - Critical Bugfix & Game Balance
+**Versione Corrente: v1.3.2** - The Medical Overhaul Update
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, la v1.2.1 sistemi richiesti dalla community, la v1.2.2 ha risolto problemi critici di usabilità, la v1.2.3 ha eliminato bug bloccanti e riequilibrato il gameplay, e la v1.2.4 perfeziona l'esperienza con correzioni mirate:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, e la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse:
+
+#### ⚡ Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
+
+Questa versione risolve un problema critico nel sistema di cure degli status, rendendo ogni condizione negativa gestibile strategicamente.
+
+**🏥 SISTEMA CURE BILANCIATO:**
+- Nuovi oggetti: Antibiotici (cura MALATO), Erbe Curative (cura INFEZIONE)
+- Ogni status ora ha almeno 2 vie di accesso alla cura (crafting + eventi)
+- Descrizioni oggetti aggiornate per chiarezza immediata
+- Nessuno status è più incurabile
+
+**🧪 RICETTE MEDICHE:**
+- Antibiotici: 2x Antibiotici Scaduti + Sostanze Chimiche + Disinfettante (Medicina DC 16)
+- Erbe Curative: 2x Funghi Commestibili + Bacche Selvatiche (Medicina DC 12)
+- Il crafting medico diventa una via strategica per l'autosufficienza
+
+**🏙️ EVENTI CITTÀ POTENZIATI:**
+- Farmacia: Antibiotici validi + nuova opzione frigorifero con Antidoti
+- Ospedale Abbandonato (NUOVO): fonte ripetibile di cure avanzate
+- Eventi bilanciati per difficoltà e ricompense
+
+**🌲 EVENTI FORESTA/VILLAGGIO:**
+- Rifugio Eremita: orto con Erbe Curative
+- Clinica Medico: Antibiotici + giardino medicinale
+- Cure naturali accessibili con skill Sopravvivenza
+
+**📊 DISTRIBUZIONE LOGICA:**
+- Città: Medicine moderne (Antibiotici, Antidoti)
+- Foresta: Rimedi naturali (Erbe, Funghi)
+- Villaggio: Mix bilanciato di entrambi
+- Skill Medicina ora centrale per accesso cure migliori
+
+**Risultato:** Ogni status è curabile. La morte è sempre conseguenza di scelte, mai di impossibilità sistemica.
+
+---
+
+#### ⚡ Novità v1.3.1 (21 Ottobre 2025) - **THE SURVIVAL OVERHAUL**
+
+Questa versione risolve i problemi fondamentali di game design che rendevano il gioco eccessivamente dipendente dalla fortuna. Ora la sopravvivenza è una questione di decisioni strategiche, non di RNG.
+
+**🆕 SISTEMA "RICERCA ATTIVA" (Tasto F):**
+- Nuova meccanica proattiva per cercare risorse
+- Consuma 30 minuti, check Sopravvivenza CD 10
+- Loot specifico per bioma (acqua in pianura, legna in foresta, metallo in città, cibo in villaggio)
+- Bonus su tile Fiume: acqua garantita + idratazione immediata
+- Il talento Scavenger raddoppia le quantità
+
+**💧 SISTEMA ACQUA RIVOLUZIONATO:**
+- **3 nuove ricette:** Purifica Acqua, Raccogli Acqua, Benda di Fortuna
+- **4 nuovi materiali:** Acqua Contaminata, Bottiglia Vuota, Straccio Pulito, Nastro Adesivo
+- **Starter kit completo:** 2 acqua, 2 cibo, 3 bende, materiali per crafting
+- **5 ricette iniziali** (era 3): incluse cure base e gestione acqua
+- L'acqua è ora gestibile strategicamente, non dipendente dalla fortuna
+
+**⚔️ LOOT DAI NEMICI:**
+- I combattimenti ora droppano materiali e consumabili
+- 3 tier di loot (common/uncommon/rare) basati su potenza nemico
+- Scavenger ottiene 2 roll invece di 1
+- Combattere diventa una scelta strategica valida
+
+**🎯 LOOT RIFUGI AMPLIATO:**
+- 15 oggetti diversi nel pool (prima: 10)
+- Acqua Contaminata, Stracci Puliti e Bottiglie Vuote aggiunti
+- Materiali per crafting più accessibili
+- Bilanciamento generale migliorato
+
+**📊 IMPATTO:**
+- **Acqua:** Da "quasi introvabile" a "gestibile strategicamente"
+- **Crafting:** Da "inaccessibile" a "disponibile dall'inizio"
+- **Combattimento:** Da "sempre perdente" a "risk/reward bilanciato"
+- **Skill Sopravvivenza:** Da "situazionale" a "centrale"
+- **Controllo Giocatore:** Da "passivo" a "proattivo"
+
+**Risultato:** Il gioco rimane molto difficile, ma ora è giusto. La morte è sempre colpa di una decisione sbagliata, mai della RNG.
+
+---
 
 #### 🔧 Novità v1.2.4 (20 Ottobre 2025)
 

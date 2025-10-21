@@ -3,16 +3,16 @@ import { useGameStore } from '../store/gameStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
 /**
- * MainQuestScreen component.
- * This component renders the main quest screen.
- * @returns {JSX.Element | null} The rendered MainQuestScreen component or null.
+ * MainStoryScreen component.
+ * This component renders the main story screen.
+ * @returns {JSX.Element | null} The rendered MainStoryScreen component or null.
  */
-const MainQuestScreen: React.FC = () => {
-    const { activeMainQuestEvent, resolveMainQuest } = useGameStore();
+const MainStoryScreen: React.FC = () => {
+    const { activeMainStoryEvent, resolveMainStory } = useGameStore();
 
     const handleConfirm = useCallback(() => {
-        resolveMainQuest();
-    }, [resolveMainQuest]);
+        resolveMainStory();
+    }, [resolveMainStory]);
 
     const handlerMap = useMemo(() => ({
         'Enter': handleConfirm,
@@ -20,11 +20,11 @@ const MainQuestScreen: React.FC = () => {
 
     useKeyboardInput(handlerMap);
 
-    if (!activeMainQuestEvent) {
+    if (!activeMainStoryEvent) {
         return null;
     }
     
-    const formattedTitle = `Echo della Memoria #${activeMainQuestEvent.stage}: ${activeMainQuestEvent.title.replace('Ricordo: ', '').replace('Frammento: ', '')}`;
+    const formattedTitle = `Echo della Memoria #${activeMainStoryEvent.stage}: ${activeMainStoryEvent.title.replace('Ricordo: ', '').replace('Frammento: ', '')}`;
 
     return (
         <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
@@ -37,7 +37,7 @@ const MainQuestScreen: React.FC = () => {
                     className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                     style={{ scrollbarWidth: 'none' }}
                 >
-                    <pre className="whitespace-pre-wrap leading-relaxed">{activeMainQuestEvent.text}</pre>
+                    <pre className="whitespace-pre-wrap leading-relaxed">{activeMainStoryEvent.text}</pre>
                 </div>
 
                 <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">
@@ -48,4 +48,4 @@ const MainQuestScreen: React.FC = () => {
     );
 };
 
-export default MainQuestScreen;
+export default MainStoryScreen;

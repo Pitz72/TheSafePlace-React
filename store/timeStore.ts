@@ -38,7 +38,7 @@ export const useTimeStore = create<TimeStoreState>((set, get) => ({
      */
     advanceTime: (minutes: number, bypassPause: boolean = false) => {
         // FIX: Destructure state from the correct stores (interactionStore and gameStore).
-        const { addJournalEntry, checkMainQuestTriggers, checkCutsceneTriggers } = useGameStore.getState();
+        const { addJournalEntry, checkMainStoryTriggers, checkCutsceneTriggers } = useGameStore.getState();
         const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
 
         if ((isInventoryOpen || isInRefuge) && !bypassPause) return;
@@ -53,7 +53,7 @@ export const useTimeStore = create<TimeStoreState>((set, get) => ({
         set({ gameTime: { day: newDay, hour: newHour, minute: newMinute } });
 
         if(newDay > oldDay) {
-            checkMainQuestTriggers();
+            checkMainStoryTriggers();
             checkCutsceneTriggers();
         }
 
