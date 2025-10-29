@@ -1,3 +1,17 @@
+/**
+ * @fileoverview Game Service - Core gameplay logic layer
+ *
+ * @description Service layer that handles complex game logic, particularly player movement.
+ * Separates business logic from state management (stores) following the Service Layer pattern.
+ *
+ * Architecture:
+ * - Services contain complex logic and coordinate between multiple stores
+ * - Stores focus on state management only
+ * - Components call services, not stores directly (for complex operations)
+ *
+ * @module services/gameService
+ */
+
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { useTimeStore } from '../store/timeStore';
@@ -7,18 +21,118 @@ import { useInteractionStore } from '../store/interactionStore';
 import { GameState, JournalEntryType } from '../types';
 import { MOUNTAIN_MESSAGES, BIOME_MESSAGES, ATMOSPHERIC_MESSAGES, BIOME_COLORS } from '../constants';
 
+/**
+ * Gets a random element from an array.
+ * @template T
+ * @param {T[]} arr - Array to pick from
+ * @returns {T} Random element
+ */
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
+/**
+ * Mapping of tile characters to Italian display names.
+ * @constant
+ */
 const TILE_NAMES: Record<string, string> = {
     '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
     'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu'
 };
+
+/**
+ * Set of tile types that block player movement.
+ * @constant
+ */
 const IMPASSABLE_TILES = new Set(['M']);
+
+/**
+ * Set of tile types that allow player movement.
+ * @constant
+ */
 const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~']);
+
+/**
+ * Base time cost in minutes for a single movement.
+ * @constant
+ */
 const BASE_TIME_COST_PER_MOVE = 10;
 
+/**
+ * Game Service - Core gameplay logic
+ *
+ * @description Service object containing complex game logic functions.
+ * Currently focused on player movement, but designed to be extended.
+ */
 export const gameService = {
+  /**
+   * Moves the player on the map and handles all movement-related logic.
+   *
+   * @description This is the core movement function that coordinates:
+   * - Position validation and boundary checking
+   * - Tile traversability checks
+   * - Water entry/exit mechanics
+   * - Refuge entry system
+   * - Biome transitions and messages
+   * - Time advancement with weather/terrain modifiers
+   * - Environmental hazards (night, weather)
+   * - XP gain and fatigue accumulation
+   * - Story/cutscene trigger checks
+   * - Event/combat encounter triggers
+   * - Atmospheric flavor messages
+   * - Trophy unlocks (steps, biomes)
+   *
+   * Movement Flow:
+   * 1. Check if exiting water (special 2-turn mechanic)
+   * 2. Validate new position (bounds, impassable tiles)
+   * 3. Handle refuge entry (one-time use)
+   * 4. Process biome transitions
+   * 5. Handle water entry (Atletica DC 12 check)
+   * 6. Calculate time cost (base + terrain + weather)
+   * 7. Apply environmental hazards (night, weather damage)
+   * 8. Update position and step counter
+   * 9. Advance time and update survival stats
+   * 10. Gain exploration XP and fatigue
+   * 11. Check story/cutscene triggers
+   * 12. Trigger encounters (guaranteed for new biomes)
+   * 13. Add atmospheric flavor messages (15% chance)
+   *
+   * @param {number} dx - Horizontal movement delta (-1 left, +1 right, 0 none)
+   * @param {number} dy - Vertical movement delta (-1 up, +1 down, 0 none)
+   *
+   * @remarks
+   * Time Costs:
+   * - Base: 10 minutes
+   * - Forest: +10 minutes (dense vegetation)
+   * - Water: ×2 (entry + exit turns)
+   * - Pioggia: +5 minutes
+   * - Tempesta: +10 minutes
+   *
+   * Environmental Hazards:
+   * - Night (20:00-6:00): 20% chance -1 HP per move
+   * - Tempesta: 15% chance -1 HP per move
+   * - Pioggia: 8% chance -1 HP per move
+   * - Water entry fail: -2 HP (Atletica DC 12)
+   *
+   * Guaranteed Events:
+   * - First step in Forest: Forest-specific event
+   * - First step in City: City-specific event
+   * - First step in Village: Village-specific event
+   *
+   * Trophy Triggers:
+   * - 100 steps: trophy_explore_100_steps
+   * - 500 steps: trophy_explore_500_steps
+   * - All biomes visited: trophy_explore_all_biomes
+   *
+   * @example
+   * // Move player right
+   * gameService.movePlayer(1, 0);
+   * // Validates position, advances time, triggers events, etc.
+   *
+   * @see useGameStore for game state
+   * @see useEventStore.triggerEncounter for encounter system
+   * @see checkMainStoryTriggers for story progression
+   * @see checkCutsceneTriggers for cutscene system
+   */
   movePlayer: (dx: number, dy: number) => {
     const { map, playerPos, playerStatus, addJournalEntry, visitedRefuges, currentBiome: previousBiome, checkMainStoryTriggers, checkCutsceneTriggers } = useGameStore.getState();
     const { advanceTime, gameTime } = useTimeStore.getState();

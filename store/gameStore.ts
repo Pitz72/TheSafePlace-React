@@ -13,8 +13,24 @@ import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
 import { useCombatStore } from './combatStore';
 
-// --- Save Game System ---
-const SAVE_VERSION = "2.0.0"; // Version for the modular save system
+// ═══════════════════════════════════════════════════════════════════════════
+// SAVE GAME SYSTEM - Version 2.0.0
+// ═══════════════════════════════════════════════════════════════════════════
+/**
+ * Current save system version.
+ * Used for save file compatibility and migration between versions.
+ *
+ * @constant {string}
+ * @see migrateSaveData for version migration logic
+ */
+const SAVE_VERSION = "2.0.0";
+
+/**
+ * LocalStorage key for tracking the last used save slot.
+ * Used to remember which slot the player saved to most recently.
+ *
+ * @constant {string}
+ */
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
 /**
@@ -102,15 +118,54 @@ const timeToMinutes = (time: GameTime): number => {
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 
+/**
+ * Mapping of tile characters to their Italian display names.
+ * @constant
+ */
 const TILE_NAMES: Record<string, string> = {
     '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
     'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu'
 };
+
+/**
+ * Set of tile types that cannot be traversed by the player.
+ * @constant
+ */
 const IMPASSABLE_TILES = new Set(['M']);
+
+/**
+ * Set of tile types that can be traversed by the player.
+ * @constant
+ */
 const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~']);
+
+/**
+ * Base time cost in minutes for a single movement action.
+ * @constant
+ */
 const BASE_TIME_COST_PER_MOVE = 10;
 
+/**
+ * Game Store - Main game state management
+ *
+ * @description Central Zustand store that manages the core game state including:
+ * - Game flow (menu, gameplay, cutscenes)
+ * - Map and player position
+ * - Journal/log system
+ * - Main story progression
+ * - Cutscene system
+ * - Save/load functionality
+ *
+ * @remarks
+ * This store coordinates with other stores (character, time, event, combat, interaction)
+ * to provide a complete game state management system.
+ *
+ * Architecture: Service Layer Pattern
+ * - Complex logic delegated to services/gameService.ts
+ * - Store focuses on state management
+ * - Actions trigger side effects in other stores
+ */
 export const useGameStore = create<GameStoreState>((set, get) => ({
   // --- State ---
   gameState: GameState.INITIAL_BLACK_SCREEN,
@@ -138,6 +193,21 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   visitedBiomes: new Set(),
   damageFlash: false,
 
+  /**
+   * Triggers a brief red flash effect to indicate player damage.
+   *
+   * @description Sets damageFlash to true for 150ms, then resets it.
+   * Used to provide visual feedback when the player takes damage.
+   *
+   * @remarks
+   * - Duration: 150ms
+   * - Non-blocking (uses setTimeout)
+   * - Can be triggered multiple times (overlapping flashes)
+   *
+   * @example
+   * // After player takes damage in combat
+   * gameStore.triggerDamageFlash();
+   */
   triggerDamageFlash: () => {
     set({ damageFlash: true });
     setTimeout(() => set({ damageFlash: false }), 150);
@@ -254,6 +324,18 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
   },
 
+  /**
+   * Moves the player on the map.
+   *
+   * @description This is a placeholder for the refactored movePlayer logic.
+   * The actual implementation is now in services/gameService.ts.
+   * This function exists to maintain the interface contract but delegates to the service layer.
+   *
+   * @param {number} dx - Horizontal movement delta (-1 for left, +1 for right, 0 for no horizontal movement)
+   * @param {number} dy - Vertical movement delta (-1 for up, +1 for down, 0 for no vertical movement)
+   *
+   * @see services/gameService.ts for the actual implementation
+   */
   movePlayer: (dx, dy) => {
     // This is a placeholder for the refactored movePlayer logic.
     // The actual implementation is now in services/gameService.ts.
@@ -474,12 +556,27 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   /**
-   * @function checkMainStoryTriggers
-   * @description Checks if any main story triggers have been met.
-   */
-  /**
-   * @function checkCutsceneTriggers
-   * @description Checks if any cutscene triggers have been met.
+   * Checks if any cutscene triggers have been met and starts the appropriate cutscene.
+   *
+   * @description This function evaluates various game conditions to determine if a cutscene
+   * should be triggered. Cutscenes are checked in priority order and only one can trigger per call.
+   *
+   * Cutscenes checked (in order):
+   * 1. CS_CITY_OF_GHOSTS - First time entering a City biome
+   * 2. CS_BEING_WATCHED - Automatically at day 3+
+   * 3. CS_RIVER_INTRO - When near water tiles (within 2 tile radius)
+   * 4. CS_HALF_JOURNEY - After 100+ steps AND 3+ days survived
+   * 5. CS_POINT_OF_NO_RETURN - Within 20 tiles of destination 'E'
+   *
+   * @remarks
+   * - Only triggers when gameState is IN_GAME
+   * - Uses game flags to prevent cutscene repetition
+   * - Each cutscene sets a flag (e.g., 'CITY_OF_GHOSTS_PLAYED')
+   * - Distance calculations use Euclidean distance (sqrt(dx² + dy²))
+   *
+   * @example
+   * // Called automatically after player movement
+   * gameStore.checkCutsceneTriggers();
    */
   checkCutsceneTriggers: () => {
     const { gameTime } = useTimeStore.getState();
@@ -555,6 +652,38 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
+  /**
+   * Checks if any main story chapter triggers have been met and activates the chapter.
+   *
+   * @description Evaluates trigger conditions for the next main story chapter and activates it
+   * if all conditions are satisfied. Respects day/night cycle and daily event limits.
+   *
+   * Main Story System:
+   * - 12 chapters total ("Echi della Memoria")
+   * - Maximum 2 story events per day
+   * - Some chapters only trigger during day (unless allowNightTrigger is true)
+   * - Triggers are checked after every significant game action
+   *
+   * Trigger Types:
+   * - stepsTaken: Player has walked X steps
+   * - daysSurvived: Player has survived X days
+   * - levelReached: Player has reached level X
+   * - combatWins: Player has won X combats
+   * - reachLocation: Player is at specific coordinates
+   * - reachEnd: Player is on the 'E' tile
+   * - nearEnd: Player is within X tiles of 'E'
+   * - firstRefugeEntry: Player enters a refuge for the first time
+   *
+   * @remarks
+   * - Unlocks survival trophies at day 5 and day 30
+   * - Resets daily event counter at midnight
+   * - Only triggers when gameState is IN_GAME
+   * - Night check: hour >= 20 OR hour < 6
+   *
+   * @example
+   * // Called after player movement, time advancement, or level up
+   * gameStore.checkMainStoryTriggers();
+   */
   checkMainStoryTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
@@ -842,6 +971,24 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       return false;
     }
   },
+  /**
+   * Serializes the game store state to a JSON-compatible object.
+   *
+   * @description Converts the store state to a plain object suitable for JSON serialization.
+   * Handles conversion of Set objects to Arrays for JSON compatibility.
+   *
+   * Used by the save game system to persist game state to localStorage.
+   *
+   * @returns {object} A JSON-serializable representation of the game store state
+   *
+   * @remarks
+   * - Converts Set<string> to string[] for gameFlags and visitedBiomes
+   * - All other state properties are preserved as-is
+   * - Compatible with save system version 2.0.0
+   *
+   * @see fromJSON for the reverse operation
+   * @see saveGame for the complete save system
+   */
   toJSON: () => {
     const state = get();
     return {
@@ -850,6 +997,27 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       visitedBiomes: Array.from(state.visitedBiomes),
     };
   },
+
+  /**
+   * Deserializes a JSON object and restores the game store state.
+   *
+   * @description Converts a plain JSON object back to the store state format.
+   * Handles conversion of Arrays back to Set objects.
+   *
+   * Used by the load game system to restore game state from localStorage.
+   *
+   * @param {any} json - The JSON object to deserialize (from saved game data)
+   *
+   * @remarks
+   * - Converts string[] back to Set<string> for gameFlags and visitedBiomes
+   * - All other properties are restored directly
+   * - Compatible with save system version 2.0.0
+   * - Handles migration from version 1.0.0 via migrateSaveData()
+   *
+   * @see toJSON for the serialization operation
+   * @see loadGame for the complete load system
+   * @see migrateSaveData for version migration
+   */
   fromJSON: (json) => {
     set({
       ...json,
@@ -857,6 +1025,19 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       visitedBiomes: new Set(json.visitedBiomes),
     });
   },
+
+  /**
+   * Restores the game store state from a partial state object.
+   *
+   * @description Low-level function to restore state. Used internally by the save/load system.
+   * Directly sets the store state without any transformation or validation.
+   *
+   * @param {any} state - The state object to restore
+   *
+   * @warning This function performs no validation. Use fromJSON() for safe deserialization.
+   *
+   * @internal
+   */
   restoreState: (state: any) => {
     set({ ...state });
   },

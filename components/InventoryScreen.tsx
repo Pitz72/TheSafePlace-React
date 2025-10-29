@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useCharacterStore } from '../store/characterStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -91,15 +91,15 @@ const ActionMenu: React.FC = () => {
  */
 
 const InventoryScreen: React.FC = () => {
-    const { 
-        toggleInventory, 
-        inventorySelectedIndex, 
-        setInventorySelectedIndex, 
-        actionMenuState, 
-        openActionMenu, 
-        navigateActionMenu, 
-        confirmActionMenuSelection, 
-        closeActionMenu 
+    const {
+        toggleInventory,
+        inventorySelectedIndex,
+        setInventorySelectedIndex,
+        actionMenuState,
+        openActionMenu,
+        navigateActionMenu,
+        confirmActionMenuSelection,
+        closeActionMenu
     } = useInteractionStore();
     
     const inventory = useCharacterStore(s => s.inventory);
@@ -113,6 +113,20 @@ const InventoryScreen: React.FC = () => {
     
     const selectedInvItem = displayInventory.length > 0 ? displayInventory[inventorySelectedIndex] : null;
     const selectedItemDetails = selectedInvItem ? itemDatabase[selectedInvItem.itemId] : null;
+
+    // Ref for the inventory list container
+    const inventoryListRef = useRef<HTMLDivElement>(null);
+    const selectedItemRef = useRef<HTMLLIElement>(null);
+
+    // Auto-scroll to selected item when selection changes
+    useEffect(() => {
+        if (selectedItemRef.current && inventoryListRef.current) {
+            selectedItemRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        }
+    }, [inventorySelectedIndex]);
 
     const keyHandler = useCallback((key: string) => {
         if (actionMenuState.isOpen) {
@@ -172,15 +186,43 @@ const InventoryScreen: React.FC = () => {
 
     useKeyboardInput(handlerMap);
 
+    // Calculate encumbrance for UI feedback
+    const totalWeight = useCharacterStore.getState().getTotalWeight();
+    const maxCarryWeight = useCharacterStore.getState().getMaxCarryWeight();
+    const isOverEncumbered = totalWeight > maxCarryWeight;
+    const weightPercentage = (totalWeight / maxCarryWeight) * 100;
+    
+    // Color coding based on weight percentage
+    let weightColor = 'var(--text-primary)'; // Normal (< 80%)
+    if (weightPercentage >= 100) {
+        weightColor = 'var(--text-danger)'; // Overencumbered (≥ 100%)
+    } else if (weightPercentage >= 80) {
+        weightColor = 'var(--text-accent)'; // Warning (80-99%)
+    }
+
     return (
         <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
             <div className="w-full h-full border-8 border-double border-green-400/50 flex flex-col p-6 relative">
                 {actionMenuState.isOpen && <ActionMenu />}
 
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ INVENTARIO ═══</h1>
+                {/* Title with weight indicator */}
+                <div className="text-center mb-6">
+                    <h1 className="text-6xl font-bold tracking-widest uppercase">═══ INVENTARIO ═══</h1>
+                    <div
+                        className={`text-3xl mt-2 ${isOverEncumbered ? 'animate-pulse' : ''}`}
+                        style={{ color: weightColor }}
+                    >
+                        Peso: {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)} kg
+                        {isOverEncumbered && <span className="ml-2 text-2xl">[SOVRACCARICO]</span>}
+                    </div>
+                </div>
                 <div className="flex-grow flex space-x-6 overflow-hidden">
                     {/* Item List */}
-                    <div className="w-2/5 h-full border-2 border-green-400/30 p-2 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                    <div
+                        ref={inventoryListRef}
+                        className="w-2/5 h-full border-2 border-green-400/30 p-2 overflow-y-auto"
+                        style={{ scrollbarWidth: 'none' }}
+                    >
                        {displayInventory.length > 0 ? (
                            <ul className="space-y-2 text-4xl">
                                {displayInventory.map((invItem, index) => {
@@ -188,9 +230,9 @@ const InventoryScreen: React.FC = () => {
                                    if (!itemDetails) return null;
                                    
                                    const isSelected = index === inventorySelectedIndex;
-                                   const isEquipped = index === equippedWeapon || 
-                                                     index === equippedHead || 
-                                                     index === equippedArmor || 
+                                   const isEquipped = index === equippedWeapon ||
+                                                     index === equippedHead ||
+                                                     index === equippedArmor ||
                                                      index === equippedLegs;
                                    
                                    let displayName = itemDetails.name;
@@ -209,8 +251,9 @@ const InventoryScreen: React.FC = () => {
                                    }
                                    
                                    return (
-                                       <li 
-                                        key={`${invItem.itemId}-${index}`} 
+                                       <li
+                                        key={`${invItem.itemId}-${index}`}
+                                        ref={isSelected ? selectedItemRef : null}
                                         className={`pl-4 py-1 ${isSelected ? 'bg-green-400 text-black' : ''}`}
                                         style={{ color: isSelected ? undefined : itemDetails.color }}
                                        >

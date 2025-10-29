@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.4.4)
+# The Safe Place Chronicles: The Echo of the Journey (v1.4.5)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,9 +84,49 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.4.4** - UX Polish & CRT Premium
+**Versione Corrente: v1.4.5** - Technical Excellence & Encumbrance
 
 Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse, e la **v1.4.x ridefinisce concettualmente la struttura narrativa** del gioco:
+
+#### Novità v1.4.5 (29 Ottobre 2025) - **TECHNICAL EXCELLENCE & ENCUMBRANCE**
+
+Questa versione solidifica le fondamenta tecniche del progetto per preparare espansioni future complesse.
+
+**FASE 1 - DOCUMENTAZIONE ENTERPRISE-GRADE (COMPLETATA):**
+- **60 funzioni documentate** con JSDoc premium (gameStore, characterStore, gameService)
+- **Standard enterprise:** Formule, esempi, tabelle di riferimento, edge cases
+- **IntelliSense potenziato:** Hover su funzione → documentazione completa
+- **Onboarding facilitato:** Nuovo sviluppatore capisce codice immediatamente
+- **Coverage:** 15% → 50% (+233%)
+
+**SISTEMA DI INGOMBRO COMPLETO:**
+- **Formula realistica:** 15 + (FOR_modifier × 2) kg (era FOR × 10)
+- **Penalità skill:** -2 Atletica/Acrobazia quando sovraccarico
+- **Fatigue accelerata:** ×2 quando sovraccarico (già esistente, ora documentato)
+- **Journal feedback:** Messaggi automatici quando diventi/esci da sovraccarico
+- **UI migliorata:** Indicatori peso con codifica colori (verde/giallo/rosso)
+- **Supporto zaini:** Preparato per zaini che aumentano capacità (+5kg/+10kg)
+
+**UX FIXES CRITICI:**
+- **Cutscene overflow:** Layout flex, scroll automatico, font ottimizzato
+- **Inventory auto-scroll:** scrollIntoView smooth quando selezione cambia
+- **Tutte le schermate narrative:** Ora completamente leggibili
+
+**DOCUMENTAZIONE TECNICA:**
+- **ROADMAP-v1.4.5-TECHNICAL-EXCELLENCE.md:** 8 fasi pianificate (400 righe)
+- **SISTEMA-INGOMBRO-IMPLEMENTATO.md:** Documentazione completa (250 righe)
+- **FASE1-JSDOC-PROGRESS.md:** Tracker progresso documentazione
+
+**IMPATTO:**
+- Fondamenta tecniche solidificate per espansioni future
+- FOR diventa statistica critica (capacità carico)
+- Scelte strategiche su cosa portare
+- Codice pronto per collaboratori esterni
+- Pronto per sistemi complessi (quest, fazioni, base building)
+
+**Risultato:** Progetto tecnicamente maturo, documentato a livello enterprise, pronto per crescita.
+
+---
 
 #### Novità v1.4.4 (29 Ottobre 2025) - **UX POLISH & CRT PREMIUM**
 

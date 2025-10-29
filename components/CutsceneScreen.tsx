@@ -92,25 +92,32 @@ const CutsceneScreen: React.FC = () => {
     if (!activeCutscene || !currentPage) return null;
 
     return (
-        <div className="absolute inset-0 bg-black flex items-center justify-center p-8">
-            <div key={pageIndex} className="w-full max-w-6xl h-full flex flex-col justify-center">
-                <div className="border-y-4 border-double border-[var(--border-primary)] py-8">
-                    <div className="whitespace-pre-wrap text-4xl leading-relaxed text-center font-mono">
-                        <span>{displayedText}</span>
-                        {isTyping && <span className="bg-[var(--text-primary)] w-5 h-8 inline-block animate-pulse ml-1" />}
+        <div className="absolute inset-0 bg-black flex items-center justify-center p-4">
+            <div key={pageIndex} className="w-full max-w-6xl h-full flex flex-col justify-between py-8">
+                {/* Text Content Area - Scrollable if needed */}
+                <div className="flex-1 flex items-center justify-center overflow-hidden">
+                    <div className="border-y-4 border-double border-[var(--border-primary)] py-6 px-4 max-h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                        <div className="whitespace-pre-wrap text-3xl leading-snug text-center font-mono max-w-5xl mx-auto">
+                            <span>{displayedText}</span>
+                            {isTyping && <span className="bg-[var(--text-primary)] w-4 h-7 inline-block animate-pulse ml-1" />}
+                        </div>
                     </div>
                 </div>
 
+                {/* Choices Area - Fixed at bottom */}
                 {!isTyping && currentPage.choices && (
-                    <div className="mt-12 text-center text-3xl space-y-4">
+                    <div className="mt-6 text-center text-2xl space-y-3 flex-shrink-0">
                         {currentPage.choices.map((choice, index) => (
-                            <p key={index}>{choice.text}</p>
+                            <p key={index} className="text-amber-400">{choice.text}</p>
                         ))}
                     </div>
                 )}
                 
-                <div className="mt-12 text-center text-3xl animate-pulse">
-                   {!isTyping && !currentPage.choices && "[INVIO per continuare]"}
+                {/* Continue Prompt - Fixed at bottom */}
+                <div className="mt-6 text-center text-2xl animate-pulse flex-shrink-0">
+                   {!isTyping && !currentPage.choices && (
+                       <span className="text-[var(--text-accent)]">[INVIO per continuare]</span>
+                   )}
                 </div>
             </div>
         </div>
