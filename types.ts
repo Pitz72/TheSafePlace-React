@@ -34,6 +34,7 @@ export enum JournalEntryType {
   ITEM_ACQUIRED,
   SYSTEM_ERROR,
   SYSTEM_WARNING,
+  SYSTEM_MESSAGE,
   COMBAT,
   XP_GAIN,
   EVENT,
@@ -233,10 +234,13 @@ export interface EnemyTactic {
   skillCheck?: { skill: SkillName; dc: number };
 }
 
+export type EnemyType = 'humanoid' | 'beast';
+
 export interface Enemy {
   id: string;
   name: string;
   description: string;
+  type: EnemyType;
   hp: number;
   ac: number;
   attack: {
@@ -334,6 +338,8 @@ export interface GameStoreState {
   saveGame: (slot: number) => boolean;
   loadGame: (slot: number) => boolean;
   restoreState: (state: any) => void;
+  toJSON: () => object;
+  fromJSON: (json: any) => void;
 }
 
 
@@ -448,6 +454,8 @@ export interface CharacterState {
     updateSurvivalStats: (minutes: number, weather: WeatherType) => void;
     calculateSurvivalCost: (minutes: number) => { satietyCost: number; hydrationCost: number };
     heal: (amount: number) => void;
+    updateFatigue: (amount: number) => void;
+    rest: (amount: number) => void;
     restoreSatiety: (amount: number) => void;
     restoreHydration: (amount: number) => void;
     changeAlignment: (type: 'lena' | 'elian', amount: number) => void;
@@ -461,6 +469,8 @@ export interface CharacterState {
     unlockTrophy: (trophyId: string) => void;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 // --- Item System ---

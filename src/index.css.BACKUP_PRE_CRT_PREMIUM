@@ -40,28 +40,23 @@ body {
   --text-glow: 0 0 5px var(--shadow-primary);
 }
 
-/* 2. Green Phosphor CRT Theme - PREMIUM QUALITY */
+/* 2. Green Phosphor CRT Theme - REWORKED */
 .theme-crt {
-  --bg-primary: #0a0f0a;
-  --text-primary: #33ff33; /* Authentic P3 phosphor green */
-  --text-secondary: #33ff33;
-  --text-accent: #66ff66; /* Brighter phosphor for highlights */
-  --text-danger: #66ff66;
-  --border-primary: rgba(51, 255, 51, 0.4);
-  --border-accent: rgba(102, 255, 102, 0.5);
+  --bg-primary: #0a140a;
+  --text-primary: #4ade80; /* Consistent green color */
+  --text-secondary: #4ade80;
+  --text-accent: #86efac; /* Lighter green for accents */
+  --text-danger: #86efac; /* Danger is also green, but can be distinguished by context */
+  --border-primary: rgba(74, 222, 128, 0.3);
+  --border-accent: rgba(134, 239, 172, 0.4);
   --highlight-bg: var(--text-primary);
   --highlight-text: #000;
-  --shadow-primary: rgba(51, 255, 51, 0.6);
-  --shadow-accent: rgba(102, 255, 102, 0.4);
-  --scanline-opacity: 0.08;
+  --shadow-primary: rgba(74, 222, 128, 0.5);
+  --shadow-accent: rgba(134, 239, 172, 0.3);
+  --scanline-opacity: 0.15; /* A bit more visible */
   --vignette-opacity: 1;
-  /* Premium phosphor glow with persistence and chromatic aberration */
-  --text-glow:
-    0 0 4px #33ff33,
-    0 0 8px #33ff33,
-    0 0 12px #33ff33,
-    0 0 16px rgba(51, 255, 51, 0.5),
-    0 0 2px rgba(255, 100, 100, 0.3);
+  /* Phosphor glow with persistence/aberration */
+  --text-glow: 0 0 7px var(--text-primary), 0 0 2px rgba(255, 80, 80, 0.6);
 }
 
 /* 3. High Contrast Theme - FIXED */
@@ -91,18 +86,14 @@ body {
   position: relative;
 }
 
-/* Apply CRT-specific filters and animations - PREMIUM */
-.theme-crt #game-container > .w-full.h-full.relative {
-  animation: text-wobble 0.12s linear infinite, phosphor-flicker 0.08s infinite;
-  filter: blur(0.3px) contrast(1.1) brightness(1.05);
-  /* Subtle screen curvature simulation */
-  transform: perspective(1000px) rotateX(0deg);
+/* Apply CRT-specific filters and animations */
+.theme-crt #game-container > .w-full.h-full.relative { /* Target the content wrapper div */
+  animation: text-wobble 0.15s linear infinite;
+  filter: blur(0.4px);
 }
 
-/* --- CRT Effects - PREMIUM QUALITY --- */
-
-/* Scanlines - More realistic with varying intensity */
-#game-container::before {
+/* --- CRT Effects --- */
+#game-container::before { /* Scrolling Scanlines */
   content: '';
   position: absolute;
   top: 0;
@@ -110,23 +101,14 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 0px,
-      rgba(0, 0, 0, 0.05) 1px,
-      rgba(0, 0, 0, 0.15) 2px,
-      rgba(0, 0, 0, 0.05) 3px,
-      rgba(0, 0, 0, 0) 4px
-    );
-  background-size: 100% 4px;
+  background-image: repeating-linear-gradient(0deg, transparent 0, transparent 1px, rgba(0,0,0,0.4) 1px, rgba(0,0,0,0.4) 2px);
+  background-size: 100% 2px;
   opacity: var(--scanline-opacity);
-  animation: scanline-scroll 12s linear infinite;
+  animation: scanline-scroll 8s linear infinite;
   z-index: 100;
 }
 
-/* Vignette & Screen Glow - Enhanced */
-#game-container::after {
+#game-container::after { /* Vignette & Flicker */
   content: '';
   position: absolute;
   top: 0;
@@ -134,59 +116,27 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse at center,
-      rgba(0,0,0,0) 0%,
-      rgba(0,0,0,0.3) 60%,
-      rgba(0,0,0,0.7) 85%,
-      rgba(0,0,0,0.95) 100%
-    );
-  box-shadow:
-    inset 0 0 200px 40px rgba(0,0,0,0.8),
-    inset 0 0 80px 10px rgba(51, 255, 51, 0.05);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+  box-shadow: inset 0 0 150px 20px rgba(0,0,0,0.9);
   opacity: var(--vignette-opacity);
-  animation: crt-flicker 0.18s infinite;
+  animation: flicker 0.15s infinite;
   z-index: 99;
 }
 
 
 /* Custom animations for the game */
-
-/* CRT Horizontal Wobble - Simulates magnetic field instability */
-@keyframes text-wobble {
-  0% { transform: translate3d(0, 0, 0); }
-  20% { transform: translate3d(0.3px, -0.2px, 0); }
-  40% { transform: translate3d(-0.3px, 0.2px, 0); }
-  60% { transform: translate3d(0.2px, 0.3px, 0); }
-  80% { transform: translate3d(-0.2px, -0.3px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+@keyframes text-wobble { /* Simulates CRT instability */
+  0% { transform: translate3d(0,0,0); }
+  25% { transform: translate3d(0.4px, -0.4px, 0); }
+  50% { transform: translate3d(-0.4px, 0.4px, 0); }
+  75% { transform: translate3d(0.4px, 0.4px, 0); }
+  100% { transform: translate3d(0,0,0); }
 }
 
-/* Phosphor Persistence Flicker - Simulates phosphor decay */
-@keyframes phosphor-flicker {
-  0% { opacity: 1; }
-  50% { opacity: 0.98; }
-  100% { opacity: 1; }
-}
-
-/* Scanline Scroll - Slower for more authentic feel */
 @keyframes scanline-scroll {
-  0% { background-position-y: 0px; }
-  100% { background-position-y: -200px; }
+  to { background-position-y: -100px; } /* Scroll by a large amount to ensure seamless loop */
 }
 
-/* CRT Flicker - Simulates power supply fluctuation */
-@keyframes crt-flicker {
-  0%, 100% { opacity: var(--vignette-opacity); }
-  10% { opacity: calc(var(--vignette-opacity) * 0.95); }
-  20% { opacity: var(--vignette-opacity); }
-  30% { opacity: calc(var(--vignette-opacity) * 0.97); }
-  40%, 60% { opacity: var(--vignette-opacity); }
-  70% { opacity: calc(var(--vignette-opacity) * 0.96); }
-  80%, 90% { opacity: var(--vignette-opacity); }
-}
-
-/* Yellow Flash - For UI elements */
 @keyframes yellow-flash {
   50% {
     color: var(--text-accent);
@@ -194,11 +144,15 @@ body {
   }
 }
 
-/* Cursor Blink */
 @keyframes cursor-blink {
   50% {
     opacity: 0;
   }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: var(--vignette-opacity); }
+  50% { opacity: calc(var(--vignette-opacity) * 0.9); }
 }
 
 .animate-yellow-flash {

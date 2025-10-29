@@ -282,13 +282,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   performQuickRest: () => {
     const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
     if (isInventoryOpen || isInRefuge) return;
-    const { lastRestTime, addJournalEntry, gameFlags, startCutscene } = get();
+    const { lastRestTime, addJournalEntry } = get();
     const { gameTime, advanceTime } = useTimeStore.getState();
-    if (gameTime.day >= 2 && !gameFlags.has('BEING_WATCHED_PLAYED')) {
-        set(state => ({ gameFlags: new Set(state.gameFlags).add('BEING_WATCHED_PLAYED') }));
-        startCutscene('CS_BEING_WATCHED');
-        return;
-    }
     if (lastRestTime) {
         if (timeToMinutes(gameTime) - timeToMinutes(lastRestTime) < 1440) {
             addJournalEntry({ text: "Troppo presto per riposare di nuovo. Devi aspettare.", type: JournalEntryType.ACTION_FAILURE });
@@ -491,6 +486,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const state = get();
     
     if (state.gameState !== GameState.IN_GAME) return;
+    
+    // CS_CITY_OF_GHOSTS: First time entering a City (HIGH PRIORITY - before city events)
+    if (state.currentBiome === 'Città' && !state.gameFlags.has('CITY_OF_GHOSTS_PLAYED')) {
+        set(s => ({ gameFlags: new Set(s.gameFlags).add('CITY_OF_GHOSTS_PLAYED') }));
+        state.startCutscene('CS_CITY_OF_GHOSTS');
+        return;
+    }
+    
+    // CS_BEING_WATCHED: Automatically triggers at day 3
+    if (gameTime.day >= 3 && !state.gameFlags.has('BEING_WATCHED_PLAYED')) {
+        set(s => ({ gameFlags: new Set(s.gameFlags).add('BEING_WATCHED_PLAYED') }));
+        state.startCutscene('CS_BEING_WATCHED');
+        return;
+    }
     
     // CS_RIVER_INTRO: Near water tiles
     if (!state.gameFlags.has('RIVER_INTRO_PLAYED')) {
@@ -847,5 +856,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       gameFlags: new Set(json.gameFlags),
       visitedBiomes: new Set(json.visitedBiomes),
     });
-  }
+  },
+  restoreState: (state: any) => {
+    set({ ...state });
+  },
 }));

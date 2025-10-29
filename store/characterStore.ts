@@ -13,6 +13,7 @@ import {
   JournalEntryType,
   PlayerStatusCondition,
   DeathCause,
+  GameState,
 } from '../types';
 import { SKILLS, XP_PER_LEVEL } from '../constants';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -311,6 +312,18 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 const gameStore = useGameStore.getState();
                 gameStore.checkMainStoryTriggers();
                 gameStore.checkCutsceneTriggers();
+                
+                // CS_STRANGERS_REFLECTION trigger: Reaching level 5 (mid-game)
+                if (newLevel === 5 && !gameStore.gameFlags.has('STRANGERS_REFLECTION_PLAYED')) {
+                    useGameStore.setState(state => ({ 
+                        gameFlags: new Set(state.gameFlags).add('STRANGERS_REFLECTION_PLAYED') 
+                    }));
+                    setTimeout(() => {
+                        if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                            useGameStore.getState().startCutscene('CS_STRANGERS_REFLECTION');
+                        }
+                    }, 500);
+                }
             });
 
             return newState;
@@ -644,6 +657,39 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             // FIX v1.2.4: Always round damage to ensure HP remains integer
             const roundedDamage = Math.floor(amount);
             const newHp = Math.max(0, state.hp.current - roundedDamage);
+            
+            // CS_THE_BRINK trigger: HP drops below 10% for the first time
+            const hpPercentage = (newHp / state.hp.max) * 100;
+            if (hpPercentage > 0 && hpPercentage < 10 && !useGameStore.getState().gameFlags.has('THE_BRINK_TRIGGERED')) {
+                useGameStore.setState(s => ({ 
+                    gameFlags: new Set(s.gameFlags).add('THE_BRINK_TRIGGERED') 
+                }));
+                
+                // Trigger cutscene with delay to allow damage to register visually
+                setTimeout(() => {
+                    if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                        useGameStore.getState().startCutscene('CS_THE_BRINK');
+                    }
+                }, 1000);
+                
+                // Grant 25% bonus to all attributes as one-time reward
+                const bonusedAttributes = { ...state.attributes };
+                (Object.keys(bonusedAttributes) as AttributeName[]).forEach(attr => {
+                    const bonus = Math.ceil(bonusedAttributes[attr] * 0.25);
+                    bonusedAttributes[attr] += bonus;
+                });
+                
+                useGameStore.getState().addJournalEntry({
+                    text: "[SOPRAVVISSUTO ALL'ORLO] La tua determinazione ti ha reso più forte! +25% a tutti gli attributi!",
+                    type: JournalEntryType.XP_GAIN
+                });
+                
+                return { 
+                    hp: { ...state.hp, current: newHp },
+                    attributes: bonusedAttributes
+                };
+            }
+            
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
@@ -877,6 +923,19 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      * @param {number} amount - The amount to change the alignment by.
      */
     changeAlignment: (type, amount) => {
+        // CS_THE_WEIGHT_OF_CHOICE trigger: Significant moral choice (±3+)
+        if (Math.abs(amount) >= 3 && !useGameStore.getState().gameFlags.has('WEIGHT_OF_CHOICE_PLAYED')) {
+            useGameStore.setState(state => ({ 
+                gameFlags: new Set(state.gameFlags).add('WEIGHT_OF_CHOICE_PLAYED') 
+            }));
+            // Delay cutscene to allow current event to complete
+            setTimeout(() => {
+                if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                    useGameStore.getState().startCutscene('CS_THE_WEIGHT_OF_CHOICE');
+                }
+            }, 1000);
+        }
+        
         const oldAlignment = get().alignment;
         const oldDiff = oldAlignment.lena - oldAlignment.elian;
         
@@ -1062,7 +1121,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      */
     fromJSON: (json) => {
         // Merge dei trofei del save con quelli globali
-        const saveTrophies = new Set(json.unlockedTrophies);
+        const saveTrophies = new Set<string>(json.unlockedTrophies || []);
         const mergedTrophies = mergeWithGlobalTrophies(saveTrophies);
         
         set({

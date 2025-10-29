@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.4.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.4.4)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,9 +84,92 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.4.0** - The Story Transformation
+**Versione Corrente: v1.4.4** - UX Polish & CRT Premium
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse, e la **v1.4.0 ridefinisce concettualmente la struttura narrativa** del gioco:
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse, e la **v1.4.x ridefinisce concettualmente la struttura narrativa** del gioco:
+
+#### Novità v1.4.4 (29 Ottobre 2025) - **UX POLISH & CRT PREMIUM**
+
+Questa versione migliora drasticamente l'esperienza utente per i nuovi giocatori e introduce un tema CRT di qualità premium.
+
+**SISTEMA PAGINAZIONE SCHERMATE INFORMATIVE:**
+- **Istruzioni:** 14 pagine navigate con keyboard (era scrolling veloce illeggibile)
+- **Storia:** 5 pagine narrative con testo completo (nessun taglio)
+- **Navigazione:** [A/←] Indietro, [D/→] Avanti, [INVIO] Avanti, [ESC] Menu
+- **UX:** Indicatore pagina, audio feedback, layout fisso (no spostamento orizzontale)
+- **Stato:** DEFINITIVO - Approvato e documentato nel codice
+
+**OPZIONI COMPLETATE:**
+- **Portoghese** aggiunto alle lingue selezionabili (preparazione i18n)
+- **Fullscreen** ora funzionante (attiva/disattiva modalità fullscreen browser)
+
+**TEMA CRT PREMIUM QUALITY:**
+- **Colore Fosforo P3 Autentico:** #33ff33 (IBM 5151, Apple Monitor III, DEC VT100)
+- **Multi-Layer Phosphor Glow:** 5 layer di bloom + aberrazione cromatica rossa
+- **Scanline Realistiche:** Gradiente intensità, pattern 4px, scroll lento (12s)
+- **Vignette Avanzata:** Gradiente 4-stop + phosphor bloom verde negli angoli
+- **Animazioni Premium:** Phosphor flicker, wobble ottimizzato, CRT flicker irregolare
+- **Filtri Avanzati:** Contrast 1.1, Brightness 1.05, Blur 0.3px
+
+**DOCUMENTAZIONE:**
+- **Template Changelog Ufficiale:** Standard per tutte le versioni future
+- **Analisi Sistema Temi:** Architettura completa (400 righe)
+- **CRT Premium Upgrade:** Dettagli tecnici upgrade (300 righe)
+
+**IMPATTO:**
+- Esperienza nuovi giocatori drasticamente migliorata
+- Schermate informative ora leggibili e professionali
+- Tema CRT di qualità premium con emulazione autentica anni '80
+- Base documentale solida per sviluppo futuro
+
+**Risultato:** UX professionale e immersione autentica nei monitor CRT vintage.
+
+---
+
+#### Novità v1.4.3 (22 Ottobre 2025) - **ECHOES OF THE PAST & ASH NESTS**
+
+Questa versione arricchisce profondamente la lore del mondo e migliora l'impatto narrativo degli eventi esistenti.
+
+**NUOVI EVENTI LORE:**
+    - **"L'Ultimo Messaggio"**: Un nuovo evento in ambiente urbano che offre una spiegazione parziale e inquietante del "Grande Silenzio", introducendo il "Progetto Eco" come un'interfaccia neurale collettiva.- **"Il Nido della Cenere"**: Un evento unico in aree remote che rivela la vera natura degli Angeli della Cenere: non solo predatori, ma entità che "raccolgono" e "trasformano" i corpi umani, aggiungendo un senso di orrore cosmico e conseguenze a lungo termine per le interazioni con gli NPC.
+
+**MIGLIORAMENTI EVENTI LORE ESISTENTI:**
+- **"L'Eco di una Tosse"**: La descrizione della malattia della ragazza è stata resa più specifica, aumentando la profondità narrativa e la potenziale rilevanza futura.
+- **"Voci nel Silenzio"**: La scelta di riparare la radio ora ricompensa il giocatore con un oggetto quest "Registrazione Criptica" in caso di successo, bilanciando la scelta "Lena" con una ricompensa tangibile e un potenziale di sviluppo narrativo a lungo termine.
+
+**IMPATTO:**
+- **Profondità Narrativa Accresciuta:** Il mondo di gioco diventa più misterioso e stratificato, con indizi sulla sua storia e sul ruolo di Lena.
+- **Scelte Più Significative:** Le decisioni del giocatore negli eventi lore hanno ora conseguenze più tangibili e ramificate.
+- **Angeli della Cenere Più Complessi:** La loro natura viene ridefinita, rendendoli antagonisti più intriganti.
+
+**Risultato:** Un mondo più vivo, misterioso e reattivo alle scelte del giocatore, con una lore che si svela gradualmente e in modo più coinvolgente.
+
+---
+
+#### Novità v1.4.1 (22 Ottobre 2025) - **THE HUMANOID FIX**
+
+Questa patch risolve **tre problemi narrativi critici** e aggiunge profondità cinematica, trasformando il gioco da un'esperienza **narrativamente fragile** a una **narrativamente robusta**.
+
+**FIX NARRATIVI CRITICI:**
+- **CS_FIRST_KILL:** La cutscene sull'uccisione di un umano ora si attiva correttamente **solo** dopo aver sconfitto un nemico `humanoid`, risolvendo una grave incoerenza narrativa. È stata introdotta una categorizzazione per tutti i 14 nemici.
+- **CS_BEING_WATCHED:** Trigger spostato da un'azione opzionale (riposo) a un evento **automatico e garantito** all'inizio del giorno 3.
+- **CS_ASH_LULLABY:** Trigger semplificato e reso **garantito** al primo rifugio notturno dal giorno 3 in poi, assicurando che la rivelazione chiave sulla madre non venga mai mancata.
+
+**NUOVE CUTSCENE CONTESTUALI:**
+- **4 nuove cutscene** brevi e potenti per trasformare momenti meccanici in eventi cinematici:
+  - `CS_THE_WEIGHT_OF_CHOICE`: Si attiva dopo la prima scelta morale significativa.
+  - `CS_CITY_OF_GHOSTS`: Aggiunge un impatto monumentale al primo ingresso in una città.
+  - `CS_STRANGERS_REFLECTION`: Collega il raggiungimento del livello 5 a una riflessione sulla trasformazione del personaggio.
+  - `CS_THE_BRINK`: Trasforma il momento in cui gli HP scendono sotto il 10% in un power-up narrativo e meccanico, fornendo un **bonus permanente a tutte le statistiche**.
+
+**IMPATTO:**
+- **Coerenza Narrativa Assoluta:** I momenti chiave della storia sono ora garantiti e contestualmente corretti.
+- **Impatto Emotivo Massimizzato:** Le nuove cutscene arricchiscono l'esperienza, dando peso a scelte, traguardi e momenti di difficoltà.
+- **Gameplay e Narrazione Sincronizzati:** Meccaniche come il level-up e la salute bassa diventano parte integrante del racconto.
+
+**Risultato:** Ogni storia viene raccontata, e il peso della sopravvivenza ha ora il peso giusto.
+
+---
 
 #### Novità v1.4.0 (21 Ottobre 2025) - **THE STORY TRANSFORMATION**
 

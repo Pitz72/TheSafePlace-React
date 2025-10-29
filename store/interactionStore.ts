@@ -492,8 +492,9 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         const selectedAction = refugeMenuState.options[refugeMenuState.selectedIndex];
         
         if (selectedAction === "Aspetta un'ora" || selectedAction === "Dormi fino all'alba") {
-            const hasMusicBox = useCharacterStore.getState().inventory.some(i => i.itemId === 'carillon_annerito');
-            if ( mainStoryStage >= 10 && playerPos.x > 80 && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST') && hasMusicBox ) {
+            // CS_ASH_LULLABY trigger: First refuge at night on day 3+
+            const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
+            if (gameTime.day >= 3 && isNight && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST')) {
                 useGameStore.setState(state => ({ gameFlags: new Set(state.gameFlags).add('LULLABY_CHOICE_OFFERED_THIS_REST') }));
                 setGameState(GameState.ASH_LULLABY_CHOICE);
                 audioManager.playSound('confirm');
@@ -578,7 +579,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             if (!isLooted && !refugeJustSearched) newOptions.push("Cerca nei dintorni");
             newOptions.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
             // FIX: Reset selectedIndex a 0 quando il menu cambia per evitare confusione
-            set(state => ({ refugeMenuState: { options: newOptions, selectedIndex: 0 } }));
+            set(state => ({ refugeMenuState: { isOpen: true, options: newOptions, selectedIndex: 0 } }));
         }
     },
 

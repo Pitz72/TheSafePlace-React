@@ -232,5 +232,15 @@
     "value": 0,
     "stackable": false,
     "rarity": "quest"
+  },
+  {
+    "id": "cryptic_recording",
+    "name": "Registrazione Criptica",
+    "description": "Un frammento audio registrato da una vecchia radio. Contiene una sequenza di numeri e suoni distorti. Potrebbe essere un messaggio in codice o solo rumore bianco.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
   }
 ]
