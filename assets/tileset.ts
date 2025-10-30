@@ -88,8 +88,16 @@ export const TILESET_SRC = `data:image/svg+xml;base64,${btoa(`
     <rect width="32" height="32" fill="black"/>
     <text x="16" y="26" class="mono" font-size="32" text-anchor="middle" fill="#facc15" style="text-shadow: 0 0 5px #facc15;">@</text>
   </g>
-  <g transform="translate(32, 64)"><rect width="32" height="32" fill="black"/></g>
-  <g transform="translate(64, 64)"><rect width="32" height="32" fill="black"/></g>
+  <g transform="translate(32, 64)">
+    <title>Quest Marker MAIN (!M)</title>
+    <rect width="32" height="32" fill="black"/>
+    <text x="16" y="26" class="mono" font-size="32" text-anchor="middle" fill="#ef4444" style="text-shadow: 0 0 8px #ef4444;">!</text>
+  </g>
+  <g transform="translate(64, 64)">
+    <title>Quest Marker SUB (!S)</title>
+    <rect width="32" height="32" fill="black"/>
+    <text x="16" y="26" class="mono" font-size="32" text-anchor="middle" fill="#facc15" style="text-shadow: 0 0 8px #facc15;">!</text>
+  </g>
   <g transform="translate(96, 64)"><rect width="32" height="32" fill="black"/></g>
   <g transform="translate(128, 64)"><rect width="32" height="32" fill="black"/></g>
 
@@ -107,4 +115,6 @@ export const TILE_MAP: { [key: string]: { x: number; y: number } } = {
   'S': { x: 3 * TILE_SIZE, y: 1 * TILE_SIZE },   // Start
   'E': { x: 4 * TILE_SIZE, y: 1 * TILE_SIZE },   // End
   '@': { x: 0 * TILE_SIZE, y: 2 * TILE_SIZE },   // Player
+  '!M': { x: 1 * TILE_SIZE, y: 2 * TILE_SIZE },  // Quest Marker MAIN (red)
+  '!S': { x: 2 * TILE_SIZE, y: 2 * TILE_SIZE },  // Quest Marker SUB (yellow)
 };

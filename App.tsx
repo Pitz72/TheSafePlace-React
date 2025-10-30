@@ -16,12 +16,14 @@ import EventScreen from './components/EventScreen';
 import CraftingScreen from './components/CraftingScreen';
 import LevelUpScreen from './components/LevelUpScreen';
 import CombatScreen from './components/CombatScreen';
+import QuestScreen from './components/QuestScreen';
 import { useItemDatabaseStore } from './data/itemDatabase';
 import { useEventDatabaseStore } from './data/eventDatabase';
 import { useRecipeDatabaseStore } from './data/recipeDatabase';
 import { useEnemyDatabaseStore } from './data/enemyDatabase';
 import { useMainStoryDatabaseStore } from './data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
+import { useQuestDatabaseStore } from './data/questDatabase';
 import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
@@ -60,6 +62,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadCutsceneDatabase, isLoaded: cutscenesLoaded } = useCutsceneDatabaseStore();
   const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
   const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
+  const { loadDatabase: loadQuestDatabase, isLoaded: questsLoaded } = useQuestDatabaseStore();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
@@ -84,6 +87,7 @@ const App: React.FC = () => {
         await loadCutsceneDatabase();
         await loadTalentDatabase();
         await loadTrophyDatabase();
+        await loadQuestDatabase();
 
         console.log('✅ Tutti i database caricati con successo!');
         setIsLoading(false);
@@ -98,7 +102,7 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, itemDatabase]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -135,6 +139,8 @@ const App: React.FC = () => {
         return <AshLullabyChoiceScreen />;
       case GameState.GAME_OVER:
         return <GameOverScreen />;
+      case GameState.QUEST_LOG:
+        return <QuestScreen />;
       case GameState.COMBAT:
         return (
           <>

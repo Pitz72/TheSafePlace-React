@@ -92,7 +92,18 @@
       "weight": 0.3, 
       "value": 60, 
       "stackable": true, 
-      "rarity": "rare", 
-      "effects": [{ "type": "satiety", "value": 80 }, { "type": "heal", "value": 10 }] 
+      "rarity": "rare",
+      "effects": [{ "type": "satiety", "value": 80 }, { "type": "heal", "value": 10 }]
+    },
+    {
+      "id": "food_honey",
+      "name": "Miele",
+      "description": "Un barattolo di miele dorato, miracolosamente conservato. Dolce, nutriente e curativo.",
+      "type": "consumable",
+      "weight": 0.3,
+      "value": 35,
+      "stackable": true,
+      "rarity": "uncommon",
+      "effects": [{ "type": "satiety", "value": 30 }, { "type": "heal", "value": 10 }]
     }
 ]

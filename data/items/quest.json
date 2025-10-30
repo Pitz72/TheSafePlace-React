@@ -243,4 +243,15 @@
     "stackable": false,
     "rarity": "quest"
   }
+,
+  {
+    "id": "jonas_talisman",
+    "name": "Talismano di Jonas",
+    "description": "Un piccolo talismano di legno intagliato a forma di corvo. Emana una debole sensazione di calore. Sembra essere stato importante per qualcuno.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 100,
+    "stackable": false,
+    "rarity": "quest"
+  }
 ]

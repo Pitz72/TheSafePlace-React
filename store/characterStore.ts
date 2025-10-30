@@ -108,6 +108,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     knownRecipes: [],
     unlockedTalents: [],
     unlockedTrophies: new Set<string>(),
+    activeQuests: {},
+    completedQuests: [],
 
     // --- Actions ---
     /**
@@ -193,6 +195,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ],
             unlockedTalents: [],
             unlockedTrophies: globalTrophies, // Inizia con i trofei globali
+            activeQuests: {},
+            completedQuests: [],
         });
     },
 
@@ -631,6 +635,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 }
             }
             return { inventory: newInventory };
+        });
+        
+        // Check quest triggers after adding item (for getItem triggers)
+        // Import questService dynamically to avoid circular dependency
+        import('../services/questService').then(({ questService }) => {
+            questService.checkQuestTriggers(itemId);
         });
     },
 
@@ -1782,6 +1792,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ...state,
             status: Array.from(state.status),
             unlockedTrophies: Array.from(state.unlockedTrophies),
+            activeQuests: state.activeQuests,
+            completedQuests: state.completedQuests,
         };
     },
 
@@ -1807,6 +1819,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ...json,
             status: new Set(json.status),
             unlockedTrophies: mergedTrophies,
+            activeQuests: json.activeQuests || {},
+            completedQuests: json.completedQuests || [],
         });
     },
 

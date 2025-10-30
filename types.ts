@@ -22,6 +22,7 @@ export enum GameState {
   COMBAT,
   MAIN_STORY,
   ASH_LULLABY_CHOICE,
+  QUEST_LOG,
   GAME_OVER,
 }
 
@@ -113,6 +114,60 @@ export interface MainStoryChapter {
   allowNightTrigger?: boolean;
 }
 
+// --- Quest System ---
+/**
+ * Type of quest: MAIN (main storyline) or SUB (side quest)
+ */
+export type QuestType = 'MAIN' | 'SUB';
+
+/**
+ * Types of triggers that can advance a quest stage
+ */
+export type QuestTriggerType = 
+  | 'reachLocation'
+  | 'getItem'
+  | 'useItem'
+  | 'enemyDefeated'
+  | 'interactWithObject'
+  | 'skillCheckSuccess';
+
+/**
+ * Defines a condition that must be met to advance a quest stage
+ */
+export interface QuestTrigger {
+  type: QuestTriggerType;
+  value: any; // e.g., { x: 10, y: 20 } for reachLocation, 'item_id' for getItem
+}
+
+/**
+ * Rewards granted upon quest completion
+ */
+export interface QuestReward {
+  xp?: number;
+  items?: Array<{ itemId: string; quantity: number }>;
+  statBoost?: { stat: keyof CharacterAttributes; amount: number };
+}
+
+/**
+ * A single stage/objective within a quest
+ */
+export interface QuestStage {
+  stage: number;
+  objective: string; // Description shown to player (e.g., "Find the old windmill.")
+  trigger: QuestTrigger;
+}
+
+/**
+ * Complete quest definition
+ */
+export interface Quest {
+  id: string; // Unique ID, e.g., "find_jonas_talisman"
+  title: string; // Title shown to player, e.g., "The Lost Talisman"
+  type: QuestType;
+  startText: string; // Narrative text shown when quest starts
+  stages: QuestStage[];
+  finalReward: QuestReward;
+}
 
 // --- UI & Menu States ---
 export type VisualTheme = 'standard' | 'crt' | 'high_contrast';
@@ -135,7 +190,7 @@ export interface CraftingMenuState {
 
 // --- Cutscene System ---
 export interface CutsceneConsequence {
-    type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest';
+    type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest' | 'startQuest';
     payload?: any;
 }
 
@@ -162,7 +217,7 @@ export interface Cutscene {
 // --- Event System ---
 export type EventResultType = 
     | 'addItem' | 'removeItem' | 'addXp' | 'takeDamage' | 'advanceTime' 
-    | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special';
+    | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special' | 'startQuest';
 
 export interface EventResult {
     type: EventResultType;
@@ -371,6 +426,9 @@ export interface Attributes {
   car: number;
 }
 
+// Type alias for CharacterAttributes (used in QuestReward)
+export type CharacterAttributes = Attributes;
+
 export interface Skill {
     proficient: boolean;
 }
@@ -432,6 +490,8 @@ export interface CharacterState {
     knownRecipes: string[];
     unlockedTalents: string[];
     unlockedTrophies: Set<string>;
+    activeQuests: Record<string, number>; // questId -> currentStage
+    completedQuests: string[]; // Array for JSON serialization
 
     // Actions
     initCharacter: () => void;

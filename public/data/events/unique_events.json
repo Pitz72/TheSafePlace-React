@@ -1,0 +1,46 @@
+[
+  {
+    "id": "unique_lost_talisman_location",
+    "title": "Il Vecchio Mulino a Vento",
+    "description": "Sei arrivato al vecchio mulino a vento menzionato nel messaggio di Jonas. Il vento cigola tra le pale arrugginite. È il posto giusto per iniziare a cercare.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca attentamente alla base del mulino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Dopo una lunga ricerca tra l'erba alta e le pietre, lo vedi. Un piccolo oggetto di legno scuro, quasi mimetizzato con il terreno. Hai trovato il Talismano di Jonas.",
+            "failureText": "Cerchi per quasi un'ora, ma non trovi nulla. Forse è stato sepolto dal tempo o portato via da qualche animale.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "jonas_talisman",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 50
+              }
+            ],
+            "failure": [
+              {
+                "type": "advanceTime",
+                "value": 60
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -20,6 +20,7 @@ import { useCombatStore } from '../store/combatStore';
 import { useInteractionStore } from '../store/interactionStore';
 import { GameState, JournalEntryType } from '../types';
 import { MOUNTAIN_MESSAGES, BIOME_MESSAGES, ATMOSPHERIC_MESSAGES, BIOME_COLORS } from '../constants';
+import { questService } from './questService';
 
 /**
  * Gets a random element from an array.
@@ -230,6 +231,9 @@ export const gameService = {
     useCharacterStore.getState().gainExplorationXp();
     useCharacterStore.getState().updateFatigue(0.1);
 
+    // Check quest triggers after movement (for reachLocation triggers)
+    questService.checkQuestTriggers();
+
     checkMainStoryTriggers();
     if (useGameStore.getState().gameState !== GameState.IN_GAME) return;
 
@@ -237,7 +241,7 @@ export const gameService = {
     if (useGameStore.getState().gameState !== GameState.IN_GAME) return;
 
     let eventTriggered = false;
-    const guaranteedEventBiomes = ['F', 'C', 'V'];
+    const guaranteedEventBiomes = ['F', 'C', 'V', '~']; // Added water for quest trigger
     if (guaranteedEventBiomes.includes(destinationTile) && destinationTile !== previousBiome) {
       useEventStore.getState().triggerEncounter(true); // Force biome-specific event
       eventTriggered = true;

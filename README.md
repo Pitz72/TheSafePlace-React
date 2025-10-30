@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.4.5)
+# The Safe Place Chronicles: The Echo of the Journey (v1.5.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -83,6 +83,62 @@ L'interazione avviene interamente tramite tastiera:
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
 ### Stato del Progetto e Sviluppi Futuri
+
+**Versione Corrente: v1.5.0** - Quest System Framework
+
+Con la versione 1.5.0, il gioco introduce il **Quest System Framework** - un'infrastruttura completa per missioni principali e secondarie che trasforma il gioco da esperienza narrativa passiva a RPG con obiettivi attivi.
+
+#### Novità v1.5.0 (30 Ottobre 2025) - **QUEST SYSTEM FRAMEWORK**
+
+Questa versione implementa le fondamenta per un sistema di quest completo, validato con la prima subquest giocabile.
+
+**SPRINT 1 - INFRASTRUTTURA QUEST:**
+- **Sistema Tipi Completo**: 6 tipi trigger, quest MAIN/SUB, ricompense multi-tipo
+- **Database Quest**: Store Zustand con caricamento asincrono ([`questDatabase.ts`](data/questDatabase.ts:1))
+- **Quest Service**: 308 righe di logica centralizzata ([`questService.ts`](services/questService.ts:1))
+- **Character Integration**: activeQuests, completedQuests, persistenza save/load
+- **Quest Log UI**: Schermata dedicata [J] con layout due colonne ([`QuestScreen.tsx`](components/QuestScreen.tsx:1))
+
+**SPRINT 2 - PRIMA QUEST GIOCABILE:**
+- **"Il Talismano Perduto"**: Subquest completa in 2 stage
+- **Evento Attivatore**: "Messaggio nella Bottiglia" (fiume)
+- **Evento Obiettivo**: "Il Vecchio Mulino a Vento" (78, 9)
+- **Trigger Implementati**: reachLocation, getItem
+- **Ricompense**: 150 XP + 2x Miele
+
+**QUEST MARKERS VISIVI:**
+- **! ROSSO**: MAIN quest (priorità massima)
+- **! GIALLO**: SUB quest (obiettivi secondari)
+- Indicatori sulla mappa mostrano dove andare
+- Scompaiono quando obiettivo raggiunto
+
+**CICLO QUEST COMPLETO:**
+1. Trova bottiglia in fiume → Leggi messaggio → Quest attivata
+2. **! GIALLO appare a (78, 9)** sulla mappa
+3. Viaggia verso il marker → Evento ricerca automatico
+4. Skill check Percezione DC 12 → Trova talismano
+5. Quest completata → Marker scompare → Ricompense assegnate
+
+**ARCHITETTURA:**
+- Service Layer pattern per logica complessa
+- Event-driven trigger system
+- Persistenza integrata in save system v2.0.0
+- UI keyboard-only coerente con design
+
+**DOCUMENTAZIONE:**
+- **QUEST-SYSTEM-v1.5.0-IMPLEMENTATION.md**: Analisi completa (308 righe)
+- **log/v1.5.0.md**: Changelog dettagliato (158 righe)
+- JSDoc enterprise-grade per tutte le funzioni
+
+**IMPATTO:**
+- Primo vero sistema di obiettivi attivi
+- Base per espansione narrativa (quest chain, branch, timer)
+- Rigiocabilità aumentata (contenuti opzionali)
+- Preparazione per Main Quest integration
+
+**Risultato:** Il gioco evolve da "survival narrative" a "survival RPG" con quest system robusto e scalabile.
+
+---
 
 **Versione Corrente: v1.4.5** - Technical Excellence & Encumbrance
 

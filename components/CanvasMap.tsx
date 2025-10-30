@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { TILESET_SRC, TILE_MAP, TILE_SIZE as BASE_TILE_SIZE } from '../assets/tileset';
+import { getActiveQuestMarkers } from '../services/questService';
 
 const CanvasMap: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -74,6 +75,33 @@ const CanvasMap: React.FC = () => {
             }
         }
         
+        // Render quest markers (after terrain, before player)
+        const questMarkers = getActiveQuestMarkers();
+        questMarkers.forEach(marker => {
+            const { pos, type } = marker;
+            
+            // Only render if marker is in viewport
+            if (pos.x >= startCol && pos.x < endCol &&
+                pos.y >= startRow && pos.y < endRow) {
+                
+                // Choose marker tile based on quest type
+                const markerTileKey = type === 'MAIN' ? '!M' : '!S';
+                const markerTile = TILE_MAP[markerTileKey];
+                
+                const screenX = Math.round((pos.x - cameraX) * tileSize);
+                const screenY = Math.round((pos.y - cameraY) * tileSize);
+                
+                ctx.drawImage(
+                    tilesetImage,
+                    markerTile.x, markerTile.y,
+                    BASE_TILE_SIZE, BASE_TILE_SIZE,
+                    screenX, screenY,
+                    Math.ceil(tileSize), Math.ceil(tileSize)
+                );
+            }
+        });
+        
+        // Render player (always on top)
         const playerScreenX = Math.round((playerPos.x - cameraX) * tileSize);
         const playerScreenY = Math.round((playerPos.y - cameraY) * tileSize);
         const playerTile = TILE_MAP['@'];
