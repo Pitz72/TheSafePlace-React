@@ -18,6 +18,8 @@ import CraftingScreen from './components/CraftingScreen';
 import LevelUpScreen from './components/LevelUpScreen';
 import CombatScreen from './components/CombatScreen';
 import QuestScreen from './components/QuestScreen';
+import DialogueScreen from './components/DialogueScreen';
+import TradeScreen from './components/TradeScreen';
 import { useItemDatabaseStore } from './data/itemDatabase';
 import { useEventDatabaseStore } from './data/eventDatabase';
 import { useRecipeDatabaseStore } from './data/recipeDatabase';
@@ -25,6 +27,8 @@ import { useEnemyDatabaseStore } from './data/enemyDatabase';
 import { useMainStoryDatabaseStore } from './data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
 import { useQuestDatabaseStore } from './data/questDatabase';
+import { useDialogueDatabaseStore } from './data/dialogueDatabase';
+import { useTraderDatabaseStore } from './data/traderDatabase';
 import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
@@ -64,6 +68,8 @@ const App: React.FC = () => {
   const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
   const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
   const { loadDatabase: loadQuestDatabase, isLoaded: questsLoaded } = useQuestDatabaseStore();
+  const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore();
+  const { loadDatabase: loadTraderDatabase, isLoaded: tradersLoaded } = useTraderDatabaseStore();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
@@ -89,6 +95,8 @@ const App: React.FC = () => {
         await loadTalentDatabase();
         await loadTrophyDatabase();
         await loadQuestDatabase();
+        await loadDialogueDatabase();
+        await loadTraderDatabase();
 
         console.log('✅ Tutti i database caricati con successo!');
         setIsLoading(false);
@@ -103,7 +111,7 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, itemDatabase]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -144,6 +152,10 @@ const App: React.FC = () => {
         return <QuestScreen />;
       case GameState.OUTPOST:
         return <OutpostScreen />;
+      case GameState.DIALOGUE:
+        return <DialogueScreen />;
+      case GameState.TRADING:
+        return <TradeScreen />;
       case GameState.COMBAT:
         return (
           <>

@@ -24,6 +24,8 @@ export enum GameState {
   ASH_LULLABY_CHOICE,
   QUEST_LOG,
   OUTPOST,
+  DIALOGUE,
+  TRADING,
   GAME_OVER,
 }
 
@@ -197,6 +199,86 @@ export interface Quest {
   startText: string; // Narrative text shown when quest starts
   stages: QuestStage[];
   finalReward: QuestReward;
+}
+
+// --- Dialogue System (v1.7.0) ---
+/**
+ * Consequence that can result from a dialogue choice.
+ * Supports quest management, item exchange, skill checks, and dialogue flow control.
+ */
+export interface DialogueConsequence {
+  type: 'startQuest' | 'advanceQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp';
+  value?: any; // questId, itemId, { skill, dc, successNode, failureNode }, nodeId, etc.
+}
+
+/**
+ * A single dialogue option that the player can choose.
+ */
+export interface DialogueOption {
+  text: string; // Text shown to player (e.g., "[1] Chi sei?")
+  consequence: DialogueConsequence;
+  showCondition?: {
+    questActive?: string;
+    questCompleted?: string;
+    hasItem?: string;
+    alignment?: 'lena' | 'elian';
+    minAlignmentValue?: number;
+  };
+}
+
+/**
+ * A single node in a dialogue tree.
+ * Contains NPC text and player response options.
+ */
+export interface DialogueNode {
+  id: string; // Node ID (e.g., "marcus_intro_1")
+  npcText: string; // What the NPC says
+  options: DialogueOption[];
+}
+
+/**
+ * Complete dialogue tree for an NPC or situation.
+ */
+export interface DialogueTree {
+  id: string; // Tree ID (e.g., "marcus_main")
+  npcName: string; // Display name (e.g., "Marcus")
+  nodes: Record<string, DialogueNode>;
+  startNodeId: string; // Initial node ID
+}
+
+// --- Trading System (v1.7.0) ---
+/**
+ * Represents an item in a trade offer.
+ */
+export interface TradeItem {
+  inventoryIndex: number; // Index in player's inventory or trader's inventory
+  itemId: string;
+  quantity: number;
+  value: number; // Total value (item.value × quantity)
+}
+
+/**
+ * Trader NPC definition with inventory.
+ */
+export interface Trader {
+  id: string; // e.g., "marcus", "wandering_trader"
+  name: string; // Display name
+  description: string;
+  inventory: Array<{ itemId: string; quantity: number }>;
+  baseMarkup: number; // Base markup percentage (e.g., 1.5 = 150%)
+}
+
+/**
+ * Current state of a trading session.
+ */
+export interface TradingSessionState {
+  traderId: string;
+  playerOffer: TradeItem[];
+  traderOffer: TradeItem[];
+  playerOfferValue: number;
+  traderOfferValue: number;
+  effectiveMarkup: number; // Markup after Persuasion skill adjustment
+  balance: number; // playerOfferValue - (traderOfferValue × effectiveMarkup)
 }
 
 // --- UI & Menu States ---

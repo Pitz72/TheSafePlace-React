@@ -1,0 +1,222 @@
+[
+  {
+    "id": "marcus_main",
+    "npcName": "Marcus",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Un altro volto nuovo. Non se ne vedono molti da queste parti. Ti guardi intorno come se avessi visto un fantasma. Posso aiutarti, viaggiatore?",
+        "options": [
+          {
+            "text": "Chi sei?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "who_are_you"
+            }
+          },
+          {
+            "text": "Cos'è questo posto?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_is_this_place"
+            }
+          },
+          {
+            "text": "[Persuasione] Parlami dei pericoli della zona.",
+            "consequence": {
+              "type": "skillCheck",
+              "value": {
+                "skill": "persuasione",
+                "dc": 12,
+                "successNode": "dangers_success",
+                "failureNode": "dangers_failure"
+              }
+            }
+          },
+          {
+            "text": "Non ho tempo per chiacchierare. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "who_are_you": {
+        "id": "who_are_you",
+        "npcText": "Il mio nome è Marcus. Diciamo che sono il... custode non ufficiale di questo posto. Vendo, compro, scambio. Cerco di tenere insieme i pezzi, come tutti.",
+        "options": [
+          {
+            "text": "Interessante. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Grazie. Devo andare.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "what_is_this_place": {
+        "id": "what_is_this_place",
+        "npcText": "Lo chiamiamo 'Il Crocevia'. È solo un mucchio di rottami, ma è il più vicino a una casa che molti di noi abbiano da anni. Se non crei problemi, sei il benvenuto.",
+        "options": [
+          {
+            "text": "Capisco. Grazie.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Sembra un buon posto. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "dangers_success": {
+        "id": "dangers_success",
+        "npcText": "Hai un modo di fare convincente. Va bene, ascolta. A nord-ovest, tra le montagne... c'è un posto che chiamiamo 'Il Nido'. Non andarci. Chi ci va, non torna. È un luogo di cenere e silenzio. Capito?",
+        "options": [
+          {
+            "text": "Grazie dell'avvertimento. Starò attento.",
+            "consequence": {
+              "type": "addXp",
+              "value": 25
+            }
+          },
+          {
+            "text": "Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "dangers_failure": {
+        "id": "dangers_failure",
+        "npcText": "I pericoli? I pericoli sono ovunque, amico. Tieni gli occhi aperti, è l'unico consiglio che do gratis.",
+        "options": [
+          {
+            "text": "Va bene, come non detto.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Capito. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "giona_main",
+    "npcName": "Giona",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Ah, finalmente qualcuno mi raggiunge. La strada è lunga e solitaria, sai? Cosa posso fare per te, viaggiatore?",
+        "options": [
+          {
+            "text": "Raccontami dei tuoi viaggi.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "travels"
+            }
+          },
+          {
+            "text": "Hai visto qualcosa di strano ultimamente?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "strange_things"
+            }
+          },
+          {
+            "text": "Conosci la strada per il Safe Place?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "safe_place"
+            }
+          },
+          {
+            "text": "Grazie, devo andare.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "travels": {
+        "id": "travels",
+        "npcText": "Ho visto molte cose nei miei viaggi. Città morte, foreste che sussurrano, fiumi che scorrono rossi. Ma ho anche visto sopravvissuti che si aiutano, piccoli atti di gentilezza in un mondo crudele. Questo mi dà speranza.",
+        "options": [
+          {
+            "text": "È confortante saperlo.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Grazie per le tue parole. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "strange_things": {
+        "id": "strange_things",
+        "npcText": "Strano? Tutto è strano in questi giorni. Ma sì... ho visto creature che non dovrebbero esistere. Ombre che si muovono contro il vento. E a volte, di notte, sento voci che cantano ninna nanne. Mi fa venire i brividi.",
+        "options": [
+          {
+            "text": "Inquietante. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Capisco. Devo andare.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "safe_place": {
+        "id": "safe_place",
+        "npcText": "Il Safe Place... sì, ne ho sentito parlare. Dicono sia a est, molto a est. Oltre le montagne, oltre le città morte. Un luogo dove la contaminazione non arriva. Ma il viaggio è lungo, ragazzo. Molto lungo. Porta con te tutto ciò che puoi.",
+        "options": [
+          {
+            "text": "Grazie per l'informazione.",
+            "consequence": {
+              "type": "addXp",
+              "value": 30
+            }
+          },
+          {
+            "text": "Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      }
+    }
+  }
+]

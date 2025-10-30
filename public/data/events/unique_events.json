@@ -240,91 +240,55 @@
                   {
                     "id": "unique_wandering_trader_encounter",
                     "title": "Incontro con il Mercante Itinerante",
-                    "description": "Raggiungi finalmente la figura solitaria che avevi visto muoversi in lontananza. È un vecchio mercante che spinge un carretto cigolante carico di merci eterogenee. Ti saluta con un cenno stanco ma vigile. 'Pochi sanno ancora viaggiare in queste terre,' dice con voce roca. 'Cosa ti porta da me, straniero?'",
+                    "description": "Raggiungi finalmente la figura solitaria che avevi visto muoversi in lontananza. È un vecchio mercante di nome Giona, che spinge un carretto cigolante carico di merci eterogenee. Ti saluta con un cenno stanco ma vigile. 'Pochi sanno ancora viaggiare in queste terre,' dice con voce roca. 'Cosa ti porta da me, straniero?'",
                     "biomes": ["Global"],
                     "isUnique": false,
                     "choices": [
                       {
-                        "text": "[Commercia] - (Prossimamente)",
+                        "text": "[Parla con Giona]",
                         "outcomes": [
                           {
                             "type": "direct",
                             "results": [
                               {
-                                "type": "journalEntry",
-                                "text": "Il mercante sorride. 'Il sistema di commercio non è ancora pronto, viaggiatore. Torna quando avrò organizzato meglio la mia merce.'"
+                                "type": "special",
+                                "value": {
+                                  "effect": "startDialogue",
+                                  "dialogueId": "giona_main"
+                                },
+                                "text": "Inizi a conversare con Giona..."
                               }
                             ]
                           }
                         ]
                       },
                       {
-                        "text": "[Chiedi Informazioni sui Luoghi Speciali]",
+                        "text": "[Commercia]",
                         "outcomes": [
                           {
                             "type": "direct",
                             "results": [
                               {
-                                "type": "journalEntry",
-                                "text": "'Ho visto cose strane nei miei viaggi,' dice il mercante abbassando la voce. 'Un vecchio laboratorio a est, ancora alimentato. Una biblioteca immensa in una città morta. E... una caverna maledetta a nord-ovest. Quel posto... evitalo se puoi.'"
-                              },
-                              {
-                                "type": "addXp",
-                                "value": 25
-                              },
-                              {
-                                "type": "journalEntry",
-                                "text": "Riflessione: Le sue parole confermano ciò che ho visto sulla mappa. Questi luoghi potrebbero contenere risposte... o pericoli mortali."
+                                "type": "special",
+                                "value": {
+                                  "effect": "startTrading",
+                                  "traderId": "wandering_trader"
+                                },
+                                "text": "Giona apre il suo carretto per mostrarti la merce..."
                               }
                             ]
                           }
                         ]
                       },
                       {
-                        "text": "[Chiedi del Safe Place]",
-                        "outcomes": [
-                          {
-                            "type": "skillCheck",
-                            "skill": "persuasione",
-                            "dc": 12,
-                            "successText": "Il mercante ti studia attentamente, poi annuisce. 'Il Safe Place... sì, ne ho sentito parlare. Dicono sia a est, oltre le montagne. Un luogo dove la contaminazione non arriva. Ma il viaggio è lungo e pericoloso. Porta con te tutto ciò che puoi.'",
-                            "failureText": "Il mercante scuote la testa. 'Il Safe Place? Leggende, ragazzo. Storie che i disperati si raccontano per dormire la notte. Ma se vuoi crederci... chi sono io per fermarti?'",
-                            "success": [
-                              {
-                                "type": "addXp",
-                                "value": 50
-                              },
-                              {
-                                "type": "journalEntry",
-                                "text": "Riflessione: Le sue parole mi danno speranza. Il Safe Place esiste davvero. Papà non mi ha mentito."
-                              }
-                            ],
-                            "failure": [
-                              {
-                                "type": "addXp",
-                                "value": 15
-                              },
-                              {
-                                "type": "journalEntry",
-                                "text": "Riflessione: Forse ha ragione. Forse sto inseguendo un miraggio. Ma cosa mi resta se non questa speranza?"
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "text": "[Saluta e prosegui]",
+                        "text": "[Congedati e prosegui]",
                         "outcomes": [
                           {
                             "type": "direct",
                             "results": [
                               {
                                 "type": "journalEntry",
-                                "text": "Saluti il mercante con un cenno e riprendi il tuo cammino. Lui ti guarda allontanarti, poi riprende a spingere il suo carretto nella direzione opposta."
-                              },
-                              {
-                                "type": "addXp",
-                                "value": 10
+                                "text": "Saluti Giona con un cenno e riprendi il tuo cammino. Lui ti guarda allontanarti, poi riprende a spingere il suo carretto nella direzione opposta."
                               }
                             ]
                           }

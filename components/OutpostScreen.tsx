@@ -5,6 +5,8 @@ import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { useTimeStore } from '../store/timeStore';
 import { GameState, JournalEntryType } from '../types';
+import { dialogueService } from '../services/dialogueService';
+import { tradingService } from '../services/tradingService';
 
 /**
  * OutpostScreen component (v1.6.0).
@@ -18,10 +20,10 @@ const OutpostScreen: React.FC = () => {
     const { advanceTime } = useTimeStore();
     const { satiety, hydration, hp, heal, rest } = useCharacterStore();
 
-    // Menu options with placeholder indicators
+    // Menu options (v1.7.0: Marcus dialogue and trading now functional)
     const options = [
-        'Parla con Marcus (il mercante) - [Prossimamente]',
-        'Commercia - [Prossimamente]',
+        'Parla con Marcus (il mercante)',
+        'Commercia',
         'Controlla la Bacheca delle Taglie - [Prossimamente]',
         'Riposa in un luogo sicuro (8 ore)',
         'Lascia l\'Avamposto'
@@ -39,6 +41,18 @@ const OutpostScreen: React.FC = () => {
 
     const confirmSelection = useCallback(() => {
         const selectedOption = options[selectedIndex];
+        
+        // Marcus dialogue (v1.7.0: Now functional!)
+        if (selectedOption.includes('Parla con Marcus')) {
+            dialogueService.startDialogue('marcus_main');
+            return;
+        }
+
+        // Trading (v1.7.0: Now functional!)
+        if (selectedOption.includes('Commercia') && !selectedOption.includes('[Prossimamente]')) {
+            tradingService.startTradingSession('marcus');
+            return;
+        }
         
         // Placeholder options (not yet implemented)
         if (selectedOption.includes('[Prossimamente]')) {

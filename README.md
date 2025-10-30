@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.6.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.7.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -83,6 +83,59 @@ L'interazione avviene interamente tramite tastiera:
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
 ### Stato del Progetto e Sviluppi Futuri
+
+**Versione Corrente: v1.7.0** - Social Hub & Interactive NPCs
+
+Con la versione 1.7.0, il gioco completa la trasformazione in un **RPG sociale completo** con sistemi di dialogo interattivo e baratto economico funzionanti.
+
+#### Novità v1.7.0 (30 Ottobre 2025) - **SOCIAL HUB & INTERACTIVE NPCS**
+
+Questa versione introduce sistemi sociali ed economici che trasformano i PNG in partner di gioco reali.
+
+**SISTEMA DI DIALOGO INTERATTIVO:**
+- Alberi di dialogo ramificati con 10 nodi totali
+- 2 PNG parlanti: Marcus (Avamposto) + Giona (Wandering Trader)
+- Effetto macchina da scrivere immersivo (30ms/carattere)
+- Skill check integrati (Persuasione DC 12)
+- Navigazione keyboard-only (1-9 per opzioni)
+- Conditional options basate su quest/alignment/items
+- Context preservation (ritorno intelligente)
+
+**SISTEMA DI BARATTO ECONOMICO:**
+- Scambio basato su valore oggetti (no valuta)
+- Markup dinamico influenzato da Persuasione
+- Formula: `effectiveMarkup = baseMarkup - (persuasionBonus × 0.02)`
+- Range markup: 105% (master) → 150% (novizio)
+- Balance real-time con indicatore verde/rosso
+- 2 mercanti: Marcus (19 item) + Giona (10 item)
+- UI dual-panel: Player | Offers | Trader
+
+**HUB INTERATTIVI COMPLETI:**
+- **Avamposto**: Dialogo + Commercio + Riposo funzionanti
+- **Wandering Trader**: Dialogo + Commercio + movimento forzato
+- Ritorno automatico al menu dopo interazioni
+- Scelte multiple per PNG (parla poi commercia)
+
+**PERSUASIONE MECCANICAMENTE UTILE:**
+- Riduce costi commercio (2% per punto bonus)
+- Sblocca informazioni nei dialoghi
+- Skill ora critica per economia
+
+**OGGETTI DI VALORE FUNZIONALI:**
+- Monete, gioielli, gemme = valuta di scambio
+- Convertire loot inutile in risorse essenziali
+- Economia strategica implementata
+
+**IMPATTO:**
+- PNG con personalità e voci
+- Dimensione sociale ed economica
+- Persuasione skill critica
+- Hub sociali completi
+- Base per fazioni e reputazione
+
+**Risultato:** Il gioco evolve da "survival RPG con mondo vivo" a "survival RPG sociale" con economia e interazioni profonde.
+
+---
 
 **Versione Corrente: v1.6.0** - Living World & Special Locations
 

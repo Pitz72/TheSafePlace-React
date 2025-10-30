@@ -145,6 +145,14 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             useGameStore.getState().setGameState(GameState.IN_GAME);
             return;
         }
+        
+        // If this was a wandering trader encounter, force trader to move
+        if (activeEventId === 'unique_wandering_trader_encounter') {
+            import('../services/gameService').then(({ gameService }) => {
+                gameService.updateWanderingTrader();
+            });
+        }
+        
         set(state => ({
             eventHistory: state.activeEvent?.isUnique ? [...state.eventHistory, activeEventId] : state.eventHistory,
             activeEvent: null,
@@ -203,7 +211,31 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 }
                 case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
-                case 'special': message = result.text || `Si è verificato un evento speciale.`; break;
+                case 'special': {
+                    // Handle special effects (v1.7.0: dialogue and trading)
+                    if (result.value && typeof result.value === 'object') {
+                        const { effect, dialogueId, traderId } = result.value;
+                        
+                        if (effect === 'startDialogue' && dialogueId) {
+                            // Import dialogueService dynamically to avoid circular dependency
+                            import('../services/dialogueService').then(({ dialogueService }) => {
+                                dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
+                            });
+                            message = result.text || "Inizi una conversazione...";
+                        } else if (effect === 'startTrading' && traderId) {
+                            // Import tradingService dynamically to avoid circular dependency
+                            import('../services/tradingService').then(({ tradingService }) => {
+                                tradingService.startTradingSession(traderId, GameState.EVENT_SCREEN);
+                            });
+                            message = result.text || "Inizi a commerciare...";
+                        } else {
+                            message = result.text || `Si è verificato un evento speciale.`;
+                        }
+                    } else {
+                        message = result.text || `Si è verificato un evento speciale.`;
+                    }
+                    break;
+                }
                 case 'startQuest':
                     questService.startQuest(result.value as string);
                     message = null; // Quest service handles journal entries
