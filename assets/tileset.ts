@@ -98,8 +98,40 @@ export const TILESET_SRC = `data:image/svg+xml;base64,${btoa(`
     <rect width="32" height="32" fill="black"/>
     <text x="16" y="26" class="mono" font-size="32" text-anchor="middle" fill="#facc15" style="text-shadow: 0 0 8px #facc15;">!</text>
   </g>
-  <g transform="translate(96, 64)"><rect width="32" height="32" fill="black"/></g>
-  <g transform="translate(128, 64)"><rect width="32" height="32" fill="black"/></g>
+  <g transform="translate(96, 64)">
+    <title>Outpost (A)</title>
+    <rect width="32" height="32" fill="#1f2937"/>
+    <path d="M4 26h24M10 26l6-18 6 18" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="16" cy="12" r="2" fill="#f59e0b"/>
+  </g>
+  <g transform="translate(128, 64)">
+    <title>Ash Nest (N)</title>
+    <rect width="32" height="32" fill="#1f2937"/>
+    <path d="M16 8a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#7e22ce" stroke-width="2" fill="none"/>
+    <circle cx="16" cy="16" r="2" fill="#dc2626"/>
+  </g>
+
+  <!-- Row 4 - Special Locations (continued) -->
+  <g transform="translate(0, 96)">
+    <title>Trader (T)</title>
+    <rect width="32" height="32" fill="#1f2937"/>
+    <path d="M16 4a5 5 0 0 0-5 5v2h10V9a5 5 0 0 0-5-5zM7 12v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V12" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="16" cy="18" r="2" fill="#facc15"/>
+  </g>
+  <g transform="translate(32, 96)">
+    <title>Laboratory (L)</title>
+    <rect width="32" height="32" fill="#1f2937"/>
+    <path d="M10 6h12M14 6v12M18 6v12M10 18h12l-3 6H13z" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="16" cy="22" r="1.5" fill="#06b6d4"/>
+  </g>
+  <g transform="translate(64, 96)">
+    <title>Library (B)</title>
+    <rect width="32" height="32" fill="#1f2937"/>
+    <path d="M6 6h10a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6V6zm20 20V9a3 3 0 0 0-3-3h-4" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <line x1="11" y1="12" x2="11" y2="20" stroke="#be123c" stroke-width="1"/>
+  </g>
+  <g transform="translate(96, 96)"><rect width="32" height="32" fill="black"/></g>
+  <g transform="translate(128, 96)"><rect width="32" height="32" fill="black"/></g>
 
 </svg>
 `)}`;
@@ -109,7 +141,7 @@ export const TILE_MAP: { [key: string]: { x: number; y: number } } = {
   'F': { x: 1 * TILE_SIZE, y: 0 * TILE_SIZE },   // Forest
   '~': { x: 2 * TILE_SIZE, y: 0 * TILE_SIZE },   // Water
   'M': { x: 3 * TILE_SIZE, y: 0 * TILE_SIZE },   // Mountain
-  'C': { x: 4 * TILE_SIZE, y: 0 * TILE_SIZE },   // City (New Position)
+  'C': { x: 4 * TILE_SIZE, y: 0 * TILE_SIZE },   // City
   'R': { x: 0 * TILE_SIZE, y: 1 * TILE_SIZE },   // Refuge
   'V': { x: 2 * TILE_SIZE, y: 1 * TILE_SIZE },   // Village
   'S': { x: 3 * TILE_SIZE, y: 1 * TILE_SIZE },   // Start
@@ -117,4 +149,9 @@ export const TILE_MAP: { [key: string]: { x: number; y: number } } = {
   '@': { x: 0 * TILE_SIZE, y: 2 * TILE_SIZE },   // Player
   '!M': { x: 1 * TILE_SIZE, y: 2 * TILE_SIZE },  // Quest Marker MAIN (red)
   '!S': { x: 2 * TILE_SIZE, y: 2 * TILE_SIZE },  // Quest Marker SUB (yellow)
+  'A': { x: 3 * TILE_SIZE, y: 2 * TILE_SIZE },   // Outpost (v1.6.0)
+  'N': { x: 4 * TILE_SIZE, y: 2 * TILE_SIZE },   // Ash Nest (v1.6.0)
+  'T': { x: 0 * TILE_SIZE, y: 3 * TILE_SIZE },   // Trader (v1.6.0)
+  'L': { x: 1 * TILE_SIZE, y: 3 * TILE_SIZE },   // Laboratory (v1.6.0)
+  'B': { x: 2 * TILE_SIZE, y: 3 * TILE_SIZE },   // Library (v1.6.0)
 };

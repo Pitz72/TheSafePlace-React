@@ -38,6 +38,353 @@
                 "value": 10
               }
             ]
+          },
+          {
+            "id": "unique_scientist_notes",
+            "title": "Il Laboratorio Dimenticato",
+            "description": "Entri in un laboratorio abbandonato. Le apparecchiature sono coperte di polvere, ma alcune luci di emergenza lampeggiano ancora debolmente. Su una scrivania trovi un diario di ricerca aperto, con l'ultima pagina macchiata di sangue. Le note parlano di 'Progetto Rinascita' e di esperimenti su 'campioni contaminati'.",
+            "biomes": ["Città"],
+            "isUnique": true,
+            "choices": [
+              {
+                "text": "Leggi attentamente il diario",
+                "outcomes": [
+                  {
+                    "type": "skillCheck",
+                    "skill": "investigare",
+                    "dc": 14,
+                    "successText": "Le note sono frammentarie, ma riesci a decifrare alcuni passaggi chiave. Il 'Progetto Rinascita' era un tentativo disperato di curare la contaminazione. L'ultimo esperimento menziona 'soggetto L-7' e 'reazione anomala'. Poi, solo sangue e silenzio.",
+                    "failureText": "Il gergo scientifico è troppo complesso. Riesci solo a capire che stavano cercando una cura, ma qualcosa è andato terribilmente storto.",
+                    "success": [
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "research_notes",
+                          "quantity": 1
+                        }
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 100
+                      },
+                      {
+                        "type": "journalEntry",
+                        "text": "Riflessione: Questi scienziati cercavano di salvare il mondo. Invece, forse, lo hanno condannato. La strada per l'inferno è lastricata di buone intenzioni."
+                      }
+                    ],
+                    "failure": [
+                      {
+                        "type": "addXp",
+                        "value": 30
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "text": "Cerca materiali utili nel laboratorio",
+                "outcomes": [
+                  {
+                    "type": "skillCheck",
+                    "skill": "percezione",
+                    "dc": 12,
+                    "successText": "Frugando tra le attrezzature, trovi alcuni componenti tecnologici ancora funzionanti e materiali chimici sigillati.",
+                    "failureText": "La maggior parte delle attrezzature è inutilizzabile. Trovi solo rottami.",
+                    "success": [
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "tech_components",
+                          "quantity": 3
+                        }
+                      },
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "chemical_substances",
+                          "quantity": 2
+                        }
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 50
+                      }
+                    ],
+                    "failure": [
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "scrap_metal",
+                          "quantity": 2
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "unique_ancient_library",
+            "title": "La Biblioteca dei Sussurri",
+            "description": "Entri in una vasta biblioteca. Gli scaffali si ergono come scheletri di legno, molti libri sono marciti o bruciati. Ma in una sezione protetta da vetri blindati, vedi volumi ancora intatti. Una targa recita: 'Archivio della Memoria Collettiva - Progetto Eco'.",
+            "biomes": ["Città"],
+            "isUnique": true,
+            "choices": [
+              {
+                "text": "Studia i volumi protetti",
+                "outcomes": [
+                  {
+                    "type": "skillCheck",
+                    "skill": "storia",
+                    "dc": 15,
+                    "successText": "I volumi parlano del 'Progetto Eco': un'interfaccia neurale collettiva che doveva preservare la conoscenza umana. Ma qualcosa è andato storto durante l'attivazione. Le ultime pagine descrivono 'il Grande Silenzio' - il momento in cui miliardi di menti si sono spente simultaneamente.",
+                    "failureText": "I testi sono troppo tecnici e frammentari. Capisci solo che il 'Progetto Eco' era legato alla catastrofe, ma non come.",
+                    "success": [
+                      {
+                        "type": "addXp",
+                        "value": 150
+                      },
+                      {
+                        "type": "statBoost",
+                        "value": {
+                          "stat": "int",
+                          "amount": 1
+                        }
+                      },
+                      {
+                        "type": "journalEntry",
+                        "text": "Riflessione: Volevano unire tutte le menti umane in una rete. Invece, le hanno spente. E io... io sono qui perché qualcuno mi ha protetto da quel silenzio?"
+                      }
+                    ],
+                    "failure": [
+                      {
+                        "type": "addXp",
+                        "value": 50
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "text": "Cerca manuali di sopravvivenza pratici",
+                "outcomes": [
+                  {
+                    "type": "skillCheck",
+                    "skill": "percezione",
+                    "dc": 10,
+                    "successText": "Tra gli scaffali trovi una sezione 'Sopravvivenza e Primo Soccorso'. Alcuni manuali sono ancora leggibili.",
+                    "failureText": "La maggior parte dei libri è troppo danneggiata per essere utile.",
+                    "success": [
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "manual_field_medicine",
+                          "quantity": 1
+                        }
+                      },
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "manual_advanced_repairs",
+                          "quantity": 1
+                        }
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 75
+                      }
+                    ],
+                    "failure": [
+                      {
+                        "type": "addXp",
+                        "value": 20
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lore_ash_nest",
+            "title": "Il Nido della Cenere",
+            "description": "Entri in una caverna naturale. L'aria è densa, quasi solida. Le pareti sono ricoperte da una sostanza organica grigia che pulsa debolmente. Al centro, vedi forme umanoidi sospese in bozzoli traslucidi. Sono vivi? Morti? Qualcosa di peggio? Uno di loro apre gli occhi - occhi bianchi, senza pupille - e ti fissa. Poi, un sussurro collettivo riempie la caverna: 'Unisciti... a noi...'",
+            "biomes": ["Global"],
+            "isUnique": true,
+            "choices": [
+              {
+                "text": "Fuggi immediatamente",
+                "outcomes": [
+                  {
+                    "type": "direct",
+                    "results": [
+                      {
+                        "type": "journalEntry",
+                        "text": "Il terrore ti travolge. Corri fuori dalla caverna senza guardarti indietro. Il sussurro ti segue per ore nella mente. Ora sai cosa succede a chi viene catturato dagli Angeli della Cenere: non muoiono. Diventano... altro."
+                      },
+                      {
+                        "type": "statusChange",
+                        "value": "TERRORIZZATO"
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 200
+                      },
+                      {
+                        "type": "journalEntry",
+                        "text": "Riflessione: Quegli occhi bianchi... erano ancora umani? O erano già diventati parte di qualcosa di più grande e terribile? Devo stare lontano da questo posto."
+                      }
+                    ]
+                  },
+                  {
+                    "id": "unique_wandering_trader_encounter",
+                    "title": "Incontro con il Mercante Itinerante",
+                    "description": "Raggiungi finalmente la figura solitaria che avevi visto muoversi in lontananza. È un vecchio mercante che spinge un carretto cigolante carico di merci eterogenee. Ti saluta con un cenno stanco ma vigile. 'Pochi sanno ancora viaggiare in queste terre,' dice con voce roca. 'Cosa ti porta da me, straniero?'",
+                    "biomes": ["Global"],
+                    "isUnique": false,
+                    "choices": [
+                      {
+                        "text": "[Commercia] - (Prossimamente)",
+                        "outcomes": [
+                          {
+                            "type": "direct",
+                            "results": [
+                              {
+                                "type": "journalEntry",
+                                "text": "Il mercante sorride. 'Il sistema di commercio non è ancora pronto, viaggiatore. Torna quando avrò organizzato meglio la mia merce.'"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "text": "[Chiedi Informazioni sui Luoghi Speciali]",
+                        "outcomes": [
+                          {
+                            "type": "direct",
+                            "results": [
+                              {
+                                "type": "journalEntry",
+                                "text": "'Ho visto cose strane nei miei viaggi,' dice il mercante abbassando la voce. 'Un vecchio laboratorio a est, ancora alimentato. Una biblioteca immensa in una città morta. E... una caverna maledetta a nord-ovest. Quel posto... evitalo se puoi.'"
+                              },
+                              {
+                                "type": "addXp",
+                                "value": 25
+                              },
+                              {
+                                "type": "journalEntry",
+                                "text": "Riflessione: Le sue parole confermano ciò che ho visto sulla mappa. Questi luoghi potrebbero contenere risposte... o pericoli mortali."
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "text": "[Chiedi del Safe Place]",
+                        "outcomes": [
+                          {
+                            "type": "skillCheck",
+                            "skill": "persuasione",
+                            "dc": 12,
+                            "successText": "Il mercante ti studia attentamente, poi annuisce. 'Il Safe Place... sì, ne ho sentito parlare. Dicono sia a est, oltre le montagne. Un luogo dove la contaminazione non arriva. Ma il viaggio è lungo e pericoloso. Porta con te tutto ciò che puoi.'",
+                            "failureText": "Il mercante scuote la testa. 'Il Safe Place? Leggende, ragazzo. Storie che i disperati si raccontano per dormire la notte. Ma se vuoi crederci... chi sono io per fermarti?'",
+                            "success": [
+                              {
+                                "type": "addXp",
+                                "value": 50
+                              },
+                              {
+                                "type": "journalEntry",
+                                "text": "Riflessione: Le sue parole mi danno speranza. Il Safe Place esiste davvero. Papà non mi ha mentito."
+                              }
+                            ],
+                            "failure": [
+                              {
+                                "type": "addXp",
+                                "value": 15
+                              },
+                              {
+                                "type": "journalEntry",
+                                "text": "Riflessione: Forse ha ragione. Forse sto inseguendo un miraggio. Ma cosa mi resta se non questa speranza?"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "text": "[Saluta e prosegui]",
+                        "outcomes": [
+                          {
+                            "type": "direct",
+                            "results": [
+                              {
+                                "type": "journalEntry",
+                                "text": "Saluti il mercante con un cenno e riprendi il tuo cammino. Lui ti guarda allontanarti, poi riprende a spingere il suo carretto nella direzione opposta."
+                              },
+                              {
+                                "type": "addXp",
+                                "value": 10
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "text": "Cerca di capire cosa sta succedendo",
+                "outcomes": [
+                  {
+                    "type": "skillCheck",
+                    "skill": "investigare",
+                    "dc": 18,
+                    "successText": "Combatti il terrore e osservi attentamente. I bozzoli sembrano nutrirsi dei corpi, trasformandoli lentamente. Noti un pattern: i soggetti più 'trasformati' emettono una debole luminescenza. Raccogli un campione di tessuto del bozzolo prima di fuggire.",
+                    "failureText": "Provi a osservare, ma il sussurro diventa più forte, più insistente. Senti la tua mente vacillare. Fuggi prima che sia troppo tardi, ma il trauma rimane.",
+                    "success": [
+                      {
+                        "type": "addItem",
+                        "value": {
+                          "itemId": "ash_tissue_sample",
+                          "quantity": 1
+                        }
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 250
+                      },
+                      {
+                        "type": "statBoost",
+                        "value": {
+                          "stat": "sag",
+                          "amount": 1
+                        }
+                      },
+                      {
+                        "type": "journalEntry",
+                        "text": "Riflessione: Questo campione potrebbe essere la chiave per capire cosa sono diventati gli Angeli della Cenere. Ma a che prezzo? Quella voce nella mia testa... non se ne va."
+                      }
+                    ],
+                    "failure": [
+                      {
+                        "type": "takeDamage",
+                        "value": 10
+                      },
+                      {
+                        "type": "statusChange",
+                        "value": "TERRORIZZATO"
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 100
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
       }

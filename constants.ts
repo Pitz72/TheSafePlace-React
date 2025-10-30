@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = "1.5.0";
+export const GAME_VERSION = "1.6.0";
 
 export const BOOT_TEXT = [
     'Runtime Radio BIOS v1.02',
@@ -342,7 +342,12 @@ export const BIOME_MESSAGES: Record<string, string> = {
     'V': "Attraversi i resti di un piccolo villaggio.",
     'R': "Hai trovato un rifugio. Sembra sicuro, per ora.",
     'S': "Inizi il tuo viaggio in un punto relativamente tranquillo.",
-    'E': "La destinazione finale è vicina."
+    'E': "La destinazione finale è vicina.",
+    'A': "Vedi l'Avamposto 'Il Crocevia' davanti a te. Fumo sale da un fuoco centrale.",
+    'N': "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
+    'T': "Un commerciante ambulante ti saluta con cautela.",
+    'L': "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
+    'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
 };
 
 export const BIOME_COLORS: Record<string, string> = {
@@ -355,6 +360,11 @@ export const BIOME_COLORS: Record<string, string> = {
     'R': '#d97706', // amber-600 (Rifugio)
     'S': '#f59e0b', // amber-500 (Start)
     'E': '#ef4444', // red-500 (End)
+    'A': '#b45309', // amber-700 (Avamposto)
+    'N': '#7e22ce', // purple-700 (Nido della Cenere)
+    'T': '#f59e0b', // amber-500 (Commerciante)
+    'L': '#0891b2', // cyan-600 (Laboratorio)
+    'B': '#9f1239', // rose-800 (Biblioteca)
 };
 
 export const ATMOSPHERIC_MESSAGES: Record<string, { day: string[], night: string[], rain?: string[] }> = {

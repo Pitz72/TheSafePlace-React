@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.5.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.6.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -83,6 +83,53 @@ L'interazione avviene interamente tramite tastiera:
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
 ### Stato del Progetto e Sviluppi Futuri
+
+**Versione Corrente: v1.6.0** - Living World & Special Locations
+
+Con la versione 1.6.0, il gioco introduce un **mondo vivo e dinamico** con location speciali uniche, il primo PNG autonomo, e un hub sociale completamente funzionante.
+
+#### Novità v1.6.0 (30 Ottobre 2025) - **LIVING WORLD & SPECIAL LOCATIONS**
+
+Questa versione trasforma il mondo di gioco da mappa generica a paesaggio narrativo vivo.
+
+**5 NUOVE LOCATION SPECIALI:**
+- **Avamposto "Il Crocevia" (A)**: Primo hub sociale con riposo sicuro (8h)
+- **Nido della Cenere (N)**: Dungeon end-game, rivela natura Angeli della Cenere
+- **Laboratorio (L)**: Svela segreti del "Progetto Rinascita"
+- **Biblioteca (B)**: Archivio del "Progetto Eco" e Grande Silenzio
+- **Commerciante Itinerante (T)**: PNG dinamico che si muove ogni 5 turni
+
+**SISTEMA PNG DINAMICO:**
+- Commerciante spawna casualmente all'inizio partita
+- Si muove autonomamente ogni 5 turni del player
+- Visibile sulla mappa con icona dorata
+- Interazione ripetibile con informazioni utili
+- Gameplay emergente: "caccia al commerciante"
+
+**EVENTI UNICI GARANTITI:**
+- Entrare in location speciale = evento narrativo garantito
+- 4 nuovi eventi con lore profonda
+- Skill check: Investigare, Storia, Percezione
+- Ricompense: Oggetti unici, XP, stat boost
+
+**NUOVI OGGETTI QUEST:**
+- Note di Ricerca (Progetto Rinascita)
+- Campione Tessuto Cenere (epic rarity)
+
+**QUEST MARKER FIX:**
+- Marker ora scompaiono istantaneamente quando quest completata
+- Rendering reattivo a cambiamenti activeQuests
+- Bug critico risolto
+
+**IMPATTO:**
+- Mondo trasformato da statico a vivo
+- Esplorazione intenzionale vs casuale
+- Primo PNG autonomo funzionante
+- Base per espansioni future (commercio, fazioni, dialoghi)
+
+**Risultato:** Il gioco evolve da "survival RPG" a "survival RPG con mondo vivo e dinamico".
+
+---
 
 **Versione Corrente: v1.5.0** - Quest System Framework
 

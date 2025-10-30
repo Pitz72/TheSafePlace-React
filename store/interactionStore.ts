@@ -56,11 +56,13 @@ interface InteractionStoreState {
     confirmActionMenuSelection: () => void;
     
     enterRefuge: () => void;
+    enterOutpost: () => void;
     leaveRefuge: () => void;
     navigateRefugeMenu: (direction: number) => void;
     confirmRefugeMenuSelection: () => void;
     searchRefuge: () => void;
     clearRefugeActionMessage: () => void;
+    startUniqueEvent: (eventId: string) => void;
 
     toggleCrafting: () => void;
     navigateCraftingMenu: (direction: number) => void;
@@ -356,6 +358,63 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             refugeMenuState: { isOpen: true, options, selectedIndex: 0 }
         });
         addJournalEntry({ text: "Sei entrato in un rifugio. Sei al sicuro.", type: JournalEntryType.NARRATIVE });
+    },
+
+    /**
+     * @function enterOutpost
+     * @description Enters the Outpost special location (v1.6.0).
+     */
+    enterOutpost: () => {
+        const { addJournalEntry } = useGameStore.getState();
+        useGameStore.getState().setGameState(GameState.OUTPOST);
+        audioManager.playSound('enter_refuge'); // Reuse appropriate sound
+        addJournalEntry({
+            text: "Sei arrivato al Crocevia. Un insediamento di fortuna, ma il primo segno di civiltà da settimane.",
+            type: JournalEntryType.NARRATIVE
+        });
+    },
+
+    /**
+     * @function startUniqueEvent
+     * @description Starts a unique event by ID (v1.6.0).
+     * Used for special location tiles (N, L, B) to trigger guaranteed unique events.
+     * @param {string} eventId - The ID of the unique event to start.
+     */
+    startUniqueEvent: (eventId: string) => {
+        const { setGameState, addJournalEntry } = useGameStore.getState();
+        const { useEventStore } = require('./eventStore');
+        const { useEventDatabaseStore } = require('../data/eventDatabase');
+        
+        // Get all events from database (unique events are in biomeEvents and loreEvents)
+        const { loreEvents, biomeEvents } = useEventDatabaseStore.getState();
+        
+        // Search for the event in both lore and biome events
+        const allEvents = [...(loreEvents || []), ...(biomeEvents || [])];
+        const event = allEvents.find((e: any) => e.id === eventId);
+        
+        if (!event) {
+            console.error(`[startUniqueEvent] Event ${eventId} not found in database`);
+            console.log('Available events:', allEvents.map((e: any) => e.id));
+            addJournalEntry({
+                text: `Errore: evento ${eventId} non trovato.`,
+                type: JournalEntryType.SYSTEM_ERROR
+            });
+            return;
+        }
+        
+        // Set the event as active in eventStore and switch to event screen
+        useEventStore.setState({
+            activeEvent: event,
+            eventResolutionText: null
+        });
+        
+        setGameState(GameState.EVENT_SCREEN);
+        addJournalEntry({
+            text: `EVENTO SPECIALE: ${event.title}`,
+            type: JournalEntryType.EVENT
+        });
+        
+        audioManager.playSound('confirm');
     },
 
     /**

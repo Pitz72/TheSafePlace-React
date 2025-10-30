@@ -14,7 +14,7 @@ import { handleLoadGame } from '../src/services/saveGameService';
  */
 const MainMenuScreen: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { setGameState, setMap, startCutscene, addJournalEntry } = useGameStore();
+  const { setGameState, setMap, startCutscene, addJournalEntry, initializeWanderingTrader } = useGameStore();
   const initCharacter = useCharacterStore((state) => state.initCharacter);
 
   const handleArrowUp = useCallback(() => {
@@ -35,6 +35,7 @@ const MainMenuScreen: React.FC = () => {
         case "Nuova Partita":
             setMap(); // Resetta il mondo di gioco
             initCharacter(); // Resetta lo stato del personaggio a vuoto
+            initializeWanderingTrader(); // Spawna il commerciante itinerante (v1.6.0)
             startCutscene('CS_OPENING'); // Avvia la cutscene di apertura
             break;
         case "Continua Partita": {
@@ -67,7 +68,7 @@ const MainMenuScreen: React.FC = () => {
             console.log("Exiting game...");
             break;
     }
-  }, [selectedIndex, setGameState, setMap, initCharacter, startCutscene, addJournalEntry]);
+  }, [selectedIndex, setGameState, setMap, initCharacter, initializeWanderingTrader, startCutscene, addJournalEntry]);
 
   const handlerMap = useMemo(() => ({
     ArrowUp: handleArrowUp,

@@ -33,11 +33,14 @@ const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)
 /**
  * Mapping of tile characters to Italian display names.
  * @constant
+ * @version 1.6.0 - Added special location tiles
  */
 const TILE_NAMES: Record<string, string> = {
     '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
-    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu'
+    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu',
+    'A': 'Avamposto', 'N': 'Nido della Cenere', 'T': 'Commerciante',
+    'L': 'Laboratorio', 'B': 'Biblioteca'
 };
 
 /**
@@ -49,8 +52,9 @@ const IMPASSABLE_TILES = new Set(['M']);
 /**
  * Set of tile types that allow player movement.
  * @constant
+ * @version 1.6.0 - Added special location tiles
  */
-const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~']);
+const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B']);
 
 /**
  * Base time cost in minutes for a single movement.
@@ -150,6 +154,19 @@ export const gameService = {
 
     if ( newPos.y < 0 || newPos.y >= map.length || newPos.x < 0 || newPos.x >= map[newPos.y].length ) return;
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // WANDERING TRADER INTERACTION CHECK (v1.6.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const { wanderingTrader } = useGameStore.getState();
+    if (wanderingTrader && newPos.x === wanderingTrader.position.x && newPos.y === wanderingTrader.position.y) {
+      // Player is moving onto trader's position - trigger encounter
+      useInteractionStore.getState().startUniqueEvent('unique_wandering_trader_encounter');
+      advanceTime(BASE_TIME_COST_PER_MOVE); // Consume movement time
+      gameService.updateWanderingTrader(); // Trader moves after interaction
+      return;
+    }
+    // ═══════════════════════════════════════════════════════════════════════════
+
     const destinationTile = map[newPos.y][newPos.x];
     if (IMPASSABLE_TILES.has(destinationTile)) {
         const message = MOUNTAIN_MESSAGES[Math.floor(Math.random() * MOUNTAIN_MESSAGES.length)];
@@ -169,6 +186,59 @@ export const gameService = {
     }
 
     if (!TRAVERSABLE_TILES.has(destinationTile)) return;
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SPECIAL LOCATION TILES HANDLING (v1.6.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Priority handling for special locations before random events
+    let specialTileActionTaken = false;
+
+    switch (destinationTile) {
+      case 'A': // Outpost - "Il Crocevia"
+        useGameStore.setState({ playerPos: newPos });
+        useInteractionStore.getState().enterOutpost();
+        specialTileActionTaken = true;
+        break;
+
+      case 'N': // Ash Nest - One-time unique event
+        if (!useGameStore.getState().gameFlags.has('ASH_NEST_VISITED')) {
+          useGameStore.setState({ playerPos: newPos });
+          useInteractionStore.getState().startUniqueEvent('lore_ash_nest');
+          useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add('ASH_NEST_VISITED')
+          }));
+          specialTileActionTaken = true;
+        }
+        break;
+
+      case 'L': // Laboratory - One-time unique event
+        if (!useGameStore.getState().gameFlags.has('LAB_VISITED')) {
+          useGameStore.setState({ playerPos: newPos });
+          useInteractionStore.getState().startUniqueEvent('unique_scientist_notes');
+          useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add('LAB_VISITED')
+          }));
+          specialTileActionTaken = true;
+        }
+        break;
+
+      case 'B': // Library - One-time unique event
+        if (!useGameStore.getState().gameFlags.has('LIBRARY_VISITED')) {
+          useGameStore.setState({ playerPos: newPos });
+          useInteractionStore.getState().startUniqueEvent('unique_ancient_library');
+          useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add('LIBRARY_VISITED')
+          }));
+          specialTileActionTaken = true;
+        }
+        break;
+    }
+
+    // If a special tile action was taken, skip normal movement logic
+    if (specialTileActionTaken) {
+      return;
+    }
+    // ═══════════════════════════════════════════════════════════════════════════
 
     if (destinationTile !== previousBiome) {
         const biomeMessage = BIOME_MESSAGES[destinationTile];
@@ -270,5 +340,82 @@ export const gameService = {
             }
         }
     }
+
+    // Update Wandering Trader position (v1.6.0)
+    gameService.updateWanderingTrader();
+  },
+
+  /**
+   * Updates the Wandering Trader's position (v1.6.0).
+   * 
+   * @description Manages the trader's movement on the map. Called after each player action
+   * that advances time. The trader moves every 5 turns to a random adjacent valid tile.
+   * 
+   * Movement Logic:
+   * - Decrements turnsUntilMove counter
+   * - When counter reaches 0, attempts to move to adjacent tile
+   * - Valid tiles: Plains (.), Forest (F), City (C), Village (V)
+   * - Invalid tiles: Mountains (M), Water (~), Refuges (R), Special locations
+   * - Tries directions in random order until valid position found
+   * - Resets counter to 5 after successful move
+   * 
+   * @remarks
+   * - Non-blocking: if no valid move exists, waits for next turn
+   * - Trader never moves onto player position
+   * - Movement is independent of player actions
+   * 
+   * @example
+   * // Called at end of movePlayer
+   * gameService.updateWanderingTrader();
+   */
+  updateWanderingTrader: () => {
+    const { wanderingTrader, map, playerPos, advanceTraderTurn, moveTrader } = useGameStore.getState();
+    
+    if (!wanderingTrader) return;
+    
+    // Decrement counter
+    if (wanderingTrader.turnsUntilMove > 1) {
+      advanceTraderTurn();
+      return;
+    }
+    
+    // Time to move - try random adjacent tile
+    const { x, y } = wanderingTrader.position;
+    const directions = [
+      { dx: 0, dy: -1 }, // North
+      { dx: 0, dy: 1 },  // South
+      { dx: 1, dy: 0 },  // East
+      { dx: -1, dy: 0 }  // West
+    ];
+    
+    // Shuffle directions for randomness
+    const shuffledDirections = directions.sort(() => Math.random() - 0.5);
+    
+    for (const dir of shuffledDirections) {
+      const newX = x + dir.dx;
+      const newY = y + dir.dy;
+      
+      // Validate new position
+      if (
+        newY >= 0 && newY < map.length &&
+        newX >= 0 && newX < map[newY].length
+      ) {
+        const tile = map[newY][newX];
+        const isPlayerPosition = newX === playerPos.x && newY === playerPos.y;
+        
+        // Valid tiles for trader: Plains, Forest, City, Village
+        if (
+          !isPlayerPosition &&
+          (tile === '.' || tile === 'F' || tile === 'C' || tile === 'V')
+        ) {
+          // Valid position found - move trader
+          moveTrader({ x: newX, y: newY });
+          return;
+        }
+      }
+    }
+    
+    // No valid move found - try again next turn
+    advanceTraderTurn();
   },
 };

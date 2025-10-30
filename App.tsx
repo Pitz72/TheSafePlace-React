@@ -12,6 +12,7 @@ import GameScreen from './components/GameScreen';
 import CharacterCreationScreen from './components/CharacterCreationScreen';
 import InventoryScreen from './components/InventoryScreen';
 import RefugeScreen from './components/RefugeScreen';
+import OutpostScreen from './components/OutpostScreen';
 import EventScreen from './components/EventScreen';
 import CraftingScreen from './components/CraftingScreen';
 import LevelUpScreen from './components/LevelUpScreen';
@@ -141,6 +142,8 @@ const App: React.FC = () => {
         return <GameOverScreen />;
       case GameState.QUEST_LOG:
         return <QuestScreen />;
+      case GameState.OUTPOST:
+        return <OutpostScreen />;
       case GameState.COMBAT:
         return (
           <>

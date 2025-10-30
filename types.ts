@@ -23,6 +23,7 @@ export enum GameState {
   MAIN_STORY,
   ASH_LULLABY_CHOICE,
   QUEST_LOG,
+  OUTPOST,
   GAME_OVER,
 }
 
@@ -70,6 +71,35 @@ export interface TileInfo {
   char: string;
   name: string;
 }
+
+// --- Map & Tile System ---
+/**
+ * All possible tile types on the game map.
+ *
+ * @remarks
+ * Standard Tiles:
+ * - '.': Plains (Pianura)
+ * - 'F': Forest (Foresta)
+ * - '~': Water (Acqua)
+ * - 'M': Mountain (Montagna) - Impassable
+ * - 'R': Refuge (Rifugio)
+ * - 'C': City (Città)
+ * - 'V': Village (Villaggio)
+ * - 'S': Start Point (Punto di Partenza)
+ * - 'E': End/Destination (Destinazione)
+ *
+ * Special Location Tiles (v1.6.0):
+ * - 'A': Outpost (Avamposto "Il Crocevia")
+ * - 'N': Ash Nest (Nido della Cenere) - End-game location
+ * - 'T': Trader (Commerciante) - Dynamic, not placed on map
+ * - 'L': Laboratory (Laboratorio) - High-tech location
+ * - 'B': Library (Biblioteca) - Knowledge repository
+ *
+ * Quest Markers (overlay, not map tiles):
+ * - '!M': Main Quest Marker (red)
+ * - '!S': Sub Quest Marker (yellow)
+ */
+export type TileType = '.' | 'F' | 'C' | 'V' | 'R' | '~' | 'M' | 'E' | 'S' | 'A' | 'N' | 'T' | 'L' | 'B';
 
 // --- Weather System ---
 export enum WeatherType {
@@ -345,6 +375,14 @@ export type PlayerCombatActionPayload =
 
 export type DeathCause = 'COMBAT' | 'STARVATION' | 'DEHYDRATION' | 'SICKNESS' | 'POISON' | 'ENVIRONMENT' | 'UNKNOWN';
 
+/**
+ * State of the Wandering Trader NPC (v1.6.0)
+ */
+export interface WanderingTraderState {
+  position: Position;
+  turnsUntilMove: number;
+}
+
 export interface GameStoreState {
   gameState: GameState;
   previousGameState: GameState | null;
@@ -370,6 +408,7 @@ export interface GameStoreState {
   deathCause: DeathCause | null;
   visitedBiomes: Set<string>;
   damageFlash: boolean;
+  wanderingTrader: WanderingTraderState | null;
   
   // Actions
   triggerDamageFlash: () => void;
@@ -395,6 +434,10 @@ export interface GameStoreState {
   restoreState: (state: any) => void;
   toJSON: () => object;
   fromJSON: (json: any) => void;
+  // Wandering Trader System (v1.6.0)
+  initializeWanderingTrader: () => void;
+  advanceTraderTurn: () => void;
+  moveTrader: (newPosition: Position) => void;
 }
 
 

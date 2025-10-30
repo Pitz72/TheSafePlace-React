@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useCharacterStore } from '../store/characterStore';
 import { TILESET_SRC, TILE_MAP, TILE_SIZE as BASE_TILE_SIZE } from '../assets/tileset';
 import { getActiveQuestMarkers } from '../services/questService';
 
@@ -7,6 +8,8 @@ const CanvasMap: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const map = useGameStore((state) => state.map);
     const playerPos = useGameStore((state) => state.playerPos);
+    const wanderingTrader = useGameStore((state) => state.wanderingTrader);
+    const activeQuests = useCharacterStore((state) => state.activeQuests);
     // FIX: Initialized useRef with 'undefined' as the starting value, as required when a generic type is provided.
     const renderMapRef = useRef<(() => void) | undefined>(undefined);
 
@@ -101,6 +104,28 @@ const CanvasMap: React.FC = () => {
             }
         });
         
+        // Render Wandering Trader (v1.6.0) - after markers, before player
+        if (wanderingTrader) {
+            const { position } = wanderingTrader;
+            
+            // Only render if trader is in viewport
+            if (position.x >= startCol && position.x < endCol &&
+                position.y >= startRow && position.y < endRow) {
+                
+                const traderTile = TILE_MAP['T'];
+                const screenX = Math.round((position.x - cameraX) * tileSize);
+                const screenY = Math.round((position.y - cameraY) * tileSize);
+                
+                ctx.drawImage(
+                    tilesetImage,
+                    traderTile.x, traderTile.y,
+                    BASE_TILE_SIZE, BASE_TILE_SIZE,
+                    screenX, screenY,
+                    Math.ceil(tileSize), Math.ceil(tileSize)
+                );
+            }
+        }
+        
         // Render player (always on top)
         const playerScreenX = Math.round((playerPos.x - cameraX) * tileSize);
         const playerScreenY = Math.round((playerPos.y - cameraY) * tileSize);
@@ -114,7 +139,7 @@ const CanvasMap: React.FC = () => {
             Math.ceil(tileSize), Math.ceil(tileSize)
         );
 
-    }, [map, playerPos, tilesetImage]);
+    }, [map, playerPos, wanderingTrader, activeQuests, tilesetImage]);
     
     // Store the latest renderMap function in a ref
     useEffect(() => {

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause } from '../types';
+import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause, Position } from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -121,11 +121,14 @@ const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)
 /**
  * Mapping of tile characters to their Italian display names.
  * @constant
+ * @version 1.6.0 - Added special location tiles (A, N, L, B)
  */
 const TILE_NAMES: Record<string, string> = {
     '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
-    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu'
+    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu',
+    'A': 'Avamposto', 'N': 'Nido della Cenere', 'T': 'Commerciante',
+    'L': 'Laboratorio', 'B': 'Biblioteca'
 };
 
 /**
@@ -137,8 +140,9 @@ const IMPASSABLE_TILES = new Set(['M']);
 /**
  * Set of tile types that can be traversed by the player.
  * @constant
+ * @version 1.6.0 - Added special location tiles (A, N, T, L, B)
  */
-const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~']);
+const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B']);
 
 /**
  * Base time cost in minutes for a single movement action.
@@ -192,6 +196,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   deathCause: null,
   visitedBiomes: new Set(),
   damageFlash: false,
+  wanderingTrader: null,
 
   /**
    * Triggers a brief red flash effect to indicate player damage.
@@ -1040,5 +1045,88 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
    */
   restoreState: (state: any) => {
     set({ ...state });
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WANDERING TRADER SYSTEM (v1.6.0)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Initializes the Wandering Trader at a random valid position on the map.
+   *
+   * @description Scans the map for traversable tiles and spawns the trader
+   * at a random location. Should be called once when starting a new game.
+   *
+   * @remarks
+   * - Only spawns on traversable tiles (., F, C, V)
+   * - Excludes water (~), mountains (M), refuges (R), start (S), end (E)
+   * - Sets initial turnsUntilMove to 5
+   */
+  initializeWanderingTrader: () => {
+    const { map } = get();
+    const validTiles: Position[] = [];
+    
+    // Scan map for valid spawn positions
+    for (let y = 0; y < map.length; y++) {
+      for (let x = 0; x < map[y].length; x++) {
+        const tile = map[y][x];
+        // Valid tiles: Plains, Forest, City, Village
+        if (tile === '.' || tile === 'F' || tile === 'C' || tile === 'V') {
+          validTiles.push({ x, y });
+        }
+      }
+    }
+    
+    if (validTiles.length === 0) {
+      console.error('[initializeWanderingTrader] No valid spawn positions found!');
+      return;
+    }
+    
+    // Pick random position
+    const randomIndex = Math.floor(Math.random() * validTiles.length);
+    const spawnPosition = validTiles[randomIndex];
+    
+    set({
+      wanderingTrader: {
+        position: spawnPosition,
+        turnsUntilMove: 5
+      }
+    });
+    
+    console.log(`[Wandering Trader] Spawned at (${spawnPosition.x}, ${spawnPosition.y})`);
+  },
+
+  /**
+   * Decrements the trader's turn counter.
+   *
+   * @description Called each player turn to count down until the trader moves.
+   */
+  advanceTraderTurn: () => {
+    set(state => {
+      if (!state.wanderingTrader) return {};
+      return {
+        wanderingTrader: {
+          ...state.wanderingTrader,
+          turnsUntilMove: state.wanderingTrader.turnsUntilMove - 1
+        }
+      };
+    });
+  },
+
+  /**
+   * Moves the trader to a new position and resets the turn counter.
+   *
+   * @param {Position} newPosition - The new position for the trader
+   */
+  moveTrader: (newPosition: Position) => {
+    set(state => {
+      if (!state.wanderingTrader) return {};
+      return {
+        wanderingTrader: {
+          position: newPosition,
+          turnsUntilMove: 5
+        }
+      };
+    });
   },
 }));
