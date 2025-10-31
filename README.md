@@ -84,9 +84,197 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.8.0** - Quest Expansion & World Interaction
+**Versione Corrente: v1.8.4** - Broken Legacies
 
-Con la versione 1.8.0, il gioco espande massivamente il Quest System con **10 subquest giocabili**, **4 nuovi trigger types**, e introduce sistemi di **modifica permanente del mondo** e **archivio lore** per scoperte narrative.
+Con la versione 1.8.4, il gioco introduce il **sistema di riparazione e ricostruzione** - 3 quest che trasformano reliquie rotte in funzionalità ripristinate, con ricompense uniche e modifiche permanenti al mondo.
+
+#### Novità v1.8.4 (31 Ottobre 2025) - **BROKEN LEGACIES**
+
+Questa versione introduce quest di riparazione con fallimento permanente e ricompense uniche.
+
+**3 REPAIR QUEST:**
+- **La Melodia Spezzata** (Pianoforte): CAR +1, momento artistico
+- **La Luce nella Torre** (Radio): Contatto Stazione Delta, walkie-talkie
+- **L'Acqua della Vita** (Impianto): Modifica mondo, acqua pulita area
+
+**SISTEMA RIPARAZIONE:**
+- Componenti rari richiesti
+- Skill check critici (DC 15-17)
+- Fallimento permanente possibile
+- Ricompense uniche (stat, discoveries, world changes)
+
+**NUOVI OGGETTI (4):**
+- Generatore Portatile (15kg, rare)
+- Filtri Industriali (3kg, uncommon)
+- Batteria Veicoli Pesanti (20kg, rare)
+- Manuale Idraulico (uncommon)
+
+**WORLD STATE EXPANSION:**
+- Water plant tracking
+- Area effect per Active Search
+- Modifiche permanenti persistenti
+
+**VALORIZZA INT/INVESTIGARE:**
+- Tutte 3 quest usano Investigare
+- DC alti (15-17) premiano skill investment
+- Bilanciamento con combat/survival
+
+**RICOMPENSE EMOTIVE:**
+- Pianoforte = arte in mondo silenzioso
+- Torre = speranza (altri sopravvissuti)
+- Impianto = civiltà ripristinata
+
+**IMPATTO:**
+- Reliquie rotte → Funzionalità ripristinate
+- Ricompense oltre XP/items
+- Mondo modificabile permanentemente
+- Playstyle "Rebuilder" supportato
+
+**Risultato:** Il gioco evolve da "survival RPG" a "survival RPG con ricostruzione del mondo perduto".
+
+---
+
+#### Novità v1.8.3 (31 Ottobre 2025) - **HUNTERS & PREY**
+
+Questa versione introduce un sistema di bounty completo con quest ripetibili e il trigger `enemyDefeated`.
+
+**SISTEMA BOUNTY - CONTENUTI ENDLESS:**
+- 3 bounty quest ripetibili (Cinghiali, Lupi, Predoni)
+- Trigger `enemyDefeated` completamente implementato
+- Kill count tracking automatico e persistente
+- Ricompense garantite (munizioni, materiali, XP)
+
+**NUOVO PNG: SILAS, IL CACCIATORE:**
+- Cacciatore esperto al Crocevia
+- Bacheca taglie con 3 contratti sempre disponibili
+- Insegnamento ricette in cambio di pelli
+- Trading specializzato (munizioni, trappole)
+
+**3 BOUNTY INIZIALI:**
+- **Cinghiali** (3 kill): 350 XP + 15× Munizioni Fucile + 5× Pelli
+- **Lupi** (4 kill): 400 XP + 20× Frecce + 6× Pelli
+- **Predoni** (5 kill): 500 XP + 30× Munizioni 9mm + 2× Medkit
+
+**KILL COUNT SYSTEM:**
+- Tracking automatico nemici uccisi per quest
+- Progresso visibile in tempo reale
+- Persistenza save/load completa
+- Reset automatico su quest complete
+
+**ECONOMIA SOSTENIBILE:**
+- Munizioni consumate → Munizioni guadagnate (+50% ROI)
+- Pelli per crafting e insegnamenti
+- Ciclo auto-sostenibile senza grind
+
+**COMBAT VALORIZZATO:**
+- Combattimento = attività proattiva scelta
+- Ricompense specifiche e garantite
+- Playstyle combat-focused supportato
+
+**IMPATTO:**
+- Contenuti infiniti post-story
+- Hub Crocevia con 3 PNG specializzati
+- Economia circolare funzionante
+- Rigiocabilità massimizzata
+
+**Risultato:** Il gioco evolve da "RPG con quest finite" a "RPG con contenuti endless e ciclo economico sostenibile".
+
+---
+
+#### Novità v1.8.2 (31 Ottobre 2025) - **SIGNS OF ASH**
+
+Questa versione introduce una quest investigativa profonda con meccaniche multi-flag innovative.
+
+**QUEST INVESTIGATIVA: "I SEGNI DELLA CENERE":**
+- 4 stage progressivi (esplorazione → decifrazione → raccolta → completamento)
+- 3 location rituali da scoprire (ordine libero)
+- Sistema multi-flag per progressione (prima implementazione)
+- Ricompensa: Manuale Dissuasore Sonico (ricetta epic)
+
+**NUOVO PNG: L'ASCOLTATORE (EREMITA):**
+- Ex-tecnico del suono, quasi cieco, udito sovrumano
+- Capanna nascosta in Foresta (evento casuale)
+- Unico in grado di decifrare diario Ascoltatori
+- Rivela: "cultisti" erano scienziati, non pazzi
+
+**3 LOCATION RITUALI:**
+- **Cerchio Rituale** (Foresta) - Modificato, avvia quest
+- **Grotta dei Sussurri** (Montagna) - Nuovo, flag CAVE
+- **Albero Segnato** (Foresta) - Nuovo, flag TREE
+
+**DISSUASORE SONICO - OGGETTO TATTICO UNICO:**
+- Consumabile epic-tier
+- Effetto: 6 ore protezione da Angeli della Cenere
+- Ricetta: Investigare DC 17, ingredienti rari
+- Game-changer per attraversamento zone pericolose
+
+**NUOVE MECCANICHE:**
+- Multi-flag quest trigger (AND di 2+ flags)
+- SetFlag event handler con auto-check
+- Conditional dialogue basato su quest stage
+- Ricompensa tattica invece di solo XP
+
+**LORE EXPANSION:**
+- Ascoltatori: scienziati che studiavano frequenze
+- Rituale di schermatura: protezione da Ash Angels
+- Grande Silenzio: "canto" invece di silenzio
+- Ash Angels: "note" di una frequenza più grande
+
+**IMPATTO:**
+- Evento singolo → Avventura multi-location
+- Lore sorprendente e sovversiva
+- PNG memorabile con ruolo chiave
+- Ricompensa unica che cambia gameplay
+- Sistema multi-flag per future quest complesse
+
+**Risultato:** Il gioco evolve da "RPG con quest lineari" a "RPG con investigazioni complesse e ricompense tattiche".
+
+---
+
+#### Novità v1.8.1 (31 Ottobre 2025) - **ECHOES OF THE LOST WORLD**
+
+Questa versione introduce un sistema di collezione profondo che valorizza ogni oggetto unico del gioco.
+
+**NUOVO PNG: ANYA, LA TECNICA:**
+- Scrapper brillante al Crocevia
+- Trasforma artefatti rari in potenziamenti
+- 5 "Echi" collezionabili con ricompense uniche
+- Dialoghi condizionali basati su inventory
+
+**QUEST A COLLEZIONE:**
+- "Echi del Mondo Perduto" - Quest persistente
+- 5 artefatti consegnabili per ricompense progressive
+- Ricompensa finale: 500 XP + INT +2
+- Tracking tramite gameFlags
+
+**5 ECHI COLLEZIONABILI:**
+- **Placca PixelDebh**: Ricetta Advanced Repair Kit
+- **Chip Drone**: Potenziamento armatura chest (+2 Difesa)
+- **Registrazione Criptica**: Rivela Deposito Medico + 75 XP
+- **Note Progetto Rinascita**: Potenziamento legs (+1 Difesa, Resistenza MALATO)
+- **Biglietto Eurocenter**: Multitool Professionale (tool raro)
+
+**NUOVE MECCANICHE:**
+- Sistema potenziamento armature (upgradeEquippedArmor)
+- 3 nuovi consequence types (upgradeArmor, learnRecipe, revealMapPOI)
+- Eventi special locations (Laboratorio, Biblioteca)
+- Tracking consegne via gameFlags
+
+**OGGETTI VALORIZZATI:**
+- Easter eggs ora meccanicamente rilevanti
+- Oggetti quest hanno "seconda vita"
+- Lore discoveries = ricompense tangibili
+
+**IMPATTO:**
+- Scopo concreto per ogni oggetto unico
+- Hub potenziamento alternativo (Anya vs Marcus)
+- Incentivo esplorazione totale
+- Rigiocabilità massimizzata
+- End-game content espanso
+
+**Risultato:** Il gioco evolve da "RPG con quest" a "RPG con sistema di collezione e potenziamento profondo".
+
+---
 
 #### Novità v1.8.0 (31 Ottobre 2025) - **QUEST EXPANSION & WORLD INTERACTION**
 

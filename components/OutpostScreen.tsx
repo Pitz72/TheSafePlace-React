@@ -20,11 +20,12 @@ const OutpostScreen: React.FC = () => {
     const { advanceTime } = useTimeStore();
     const { satiety, hydration, hp, heal, rest } = useCharacterStore();
 
-    // Menu options (v1.7.0: Marcus dialogue and trading now functional)
+    // Menu options (v1.8.3: Added Silas dialogue)
     const options = [
         'Parla con Marcus (il mercante)',
+        'Parla con Anya (la tecnica)',
+        'Parla con Silas (il cacciatore)',
         'Commercia',
-        'Controlla la Bacheca delle Taglie - [Prossimamente]',
         'Riposa in un luogo sicuro (8 ore)',
         'Lascia l\'Avamposto'
     ];
@@ -48,15 +49,21 @@ const OutpostScreen: React.FC = () => {
             return;
         }
 
+        // Anya dialogue (v1.8.1: NEW!)
+        if (selectedOption.includes('Parla con Anya')) {
+            dialogueService.startDialogue('anya_main');
+            return;
+        }
+
+        // Silas dialogue (v1.8.3: NEW!)
+        if (selectedOption.includes('Parla con Silas')) {
+            dialogueService.startDialogue('silas_main');
+            return;
+        }
+
         // Trading (v1.7.0: Now functional!)
         if (selectedOption.includes('Commercia') && !selectedOption.includes('[Prossimamente]')) {
             tradingService.startTradingSession('marcus');
-            return;
-        }
-        
-        // Placeholder options (not yet implemented)
-        if (selectedOption.includes('[Prossimamente]')) {
-            setActionMessage('Questa funzionalità sarà disponibile in un futuro aggiornamento.');
             return;
         }
 

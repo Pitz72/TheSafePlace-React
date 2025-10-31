@@ -200,6 +200,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   worldState: {
     repairedPumps: [],
     destroyedPumps: [],
+    waterPlantActive: false,
+    waterPlantLocation: null,
   },
 
   /**
@@ -331,6 +333,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         worldState: {
             repairedPumps: [],
             destroyedPumps: [],
+            waterPlantActive: false,
+            waterPlantLocation: null,
         },
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
@@ -1037,7 +1041,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       ...json,
       gameFlags: new Set(json.gameFlags),
       visitedBiomes: new Set(json.visitedBiomes),
-      worldState: json.worldState || { repairedPumps: [], destroyedPumps: [] },
+      worldState: json.worldState || { repairedPumps: [], destroyedPumps: [], waterPlantActive: false, waterPlantLocation: null },
     });
   },
 
@@ -1170,6 +1174,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       
       return {
         worldState: {
+          ...state.worldState,
           repairedPumps: newRepaired,
           destroyedPumps: newDestroyed,
         }
@@ -1207,6 +1212,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       
       return {
         worldState: {
+          ...state.worldState,
           repairedPumps: newRepaired,
           destroyedPumps: newDestroyed,
         }
@@ -1235,5 +1241,39 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   canUseWaterPump: (location: Position): boolean => {
     const { repairedPumps } = get().worldState;
     return repairedPumps.some(p => p.x === location.x && p.y === location.y);
+  },
+
+  /**
+   * Activates the water treatment plant.
+   *
+   * @description Marks the water plant as active, providing clean water
+   * in the surrounding area via Active Search.
+   *
+   * @param {Position} location - Coordinates of the plant
+   *
+   * @remarks
+   * v1.8.4 - Repair Quest System:
+   * - Sets waterPlantActive flag
+   * - Stores plant location
+   * - Modifies Active Search loot in area
+   * - Persists in save/load
+   *
+   * @example
+   * activateWaterPlant({ x: 50, y: 80 });
+   */
+  activateWaterPlant: (location: Position) => {
+    set(state => ({
+      worldState: {
+        ...state.worldState,
+        waterPlantActive: true,
+        waterPlantLocation: location,
+      }
+    }));
+    
+    get().addJournalEntry({
+      text: `[MONDO] L'impianto di depurazione è ora attivo! L'area circostante ha acqua pulita.`,
+      type: JournalEntryType.XP_GAIN,
+      color: '#38bdf8' // cyan
+    });
   },
 }));

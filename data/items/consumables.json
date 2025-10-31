@@ -106,5 +106,28 @@
       "stackable": true,
       "rarity": "uncommon",
       "effects": [{ "type": "satiety", "value": 30 }, { "type": "heal", "value": 10 }]
+    },
+    {
+      "id": "sonic_dissuader",
+      "name": "Dissuasore Sonico",
+      "description": "Un rozzo dispositivo assemblato con componenti di radio e cristalli. Se attivato, emette un'onda sonora ad alta frequenza, inudibile per gli umani, ma apparentemente intollerabile per gli Angeli della Cenere. Garantisce 6 ore di viaggio sicuro.",
+      "type": "consumable",
+      "weight": 1.2,
+      "value": 300,
+      "stackable": true,
+      "rarity": "epic",
+      "effects": [{ "type": "special", "value": "ash_angel_protection_6h" }],
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "MED_HEALING_HERBS",
+      "name": "Erbe Curative",
+      "description": "Un mazzo di erbe medicinali rare con potenti proprietà curative. Possono curare infezioni e malattie.",
+      "type": "consumable",
+      "weight": 0.2,
+      "value": 40,
+      "stackable": true,
+      "rarity": "uncommon",
+      "effects": [{ "type": "heal", "value": 20 }, { "type": "cureStatus", "value": "INFEZIONE" }]
     }
 ]

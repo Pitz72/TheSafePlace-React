@@ -312,5 +312,19 @@
       { "itemId": "nylon_wire", "quantity": 1 }
     ],
     "results": [{ "itemId": "advanced_bear_trap", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_sonic_dissuader",
+    "name": "Dissuasore Sonico",
+    "description": "Un dispositivo che emette onde sonore ad alta frequenza per respingere gli Angeli della Cenere. Tecnologia degli Ascoltatori basata su frequenze dissonanti.",
+    "skill": "investigare",
+    "dc": 17,
+    "timeCost": 90,
+    "ingredients": [
+      { "itemId": "tech_components", "quantity": 3 },
+      { "itemId": "copper_wire", "quantity": 2 },
+      { "itemId": "precious_stone", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "sonic_dissuader", "quantity": 1 }]
   }
 ]

@@ -291,5 +291,291 @@
     "finalReward": {
       "xp": 100
     }
+  },
+  {
+    "id": "collect_world_echoes",
+    "title": "Echi del Mondo Perduto",
+    "type": "SUB",
+    "startText": "Anya, la tecnica del Crocevia, è alla ricerca di rari artefatti tecnologici e frammenti di conoscenza del mondo pre-catastrofe. Portarle questi 'Echi' potrebbe sbloccare ricompense uniche.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova Echi del mondo perduto e portali ad Anya al Crocevia. (Progresso tracciato tramite dialoghi)",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "anya_all_echoes_delivered"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "statBoost": {
+        "stat": "int",
+        "amount": 2
+      }
+    }
+  },
+  {
+    "id": "signs_of_ash",
+    "title": "I Segni della Cenere",
+    "type": "SUB",
+    "startText": "Hai trovato il diario di un 'Ascoltatore' che studiava gli Angeli della Cenere. Il testo è in codice, ma parla di altri due 'luoghi di potere' necessari per completare un 'rituale di schermatura'. Forse questi luoghi possono rivelare di più.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova gli altri due luoghi rituali menzionati nel diario. (0/2 trovati)",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "visited_all_ritual_sites"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Hai raccolto tutti gli indizi, ma il diario è ancora incomprensibile. Forse qualcuno di più saggio può aiutarti.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "hermit_deciphers_journal"
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "L'eremita ha bisogno di erbe rare per aiutarti. Raccogli 3× Erbe Curative e 5× Funghi Commestibili.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "MED_HEALING_HERBS", "quantity": 3 },
+            { "itemId": "edible_mushrooms", "quantity": 5 }
+          ]
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Porta le erbe all'eremita per la decifrazione finale.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "hermit_receives_herbs"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "items": [
+        {
+          "itemId": "manual_sonic_dissuader",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_boars",
+    "title": "Taglia: Flagello dei Cinghiali",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha chiesto di eliminare alcuni cinghiali aggressivi che minacciano i sentieri vicini al Crocevia. Sono pericolosi e imprevedibili.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 3 Cinghiali Aggressivi. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "aggressive_boar",
+            "quantity": 3
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 350,
+      "items": [
+        {
+          "itemId": "AMMO_12G",
+          "quantity": 15
+        },
+        {
+          "itemId": "animal_hide",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_wolves",
+    "title": "Taglia: Branco di Lupi",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha incaricato di eliminare un branco di lupi mutati che attaccano i viaggiatori nelle foreste circostanti.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 4 Lupi Mutati. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "mutated_wolf",
+            "quantity": 4
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 400,
+      "items": [
+        {
+          "itemId": "ammo_arrow",
+          "quantity": 20
+        },
+        {
+          "itemId": "animal_hide",
+          "quantity": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_raiders",
+    "title": "Taglia: Predoni Armati",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha chiesto di eliminare alcuni predoni armati che terrorizzano le zone vicine. Sono pericolosi e ben equipaggiati.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 5 Predoni Armati. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "armed_raider",
+            "quantity": 5
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "items": [
+        {
+          "itemId": "AMMO_9MM",
+          "quantity": 30
+        },
+        {
+          "itemId": "first_aid_kit",
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "broken_melody",
+    "title": "La Melodia Spezzata",
+    "type": "SUB",
+    "startText": "Questo pianoforte è un'incredibile reliquia del mondo passato. I tasti sono intatti, ma il suono è terribilmente stonato. Con gli attrezzi giusti, forse potresti provare ad accordarlo e sentire di nuovo una vera melodia.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova Strumenti di Precisione per accordare il pianoforte.",
+        "trigger": {
+          "type": "getItem",
+          "value": "precision_tools"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna al Teatro in Rovina e accorda il pianoforte.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "piano_tuning_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200,
+      "statBoost": {
+        "stat": "car",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "tower_of_light",
+    "title": "La Luce nella Torre",
+    "type": "SUB",
+    "startText": "La console di questa torre radio è in pezzi, ma il cablaggio principale e l'antenna sembrano intatti. Con componenti di alta qualità, potresti essere in grado di riattivare il segnale di emergenza. Potrebbe essere un modo per scoprire se c'è qualcun altro là fuori.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Recupera i componenti necessari: 3× Elettronica di Grado Militare, 1× Generatore Portatile.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "military_grade_electronics", "quantity": 3 },
+            { "itemId": "portable_generator", "quantity": 1 }
+          ]
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna a una torre radio per installare i componenti.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "radio_tower_repair_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 600,
+      "items": [
+        {
+          "itemId": "walkie_talkie",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "water_of_life",
+    "title": "L'Acqua della Vita",
+    "type": "SUB",
+    "startText": "Questo impianto di depurazione è in gran parte intatto, ma il generatore principale e il sistema di filtraggio sono offline. Riattivarlo potrebbe fornire acqua pulita a tutta questa parte della città.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova un Manuale di Manutenzione per impianti idraulici.",
+        "trigger": {
+          "type": "getItem",
+          "value": "hydraulic_manual"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Recupera 3 Filtri Industriali.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "industrial_filter", "quantity": 3 }
+          ]
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Trova una Batteria per veicoli pesanti per riavviare il generatore.",
+        "trigger": {
+          "type": "getItem",
+          "value": "vehicle_battery"
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Torna all'impianto di depurazione per completare la riparazione.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "water_plant_repair_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 800
+    }
   }
 ]

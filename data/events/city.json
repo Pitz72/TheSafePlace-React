@@ -764,9 +764,20 @@
   {
     "id": "city_theater_ruins",
     "title": "Teatro in Rovina",
-    "description": "Un vecchio teatro abbandonato. Il palco è crollato, ma il retroscena potrebbe nascondere qualcosa.",
+    "description": "Un vecchio teatro abbandonato. Il palco è crollato, ma il retroscena potrebbe nascondere qualcosa. Al centro della sala, miracolosamente intatto, c'è un magnifico pianoforte a coda.",
     "biomes": ["Città"], "isUnique": true,
     "choices": [
+      {
+        "text": "Esamina il pianoforte",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Il pianoforte è una reliquia incredibile. I tasti sono intatti, ma quando premi uno, il suono è terribilmente stonato. Con gli strumenti giusti, forse potresti accordarlo..." },
+            { "type": "startQuest", "value": "broken_melody" },
+            { "type": "addXp", "value": 50 }
+          ]
+        }]
+      },
       {
         "text": "Cerca nel retroscena",
         "outcomes": [{
@@ -780,6 +791,30 @@
           ],
           "failure": [
             { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "[QUEST] Tenta di accordare il pianoforte",
+        "itemRequirements": [{ "itemId": "precision_tools", "quantity": 1 }],
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 15,
+          "successText": "Con pazienza infinita, accorda ogni corda. Poi, esitante, suoni alcune note. La melodia che ne esce è semplice, malinconica, ma pura. Per un istante, il suono della musica riempie le rovine, un'eco di bellezza in un mondo di cenere. Ti senti... più umano.",
+          "failureText": "Tenti di accordare le corde, ma una si spezza con un suono stridente. Il delicato meccanismo è compromesso. Il pianoforte non suonerà mai più.",
+          "success": [
+            { "type": "removeItem", "value": { "itemId": "precision_tools", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "completeQuestFromEvent", "questId": "broken_melody" } },
+            { "type": "statBoost", "value": { "stat": "car", "amount": 1 } },
+            { "type": "journalEntry", "text": "[EREDITÀ] Hai riportato in vita l'arte. Il tuo Carisma aumenta permanentemente." },
+            { "type": "addXp", "value": 200 }
+          ],
+          "failure": [
+            { "type": "removeItem", "value": { "itemId": "precision_tools", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "failQuestFromEvent", "questId": "broken_melody" } },
+            { "type": "journalEntry", "text": "[FALLIMENTO] Il pianoforte è perduto per sempre." },
+            { "type": "addXp", "value": 50 }
           ]
         }]
       },

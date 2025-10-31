@@ -111,6 +111,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     activeQuests: {},
     completedQuests: [],
     loreArchive: [],
+    questKillCounts: {},
 
     // --- Actions ---
     /**
@@ -199,6 +200,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             activeQuests: {},
             completedQuests: [],
             loreArchive: [],
+            questKillCounts: {},
         });
     },
 
@@ -1797,6 +1799,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             activeQuests: state.activeQuests,
             completedQuests: state.completedQuests,
             loreArchive: state.loreArchive,
+            questKillCounts: state.questKillCounts,
         };
     },
 
@@ -1825,6 +1828,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             activeQuests: json.activeQuests || {},
             completedQuests: json.completedQuests || [],
             loreArchive: json.loreArchive || [],
+            questKillCounts: json.questKillCounts || {},
         });
     },
 
@@ -1927,6 +1931,88 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             });
             
             return { loreArchive: [...state.loreArchive, entryId] };
+        });
+    },
+
+    /**
+     * Upgrades equipped armor with enhanced defense.
+     *
+     * @description Permanently increases the defense value of equipped armor
+     * and fully restores its durability. Used by Anya's tech upgrades.
+     *
+     * @param {'head' | 'chest' | 'legs'} slot - Armor slot to upgrade
+     * @param {number} defenseBonus - Defense increase (typically 1-2)
+     *
+     * @remarks
+     * v1.8.1 - Anya's Echo System:
+     * - Restores armor to full durability
+     * - Adds permanent defense bonus
+     * - One-time upgrade per armor piece
+     * - Requires equipped armor in specified slot
+     *
+     * Implementation Note:
+     * - Since itemDatabase is immutable, we track upgrades via gameFlags
+     * - Defense bonus applied in getPlayerAC() calculation
+     * - Durability restoration is immediate
+     *
+     * @example
+     * upgradeEquippedArmor('chest', 2);
+     * // Chest armor defense +2, durability restored to max
+     *
+     * @see getPlayerAC for how defense is calculated
+     */
+    upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => {
+        const { inventory, equippedArmor, equippedHead, equippedLegs } = get();
+        const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+        
+        let equippedIndex: number | null = null;
+        if (slot === 'chest') equippedIndex = equippedArmor;
+        else if (slot === 'head') equippedIndex = equippedHead;
+        else if (slot === 'legs') equippedIndex = equippedLegs;
+        
+        if (equippedIndex === null) {
+            useGameStore.getState().addJournalEntry({
+                text: `Non hai nulla equipaggiato nello slot ${slot}.`,
+                type: JournalEntryType.ACTION_FAILURE
+            });
+            return;
+        }
+        
+        const armorItem = inventory[equippedIndex];
+        if (!armorItem) return;
+        
+        const armorDetails = itemDatabase[armorItem.itemId];
+        if (!armorDetails || armorDetails.type !== 'armor') {
+            useGameStore.getState().addJournalEntry({
+                text: `L'oggetto equipaggiato non è un'armatura.`,
+                type: JournalEntryType.ACTION_FAILURE
+            });
+            return;
+        }
+        
+        // Restore durability to max
+        set(state => {
+            const newInventory = [...state.inventory];
+            const upgradedArmor = { ...newInventory[equippedIndex!] };
+            
+            if (upgradedArmor.durability) {
+                upgradedArmor.durability.current = upgradedArmor.durability.max;
+            }
+            
+            newInventory[equippedIndex!] = upgradedArmor;
+            return { inventory: newInventory };
+        });
+        
+        // Set upgrade flag for defense bonus tracking
+        const upgradeFlag = `ARMOR_UPGRADED_${slot.toUpperCase()}_${defenseBonus}`;
+        useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add(upgradeFlag)
+        }));
+        
+        useGameStore.getState().addJournalEntry({
+            text: `[POTENZIAMENTO] ${armorDetails.name} migliorato! (+${defenseBonus} Difesa, Durabilità ripristinata)`,
+            type: JournalEntryType.XP_GAIN,
+            color: '#a855f7' // purple-500
         });
     }
 }));

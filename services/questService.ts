@@ -282,6 +282,62 @@ export const questService = {
   },
 
   /**
+   * Increments kill count for a specific enemy in bounty quests.
+   *
+   * @description Tracks enemy kills for bounty quests with enemyDefeated triggers.
+   * Called after each combat victory.
+   *
+   * @param {string} enemyId - ID of defeated enemy
+   *
+   * @remarks
+   * v1.8.3 - Bounty System:
+   * - Increments counter in questKillCounts
+   * - Triggers quest check after increment
+   * - Supports multiple simultaneous bounties
+   *
+   * @example
+   * incrementQuestKillCount('aggressive_boar');
+   * // If bounty_kill_boars active, count goes 0→1
+   */
+  incrementQuestKillCount: (enemyId: string) => {
+    const { activeQuests, questKillCounts } = useCharacterStore.getState();
+    const { quests } = useQuestDatabaseStore.getState();
+    
+    // Check all active quests for enemyDefeated triggers
+    Object.keys(activeQuests).forEach(questId => {
+      const quest = quests[questId];
+      if (!quest) return;
+      
+      const currentStage = activeQuests[questId];
+      const stageData = quest.stages.find(s => s.stage === currentStage);
+      
+      if (stageData && stageData.trigger.type === 'enemyDefeated') {
+        const triggerValue = stageData.trigger.value as { enemyId: string; quantity: number };
+        
+        if (triggerValue.enemyId === enemyId) {
+          // Initialize quest kill counts if needed
+          const newKillCounts = { ...questKillCounts };
+          if (!newKillCounts[questId]) {
+            newKillCounts[questId] = {};
+          }
+          if (!newKillCounts[questId][enemyId]) {
+            newKillCounts[questId][enemyId] = 0;
+          }
+          
+          // Increment count
+          newKillCounts[questId][enemyId]++;
+          useCharacterStore.setState({ questKillCounts: newKillCounts });
+          
+          console.log(`[QUEST SERVICE] Kill count for ${questId}: ${enemyId} = ${newKillCounts[questId][enemyId]}/${triggerValue.quantity}`);
+          
+          // Check if quest should advance
+          questService.checkQuestTriggers();
+        }
+      }
+    });
+  },
+
+  /**
    * Checks all active quest triggers and advances/completes quests as needed.
    *
    * @description The "orchestrator" function that evaluates all active quests
@@ -290,6 +346,7 @@ export const questService = {
    * @param {string} [lastAddedItemId] - Optional: ID of item just added to inventory
    * @param {string} [lastDialogueNodeId] - Optional: ID of dialogue node just visited
    * @param {string} [lastCompletedEventId] - Optional: ID of event just completed
+   * @param {string} [lastDefeatedEnemyId] - Optional: ID of enemy just defeated (v1.8.3)
    *
    * @remarks
    * Trigger Types Implemented (v1.8.0):
@@ -324,9 +381,9 @@ export const questService = {
    * // After event
    * questService.checkQuestTriggers(undefined, undefined, 'unique_ancient_library');
    */
-  checkQuestTriggers: (lastAddedItemId?: string, lastDialogueNodeId?: string, lastCompletedEventId?: string) => {
+  checkQuestTriggers: (lastAddedItemId?: string, lastDialogueNodeId?: string, lastCompletedEventId?: string, lastDefeatedEnemyId?: string) => {
     const { quests } = useQuestDatabaseStore.getState();
-    const { activeQuests, inventory } = useCharacterStore.getState();
+    const { activeQuests, inventory, questKillCounts } = useCharacterStore.getState();
     const { playerPos } = useGameStore.getState();
 
     // Iterate through all active quests
@@ -466,16 +523,37 @@ export const questService = {
           // The interaction ID is passed as lastDialogueNodeId parameter
           // Used for: terminal interactions, object-based quest completion
           const targetInteractionId = trigger.value as string;
-          if (lastDialogueNodeId === targetInteractionId) {
+          
+          // Special case: Multi-flag check for signs_of_ash quest stage 1
+          if (targetInteractionId === 'visited_all_ritual_sites') {
+            const { gameFlags } = useGameStore.getState();
+            const hasCave = gameFlags.has('RITUAL_SITE_CAVE_VISITED');
+            const hasTree = gameFlags.has('RITUAL_SITE_TREE_VISITED');
+            
+            if (hasCave && hasTree) {
+              triggerMet = true;
+              console.log(`[QUEST SERVICE] All ritual sites visited for ${questId}`);
+            }
+          } else if (lastDialogueNodeId === targetInteractionId) {
             triggerMet = true;
             console.log(`[QUEST SERVICE] interactWithObject trigger met for ${questId} (${targetInteractionId})`);
           }
           break;
         }
 
+        case 'enemyDefeated': {
+          const { enemyId, quantity } = trigger.value as { enemyId: string; quantity: number };
+          const killCount = questKillCounts[questId]?.[enemyId] || 0;
+          
+          if (killCount >= quantity) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] enemyDefeated trigger met for ${questId} (${killCount}/${quantity} ${enemyId})`);
+          }
+          break;
+        }
+
         // Future trigger types
         case 'useItem':
-        case 'enemyDefeated':
         case 'skillCheckSuccess':
           // Not yet implemented
           break;

@@ -479,21 +479,23 @@
   {
     "id": "forest_ritual_circle",
     "title": "Cerchio Rituale",
-    "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate.",
+    "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate. L'aria qui sembra vibrare con una frequenza quasi impercettibile.",
     "biomes": ["Foresta"], "isUnique": true,
     "choices": [
       {
-        "text": "Esamina i simboli",
+        "text": "Esamina i simboli con attenzione",
         "outcomes": [{
           "type": "skillCheck", "skill": "storia", "dc": 15,
-          "successText": "Sono simboli pre-guerra di un culto apocalittico. Trovi un diario nascosto sotto una pietra.",
-          "failureText": "I simboli non hanno senso per te. Sono solo scarabocchi.",
+          "successText": "Sotto una delle pietre principali, protetto da un involucro di pelle cerata, trovi un diario. Le pagine sono piene di simboli astronomici, calcoli complessi e note scritte in una calligrafia frenetica. Parla di 'frequenze dissonanti', di 'armonizzare gli echi' e di un 'rituale di schermatura'. Non è il diario di un pazzo, ma di qualcuno che stava cercando disperatamente una soluzione.",
+          "failureText": "I simboli sono troppo complessi. Sembrano astronomici, ma non riesci a decifrarli. Trovi solo cenere e ossa.",
           "success": [
-            { "type": "addItem", "value": { "itemId": "sensitive_documents", "quantity": 1 } },
-            { "type": "addXp", "value": 45 }
+            { "type": "addItem", "value": { "itemId": "cultist_coded_journal", "quantity": 1 } },
+            { "type": "startQuest", "value": "signs_of_ash" },
+            { "type": "addXp", "value": 60 },
+            { "type": "journalEntry", "text": "[SCOPERTA] Il diario menziona altri due 'luoghi di potere' necessari per completare il rituale." }
           ],
           "failure": [
-            { "type": "addXp", "value": 5 }
+            { "type": "addXp", "value": 15 }
           ]
         }]
       },

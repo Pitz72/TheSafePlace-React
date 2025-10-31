@@ -279,17 +279,22 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             audioManager.playSound('victory');
             
             // Increment total combat wins counter
-            useGameStore.setState(state => ({ 
-                totalCombatWins: state.totalCombatWins + 1 
+            useGameStore.setState(state => ({
+                totalCombatWins: state.totalCombatWins + 1
             }));
+            
+            // Increment quest kill counts for bounty quests (v1.8.3)
+            import('../services/questService').then(({ questService }) => {
+                questService.incrementQuestKillCount(combatState.enemy.id);
+            });
             
             // Trigger CS_FIRST_KILL cutscene only after first HUMANOID kill
             const { gameFlags, startCutscene } = useGameStore.getState();
             const isHumanoid = combatState.enemy.type === 'humanoid';
             if (isHumanoid && !gameFlags.has('FIRST_HUMAN_KILL_PLAYED')) {
                 setTimeout(() => {
-                    useGameStore.setState(state => ({ 
-                        gameFlags: new Set(state.gameFlags).add('FIRST_HUMAN_KILL_PLAYED') 
+                    useGameStore.setState(state => ({
+                        gameFlags: new Set(state.gameFlags).add('FIRST_HUMAN_KILL_PLAYED')
                     }));
                     useGameStore.getState().startCutscene('CS_FIRST_KILL');
                 }, 2000); // 2 second delay after combat ends

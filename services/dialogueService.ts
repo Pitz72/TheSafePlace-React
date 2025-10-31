@@ -20,6 +20,7 @@ import { useDialogueStore, DialogueSkillCheckResult } from '../store/dialogueSto
 import { useDialogueDatabaseStore } from '../data/dialogueDatabase';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
+import { useItemDatabaseStore } from '../data/itemDatabase';
 import { GameState, JournalEntryType, SkillName } from '../types';
 import { questService } from './questService';
 import { audioManager } from '../utils/audio';
@@ -210,10 +211,27 @@ export const dialogueService = {
       case 'takeItem': {
         const { itemId, quantity } = consequence.value as { itemId: string; quantity: number };
         removeItem(itemId, quantity);
-        addJournalEntry({
-          text: `Hai dato un oggetto a Marcus.`,
-          type: JournalEntryType.NARRATIVE
-        });
+        
+        // Special handling for Anya's Eurocenter card
+        if (itemId === 'eurocenter_business_card') {
+          // Mark echo as delivered
+          useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add('ANYA_ECHO_EUROCENTER')
+          }));
+          
+          addJournalEntry({
+            text: `Hai consegnato il biglietto da visita ad Anya.`,
+            type: JournalEntryType.NARRATIVE
+          });
+          
+          // Jump to reward node
+          setCurrentNode('anya_after_eurocenter');
+        } else {
+          addJournalEntry({
+            text: `Hai dato un oggetto.`,
+            type: JournalEntryType.NARRATIVE
+          });
+        }
         break;
       }
 
@@ -257,6 +275,94 @@ export const dialogueService = {
           type: JournalEntryType.SYSTEM_WARNING,
           color: '#ef4444' // red-500
         });
+        break;
+      }
+
+      case 'learnRecipe': {
+        const recipeId = consequence.value as string;
+        const { learnRecipe } = useCharacterStore.getState();
+        learnRecipe(recipeId);
+        
+        // Mark echo as delivered
+        const echoFlag = `ANYA_ECHO_PIXELDEBH`;
+        useGameStore.setState(state => ({
+          gameFlags: new Set(state.gameFlags).add(echoFlag)
+        }));
+        
+        // Remove the item from inventory
+        removeItem('pixeldebh_plate', 1);
+        
+        // End dialogue after reward
+        setTimeout(() => {
+          dialogueService.endDialogue();
+        }, 1500);
+        break;
+      }
+
+      case 'upgradeArmor': {
+        const { slot, defenseBonus, statusResistance } = consequence.value as {
+          slot: 'head' | 'chest' | 'legs';
+          defenseBonus: number;
+          statusResistance?: string;
+        };
+        
+        const { upgradeEquippedArmor } = useCharacterStore.getState();
+        
+        // Determine which echo item to remove
+        let echoFlag = '';
+        let itemToRemove = '';
+        
+        if (slot === 'chest') {
+          echoFlag = 'ANYA_ECHO_DRONE_CHIP';
+          itemToRemove = 'drone_memory_chip';
+        } else if (slot === 'legs') {
+          echoFlag = 'ANYA_ECHO_PROJECT_REBIRTH';
+          itemToRemove = 'research_notes_rebirth';
+        }
+        
+        // Upgrade the armor
+        upgradeEquippedArmor(slot, defenseBonus);
+        
+        // Mark echo as delivered
+        useGameStore.setState(state => ({
+          gameFlags: new Set(state.gameFlags).add(echoFlag)
+        }));
+        
+        // Remove the echo item
+        removeItem(itemToRemove, 1);
+        
+        // End dialogue after upgrade
+        setTimeout(() => {
+          dialogueService.endDialogue();
+        }, 1500);
+        break;
+      }
+
+      case 'revealMapPOI': {
+        const { x, y, name } = consequence.value as { x: number; y: number; name: string };
+        
+        // Mark echo as delivered
+        const echoFlag = 'ANYA_ECHO_CRYPTIC_RECORDING';
+        useGameStore.setState(state => ({
+          gameFlags: new Set(state.gameFlags).add(echoFlag)
+        }));
+        
+        // Remove the item
+        removeItem('cryptic_recording', 1);
+        
+        addJournalEntry({
+          text: `[SCOPERTA] ${name} rivelato alle coordinate (${x}, ${y})!`,
+          type: JournalEntryType.XP_GAIN,
+          color: '#38bdf8' // cyan-400
+        });
+        
+        // Add XP for discovery
+        addXp(75);
+        
+        // End dialogue after reveal
+        setTimeout(() => {
+          dialogueService.endDialogue();
+        }, 1500);
         break;
       }
 

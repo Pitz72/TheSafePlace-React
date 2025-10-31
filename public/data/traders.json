@@ -43,5 +43,25 @@
       { "itemId": "repair_kit_basic", "quantity": 1 },
       { "itemId": "manual_field_medicine", "quantity": 1 }
     ]
+  },
+  {
+    "id": "anya",
+    "name": "Anya, la Tecnica",
+    "description": "Una brillante scrapper ossessionata dalla tecnologia pre-catastrofe. Non commercia oggetti comuni, ma può trasformare artefatti rari in potenziamenti unici.",
+    "baseMarkup": 1.0,
+    "inventory": []
+  },
+  {
+    "id": "silas",
+    "name": "Silas, il Cacciatore",
+    "description": "Un cacciatore esperto e pragmatico che si occupa della sicurezza del Crocevia. Offre contratti di caccia e insegna tecniche di sopravvivenza in cambio di trofei.",
+    "baseMarkup": 1.2,
+    "inventory": [
+      { "itemId": "ammo_arrow", "quantity": 30 },
+      { "itemId": "AMMO_12G", "quantity": 20 },
+      { "itemId": "animal_hide", "quantity": 10 },
+      { "itemId": "bear_trap", "quantity": 3 },
+      { "itemId": "manual_wilderness_survival", "quantity": 1 }
+    ]
   }
 ]

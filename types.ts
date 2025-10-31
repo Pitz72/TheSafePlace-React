@@ -208,10 +208,12 @@ export interface Quest {
 /**
  * Consequence that can result from a dialogue choice.
  * Supports quest management, item exchange, skill checks, and dialogue flow control.
+ *
+ * @version 1.8.1 - Added upgradeArmor, learnRecipe, revealMapPOI
  */
 export interface DialogueConsequence {
-  type: 'startQuest' | 'advanceQuest' | 'completeQuest' | 'failQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp';
-  value?: any; // questId, itemId, { skill, dc, successNode, failureNode }, nodeId, etc.
+  type: 'startQuest' | 'advanceQuest' | 'completeQuest' | 'failQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp' | 'upgradeArmor' | 'learnRecipe' | 'revealMapPOI';
+  value?: any; // questId, itemId, { skill, dc, successNode, failureNode }, nodeId, { slot, defenseBonus, statusResistance }, recipeId, { x, y, name }, etc.
 }
 
 /**
@@ -469,11 +471,15 @@ export interface WanderingTraderState {
 }
 
 /**
- * World State - Tracks permanent changes to the game world (v1.8.0)
+ * World State - Tracks permanent changes to the game world (v1.8.0+)
+ *
+ * @version 1.8.4 - Added water plant tracking
  */
 export interface WorldState {
   repairedPumps: Position[];
   destroyedPumps: Position[];
+  waterPlantActive: boolean;
+  waterPlantLocation: Position | null;
 }
 
 /**
@@ -542,10 +548,11 @@ export interface GameStoreState {
   initializeWanderingTrader: () => void;
   advanceTraderTurn: () => void;
   moveTrader: (newPosition: Position) => void;
-  // World State System (v1.8.0)
+  // World State System (v1.8.0+)
   activateWaterPump: (location: Position) => void;
   destroyWaterPump: (location: Position) => void;
   canUseWaterPump: (location: Position) => boolean;
+  activateWaterPlant: (location: Position) => void;
 }
 
 
@@ -644,6 +651,7 @@ export interface CharacterState {
     activeQuests: Record<string, number>; // questId -> currentStage
     completedQuests: string[]; // Array for JSON serialization
     loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
+    questKillCounts: Record<string, Record<string, number>>; // questId -> { enemyId -> count } (v1.8.3)
 
     // Actions
     initCharacter: () => void;
@@ -680,6 +688,7 @@ export interface CharacterState {
     getMaxCarryWeight: () => number;
     unlockTrophy: (trophyId: string) => void;
     addLoreEntry: (entryId: string) => void;
+    upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => void;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
     toJSON: () => object;

@@ -240,11 +240,22 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
                 case 'special': {
-                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state)
+                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags)
                     if (result.value && typeof result.value === 'object') {
-                        const { effect, dialogueId, traderId, location } = result.value;
+                        const { effect, dialogueId, traderId, location, flag } = result.value;
                         
-                        if (effect === 'startDialogue' && dialogueId) {
+                        if (effect === 'setFlag' && flag) {
+                            // v1.8.2: Set game flag for quest tracking
+                            useGameStore.setState(state => ({
+                                gameFlags: new Set(state.gameFlags).add(flag)
+                            }));
+                            message = result.text || `Flag ${flag} impostato.`;
+                            
+                            // Check if this completes any quest triggers
+                            import('../services/questService').then(({ questService }) => {
+                                questService.checkQuestTriggers();
+                            });
+                        } else if (effect === 'startDialogue' && dialogueId) {
                             // Import dialogueService dynamically to avoid circular dependency
                             import('../services/dialogueService').then(({ dialogueService }) => {
                                 dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
@@ -264,6 +275,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                             // v1.8.0: Destroy water pump
                             useGameStore.getState().destroyWaterPump(location);
                             message = result.text || "La pompa è stata distrutta.";
+                        } else if (effect === 'activateWaterPlant' && location) {
+                            // v1.8.4: Activate water treatment plant
+                            useGameStore.getState().activateWaterPlant(location);
+                            message = result.text || "L'impianto di depurazione è attivo!";
                         } else if (effect === 'completeQuestFromEvent') {
                             // v1.8.0: Complete quest from event
                             const { questId } = result.value;

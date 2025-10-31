@@ -320,5 +320,482 @@
         ]
       }
     }
+  },
+  {
+    "id": "anya_main",
+    "npcName": "Anya",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Stai lontano dai miei circuiti, viaggiatore. A meno che tu non abbia qualcosa di... interessante. Il mondo là fuori è un cimitero di tecnologia che canta ancora, se sai come ascoltare. Io colleziono i suoi echi. Se trovi qualcosa che non capisci, qualcosa che sembra 'fuori posto', portamelo. Potrei renderlo di nuovo utile. Per entrambi.",
+        "options": [
+          {
+            "text": "Cosa cerchi esattamente?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_do_you_seek"
+            }
+          },
+          {
+            "text": "Cosa puoi fare con questa tecnologia?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_can_you_do"
+            }
+          },
+          {
+            "text": "[ECHO] Ho trovato questa strana placca di metallo ('PixelDebh').",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_pixeldebh"
+            },
+            "showCondition": {
+              "hasItem": "pixeldebh_plate"
+            }
+          },
+          {
+            "text": "[ECHO] Ho un chip di memoria da un drone di sorveglianza.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_drone_chip"
+            },
+            "showCondition": {
+              "hasItem": "drone_memory_chip"
+            }
+          },
+          {
+            "text": "[ECHO] Ho una registrazione criptica da una vecchia radio.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_cryptic_recording"
+            },
+            "showCondition": {
+              "hasItem": "cryptic_recording"
+            }
+          },
+          {
+            "text": "[ECHO] Ho trovato note sul 'Progetto Rinascita'.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_project_rebirth"
+            },
+            "showCondition": {
+              "hasItem": "research_notes_rebirth"
+            }
+          },
+          {
+            "text": "[ECHO] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_eurocenter_card"
+            },
+            "showCondition": {
+              "hasItem": "eurocenter_business_card"
+            }
+          },
+          {
+            "text": "Ti terrò a mente. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "what_do_you_seek": {
+        "id": "what_do_you_seek",
+        "npcText": "Cerco frammenti. Pezzi di un mondo che non esiste più. Chip di memoria, placche identificative, registrazioni audio... ogni pezzo racconta una storia. E ogni storia può essere trasformata in qualcosa di utile. Potere, conoscenza, sopravvivenza. Tutto è connesso.",
+        "options": [
+          {
+            "text": "Terrò gli occhi aperti per questi 'Echi'.",
+            "consequence": {
+              "type": "startQuest",
+              "value": "collect_world_echoes"
+            }
+          },
+          {
+            "text": "Capisco. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "start_after_quest": {
+        "id": "start_after_quest",
+        "npcText": "Hai altro per me, viaggiatore?",
+        "options": [
+          {
+            "text": "Cosa puoi fare con questa tecnologia?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_can_you_do"
+            }
+          },
+          {
+            "text": "[ECHO] Ho trovato questa strana placca di metallo ('PixelDebh').",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_pixeldebh"
+            },
+            "showCondition": {
+              "hasItem": "pixeldebh_plate"
+            }
+          },
+          {
+            "text": "[ECHO] Ho un chip di memoria da un drone di sorveglianza.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_drone_chip"
+            },
+            "showCondition": {
+              "hasItem": "drone_memory_chip"
+            }
+          },
+          {
+            "text": "[ECHO] Ho una registrazione criptica da una vecchia radio.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_cryptic_recording"
+            },
+            "showCondition": {
+              "hasItem": "cryptic_recording"
+            }
+          },
+          {
+            "text": "[ECHO] Ho trovato note sul 'Progetto Rinascita'.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_project_rebirth"
+            },
+            "showCondition": {
+              "hasItem": "research_notes_rebirth"
+            }
+          },
+          {
+            "text": "[ECHO] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_eurocenter_card"
+            },
+            "showCondition": {
+              "hasItem": "eurocenter_business_card"
+            }
+          },
+          {
+            "text": "Non ora. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "what_can_you_do": {
+        "id": "what_can_you_do",
+        "npcText": "Posso fare molte cose. Posso insegnarti a riparare meglio il tuo equipaggiamento. Posso potenziare la tua armatura con tecnologia recuperata. Posso decifrare codici e rivelare segreti nascosti. Ma solo se mi porti gli 'Echi' giusti. Ogni frammento ha il suo prezzo... e la sua ricompensa.",
+        "options": [
+          {
+            "text": "Terrò gli occhi aperti.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Grazie. Devo andare.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "anya_pixeldebh": {
+        "id": "anya_pixeldebh",
+        "npcText": "Incredibile... un pannello di accesso di una sala giochi 'Paradise'. Si diceva che usassero componenti militari per i loro simulatori. Dammi un attimo... (Anya smonta la placca con precisione chirurgica) Ecco. Questi circuiti possono essere riutilizzati. Impara a tenere insieme le cose. È la prima regola.",
+        "options": [
+          {
+            "text": "Grazie per la lezione.",
+            "consequence": {
+              "type": "learnRecipe",
+              "value": "recipe_repair_kit_advanced"
+            }
+          }
+        ]
+      },
+      "anya_drone_chip": {
+        "id": "anya_drone_chip",
+        "npcText": "Un chip di un drone di sorveglianza... La maggior parte dei dati è corrotta, ma la matrice energetica è interessante. Posso usarla per rinforzare qualcosa. (Anya esamina la tua armatura) Dammi il tuo pettorale. Ti restituirò qualcosa di meglio.",
+        "options": [
+          {
+            "text": "Fai pure.",
+            "consequence": {
+              "type": "upgradeArmor",
+              "value": { "slot": "chest", "defenseBonus": 2 }
+            }
+          }
+        ]
+      },
+      "anya_cryptic_recording": {
+        "id": "anya_cryptic_recording",
+        "npcText": "Una trasmissione numerica... l'ho già sentita. È un vecchio protocollo militare. Dammi tempo per decifrarla. (Anya lavora per alcuni minuti su un vecchio terminale) Ecco. È un codice di emergenza. Indica la posizione di un deposito medico nascosto. Coordinate: 62, 73. Buona fortuna.",
+        "options": [
+          {
+            "text": "Informazione preziosa. Grazie.",
+            "consequence": {
+              "type": "revealMapPOI",
+              "value": { "x": 62, "y": 73, "name": "Deposito Medico Nascosto" }
+            }
+          }
+        ]
+      },
+      "anya_project_rebirth": {
+        "id": "anya_project_rebirth",
+        "npcText": "(Il suo tono diventa serio, quasi spaventato) Progetto Rinascita... pensavo fossero solo leggende. Storie del terrore per spaventare i sopravvissuti. Se questo è vero... allora il Grande Silenzio non è stato un incidente. È stato un atto deliberato. (Pausa) Se le cose stanno così, hai bisogno di una protezione migliore. Dammi i tuoi stivali.",
+        "options": [
+          {
+            "text": "Ecco, prendili.",
+            "consequence": {
+              "type": "upgradeArmor",
+              "value": { "slot": "legs", "defenseBonus": 1, "statusResistance": "MALATO" }
+            }
+          }
+        ]
+      },
+      "anya_eurocenter_card": {
+        "id": "anya_eurocenter_card",
+        "npcText": "(Anya sorride amaramente) Immobiliare Eurocenter... vendevano sogni prima che il mondo diventasse un incubo. 'Appartamenti di lusso con vista sul futuro'. Che ironia. Grazie per questo... eco. È un promemoria di ciò che eravamo. Prendi, questo ti sarà più utile di un biglietto da visita.",
+        "options": [
+          {
+            "text": "Grazie.",
+            "consequence": {
+              "type": "takeItem",
+              "value": { "itemId": "eurocenter_business_card", "quantity": 1 }
+            }
+          }
+        ]
+      },
+      "anya_after_eurocenter": {
+        "id": "anya_after_eurocenter",
+        "npcText": "Ecco il tuo multitool. Usalo bene.",
+        "options": [
+          {
+            "text": "Lo farò. Grazie.",
+            "consequence": {
+              "type": "giveItem",
+              "value": { "itemId": "tool_multitool", "quantity": 1 }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hermit_main",
+    "npcName": "L'Ascoltatore",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Il mondo parla a chi sa ascoltare. Io ascolto da anni. Le frequenze, i sussurri, gli echi del Silenzio. Cosa ti porta qui, viaggiatore? Il caso... o qualcosa di più profondo?",
+        "options": [
+          {
+            "text": "Chi sei?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "who_are_you"
+            }
+          },
+          {
+            "text": "Cosa intendi per 'ascoltare'?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_is_listening"
+            }
+          },
+          {
+            "text": "[QUEST] Ho trovato questo diario... parla di 'frequenze'.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "hermit_deciphers_journal"
+            },
+            "showCondition": {
+              "questActive": "signs_of_ash",
+              "hasItem": "cultist_coded_journal"
+            }
+          },
+          {
+            "text": "[QUEST] Ho raccolto le erbe che mi hai chiesto.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "hermit_receives_herbs"
+            },
+            "showCondition": {
+              "questActive": "signs_of_ash",
+              "hasItem": "MED_HEALING_HERBS"
+            }
+          },
+          {
+            "text": "Devo andare. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "who_are_you": {
+        "id": "who_are_you",
+        "npcText": "Un nome? I nomi sono echi del passato. Chiamami 'L'Ascoltatore', se devi chiamarmi. Ero un tecnico del suono, prima del Silenzio. Ora... ascolto ciò che gli altri non possono sentire. Le frequenze che hanno spento il mondo. E quelle che potrebbero proteggerci.",
+        "options": [
+          {
+            "text": "Affascinante. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Capisco. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "what_is_listening": {
+        "id": "what_is_listening",
+        "npcText": "Il Grande Silenzio non fu silenzio. Fu un canto. Una frequenza che spense le macchine, le menti... l'umanità stessa. Ma alcune frequenze possono creare... interferenze. Zone di protezione. Gli Ascoltatori lo sapevano. Cercavano di creare rifugi sonori. Non ci riuscirono... ma i loro studi restano.",
+        "options": [
+          {
+            "text": "Inquietante. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Grazie per le informazioni. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "hermit_deciphers_journal": {
+        "id": "hermit_deciphers_journal",
+        "npcText": "(Gli occhi ciechi dell'eremita si illuminano) Questo... questo è il diario di un Ascoltatore! Questi non erano pazzi. Erano come me. Cercavano di creare una zona di 'silenzio nel Silenzio', una frequenza di disturbo per tenere lontane... le cose che camminano nella cenere. (Pausa) Ma mi mancano degli ingredienti per completare i loro calcoli. Portami erbe che calmano la mente - 3 Erbe Curative e 5 Funghi Commestibili. Forse potrò 'sentire' la soluzione.",
+        "options": [
+          {
+            "text": "Troverò le erbe.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "hermit_receives_herbs": {
+        "id": "hermit_receives_herbs",
+        "npcText": "(L'eremita prepara un infuso con le erbe, lo beve, e i suoi occhi si chiudono. Entra in uno stato di trance profonda. Dopo lunghi minuti di silenzio, parla con voce distante) ...non è odio... è... un segnale. Un canto. Loro sono solo le note. Ma il rituale... sì, vedo. Un controsuono. Un'interferenza. Ecco la chiave... (Si sveglia bruscamente) Ho visto. Ho sentito. Posso insegnarti a costruire un Dissuasore. Non li fermerà, ma li terrà lontani. Per un po'.",
+        "options": [
+          {
+            "text": "Grazie, Ascoltatore.",
+            "consequence": {
+              "type": "completeQuest",
+              "value": "signs_of_ash"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "silas_main",
+    "npcName": "Silas",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Un altro nuovo arrivato. Spero tu sappia come usare quell'arma che porti. Questo mondo non ha pietà per i deboli. Io mi occupo di tenere le bestie e i pazzi lontani da questo posto. A volte ho bisogno di una mano. Se non hai paura di sporcarti le mani, forse possiamo fare affari.",
+        "options": [
+          {
+            "text": "Che tipo di 'affari'?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "bounty_board"
+            }
+          },
+          {
+            "text": "Insegni quello che sai?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "teaching"
+            }
+          },
+          {
+            "text": "Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "bounty_board": {
+        "id": "bounty_board",
+        "npcText": "Ho sempre un paio di problemi da risolvere. Vedi se c'è qualcosa che fa per te. Ogni taglia ha la sua ricompensa.",
+        "options": [
+          {
+            "text": "[TAGLIA] Cinghiali aggressivi minacciano i sentieri.",
+            "consequence": {
+              "type": "startQuest",
+              "value": "bounty_kill_boars"
+            }
+          },
+          {
+            "text": "[TAGLIA] Lupi affamati attaccano i viaggiatori.",
+            "consequence": {
+              "type": "startQuest",
+              "value": "bounty_kill_wolves"
+            }
+          },
+          {
+            "text": "[TAGLIA] Predoni armati terrorizzano la zona.",
+            "consequence": {
+              "type": "startQuest",
+              "value": "bounty_kill_raiders"
+            }
+          },
+          {
+            "text": "Non ora. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "teaching": {
+        "id": "teaching",
+        "npcText": "Insegnare? Non sono un maestro. Ma se mi porti 5 pelli di animali di qualità, posso mostrarti come costruire trappole migliori. È un commercio equo.",
+        "options": [
+          {
+            "text": "[5× Pelli] Ecco le pelli. Insegnami.",
+            "consequence": {
+              "type": "learnRecipe",
+              "value": "recipe_advanced_bear_trap"
+            },
+            "showCondition": {
+              "hasItem": "animal_hide"
+            }
+          },
+          {
+            "text": "Non ho abbastanza pelli. Tornerò.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      }
+    }
   }
 ]
