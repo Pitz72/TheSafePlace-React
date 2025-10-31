@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.7.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.8.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -83,6 +83,80 @@ L'interazione avviene interamente tramite tastiera:
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
 ### Stato del Progetto e Sviluppi Futuri
+
+**Versione Corrente: v1.8.0** - Quest Expansion & World Interaction
+
+Con la versione 1.8.0, il gioco espande massivamente il Quest System con **10 subquest giocabili**, **4 nuovi trigger types**, e introduce sistemi di **modifica permanente del mondo** e **archivio lore** per scoperte narrative.
+
+#### Novità v1.8.0 (31 Ottobre 2025) - **QUEST EXPANSION & WORLD INTERACTION**
+
+Questa versione trasforma il Quest System da framework base a sistema completo e versatile con varietà narrativa.
+
+**10 SUBQUEST GIOCABILI (+900%):**
+- **"La Pompa Silenziosa"**: Ripara pompa d'acqua per fonte permanente
+- **"Indagine al Crocevia"**: Recupera orologio rubato, guadagna amicizia Marcus
+- **"La Conoscenza Perduta"**: Scopri segreti Progetto Eco (lore quest)
+- **"L'Eco del Silenzio"**: Scopri segreti Progetto Rinascita (lore quest)
+- **"Il Messaggio del Fiume"**: Espansa con stage 3, integrazione Marcus
+- **"L'Ultimo Messaggero"**: Consegna pacco sigillato al Crocevia
+- **"L'Occhio nel Cielo"**: Decifrare chip drone (con possibilità fallimento)
+- **"Il Debito del Sopravvissuto"**: Salva Liam e scorta Elara al sicuro
+- **"La Promessa del Bambino"**: Trova tesoro famiglia sotto torre radio
+- **"Il Peso della Scelta"**: Scopri destino famiglia Alenko (narrativa agrodolce)
+
+**6 TRIGGER TYPES (+200%):**
+- **hasItems**: Check inventario multiplo (raccolta materiali)
+- **talkToNPC**: Dialogo con NPC specifico (integrazione sociale)
+- **completeEvent**: Evento unico completato (lore quests)
+- **interactWithObject**: Interazione oggetto/terminale (quest tecnologiche)
+
+**WORLD STATE SYSTEM:**
+- Modifiche permanenti al mondo (pompe riparate/distrutte)
+- Interazioni ripetibili con oggetti riparati
+- Persistenza completa save/load
+- Base per espansioni (ponti, giardini, rifugi)
+
+**ARCHIVIO LORE:**
+- Nuova colonna in QuestScreen: "ARCHIVIO LORE"
+- 3 lore entries sbloccabili (Progetto Eco, Rinascita, Clan Corvo)
+- Testo completo rileggibile
+- Ricompensa per esplorazione e scoperte
+
+**SISTEMA REPUTAZIONE:**
+- Marcus Friendship flag
+- Sconto permanente 10% in scambi
+- Base per sistema fazioni futuro
+
+**INTEGRAZIONE DIALOGHI/QUEST:**
+- Conditional dialogue options basate su quest attive
+- Quest completabili tramite dialoghi
+- Ricompense scelte in dialogo
+
+**MECCANICHE AVANZATE:**
+- Fallimento quest permanente (chip drone)
+- Conseguenze dialogo (completeQuest, failQuest)
+- Quest multi-stage complesse (fino a 4 stage)
+- Ricompense variegate (XP, items, stat, lore, reputation, world changes)
+
+**VARIETÀ NARRATIVA:**
+- Quest eroiche (salvare Elara)
+- Quest investigative (orologio, drone)
+- Quest di consegna (messaggero)
+- Quest tecnologiche (terminale)
+- Quest emotive (famiglia Alenko)
+- Lore quests (auto-complete)
+
+**IMPATTO:**
+- Quest system enterprise-grade (10 quest, 6 trigger types)
+- Mondo modificabile permanentemente (pompe)
+- Scoperte narrative valorizzate (archivio lore)
+- Relazioni PNG profonde (Marcus friendship)
+- Conseguenze permanenti (fallimenti, reputazione)
+- Base solida per espansioni infinite
+
+**Risultato:** Il gioco evolve da "RPG con quest base" a "RPG con mondo interattivo, persistente e narrativamente profondo".
+
+---
 
 **Versione Corrente: v1.7.0** - Social Hub & Interactive NPCs
 

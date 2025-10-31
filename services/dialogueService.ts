@@ -137,6 +137,9 @@ export const dialogueService = {
         const targetNodeId = consequence.value as string;
         setCurrentNode(targetNodeId);
         console.log(`[DIALOGUE SERVICE] Jumped to node: ${targetNodeId}`);
+        
+        // Check quest triggers after dialogue node (v1.8.0)
+        questService.checkQuestTriggers(undefined, targetNodeId);
         break;
       }
 
@@ -228,6 +231,32 @@ export const dialogueService = {
         setTimeout(() => {
           dialogueService.endDialogue();
         }, 1000);
+        break;
+      }
+
+      case 'completeQuest': {
+        const questId = consequence.value as string;
+        questService.completeQuest(questId);
+        // End dialogue after quest completion
+        setTimeout(() => {
+          dialogueService.endDialogue();
+        }, 1000);
+        break;
+      }
+
+      case 'failQuest': {
+        const questId = consequence.value as string;
+        // Remove from active quests without adding to completed
+        const { activeQuests } = useCharacterStore.getState();
+        const newActiveQuests = { ...activeQuests };
+        delete newActiveQuests[questId];
+        useCharacterStore.setState({ activeQuests: newActiveQuests });
+        
+        addJournalEntry({
+          text: `[MISSIONE FALLITA] La quest è stata abbandonata.`,
+          type: JournalEntryType.SYSTEM_WARNING,
+          color: '#ef4444' // red-500
+        });
         break;
       }
 

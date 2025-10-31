@@ -1,7 +1,7 @@
 [
   {
     "id": "find_jonas_talisman",
-    "title": "Il Talismano Perduto",
+    "title": "Il Messaggio del Fiume",
     "type": "SUB",
     "startText": "Il messaggio nella bottiglia parla di un talismano portafortuna perduto vicino a un vecchio mulino a vento. Il suo proprietario, Jonas, spera che possa portare fortuna a chi lo troverà.",
     "stages": [
@@ -20,16 +20,276 @@
           "type": "getItem",
           "value": "jonas_talisman"
         }
+      },
+      {
+        "stage": 3,
+        "objective": "Il talismano ha strane incisioni. Forse qualcuno al Crocevia sa cosa significano.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_talisman_knowledge"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 250,
+      "items": [
+        {
+          "itemId": "manual_advanced_trap",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "repair_water_pump",
+    "title": "La Pompa Silenziosa",
+    "type": "SUB",
+    "startText": "Questa pompa potrebbe diventare una fonte d'acqua affidabile per i miei viaggi in questa zona. Devo trovare i materiali necessari per tentare una riparazione.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Raccogli i materiali: 1× Guarnizione di Gomma, 2× Rottame Metallico",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "rubber_gasket", "quantity": 1 },
+            { "itemId": "scrap_metal", "quantity": 2 }
+          ]
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna alla Pompa Rotta per tentare la riparazione",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 45, "y": 85 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200
+    }
+  },
+  {
+    "id": "crossroads_investigation",
+    "title": "Indagine al Crocevia",
+    "type": "SUB",
+    "startText": "Marcus cerca un orologio rubato. Il ladro si nasconde nelle foreste a nord del Crocevia. Devo trovarlo e recuperare l'orologio.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Parla con Marcus all'Avamposto 'Il Crocevia' per maggiori dettagli",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_investigation_start"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Trova l'accampamento del predone nelle foreste a nord del Crocevia",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 95, "y": 50 }
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Recupera l'orologio da tasca",
+        "trigger": {
+          "type": "getItem",
+          "value": "old_watch"
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Riporta l'orologio a Marcus al Crocevia",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_investigation_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 300
+    }
+  },
+  {
+    "id": "lore_quest_library",
+    "title": "La Conoscenza Perduta",
+    "type": "SUB",
+    "startText": "Hai scoperto segreti del Progetto Eco nella biblioteca antica.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Esplora la Biblioteca e scopri il Progetto Eco",
+        "trigger": {
+          "type": "completeEvent",
+          "value": "unique_ancient_library"
+        }
       }
     ],
     "finalReward": {
       "xp": 150,
+      "statBoost": {
+        "stat": "int",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "lore_quest_laboratory",
+    "title": "L'Eco del Silenzio",
+    "type": "SUB",
+    "startText": "Hai scoperto segreti del Progetto Rinascita nel laboratorio abbandonato.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Esplora il Laboratorio e scopri il Progetto Rinascita",
+        "trigger": {
+          "type": "completeEvent",
+          "value": "unique_scientist_notes"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 150,
+      "statBoost": {
+        "stat": "int",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "deliver_last_message",
+    "title": "L'Ultimo Messaggero",
+    "type": "SUB",
+    "startText": "Hai trovato un pacco sigillato sul corpo di un messaggero caduto. È indirizzato a un 'avamposto a nord'. Onorare il suo ultimo compito potrebbe essere la cosa giusta da fare... e potrebbe fruttarti una ricompensa.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova l'avamposto a nord menzionato nell'ordine di consegna.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 41, "y": 39 }
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Parla con Marcus al Crocevia e consegnagli il pacco.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "marcus_dialogue_delivery"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 250,
       "items": [
         {
-          "itemId": "food_honey",
-          "quantity": 2
+          "itemId": "compass",
+          "quantity": 1
         }
       ]
+    }
+  },
+  {
+    "id": "decipher_drone_data",
+    "title": "L'Occhio nel Cielo",
+    "type": "SUB",
+    "startText": "Hai recuperato il chip di memoria da un drone di sorveglianza. Contiene dati criptati. Forse un terminale funzionante, come quello in una stazione di polizia, potrebbe leggerlo.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova una stazione di polizia con un terminale funzionante.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "police_terminal_interaction"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 300
+    }
+  },
+  {
+    "id": "find_elara",
+    "title": "Il Debito del Sopravvissuto",
+    "type": "SUB",
+    "startText": "Hai salvato un uomo di nome Liam. Sua figlia, Elara, si è nascosta nella scuola in rovina durante il crollo. Devi trovarla e portarla al sicuro al Crocevia.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Cerca Elara nella scuola in rovina della città.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 70, "y": 95 }
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Hai trovato Elara. Scortala all'Avamposto 'Il Crocevia'.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 41, "y": 39 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 400,
+      "items": [
+        {
+          "itemId": "tool_repair_kit_advanced",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "find_family_treasure",
+    "title": "La Promessa del Bambino",
+    "type": "SUB",
+    "startText": "Un bambino che hai aiutato ti ha parlato di un tesoro di famiglia, nascosto sotto una 'torre di ferro dove le voci corrono veloci'. Devi trovare questo luogo.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova e investiga la Torre Radio.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "radio_tower_search_treasure"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200,
+      "items": [
+        {
+          "itemId": "silver_locket",
+          "quantity": 1
+        },
+        {
+          "itemId": "first_aid_kit",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "check_on_alenkos",
+    "title": "Il Peso della Scelta",
+    "type": "SUB",
+    "startText": "Hai aiutato la famiglia Alenko, diretta al Crocevia. Hai promesso di controllare come stavano se fossi passato di là.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Chiedi di loro a Marcus, al Crocevia.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "marcus_dialogue_alenkos"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 100
     }
   }
 ]

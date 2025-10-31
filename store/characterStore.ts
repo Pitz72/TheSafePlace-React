@@ -110,6 +110,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     unlockedTrophies: new Set<string>(),
     activeQuests: {},
     completedQuests: [],
+    loreArchive: [],
 
     // --- Actions ---
     /**
@@ -197,6 +198,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             unlockedTrophies: globalTrophies, // Inizia con i trofei globali
             activeQuests: {},
             completedQuests: [],
+            loreArchive: [],
         });
     },
 
@@ -637,10 +639,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             return { inventory: newInventory };
         });
         
-        // Check quest triggers after adding item (for getItem triggers)
+        // Check quest triggers after adding item (for getItem and hasItems triggers)
         // Import questService dynamically to avoid circular dependency
         import('../services/questService').then(({ questService }) => {
-            questService.checkQuestTriggers(itemId);
+            questService.checkQuestTriggers(itemId); // Checks both getItem and hasItems
         });
     },
 
@@ -1794,6 +1796,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             unlockedTrophies: Array.from(state.unlockedTrophies),
             activeQuests: state.activeQuests,
             completedQuests: state.completedQuests,
+            loreArchive: state.loreArchive,
         };
     },
 
@@ -1821,6 +1824,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             unlockedTrophies: mergedTrophies,
             activeQuests: json.activeQuests || {},
             completedQuests: json.completedQuests || [],
+            loreArchive: json.loreArchive || [],
         });
     },
 
@@ -1892,5 +1896,37 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         }
         
         return baseCapacity;
+    },
+
+    /**
+     * Adds a lore entry to the character's archive.
+     *
+     * @param {string} entryId - Lore entry ID from loreArchiveDatabase
+     *
+     * @remarks
+     * - Checks if already unlocked (idempotent)
+     * - Shows journal message
+     * - Lore entries found via special events and lore quests
+     * - Viewable in QuestScreen Archivio Lore tab
+     *
+     * @example
+     * addLoreEntry('lore_project_echo'); // Unlock Project Echo lore
+     *
+     * @see QuestScreen for lore archive display
+     */
+    addLoreEntry: (entryId: string) => {
+        set(state => {
+            if (state.loreArchive.includes(entryId)) {
+                return {}; // Already unlocked
+            }
+            
+            useGameStore.getState().addJournalEntry({
+                text: `[ARCHIVIO LORE] Nuova scoperta sbloccata! Consultabile nel Diario Missioni.`,
+                type: JournalEntryType.XP_GAIN,
+                color: '#a78bfa' // violet-400
+            });
+            
+            return { loreArchive: [...state.loreArchive, entryId] };
+        });
     }
 }));

@@ -299,5 +299,18 @@
       { "itemId": "metal_piece", "quantity": 3 }
     ],
     "results": [{ "itemId": "tool_fishing_kit", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_advanced_bear_trap",
+    "name": "Trappola per Orsi Avanzata",
+    "description": "Una trappola mortale del Clan del Corvo, capace di catturare anche le prede più grandi. Tecnica segreta degli esploratori d'élite.",
+    "skill": "sopravvivenza",
+    "dc": 15,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "advanced_bear_trap", "quantity": 1 }]
   }
 ]

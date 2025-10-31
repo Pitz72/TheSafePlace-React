@@ -57,10 +57,12 @@ export const tradingService = {
    */
   calculateEffectiveMarkup: (baseMarkup: number, persuasionBonus: number): number => {
     const reduction = persuasionBonus * 0.02; // 2% reduction per point of bonus
-    const effectiveMarkup = baseMarkup - reduction;
+    let effectiveMarkup = baseMarkup - reduction;
     const minimumMarkup = 1.05; // 5% minimum markup
     
-    return Math.max(effectiveMarkup, minimumMarkup);
+    effectiveMarkup = Math.max(effectiveMarkup, minimumMarkup);
+    
+    return effectiveMarkup;
   },
 
   /**
@@ -100,7 +102,18 @@ export const tradingService = {
 
     // Calculate effective markup based on Persuasion skill
     const persuasionBonus = getSkillBonus('persuasione');
-    const effectiveMarkup = tradingService.calculateEffectiveMarkup(trader.baseMarkup, persuasionBonus);
+    let effectiveMarkup = tradingService.calculateEffectiveMarkup(trader.baseMarkup, persuasionBonus);
+    
+    // v1.8.0: Marcus friendship discount (10% additional)
+    const hasMarcusFriendship = useGameStore.getState().gameFlags.has('MARCUS_FRIENDSHIP');
+    if (hasMarcusFriendship && traderId === 'marcus') {
+      effectiveMarkup *= 0.9; // 10% discount
+      addJournalEntry({
+        text: `[AMICIZIA] Marcus ti fa uno sconto speciale come amico.`,
+        type: JournalEntryType.NARRATIVE,
+        color: '#22c55e' // green-500
+      });
+    }
 
     // Initialize trading session
     // If returnState not specified, use current state (for context preservation)

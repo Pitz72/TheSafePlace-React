@@ -35,6 +35,49 @@
             }
           },
           {
+            "text": "[QUEST] Ho visto un avviso su un orologio rubato...",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_investigation_start"
+            },
+            "showCondition": {
+              "questActive": "crossroads_investigation"
+            }
+          },
+          {
+            "text": "[QUEST] Ho recuperato il tuo orologio.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_investigation_complete"
+            },
+            "showCondition": {
+              "questActive": "crossroads_investigation",
+              "hasItem": "old_watch"
+            }
+          },
+          {
+            "text": "[QUEST] Conosci questo simbolo?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_talisman_knowledge"
+            },
+            "showCondition": {
+              "questActive": "find_jonas_talisman",
+              "hasItem": "jonas_talisman"
+            }
+          },
+          {
+            "text": "[QUEST] Ho un pacco per questo avamposto.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "quest_delivery"
+            },
+            "showCondition": {
+              "questActive": "deliver_last_message",
+              "hasItem": "sealed_package_quest"
+            }
+          },
+          {
             "text": "Non ho tempo per chiacchierare. Addio.",
             "consequence": {
               "type": "endDialogue"
@@ -115,6 +158,65 @@
             "text": "Capito. Addio.",
             "consequence": {
               "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "marcus_investigation_start": {
+        "id": "marcus_investigation_start",
+        "npcText": "Ah, hai visto l'avviso! Sì, quell'orologio... apparteneva a mio padre. Un predone l'ha rubato settimane fa. L'ho visto dirigersi verso nord, nelle foreste. È un tipo pericoloso, armato e diffidente. Fai attenzione.",
+        "options": [
+          {
+            "text": "Lo troverò e recupererò l'orologio.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "marcus_investigation_complete": {
+        "id": "marcus_investigation_complete",
+        "npcText": "L'hai recuperato! Non posso crederci... Questo orologio è tutto ciò che mi resta di mio padre. Grazie, davvero. Scegli un'arma dal mio deposito come ricompensa. E d'ora in poi, avrai sempre uno sconto nei miei scambi.",
+        "options": [
+          {
+            "text": "Scelgo il Pugnale Affilato.",
+            "consequence": {
+              "type": "giveItem",
+              "value": { "itemId": "weapon_sharp_dagger", "quantity": 1 }
+            }
+          },
+          {
+            "text": "Scelgo l'Arco Improvvisato.",
+            "consequence": {
+              "type": "giveItem",
+              "value": { "itemId": "weapon_makeshift_bow", "quantity": 1 }
+            }
+          }
+        ]
+      },
+      "marcus_talisman_knowledge": {
+        "id": "marcus_talisman_knowledge",
+        "npcText": "Questo simbolo... è il marchio del Clan del Corvo! Jonas era il loro fondatore, un grande esploratore. Questo talismano era il loro simbolo di appartenenza. Che tu l'abbia trovato significa molto. Lascia che ti insegni una vecchia tecnica di sopravvivenza del clan.",
+        "options": [
+          {
+            "text": "Grazie per le informazioni.",
+            "consequence": {
+              "type": "addXp",
+              "value": 100
+            }
+          }
+        ]
+      },
+      "quest_delivery": {
+        "id": "quest_delivery",
+        "npcText": "Un pacco? Fammi vedere... Oh. Questo sigillo... è del Vecchio Jonas. Pensavamo fosse disperso da mesi. Grazie per aver onorato il suo ultimo viaggio. Non abbiamo molto, ma prendi questa. Una buona bussola è più preziosa dell'oro, da queste parti.",
+        "options": [
+          {
+            "text": "È stato un dovere.",
+            "consequence": {
+              "type": "completeQuest",
+              "value": "deliver_last_message"
             }
           }
         ]

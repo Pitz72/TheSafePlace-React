@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause, Position } from '../types';
+import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause, Position, WorldState } from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -197,6 +197,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   visitedBiomes: new Set(),
   damageFlash: false,
   wanderingTrader: null,
+  worldState: {
+    repairedPumps: [],
+    destroyedPumps: [],
+  },
 
   /**
    * Triggers a brief red flash effect to indicate player damage.
@@ -324,6 +328,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         mainStoryEventsToday: { day: 1, count: 0 },
         deathCause: null,
         visitedBiomes: new Set(['S']),
+        worldState: {
+            repairedPumps: [],
+            destroyedPumps: [],
+        },
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
@@ -1000,6 +1008,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       ...state,
       gameFlags: Array.from(state.gameFlags),
       visitedBiomes: Array.from(state.visitedBiomes),
+      worldState: state.worldState, // Already serializable (arrays of positions)
     };
   },
 
@@ -1028,6 +1037,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       ...json,
       gameFlags: new Set(json.gameFlags),
       visitedBiomes: new Set(json.visitedBiomes),
+      worldState: json.worldState || { repairedPumps: [], destroyedPumps: [] },
     });
   },
 
@@ -1128,5 +1138,102 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         }
       };
     });
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WORLD STATE SYSTEM (v1.8.0)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Activates a water pump at the specified location.
+   *
+   * @description Marks a pump as repaired and functional. The pump becomes
+   * a permanent water source that the player can interact with.
+   *
+   * @param {Position} location - Coordinates of the pump
+   *
+   * @remarks
+   * - Adds location to repairedPumps array
+   * - Removes from destroyedPumps if present
+   * - Persists in save/load system
+   * - Triggers visual marker on map
+   *
+   * @example
+   * activateWaterPump({ x: 45, y: 85 });
+   */
+  activateWaterPump: (location: Position) => {
+    set(state => {
+      const newRepaired = [...state.worldState.repairedPumps, location];
+      const newDestroyed = state.worldState.destroyedPumps.filter(
+        p => !(p.x === location.x && p.y === location.y)
+      );
+      
+      return {
+        worldState: {
+          repairedPumps: newRepaired,
+          destroyedPumps: newDestroyed,
+        }
+      };
+    });
+    
+    get().addJournalEntry({
+      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è ora funzionante!`,
+      type: JournalEntryType.XP_GAIN,
+      color: '#38bdf8' // cyan
+    });
+  },
+
+  /**
+   * Destroys a water pump at the specified location.
+   *
+   * @description Marks a pump as permanently destroyed and unusable.
+   *
+   * @param {Position} location - Coordinates of the pump
+   *
+   * @remarks
+   * - Adds location to destroyedPumps array
+   * - Removes from repairedPumps if present
+   * - Persists in save/load system
+   *
+   * @example
+   * destroyWaterPump({ x: 45, y: 85 });
+   */
+  destroyWaterPump: (location: Position) => {
+    set(state => {
+      const newDestroyed = [...state.worldState.destroyedPumps, location];
+      const newRepaired = state.worldState.repairedPumps.filter(
+        p => !(p.x === location.x && p.y === location.y)
+      );
+      
+      return {
+        worldState: {
+          repairedPumps: newRepaired,
+          destroyedPumps: newDestroyed,
+        }
+      };
+    });
+    
+    get().addJournalEntry({
+      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è stata distrutta.`,
+      type: JournalEntryType.SYSTEM_WARNING
+    });
+  },
+
+  /**
+   * Checks if a water pump at the specified location can be used.
+   *
+   * @description Returns true if pump is repaired and functional.
+   *
+   * @param {Position} location - Coordinates to check
+   * @returns {boolean} True if pump is usable
+   *
+   * @example
+   * if (canUseWaterPump({ x: 45, y: 85 })) {
+   *   // Show pump interaction option
+   * }
+   */
+  canUseWaterPump: (location: Position): boolean => {
+    const { repairedPumps } = get().worldState;
+    return repairedPumps.some(p => p.x === location.x && p.y === location.y);
   },
 }));

@@ -20,7 +20,7 @@ import { useGameStore } from '../store/gameStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
 import { useEventStore } from '../store/eventStore';
 import { useEventDatabaseStore } from '../data/eventDatabase';
-import { JournalEntryType, GameState, Position, QuestType } from '../types';
+import { JournalEntryType, GameState, Position, QuestType, InventoryItem } from '../types';
 
 /**
  * Gets all active quest marker locations with their types.
@@ -259,6 +259,24 @@ export const questService = {
         type: JournalEntryType.XP_GAIN
       });
     }
+    
+    // Special quest completion effects (v1.8.0)
+    if (questId === 'crossroads_investigation') {
+      // Grant Marcus friendship flag for permanent discount
+      useGameStore.setState(state => ({
+        gameFlags: new Set(state.gameFlags).add('MARCUS_FRIENDSHIP')
+      }));
+      addJournalEntry({
+        text: `[REPUTAZIONE] Marcus ti considera ora un amico. Avrai uno sconto permanente nei suoi scambi.`,
+        type: JournalEntryType.XP_GAIN,
+        color: '#22c55e' // green-500
+      });
+    }
+    
+    if (questId === 'find_jonas_talisman') {
+      // Add Clan of the Raven lore entry
+      useCharacterStore.getState().addLoreEntry('lore_clan_of_the_raven');
+    }
 
     console.log(`[QUEST SERVICE] ✅ Completed quest: ${questId} (${quest.title})`);
   },
@@ -270,13 +288,18 @@ export const questService = {
    * and checks if their current stage triggers are satisfied.
    *
    * @param {string} [lastAddedItemId] - Optional: ID of item just added to inventory
+   * @param {string} [lastDialogueNodeId] - Optional: ID of dialogue node just visited
+   * @param {string} [lastCompletedEventId] - Optional: ID of event just completed
    *
    * @remarks
-   * Trigger Types Implemented:
+   * Trigger Types Implemented (v1.8.0):
    * - reachLocation: Player position matches trigger coordinates
    * - getItem: Item with matching ID was just added to inventory
+   * - hasItems: Player has all required items in inventory
+   * - talkToNPC: Player talked to specific NPC (dialogue node)
+   * - completeEvent: Player completed specific unique event
    *
-   * Trigger Types Planned (Sprint 2):
+   * Trigger Types Planned (Future):
    * - useItem: Item consumed/used
    * - enemyDefeated: Specific enemy killed
    * - interactWithObject: Object interaction
@@ -284,7 +307,9 @@ export const questService = {
    *
    * Call Points:
    * - After movePlayer() - checks reachLocation triggers
-   * - After addItem() - checks getItem triggers
+   * - After addItem() - checks getItem, hasItems triggers
+   * - After dialogue node - checks talkToNPC triggers
+   * - After event completion - checks completeEvent triggers
    *
    * @example
    * // After player movement
@@ -292,10 +317,16 @@ export const questService = {
    *
    * // After item acquisition
    * questService.checkQuestTriggers('jonas_talisman');
+   *
+   * // After dialogue
+   * questService.checkQuestTriggers(undefined, 'marcus_investigation_start');
+   *
+   * // After event
+   * questService.checkQuestTriggers(undefined, undefined, 'unique_ancient_library');
    */
-  checkQuestTriggers: (lastAddedItemId?: string) => {
+  checkQuestTriggers: (lastAddedItemId?: string, lastDialogueNodeId?: string, lastCompletedEventId?: string) => {
     const { quests } = useQuestDatabaseStore.getState();
-    const { activeQuests } = useCharacterStore.getState();
+    const { activeQuests, inventory } = useCharacterStore.getState();
     const { playerPos } = useGameStore.getState();
 
     // Iterate through all active quests
@@ -338,6 +369,54 @@ export const questService = {
                 triggerMet = false; // Override to prevent auto-advance
               }
             }
+            
+            // v1.8.0: Water pump repair quest
+            if (questId === 'repair_water_pump' && currentStage === 2) {
+              // Trigger the pump repair event
+              const { biomeEvents } = useEventDatabaseStore.getState();
+              const pumpEvent = biomeEvents.find(e => e.id === 'complete_pump_repair');
+              if (pumpEvent) {
+                useEventStore.setState({
+                  activeEvent: pumpEvent,
+                  eventResolutionText: null
+                });
+                useGameStore.setState({ gameState: GameState.EVENT_SCREEN });
+                // Don't advance quest yet - will complete after repair attempt
+                triggerMet = false; // Override to prevent auto-advance
+              }
+            }
+            
+            // v1.8.0: Crossroads investigation quest
+            if (questId === 'crossroads_investigation' && currentStage === 2) {
+              // Trigger the thief camp event
+              const { biomeEvents } = useEventDatabaseStore.getState();
+              const thiefEvent = biomeEvents.find(e => e.id === 'unique_thief_camp');
+              if (thiefEvent) {
+                useEventStore.setState({
+                  activeEvent: thiefEvent,
+                  eventResolutionText: null
+                });
+                useGameStore.setState({ gameState: GameState.EVENT_SCREEN });
+                // Don't advance quest yet - will advance when item is obtained
+                triggerMet = false; // Override to prevent auto-advance
+              }
+            }
+            
+            // v1.8.0: Find Elara quest
+            if (questId === 'find_elara' && currentStage === 1) {
+              // Trigger the find Elara event
+              const { biomeEvents } = useEventDatabaseStore.getState();
+              const elaraEvent = biomeEvents.find(e => e.id === 'unique_find_elara');
+              if (elaraEvent) {
+                useEventStore.setState({
+                  activeEvent: elaraEvent,
+                  eventResolutionText: null
+                });
+                useGameStore.setState({ gameState: GameState.EVENT_SCREEN });
+                // Don't advance quest yet - will advance after event
+                triggerMet = false; // Override to prevent auto-advance
+              }
+            }
           }
           break;
         }
@@ -351,10 +430,52 @@ export const questService = {
           break;
         }
 
-        // Future trigger types will be implemented in Sprint 2
+        case 'hasItems': {
+          const requiredItems = trigger.value as Array<{itemId: string, quantity: number}>;
+          const hasAll = requiredItems.every(req => {
+            const playerItem = inventory.find((i: InventoryItem) => i.itemId === req.itemId);
+            return playerItem && playerItem.quantity >= req.quantity;
+          });
+          if (hasAll) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] hasItems trigger met for ${questId}`);
+          }
+          break;
+        }
+
+        case 'talkToNPC': {
+          const targetNodeId = trigger.value as string;
+          if (lastDialogueNodeId === targetNodeId) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] talkToNPC trigger met for ${questId} (${targetNodeId})`);
+          }
+          break;
+        }
+
+        case 'completeEvent': {
+          const targetEventId = trigger.value as string;
+          if (lastCompletedEventId === targetEventId) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] completeEvent trigger met for ${questId} (${targetEventId})`);
+          }
+          break;
+        }
+
+        case 'interactWithObject': {
+          // This trigger works like talkToNPC - checked when player interacts with objects
+          // The interaction ID is passed as lastDialogueNodeId parameter
+          // Used for: terminal interactions, object-based quest completion
+          const targetInteractionId = trigger.value as string;
+          if (lastDialogueNodeId === targetInteractionId) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] interactWithObject trigger met for ${questId} (${targetInteractionId})`);
+          }
+          break;
+        }
+
+        // Future trigger types
         case 'useItem':
         case 'enemyDefeated':
-        case 'interactWithObject':
         case 'skillCheckSuccess':
           // Not yet implemented
           break;

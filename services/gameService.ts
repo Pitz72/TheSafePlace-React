@@ -239,6 +239,18 @@ export const gameService = {
       return;
     }
     // ═══════════════════════════════════════════════════════════════════════════
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // WATER PUMP INTERACTION (v1.8.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Check if player is on a repaired water pump
+    const canUsePump = useGameStore.getState().canUseWaterPump(newPos);
+    if (canUsePump && destinationTile === 'V') {
+      useGameStore.setState({ playerPos: newPos });
+      useInteractionStore.getState().startUniqueEvent('use_water_pump');
+      return;
+    }
+    // ═══════════════════════════════════════════════════════════════════════════
 
     if (destinationTile !== previousBiome) {
         const biomeMessage = BIOME_MESSAGES[destinationTile];

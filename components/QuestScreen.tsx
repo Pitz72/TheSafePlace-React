@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useCharacterStore } from '../store/characterStore';
 import { useGameStore } from '../store/gameStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
+import { useLoreArchiveDatabaseStore } from '../data/loreArchiveDatabase';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { GameState } from '../types';
 
@@ -21,8 +22,9 @@ import { GameState } from '../types';
  * @returns {JSX.Element} The rendered QuestScreen component
  */
 const QuestScreen: React.FC = () => {
-    const { activeQuests, completedQuests } = useCharacterStore();
+    const { activeQuests, completedQuests, loreArchive } = useCharacterStore();
     const { quests } = useQuestDatabaseStore();
+    const { loreEntries } = useLoreArchiveDatabaseStore();
     const { setGameState } = useGameStore();
 
     const closeQuestLog = useCallback(() => {
@@ -98,10 +100,10 @@ const QuestScreen: React.FC = () => {
                     <h1 className="text-6xl font-bold tracking-widest uppercase">═══ DIARIO MISSIONI ═══</h1>
                 </div>
 
-                {/* Two-column layout */}
-                <div className="flex-grow flex space-x-6 overflow-hidden">
+                {/* Three-column layout */}
+                <div className="flex-grow flex space-x-4 overflow-hidden">
                     {/* Main Quests Column */}
-                    <div className="w-1/2 h-full border-2 border-green-400/30 p-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                    <div className="w-1/3 h-full border-2 border-green-400/30 p-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
                         <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
                             MISSIONI PRINCIPALI
                         </h2>
@@ -127,7 +129,7 @@ const QuestScreen: React.FC = () => {
                     </div>
 
                     {/* Subquests Column */}
-                    <div className="w-1/2 h-full border-2 border-green-400/30 p-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                    <div className="w-1/3 h-full border-2 border-green-400/30 p-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
                         <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
                             MISSIONI SECONDARIE
                         </h2>
@@ -148,6 +150,37 @@ const QuestScreen: React.FC = () => {
                             <div className="mt-6 pt-4 border-t-2 border-green-400/20">
                                 <h3 className="text-4xl font-bold mb-3 text-green-400/60">COMPLETATE</h3>
                                 {completedSubQuests.map(renderCompletedQuest)}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Lore Archive Column */}
+                    <div className="w-1/3 h-full border-2 border-green-400/30 p-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                        <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
+                            ARCHIVIO LORE
+                        </h2>
+                        
+                        {loreArchive.length > 0 ? (
+                            <div className="space-y-6">
+                                {loreArchive.map(entryId => {
+                                    const entry = loreEntries[entryId];
+                                    if (!entry) return null;
+                                    
+                                    return (
+                                        <div key={entryId} className="mb-6 pb-4 border-b border-green-400/20">
+                                            <div className="text-4xl font-bold mb-3" style={{ color: '#a78bfa', textShadow: '0 0 8px #a78bfa' }}>
+                                                {entry.title}
+                                            </div>
+                                            <div className="text-2xl text-green-400/70 leading-relaxed whitespace-pre-wrap">
+                                                {entry.text}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="text-green-400/50 text-3xl">
+                                -- Nessuna scoperta ancora --
                             </div>
                         )}
                     </div>

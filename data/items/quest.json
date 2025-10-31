@@ -253,5 +253,48 @@
     "value": 100,
     "stackable": false,
     "rarity": "quest"
+  },
+  {
+    "id": "old_watch",
+    "name": "Orologio da Tasca",
+    "description": "Un vecchio orologio da tasca in argento con incisioni elaborate. Appartiene a Marcus e ha un grande valore affettivo per lui.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 80,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "manual_advanced_trap",
+    "name": "Manuale: Trappole Avanzate del Clan del Corvo",
+    "description": "Un manuale del leggendario Clan del Corvo che insegna a costruire trappole sofisticate per la caccia e la difesa.",
+    "type": "manual",
+    "weight": 0.3,
+    "value": 120,
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": "recipe_advanced_bear_trap"
+  },
+  {
+    "id": "compass",
+    "name": "Bussola Affidabile",
+    "description": "Una bussola di ottima fattura, ancora perfettamente funzionante. Punta sempre a nord con precisione. Uno strumento prezioso per un viaggiatore.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 150,
+    "stackable": false,
+    "rarity": "uncommon",
+    "color": "#60BF77"
+  },
+  {
+    "id": "drone_memory_chip",
+    "name": "Chip di Memoria del Drone",
+    "description": "Un chip di memoria recuperato da un drone di sorveglianza. È danneggiato ma i dati sembrano recuperabili con l'attrezzatura giusta.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest",
+    "color": "#38bdf8"
   }
 ]

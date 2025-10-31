@@ -29,6 +29,7 @@ import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
 import { useQuestDatabaseStore } from './data/questDatabase';
 import { useDialogueDatabaseStore } from './data/dialogueDatabase';
 import { useTraderDatabaseStore } from './data/traderDatabase';
+import { useLoreArchiveDatabaseStore } from './data/loreArchiveDatabase';
 import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
@@ -70,6 +71,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadQuestDatabase, isLoaded: questsLoaded } = useQuestDatabaseStore();
   const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore();
   const { loadDatabase: loadTraderDatabase, isLoaded: tradersLoaded } = useTraderDatabaseStore();
+  const { loadDatabase: loadLoreArchiveDatabase, isLoaded: loreArchiveLoaded } = useLoreArchiveDatabaseStore();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
@@ -97,6 +99,7 @@ const App: React.FC = () => {
         await loadQuestDatabase();
         await loadDialogueDatabase();
         await loadTraderDatabase();
+        await loadLoreArchiveDatabase();
 
         console.log('✅ Tutti i database caricati con successo!');
         setIsLoading(false);
@@ -111,7 +114,7 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, loadLoreArchiveDatabase, itemDatabase]);
 
   const renderContent = () => {
     switch (gameState) {

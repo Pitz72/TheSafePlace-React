@@ -38,6 +38,31 @@
                 "value": 10
               }
             ]
+          },
+          {
+            "id": "unique_find_elara",
+            "title": "La Bambina Nascosta",
+            "description": "Entri nella scuola in rovina. Il silenzio è rotto solo dal gocciolio dell'acqua. Chiami a bassa voce il nome 'Elara'. Dopo un momento di esitazione, una ragazzina spaurita emerge da dietro una cattedra rovesciata. 'Papà... papà ti ha mandato?' chiede con voce tremante.",
+            "biomes": ["Città"],
+            "isUnique": true,
+            "choices": [
+              {
+                "text": "Sì, tuo padre è al sicuro. Ti porto da lui.",
+                "outcomes": [{
+                  "type": "direct",
+                  "results": [
+                    {
+                      "type": "journalEntry",
+                      "text": "Elara ti guarda con occhi pieni di speranza e paura. Annuisce e ti prende la mano. 'Andiamo,' sussurra. Ora devi scortarla al Crocevia."
+                    },
+                    {
+                      "type": "addXp",
+                      "value": 50
+                    }
+                  ]
+                }]
+              }
+            ]
           }
         ]
       }

@@ -155,13 +155,16 @@ export type QuestType = 'MAIN' | 'SUB';
 /**
  * Types of triggers that can advance a quest stage
  */
-export type QuestTriggerType = 
+export type QuestTriggerType =
   | 'reachLocation'
   | 'getItem'
+  | 'hasItems'
   | 'useItem'
   | 'enemyDefeated'
   | 'interactWithObject'
-  | 'skillCheckSuccess';
+  | 'skillCheckSuccess'
+  | 'talkToNPC'
+  | 'completeEvent';
 
 /**
  * Defines a condition that must be met to advance a quest stage
@@ -207,7 +210,7 @@ export interface Quest {
  * Supports quest management, item exchange, skill checks, and dialogue flow control.
  */
 export interface DialogueConsequence {
-  type: 'startQuest' | 'advanceQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp';
+  type: 'startQuest' | 'advanceQuest' | 'completeQuest' | 'failQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp';
   value?: any; // questId, itemId, { skill, dc, successNode, failureNode }, nodeId, etc.
 }
 
@@ -465,6 +468,24 @@ export interface WanderingTraderState {
   turnsUntilMove: number;
 }
 
+/**
+ * World State - Tracks permanent changes to the game world (v1.8.0)
+ */
+export interface WorldState {
+  repairedPumps: Position[];
+  destroyedPumps: Position[];
+}
+
+/**
+ * Lore Archive Entry - Unlockable lore discoveries (v1.8.0)
+ */
+export interface LoreEntry {
+  id: string;
+  title: string;
+  text: string;
+  category: 'project' | 'history' | 'character' | 'world';
+}
+
 export interface GameStoreState {
   gameState: GameState;
   previousGameState: GameState | null;
@@ -491,6 +512,7 @@ export interface GameStoreState {
   visitedBiomes: Set<string>;
   damageFlash: boolean;
   wanderingTrader: WanderingTraderState | null;
+  worldState: WorldState;
   
   // Actions
   triggerDamageFlash: () => void;
@@ -520,6 +542,10 @@ export interface GameStoreState {
   initializeWanderingTrader: () => void;
   advanceTraderTurn: () => void;
   moveTrader: (newPosition: Position) => void;
+  // World State System (v1.8.0)
+  activateWaterPump: (location: Position) => void;
+  destroyWaterPump: (location: Position) => void;
+  canUseWaterPump: (location: Position) => boolean;
 }
 
 
@@ -617,6 +643,7 @@ export interface CharacterState {
     unlockedTrophies: Set<string>;
     activeQuests: Record<string, number>; // questId -> currentStage
     completedQuests: string[]; // Array for JSON serialization
+    loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
 
     // Actions
     initCharacter: () => void;
@@ -652,6 +679,7 @@ export interface CharacterState {
     getTotalWeight: () => number;
     getMaxCarryWeight: () => number;
     unlockTrophy: (trophyId: string) => void;
+    addLoreEntry: (entryId: string) => void;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
     toJSON: () => object;

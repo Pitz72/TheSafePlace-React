@@ -153,6 +153,34 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             });
         }
         
+        // Check quest triggers after event completion (v1.8.0: completeEvent trigger)
+        import('../services/questService').then(({ questService }) => {
+            questService.checkQuestTriggers(undefined, undefined, activeEventId);
+        });
+        
+        // Auto-start and auto-complete lore quests (v1.8.0)
+        if (activeEventId === 'unique_ancient_library') {
+            import('../services/questService').then(({ questService }) => {
+                questService.startQuest('lore_quest_library');
+                // Small delay to ensure quest is started before completing
+                setTimeout(() => {
+                    questService.completeQuest('lore_quest_library');
+                    useCharacterStore.getState().addLoreEntry('lore_project_echo');
+                }, 100);
+            });
+        }
+        
+        if (activeEventId === 'unique_scientist_notes') {
+            import('../services/questService').then(({ questService }) => {
+                questService.startQuest('lore_quest_laboratory');
+                // Small delay to ensure quest is started before completing
+                setTimeout(() => {
+                    questService.completeQuest('lore_quest_laboratory');
+                    useCharacterStore.getState().addLoreEntry('lore_project_rebirth');
+                }, 100);
+            });
+        }
+        
         set(state => ({
             eventHistory: state.activeEvent?.isUnique ? [...state.eventHistory, activeEventId] : state.eventHistory,
             activeEvent: null,
@@ -212,9 +240,9 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
                 case 'special': {
-                    // Handle special effects (v1.7.0: dialogue and trading)
+                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state)
                     if (result.value && typeof result.value === 'object') {
-                        const { effect, dialogueId, traderId } = result.value;
+                        const { effect, dialogueId, traderId, location } = result.value;
                         
                         if (effect === 'startDialogue' && dialogueId) {
                             // Import dialogueService dynamically to avoid circular dependency
@@ -228,6 +256,34 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 tradingService.startTradingSession(traderId, GameState.EVENT_SCREEN);
                             });
                             message = result.text || "Inizi a commerciare...";
+                        } else if (effect === 'activateWaterPump' && location) {
+                            // v1.8.0: Activate water pump
+                            useGameStore.getState().activateWaterPump(location);
+                            message = result.text || "La pompa è ora funzionante!";
+                        } else if (effect === 'destroyWaterPump' && location) {
+                            // v1.8.0: Destroy water pump
+                            useGameStore.getState().destroyWaterPump(location);
+                            message = result.text || "La pompa è stata distrutta.";
+                        } else if (effect === 'completeQuestFromEvent') {
+                            // v1.8.0: Complete quest from event
+                            const { questId } = result.value;
+                            import('../services/questService').then(({ questService }) => {
+                                questService.completeQuest(questId);
+                            });
+                            message = result.text || "Quest completata!";
+                        } else if (effect === 'failQuestFromEvent') {
+                            // v1.8.0: Fail quest from event
+                            const { questId } = result.value;
+                            const { activeQuests } = useCharacterStore.getState();
+                            const newActiveQuests = { ...activeQuests };
+                            delete newActiveQuests[questId];
+                            useCharacterStore.setState({ activeQuests: newActiveQuests });
+                            addJournalEntry({
+                                text: `[MISSIONE FALLITA] La quest è stata abbandonata.`,
+                                type: JournalEntryType.SYSTEM_WARNING,
+                                color: '#ef4444'
+                            });
+                            message = result.text || "Quest fallita.";
                         } else {
                             message = result.text || `Si è verificato un evento speciale.`;
                         }
