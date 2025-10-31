@@ -304,10 +304,18 @@
         "text": "Tenta di abbatterlo con un sasso.",
         "outcomes": [{
           "type": "skillCheck", "skill": "rapiditaDiMano", "dc": 14,
-          "successText": "Prendi la mira e scagli una pietra con precisione. Colpisci uno dei rotori. Il drone precipita a terra. Ora puoi recuperare i suoi componenti tecnologici.",
+          "successText": "Colpisci uno dei rotori! Il drone precipita. Recuperi i suoi componenti e un chip di memoria intatto.",
           "failureText": "Il sasso manca il bersaglio. Il drone emette un segnale acustico, segnalando la tua presenza, prima di allontanarsi a grande velocità.",
-          "success": [{ "type": "addItem", "value": { "itemId": "tech_components", "quantity": 3 } }, { "type": "addXp", "value": 30 }],
-          "failure": [{ "type": "journalEntry", "text": "Il drone segnala la tua posizione. Senti un brivido lungo la schiena, ora sei più esposto." }, { "type": "addXp", "value": 10 }]
+          "success": [
+            { "type": "addItem", "value": { "itemId": "tech_components", "quantity": 3 } },
+            { "type": "addItem", "value": { "itemId": "drone_memory_chip", "quantity": 1 } },
+            { "type": "startQuest", "value": "decipher_drone_data" },
+            { "type": "addXp", "value": 30 }
+          ],
+          "failure": [
+            { "type": "journalEntry", "text": "Il drone segnala la tua posizione. Senti un brivido lungo la schiena, ora sei più esposto." },
+            { "type": "addXp", "value": 10 }
+          ]
         }]
       },
       {
@@ -437,6 +445,7 @@
             { "type": "journalEntry", "text": "I vivi hanno bisogno di risorse più dei morti. Prendi la borsa. All'interno, trovi un pacco sigillato e un coltello." },
             { "type": "addItem", "value": { "itemId": "sealed_package_quest", "quantity": 1 } },
             { "type": "addItem", "value": { "itemId": "folding_knife", "quantity": 1 } },
+            { "type": "startQuest", "value": "deliver_last_message" },
             { "type": "addXp", "value": 25 }
           ]
         }]
@@ -445,10 +454,13 @@
         "text": "Cerca solo indizi sulla sua missione.",
         "outcomes": [{
           "type": "skillCheck", "skill": "investigare", "dc": 12,
-          "successText": "Decidi di non saccheggiarlo. Trovi un ordine di consegna per un 'avamposto a nord'. L'informazione potrebbe guidarti.",
+          "successText": "Decidi di non saccheggiarlo, ma trovi un ordine di consegna per un 'avamposto a nord'. La conoscenza di questo luogo potrebbe guidarti.",
           "failureText": "Non trovi alcun documento o indizio. La sua storia muore con lui.",
-          "success": [{ "type": "special", "value": { "effect": "lore_clue", "clueId": "outpost_north" } }, { "type": "addXp", "value": 35 }],
-           "failure": [{ "type": "addXp", "value": 10 }]
+          "success": [
+            { "type": "startQuest", "value": "deliver_last_message" },
+            { "type": "addXp", "value": 35 }
+          ],
+          "failure": [{ "type": "addXp", "value": 10 }]
         }]
       }
     ]

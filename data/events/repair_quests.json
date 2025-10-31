@@ -1,0 +1,120 @@
+[
+  {
+    "id": "unique_radio_tower_console",
+    "title": "Console della Torre Radio",
+    "description": "La sala trasmissioni della torre è in rovina. La console principale è danneggiata, ma l'antenna sul tetto sembra intatta. Con i componenti giusti, potresti riattivare il segnale di emergenza.",
+    "biomes": ["Pianura", "Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la console",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "La console è gravemente danneggiata. Ti servirebbero componenti di grado militare e un generatore per riattivarla. Ma se ci riuscissi... potresti trasmettere un segnale di emergenza." },
+            { "type": "startQuest", "value": "tower_of_light" },
+            { "type": "addXp", "value": 75 }
+          ]
+        }]
+      },
+      {
+        "text": "[QUEST] Installa i componenti e riattiva la torre",
+        "itemRequirements": [
+          { "itemId": "military_grade_electronics", "quantity": 3 },
+          { "itemId": "portable_generator", "quantity": 1 }
+        ],
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 17,
+          "successText": "Dopo ore di lavoro febbrile, colleghi l'ultimo cavo. Il generatore tossisce, poi si avvia con un ronzio costante. Le luci della console si accendono una a una. Attivi il trasmettitore di emergenza. Per un lungo momento, c'è solo statica. Poi, una voce debole, quasi sommersa dal rumore: '...qui Stazione Delta... c'è qualcuno in ascolto?... Ripeto, c'è qualcuno...' Hai trovato altri sopravvissuti!",
+          "failureText": "Un collegamento errato. Senti un odore di bruciato e la console si spegne definitivamente. Hai fritto i circuiti principali. Questa torre è perduta per sempre.",
+          "success": [
+            { "type": "removeItem", "value": { "itemId": "military_grade_electronics", "quantity": 3 } },
+            { "type": "removeItem", "value": { "itemId": "portable_generator", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "completeQuestFromEvent", "questId": "tower_of_light" } },
+            { "type": "journalEntry", "text": "[SCOPERTA] Hai stabilito contatto con la Stazione Delta! Una nuova speranza." },
+            { "type": "addXp", "value": 400 }
+          ],
+          "failure": [
+            { "type": "removeItem", "value": { "itemId": "military_grade_electronics", "quantity": 3 } },
+            { "type": "removeItem", "value": { "itemId": "portable_generator", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "failQuestFromEvent", "questId": "tower_of_light" } },
+            { "type": "journalEntry", "text": "[FALLIMENTO] La torre è perduta. L'opportunità è svanita." },
+            { "type": "addXp", "value": 100 }
+          ]
+        }]
+      },
+      {
+        "text": "Non ora. Esci",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Forse un giorno tornerai con i componenti necessari." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_water_treatment_plant",
+    "title": "Impianto di Depurazione Acqua",
+    "description": "Un vasto complesso industriale, sorprendentemente intatto. Le enormi vasche di depurazione sono vuote, le pompe silenziose. Ma i sistemi principali sembrano solo spenti, non distrutti. Questo impianto potrebbe fornire acqua pulita a un'intera area urbana.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ispeziona i sistemi principali",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Il generatore è offline, i filtri sono intasati, ma la struttura è solida. Con il manuale giusto, filtri nuovi e una batteria potente, potresti riattivare tutto. Acqua pulita per chiunque passi di qui." },
+            { "type": "startQuest", "value": "water_of_life" },
+            { "type": "addXp", "value": 100 }
+          ]
+        }]
+      },
+      {
+        "text": "[QUEST] Ripara l'impianto di depurazione",
+        "itemRequirements": [
+          { "itemId": "hydraulic_manual", "quantity": 1 },
+          { "itemId": "industrial_filter", "quantity": 3 },
+          { "itemId": "vehicle_battery", "quantity": 1 }
+        ],
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 16,
+          "successText": "Segui le istruzioni del manuale passo dopo passo. Sostituisci i filtri, colleghi la batteria, riavvii le pompe. Con un rombo profondo, le vecchie macchine si rimettono in moto. L'acqua inizia a scorrere attraverso i filtri. Nelle fontane e nei rubinetti di tutto il quartiere, l'acqua torna a sgorgare, pulita e potabile. Hai riportato in vita un pezzo di civiltà.",
+          "failureText": "Uno skill check critico fallisce. Un sovraccarico elettrico danneggia irreparabilmente il sistema di controllo. L'impianto è perduto.",
+          "success": [
+            { "type": "removeItem", "value": { "itemId": "hydraulic_manual", "quantity": 1 } },
+            { "type": "removeItem", "value": { "itemId": "industrial_filter", "quantity": 3 } },
+            { "type": "removeItem", "value": { "itemId": "vehicle_battery", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "activateWaterPlant", "location": { "x": 0, "y": 0 } } },
+            { "type": "special", "value": { "effect": "completeQuestFromEvent", "questId": "water_of_life" } },
+            { "type": "journalEntry", "text": "[EREDITÀ] Hai riattivato l'impianto! L'area circostante ora ha acqua pulita." },
+            { "type": "addXp", "value": 600 }
+          ],
+          "failure": [
+            { "type": "removeItem", "value": { "itemId": "hydraulic_manual", "quantity": 1 } },
+            { "type": "removeItem", "value": { "itemId": "industrial_filter", "quantity": 3 } },
+            { "type": "removeItem", "value": { "itemId": "vehicle_battery", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "failQuestFromEvent", "questId": "water_of_life" } },
+            { "type": "journalEntry", "text": "[FALLIMENTO] L'impianto è irrimediabilmente danneggiato." },
+            { "type": "addXp", "value": 150 }
+          ]
+        }]
+      },
+      {
+        "text": "Troppo complesso. Esci",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Questo progetto richiede preparazione. Forse un giorno tornerai." }
+          ]
+        }]
+      }
+    ]
+  }
+]

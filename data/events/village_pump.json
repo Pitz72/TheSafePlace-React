@@ -1,0 +1,133 @@
+[
+  {
+    "id": "trigger_pump_quest",
+    "title": "Pompa Rotta",
+    "description": "Al centro di una piccola piazza desolata, vedi una vecchia pompa dell'acqua a mano, arrugginita e chiaramente fuori uso. Un tempo doveva essere il cuore di questo villaggio. Con i pezzi giusti, forse potresti rimetterla in funzione.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la pompa",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "La pompa è danneggiata ma riparabile. Ti serviranno: 1 Guarnizione di Gomma e 2 Rottami Metallici."
+            },
+            {
+              "type": "startQuest",
+              "value": "repair_water_pump"
+            },
+            {
+              "type": "addXp",
+              "value": 30
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Ignora la pompa",
+        "outcomes": [{
+          "type": "direct",
+          "results": [{
+            "type": "journalEntry",
+            "text": "Non hai tempo per progetti di riparazione. Prosegui."
+          }]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "complete_pump_repair",
+    "title": "Riparazione della Pompa",
+    "description": "Sei di nuovo di fronte alla pompa rotta. Hai tutto il necessario per provare a ripararla.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [{
+      "text": "Tenta la riparazione (richiede 1× Guarnizione, 2× Rottami)",
+      "itemRequirements": [
+        { "itemId": "rubber_gasket", "quantity": 1 },
+        { "itemId": "scrap_metal", "quantity": 2 }
+      ],
+      "outcomes": [{
+        "type": "skillCheck",
+        "skill": "investigare",
+        "dc": 13,
+        "successText": "Con pazienza e un po' di ingegno, smonti il meccanismo arrugginito, sostituisci le parti usurate e rimonti il tutto. Azioni la leva... e dopo alcuni cigolii, un fiotto di acqua pulita sgorga dal beccuccio. Hai riportato un piccolo pezzo di mondo alla vita.",
+        "failureText": "Provi a riparare il meccanismo, ma un pezzo cruciale si spezza sotto i tuoi sforzi. La pompa è irrimediabilmente danneggiata. I materiali che hai usato sono andati sprecati.",
+        "success": [
+          {
+            "type": "removeItem",
+            "value": { "itemId": "rubber_gasket", "quantity": 1 }
+          },
+          {
+            "type": "removeItem",
+            "value": { "itemId": "scrap_metal", "quantity": 2 }
+          },
+          {
+            "type": "special",
+            "value": {
+              "effect": "activateWaterPump",
+              "location": { "x": 45, "y": 85 }
+            },
+            "text": "La pompa è ora funzionante! Potrai tornare qui per raccogliere acqua pulita."
+          },
+          {
+            "type": "addXp",
+            "value": 100
+          }
+        ],
+        "failure": [
+          {
+            "type": "removeItem",
+            "value": { "itemId": "rubber_gasket", "quantity": 1 }
+          },
+          {
+            "type": "removeItem",
+            "value": { "itemId": "scrap_metal", "quantity": 2 }
+          },
+          {
+            "type": "special",
+            "value": {
+              "effect": "destroyWaterPump",
+              "location": { "x": 45, "y": 85 }
+            },
+            "text": "La pompa è ora irrimediabilmente rotta."
+          },
+          {
+            "type": "addXp",
+            "value": 30
+          }
+        ]
+      }]
+    }]
+  },
+  {
+    "id": "use_water_pump",
+    "title": "Pompa dell'Acqua",
+    "description": "La pompa che hai riparato funziona perfettamente. Puoi raccogliere acqua pulita qui.",
+    "biomes": ["Villaggio"],
+    "isUnique": false,
+    "choices": [{
+      "text": "Raccogli acqua (richiede bottiglie vuote)",
+      "outcomes": [{
+        "type": "direct",
+        "results": [
+          {
+            "type": "journalEntry",
+            "text": "Azioni la leva della pompa e riempi le tue borracce con acqua fresca e pulita."
+          },
+          {
+            "type": "addItem",
+            "value": { "itemId": "CONS_002", "quantity": 3 }
+          },
+          {
+            "type": "advanceTime",
+            "value": 15
+          }
+        ]
+      }]
+    }]
+  }
+]

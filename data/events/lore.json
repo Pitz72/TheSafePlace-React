@@ -2,7 +2,7 @@
   {
     "id": "lore_sick_traveler",
     "title": "L'Eco di una Tosse",
-    "description": "Senti un colpo di tosse secca, fragile. Appoggiato a un albero crollato, vedi un uomo. È poco più di uno scheletro tenuto insieme da stracci. Accanto a lui, una ragazza molto giovane trema, scossa da una febbre evidente. Ti guardano con occhi privi di speranza. Sono deboli, forse troppo per essere una minaccia. Forse.",
+    "description": "Senti un colpo di tosse secca, fragile, che le squarcia i polmoni. Appoggiato a un albero crollato, vedi un uomo. È poco più di uno scheletro tenuto insieme da stracci. Accanto a lui, una ragazza molto giovane trema, scossa da una febbre evidente e con macchie scure che le affiorano sulla pelle. Ti guardano con occhi privi di speranza. Sono deboli, forse troppo per essere una minaccia. Forse.",
     "biomes": ["Foresta", "Pianura"],
     "isUnique": true,
     "choices": [
@@ -78,7 +78,8 @@
               { "type": "statusChange", "value": "ISPIRATO" },
               { "type": "journalEntry", "text": "Riflessione: Per un istante, quella voce nella radio... sembrava quella di mamma. Era solo immaginazione, ma il cuore mi ha battuto più forte." },
               { "type": "alignmentChange", "value": { "type": "lena", "amount": 2 } },
-              { "type": "special", "value": {"effect": "lenaMemoryUnlocked", "id": "ninna_nanna_memory"}}
+              { "type": "special", "value": {"effect": "lenaMemoryUnlocked", "id": "ninna_nanna_memory"}},
+              { "type": "addItem", "value": { "itemId": "cryptic_recording", "quantity": 1 } }
             ],
             "failure": [
               { "type": "statusChange", "value": "DELUSO" }
@@ -186,6 +187,107 @@
               { "type": "statusChange", "value": "PACIFICO" },
               { "type": "alignmentChange", "value": { "type": "lena", "amount": 3 } },
               { "type": "journalEntry", "text": "Riflessione: Mamma diceva sempre che rispettare i morti ci mantiene umani. Forse aveva ragione. Forse è questo che ci distingue dalle bestie." }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_last_message",
+    "title": "L'Ultimo Messaggio",
+    "description": "In un terminale militare ancora alimentato da una batteria di emergenza, trovi un singolo log non corrotto, datato il giorno del \"Grande Silenzio\".",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi il log pubblico",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Il log pubblico recita: \"AVVISO URGENTE: Cessate il fuoco unilaterale in atto. Evento di contenimento a livello continentale. Mantenere la calma. Attendere ulteriori istruzioni.\" Il messaggio si ripete in loop, ma non arrivano altre istruzioni." }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Hackera il terminale (Intelligenza DC 15)",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "intelligenza",
+            "dc": 15,
+            "successText": "Riesci a bypassare la sicurezza di base e accedi a un log personale, non ufficiale, di un ufficiale in preda al panico. È frammentario, pieno di errori di battitura.\n\n\"...non è un'arma. Ripeto, NON è un'arma. È una... frequenza? Un segnale. Stanno dicendo che ha 'calmato' le cose. Calmare? Ha spento tutto. Le macchine, le comunicazioni... le persone. Alcuni sono solo... caduti. Altri... altri stanno cambiando. Ho visto cosa succede.\n\nIl 'Progetto Eco' era un errore. Stavano cercando di creare un'interfaccia neurale collettiva, non un coro silenzioso. Ora è troppo tardi.\n\nIl Silenzio non è la fine della guerra. È l'inizio di qualcos'altro.\"",
+            "failureText": "Armeggi con i controlli, ma un allarme silenzioso si attiva. Il terminale si spegne, i dati persi per sempre. Hai sprecato tempo prezioso.",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: Progetto Eco... un'interfaccia neurale collettiva. Il Silenzio non è quello che pensavo." },
+              { "type": "statusChange", "value": "SCONVOLTO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 2 } }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Un'altra opportunità persa. Forse alcune verità sono meglio lasciarle sepolte." },
+              { "type": "statusChange", "value": "FRUSTRATO" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_ash_nest",
+    "title": "Il Nido della Cenere",
+    "description": "Trovi un luogo dove diversi Angeli della Cenere sono immobili, in cerchio attorno a una strana antenna o a un dispositivo tecnologico ronzante. Non sembrano ostili, sono in uno stato di \"ricarica\" o \"comunione\". Al centro, vedi che stanno \"coltivando\" qualcosa: corpi umani ricoperti da un bozzolo di cavi e cenere cristallizzata. È un processo di trasformazione.",
+    "biomes": ["Città", "Montagna"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Fuggi silenziosamente (Furtività DC 14)",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 14,
+            "successText": "Ti muovi con la grazia di un fantasma, allontanandoti dal nido senza attirare l'attenzione. L'immagine dei bozzoli ti perseguiterà, ma sei al sicuro. Per ora.",
+            "failureText": "Un rametto si spezza sotto il tuo piede. Uno degli Angeli si muove, la testa scatta nella tua direzione. Devi fuggire in fretta!",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: Ho visto abbastanza. Non sono solo mostri. Sono... qualcosa di più. E non voglio farne parte." },
+              { "type": "statusChange", "value": "TERRORIZZATO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 2 } }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Sono stato troppo lento. La loro attenzione è su di me. Devo scappare!" },
+              { "type": "takeDamage", "value": 5 },
+              { "type": "statusChange", "value": "FERITO" },
+              { "type": "statusChange", "value": "TERRORIZZATO" }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Avvicinati per osservare (Percezione DC 16)",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 16,
+            "successText": "Con un brivido di orrore, ti avvicini abbastanza da distinguere i volti. In uno dei bozzoli più freschi, riconosci un volto familiare: è [Nome NPC]. Gli Angeli non uccidono e basta: raccolgono. E trasformano.",
+            "failureText": "Non riesci a distinguere nulla di significativo tra i bozzoli. L'orrore è sufficiente. Ti ritiri, l'immagine di quei corpi avvolti ti brucia nella mente.",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: [Nome NPC]... è qui. È diventato uno di loro. Cosa significa questo per tutti noi?" },
+              { "type": "statusChange", "value": "SCONVOLTO" },
+              { "type": "statusChange", "value": "COLPEVOLE" },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 2 } },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": -1 } },
+              { "type": "setFlag", "value": "ASH_NEST_OBSERVED" }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Non ho visto abbastanza, ma ho visto troppo. Questo posto è un incubo." },
+              { "type": "statusChange", "value": "TERRORIZZATO" }
             ]
           }
         ]

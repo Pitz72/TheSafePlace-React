@@ -1,0 +1,31 @@
+[
+  {
+    "id": "unique_hermit_cabin",
+    "title": "La Capanna dell'Ascoltatore",
+    "description": "Nascosta nel profondo della foresta, trovi una capanna isolata. Fumo esce dal camino. Alla porta, campanelli eolici di metallo tintinnano dolcemente. Un vecchio con occhi velati da cataratte ti osserva dalla soglia. 'Ti ho sentito arrivare da lontano,' dice con voce roca. 'Il mondo è pieno di suoni per chi sa ascoltare.'",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Saluta l'eremita",
+        "outcomes": [{
+          "type": "special",
+          "value": {
+            "effect": "startDialogue",
+            "dialogueId": "hermit_main"
+          },
+          "results": []
+        }]
+      },
+      {
+        "text": "Vai via senza disturbare",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Decidi di non disturbare il vecchio. Forse tornerai un'altra volta." }
+          ]
+        }]
+      }
+    ]
+  }
+]

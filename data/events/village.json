@@ -1,5 +1,44 @@
 [
   {
+    "id": "village_community_board",
+    "title": "Bacheca del Villaggio",
+    "description": "Una vecchia bacheca di legno con un avviso scritto a mano: 'AVVISO: Un orologio da tasca di grande valore affettivo mi è stato rubato. Sospetto di un predone che si nasconde nelle foreste a nord di qui. Offro una generosa ricompensa a chiunque me lo riporti. - Marcus, Il Crocevia.'",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Accetta l'incarico",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "startQuest",
+              "value": "crossroads_investigation"
+            },
+            {
+              "type": "journalEntry",
+              "text": "Hai accettato di aiutare Marcus. Devi andare al Crocevia per parlare con lui."
+            },
+            {
+              "type": "addXp",
+              "value": 20
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Ignora l'avviso",
+        "outcomes": [{
+          "type": "direct",
+          "results": [{
+            "type": "journalEntry",
+            "text": "Non hai tempo per fare il detective. Prosegui."
+          }]
+        }]
+      }
+    ]
+  },
+  {
     "id": "village_water_mill", "title": "La Ruota Silenziosa", "isUnique": true, "biomes": ["Villaggio"],
     "description": "Ti imbatti nelle rovine di un vecchio mulino ad acqua. La struttura sembra solida e potresti ispezionare i meccanismi interni o cercare nel granaio adiacente.",
     "choices": [

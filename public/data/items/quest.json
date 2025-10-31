@@ -200,5 +200,25 @@
     "value": 0,
     "stackable": false,
     "rarity": "quest"
+  },
+  {
+    "id": "research_notes",
+    "name": "Note di Ricerca",
+    "description": "Un diario di ricerca del 'Progetto Rinascita'. Le pagine descrivono esperimenti su campioni contaminati e menzionano un misterioso 'soggetto L-7'. L'ultima pagina è macchiata di sangue.",
+    "type": "quest",
+    "weight": 0.3,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "ash_tissue_sample",
+    "name": "Campione di Tessuto della Cenere",
+    "description": "Un frammento di tessuto organico prelevato da un bozzolo nel Nido della Cenere. Pulsa debolmente con una luce grigia. Guardarlo troppo a lungo provoca un senso di vertigine.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "epic"
   }
 ]

@@ -1,3 +1,25 @@
+## **VERSIONE 1.4.3** - "Echoes of the Past & Ash Nests"
+- **Nuovi Eventi Lore:** Aggiunti due eventi lore che approfondiscono la storia del mondo:
+    - **"L'Ultimo Messaggio"**: Rivelazioni sulla "Guerra Inespressa" e il "Grande Silenzio", introducendo il "Progetto Eco" come un'interfaccia neurale collettiva.
+    - **"Il Nido della Cenere"**: Approfondisce la natura degli Angeli della Cenere, rivelando che raccolgono e trasformano i corpi umani, aggiungendo un senso di orrore cosmico.
+- **Miglioramenti Eventi Lore Esistenti:**
+    - **"L'Eco di una Tosse"**: Descrizione della malattia resa più specifica per aumentare la profondità narrativa.
+    - **"Voci nel Silenzio"**: La scelta di riparare la radio ora ricompensa con un oggetto quest "Registrazione Criptica", bilanciando la scelta con una ricompensa tangibile a lungo termine.
+
+---
+
+## **VERSIONE 1.4.1** - "The Humanoid Fix"
+- **Fix Narrativo Critico (CS_FIRST_KILL):** Risolto un bug che attivava una cutscene sull'uccisione di un umano dopo aver sconfitto un animale. La cutscene ora si attiva correttamente solo dopo la prima vittoria contro un nemico umanoide.
+- **Categorizzazione Nemici:** Introdotta la distinzione tra nemici `humanoid` e `beast` per tutti i 14 nemici, garantendo coerenza narrativa.
+- **Fix Trigger Cutscene Essenziali:**
+    - `CS_BEING_WATCHED`: Ora si attiva automaticamente al giorno 3, garantendo che ogni giocatore veda l'introduzione degli Angeli della Cenere.
+    - `CS_ASH_LULLABY`: Ora si attiva al primo rifugio notturno dal giorno 3 in poi, assicurando che la rivelazione chiave sulla madre non venga mancata.
+- **4 Nuove Cutscene Contestuali:** Aggiunte brevi scene narrative che si attivano in momenti chiave del gioco (prima scelta morale, ingresso in città, livello 5, HP bassi) per aumentare l'impatto emotivo.
+- **Bonus Meccanico "Sull'Orlo":** Scendere sotto il 10% di HP per la prima volta non solo attiva una cutscene, ma fornisce anche un bonus permanente a tutte le statistiche.
+- **Impatto:** Trasforma l'esperienza da "narrativamente fragile" a "narrativamente robusta", garantendo che ogni momento chiave della storia venga vissuto dal giocatore.
+
+---
+
 ## **VERSIONE 1.0.1** - "Segreti e Conseguenze"
 - Sistema Easter Egg (eventi rari 2% probabilità, 4 eventi segreti)
 - Nuovi oggetti speciali per Easter Egg

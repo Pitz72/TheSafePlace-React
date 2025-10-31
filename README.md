@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.3.2)
+# The Safe Place Chronicles: The Echo of the Journey (v1.8.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -39,7 +39,7 @@ Il prototipo vanta un ciclo di gameplay robusto, con tutti i pilastri fondamenta
 *   **Bussola Morale con Effetti:** Un sistema di allineamento (Lena/Elian) traccia le decisioni morali. Raggiungere una forte inclinazione verso la compassione o il pragmatismo sblocca bonus passivi permanenti a determinate abilità.
 
 #### 4. Sistemi Narrativi Stratificati
-*   **Missione Principale ("Main Quest"):** Una trama completa in 12 capitoli che guida il giocatore in un viaggio alla scoperta della verità. Gli eventi sono attivati da trigger organici legati al gameplay e rispettano il ciclo giorno/notte per una maggiore immersione (un ricordo del sole non si attiverà in piena notte, a meno che non sia tematicamente appropriato).
+*   **Storia Principale ("Main Story"):** Una trama completa in 12 capitoli chiamati "Echi della Memoria" che guida il giocatore in un viaggio emotivo alla scoperta della verità sul suo passato. Gli eventi sono attivati da trigger organici legati al gameplay e rispettano il ciclo giorno/notte per una maggiore immersione (un ricordo del sole non si attiverà in piena notte, a meno che non sia tematicamente appropriato).
 *   **Cutscene Cinematiche Testuali:** Momenti narrativi cruciali vengono presentati con un'interfaccia immersiva a schermo intero, con scelte che possono avere conseguenze permanenti.
 *   **Sistema di Eventi Intelligente:** Un gestore di incontri garantisce varietà e coerenza. Il primo passo in un'area speciale (Foresta, Villaggio) attiva sempre un evento a tema. Un cooldown dinamico previene la ripetitività, e un sistema di priorità assicura che gli eventi di trama vengano vissuti dal giocatore.
 *   **Eventi Segreti (Easter Egg):** Il mondo contiene eventi unici ed estremamente rari, progettati per sorprendere e deliziare i giocatori più attenti o fortunati. Offrono ricompense uniche e aggiungono strati di mistero o umorismo che alludono a un mondo pre-catastrofe più complesso.
@@ -84,11 +84,579 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.3.2** - The Medical Overhaul Update
+**Versione Corrente: v1.8.4** - Broken Legacies
 
-Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, e la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse:
+Con la versione 1.8.4, il gioco introduce il **sistema di riparazione e ricostruzione** - 3 quest che trasformano reliquie rotte in funzionalità ripristinate, con ricompense uniche e modifiche permanenti al mondo.
 
-#### ⚡ Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
+#### Novità v1.8.4 (31 Ottobre 2025) - **BROKEN LEGACIES**
+
+Questa versione introduce quest di riparazione con fallimento permanente e ricompense uniche.
+
+**3 REPAIR QUEST:**
+- **La Melodia Spezzata** (Pianoforte): CAR +1, momento artistico
+- **La Luce nella Torre** (Radio): Contatto Stazione Delta, walkie-talkie
+- **L'Acqua della Vita** (Impianto): Modifica mondo, acqua pulita area
+
+**SISTEMA RIPARAZIONE:**
+- Componenti rari richiesti
+- Skill check critici (DC 15-17)
+- Fallimento permanente possibile
+- Ricompense uniche (stat, discoveries, world changes)
+
+**NUOVI OGGETTI (4):**
+- Generatore Portatile (15kg, rare)
+- Filtri Industriali (3kg, uncommon)
+- Batteria Veicoli Pesanti (20kg, rare)
+- Manuale Idraulico (uncommon)
+
+**WORLD STATE EXPANSION:**
+- Water plant tracking
+- Area effect per Active Search
+- Modifiche permanenti persistenti
+
+**VALORIZZA INT/INVESTIGARE:**
+- Tutte 3 quest usano Investigare
+- DC alti (15-17) premiano skill investment
+- Bilanciamento con combat/survival
+
+**RICOMPENSE EMOTIVE:**
+- Pianoforte = arte in mondo silenzioso
+- Torre = speranza (altri sopravvissuti)
+- Impianto = civiltà ripristinata
+
+**IMPATTO:**
+- Reliquie rotte → Funzionalità ripristinate
+- Ricompense oltre XP/items
+- Mondo modificabile permanentemente
+- Playstyle "Rebuilder" supportato
+
+**Risultato:** Il gioco evolve da "survival RPG" a "survival RPG con ricostruzione del mondo perduto".
+
+---
+
+#### Novità v1.8.3 (31 Ottobre 2025) - **HUNTERS & PREY**
+
+Questa versione introduce un sistema di bounty completo con quest ripetibili e il trigger `enemyDefeated`.
+
+**SISTEMA BOUNTY - CONTENUTI ENDLESS:**
+- 3 bounty quest ripetibili (Cinghiali, Lupi, Predoni)
+- Trigger `enemyDefeated` completamente implementato
+- Kill count tracking automatico e persistente
+- Ricompense garantite (munizioni, materiali, XP)
+
+**NUOVO PNG: SILAS, IL CACCIATORE:**
+- Cacciatore esperto al Crocevia
+- Bacheca taglie con 3 contratti sempre disponibili
+- Insegnamento ricette in cambio di pelli
+- Trading specializzato (munizioni, trappole)
+
+**3 BOUNTY INIZIALI:**
+- **Cinghiali** (3 kill): 350 XP + 15× Munizioni Fucile + 5× Pelli
+- **Lupi** (4 kill): 400 XP + 20× Frecce + 6× Pelli
+- **Predoni** (5 kill): 500 XP + 30× Munizioni 9mm + 2× Medkit
+
+**KILL COUNT SYSTEM:**
+- Tracking automatico nemici uccisi per quest
+- Progresso visibile in tempo reale
+- Persistenza save/load completa
+- Reset automatico su quest complete
+
+**ECONOMIA SOSTENIBILE:**
+- Munizioni consumate → Munizioni guadagnate (+50% ROI)
+- Pelli per crafting e insegnamenti
+- Ciclo auto-sostenibile senza grind
+
+**COMBAT VALORIZZATO:**
+- Combattimento = attività proattiva scelta
+- Ricompense specifiche e garantite
+- Playstyle combat-focused supportato
+
+**IMPATTO:**
+- Contenuti infiniti post-story
+- Hub Crocevia con 3 PNG specializzati
+- Economia circolare funzionante
+- Rigiocabilità massimizzata
+
+**Risultato:** Il gioco evolve da "RPG con quest finite" a "RPG con contenuti endless e ciclo economico sostenibile".
+
+---
+
+#### Novità v1.8.2 (31 Ottobre 2025) - **SIGNS OF ASH**
+
+Questa versione introduce una quest investigativa profonda con meccaniche multi-flag innovative.
+
+**QUEST INVESTIGATIVA: "I SEGNI DELLA CENERE":**
+- 4 stage progressivi (esplorazione → decifrazione → raccolta → completamento)
+- 3 location rituali da scoprire (ordine libero)
+- Sistema multi-flag per progressione (prima implementazione)
+- Ricompensa: Manuale Dissuasore Sonico (ricetta epic)
+
+**NUOVO PNG: L'ASCOLTATORE (EREMITA):**
+- Ex-tecnico del suono, quasi cieco, udito sovrumano
+- Capanna nascosta in Foresta (evento casuale)
+- Unico in grado di decifrare diario Ascoltatori
+- Rivela: "cultisti" erano scienziati, non pazzi
+
+**3 LOCATION RITUALI:**
+- **Cerchio Rituale** (Foresta) - Modificato, avvia quest
+- **Grotta dei Sussurri** (Montagna) - Nuovo, flag CAVE
+- **Albero Segnato** (Foresta) - Nuovo, flag TREE
+
+**DISSUASORE SONICO - OGGETTO TATTICO UNICO:**
+- Consumabile epic-tier
+- Effetto: 6 ore protezione da Angeli della Cenere
+- Ricetta: Investigare DC 17, ingredienti rari
+- Game-changer per attraversamento zone pericolose
+
+**NUOVE MECCANICHE:**
+- Multi-flag quest trigger (AND di 2+ flags)
+- SetFlag event handler con auto-check
+- Conditional dialogue basato su quest stage
+- Ricompensa tattica invece di solo XP
+
+**LORE EXPANSION:**
+- Ascoltatori: scienziati che studiavano frequenze
+- Rituale di schermatura: protezione da Ash Angels
+- Grande Silenzio: "canto" invece di silenzio
+- Ash Angels: "note" di una frequenza più grande
+
+**IMPATTO:**
+- Evento singolo → Avventura multi-location
+- Lore sorprendente e sovversiva
+- PNG memorabile con ruolo chiave
+- Ricompensa unica che cambia gameplay
+- Sistema multi-flag per future quest complesse
+
+**Risultato:** Il gioco evolve da "RPG con quest lineari" a "RPG con investigazioni complesse e ricompense tattiche".
+
+---
+
+#### Novità v1.8.1 (31 Ottobre 2025) - **ECHOES OF THE LOST WORLD**
+
+Questa versione introduce un sistema di collezione profondo che valorizza ogni oggetto unico del gioco.
+
+**NUOVO PNG: ANYA, LA TECNICA:**
+- Scrapper brillante al Crocevia
+- Trasforma artefatti rari in potenziamenti
+- 5 "Echi" collezionabili con ricompense uniche
+- Dialoghi condizionali basati su inventory
+
+**QUEST A COLLEZIONE:**
+- "Echi del Mondo Perduto" - Quest persistente
+- 5 artefatti consegnabili per ricompense progressive
+- Ricompensa finale: 500 XP + INT +2
+- Tracking tramite gameFlags
+
+**5 ECHI COLLEZIONABILI:**
+- **Placca PixelDebh**: Ricetta Advanced Repair Kit
+- **Chip Drone**: Potenziamento armatura chest (+2 Difesa)
+- **Registrazione Criptica**: Rivela Deposito Medico + 75 XP
+- **Note Progetto Rinascita**: Potenziamento legs (+1 Difesa, Resistenza MALATO)
+- **Biglietto Eurocenter**: Multitool Professionale (tool raro)
+
+**NUOVE MECCANICHE:**
+- Sistema potenziamento armature (upgradeEquippedArmor)
+- 3 nuovi consequence types (upgradeArmor, learnRecipe, revealMapPOI)
+- Eventi special locations (Laboratorio, Biblioteca)
+- Tracking consegne via gameFlags
+
+**OGGETTI VALORIZZATI:**
+- Easter eggs ora meccanicamente rilevanti
+- Oggetti quest hanno "seconda vita"
+- Lore discoveries = ricompense tangibili
+
+**IMPATTO:**
+- Scopo concreto per ogni oggetto unico
+- Hub potenziamento alternativo (Anya vs Marcus)
+- Incentivo esplorazione totale
+- Rigiocabilità massimizzata
+- End-game content espanso
+
+**Risultato:** Il gioco evolve da "RPG con quest" a "RPG con sistema di collezione e potenziamento profondo".
+
+---
+
+#### Novità v1.8.0 (31 Ottobre 2025) - **QUEST EXPANSION & WORLD INTERACTION**
+
+Questa versione trasforma il Quest System da framework base a sistema completo e versatile con varietà narrativa.
+
+**10 SUBQUEST GIOCABILI (+900%):**
+- **"La Pompa Silenziosa"**: Ripara pompa d'acqua per fonte permanente
+- **"Indagine al Crocevia"**: Recupera orologio rubato, guadagna amicizia Marcus
+- **"La Conoscenza Perduta"**: Scopri segreti Progetto Eco (lore quest)
+- **"L'Eco del Silenzio"**: Scopri segreti Progetto Rinascita (lore quest)
+- **"Il Messaggio del Fiume"**: Espansa con stage 3, integrazione Marcus
+- **"L'Ultimo Messaggero"**: Consegna pacco sigillato al Crocevia
+- **"L'Occhio nel Cielo"**: Decifrare chip drone (con possibilità fallimento)
+- **"Il Debito del Sopravvissuto"**: Salva Liam e scorta Elara al sicuro
+- **"La Promessa del Bambino"**: Trova tesoro famiglia sotto torre radio
+- **"Il Peso della Scelta"**: Scopri destino famiglia Alenko (narrativa agrodolce)
+
+**6 TRIGGER TYPES (+200%):**
+- **hasItems**: Check inventario multiplo (raccolta materiali)
+- **talkToNPC**: Dialogo con NPC specifico (integrazione sociale)
+- **completeEvent**: Evento unico completato (lore quests)
+- **interactWithObject**: Interazione oggetto/terminale (quest tecnologiche)
+
+**WORLD STATE SYSTEM:**
+- Modifiche permanenti al mondo (pompe riparate/distrutte)
+- Interazioni ripetibili con oggetti riparati
+- Persistenza completa save/load
+- Base per espansioni (ponti, giardini, rifugi)
+
+**ARCHIVIO LORE:**
+- Nuova colonna in QuestScreen: "ARCHIVIO LORE"
+- 3 lore entries sbloccabili (Progetto Eco, Rinascita, Clan Corvo)
+- Testo completo rileggibile
+- Ricompensa per esplorazione e scoperte
+
+**SISTEMA REPUTAZIONE:**
+- Marcus Friendship flag
+- Sconto permanente 10% in scambi
+- Base per sistema fazioni futuro
+
+**INTEGRAZIONE DIALOGHI/QUEST:**
+- Conditional dialogue options basate su quest attive
+- Quest completabili tramite dialoghi
+- Ricompense scelte in dialogo
+
+**MECCANICHE AVANZATE:**
+- Fallimento quest permanente (chip drone)
+- Conseguenze dialogo (completeQuest, failQuest)
+- Quest multi-stage complesse (fino a 4 stage)
+- Ricompense variegate (XP, items, stat, lore, reputation, world changes)
+
+**VARIETÀ NARRATIVA:**
+- Quest eroiche (salvare Elara)
+- Quest investigative (orologio, drone)
+- Quest di consegna (messaggero)
+- Quest tecnologiche (terminale)
+- Quest emotive (famiglia Alenko)
+- Lore quests (auto-complete)
+
+**IMPATTO:**
+- Quest system enterprise-grade (10 quest, 6 trigger types)
+- Mondo modificabile permanentemente (pompe)
+- Scoperte narrative valorizzate (archivio lore)
+- Relazioni PNG profonde (Marcus friendship)
+- Conseguenze permanenti (fallimenti, reputazione)
+- Base solida per espansioni infinite
+
+**Risultato:** Il gioco evolve da "RPG con quest base" a "RPG con mondo interattivo, persistente e narrativamente profondo".
+
+---
+
+**Versione Corrente: v1.7.0** - Social Hub & Interactive NPCs
+
+Con la versione 1.7.0, il gioco completa la trasformazione in un **RPG sociale completo** con sistemi di dialogo interattivo e baratto economico funzionanti.
+
+#### Novità v1.7.0 (30 Ottobre 2025) - **SOCIAL HUB & INTERACTIVE NPCS**
+
+Questa versione introduce sistemi sociali ed economici che trasformano i PNG in partner di gioco reali.
+
+**SISTEMA DI DIALOGO INTERATTIVO:**
+- Alberi di dialogo ramificati con 10 nodi totali
+- 2 PNG parlanti: Marcus (Avamposto) + Giona (Wandering Trader)
+- Effetto macchina da scrivere immersivo (30ms/carattere)
+- Skill check integrati (Persuasione DC 12)
+- Navigazione keyboard-only (1-9 per opzioni)
+- Conditional options basate su quest/alignment/items
+- Context preservation (ritorno intelligente)
+
+**SISTEMA DI BARATTO ECONOMICO:**
+- Scambio basato su valore oggetti (no valuta)
+- Markup dinamico influenzato da Persuasione
+- Formula: `effectiveMarkup = baseMarkup - (persuasionBonus × 0.02)`
+- Range markup: 105% (master) → 150% (novizio)
+- Balance real-time con indicatore verde/rosso
+- 2 mercanti: Marcus (19 item) + Giona (10 item)
+- UI dual-panel: Player | Offers | Trader
+
+**HUB INTERATTIVI COMPLETI:**
+- **Avamposto**: Dialogo + Commercio + Riposo funzionanti
+- **Wandering Trader**: Dialogo + Commercio + movimento forzato
+- Ritorno automatico al menu dopo interazioni
+- Scelte multiple per PNG (parla poi commercia)
+
+**PERSUASIONE MECCANICAMENTE UTILE:**
+- Riduce costi commercio (2% per punto bonus)
+- Sblocca informazioni nei dialoghi
+- Skill ora critica per economia
+
+**OGGETTI DI VALORE FUNZIONALI:**
+- Monete, gioielli, gemme = valuta di scambio
+- Convertire loot inutile in risorse essenziali
+- Economia strategica implementata
+
+**IMPATTO:**
+- PNG con personalità e voci
+- Dimensione sociale ed economica
+- Persuasione skill critica
+- Hub sociali completi
+- Base per fazioni e reputazione
+
+**Risultato:** Il gioco evolve da "survival RPG con mondo vivo" a "survival RPG sociale" con economia e interazioni profonde.
+
+---
+
+**Versione Corrente: v1.6.0** - Living World & Special Locations
+
+Con la versione 1.6.0, il gioco introduce un **mondo vivo e dinamico** con location speciali uniche, il primo PNG autonomo, e un hub sociale completamente funzionante.
+
+#### Novità v1.6.0 (30 Ottobre 2025) - **LIVING WORLD & SPECIAL LOCATIONS**
+
+Questa versione trasforma il mondo di gioco da mappa generica a paesaggio narrativo vivo.
+
+**5 NUOVE LOCATION SPECIALI:**
+- **Avamposto "Il Crocevia" (A)**: Primo hub sociale con riposo sicuro (8h)
+- **Nido della Cenere (N)**: Dungeon end-game, rivela natura Angeli della Cenere
+- **Laboratorio (L)**: Svela segreti del "Progetto Rinascita"
+- **Biblioteca (B)**: Archivio del "Progetto Eco" e Grande Silenzio
+- **Commerciante Itinerante (T)**: PNG dinamico che si muove ogni 5 turni
+
+**SISTEMA PNG DINAMICO:**
+- Commerciante spawna casualmente all'inizio partita
+- Si muove autonomamente ogni 5 turni del player
+- Visibile sulla mappa con icona dorata
+- Interazione ripetibile con informazioni utili
+- Gameplay emergente: "caccia al commerciante"
+
+**EVENTI UNICI GARANTITI:**
+- Entrare in location speciale = evento narrativo garantito
+- 4 nuovi eventi con lore profonda
+- Skill check: Investigare, Storia, Percezione
+- Ricompense: Oggetti unici, XP, stat boost
+
+**NUOVI OGGETTI QUEST:**
+- Note di Ricerca (Progetto Rinascita)
+- Campione Tessuto Cenere (epic rarity)
+
+**QUEST MARKER FIX:**
+- Marker ora scompaiono istantaneamente quando quest completata
+- Rendering reattivo a cambiamenti activeQuests
+- Bug critico risolto
+
+**IMPATTO:**
+- Mondo trasformato da statico a vivo
+- Esplorazione intenzionale vs casuale
+- Primo PNG autonomo funzionante
+- Base per espansioni future (commercio, fazioni, dialoghi)
+
+**Risultato:** Il gioco evolve da "survival RPG" a "survival RPG con mondo vivo e dinamico".
+
+---
+
+**Versione Corrente: v1.5.0** - Quest System Framework
+
+Con la versione 1.5.0, il gioco introduce il **Quest System Framework** - un'infrastruttura completa per missioni principali e secondarie che trasforma il gioco da esperienza narrativa passiva a RPG con obiettivi attivi.
+
+#### Novità v1.5.0 (30 Ottobre 2025) - **QUEST SYSTEM FRAMEWORK**
+
+Questa versione implementa le fondamenta per un sistema di quest completo, validato con la prima subquest giocabile.
+
+**SPRINT 1 - INFRASTRUTTURA QUEST:**
+- **Sistema Tipi Completo**: 6 tipi trigger, quest MAIN/SUB, ricompense multi-tipo
+- **Database Quest**: Store Zustand con caricamento asincrono ([`questDatabase.ts`](data/questDatabase.ts:1))
+- **Quest Service**: 308 righe di logica centralizzata ([`questService.ts`](services/questService.ts:1))
+- **Character Integration**: activeQuests, completedQuests, persistenza save/load
+- **Quest Log UI**: Schermata dedicata [J] con layout due colonne ([`QuestScreen.tsx`](components/QuestScreen.tsx:1))
+
+**SPRINT 2 - PRIMA QUEST GIOCABILE:**
+- **"Il Talismano Perduto"**: Subquest completa in 2 stage
+- **Evento Attivatore**: "Messaggio nella Bottiglia" (fiume)
+- **Evento Obiettivo**: "Il Vecchio Mulino a Vento" (78, 9)
+- **Trigger Implementati**: reachLocation, getItem
+- **Ricompense**: 150 XP + 2x Miele
+
+**QUEST MARKERS VISIVI:**
+- **! ROSSO**: MAIN quest (priorità massima)
+- **! GIALLO**: SUB quest (obiettivi secondari)
+- Indicatori sulla mappa mostrano dove andare
+- Scompaiono quando obiettivo raggiunto
+
+**CICLO QUEST COMPLETO:**
+1. Trova bottiglia in fiume → Leggi messaggio → Quest attivata
+2. **! GIALLO appare a (78, 9)** sulla mappa
+3. Viaggia verso il marker → Evento ricerca automatico
+4. Skill check Percezione DC 12 → Trova talismano
+5. Quest completata → Marker scompare → Ricompense assegnate
+
+**ARCHITETTURA:**
+- Service Layer pattern per logica complessa
+- Event-driven trigger system
+- Persistenza integrata in save system v2.0.0
+- UI keyboard-only coerente con design
+
+**DOCUMENTAZIONE:**
+- **QUEST-SYSTEM-v1.5.0-IMPLEMENTATION.md**: Analisi completa (308 righe)
+- **log/v1.5.0.md**: Changelog dettagliato (158 righe)
+- JSDoc enterprise-grade per tutte le funzioni
+
+**IMPATTO:**
+- Primo vero sistema di obiettivi attivi
+- Base per espansione narrativa (quest chain, branch, timer)
+- Rigiocabilità aumentata (contenuti opzionali)
+- Preparazione per Main Quest integration
+
+**Risultato:** Il gioco evolve da "survival narrative" a "survival RPG" con quest system robusto e scalabile.
+
+---
+
+**Versione Corrente: v1.4.5** - Technical Excellence & Encumbrance
+
+Con la versione 1.0.3, il prototipo ha raggiunto la sua **piena completezza narrativa e meccanica**. La versione 1.2.0 ha introdotto un'espansione massiva di contenuti, le versioni 1.2.x hanno risolto bug critici e bilanciamenti, la **v1.3.x rivoluziona completamente i sistemi di sopravvivenza**, eliminando la dipendenza dalla fortuna e dando al giocatore controllo strategico sulle risorse, e la **v1.4.x ridefinisce concettualmente la struttura narrativa** del gioco:
+
+#### Novità v1.4.5 (29 Ottobre 2025) - **TECHNICAL EXCELLENCE & ENCUMBRANCE**
+
+Questa versione solidifica le fondamenta tecniche del progetto per preparare espansioni future complesse.
+
+**FASE 1 - DOCUMENTAZIONE ENTERPRISE-GRADE (COMPLETATA):**
+- **60 funzioni documentate** con JSDoc premium (gameStore, characterStore, gameService)
+- **Standard enterprise:** Formule, esempi, tabelle di riferimento, edge cases
+- **IntelliSense potenziato:** Hover su funzione → documentazione completa
+- **Onboarding facilitato:** Nuovo sviluppatore capisce codice immediatamente
+- **Coverage:** 15% → 50% (+233%)
+
+**SISTEMA DI INGOMBRO COMPLETO:**
+- **Formula realistica:** 15 + (FOR_modifier × 2) kg (era FOR × 10)
+- **Penalità skill:** -2 Atletica/Acrobazia quando sovraccarico
+- **Fatigue accelerata:** ×2 quando sovraccarico (già esistente, ora documentato)
+- **Journal feedback:** Messaggi automatici quando diventi/esci da sovraccarico
+- **UI migliorata:** Indicatori peso con codifica colori (verde/giallo/rosso)
+- **Supporto zaini:** Preparato per zaini che aumentano capacità (+5kg/+10kg)
+
+**UX FIXES CRITICI:**
+- **Cutscene overflow:** Layout flex, scroll automatico, font ottimizzato
+- **Inventory auto-scroll:** scrollIntoView smooth quando selezione cambia
+- **Tutte le schermate narrative:** Ora completamente leggibili
+
+**DOCUMENTAZIONE TECNICA:**
+- **ROADMAP-v1.4.5-TECHNICAL-EXCELLENCE.md:** 8 fasi pianificate (400 righe)
+- **SISTEMA-INGOMBRO-IMPLEMENTATO.md:** Documentazione completa (250 righe)
+- **FASE1-JSDOC-PROGRESS.md:** Tracker progresso documentazione
+
+**IMPATTO:**
+- Fondamenta tecniche solidificate per espansioni future
+- FOR diventa statistica critica (capacità carico)
+- Scelte strategiche su cosa portare
+- Codice pronto per collaboratori esterni
+- Pronto per sistemi complessi (quest, fazioni, base building)
+
+**Risultato:** Progetto tecnicamente maturo, documentato a livello enterprise, pronto per crescita.
+
+---
+
+#### Novità v1.4.4 (29 Ottobre 2025) - **UX POLISH & CRT PREMIUM**
+
+Questa versione migliora drasticamente l'esperienza utente per i nuovi giocatori e introduce un tema CRT di qualità premium.
+
+**SISTEMA PAGINAZIONE SCHERMATE INFORMATIVE:**
+- **Istruzioni:** 14 pagine navigate con keyboard (era scrolling veloce illeggibile)
+- **Storia:** 5 pagine narrative con testo completo (nessun taglio)
+- **Navigazione:** [A/←] Indietro, [D/→] Avanti, [INVIO] Avanti, [ESC] Menu
+- **UX:** Indicatore pagina, audio feedback, layout fisso (no spostamento orizzontale)
+- **Stato:** DEFINITIVO - Approvato e documentato nel codice
+
+**OPZIONI COMPLETATE:**
+- **Portoghese** aggiunto alle lingue selezionabili (preparazione i18n)
+- **Fullscreen** ora funzionante (attiva/disattiva modalità fullscreen browser)
+
+**TEMA CRT PREMIUM QUALITY:**
+- **Colore Fosforo P3 Autentico:** #33ff33 (IBM 5151, Apple Monitor III, DEC VT100)
+- **Multi-Layer Phosphor Glow:** 5 layer di bloom + aberrazione cromatica rossa
+- **Scanline Realistiche:** Gradiente intensità, pattern 4px, scroll lento (12s)
+- **Vignette Avanzata:** Gradiente 4-stop + phosphor bloom verde negli angoli
+- **Animazioni Premium:** Phosphor flicker, wobble ottimizzato, CRT flicker irregolare
+- **Filtri Avanzati:** Contrast 1.1, Brightness 1.05, Blur 0.3px
+
+**DOCUMENTAZIONE:**
+- **Template Changelog Ufficiale:** Standard per tutte le versioni future
+- **Analisi Sistema Temi:** Architettura completa (400 righe)
+- **CRT Premium Upgrade:** Dettagli tecnici upgrade (300 righe)
+
+**IMPATTO:**
+- Esperienza nuovi giocatori drasticamente migliorata
+- Schermate informative ora leggibili e professionali
+- Tema CRT di qualità premium con emulazione autentica anni '80
+- Base documentale solida per sviluppo futuro
+
+**Risultato:** UX professionale e immersione autentica nei monitor CRT vintage.
+
+---
+
+#### Novità v1.4.3 (22 Ottobre 2025) - **ECHOES OF THE PAST & ASH NESTS**
+
+Questa versione arricchisce profondamente la lore del mondo e migliora l'impatto narrativo degli eventi esistenti.
+
+**NUOVI EVENTI LORE:**
+    - **"L'Ultimo Messaggio"**: Un nuovo evento in ambiente urbano che offre una spiegazione parziale e inquietante del "Grande Silenzio", introducendo il "Progetto Eco" come un'interfaccia neurale collettiva.- **"Il Nido della Cenere"**: Un evento unico in aree remote che rivela la vera natura degli Angeli della Cenere: non solo predatori, ma entità che "raccolgono" e "trasformano" i corpi umani, aggiungendo un senso di orrore cosmico e conseguenze a lungo termine per le interazioni con gli NPC.
+
+**MIGLIORAMENTI EVENTI LORE ESISTENTI:**
+- **"L'Eco di una Tosse"**: La descrizione della malattia della ragazza è stata resa più specifica, aumentando la profondità narrativa e la potenziale rilevanza futura.
+- **"Voci nel Silenzio"**: La scelta di riparare la radio ora ricompensa il giocatore con un oggetto quest "Registrazione Criptica" in caso di successo, bilanciando la scelta "Lena" con una ricompensa tangibile e un potenziale di sviluppo narrativo a lungo termine.
+
+**IMPATTO:**
+- **Profondità Narrativa Accresciuta:** Il mondo di gioco diventa più misterioso e stratificato, con indizi sulla sua storia e sul ruolo di Lena.
+- **Scelte Più Significative:** Le decisioni del giocatore negli eventi lore hanno ora conseguenze più tangibili e ramificate.
+- **Angeli della Cenere Più Complessi:** La loro natura viene ridefinita, rendendoli antagonisti più intriganti.
+
+**Risultato:** Un mondo più vivo, misterioso e reattivo alle scelte del giocatore, con una lore che si svela gradualmente e in modo più coinvolgente.
+
+---
+
+#### Novità v1.4.1 (22 Ottobre 2025) - **THE HUMANOID FIX**
+
+Questa patch risolve **tre problemi narrativi critici** e aggiunge profondità cinematica, trasformando il gioco da un'esperienza **narrativamente fragile** a una **narrativamente robusta**.
+
+**FIX NARRATIVI CRITICI:**
+- **CS_FIRST_KILL:** La cutscene sull'uccisione di un umano ora si attiva correttamente **solo** dopo aver sconfitto un nemico `humanoid`, risolvendo una grave incoerenza narrativa. È stata introdotta una categorizzazione per tutti i 14 nemici.
+- **CS_BEING_WATCHED:** Trigger spostato da un'azione opzionale (riposo) a un evento **automatico e garantito** all'inizio del giorno 3.
+- **CS_ASH_LULLABY:** Trigger semplificato e reso **garantito** al primo rifugio notturno dal giorno 3 in poi, assicurando che la rivelazione chiave sulla madre non venga mai mancata.
+
+**NUOVE CUTSCENE CONTESTUALI:**
+- **4 nuove cutscene** brevi e potenti per trasformare momenti meccanici in eventi cinematici:
+  - `CS_THE_WEIGHT_OF_CHOICE`: Si attiva dopo la prima scelta morale significativa.
+  - `CS_CITY_OF_GHOSTS`: Aggiunge un impatto monumentale al primo ingresso in una città.
+  - `CS_STRANGERS_REFLECTION`: Collega il raggiungimento del livello 5 a una riflessione sulla trasformazione del personaggio.
+  - `CS_THE_BRINK`: Trasforma il momento in cui gli HP scendono sotto il 10% in un power-up narrativo e meccanico, fornendo un **bonus permanente a tutte le statistiche**.
+
+**IMPATTO:**
+- **Coerenza Narrativa Assoluta:** I momenti chiave della storia sono ora garantiti e contestualmente corretti.
+- **Impatto Emotivo Massimizzato:** Le nuove cutscene arricchiscono l'esperienza, dando peso a scelte, traguardi e momenti di difficoltà.
+- **Gameplay e Narrazione Sincronizzati:** Meccaniche come il level-up e la salute bassa diventano parte integrante del racconto.
+
+**Risultato:** Ogni storia viene raccontata, e il peso della sopravvivenza ha ora il peso giusto.
+
+---
+
+#### Novità v1.4.0 (21 Ottobre 2025) - **THE STORY TRANSFORMATION**
+
+Questa versione rappresenta una trasformazione strutturale fondamentale nella concezione narrativa del gioco, preparando il terreno per future espansioni del gameplay.
+
+**REFACTORING ARCHITETTURALE COMPLETO:**
+- Trasformazione da "Main Quest" a "Main Story" in tutto il codebase
+- Ridefinizione concettuale: la narrazione principale è ora chiaramente identificata come la storia emotiva di Ultimo, separata da future meccaniche di quest attive
+- Aggiornamento di tipi, interfacce, store, componenti e servizi per coerenza semantica totale
+
+**ESPANSIONE NARRATIVA:**
+- I 12 capitoli della Main Story sono stati riscritti e arricchiti con maggiore profondità emotiva
+- Nuova struttura: "Echi della Memoria" che svelano progressivamente il trauma rimosso del protagonista
+- Migliore progressione drammatica e connessioni narrative più forti tra gli eventi
+
+**ISTRUZIONI RIDISEGNATE:**
+- Schermata istruzioni completamente riscritta come guida professionale alla sopravvivenza
+- Organizzata per sezioni tematiche invece di formato lettera
+- Maggiore chiarezza per nuovi giocatori, separazione netta tra meccaniche e narrazione
+
+**APERTURA AL FUTURO:**
+- La distinzione tra "storia" (narrazione passiva) e "quest" (obiettivi attivi) prepara l'introduzione di vere e proprie quest secondarie
+- Sistema pronto per espansioni narrative e ludiche senza conflitti strutturali
+
+**Risultato:** Codebase più chiaro, coerente e pronto per l'evoluzione futura del gioco, con una narrazione emotivamente più profonda e un'architettura che supporta nuove possibilità di gameplay.
+
+---
+
+#### Novità v1.3.2 (20 Ottobre 2025) - **THE MEDICAL OVERHAUL**
 
 Questa versione risolve un problema critico nel sistema di cure degli status, rendendo ogni condizione negativa gestibile strategicamente.
 

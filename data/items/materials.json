@@ -190,5 +190,45 @@
     "value": 2,
     "stackable": true,
     "rarity": "common"
+  },
+  {
+    "id": "portable_generator",
+    "name": "Generatore Portatile",
+    "description": "Un piccolo generatore a benzina, ancora funzionante. Può fornire energia elettrica per brevi periodi.",
+    "type": "material",
+    "weight": 15.0,
+    "value": 250,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "industrial_filter",
+    "name": "Filtro Industriale",
+    "description": "Un filtro per impianti di depurazione acqua. Pesante ma essenziale per purificare grandi quantità d'acqua.",
+    "type": "material",
+    "weight": 3.0,
+    "value": 80,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "vehicle_battery",
+    "name": "Batteria per Veicoli Pesanti",
+    "description": "Una batteria industriale da camion o generatore. Pesante ma con enorme capacità energetica.",
+    "type": "material",
+    "weight": 20.0,
+    "value": 200,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "hydraulic_manual",
+    "name": "Manuale Manutenzione Impianti Idraulici",
+    "description": "Un manuale tecnico dettagliato sulla manutenzione di impianti di depurazione acqua. Conoscenza preziosa del mondo perduto.",
+    "type": "material",
+    "weight": 0.5,
+    "value": 100,
+    "stackable": false,
+    "rarity": "uncommon"
   }
 ]

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "find_jonas_talisman",
+    "title": "Il Talismano Perduto",
+    "type": "SUB",
+    "startText": "Il messaggio nella bottiglia parla di un talismano portafortuna perduto vicino a un vecchio mulino a vento. Il suo proprietario, Jonas, spera che possa portare fortuna a chi lo troverà.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova il vecchio mulino a vento menzionato nel messaggio.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 78, "y": 9 }
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Cerca il talismano di Jonas vicino al mulino.",
+        "trigger": {
+          "type": "getItem",
+          "value": "jonas_talisman"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 150,
+      "items": [
+        {
+          "itemId": "food_honey",
+          "quantity": 2
+        }
+      ]
+    }
+  }
+]

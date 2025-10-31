@@ -55,9 +55,10 @@
           {
             "type": "direct",
             "results": [
-              { "type": "journalEntry", "text": "Con un certo rispetto, controlli le sue tasche. Trovi un pacchetto di sigarette ancora sigillato e un flacone di antidolorifici. Povero Marco G., qualunque sia stata la sua storia." },
+              { "type": "journalEntry", "text": "Con un certo rispetto, controlli le sue tasche. Trovi un pacchetto di sigarette ancora sigillato, un flacone di antidolorifici e un biglietto da visita professionale. Povero Marco G., qualunque sia stata la sua storia." },
               { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 1 } },
               { "type": "addItem", "value": { "itemId": "cigarettes_pack", "quantity": 1 } },
+              { "type": "addItem", "value": { "itemId": "eurocenter_business_card", "quantity": 1 } },
               { "type": "addXp", "value": 25 }
             ]
           }
