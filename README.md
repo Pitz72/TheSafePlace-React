@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.8.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.8.5)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,7 +84,52 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.8.4** - Broken Legacies
+**Versione Corrente: v1.8.5** - Database Integrity
+
+Con la versione 1.8.5, è stato risolto un bug critico che impediva il caricamento dei file JSON delle subquest, rendendo finalmente accessibili tutti i contenuti implementati nelle versioni 1.8.0-1.8.4.
+
+#### Novità v1.8.5 (4 Novembre 2025) - **DATABASE INTEGRITY**
+
+Questa patch risolve errori 404 critici nel caricamento dei database JSON.
+
+**BUG FIX CRITICO:**
+- ✅ Risolti errori 404 per 6 file JSON mancanti
+- ✅ Copiati file eventi subquest in public/data/events/
+- ✅ Copiato lore_archive.json in public/data/
+- ✅ Sistema quest ora completamente funzionante
+
+**LOGGING DETTAGLIATO:**
+- Aggiunto logging enterprise-grade a eventDatabase.ts
+- Monitoraggio caricamento: [EVENT DB] e [EVENT STORE]
+- Diagnostica facilitata per problemi futuri
+
+**FILE COPIATI (6):**
+- village_pump.json - Eventi pompa villaggio
+- forest_thief.json - Eventi ladro foresta
+- special_locations.json - Location speciali
+- hermit_location.json - Capanna eremita
+- repair_quests.json - Quest riparazione
+- lore_archive.json - Archivio scoperte lore
+
+**DATABASE CARICATI:**
+- Items: 131 ✅
+- Events: 47 ✅ (24 biome + 15 encounters + 4 lore + 4 easter eggs)
+- Quests: 1 ✅
+- Dialogues: 5 ✅
+- Traders: 4 ✅
+- Lore Archive: 3 ✅
+
+**IMPATTO:**
+- Zero errori 404 in console
+- Contenuti v1.8.0-v1.8.4 finalmente accessibili
+- Quest subquest completamente funzionanti
+- Eventi speciali attivabili
+
+**Risultato:** Il sistema quest implementato nelle ultime 5 versioni è ora completamente operativo.
+
+---
+
+#### Novità v1.8.4 (31 Ottobre 2025) - **BROKEN LEGACIES**
 
 Con la versione 1.8.4, il gioco introduce il **sistema di riparazione e ricostruzione** - 3 quest che trasformano reliquie rotte in funzionalità ripristinate, con ricompense uniche e modifiche permanenti al mondo.
 
