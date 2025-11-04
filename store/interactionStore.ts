@@ -741,6 +741,22 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         if (createdItemsText.length > 0) {
             const journalText = `Hai creato: ${createdItemsText}.`;
             addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+            
+            // v1.9.0: Set quest flags for Main Quest "Prove del Padre"
+            recipe.results.forEach(result => {
+                if (result.itemId === 'CONS_002') {
+                    // Player has purified water - set flag for Main Quest
+                    useCharacterStore.getState().setQuestFlag('hasCraftedWater', true);
+                    console.log('[CRAFTING] Quest flag set: hasCraftedWater = true');
+                }
+            });
+            
+            // Check quest triggers for craftItem type
+            import('../services/questService').then(({ questService }) => {
+                recipe.results.forEach(result => {
+                    questService.checkQuestTriggers(result.itemId);
+                });
+            });
         } else {
             addJournalEntry({ text: "Crafting fallito: nessun oggetto creato.", type: JournalEntryType.SYSTEM_ERROR });
         }

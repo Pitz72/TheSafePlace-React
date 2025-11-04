@@ -1,5 +1,70 @@
 [
   {
+    "id": "MQ_THE_ECHO_OF_THE_JOURNEY",
+    "title": "L'Eco del Viaggio",
+    "type": "MAIN",
+    "startText": "La lettera di tuo padre è un peso nel tuo cuore e nella tua tasca. La sua ultima istruzione è chiara: sopravvivi e raggiungi il Safe Place, a Est.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Segui la mappa di tuo padre verso Est, fino al luogo segnato come 'The Safe Place'.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 2
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "PROVA: Dimostra di aver imparato la lezione sull'acqua. Purifica dell'acqua per sopravvivere.",
+        "trigger": {
+          "type": "craftItem",
+          "value": "CONS_002"
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Continua il tuo viaggio verso Est.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 3
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "PROVA: Dimostra di saper quando non combattere. Fuggi con successo da un combattimento.",
+        "trigger": {
+          "type": "successfulFlee"
+        }
+      },
+      {
+        "stage": 5,
+        "objective": "La strada è ancora lunga. Prosegui verso il Safe Place.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 6
+        }
+      },
+      {
+        "stage": 6,
+        "objective": "PROVA: Studia il tuo nemico. Scopri la debolezza tattica di un avversario.",
+        "trigger": {
+          "type": "tacticRevealed"
+        }
+      },
+      {
+        "stage": 7,
+        "objective": "Hai imparato le lezioni. Ora raggiungi il Safe Place e confrontati con la verità.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 149, "y": 146 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 1000
+    }
+  },
+  {
     "id": "find_jonas_talisman",
     "title": "Il Messaggio del Fiume",
     "type": "SUB",

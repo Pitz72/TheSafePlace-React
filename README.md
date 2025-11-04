@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.8.5)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,7 +84,62 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.8.5** - Database Integrity
+**Versione Corrente: v1.9.0** - Le Prove del Padre
+
+Con la versione 1.9.0, il gioco introduce il **sistema Main Quest multi-stage** - la quest principale diventa un viaggio strutturato con "Prove" attive che valorizzano le lezioni del padre.
+
+#### Novità v1.9.0 (4 Novembre 2025) - **LE PROVE DEL PADRE**
+
+Questa versione trasforma la Main Quest da obiettivo passivo a sistema multi-stage con prove attive.
+
+**MAIN QUEST MULTI-STAGE:**
+- 7 stage totali (3 prove + 4 narrativi)
+- Alternanza tra obiettivi narrativi e prove concrete
+- Integrazione perfetta con "Echi della Memoria"
+- Auto-attivazione all'inizio del gioco
+
+**3 PROVE ATTIVE:**
+- **Prova dell'Acqua**: Purifica acqua (craftItem CONS_002)
+- **Prova della Fuga**: Fuggi da combattimento (successfulFlee)
+- **Prova dell'Analisi**: Studia nemico (tacticRevealed)
+
+**4 NUOVI TRIGGER TYPES (+44%):**
+- `mainStoryComplete`: Trigger quando Main Story avanza
+- `craftItem`: Trigger quando oggetto specifico craftato
+- `successfulFlee`: Trigger dopo fuga riuscita
+- `tacticRevealed`: Trigger dopo analisi nemica
+
+**SISTEMA QUEST FLAGS:**
+- Tracking achievements player (hasCraftedWater, etc.)
+- Persistenza save/load completa
+- Skip automatico prove già completate
+- Journal feedback intelligente
+
+**SKIP-AHEAD LOGIC:**
+- Se prova già completata → skip automatico
+- Journal: "Ti rendi conto di averlo già fatto"
+- Progressione fluida senza ripetizioni
+- Valorizza azioni precedenti
+
+**INTEGRAZIONE GAMEPLAY:**
+- Crafting → Set flag + trigger check
+- Combat flee → Set flag + trigger check
+- Combat analyze → Set flag + trigger check
+- Main Story complete → Trigger quest advance
+
+**IMPATTO:**
+- Viaggio strutturato invece di dispersivo
+- Obiettivi concreti tra Echi narrativi
+- Lezioni del padre valorizzate meccanicamente
+- Progressione gratificante e dinamica
+
+**Risultato:** Il gioco evolve da "survival RPG con storia passiva" a "survival RPG con Main Quest attiva e obiettivi strutturati".
+
+---
+
+#### Novità v1.8.5 (4 Novembre 2025) - **DATABASE INTEGRITY**
+
+Con la versione 1.8.5, è stato risolto un bug critico che impediva il caricamento dei file JSON delle subquest, rendendo finalmente accessibili tutti i contenuti implementati nelle versioni 1.8.0-1.8.4.
 
 Con la versione 1.8.5, è stato risolto un bug critico che impediva il caricamento dei file JSON delle subquest, rendendo finalmente accessibili tutti i contenuti implementati nelle versioni 1.8.0-1.8.4.
 

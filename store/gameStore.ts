@@ -339,6 +339,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
+    
+    // v1.9.0: Auto-start Main Quest
+    import('../services/questService').then(({ questService }) => {
+        questService.startQuest('MQ_THE_ECHO_OF_THE_JOURNEY');
+    });
   },
 
   /**
@@ -784,11 +789,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   resolveMainStory: () => {
     const completedStage = get().mainStoryStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
+    const newStage = completedStage + 1;
     set(state => ({
-        mainStoryStage: state.mainStoryStage + 1,
+        mainStoryStage: newStage,
         activeMainStoryEvent: null,
         gameState: GameState.IN_GAME,
     }));
+    
+    // v1.9.0: Check quest triggers for mainStoryComplete
+    import('../services/questService').then(({ questService }) => {
+        questService.checkQuestTriggers();
+    });
   },
   
   /**

@@ -1,7 +1,72 @@
 [
   {
+    "id": "MQ_THE_ECHO_OF_THE_JOURNEY",
+    "title": "L'Eco del Viaggio",
+    "type": "MAIN",
+    "startText": "La lettera di tuo padre è un peso nel tuo cuore e nella tua tasca. La sua ultima istruzione è chiara: sopravvivi e raggiungi il Safe Place, a Est.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Segui la mappa di tuo padre verso Est, fino al luogo segnato come 'The Safe Place'.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 2
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "PROVA: Dimostra di aver imparato la lezione sull'acqua. Purifica dell'acqua per sopravvivere.",
+        "trigger": {
+          "type": "craftItem",
+          "value": "CONS_002"
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Continua il tuo viaggio verso Est.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 3
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "PROVA: Dimostra di saper quando non combattere. Fuggi con successo da un combattimento.",
+        "trigger": {
+          "type": "successfulFlee"
+        }
+      },
+      {
+        "stage": 5,
+        "objective": "La strada è ancora lunga. Prosegui verso il Safe Place.",
+        "trigger": {
+          "type": "mainStoryComplete",
+          "value": 6
+        }
+      },
+      {
+        "stage": 6,
+        "objective": "PROVA: Studia il tuo nemico. Scopri la debolezza tattica di un avversario.",
+        "trigger": {
+          "type": "tacticRevealed"
+        }
+      },
+      {
+        "stage": 7,
+        "objective": "Hai imparato le lezioni. Ora raggiungi il Safe Place e confrontati con la verità.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 149, "y": 146 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 1000
+    }
+  },
+  {
     "id": "find_jonas_talisman",
-    "title": "Il Talismano Perduto",
+    "title": "Il Messaggio del Fiume",
     "type": "SUB",
     "startText": "Il messaggio nella bottiglia parla di un talismano portafortuna perduto vicino a un vecchio mulino a vento. Il suo proprietario, Jonas, spera che possa portare fortuna a chi lo troverà.",
     "stages": [
@@ -20,16 +85,562 @@
           "type": "getItem",
           "value": "jonas_talisman"
         }
+      },
+      {
+        "stage": 3,
+        "objective": "Il talismano ha strane incisioni. Forse qualcuno al Crocevia sa cosa significano.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_talisman_knowledge"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 250,
+      "items": [
+        {
+          "itemId": "manual_advanced_trap",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "repair_water_pump",
+    "title": "La Pompa Silenziosa",
+    "type": "SUB",
+    "startText": "Questa pompa potrebbe diventare una fonte d'acqua affidabile per i miei viaggi in questa zona. Devo trovare i materiali necessari per tentare una riparazione.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Raccogli i materiali: 1× Guarnizione di Gomma, 2× Rottame Metallico",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "rubber_gasket", "quantity": 1 },
+            { "itemId": "scrap_metal", "quantity": 2 }
+          ]
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna alla Pompa Rotta per tentare la riparazione",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 45, "y": 85 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200
+    }
+  },
+  {
+    "id": "crossroads_investigation",
+    "title": "Indagine al Crocevia",
+    "type": "SUB",
+    "startText": "Marcus cerca un orologio rubato. Il ladro si nasconde nelle foreste a nord del Crocevia. Devo trovarlo e recuperare l'orologio.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Parla con Marcus all'Avamposto 'Il Crocevia' per maggiori dettagli",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_investigation_start"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Trova l'accampamento del predone nelle foreste a nord del Crocevia",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 95, "y": 50 }
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Recupera l'orologio da tasca",
+        "trigger": {
+          "type": "getItem",
+          "value": "old_watch"
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Riporta l'orologio a Marcus al Crocevia",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "marcus_investigation_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 300
+    }
+  },
+  {
+    "id": "lore_quest_library",
+    "title": "La Conoscenza Perduta",
+    "type": "SUB",
+    "startText": "Hai scoperto segreti del Progetto Eco nella biblioteca antica.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Esplora la Biblioteca e scopri il Progetto Eco",
+        "trigger": {
+          "type": "completeEvent",
+          "value": "unique_ancient_library"
+        }
       }
     ],
     "finalReward": {
       "xp": 150,
+      "statBoost": {
+        "stat": "int",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "lore_quest_laboratory",
+    "title": "L'Eco del Silenzio",
+    "type": "SUB",
+    "startText": "Hai scoperto segreti del Progetto Rinascita nel laboratorio abbandonato.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Esplora il Laboratorio e scopri il Progetto Rinascita",
+        "trigger": {
+          "type": "completeEvent",
+          "value": "unique_scientist_notes"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 150,
+      "statBoost": {
+        "stat": "int",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "deliver_last_message",
+    "title": "L'Ultimo Messaggero",
+    "type": "SUB",
+    "startText": "Hai trovato un pacco sigillato sul corpo di un messaggero caduto. È indirizzato a un 'avamposto a nord'. Onorare il suo ultimo compito potrebbe essere la cosa giusta da fare... e potrebbe fruttarti una ricompensa.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova l'avamposto a nord menzionato nell'ordine di consegna.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 41, "y": 39 }
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Parla con Marcus al Crocevia e consegnagli il pacco.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "marcus_dialogue_delivery"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 250,
       "items": [
         {
-          "itemId": "food_honey",
+          "itemId": "compass",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "decipher_drone_data",
+    "title": "L'Occhio nel Cielo",
+    "type": "SUB",
+    "startText": "Hai recuperato il chip di memoria da un drone di sorveglianza. Contiene dati criptati. Forse un terminale funzionante, come quello in una stazione di polizia, potrebbe leggerlo.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova una stazione di polizia con un terminale funzionante.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "police_terminal_interaction"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 300
+    }
+  },
+  {
+    "id": "find_elara",
+    "title": "Il Debito del Sopravvissuto",
+    "type": "SUB",
+    "startText": "Hai salvato un uomo di nome Liam. Sua figlia, Elara, si è nascosta nella scuola in rovina durante il crollo. Devi trovarla e portarla al sicuro al Crocevia.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Cerca Elara nella scuola in rovina della città.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 70, "y": 95 }
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Hai trovato Elara. Scortala all'Avamposto 'Il Crocevia'.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 41, "y": 39 }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 400,
+      "items": [
+        {
+          "itemId": "tool_repair_kit_advanced",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "find_family_treasure",
+    "title": "La Promessa del Bambino",
+    "type": "SUB",
+    "startText": "Un bambino che hai aiutato ti ha parlato di un tesoro di famiglia, nascosto sotto una 'torre di ferro dove le voci corrono veloci'. Devi trovare questo luogo.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova e investiga la Torre Radio.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "radio_tower_search_treasure"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200,
+      "items": [
+        {
+          "itemId": "silver_locket",
+          "quantity": 1
+        },
+        {
+          "itemId": "first_aid_kit",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "check_on_alenkos",
+    "title": "Il Peso della Scelta",
+    "type": "SUB",
+    "startText": "Hai aiutato la famiglia Alenko, diretta al Crocevia. Hai promesso di controllare come stavano se fossi passato di là.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Chiedi di loro a Marcus, al Crocevia.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "marcus_dialogue_alenkos"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 100
+    }
+  },
+  {
+    "id": "collect_world_echoes",
+    "title": "Echi del Mondo Perduto",
+    "type": "SUB",
+    "startText": "Anya, la tecnica del Crocevia, è alla ricerca di rari artefatti tecnologici e frammenti di conoscenza del mondo pre-catastrofe. Portarle questi 'Echi' potrebbe sbloccare ricompense uniche.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova Echi del mondo perduto e portali ad Anya al Crocevia. (Progresso tracciato tramite dialoghi)",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "anya_all_echoes_delivered"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "statBoost": {
+        "stat": "int",
+        "amount": 2
+      }
+    }
+  },
+  {
+    "id": "signs_of_ash",
+    "title": "I Segni della Cenere",
+    "type": "SUB",
+    "startText": "Hai trovato il diario di un 'Ascoltatore' che studiava gli Angeli della Cenere. Il testo è in codice, ma parla di altri due 'luoghi di potere' necessari per completare un 'rituale di schermatura'. Forse questi luoghi possono rivelare di più.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova gli altri due luoghi rituali menzionati nel diario. (0/2 trovati)",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "visited_all_ritual_sites"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Hai raccolto tutti gli indizi, ma il diario è ancora incomprensibile. Forse qualcuno di più saggio può aiutarti.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "hermit_deciphers_journal"
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "L'eremita ha bisogno di erbe rare per aiutarti. Raccogli 3× Erbe Curative e 5× Funghi Commestibili.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "MED_HEALING_HERBS", "quantity": 3 },
+            { "itemId": "edible_mushrooms", "quantity": 5 }
+          ]
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Porta le erbe all'eremita per la decifrazione finale.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "hermit_receives_herbs"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "items": [
+        {
+          "itemId": "manual_sonic_dissuader",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_boars",
+    "title": "Taglia: Flagello dei Cinghiali",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha chiesto di eliminare alcuni cinghiali aggressivi che minacciano i sentieri vicini al Crocevia. Sono pericolosi e imprevedibili.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 3 Cinghiali Aggressivi. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "aggressive_boar",
+            "quantity": 3
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 350,
+      "items": [
+        {
+          "itemId": "AMMO_12G",
+          "quantity": 15
+        },
+        {
+          "itemId": "animal_hide",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_wolves",
+    "title": "Taglia: Branco di Lupi",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha incaricato di eliminare un branco di lupi mutati che attaccano i viaggiatori nelle foreste circostanti.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 4 Lupi Mutati. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "mutated_wolf",
+            "quantity": 4
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 400,
+      "items": [
+        {
+          "itemId": "ammo_arrow",
+          "quantity": 20
+        },
+        {
+          "itemId": "animal_hide",
+          "quantity": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": "bounty_kill_raiders",
+    "title": "Taglia: Predoni Armati",
+    "type": "SUB",
+    "isBounty": true,
+    "startText": "Silas ti ha chiesto di eliminare alcuni predoni armati che terrorizzano le zone vicine. Sono pericolosi e ben equipaggiati.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Uccidi 5 Predoni Armati. (Progresso tracciato automaticamente)",
+        "trigger": {
+          "type": "enemyDefeated",
+          "value": {
+            "enemyId": "armed_raider",
+            "quantity": 5
+          }
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "items": [
+        {
+          "itemId": "AMMO_9MM",
+          "quantity": 30
+        },
+        {
+          "itemId": "first_aid_kit",
           "quantity": 2
         }
       ]
+    }
+  },
+  {
+    "id": "broken_melody",
+    "title": "La Melodia Spezzata",
+    "type": "SUB",
+    "startText": "Questo pianoforte è un'incredibile reliquia del mondo passato. I tasti sono intatti, ma il suono è terribilmente stonato. Con gli attrezzi giusti, forse potresti provare ad accordarlo e sentire di nuovo una vera melodia.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova Strumenti di Precisione per accordare il pianoforte.",
+        "trigger": {
+          "type": "getItem",
+          "value": "precision_tools"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna al Teatro in Rovina e accorda il pianoforte.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "piano_tuning_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 200,
+      "statBoost": {
+        "stat": "car",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "tower_of_light",
+    "title": "La Luce nella Torre",
+    "type": "SUB",
+    "startText": "La console di questa torre radio è in pezzi, ma il cablaggio principale e l'antenna sembrano intatti. Con componenti di alta qualità, potresti essere in grado di riattivare il segnale di emergenza. Potrebbe essere un modo per scoprire se c'è qualcun altro là fuori.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Recupera i componenti necessari: 3× Elettronica di Grado Militare, 1× Generatore Portatile.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "military_grade_electronics", "quantity": 3 },
+            { "itemId": "portable_generator", "quantity": 1 }
+          ]
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Torna a una torre radio per installare i componenti.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "radio_tower_repair_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 600,
+      "items": [
+        {
+          "itemId": "walkie_talkie",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "water_of_life",
+    "title": "L'Acqua della Vita",
+    "type": "SUB",
+    "startText": "Questo impianto di depurazione è in gran parte intatto, ma il generatore principale e il sistema di filtraggio sono offline. Riattivarlo potrebbe fornire acqua pulita a tutta questa parte della città.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova un Manuale di Manutenzione per impianti idraulici.",
+        "trigger": {
+          "type": "getItem",
+          "value": "hydraulic_manual"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Recupera 3 Filtri Industriali.",
+        "trigger": {
+          "type": "hasItems",
+          "value": [
+            { "itemId": "industrial_filter", "quantity": 3 }
+          ]
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Trova una Batteria per veicoli pesanti per riavviare il generatore.",
+        "trigger": {
+          "type": "getItem",
+          "value": "vehicle_battery"
+        }
+      },
+      {
+        "stage": 4,
+        "objective": "Torna all'impianto di depurazione per completare la riparazione.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "water_plant_repair_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 800
     }
   }
 ]

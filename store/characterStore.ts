@@ -112,6 +112,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     completedQuests: [],
     loreArchive: [],
     questKillCounts: {},
+    questFlags: {},
 
     // --- Actions ---
     /**
@@ -201,6 +202,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             completedQuests: [],
             loreArchive: [],
             questKillCounts: {},
+            questFlags: {},
         });
     },
 
@@ -1800,6 +1802,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             completedQuests: state.completedQuests,
             loreArchive: state.loreArchive,
             questKillCounts: state.questKillCounts,
+            questFlags: state.questFlags,
         };
     },
 
@@ -1829,7 +1832,52 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             completedQuests: json.completedQuests || [],
             loreArchive: json.loreArchive || [],
             questKillCounts: json.questKillCounts || {},
+            questFlags: json.questFlags || {},
         });
+    },
+
+    /**
+     * Sets a quest achievement flag.
+     *
+     * @description Tracks player achievements for Main Quest "Prove del Padre" system.
+     * Flags persist across save/load and allow quest stages to be skipped if already completed.
+     *
+     * @param {string} flagName - Name of the flag (e.g., 'hasCraftedWater')
+     * @param {boolean} value - Flag value (typically true)
+     *
+     * @remarks
+     * v1.9.0 - Main Quest Multi-Stage System:
+     * - hasCraftedWater: Player has purified water
+     * - hasSuccessfullyFled: Player has fled from combat
+     * - hasRevealedTactic: Player has analyzed enemy
+     *
+     * @example
+     * setQuestFlag('hasCraftedWater', true);
+     * // Quest stage 2 will auto-skip if this is true
+     */
+    setQuestFlag: (flagName: string, value: boolean) => {
+        set(state => ({
+            questFlags: {
+                ...state.questFlags,
+                [flagName]: value
+            }
+        }));
+    },
+
+    /**
+     * Gets a quest achievement flag value.
+     *
+     * @param {string} flagName - Name of the flag to check
+     * @returns {boolean} Flag value (false if not set)
+     *
+     * @example
+     * const hasWater = getQuestFlag('hasCraftedWater');
+     * if (hasWater) {
+     *   // Skip water purification quest stage
+     * }
+     */
+    getQuestFlag: (flagName: string): boolean => {
+        return get().questFlags[flagName] || false;
     },
 
     /**

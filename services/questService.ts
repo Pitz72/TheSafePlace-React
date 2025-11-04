@@ -148,7 +148,7 @@ export const questService = {
    */
   advanceQuest: (questId: string) => {
     const { quests } = useQuestDatabaseStore.getState();
-    const { activeQuests } = useCharacterStore.getState();
+    const { activeQuests, getQuestFlag } = useCharacterStore.getState();
     const { addJournalEntry } = useGameStore.getState();
 
     const quest = quests[questId];
@@ -162,19 +162,55 @@ export const questService = {
       return;
     }
 
-    // Increment stage
-    const newStage = activeQuests[questId] + 1;
+    let newStage = activeQuests[questId] + 1;
+    let skippedStages = 0;
+    
+    // Check if next stage is a "Prova" that was already completed
+    // If so, skip ahead to the next stage
+    while (newStage <= quest.stages.length) {
+      const stageData = quest.stages.find(s => s.stage === newStage);
+      if (!stageData) break;
+      
+      const trigger = stageData.trigger;
+      let shouldSkip = false;
+      
+      // Check if this is a "Prova" stage that was already completed
+      if (trigger.type === 'craftItem' && trigger.value === 'CONS_002') {
+        shouldSkip = getQuestFlag('hasCraftedWater');
+      } else if (trigger.type === 'successfulFlee') {
+        shouldSkip = getQuestFlag('hasSuccessfullyFled');
+      } else if (trigger.type === 'tacticRevealed') {
+        shouldSkip = getQuestFlag('hasRevealedTactic');
+      }
+      
+      if (shouldSkip) {
+        skippedStages++;
+        newStage++;
+        console.log(`[QUEST SERVICE] Skipping stage ${newStage - 1} (already completed)`);
+      } else {
+        break; // Stop skipping, this stage needs to be completed
+      }
+    }
+
     const newActiveQuests = { ...activeQuests, [questId]: newStage };
     useCharacterStore.setState({ activeQuests: newActiveQuests });
 
     // Add journal entry
-    addJournalEntry({
-      text: `[MISSIONE AGGIORNATA] ${quest.title}`,
-      type: JournalEntryType.XP_GAIN,
-      color: '#facc15' // yellow-400
-    });
+    if (skippedStages > 0) {
+      addJournalEntry({
+        text: `[MISSIONE AGGIORNATA] ${quest.title} - Ti rendi conto di aver già dimostrato questa abilità.`,
+        type: JournalEntryType.XP_GAIN,
+        color: '#38bdf8' // cyan-400 (different color for skip)
+      });
+    } else {
+      addJournalEntry({
+        text: `[MISSIONE AGGIORNATA] ${quest.title}`,
+        type: JournalEntryType.XP_GAIN,
+        color: '#facc15' // yellow-400
+      });
+    }
 
-    console.log(`[QUEST SERVICE] ✅ Advanced quest: ${questId} to stage ${newStage}`);
+    console.log(`[QUEST SERVICE] ✅ Advanced quest: ${questId} to stage ${newStage}${skippedStages > 0 ? ` (skipped ${skippedStages} stage(s))` : ''}`);
   },
 
   /**
@@ -548,6 +584,48 @@ export const questService = {
           if (killCount >= quantity) {
             triggerMet = true;
             console.log(`[QUEST SERVICE] enemyDefeated trigger met for ${questId} (${killCount}/${quantity} ${enemyId})`);
+          }
+          break;
+        }
+
+        case 'mainStoryComplete': {
+          const requiredStage = trigger.value as number;
+          const { mainStoryStage } = useGameStore.getState();
+          
+          if (mainStoryStage >= requiredStage) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] mainStoryComplete trigger met for ${questId} (stage ${mainStoryStage} >= ${requiredStage})`);
+          }
+          break;
+        }
+
+        case 'craftItem': {
+          const targetItemId = trigger.value as string;
+          // This trigger is checked when an item is crafted
+          // The lastAddedItemId parameter will contain the crafted item ID
+          if (lastAddedItemId === targetItemId) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] craftItem trigger met for ${questId} (${targetItemId})`);
+          }
+          break;
+        }
+
+        case 'successfulFlee': {
+          // This trigger has no value - it's checked via quest flag
+          const { getQuestFlag } = useCharacterStore.getState();
+          if (getQuestFlag('hasSuccessfullyFled')) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] successfulFlee trigger met for ${questId}`);
+          }
+          break;
+        }
+
+        case 'tacticRevealed': {
+          // This trigger has no value - it's checked via quest flag
+          const { getQuestFlag } = useCharacterStore.getState();
+          if (getQuestFlag('hasRevealedTactic')) {
+            triggerMet = true;
+            console.log(`[QUEST SERVICE] tacticRevealed trigger met for ${questId}`);
           }
           break;
         }

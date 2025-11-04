@@ -160,6 +160,15 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     audioManager.playSound('confirm');
                     addLog("SUCCESSO! " + combatState.enemy.tactics.description, '#38bdf8');
                     set(state => ({ activeCombat: { ...state.activeCombat!, revealedTactics: true, availableTacticalActions: combatState.enemy.tactics.actions }}));
+                    
+                    // v1.9.0: Set quest flag for Main Quest "Prove del Padre"
+                    useCharacterStore.getState().setQuestFlag('hasRevealedTactic', true);
+                    console.log('[COMBAT] Quest flag set: hasRevealedTactic = true');
+                    
+                    // Check quest triggers for tacticRevealed
+                    import('../services/questService').then(({ questService }) => {
+                        questService.checkQuestTriggers();
+                    });
                 } else {
                     audioManager.playSound('error');
                     addLog("FALLIMENTO. Non noti nulla di particolare.", '#ff8c00');
@@ -172,6 +181,16 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                 addLog(`Prova di Furtività (CD ${check.dc}): ${check.roll} + ${check.bonus} = ${check.total}.`);
                 if (check.success) {
                     addLog("Riesci a dileguarti!", '#60BF77');
+                    
+                    // v1.9.0: Set quest flag for Main Quest "Prove del Padre"
+                    useCharacterStore.getState().setQuestFlag('hasSuccessfullyFled', true);
+                    console.log('[COMBAT] Quest flag set: hasSuccessfullyFled = true');
+                    
+                    // Check quest triggers for successfulFlee
+                    import('../services/questService').then(({ questService }) => {
+                        questService.checkQuestTriggers();
+                    });
+                    
                     get().endCombat('flee');
                     return;
                 } else {

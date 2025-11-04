@@ -164,7 +164,11 @@ export type QuestTriggerType =
   | 'interactWithObject'
   | 'skillCheckSuccess'
   | 'talkToNPC'
-  | 'completeEvent';
+  | 'completeEvent'
+  | 'mainStoryComplete'
+  | 'craftItem'
+  | 'successfulFlee'
+  | 'tacticRevealed';
 
 /**
  * Defines a condition that must be met to advance a quest stage
@@ -652,6 +656,7 @@ export interface CharacterState {
     completedQuests: string[]; // Array for JSON serialization
     loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
     questKillCounts: Record<string, Record<string, number>>; // questId -> { enemyId -> count } (v1.8.3)
+    questFlags: Record<string, boolean>; // Quest achievement flags (v1.9.0)
 
     // Actions
     initCharacter: () => void;
@@ -689,6 +694,8 @@ export interface CharacterState {
     unlockTrophy: (trophyId: string) => void;
     addLoreEntry: (entryId: string) => void;
     upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => void;
+    setQuestFlag: (flagName: string, value: boolean) => void;
+    getQuestFlag: (flagName: string) => boolean;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
     toJSON: () => object;
