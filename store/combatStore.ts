@@ -71,7 +71,16 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                 log: log,
                 revealedTactics: false,
                 availableTacticalActions: [],
-                victory: false
+                victory: false,
+                biome: currentBiome, // v1.9.1 - Track biome for environmental actions
+                environmentalBonusActive: false,
+                environmentalBonusTurns: 0,
+                specialAmmoActive: null,
+                specialAmmoRounds: 0,
+                enemyBurning: false,
+                enemyBurningTurns: 0,
+                turnCount: 0,
+                abilityUsedThisCombat: false
             }
         });
         // FIX: Use GameState enum instead of string.
@@ -138,13 +147,57 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     const attackRoll = Math.floor(Math.random() * 20) + 1;
                     const attackBonus = getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for');
                     const totalAttack = attackRoll + attackBonus;
-                    addLog(`Tiro per colpire: ${attackRoll} + ${attackBonus} = ${totalAttack} vs CA ${combatState.enemy.ac}`, '#a3a3a3');
-                    if (totalAttack >= combatState.enemy.ac) {
+                    
+                    // v1.9.1 - Special ammo effects on AC
+                    let effectiveEnemyAC = combatState.enemy.ac;
+                    if (combatState.specialAmmoActive === 'piercing' && combatState.specialAmmoRounds! > 0) {
+                        effectiveEnemyAC = Math.max(10, effectiveEnemyAC - 3); // Ignore 3 AC (min 10)
+                        addLog(`[Munizioni Perforanti] Ignori parte dell'armatura nemica!`, '#f59e0b');
+                    }
+                    
+                    addLog(`Tiro per colpire: ${attackRoll} + ${attackBonus} = ${totalAttack} vs CA ${effectiveEnemyAC}`, '#a3a3a3');
+                    
+                    if (totalAttack >= effectiveEnemyAC) {
                         audioManager.playSound('hit_enemy');
                         const baseDamage = weaponDetails?.damage || 2;
-                        const damage = baseDamage + getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2;
+                        let damage = baseDamage + getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2;
+                        
+                        // v1.9.1 - Special ammo damage effects
+                        if (combatState.specialAmmoActive === 'hollow_point' && combatState.specialAmmoRounds! > 0) {
+                            const bonusDamage = Math.floor(Math.random() * 4) + 1; // +1d4
+                            damage += bonusDamage;
+                            addLog(`[Munizioni a Espansione] Danno extra: +${bonusDamage}!`, '#f59e0b');
+                        }
+                        
                         newEnemyHp.current = Math.max(0, newEnemyHp.current - damage);
                         addLog(`${getRandom(N.PLAYER_HIT_DESCRIPTIONS)} Infliggi ${damage} danni.`, '#60BF77');
+                        
+                        // v1.9.1 - Incendiary ammo sets enemy on fire
+                        if (combatState.specialAmmoActive === 'incendiary' && combatState.specialAmmoRounds! > 0) {
+                            set(state => ({
+                                activeCombat: {
+                                    ...state.activeCombat!,
+                                    enemyBurning: true,
+                                    enemyBurningTurns: 3
+                                }
+                            }));
+                            addLog(`[Munizioni Incendiarie] Il nemico prende fuoco!`, '#f59e0b');
+                        }
+                        
+                        // Decrement special ammo rounds
+                        if (combatState.specialAmmoActive && combatState.specialAmmoRounds! > 0) {
+                            const newRounds = combatState.specialAmmoRounds! - 1;
+                            set(state => ({
+                                activeCombat: {
+                                    ...state.activeCombat!,
+                                    specialAmmoRounds: newRounds,
+                                    specialAmmoActive: newRounds > 0 ? state.activeCombat!.specialAmmoActive : null
+                                }
+                            }));
+                            if (newRounds === 0) {
+                                addLog(`Munizioni speciali esaurite.`, '#a3a3a3');
+                            }
+                        }
                     } else {
                         addLog(getRandom(N.PLAYER_MISS_DESCRIPTIONS), '#ff8c00');
                     }
@@ -228,6 +281,85 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                         }
                     });
                 }
+                break;
+            }
+            
+            case 'environmental': {
+                // v1.9.1 - Environmental combat actions
+                if (action.actionId === 'hide_in_trees') {
+                    // Forest: Hide in trees (Furtività DC 13)
+                    addLog("Tenti di nasconderti tra il fitto fogliame...");
+                    const check = performSkillCheck('furtivita', 13);
+                    addLog(`Prova di Furtività (CD ${check.dc}): ${check.roll} + ${check.bonus} = ${check.total}.`);
+                    
+                    if (check.success) {
+                        audioManager.playSound('confirm');
+                        addLog("SUCCESSO! Scompari tra gli alberi. Il nemico ti perde di vista.", '#60BF77');
+                        // Set environmental bonus: next enemy attack will miss
+                        set(state => ({
+                            activeCombat: {
+                                ...state.activeCombat!,
+                                environmentalBonusActive: true,
+                                environmentalBonusTurns: 1
+                            }
+                        }));
+                    } else {
+                        audioManager.playSound('error');
+                        addLog("FALLIMENTO! Fai troppo rumore. Il nemico ti individua!", '#ff8c00');
+                    }
+                } else if (action.actionId === 'seek_cover') {
+                    // City/Village: Seek cover (Percezione DC 12)
+                    addLog("Cerchi rapidamente una copertura...");
+                    const check = performSkillCheck('percezione', 12);
+                    addLog(`Prova di Percezione (CD ${check.dc}): ${check.roll} + ${check.bonus} = ${check.total}.`);
+                    
+                    if (check.success) {
+                        audioManager.playSound('confirm');
+                        addLog("SUCCESSO! Ti ripari dietro un muro crollato. (+4 AC per 2 turni)", '#60BF77');
+                        // Set environmental bonus: +4 AC for 2 turns
+                        set(state => ({
+                            activeCombat: {
+                                ...state.activeCombat!,
+                                environmentalBonusActive: true,
+                                environmentalBonusTurns: 2
+                            }
+                        }));
+                    } else {
+                        audioManager.playSound('error');
+                        addLog("FALLIMENTO! Non trovi una copertura adeguata in tempo.", '#ff8c00');
+                    }
+                }
+                break;
+            }
+            
+            case 'load_special_ammo': {
+                // v1.9.1 - Load special ammunition
+                const ammoItemIds: Record<string, string> = {
+                    'piercing': 'ammo_piercing',
+                    'incendiary': 'ammo_incendiary',
+                    'hollow_point': 'ammo_hollow_point'
+                };
+                
+                const ammoItemId = ammoItemIds[action.ammoType];
+                const hasAmmo = inventory.some(i => i.itemId === ammoItemId && i.quantity > 0);
+                
+                if (!hasAmmo) {
+                    addLog(`Non hai munizioni ${action.ammoType} disponibili!`, '#ff8c00');
+                    audioManager.playSound('error');
+                    break;
+                }
+                
+                // Consume ammo and activate effect
+                removeItem(ammoItemId, 3); // Use 3 rounds
+                addLog(`Carichi munizioni ${action.ammoType}. (3 colpi disponibili)`, '#38bdf8');
+                
+                set(state => ({
+                    activeCombat: {
+                        ...state.activeCombat!,
+                        specialAmmoActive: action.ammoType,
+                        specialAmmoRounds: 3
+                    }
+                }));
                 break;
             }
         }
@@ -331,24 +463,148 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                 let enemyLog = [...currentCombatState.log];
                 const addEnemyLog = (text: string, color?: string) => enemyLog.push({ text, color });
                 
-                addEnemyLog(getRandom(N.ENEMY_ATTACK_DESCRIPTIONS).replace('{enemy}', enemy.name));
-                const enemyAttackRoll = Math.floor(Math.random() * 20) + 1;
-                const totalEnemyAttack = enemyAttackRoll + enemy.attack.bonus;
-                const playerAC = getPlayerAC();
-                addEnemyLog(`Tiro per colpire del nemico: ${enemyAttackRoll} + ${enemy.attack.bonus} = ${totalEnemyAttack} vs CA ${playerAC}`, '#a3a3a3');
-                
-                if (totalEnemyAttack >= playerAC) {
-                    audioManager.playSound('hit_player');
-                    damageEquippedItem('armor', 1);
-                    const damage = enemy.attack.damage + Math.floor(Math.random() * 3) - 1;
-                    takeDamage(damage, 'COMBAT');
-                    addEnemyLog(`${getRandom(N.ENEMY_HIT_DESCRIPTIONS)} Subisci ${damage} danni.`, '#ef4444');
-                } else {
-                    addEnemyLog(getRandom(N.ENEMY_MISS_DESCRIPTIONS), '#60BF77');
+                // v1.9.1 - Apply burning damage at start of enemy turn
+                if (currentCombatState.enemyBurning && currentCombatState.enemyBurningTurns! > 0) {
+                    const burnDamage = 3;
+                    newEnemyHp.current = Math.max(0, newEnemyHp.current - burnDamage);
+                    addEnemyLog(`[FUOCO] Il nemico brucia! Subisce ${burnDamage} danni.`, '#f59e0b');
+                    
+                    // Decrement burning turns
+                    const newBurningTurns = currentCombatState.enemyBurningTurns! - 1;
+                    if (newBurningTurns === 0) {
+                        addEnemyLog(`Le fiamme si spengono.`, '#a3a3a3');
+                    }
+                    
+                    // Update burning status
+                    set(state => ({
+                        activeCombat: {
+                            ...state.activeCombat!,
+                            enemyHp: newEnemyHp,
+                            enemyBurning: newBurningTurns > 0,
+                            enemyBurningTurns: newBurningTurns
+                        }
+                    }));
+                    
+                    // Check if enemy died from burning
+                    if (newEnemyHp.current <= 0) {
+                        addEnemyLog(`Il nemico cade, consumato dalle fiamme!`, '#f59e0b');
+                        set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, victory: true } }));
+                        return;
+                    }
                 }
+                
+                // v1.9.1 - Increment turn counter
+                const currentTurn = (currentCombatState.turnCount || 0) + 1;
+                
+                // v1.9.1 - Elite enemy special abilities
+                if (enemy.isElite && enemy.specialAbility && !currentCombatState.abilityUsedThisCombat) {
+                    const ability = enemy.specialAbility;
+                    let shouldTrigger = false;
+                    
+                    // Check trigger condition
+                    if (ability.trigger === 'turn_2' && currentTurn === 2) {
+                        shouldTrigger = Math.random() < (ability.probability || 1.0);
+                    }
+                    
+                    if (shouldTrigger) {
+                        if (ability.id === 'pack_call') {
+                            // Capobranco: Richiamo del Branco
+                            addEnemyLog(`[ABILITÀ ELITE] ${enemy.name} ulula! Un altro lupo risponde alla chiamata!`, '#f59e0b');
+                            // Start a new combat with a regular wolf (this would need more complex logic)
+                            // For now, just heal the alpha wolf to simulate reinforcement
+                            newEnemyHp.current = Math.min(newEnemyHp.max, newEnemyHp.current + 15);
+                            addEnemyLog(`Il Capobranco si rinvigorisce con l'arrivo del rinforzo! (+15 HP)`, '#f59e0b');
+                            
+                            set(state => ({
+                                activeCombat: {
+                                    ...state.activeCombat!,
+                                    enemyHp: newEnemyHp,
+                                    abilityUsedThisCombat: true,
+                                    turnCount: currentTurn
+                                }
+                            }));
+                        }
+                    }
+                }
+                
+                // Update turn count
+                set(state => ({
+                    activeCombat: {
+                        ...state.activeCombat!,
+                        turnCount: currentTurn
+                    }
+                }));
+                
+                // v1.9.1 - Check environmental bonus
+                const { environmentalBonusActive, environmentalBonusTurns, biome } = currentCombatState;
+                
+                if (environmentalBonusActive && environmentalBonusTurns! > 0) {
+                    if (biome === 'Foresta' || biome === 'F') {
+                        // Hidden in trees - enemy attack auto-misses
+                        addEnemyLog(getRandom(N.ENEMY_ATTACK_DESCRIPTIONS).replace('{enemy}', enemy.name));
+                        addEnemyLog("Il nemico attacca a vuoto! Sei ben nascosto tra il fogliame.", '#60BF77');
+                        
+                        // Deactivate bonus after use
+                        set(state => ({
+                            activeCombat: {
+                                ...state.activeCombat!,
+                                log: enemyLog,
+                                playerTurn: true,
+                                environmentalBonusActive: false,
+                                environmentalBonusTurns: 0
+                            }
+                        }));
+                    } else {
+                        // In cover - bonus AC
+                        addEnemyLog(getRandom(N.ENEMY_ATTACK_DESCRIPTIONS).replace('{enemy}', enemy.name));
+                        const enemyAttackRoll = Math.floor(Math.random() * 20) + 1;
+                        const totalEnemyAttack = enemyAttackRoll + enemy.attack.bonus;
+                        const playerAC = getPlayerAC() + 4; // +4 AC from cover
+                        addEnemyLog(`Tiro per colpire del nemico: ${enemyAttackRoll} + ${enemy.attack.bonus} = ${totalEnemyAttack} vs CA ${playerAC} (+4 copertura)`, '#a3a3a3');
+                        
+                        if (totalEnemyAttack >= playerAC) {
+                            audioManager.playSound('hit_player');
+                            damageEquippedItem('armor', 1);
+                            const damage = enemy.attack.damage + Math.floor(Math.random() * 3) - 1;
+                            takeDamage(damage, 'COMBAT');
+                            addEnemyLog(`${getRandom(N.ENEMY_HIT_DESCRIPTIONS)} Subisci ${damage} danni.`, '#ef4444');
+                        } else {
+                            addEnemyLog("L'attacco colpisce la copertura! Sei al sicuro.", '#60BF77');
+                        }
+                        
+                        // Decrement bonus turns
+                        const newBonusTurns = environmentalBonusTurns! - 1;
+                        set(state => ({
+                            activeCombat: {
+                                ...state.activeCombat!,
+                                log: enemyLog,
+                                playerTurn: true,
+                                environmentalBonusActive: newBonusTurns > 0,
+                                environmentalBonusTurns: newBonusTurns
+                            }
+                        }));
+                    }
+                } else {
+                    // Normal enemy attack (no environmental bonus)
+                    addEnemyLog(getRandom(N.ENEMY_ATTACK_DESCRIPTIONS).replace('{enemy}', enemy.name));
+                    const enemyAttackRoll = Math.floor(Math.random() * 20) + 1;
+                    const totalEnemyAttack = enemyAttackRoll + enemy.attack.bonus;
+                    const playerAC = getPlayerAC();
+                    addEnemyLog(`Tiro per colpire del nemico: ${enemyAttackRoll} + ${enemy.attack.bonus} = ${totalEnemyAttack} vs CA ${playerAC}`, '#a3a3a3');
+                    
+                    if (totalEnemyAttack >= playerAC) {
+                        audioManager.playSound('hit_player');
+                        damageEquippedItem('armor', 1);
+                        const damage = enemy.attack.damage + Math.floor(Math.random() * 3) - 1;
+                        takeDamage(damage, 'COMBAT');
+                        addEnemyLog(`${getRandom(N.ENEMY_HIT_DESCRIPTIONS)} Subisci ${damage} danni.`, '#ef4444');
+                    } else {
+                        addEnemyLog(getRandom(N.ENEMY_MISS_DESCRIPTIONS), '#60BF77');
+                    }
 
-                if (useCharacterStore.getState().hp.current > 0) {
-                     set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, playerTurn: true } }));
+                    if (useCharacterStore.getState().hp.current > 0) {
+                         set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, playerTurn: true } }));
+                    }
                 }
             }, 1500);
         }

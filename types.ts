@@ -425,6 +425,14 @@ export interface Enemy {
   };
   xp: number;
   biomes: string[];
+  isElite?: boolean; // v1.9.1 - Elite enemies with special abilities
+  specialAbility?: {
+    id: string;
+    name: string;
+    description: string;
+    trigger: 'turn_2' | 'player_miss' | 'low_hp';
+    probability?: number;
+  };
   tactics: {
     revealDc: number;
     description: string;
@@ -451,6 +459,15 @@ export interface CombatState {
     availableTacticalActions: EnemyTactic[];
     debuffs?: CombatDebuff[];
     victory?: boolean;
+    biome?: string; // v1.9.1 - Current biome for environmental actions
+    environmentalBonusActive?: boolean; // v1.9.1 - Cover/hide bonus active
+    environmentalBonusTurns?: number; // v1.9.1 - Turns remaining for bonus
+    specialAmmoActive?: 'piercing' | 'incendiary' | 'hollow_point' | null; // v1.9.1 - Active special ammo type
+    specialAmmoRounds?: number; // v1.9.1 - Rounds remaining with special ammo
+    enemyBurning?: boolean; // v1.9.1 - Enemy on fire (incendiary ammo)
+    enemyBurningTurns?: number; // v1.9.1 - Turns remaining for burning
+    turnCount?: number; // v1.9.1 - Combat turn counter for Elite abilities
+    abilityUsedThisCombat?: boolean; // v1.9.1 - Track if Elite ability already used
 }
 
 
@@ -462,7 +479,9 @@ export interface PlayerStatus {
 export type PlayerCombatActionPayload =
   | { type: 'attack' | 'analyze' | 'flee' }
   | { type: 'tactic', tacticId: string }
-  | { type: 'use_item', itemId: string };
+  | { type: 'use_item', itemId: string }
+  | { type: 'environmental', actionId: 'hide_in_trees' | 'seek_cover' }
+  | { type: 'load_special_ammo', ammoType: 'piercing' | 'incendiary' | 'hollow_point' };
 
 export type DeathCause = 'COMBAT' | 'STARVATION' | 'DEHYDRATION' | 'SICKNESS' | 'POISON' | 'ENVIRONMENT' | 'UNKNOWN';
 

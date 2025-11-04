@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.0)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.1)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,7 +84,59 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.0** - Le Prove del Padre
+**Versione Corrente: v1.9.1** - Tactical Combat
+
+Con la versione 1.9.1, il gioco introduce il **sistema di combattimento tattico** - azioni ambientali contestuali, munizioni speciali con effetti unici, e nemici Elite con abilità speciali che trasformano gli scontri in battaglie strategiche.
+
+#### Novità v1.9.1 (4 Novembre 2025) - **TACTICAL COMBAT**
+
+Questa versione espande massivamente il sistema di combattimento con meccaniche tattiche avanzate.
+
+**AZIONI AMBIENTALI CONTESTUALI:**
+- **Foresta**: [Nasconditi tra gli Alberi] - Furtività DC 13, prossimo attacco nemico auto-miss
+- **Città/Villaggio**: [Cerca Copertura] - Percezione DC 12, +4 AC per 2 turni
+- **Pianura**: Nessuna azione (terreno puro, identità strategica unica)
+
+**SISTEMA MUNIZIONI SPECIALI:**
+- **Perforanti**: Ignorano 3 punti AC nemico (vs nemici corazzati)
+- **Incendiarie**: Applicano status "In Fiamme" (3 HP/turno × 3 turni)
+- **Hollow Point**: +1d4 danno bonus (massimizzano danno)
+- Caricamento: 3 munizioni = 3 colpi speciali
+
+**2 NEMICI ELITE (+14%):**
+- **Capobranco Lupi Mutati**: HP 55, AC 14, XP 200
+  - Abilità: Richiamo Branco (turno 2, 50% prob, +15 HP)
+  - Counterplay: Spara in Aria (Intimidire DC 15)
+- **Capo Predone Veterano**: HP 50, AC 16, XP 250
+  - Abilità: Contrattacco (su player miss, 30% prob, 75% danno)
+  - Counterplay: Finta Elaborata (Inganno DC 16)
+
+**BIOME INTEGRATION:**
+- Combat tracking bioma corrente
+- Azioni disponibili basate su ambiente
+- Bonus ambientali (hide/cover)
+- Decremento automatico turni
+
+**BURNING STATUS EFFECT:**
+- Applicato da munizioni incendiarie
+- 3 HP danno/turno per 3 turni
+- Check morte da fuoco
+- Visual feedback in combat log
+
+**IMPATTO:**
+- Combattimento tattico vs ripetitivo
+- Ambiente risorsa strategica
+- Preparazione premiata (munizioni)
+- Boss memorabili e sfidanti
+- Skill Furtività/Percezione valorizzate
+
+**Risultato:** Il combattimento evolve da "meccanica isolata" a "sistema tattico integrato" dove ambiente, equipaggiamento e preparazione determinano vittoria o sconfitta.
+
+---
+
+#### Novità v1.9.0 (4 Novembre 2025) - **LE PROVE DEL PADRE**
+
+Con la versione 1.9.0, il gioco introduce il **sistema Main Quest multi-stage** - la quest principale diventa un viaggio strutturato con "Prove" attive che valorizzano le lezioni del padre.
 
 Con la versione 1.9.0, il gioco introduce il **sistema Main Quest multi-stage** - la quest principale diventa un viaggio strutturato con "Prove" attive che valorizzano le lezioni del padre.
 

@@ -321,4 +321,67 @@
       ]
     }
   }
+  ,
+  {
+    "id": "alpha_wolf_pack_leader",
+    "name": "Capobranco dei Lupi Mutati",
+    "description": "Il leader di un branco di lupi mutati. Più grande, più forte, e molto più intelligente dei suoi simili. Le sue cicatrici raccontano di innumerevoli battaglie vinte.",
+    "type": "beast",
+    "hp": 55,
+    "ac": 14,
+    "attack": { "damage": 10, "bonus": 4 },
+    "xp": 200,
+    "biomes": ["Foresta"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "pack_call",
+      "name": "Richiamo del Branco",
+      "description": "Al secondo turno, ha 50% probabilità di chiamare un alleato lupo.",
+      "trigger": "turn_2",
+      "probability": 0.5
+    },
+    "tactics": {
+      "revealDc": 16,
+      "description": "Il suo ululato è il suo punto debole. Un suono forte e improvviso potrebbe disorientarlo e impedirgli di chiamare il branco.",
+      "actions": [
+        {
+          "id": "tactic_loud_noise",
+          "name": "[Tattico] Spara un Colpo in Aria",
+          "description": "Usa un'arma da fuoco per creare un rumore assordante che impedisce al Capobranco di ululare.",
+          "skillCheck": { "skill": "intimidire", "dc": 15 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "veteran_raider_chief",
+    "name": "Capo Predone Veterano",
+    "description": "Un predone esperto e spietato, veterano di innumerevoli scontri. La sua armatura è coperta di trofei presi ai nemici caduti. Combatte con un machete affilato e una sicurezza letale.",
+    "type": "humanoid",
+    "hp": 50,
+    "ac": 16,
+    "attack": { "damage": 11, "bonus": 4 },
+    "xp": 250,
+    "biomes": ["Città", "Foresta"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "counterattack",
+      "name": "Contrattacco",
+      "description": "Se il player manca un attacco, 30% probabilità di attacco di opportunità.",
+      "trigger": "player_miss",
+      "probability": 0.3
+    },
+    "tactics": {
+      "revealDc": 17,
+      "description": "La sua arroganza è il suo punto debole. Un inganno ben eseguito potrebbe indurlo a un attacco avventato, annullando il suo contrattacco e riducendo la sua difesa.",
+      "actions": [
+        {
+          "id": "tactic_feint_chief",
+          "name": "[Tattico] Finta Elaborata",
+          "description": "Fingi un attacco per indurlo a scoprirsi, annullando il suo contrattacco per questo turno.",
+          "skillCheck": { "skill": "inganno", "dc": 16 }
+        }
+      ]
+    }
+  }
 ]
