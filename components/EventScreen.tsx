@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { useCharacterStore } from '../store/characterStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
@@ -13,6 +13,8 @@ const EventScreen: React.FC = () => {
     const { activeEvent, resolveEventChoice, eventResolutionText, dismissEventResolution } = useEventStore();
     const inventory = useCharacterStore(state => state.inventory);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const descriptionBoxRef = useRef<HTMLDivElement>(null);
+    const resolutionBoxRef = useRef<HTMLDivElement>(null);
 
     const choiceStatus = useMemo(() => {
         if (!activeEvent) return [];
@@ -57,11 +59,35 @@ const EventScreen: React.FC = () => {
         }
     }, [activeEvent, selectedIndex, resolveEventChoice, choiceStatus, eventResolutionText, dismissEventResolution]);
     
-    const handlerMap = useMemo(() => ({
-        'w': () => handleNavigate(-1), 'ArrowUp': () => handleNavigate(-1),
-        's': () => handleNavigate(1), 'ArrowDown': () => handleNavigate(1),
-        'Enter': handleConfirm,
-    }), [handleNavigate, handleConfirm]);
+    const handleScrollDescription = useCallback((direction: 'up' | 'down') => {
+        const box = eventResolutionText ? resolutionBoxRef.current : descriptionBoxRef.current;
+        if (box) {
+            box.scrollBy({ top: direction === 'down' ? 100 : -100, behavior: 'smooth' });
+            audioManager.playSound('navigate');
+        }
+    }, [eventResolutionText]);
+
+    const handlerMap = useMemo(() => {
+        if (eventResolutionText) {
+            // In resolution screen: W/S scroll, Enter confirm
+            return {
+                'w': () => handleScrollDescription('up'),
+                'ArrowUp': () => handleScrollDescription('up'),
+                's': () => handleScrollDescription('down'),
+                'ArrowDown': () => handleScrollDescription('down'),
+                'Enter': handleConfirm,
+            };
+        } else {
+            // In choice screen: W/S navigate choices, Enter confirm
+            return {
+                'w': () => handleNavigate(-1),
+                'ArrowUp': () => handleNavigate(-1),
+                's': () => handleNavigate(1),
+                'ArrowDown': () => handleNavigate(1),
+                'Enter': handleConfirm,
+            };
+        }
+    }, [handleNavigate, handleConfirm, handleScrollDescription, eventResolutionText]);
 
     useKeyboardInput(handlerMap);
 
@@ -77,15 +103,16 @@ const EventScreen: React.FC = () => {
                         ═══ ESITO: {activeEvent.title} ═══
                     </h1>
                     
-                    <div 
-                        className="w-full h-64 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
+                    <div
+                        ref={resolutionBoxRef}
+                        className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                         style={{ scrollbarWidth: 'none' }}
                     >
                         <pre className="whitespace-pre-wrap leading-relaxed">{eventResolutionText.replace(/\\n/g, '\n')}</pre>
                     </div>
 
                     <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4 animate-pulse">
-                        [INVIO] Continua
+                        [W/S / ↑↓] Scorri | [INVIO] Continua
                     </div>
                 </div>
             </div>
@@ -99,8 +126,9 @@ const EventScreen: React.FC = () => {
                     ═══ {activeEvent.title} ═══
                 </h1>
                 
-                <div 
-                    className="w-full h-64 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
+                <div
+                    ref={descriptionBoxRef}
+                    className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                     style={{ scrollbarWidth: 'none' }}
                 >
                     <pre className="whitespace-pre-wrap leading-relaxed">{activeEvent.description.replace(/\\n/g, '\n')}</pre>

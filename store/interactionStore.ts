@@ -380,10 +380,10 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * Used for special location tiles (N, L, B) to trigger guaranteed unique events.
      * @param {string} eventId - The ID of the unique event to start.
      */
-    startUniqueEvent: (eventId: string) => {
+    startUniqueEvent: async (eventId: string) => {
         const { setGameState, addJournalEntry } = useGameStore.getState();
-        const { useEventStore } = require('./eventStore');
-        const { useEventDatabaseStore } = require('../data/eventDatabase');
+        const { useEventStore } = await import('./eventStore');
+        const { useEventDatabaseStore } = await import('../data/eventDatabase');
         
         // Get all events from database (unique events are in biomeEvents and loreEvents)
         const { loreEvents, biomeEvents } = useEventDatabaseStore.getState();

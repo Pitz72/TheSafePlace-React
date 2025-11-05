@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.5)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.6)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,16 +84,43 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.5** - Echoes of the Donors
+**Versione Corrente: v1.9.6** - Critical Bugfixes
 
 🎉 **MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (95%)**
 
-Con la versione 1.9.5, il progetto raggiunge il suo completamento sostanziale. Tutti i sistemi core sono implementati, la narrativa è completa, e il gioco offre un'esperienza ricca e profonda dall'inizio alla fine.
+Con la versione 1.9.6, il progetto raggiunge stabilità completa dopo il completamento contenuti della v1.9.5. Tutti i bug critici sono stati risolti e il gioco è ora completamente giocabile senza crash.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT)
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Polish finale e testing approfondito
+
+#### Novità v1.9.6 (5 Novembre 2025) - **CRITICAL BUGFIXES**
+
+Patch critica che risolve bug game-breaking emersi durante i test della v1.9.5.
+
+**BUG FIX CRITICI:**
+- ✅ **RISOLTO CRASH**: Errore "require is not defined" su eventi speciali (marker viola)
+  - Fix: Sostituito require() con import() async in interactionStore
+  - Impatto: Eventi speciali ora funzionano senza crash
+  
+- ✅ **TITOLI CORRETTI**: Duplicazione "Echi della Memoria" rimossa
+  - Fix: Rimossi prefissi duplicati da mainStory.json
+  - Impatto: Titoli ora formattati correttamente
+  
+- ✅ **UX MIGLIORATA**: Box di testo eventi ingranditi (+50%)
+  - Fix: h-64 → h-96 + scroll con W/S
+  - Impatto: Tutti i testi eventi completamente leggibili
+
+**IMPATTO:**
+- Gioco ora stabile e completamente giocabile
+- Zero crash su eventi speciali
+- Esperienza utente significativamente migliorata
+- Tutti i contenuti v1.9.5 accessibili senza problemi
+
+**Risultato:** Patch essenziale che rende la v1.9.5 completamente stabile e giocabile.
+
+---
 
 #### Novità v1.9.5 (5 Novembre 2025) - **ECHOES OF THE DONORS**
 
