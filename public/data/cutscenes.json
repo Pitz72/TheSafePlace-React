@@ -251,5 +251,62 @@
         "nextPage": null
       }
     ]
+  },
+  {
+    "id": "CS_THE_WEIGHT_OF_CHOICE",
+    "title": "Il Peso della Scelta",
+    "pages": [
+      {
+        "text": "Prosegui il cammino. I tuoi passi sono fermi, decisi. Hai fatto ciò che dovevi fare. La scelta giusta. La scelta di un sopravvissuto.\n\nIl vento soffia alle tue spalle, portando con sé suoni lontani. Grida? Pianti? Non importa. Sono già lontani. Sono già passato. Sei vivo. Questo è tutto ciò che conta.\n\nO almeno, è quello che continui a ripeterti.",
+        "nextPage": 1
+      },
+      {
+        "text": "Quella notte, mentre il fuoco scoppietta e le stelle ti osservano in silenzio, la voce di tuo padre risuona nella tua testa.\n\n\"La pietà è un lusso che non puoi permetterti, Ultimo. La compassione ti ucciderà più velocemente della fame.\"\n\nAveva ragione. Lo sai. Eppure, c'è un sapore amaro in bocca che l'acqua non lava via. Un peso nel petto che non era lì prima.\n\nTi chiedi se anche lui, dopo la sua Scelta, dopo aver scelto te invece di lei, si sia sentito così.\n\nNon un vincitore. Solo... più solo.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_CITY_OF_GHOSTS",
+    "title": "La Città dei Fantasmi",
+    "pages": [
+      {
+        "text": "L'aria cambia.\n\nL'odore di terra e polvere, tuo compagno costante, lascia il posto a qualcosa di diverso. Cemento freddo. Ruggine. Un decadimento su scala monumentale, come se la morte stessa avesse un odore quando è applicata a un'intera civiltà.\n\nAlzi lo sguardo.\n\nScheletri di grattacieli graffiano il cielo grigio come dita scheletriche che si protendono verso un dio sordo. Strade, un tempo arterie pulsanti di vita, sono ora canyon silenziosi dove il vento ulula come un milione di fantasmi.\n\nNon hai mai visto niente di simile.",
+        "nextPage": 1
+      },
+      {
+        "text": "Le lezioni di tuo padre ti hanno preparato ai pericoli della natura selvaggia, ai predoni solitari, alle bestie mutate. Ma questo... questo è diverso.\n\nQuesto è il cimitero di un mondo intero. Ogni finestra rotta è un occhio spento. Ogni insegna sbiadita è un epitaffio di sogni morti. E tu sei solo un insetto che si muove tra lapidi gigantesche.\n\nLa promessa di risorse preziose, nascoste tra questi giganti caduti, è forte.\n\nMa la sensazione di essere schiacciato dal peso di un milione di storie finite è ancora più forte.\n\nInhali profondamente. L'aria sa di fine. E tu sei vivo. Per ora.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_STRANGERS_REFLECTION",
+    "title": "Il Riflesso di uno Sconosciuto",
+    "pages": [
+      {
+        "text": "Ti fermi per bere da una pozzanghera di acqua piovana, raccolta in un pezzo di lamiera piegata. L'acqua è torbida ma relativamente pulita. Abbassi la testa per bere.\n\nPer un istante, prima che le tue labbra increspino la superficie, vedi il tuo riflesso.\n\nE ti blocchi.\n\nIl volto che ti fissa non è quello del ragazzo che ha lasciato il rifugio di Elian. Gli occhi sono più infossati, più attenti, come quelli di un predatore che ha imparato che ogni ombra può nascondere la morte. C'è una cicatrice sulla guancia che prima non c'era. La pelle è bruciata dal sole e tirata dalla fame. Le labbra sono screpolate. Non c'è più morbidezza. Solo angoli duri, scolpiti dal dolore e dalla necessità.",
+        "nextPage": 1
+      },
+      {
+        "text": "Chi è questo sconosciuto?\n\nÈ la creatura che Elian ha forgiato con anni di addestramento brutale? O è qualcosa di nuovo, nato da questo viaggio solitario, temprato dalla solitudine e dalle scelte impossibili?\n\nLa domanda ti inquieta.\n\nDistogli lo sguardo, increspando l'acqua con le dita. Il riflesso si frantuma in mille pezzi, come tutto il resto.\n\nBevi. L'acqua è fredda e sa di metallo.\n\nNon ti piace la risposta che vedevi in quegli occhi. O forse, ti spaventa scoprire che quella risposta... ti piace.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_THE_BRINK",
+    "title": "Sull'Orlo",
+    "pages": [
+      {
+        "text": "Cadi in ginocchio.\n\nIl mondo si inclina pericolosamente. La vista si oscura ai bordi, come se qualcuno stesse spegnendo lentamente le luci. Ogni respiro è una scheggia di vetro nei polmoni. Il sapore metallico del sangue ti riempie la bocca, caldo e denso.\n\nLe tue mani affondano nella terra. È così che finisce? Qui? Dopo tutta questa strada, dopo tutto quello che hai sopportato?\n\nNo. No, non può essere questo.\n\nMa il tuo corpo non ti ascolta. Le forze ti abbandonano. Il buio avanza.",
+        "nextPage": 1
+      },
+      {
+        "text": "E poi, nel silenzio che precede la fine, la senti.\n\n\"Sopravvivi.\"\n\nLa voce di tuo padre. Non è un incoraggiamento. Non è conforto. È un ordine. Secco. Implacabile. Come sempre.\n\n\"Sopravvivi, Ultimo. Non per me. Non per lei. Per te. Perché questa è l'unica cosa che conta. L'unica cosa che hai sempre avuto.\"\n\nQualcosa si accende dentro di te. Non è speranza. Non è coraggio.\n\nÈ rabbia.\n\nPura, ostinata, feroce rabbia.\n\nCon uno sforzo che ti lacera i muscoli e ti strappa un urlo silenzioso dalla gola, ti rimetti in piedi. Barcollando. Sanguinante. Ma in piedi.\n\nNon morirai qui. Non gliela darai vinta. Non a questo mondo spietato. Non a lui. Non a te stesso.\n\nSei Ultimo. E finché respiri, combatti.",
+        "consequences": [{ "type": "setFlag", "payload": "THE_BRINK_SURVIVED" }],
+        "nextPage": null
+      }
+    ]
   }
 ]

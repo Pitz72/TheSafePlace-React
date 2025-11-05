@@ -40,317 +40,103 @@
             ]
           },
           {
-            "id": "unique_scientist_notes",
-            "title": "Il Laboratorio Dimenticato",
-            "description": "Entri in un laboratorio abbandonato. Le apparecchiature sono coperte di polvere, ma alcune luci di emergenza lampeggiano ancora debolmente. Su una scrivania trovi un diario di ricerca aperto, con l'ultima pagina macchiata di sangue. Le note parlano di 'Progetto Rinascita' e di esperimenti su 'campioni contaminati'.",
+            "id": "unique_find_elara",
+            "title": "La Bambina Nascosta",
+            "description": "Entri nella scuola in rovina. Il silenzio è rotto solo dal gocciolio dell'acqua. Chiami a bassa voce il nome 'Elara'. Dopo un momento di esitazione, una ragazzina spaurita emerge da dietro una cattedra rovesciata. 'Papà... papà ti ha mandato?' chiede con voce tremante.",
             "biomes": ["Città"],
             "isUnique": true,
             "choices": [
               {
-                "text": "Leggi attentamente il diario",
-                "outcomes": [
-                  {
-                    "type": "skillCheck",
-                    "skill": "investigare",
-                    "dc": 14,
-                    "successText": "Le note sono frammentarie, ma riesci a decifrare alcuni passaggi chiave. Il 'Progetto Rinascita' era un tentativo disperato di curare la contaminazione. L'ultimo esperimento menziona 'soggetto L-7' e 'reazione anomala'. Poi, solo sangue e silenzio.",
-                    "failureText": "Il gergo scientifico è troppo complesso. Riesci solo a capire che stavano cercando una cura, ma qualcosa è andato terribilmente storto.",
-                    "success": [
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "research_notes",
-                          "quantity": 1
-                        }
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 100
-                      },
-                      {
-                        "type": "journalEntry",
-                        "text": "Riflessione: Questi scienziati cercavano di salvare il mondo. Invece, forse, lo hanno condannato. La strada per l'inferno è lastricata di buone intenzioni."
-                      }
-                    ],
-                    "failure": [
-                      {
-                        "type": "addXp",
-                        "value": 30
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "text": "Cerca materiali utili nel laboratorio",
-                "outcomes": [
-                  {
-                    "type": "skillCheck",
-                    "skill": "percezione",
-                    "dc": 12,
-                    "successText": "Frugando tra le attrezzature, trovi alcuni componenti tecnologici ancora funzionanti e materiali chimici sigillati.",
-                    "failureText": "La maggior parte delle attrezzature è inutilizzabile. Trovi solo rottami.",
-                    "success": [
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "tech_components",
-                          "quantity": 3
-                        }
-                      },
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "chemical_substances",
-                          "quantity": 2
-                        }
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 50
-                      }
-                    ],
-                    "failure": [
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "scrap_metal",
-                          "quantity": 2
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "unique_ancient_library",
-            "title": "La Biblioteca dei Sussurri",
-            "description": "Entri in una vasta biblioteca. Gli scaffali si ergono come scheletri di legno, molti libri sono marciti o bruciati. Ma in una sezione protetta da vetri blindati, vedi volumi ancora intatti. Una targa recita: 'Archivio della Memoria Collettiva - Progetto Eco'.",
-            "biomes": ["Città"],
-            "isUnique": true,
-            "choices": [
-              {
-                "text": "Studia i volumi protetti",
-                "outcomes": [
-                  {
-                    "type": "skillCheck",
-                    "skill": "storia",
-                    "dc": 15,
-                    "successText": "I volumi parlano del 'Progetto Eco': un'interfaccia neurale collettiva che doveva preservare la conoscenza umana. Ma qualcosa è andato storto durante l'attivazione. Le ultime pagine descrivono 'il Grande Silenzio' - il momento in cui miliardi di menti si sono spente simultaneamente.",
-                    "failureText": "I testi sono troppo tecnici e frammentari. Capisci solo che il 'Progetto Eco' era legato alla catastrofe, ma non come.",
-                    "success": [
-                      {
-                        "type": "addXp",
-                        "value": 150
-                      },
-                      {
-                        "type": "statBoost",
-                        "value": {
-                          "stat": "int",
-                          "amount": 1
-                        }
-                      },
-                      {
-                        "type": "journalEntry",
-                        "text": "Riflessione: Volevano unire tutte le menti umane in una rete. Invece, le hanno spente. E io... io sono qui perché qualcuno mi ha protetto da quel silenzio?"
-                      }
-                    ],
-                    "failure": [
-                      {
-                        "type": "addXp",
-                        "value": 50
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "text": "Cerca manuali di sopravvivenza pratici",
-                "outcomes": [
-                  {
-                    "type": "skillCheck",
-                    "skill": "percezione",
-                    "dc": 10,
-                    "successText": "Tra gli scaffali trovi una sezione 'Sopravvivenza e Primo Soccorso'. Alcuni manuali sono ancora leggibili.",
-                    "failureText": "La maggior parte dei libri è troppo danneggiata per essere utile.",
-                    "success": [
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "manual_field_medicine",
-                          "quantity": 1
-                        }
-                      },
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "manual_advanced_repairs",
-                          "quantity": 1
-                        }
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 75
-                      }
-                    ],
-                    "failure": [
-                      {
-                        "type": "addXp",
-                        "value": 20
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "lore_ash_nest",
-            "title": "Il Nido della Cenere",
-            "description": "Entri in una caverna naturale. L'aria è densa, quasi solida. Le pareti sono ricoperte da una sostanza organica grigia che pulsa debolmente. Al centro, vedi forme umanoidi sospese in bozzoli traslucidi. Sono vivi? Morti? Qualcosa di peggio? Uno di loro apre gli occhi - occhi bianchi, senza pupille - e ti fissa. Poi, un sussurro collettivo riempie la caverna: 'Unisciti... a noi...'",
-            "biomes": ["Global"],
-            "isUnique": true,
-            "choices": [
-              {
-                "text": "Fuggi immediatamente",
-                "outcomes": [
-                  {
-                    "type": "direct",
-                    "results": [
-                      {
-                        "type": "journalEntry",
-                        "text": "Il terrore ti travolge. Corri fuori dalla caverna senza guardarti indietro. Il sussurro ti segue per ore nella mente. Ora sai cosa succede a chi viene catturato dagli Angeli della Cenere: non muoiono. Diventano... altro."
-                      },
-                      {
-                        "type": "statusChange",
-                        "value": "TERRORIZZATO"
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 200
-                      },
-                      {
-                        "type": "journalEntry",
-                        "text": "Riflessione: Quegli occhi bianchi... erano ancora umani? O erano già diventati parte di qualcosa di più grande e terribile? Devo stare lontano da questo posto."
-                      }
-                    ]
-                  },
-                  {
-                    "id": "unique_wandering_trader_encounter",
-                    "title": "Incontro con il Mercante Itinerante",
-                    "description": "Raggiungi finalmente la figura solitaria che avevi visto muoversi in lontananza. È un vecchio mercante di nome Giona, che spinge un carretto cigolante carico di merci eterogenee. Ti saluta con un cenno stanco ma vigile. 'Pochi sanno ancora viaggiare in queste terre,' dice con voce roca. 'Cosa ti porta da me, straniero?'",
-                    "biomes": ["Global"],
-                    "isUnique": false,
-                    "choices": [
-                      {
-                        "text": "[Parla con Giona]",
-                        "outcomes": [
-                          {
-                            "type": "direct",
-                            "results": [
-                              {
-                                "type": "special",
-                                "value": {
-                                  "effect": "startDialogue",
-                                  "dialogueId": "giona_main"
-                                },
-                                "text": "Inizi a conversare con Giona..."
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "text": "[Commercia]",
-                        "outcomes": [
-                          {
-                            "type": "direct",
-                            "results": [
-                              {
-                                "type": "special",
-                                "value": {
-                                  "effect": "startTrading",
-                                  "traderId": "wandering_trader"
-                                },
-                                "text": "Giona apre il suo carretto per mostrarti la merce..."
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "text": "[Congedati e prosegui]",
-                        "outcomes": [
-                          {
-                            "type": "direct",
-                            "results": [
-                              {
-                                "type": "journalEntry",
-                                "text": "Saluti Giona con un cenno e riprendi il tuo cammino. Lui ti guarda allontanarti, poi riprende a spingere il suo carretto nella direzione opposta."
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "text": "Cerca di capire cosa sta succedendo",
-                "outcomes": [
-                  {
-                    "type": "skillCheck",
-                    "skill": "investigare",
-                    "dc": 18,
-                    "successText": "Combatti il terrore e osservi attentamente. I bozzoli sembrano nutrirsi dei corpi, trasformandoli lentamente. Noti un pattern: i soggetti più 'trasformati' emettono una debole luminescenza. Raccogli un campione di tessuto del bozzolo prima di fuggire.",
-                    "failureText": "Provi a osservare, ma il sussurro diventa più forte, più insistente. Senti la tua mente vacillare. Fuggi prima che sia troppo tardi, ma il trauma rimane.",
-                    "success": [
-                      {
-                        "type": "addItem",
-                        "value": {
-                          "itemId": "ash_tissue_sample",
-                          "quantity": 1
-                        }
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 250
-                      },
-                      {
-                        "type": "statBoost",
-                        "value": {
-                          "stat": "sag",
-                          "amount": 1
-                        }
-                      },
-                      {
-                        "type": "journalEntry",
-                        "text": "Riflessione: Questo campione potrebbe essere la chiave per capire cosa sono diventati gli Angeli della Cenere. Ma a che prezzo? Quella voce nella mia testa... non se ne va."
-                      }
-                    ],
-                    "failure": [
-                      {
-                        "type": "takeDamage",
-                        "value": 10
-                      },
-                      {
-                        "type": "statusChange",
-                        "value": "TERRORIZZATO"
-                      },
-                      {
-                        "type": "addXp",
-                        "value": 100
-                      }
-                    ]
-                  }
-                ]
+                "text": "Sì, tuo padre è al sicuro. Ti porto da lui.",
+                "outcomes": [{
+                  "type": "direct",
+                  "results": [
+                    {
+                      "type": "journalEntry",
+                      "text": "Elara ti guarda con occhi pieni di speranza e paura. Annuisce e ti prende la mano. 'Andiamo,' sussurra. Ora devi scortarla al Crocevia."
+                    },
+                    {
+                      "type": "addXp",
+                      "value": 50
+                    }
+                  ]
+                }]
               }
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "unique_ritual_cave",
+    "title": "La Grotta dei Sussurri",
+    "description": "Entri in una grotta nascosta tra le rocce. Le pareti sono coperte dagli stessi simboli astronomici che hai visto nel cerchio rituale. Al centro, un altare di pietra con cenere ancora calda. Qualcuno è stato qui di recente.",
+    "biomes": ["Montagna"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina l'altare e i simboli",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 13,
+          "successText": "I simboli formano un pattern complesso. Riconosci alcune costellazioni e calcoli di frequenze sonore. Questo luogo era usato per 'ascoltare' qualcosa. Annoti tutto nel diario che hai trovato.",
+          "failureText": "I simboli sono troppo complessi. Riesci solo a copiarne alcuni nel diario.",
+          "success": [
+            { "type": "special", "value": { "effect": "setFlag", "flag": "RITUAL_SITE_CAVE_VISITED" } },
+            { "type": "journalEntry", "text": "[RITUALE] Hai documentato il secondo luogo di potere. Il pattern inizia a prendere forma." },
+            { "type": "addXp", "value": 75 }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 20 }
+          ]
+        }]
+      },
+      {
+        "text": "Questo posto è inquietante. Esci",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "L'aria qui vibra in modo innaturale. Decidi di non restare." }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_ancient_tree_ritual",
+    "title": "L'Albero Segnato",
+    "description": "Ti trovi di fronte a un albero antico e mastodontico. La sua corteccia è coperta di incisioni profonde - gli stessi simboli del cerchio rituale e della grotta. Alla base dell'albero, cenere e cristalli disposti in un pattern preciso.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Studia le incisioni e il pattern",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "natura",
+          "dc": 14,
+          "successText": "L'albero è vivo, ma i simboli sono antichi. Qualcuno ha usato questo luogo per anni, forse decenni. I cristalli alla base vibrano leggermente quando ti avvicini. Documenti tutto accuratamente.",
+          "failureText": "Le incisioni sono troppo erose dal tempo. Riesci a copiarne solo alcune.",
+          "success": [
+            { "type": "special", "value": { "effect": "setFlag", "flag": "RITUAL_SITE_TREE_VISITED" } },
+            { "type": "journalEntry", "text": "[RITUALE] Hai documentato il terzo luogo di potere. Ora hai tutti i pezzi del puzzle." },
+            { "type": "addXp", "value": 75 }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 20 }
+          ]
+        }]
+      },
+      {
+        "text": "Non toccare nulla. Vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Qualcosa in questo luogo ti mette a disagio. Meglio non interferire." }
+          ]
+        }]
       }
     ]
   }
