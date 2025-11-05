@@ -383,5 +383,36 @@
         }
       ]
     }
+  },
+  {
+    "id": "aberrant_angel_arsonist",
+    "name": "Angelo Aberrante - Il Piromane",
+    "description": "Una trasformazione fallita in Angelo della Cenere. Metà uomo, metà macchina, completamente folle. Il suo corpo è fuso con tecnologia aliena in modo grottesco e doloroso. Un occhio umano pieno di follia, l'altro una lente rossa incrinata. Indossa ancora i resti di un maglioncino a strisce rosse e bianche. Dalle sue mani emanano fiamme instabili.",
+    "type": "humanoid",
+    "hp": 45,
+    "ac": 12,
+    "attack": { "damage": 12, "bonus": 3 },
+    "xp": 600,
+    "biomes": ["Città"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "pyromaniac_burst",
+      "name": "Esplosione Piromaniacale",
+      "description": "Quando i suoi HP scendono sotto il 50%, ha 40% probabilità di esplodere in fiamme, danneggiando il giocatore.",
+      "trigger": "low_hp",
+      "probability": 0.4
+    },
+    "tactics": {
+      "revealDc": 15,
+      "description": "La sua follia lo rende imprevedibile, ma le fiamme che emana sono la sua unica arma. L'acqua o il freddo potrebbero indebolirlo significativamente.",
+      "actions": [
+        {
+          "id": "tactic_douse_flames",
+          "name": "[Tattico] Spegni le Fiamme",
+          "description": "Usa acqua o un oggetto freddo per spegnere le sue fiamme e ridurre il suo potere.",
+          "skillCheck": { "skill": "sopravvivenza", "dc": 14 }
+        }
+      ]
+    }
   }
 ]

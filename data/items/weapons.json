@@ -182,5 +182,19 @@
     "stackable": false,
     "rarity": "common",
     "color": "#a3a3a3"
+  },
+  {
+    "id": "greatsword_vargeon",
+    "name": "Spadone di Vargeon",
+    "description": "Una grande spada a due mani di fattura antica e magistrale. Ogni anello della cotta che la accompagnava era intrecciato a mano. La lama porta l'incisione 'In Hoc Signo Vinces'. Un'arma di un'epoca dimenticata, pesante ma devastante.",
+    "type": "weapon",
+    "weaponType": "melee",
+    "damage": 28,
+    "durability": 100,
+    "weight": 6.0,
+    "value": 300,
+    "stackable": false,
+    "rarity": "epic",
+    "color": "#a855f7"
   }
 ]

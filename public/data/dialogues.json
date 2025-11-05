@@ -395,6 +395,16 @@
             }
           },
           {
+            "text": "[ECHO] Ho l'ultima trasmissione del Capitano Keith Arrow.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_captains_broadcast"
+            },
+            "showCondition": {
+              "hasItem": "captains_last_broadcast"
+            }
+          },
+          {
             "text": "Ti terrò a mente. Addio.",
             "consequence": {
               "type": "endDialogue"
@@ -583,6 +593,32 @@
             "consequence": {
               "type": "giveItem",
               "value": { "itemId": "tool_multitool", "quantity": 1 }
+            }
+          }
+        ]
+      },
+      "anya_captains_broadcast": {
+        "id": "anya_captains_broadcast",
+        "npcText": "(Gli occhi di Anya si illuminano) The Elder Radio... Il Capitano Keith Arrow. Pensavo fosse solo una leggenda urbana, una storia che i sopravvissuti si raccontavano per sentirsi meno soli. Ma questa... questa è la sua voce. (Ascolta in silenzio la registrazione, con le lacrime agli occhi) Grazie. Grazie per avermi portato questo. Non è solo un 'Eco'. È la prova che qualcuno ha cercato di combattere il Silenzio con la musica e la speranza. Prendi questo. È tutto ciò che posso offrirti in cambio di un dono così prezioso.",
+        "options": [
+          {
+            "text": "È stato un onore trovarlo.",
+            "consequence": {
+              "type": "takeItem",
+              "value": { "itemId": "captains_last_broadcast", "quantity": 1 }
+            }
+          }
+        ]
+      },
+      "anya_after_broadcast": {
+        "id": "anya_after_broadcast",
+        "npcText": "Ecco la tua ricompensa. Un potenziamento per il tuo elmo. Il Capitano avrebbe voluto che tu fossi protetto.",
+        "options": [
+          {
+            "text": "Grazie, Anya.",
+            "consequence": {
+              "type": "upgradeArmor",
+              "value": { "slot": "head", "defenseBonus": 2 }
             }
           }
         ]
@@ -792,6 +828,141 @@
             "consequence": {
               "type": "jumpToNode",
               "value": "start"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "olivia_main",
+    "npcName": "Olivia",
+    "startNodeId": "start",
+    "nodes": {
+      "start": {
+        "id": "start",
+        "npcText": "Un viaggiatore. È raro vedere volti nuovi. Se cerchi riparo, sei il benvenuto, purché tu non porti guai. Se cerchi cure, forse posso aiutarti. Questo piccolo giardino è tutto ciò che mi resta del mondo di prima.",
+        "options": [
+          {
+            "text": "Chi sei?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "who_are_you"
+            }
+          },
+          {
+            "text": "Come fai a sopravvivere qui da sola?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "how_survive"
+            }
+          },
+          {
+            "text": "Hai bisogno di aiuto?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "need_help"
+            }
+          },
+          {
+            "text": "[QUEST] Ho trovato il Fiore di Ghiaccio che cercavi.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "olivia_quest_complete"
+            },
+            "showCondition": {
+              "questActive": "the_waiting_woman",
+              "hasItem": "ice_flower"
+            }
+          },
+          {
+            "text": "Devo andare. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "who_are_you": {
+        "id": "who_are_you",
+        "npcText": "Mi chiamo Olivia. Ero una botanica, prima del Silenzio. Studiavo piante medicinali, cercavo di capire come la natura potesse curare ciò che la medicina moderna non riusciva a toccare. Ora... continuo a farlo. È tutto ciò che so fare. E in questo mondo, la conoscenza delle erbe vale più dell'oro.",
+        "options": [
+          {
+            "text": "Affascinante. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
+            "text": "Grazie per avermi raccontato. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
+      "how_survive": {
+        "id": "how_survive",
+        "npcText": "Conoscenza. E pazienza. Queste piante... sono più forti di quanto pensiamo. Crescono anche in questo mondo morente, si adattano, sopravvivono. Io le studio, le coltivo, le uso per curare me stessa e i rari viaggiatori che passano di qui. Ma ce n'è una che non riesco più a trovare...",
+        "options": [
+          {
+            "text": "Quale pianta cerchi?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "need_help"
+            }
+          },
+          {
+            "text": "Capisco. Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "need_help": {
+        "id": "need_help",
+        "npcText": "Una pianta che cresceva solo in luoghi freddi e alti, dove l'aria è sottile. La chiamavano 'Fiore di Ghiaccio' per la sua resistenza. I suoi petali sono quasi trasparenti, di un blu pallido, e sono freddi al tatto. Mi serve per un decotto importante, un elisir che rinforza il corpo contro le avversità. Se mai ti trovassi sulle montagne a nord, e ne vedessi uno... ti ricompenserei generosamente.",
+        "options": [
+          {
+            "text": "Cercherò questo fiore per te.",
+            "consequence": {
+              "type": "startQuest",
+              "value": "the_waiting_woman"
+            }
+          },
+          {
+            "text": "Non posso prometterti nulla, ma terrò gli occhi aperti.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          }
+        ]
+      },
+      "olivia_quest_complete": {
+        "id": "olivia_quest_complete",
+        "npcText": "Non posso crederci... Dopo tutti questi anni. Hai rischiato molto per questo. Il Fiore di Ghiaccio è incredibilmente raro e fragile. Grazie, davvero. La tua gentilezza non sarà dimenticata. Lascia che ti mostri come usarlo. Questa è una vecchia ricetta di famiglia, un elisir che rinforza il corpo contro le avversità. Impara bene, viaggiatore. Potrebbe salvarti la vita.",
+        "options": [
+          {
+            "text": "Grazie per la ricetta, Olivia.",
+            "consequence": {
+              "type": "learnRecipe",
+              "value": "recipe_elixir_of_fortitude"
+            }
+          }
+        ]
+      },
+      "after_quest_complete": {
+        "id": "after_quest_complete",
+        "npcText": "Grazie ancora per il Fiore di Ghiaccio. Se hai bisogno di erbe o cure, sono sempre qui.",
+        "options": [
+          {
+            "text": "Grazie, Olivia.",
+            "consequence": {
+              "type": "endDialogue"
             }
           }
         ]

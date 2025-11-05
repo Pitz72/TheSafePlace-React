@@ -326,5 +326,19 @@
       { "itemId": "precious_stone", "quantity": 1 }
     ],
     "results": [{ "itemId": "sonic_dissuader", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_elixir_of_fortitude",
+    "name": "Elisir della Tempra",
+    "description": "Un decotto potente preparato con il raro Fiore di Ghiaccio. Rinforza il corpo contro le avversità e protegge dal freddo estremo. Una ricetta antica tramandata da Olivia.",
+    "skill": "medicina",
+    "dc": 16,
+    "timeCost": 60,
+    "ingredients": [
+      { "itemId": "ice_flower", "quantity": 1 },
+      { "itemId": "MED_HEALING_HERBS", "quantity": 3 },
+      { "itemId": "CONS_002", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "elixir_of_fortitude", "quantity": 1 }]
   }
 ]

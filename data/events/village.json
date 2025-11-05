@@ -919,5 +919,108 @@
         }]
       }
     ]
+  },
+  {
+    "id": "unique_elder_radio_car",
+    "title": "L'Utilitaria Azzurrina",
+    "description": "In fondo a un vicolo cieco, seminascosta sotto un telo cerato lacero, noti la sagoma di una piccola auto. È un vecchio modello di utilitaria, la cui vernice, un tempo di un azzurro brillante, è ora scrostata e opaca. La portiera del conducente è socchiusa.\n\nAvvicinandoti, vedi che l'interno è stato trasformato in una sorta di studio improvvisato. Cavi corrono ovunque, collegando un vecchio microfono a un trasmettitore radio modificato, il tutto alimentato da una serie di batterie per auto collegate in serie. Sul cruscotto, un pezzo di nastro adesivo ingiallito reca una scritta a pennarello: 'The Katzus'.\n\nSembra che qualcuno, in questo piccolo angolo di mondo, abbia cercato di tenere accesa una voce nel silenzio.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina l'attrezzatura radio",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 12,
+          "successText": "L'attrezzatura è un capolavoro di ingegno e improvvisazione. Il trasmettitore è stato modificato per funzionare a bassa potenza, ma con un'ampia portata. Trovi un registratore a nastro collegato al mixer. Premi 'play'. Una voce calda e un po' stanca riempie l'abitacolo: '...e questo era l'ultimo messaggio del Capitano Keith Arrow per The Elder Radio. Se qualcuno è in ascolto... non mollate. C'è sempre una canzone che vale la pena ascoltare. Passo e chiudo.' La registrazione finisce. Recuperi la cassetta e alcuni componenti elettronici utili.",
+          "failureText": "L'attrezzatura è troppo complessa e danneggiata. Toccando un cavo sbagliato, provochi un corto circuito. L'ultima luce sul trasmettitore si spegne con un sibilo. Qualunque segreto custodisse, è andato perduto.",
+          "success": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "captains_last_broadcast",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "tech_components",
+                "quantity": 2
+              }
+            },
+            {
+              "type": "journalEntry",
+              "text": "Hai recuperato l'ultima trasmissione del Capitano Keith Arrow. Un'eco di speranza in un mondo silenzioso."
+            },
+            {
+              "type": "addXp",
+              "value": 150
+            }
+          ],
+          "failure": [
+            {
+              "type": "addXp",
+              "value": 30
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Cerca nel vano portaoggetti e sotto i sedili",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Nel vano portaoggetti, trovi una collezione di musicassette con etichette scritte a mano: 'Rock Classico', 'Anni '80', 'Per le Notti Solitarie'. Sotto il sedile del passeggero, una mappa della regione con decine di cerchi e note. Sembra che il 'Capitano' stesse cercando di mappare altri insediamenti, forse per creare una rete di ascoltatori. È la mappa di un sognatore."
+            },
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "rare_music_cassettes",
+                "quantity": 2
+              }
+            },
+            {
+              "type": "revealMapPOI",
+              "value": {
+                "x": 55,
+                "y": 120,
+                "name": "Rifugio Segnalato"
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 120
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Lascia questo santuario intatto",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi di non toccare nulla. Questo non è un deposito da saccheggiare; è il monumento a qualcuno che ha combattuto il Silenzio con l'unica arma che aveva: la sua voce. Chiudi piano la portiera dell'utilitaria azzurrina, lasciando 'The Katzus' al suo riposo. L'idea che qualcuno, da qualche parte, abbia cercato di mantenere viva una connessione umana ti dà una strana forza."
+            },
+            {
+              "type": "alignmentChange",
+              "value": {
+                "type": "lena",
+                "amount": 2
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 100
+            }
+          ]
+        }]
+      }
+    ]
   }
 ]

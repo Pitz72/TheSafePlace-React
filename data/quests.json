@@ -642,5 +642,77 @@
     "finalReward": {
       "xp": 800
     }
+  },
+  {
+    "id": "the_waiting_woman",
+    "title": "La Donna che Attende",
+    "type": "SUB",
+    "startText": "Olivia, l'erborista, ti ha chiesto di trovarle un'erba rara chiamata 'Fiore di Ghiaccio'. Ha detto che cresce solo in luoghi freddi e alti, sulle montagne a nord.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Trova il 'Fiore di Ghiaccio' sulle montagne a nord.",
+        "trigger": {
+          "type": "getItem",
+          "value": "ice_flower"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "Porta il 'Fiore di Ghiaccio' a Olivia nella sua capanna.",
+        "trigger": {
+          "type": "talkToNPC",
+          "value": "olivia_quest_complete"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 500,
+      "statBoost": {
+        "stat": "sag",
+        "amount": 1
+      }
+    }
+  },
+  {
+    "id": "the_arsonist_and_the_tube",
+    "title": "Il Tubo N.403",
+    "type": "SUB",
+    "startText": "Hai trovato la lettera struggente di una nonna per suo nipote, un 'piromane' incarcerato in un luogo chiamato 'Tubo N.403'. La lettera parla di una vigna e di un maglioncino. Forse c'è ancora qualcuno da trovare, o una storia da concludere.",
+    "stages": [
+      {
+        "stage": 1,
+        "objective": "Scopri cos'è o dov'è il 'Tubo N.403'. Forse i registri di una prigione o di un ospedale psichiatrico possono aiutare.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "asylum_records_found"
+        }
+      },
+      {
+        "stage": 2,
+        "objective": "I registri indicano che il Tubo N.403 era una sezione di massima sicurezza del Manicomio di Sant'Ambrogio, situato nelle colline a est della città. Trova questo luogo.",
+        "trigger": {
+          "type": "reachLocation",
+          "value": { "x": 120, "y": 85 }
+        }
+      },
+      {
+        "stage": 3,
+        "objective": "Sei arrivato al manicomio in rovina. Trova la sezione 'Tubo N.403' e scopri cosa ne è stato del Piromane.",
+        "trigger": {
+          "type": "interactWithObject",
+          "value": "found_the_arsonist"
+        }
+      }
+    ],
+    "finalReward": {
+      "xp": 700,
+      "items": [
+        {
+          "itemId": "pyromaniacs_lighter",
+          "quantity": 1
+        }
+      ]
+    }
   }
 ]

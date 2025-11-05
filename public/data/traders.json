@@ -63,5 +63,22 @@
       { "itemId": "bear_trap", "quantity": 3 },
       { "itemId": "manual_wilderness_survival", "quantity": 1 }
     ]
+  },
+  {
+    "id": "olivia",
+    "name": "Olivia, l'Erborista",
+    "description": "Una botanica esperta che vive isolata in una capanna nella foresta. Specializzata in erbe medicinali e rimedi naturali. Offre cure e conoscenze botaniche rare.",
+    "baseMarkup": 1.15,
+    "inventory": [
+      { "itemId": "MED_HEALING_HERBS", "quantity": 8 },
+      { "itemId": "edible_mushrooms", "quantity": 12 },
+      { "itemId": "wild_berries", "quantity": 10 },
+      { "itemId": "MED_BANDAGE_BASIC", "quantity": 6 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 4 },
+      { "itemId": "antibiotics_expired", "quantity": 3 },
+      { "itemId": "MED_ANTIDOTE", "quantity": 2 },
+      { "itemId": "first_aid_kit", "quantity": 1 },
+      { "itemId": "manual_field_medicine", "quantity": 1 }
+    ]
   }
 ]

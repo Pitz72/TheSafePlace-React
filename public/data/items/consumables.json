@@ -13,6 +13,7 @@
     { "id": "TOOL_TORCH_BASIC", "name": "Torcia improvvisata", "description": "Un bastone con stracci imbevuti di combustibile. Fornisce luce per esplorare.", "type": "consumable", "weight": 0.8, "value": 4, "stackable": true, "rarity": "common", "effects": [{ "type": "light", "value": 60 }] },
     { "id": "TRAP_SIMPLE", "name": "Trappola semplice", "description": "Una trappola rudimentale fatta con corda e legno. Può catturare piccoli animali.", "type": "consumable", "weight": 1.5, "value": 8, "stackable": true, "rarity": "common", "effects": [{ "type": "trap", "value": 1 }] },
     { "id": "bear_trap", "name": "Trappola per orsi", "description": "Una trappola pesante per animali grandi. Molto efficace ma pericolosa da maneggiare.", "type": "consumable", "weight": 3.0, "value": 25, "stackable": true, "rarity": "uncommon", "effects": [{ "type": "trap", "value": 3 }] },
+    { "id": "advanced_bear_trap", "name": "Trappola per Orsi Avanzata", "description": "Una trappola sofisticata del Clan del Corvo, con meccanismo a scatto rapido e mascelle rinforzate. Mortale anche contro le prede più grandi.", "type": "consumable", "weight": 4.0, "value": 60, "stackable": true, "rarity": "rare", "effects": [{ "type": "trap", "value": 5 }], "color": "#a855f7" },
     { "id": "expired_medicine", "name": "Medicine scadute", "description": "Farmaci scaduti da tempo. Potrebbero ancora avere qualche effetto, ma con rischi.", "type": "consumable", "weight": 0.1, "value": 5, "stackable": true, "rarity": "common", "effects": [{ "type": "heal", "value": 8 }] },
     { "id": "survival_backpack", "name": "Zaino sopravvivenza", "description": "Uno zaino ben equipaggiato con attrezzi essenziali per la sopravvivenza.", "type": "consumable", "weight": 2.5, "value": 50, "stackable": false, "rarity": "rare", "effects": [{ "type": "container", "value": 20 }] },
     { "id": "fresh_fish", "name": "Pesce fresco", "description": "Pesce appena pescato. Ottima fonte di proteine se cucinato.", "type": "consumable", "weight": 0.3, "value": 8, "stackable": true, "rarity": "common", "effects": [{ "type": "satiety", "value": 20 }] },
@@ -44,8 +45,6 @@
     { "id": "potato", "name": "Patata", "description": "Una patata cruda. Meglio se cotta, ma commestibile.", "type": "consumable", "weight": 0.2, "value": 5, "stackable": true, "rarity": "common", "effects": [{ "type": "satiety", "value": 15 }] },
     { "id": "mechanic_toolkit", "name": "Kit Attrezzi Meccanico", "description": "Un set di attrezzi di buona qualità per riparazioni meccaniche complesse.", "type": "consumable", "weight": 3.0, "value": 60, "stackable": false, "rarity": "rare", "effects": [{ "type": "repair", "value": 25 }] },
     { "id": "antibiotics_expired", "name": "Antibiotici Scaduti", "description": "Antibiotici scaduti. Potrebbero curare una malattia, ma c'è il rischio di effetti collaterali.", "type": "consumable", "weight": 0.1, "value": 5, "stackable": true, "rarity": "common", "effects": [{ "type": "heal", "value": 5 }, { "type": "cureStatus", "value": "MALATO" }] },
-    { "id": "MED_ANTIBIOTICS", "name": "Antibiotici", "description": "Antibiotici efficaci per curare malattie batteriche. Essenziali per sopravvivere alle infezioni.", "type": "consumable", "weight": 0.1, "value": 40, "stackable": true, "rarity": "uncommon", "effects": [{ "type": "heal", "value": 15 }, { "type": "cureStatus", "value": "MALATO" }] },
-    { "id": "MED_HEALING_HERBS", "name": "Erbe Curative", "description": "Un mazzetto di erbe medicinali. Efficaci contro infezioni e ferite infette.", "type": "consumable", "weight": 0.1, "value": 30, "stackable": true, "rarity": "uncommon", "effects": [{ "type": "heal", "value": 10 }, { "type": "cureStatus", "value": "INFEZIONE" }] },
     { "id": "strong_liquor", "name": "Liquore Forte", "description": "Una bottiglia di un superalcolico di dubbia provenienza. Scalda lo spirito, ma disidrata.", "type": "consumable", "weight": 0.7, "value": 20, "stackable": false, "rarity": "uncommon", "effects": [{ "type": "heal", "value": 2 }, { "type": "hydration", "value": -10 }] },
     { "id": "cigars_box", "name": "Scatola di Sigari", "description": "Una scatola di sigari di lusso, ancora sigillata. Un raro lusso in questo mondo.", "type": "consumable", "weight": 0.3, "value": 40, "stackable": false, "rarity": "rare", "effects": [] },
     { "id": "wild_berries", "name": "Bacche Selvatiche", "description": "Un pugno di bacche trovate nel bosco. Commestibili e dolci.", "type": "consumable", "weight": 0.1, "value": 3, "stackable": true, "rarity": "common", "effects": [{ "type": "satiety", "value": 10 }, { "type": "hydration", "value": 5 }] },
@@ -94,7 +93,74 @@
       "weight": 0.3, 
       "value": 60, 
       "stackable": true, 
-      "rarity": "rare", 
-      "effects": [{ "type": "satiety", "value": 80 }, { "type": "heal", "value": 10 }] 
+      "rarity": "rare",
+      "effects": [{ "type": "satiety", "value": 80 }, { "type": "heal", "value": 10 }]
+    },
+    {
+      "id": "food_honey",
+      "name": "Miele",
+      "description": "Un barattolo di miele dorato, miracolosamente conservato. Dolce, nutriente e curativo.",
+      "type": "consumable",
+      "weight": 0.3,
+      "value": 35,
+      "stackable": true,
+      "rarity": "uncommon",
+      "effects": [{ "type": "satiety", "value": 30 }, { "type": "heal", "value": 10 }]
+    },
+    {
+      "id": "sonic_dissuader",
+      "name": "Dissuasore Sonico",
+      "description": "Un rozzo dispositivo assemblato con componenti di radio e cristalli. Se attivato, emette un'onda sonora ad alta frequenza, inudibile per gli umani, ma apparentemente intollerabile per gli Angeli della Cenere. Garantisce 6 ore di viaggio sicuro.",
+      "type": "consumable",
+      "weight": 1.2,
+      "value": 300,
+      "stackable": true,
+      "rarity": "epic",
+      "effects": [{ "type": "special", "value": "ash_angel_protection_6h" }],
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "MED_HEALING_HERBS",
+      "name": "Erbe Curative",
+      "description": "Un mazzo di erbe medicinali rare con potenti proprietà curative. Possono curare infezioni e malattie.",
+      "type": "consumable",
+      "weight": 0.2,
+      "value": 40,
+      "stackable": true,
+      "rarity": "uncommon",
+      "effects": [{ "type": "heal", "value": 20 }, { "type": "cureStatus", "value": "INFEZIONE" }]
+    },
+    {
+      "id": "elixir_of_fortitude",
+      "name": "Elisir della Tempra",
+      "description": "Un decotto denso e aromatico preparato con il Fiore di Ghiaccio. Scalda dall'interno e sembra rinforzare le ossa. Conferisce resistenza al freddo e aumenta temporaneamente la costituzione.",
+      "type": "consumable",
+      "weight": 0.3,
+      "value": 200,
+      "stackable": true,
+      "rarity": "epic",
+      "effects": [
+        { "type": "heal", "value": 30 },
+        { "type": "cureStatus", "value": "IPOTERMIA" },
+        { "type": "special", "value": "fortitude_buff_12h" }
+      ],
+      "color": "#60a5fa"
+    },
+    {
+      "id": "pyromaniacs_lighter",
+      "name": "L'Accendino del Piromane",
+      "description": "Un vecchio accendino a benzina, stranamente freddo al tatto. Sul lato è incisa una piccola vigna. Non si scarica mai. Un'eredità tragica trasformata in strumento di sopravvivenza.",
+      "type": "consumable",
+      "weight": 0.1,
+      "value": 500,
+      "stackable": false,
+      "rarity": "epic",
+      "effects": [
+        {
+          "type": "fire",
+          "value": 999999
+        }
+      ],
+      "color": "#ef4444"
     }
 ]

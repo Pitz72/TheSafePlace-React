@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { BOOT_TEXT } from '../constants';
@@ -14,6 +14,7 @@ const BootScreen: React.FC = () => {
   const [bootLines, setBootLines] = useState<string[]>([]);
   const [showCursor, setShowCursor] = useState(true);
   const [bootComplete, setBootComplete] = useState(false);
+  const creditsBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (gameState === GameState.INITIAL_BLACK_SCREEN) {
@@ -21,11 +22,26 @@ const BootScreen: React.FC = () => {
       return () => clearTimeout(timer);
     }
     if (gameState === GameState.PRESENTS_SCREEN) {
-      const handleKeyPress = () => {
-        audioManager.playSound('confirm'); // Play sound on user interaction to unlock audio
-        setGameState(GameState.INTERSTITIAL_BLACK_SCREEN);
+      const handleKeyPress = (e: KeyboardEvent) => {
+        if (e.key === 'ArrowDown') {
+          // Scroll down
+          if (creditsBoxRef.current) {
+            creditsBoxRef.current.scrollBy({ top: 100, behavior: 'smooth' });
+            audioManager.playSound('navigate');
+          }
+        } else if (e.key === 'ArrowUp') {
+          // Scroll up
+          if (creditsBoxRef.current) {
+            creditsBoxRef.current.scrollBy({ top: -100, behavior: 'smooth' });
+            audioManager.playSound('navigate');
+          }
+        } else if (e.key === 'Enter') {
+          // Proceed to next screen
+          audioManager.playSound('confirm');
+          setGameState(GameState.INTERSTITIAL_BLACK_SCREEN);
+        }
       };
-      window.addEventListener('keydown', handleKeyPress, { once: true });
+      window.addEventListener('keydown', handleKeyPress);
       return () => {
         window.removeEventListener('keydown', handleKeyPress);
       };
@@ -85,23 +101,44 @@ const BootScreen: React.FC = () => {
   if (gameState === GameState.PRESENTS_SCREEN) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center p-8 text-3xl">
-        <div className="w-[90%] h-[80%] border-2 border-[var(--border-primary)] p-6 overflow-y-auto text-left presents-screen-content-box" style={{ scrollbarWidth: 'none' }}>
-          <p className="text-center mb-4 text-[var(--text-accent)] presents-title">[ ATTENZIONE ]</p>
-          <p className="text-center mb-6">Benvenuti in The Safe Place Chronicles: The Echo of the Journey</p>
+        <div
+          ref={creditsBoxRef}
+          className="w-[90%] h-[80%] border-2 border-[var(--border-primary)] p-6 overflow-y-auto text-left presents-screen-content-box"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          <p className="text-center mb-6 text-[var(--text-accent)] presents-title text-4xl">THE SAFE PLACE CHRONICLES</p>
+          <p className="text-center mb-8 text-3xl">The Echo of the Journey</p>
           
-          <p className="mb-4">Questo progetto nasce come esperimento tecnico e narrativo, iniziato mesi fa con l'obiettivo di mettere alla prova la tecnologia LLM allora più avanzata: Gemini 2.5 Pro. La mia sfida era semplice e ambiziosa allo stesso tempo: scoprire se un modello linguistico potesse contribuire alla creazione di un progetto strutturato, coerente e dotato di un'anima.</p>
-          <p className="mb-4">La risposta? Non posso riassumerla in queste poche righe — ne parlerò presto nei miei podcast, nelle dirette di chi vorrà ospitarmi e in un libro tecnico (e non solo) di prossima pubblicazione.</p>
+          <p className="text-center mb-6 text-3xl">Progettato e realizzato da<br/><span className="text-[var(--text-accent)]">Simone Pizzi</span></p>
           
-          <p className="mb-4">Questo che state per giocare è un prototipo concettuale, arricchito con elementi narrativi e meccaniche sperimentali. Nei prossimi mesi il progetto crescerà, si evolverà e darà vita ad altre opere. Non aspettatevi un prodotto definitivo, ma un viaggio dentro un'idea in divenire.</p>
+          <p className="text-center mb-6 text-2xl">Supporto tecnico, consulenza e sviluppo esecutivo:<br/>Gemini 2.5 Pro, Kilo Code, Claude Sonnet 4.5</p>
           
-          <p className="mb-4">Per feedback, suggerimenti o segnalazioni, potete scrivere a:<br/>[E-MAIL] runtimeradio@gmail.com</p>
+          <p className="text-center mb-6 text-2xl">Supporto tecnico nella gestione git:<br/>Giuseppe Pugliese</p>
           
-          <p className="mb-4">Un ringraziamento speciale a Michela, mia moglie, per la pazienza e il sostegno anche quando vorrebbe tirarmi una ciabatta, a PixelDebh, Giuseppe "MagnetarMan" Pugliese e al Prof. Leonardo Boselli per aver creduto e dato spazio a questa visione. Un grazie speciale anche a tutti gli amici e i membri del gruppo Telegram Progetto GDR Anni 80 (WIP).</p>
+          <p className="text-center mb-6 text-2xl">Design dello sprite del player:<br/>Carlo Santagostino</p>
           
-          <p className="text-center mt-6 presents-signature">Simone Pizzi<br/>© Runtime Radio 2025<br/>The Safe Place Chronicles: The Echo of the Journey</p>
+          <p className="text-center mb-8 text-2xl">Ringraziamento speciale:<br/>Michela De Paola</p>
+          
+          <p className="text-center mb-4 text-3xl text-[var(--text-accent)]">Questo progetto è stato realizzato ed espanso grazie al contributo di:</p>
+          
+          <p className="text-center mb-6 text-2xl leading-relaxed">
+            Adriana Coppe, Alessandro Raccuglia Giaminardi, Alirio Bruni, Angelo Mastrogiacomo,<br/>
+            Claudio Marro Filosa, Cristian Spaccapaniccia, Cristiano Caliendo,<br/>
+            Ennio Vitelli, Gabriel Mele, Jimmy Romero, Leonardo Tomassetti,<br/>
+            Luca Francesca, Massimiliano Libralesso, Matteo Garza, Mattia Seppolini,<br/>
+            Michele Bancheri, Monica Piu, Olivia Quattrocchi, Paolo Sammartino,<br/>
+            Roberto Tomaiuolo, Ruggero Celva, Samuele Palazzolo, Simone Di Resta,<br/>
+            Stefano Paganini, Tommaso Sciara, Valerio Galano, Vincenzo Falce
+          </p>
+          
+          <p className="text-center mb-6 text-2xl">Si ringraziano i canali YouTube di<br/>PixelDebh e di Mille e Una Avventura</p>
+          
+          <p className="text-center mb-6 text-2xl">Produzione, collaborazione e supporto diretto:<br/>Runtime Radio, Archeologia Informatica,<br/>Glitch Podcast, Good Vibrations Podcast</p>
+          
+          <p className="text-center mt-8 presents-signature text-2xl">© Runtime Radio 2025</p>
         </div>
-        <p className="whitespace-pre mt-8 animate-pulse text-4xl">
-          PREMI UN TASTO PER PARTIRE
+        <p className="whitespace-pre mt-8 text-center text-3xl">
+          <span className="animate-pulse">PREMI FRECCE PER SCORRERE - INVIO PER ANDARE AVANTI</span>
           <span className="bg-green-400 w-6 h-10 inline-block ml-2 align-bottom" style={{ opacity: showCursor ? 1 : 0 }}></span>
         </p>
       </div>

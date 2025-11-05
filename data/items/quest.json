@@ -361,5 +361,49 @@
     "rarity": "epic",
     "unlocksRecipe": "recipe_sonic_dissuader",
     "color": "#8b5cf6"
+  },
+  {
+    "id": "ice_flower",
+    "name": "Fiore di Ghiaccio",
+    "description": "Un piccolo fiore dai petali quasi trasparenti, di un blu pallido. È freddo al tatto e incredibilmente resiliente. Emana un debole profumo di ozono e neve.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "rare",
+    "color": "#60a5fa"
+  },
+  {
+    "id": "vargeon_medallion",
+    "name": "Medaglione di Vargeon",
+    "description": "Un medaglione di legno intagliato con uno stemma che non riconosci e la scritta 'Leonardus Vargeon'. Accanto, un piccolo sacchetto di erbe essiccate ancora aromatiche. Un artefatto di un'epoca perduta, forse precedente persino al Grande Silenzio.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "rare",
+    "color": "#a855f7"
+  },
+  {
+    "id": "grandmothers_letter",
+    "name": "Lettera della Nonna",
+    "description": "Una lettera scritta con calligrafia tremante su carta ingiallita. Indirizzata a 'Mio caro nipote, il Piromane del Tubo N.403'. Parla di una vigna, di un maglioncino a strisce rosse e bianche, e di un amore incondizionato che nemmeno la follia può spezzare. È straziante.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest",
+    "color": "#ef4444"
+  },
+  {
+    "id": "captains_last_broadcast",
+    "name": "L'Ultima Trasmissione del Capitano",
+    "description": "Una cassetta audio con l'ultima trasmissione del Capitano Keith Arrow di The Elder Radio. La sua voce calda parla di speranza e musica in un mondo morente. Un'eco preziosa di umanità perduta.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "rare",
+    "color": "#60a5fa"
   }
 ]

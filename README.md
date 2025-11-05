@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.1)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.5)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,9 +84,71 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.1** - Tactical Combat
+**Versione Corrente: v1.9.5** - Echoes of the Donors
 
-Con la versione 1.9.1, il gioco introduce il **sistema di combattimento tattico** - azioni ambientali contestuali, munizioni speciali con effetti unici, e nemici Elite con abilità speciali che trasformano gli scontri in battaglie strategiche.
+🎉 **MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (95%)**
+
+Con la versione 1.9.5, il progetto raggiunge il suo completamento sostanziale. Tutti i sistemi core sono implementati, la narrativa è completa, e il gioco offre un'esperienza ricca e profonda dall'inizio alla fine.
+
+**Cosa Rimane:**
+- Traduzioni multilingua (EN, ES, FR, DE, PT)
+- Ulteriori omaggi ai donatori rimanenti (~20)
+- Polish finale e testing approfondito
+
+#### Novità v1.9.5 (5 Novembre 2025) - **ECHOES OF THE DONORS**
+
+Questa versione completa il gioco con omaggi creativi ai donatori e polish dell'esperienza utente.
+
+**SCHERMATA CREDITI PROFESSIONALE:**
+- Trasformata schermata iniziale in crediti scrollabili
+- Navigazione: Frecce SU/GIÙ + INVIO per procedere
+- 27 contributori in ordine alfabetico
+- Crediti team completi con audio feedback
+
+**QUEST "LA DONNA CHE ATTENDE":**
+- Olivia l'Erborista - botanica isolata nella foresta
+- 2 stage: Trova Fiore di Ghiaccio → Consegna
+- Ricompensa: 500 XP + SAG +1 + Ricetta Elisir Epic
+- NPC completo: dialogo (5 nodi) + trading specializzato
+- Nuovo consumabile: Elisir della Tempra (heal + anti-freddo + buff 12h)
+
+**EVENTO "IL CAVALIERE SILENTE":**
+- Leonardus Vargeon - guerriero medievale anacronistico
+- Mistero poetico in radura isolata
+- 3 scelte: Spadone epic / Medaglione / Scelta morale
+- Arma più potente del gioco: Spadone di Vargeon (28 dmg)
+
+**QUEST "IL TUBO N.403":**
+- Storia horror del Piromane - Angelo della Cenere fallito
+- 3 stage investigativi: Lettera → Archivi → Confronto
+- Boss Elite: Angelo Aberrante (abilità Esplosione Piromaniacale)
+- Ricompensa: Accendino Infinito (game-changer quality of life)
+- 3 scelte finali: Compassione / Combattimento / Fuga
+
+**EVENTO "L'UTILITARIA AZZURRINA":**
+- Omaggio The Elder Radio e Capitano Keith Arrow
+- Studio radio mobile in auto azzurra "The Katzus"
+- 3 scelte: Cassetta audio / Mappa POI / Rispetto
+- Integrazione con Anya (potenziamento elmo)
+
+**CONTENUTI AGGIUNTI:**
+- Items: 156 (+25, +19%)
+- Eventi: 99 (+50, +102%)
+- Quest: 21 (+2, +11%)
+- Dialogues: 6 (+1, +20%)
+- Traders: 5 (+1, +25%)
+- Enemies: 15 (+1 boss Elite)
+
+**IMPATTO:**
+- Gioco dichiarato sostanzialmente completo
+- Omaggi donatori integrati creativamente
+- Narrativa arricchita con storie personali
+- Quality of life massimizzata
+- Esperienza utente professionale
+
+**Risultato:** The Safe Place Chronicles raggiunge la sua forma definitiva, un RPG post-apocalittico completo che attende solo traduzioni e ulteriori personalizzazioni.
+
+---
 
 #### Novità v1.9.1 (4 Novembre 2025) - **TACTICAL COMBAT**
 

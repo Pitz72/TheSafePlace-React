@@ -129,5 +129,38 @@
       "stackable": true,
       "rarity": "uncommon",
       "effects": [{ "type": "heal", "value": 20 }, { "type": "cureStatus", "value": "INFEZIONE" }]
+    },
+    {
+      "id": "elixir_of_fortitude",
+      "name": "Elisir della Tempra",
+      "description": "Un decotto denso e aromatico preparato con il Fiore di Ghiaccio. Scalda dall'interno e sembra rinforzare le ossa. Conferisce resistenza al freddo e aumenta temporaneamente la costituzione.",
+      "type": "consumable",
+      "weight": 0.3,
+      "value": 200,
+      "stackable": true,
+      "rarity": "epic",
+      "effects": [
+        { "type": "heal", "value": 30 },
+        { "type": "cureStatus", "value": "IPOTERMIA" },
+        { "type": "special", "value": "fortitude_buff_12h" }
+      ],
+      "color": "#60a5fa"
+    },
+    {
+      "id": "pyromaniacs_lighter",
+      "name": "L'Accendino del Piromane",
+      "description": "Un vecchio accendino a benzina, stranamente freddo al tatto. Sul lato è incisa una piccola vigna. Non si scarica mai. Un'eredità tragica trasformata in strumento di sopravvivenza.",
+      "type": "consumable",
+      "weight": 0.1,
+      "value": 500,
+      "stackable": false,
+      "rarity": "epic",
+      "effects": [
+        {
+          "type": "fire",
+          "value": 999999
+        }
+      ],
+      "color": "#ef4444"
     }
 ]

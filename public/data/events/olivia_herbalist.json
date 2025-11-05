@@ -1,0 +1,105 @@
+
+[
+  {
+    "id": "olivia_herbalist_cabin",
+    "title": "La Capanna dell'Erborista",
+    "description": "In una piccola radura protetta da alberi secolari, vedi una capanna di legno e lamiera, quasi soffocata da piante rampicanti. Un filo di fumo esce da un comignolo improvvisato e l'aria profuma di erbe aromatiche e terra umida. È un'oasi di vita in un mondo di morte.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Avvicinati alla capanna",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Una voce calma ti saluta dall'interno: 'Un viaggiatore. È raro vedere volti nuovi. Entra, se vieni in pace.'"
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "start_dialogue",
+                "dialogueId": "olivia_main"
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 50
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Osserva da lontano e vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi di non disturbare. Forse tornerai un'altra volta."
+            }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_find_ice_flower",
+    "title": "Il Fiore di Ghiaccio",
+    "description": "Arrampicandoti su una cengia esposta al vento gelido, noti una macchia di colore innaturale. In una crepa della roccia, protetto dal peggio delle intemperie, cresce un singolo, piccolo fiore blu pallido. I suoi petali sono quasi trasparenti e sembrano brillare di luce propria. È il Fiore di Ghiaccio che Olivia cercava.",
+    "biomes": ["Montagna"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Raccogli il fiore con delicatezza",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "natura",
+          "dc": 12,
+          "successText": "Con mani delicate, raccogli il fiore senza danneggiarlo. È freddo al tatto e sembra pulsare di una luce tenue. Un tesoro botanico raro.",
+          "failureText": "Il fiore è troppo fragile. Mentre cerchi di raccoglierlo, i petali si sbriciolano tra le tue dita. È perduto per sempre.",
+          "success": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "ice_flower",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "journalEntry",
+              "text": "Hai raccolto il Fiore di Ghiaccio! Olivia sarà felice di vederlo."
+            },
+            {
+              "type": "addXp",
+              "value": 100
+            }
+          ],
+          "failure": [
+            {
+              "type": "journalEntry",
+              "text": "Il fiore si è disintegrato. Non potrai mai più trovarne un altro in questo luogo."
+            },
+            {
+              "type": "addXp",
+              "value": 20
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Lascia il fiore dov'è",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi di non disturbare questa meraviglia naturale. Forse tornerai un'altra volta."
+            }
+          ]
+        }]
+      }
+    ]
+  }
+]

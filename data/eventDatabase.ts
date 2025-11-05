@@ -17,7 +17,9 @@ async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounter
         '/data/events/forest_thief.json',
         '/data/events/special_locations.json',
         '/data/events/hermit_location.json',
-        '/data/events/repair_quests.json'
+        '/data/events/repair_quests.json',
+        '/data/events/olivia_herbalist.json',
+        '/data/events/arsonist_quest.json'
     ];
     const encounterFile = '/data/events/encounters.json';
     const loreFile = '/data/events/lore.json';
