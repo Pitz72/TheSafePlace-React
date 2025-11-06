@@ -1289,6 +1289,14 @@ npm run validate:data
 
 Lo script verificherà che tutti i file di dati abbiano il formato corretto e che tutti gli ID degli oggetti a cui si fa riferimento esistano.
 
+### 📂 Documentazione di Sviluppo
+
+Tutta la documentazione relativa al processo di sviluppo, al game design e all'analisi tecnica è archiviata nella cartella `/docs`.
+
+*   **[Changelog delle Versioni](/docs/changelog/)**: Contiene i log dettagliati per ogni versione del gioco.
+*   **[Documenti di Game Design](/docs/design/)**: Include le analisi approfondite delle meccaniche di gioco, delle quest e della roadmap di sviluppo dei contenuti.
+*   **[Documentazione Tecnica](/docs/technical/)**: Raccoglie i report di analisi del codice, le guide per i fix e le note sull'architettura del software.
+
 ### Ringraziamenti
 
 Un ringraziamento speciale a Michela, mia moglie, per la pazienza e il sostegno, a PixelDebh, Giuseppe "MagnetarMan" Pugliese e al Prof. Leonardo Boselli per aver creduto e dato spazio a questa visione. Un grazie speciale anche a tutti gli amici e i membri del gruppo Telegram "Progetto GDR Anni 80 (WIP)".
