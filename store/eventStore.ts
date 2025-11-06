@@ -229,7 +229,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
                 case 'advanceTime': advanceTime(result.value, true); message = `Passano ${result.value} minuti.`; break;
                 case 'journalEntry': if (result.text) message = result.text; break;
-                case 'alignmentChange': changeAlignment(result.value.type, result.value.amount); message = `La tua bussola morale si sposta verso ${result.value.type}.`; break;
+                case 'alignmentChange':
+                    changeAlignment(result.value.type, result.value.amount);
+                    message = null; // changeAlignment handles its own journal entries
+                    break;
                 case 'statusChange': addStatus(result.value); message = `Sei ora in stato: ${result.value}.`; break;
                 case 'statBoost': {
                     const { stat, amount } = result.value as { stat: AttributeName; amount: number };

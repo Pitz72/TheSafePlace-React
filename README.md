@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.6)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.7)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -84,16 +84,36 @@ L'interazione avviene interamente tramite tastiera:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.6** - Critical Bugfixes
+**Versione Corrente: v1.9.7** - Alignment Fix
 
 🎉 **MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (95%)**
 
-Con la versione 1.9.6, il progetto raggiunge stabilità completa dopo il completamento contenuti della v1.9.5. Tutti i bug critici sono stati risolti e il gioco è ora completamente giocabile senza crash.
+Con la versione 1.9.7, il progetto raggiunge stabilità completa. Tutti i bug critici sono stati risolti, incluso il sistema di allineamento morale, e il gioco è ora completamente giocabile e stabile.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT)
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Polish finale e testing approfondito
+
+#### Novità v1.9.7 (6 Novembre 2025) - **ALIGNMENT FIX**
+
+Patch rapida che risolve il bug del sistema di allineamento morale.
+
+**BUG FIX:**
+- ✅ **ALLINEAMENTO MORALE**: Messaggi duplicati rimossi
+  - Fix: Rimosso messaggio generico da eventStore
+  - Impatto: Solo il messaggio corretto appare nel diario
+  - Barra visiva ora si aggiorna correttamente
+  - Sistema completamente funzionale
+
+**IMPATTO:**
+- Sistema allineamento morale completamente funzionante
+- Scelte morali ora chiare e feedback corretto
+- Bussola morale (Lena/Elian) operativa al 100%
+
+**Risultato:** Il sistema di allineamento, pilastro narrativo del gioco, è ora perfettamente funzionante.
+
+---
 
 #### Novità v1.9.6 (5 Novembre 2025) - **CRITICAL BUGFIXES**
 
