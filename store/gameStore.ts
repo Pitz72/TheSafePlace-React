@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainQuestChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause } from '../types';
+import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause, Position, WorldState } from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
-import { useMainQuestDatabaseStore } from '../data/mainQuestDatabase';
+import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from '../data/cutsceneDatabase';
 import { MOUNTAIN_MESSAGES, BIOME_MESSAGES, ATMOSPHERIC_MESSAGES, BIOME_COLORS } from '../constants';
 import { audioManager } from '../utils/audio';
@@ -13,8 +13,24 @@ import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
 import { useCombatStore } from './combatStore';
 
-// --- Save Game System ---
-const SAVE_VERSION = "2.0.0"; // Version for the modular save system
+// ═══════════════════════════════════════════════════════════════════════════
+// SAVE GAME SYSTEM - Version 2.0.0
+// ═══════════════════════════════════════════════════════════════════════════
+/**
+ * Current save system version.
+ * Used for save file compatibility and migration between versions.
+ *
+ * @constant {string}
+ * @see migrateSaveData for version migration logic
+ */
+const SAVE_VERSION = "2.0.0";
+
+/**
+ * LocalStorage key for tracking the last used save slot.
+ * Used to remember which slot the player saved to most recently.
+ *
+ * @constant {string}
+ */
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
 /**
@@ -102,15 +118,58 @@ const timeToMinutes = (time: GameTime): number => {
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 
+/**
+ * Mapping of tile characters to their Italian display names.
+ * @constant
+ * @version 1.6.0 - Added special location tiles (A, N, L, B)
+ */
 const TILE_NAMES: Record<string, string> = {
     '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
-    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu'
+    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu',
+    'A': 'Avamposto', 'N': 'Nido della Cenere', 'T': 'Commerciante',
+    'L': 'Laboratorio', 'B': 'Biblioteca'
 };
+
+/**
+ * Set of tile types that cannot be traversed by the player.
+ * @constant
+ */
 const IMPASSABLE_TILES = new Set(['M']);
-const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~']);
+
+/**
+ * Set of tile types that can be traversed by the player.
+ * @constant
+ * @version 1.6.0 - Added special location tiles (A, N, T, L, B)
+ */
+const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B']);
+
+/**
+ * Base time cost in minutes for a single movement action.
+ * @constant
+ */
 const BASE_TIME_COST_PER_MOVE = 10;
 
+/**
+ * Game Store - Main game state management
+ *
+ * @description Central Zustand store that manages the core game state including:
+ * - Game flow (menu, gameplay, cutscenes)
+ * - Map and player position
+ * - Journal/log system
+ * - Main story progression
+ * - Cutscene system
+ * - Save/load functionality
+ *
+ * @remarks
+ * This store coordinates with other stores (character, time, event, combat, interaction)
+ * to provide a complete game state management system.
+ *
+ * Architecture: Service Layer Pattern
+ * - Complex logic delegated to services/gameService.ts
+ * - Store focuses on state management
+ * - Actions trigger side effects in other stores
+ */
 export const useGameStore = create<GameStoreState>((set, get) => ({
   // --- State ---
   gameState: GameState.INITIAL_BLACK_SCREEN,
@@ -127,17 +186,39 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lastLoreEventDay: null,
   lootedRefuges: [],
   visitedRefuges: [],
-  mainQuestStage: 1,
+  mainStoryStage: 1,
   totalSteps: 0,
   totalCombatWins: 0,
-  activeMainQuestEvent: null,
+  activeMainStoryEvent: null,
   activeCutscene: null,
   gameFlags: new Set(),
-  mainQuestsToday: { day: 0, count: 0 },
+  mainStoryEventsToday: { day: 0, count: 0 },
   deathCause: null,
   visitedBiomes: new Set(),
   damageFlash: false,
+  wanderingTrader: null,
+  worldState: {
+    repairedPumps: [],
+    destroyedPumps: [],
+    waterPlantActive: false,
+    waterPlantLocation: null,
+  },
 
+  /**
+   * Triggers a brief red flash effect to indicate player damage.
+   *
+   * @description Sets damageFlash to true for 150ms, then resets it.
+   * Used to provide visual feedback when the player takes damage.
+   *
+   * @remarks
+   * - Duration: 150ms
+   * - Non-blocking (uses setTimeout)
+   * - Can be triggered multiple times (overlapping flashes)
+   *
+   * @example
+   * // After player takes damage in combat
+   * gameStore.triggerDamageFlash();
+   */
   triggerDamageFlash: () => {
     set({ damageFlash: true });
     setTimeout(() => set({ damageFlash: false }), 150);
@@ -240,20 +321,43 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         lastLoreEventDay: 0,
         lootedRefuges: [],
         visitedRefuges: [],
-        mainQuestStage: 1,
+        mainStoryStage: 1,
         totalSteps: 0,
         totalCombatWins: 0,
-        activeMainQuestEvent: null,
+        activeMainStoryEvent: null,
         gameFlags: new Set(),
         activeCutscene: null,
-        mainQuestsToday: { day: 1, count: 0 },
+        mainStoryEventsToday: { day: 1, count: 0 },
         deathCause: null,
         visitedBiomes: new Set(['S']),
+        worldState: {
+            repairedPumps: [],
+            destroyedPumps: [],
+            waterPlantActive: false,
+            waterPlantLocation: null,
+        },
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
+    
+    // v1.9.0: Auto-start Main Quest
+    import('../services/questService').then(({ questService }) => {
+        questService.startQuest('MQ_THE_ECHO_OF_THE_JOURNEY');
+    });
   },
 
+  /**
+   * Moves the player on the map.
+   *
+   * @description This is a placeholder for the refactored movePlayer logic.
+   * The actual implementation is now in services/gameService.ts.
+   * This function exists to maintain the interface contract but delegates to the service layer.
+   *
+   * @param {number} dx - Horizontal movement delta (-1 for left, +1 for right, 0 for no horizontal movement)
+   * @param {number} dy - Vertical movement delta (-1 for up, +1 for down, 0 for no vertical movement)
+   *
+   * @see services/gameService.ts for the actual implementation
+   */
   movePlayer: (dx, dy) => {
     // This is a placeholder for the refactored movePlayer logic.
     // The actual implementation is now in services/gameService.ts.
@@ -282,13 +386,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   performQuickRest: () => {
     const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
     if (isInventoryOpen || isInRefuge) return;
-    const { lastRestTime, addJournalEntry, gameFlags, startCutscene } = get();
+    const { lastRestTime, addJournalEntry } = get();
     const { gameTime, advanceTime } = useTimeStore.getState();
-    if (gameTime.day >= 2 && !gameFlags.has('BEING_WATCHED_PLAYED')) {
-        set(state => ({ gameFlags: new Set(state.gameFlags).add('BEING_WATCHED_PLAYED') }));
-        startCutscene('CS_BEING_WATCHED');
-        return;
-    }
     if (lastRestTime) {
         if (timeToMinutes(gameTime) - timeToMinutes(lastRestTime) < 1440) {
             addJournalEntry({ text: "Troppo presto per riposare di nuovo. Devi aspettare.", type: JournalEntryType.ACTION_FAILURE });
@@ -479,18 +578,47 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   /**
-   * @function checkMainQuestTriggers
-   * @description Checks if any main quest triggers have been met.
-   */
-  /**
-   * @function checkCutsceneTriggers
-   * @description Checks if any cutscene triggers have been met.
+   * Checks if any cutscene triggers have been met and starts the appropriate cutscene.
+   *
+   * @description This function evaluates various game conditions to determine if a cutscene
+   * should be triggered. Cutscenes are checked in priority order and only one can trigger per call.
+   *
+   * Cutscenes checked (in order):
+   * 1. CS_CITY_OF_GHOSTS - First time entering a City biome
+   * 2. CS_BEING_WATCHED - Automatically at day 3+
+   * 3. CS_RIVER_INTRO - When near water tiles (within 2 tile radius)
+   * 4. CS_HALF_JOURNEY - After 100+ steps AND 3+ days survived
+   * 5. CS_POINT_OF_NO_RETURN - Within 20 tiles of destination 'E'
+   *
+   * @remarks
+   * - Only triggers when gameState is IN_GAME
+   * - Uses game flags to prevent cutscene repetition
+   * - Each cutscene sets a flag (e.g., 'CITY_OF_GHOSTS_PLAYED')
+   * - Distance calculations use Euclidean distance (sqrt(dx² + dy²))
+   *
+   * @example
+   * // Called automatically after player movement
+   * gameStore.checkCutsceneTriggers();
    */
   checkCutsceneTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const state = get();
     
     if (state.gameState !== GameState.IN_GAME) return;
+    
+    // CS_CITY_OF_GHOSTS: First time entering a City (HIGH PRIORITY - before city events)
+    if (state.currentBiome === 'Città' && !state.gameFlags.has('CITY_OF_GHOSTS_PLAYED')) {
+        set(s => ({ gameFlags: new Set(s.gameFlags).add('CITY_OF_GHOSTS_PLAYED') }));
+        state.startCutscene('CS_CITY_OF_GHOSTS');
+        return;
+    }
+    
+    // CS_BEING_WATCHED: Automatically triggers at day 3
+    if (gameTime.day >= 3 && !state.gameFlags.has('BEING_WATCHED_PLAYED')) {
+        set(s => ({ gameFlags: new Set(s.gameFlags).add('BEING_WATCHED_PLAYED') }));
+        state.startCutscene('CS_BEING_WATCHED');
+        return;
+    }
     
     // CS_RIVER_INTRO: Near water tiles
     if (!state.gameFlags.has('RIVER_INTRO_PLAYED')) {
@@ -546,14 +674,46 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
   },
 
-  checkMainQuestTriggers: () => {
+  /**
+   * Checks if any main story chapter triggers have been met and activates the chapter.
+   *
+   * @description Evaluates trigger conditions for the next main story chapter and activates it
+   * if all conditions are satisfied. Respects day/night cycle and daily event limits.
+   *
+   * Main Story System:
+   * - 12 chapters total ("Echi della Memoria")
+   * - Maximum 2 story events per day
+   * - Some chapters only trigger during day (unless allowNightTrigger is true)
+   * - Triggers are checked after every significant game action
+   *
+   * Trigger Types:
+   * - stepsTaken: Player has walked X steps
+   * - daysSurvived: Player has survived X days
+   * - levelReached: Player has reached level X
+   * - combatWins: Player has won X combats
+   * - reachLocation: Player is at specific coordinates
+   * - reachEnd: Player is on the 'E' tile
+   * - nearEnd: Player is within X tiles of 'E'
+   * - firstRefugeEntry: Player enters a refuge for the first time
+   *
+   * @remarks
+   * - Unlocks survival trophies at day 5 and day 30
+   * - Resets daily event counter at midnight
+   * - Only triggers when gameState is IN_GAME
+   * - Night check: hour >= 20 OR hour < 6
+   *
+   * @example
+   * // Called after player movement, time advancement, or level up
+   * gameStore.checkMainStoryTriggers();
+   */
+  checkMainStoryTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const { unlockTrophy } = useCharacterStore.getState();
     const state = get();
 
-    // Reset daily quest counter if the day has changed
-    if (state.mainQuestsToday.day !== gameTime.day) {
-        set({ mainQuestsToday: { day: gameTime.day, count: 0 } });
+    // Reset daily story event counter if the day has changed
+    if (state.mainStoryEventsToday.day !== gameTime.day) {
+        set({ mainStoryEventsToday: { day: gameTime.day, count: 0 } });
     }
     
     if (gameTime.day >= 5) unlockTrophy('trophy_survive_7_days');
@@ -561,14 +721,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
     const currentState = get();
 
-    // Block if 2 quests already happened today
-    if (currentState.mainQuestsToday.count >= 2) {
+    // Block if 2 story events already happened today
+    if (currentState.mainStoryEventsToday.count >= 2) {
         return;
     }
 
-    if (currentState.activeMainQuestEvent || currentState.gameState !== GameState.IN_GAME) return;
-    const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
-    const nextChapter = mainQuestChapters.find(c => c.stage === currentState.mainQuestStage);
+    if (currentState.activeMainStoryEvent || currentState.gameState !== GameState.IN_GAME) return;
+    const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
+    const nextChapter = mainStoryChapters.find(c => c.stage === currentState.mainStoryStage);
     if (!nextChapter) return;
 
     const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
@@ -612,28 +772,34 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     }
     if (conditionMet) {
         set(prevState => ({
-            activeMainQuestEvent: nextChapter,
-            gameState: GameState.MAIN_QUEST,
-            mainQuestsToday: {
-                day: prevState.mainQuestsToday.day,
-                count: prevState.mainQuestsToday.count + 1
+            activeMainStoryEvent: nextChapter,
+            gameState: GameState.MAIN_STORY,
+            mainStoryEventsToday: {
+                day: prevState.mainStoryEventsToday.day,
+                count: prevState.mainStoryEventsToday.count + 1
             }
         }));
     }
   },
 
   /**
-   * @function resolveMainQuest
-   * @description Resolves the current main quest and advances to the next stage.
+   * @function resolveMainStory
+   * @description Resolves the current main story event and advances to the next stage.
    */
-  resolveMainQuest: () => {
-    const completedStage = get().mainQuestStage;
+  resolveMainStory: () => {
+    const completedStage = get().mainStoryStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
+    const newStage = completedStage + 1;
     set(state => ({
-        mainQuestStage: state.mainQuestStage + 1,
-        activeMainQuestEvent: null,
+        mainStoryStage: newStage,
+        activeMainStoryEvent: null,
         gameState: GameState.IN_GAME,
     }));
+    
+    // v1.9.0: Check quest triggers for mainStoryComplete
+    import('../services/questService').then(({ questService }) => {
+        questService.checkQuestTriggers();
+    });
   },
   
   /**
@@ -833,19 +999,292 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       return false;
     }
   },
+  /**
+   * Serializes the game store state to a JSON-compatible object.
+   *
+   * @description Converts the store state to a plain object suitable for JSON serialization.
+   * Handles conversion of Set objects to Arrays for JSON compatibility.
+   *
+   * Used by the save game system to persist game state to localStorage.
+   *
+   * @returns {object} A JSON-serializable representation of the game store state
+   *
+   * @remarks
+   * - Converts Set<string> to string[] for gameFlags and visitedBiomes
+   * - All other state properties are preserved as-is
+   * - Compatible with save system version 2.0.0
+   *
+   * @see fromJSON for the reverse operation
+   * @see saveGame for the complete save system
+   */
   toJSON: () => {
     const state = get();
     return {
       ...state,
       gameFlags: Array.from(state.gameFlags),
       visitedBiomes: Array.from(state.visitedBiomes),
+      worldState: state.worldState, // Already serializable (arrays of positions)
     };
   },
+
+  /**
+   * Deserializes a JSON object and restores the game store state.
+   *
+   * @description Converts a plain JSON object back to the store state format.
+   * Handles conversion of Arrays back to Set objects.
+   *
+   * Used by the load game system to restore game state from localStorage.
+   *
+   * @param {any} json - The JSON object to deserialize (from saved game data)
+   *
+   * @remarks
+   * - Converts string[] back to Set<string> for gameFlags and visitedBiomes
+   * - All other properties are restored directly
+   * - Compatible with save system version 2.0.0
+   * - Handles migration from version 1.0.0 via migrateSaveData()
+   *
+   * @see toJSON for the serialization operation
+   * @see loadGame for the complete load system
+   * @see migrateSaveData for version migration
+   */
   fromJSON: (json) => {
     set({
       ...json,
       gameFlags: new Set(json.gameFlags),
       visitedBiomes: new Set(json.visitedBiomes),
+      worldState: json.worldState || { repairedPumps: [], destroyedPumps: [], waterPlantActive: false, waterPlantLocation: null },
     });
-  }
+  },
+
+  /**
+   * Restores the game store state from a partial state object.
+   *
+   * @description Low-level function to restore state. Used internally by the save/load system.
+   * Directly sets the store state without any transformation or validation.
+   *
+   * @param {any} state - The state object to restore
+   *
+   * @warning This function performs no validation. Use fromJSON() for safe deserialization.
+   *
+   * @internal
+   */
+  restoreState: (state: any) => {
+    set({ ...state });
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WANDERING TRADER SYSTEM (v1.6.0)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Initializes the Wandering Trader at a random valid position on the map.
+   *
+   * @description Scans the map for traversable tiles and spawns the trader
+   * at a random location. Should be called once when starting a new game.
+   *
+   * @remarks
+   * - Only spawns on traversable tiles (., F, C, V)
+   * - Excludes water (~), mountains (M), refuges (R), start (S), end (E)
+   * - Sets initial turnsUntilMove to 5
+   */
+  initializeWanderingTrader: () => {
+    const { map } = get();
+    const validTiles: Position[] = [];
+    
+    // Scan map for valid spawn positions
+    for (let y = 0; y < map.length; y++) {
+      for (let x = 0; x < map[y].length; x++) {
+        const tile = map[y][x];
+        // Valid tiles: Plains, Forest, City, Village
+        if (tile === '.' || tile === 'F' || tile === 'C' || tile === 'V') {
+          validTiles.push({ x, y });
+        }
+      }
+    }
+    
+    if (validTiles.length === 0) {
+      console.error('[initializeWanderingTrader] No valid spawn positions found!');
+      return;
+    }
+    
+    // Pick random position
+    const randomIndex = Math.floor(Math.random() * validTiles.length);
+    const spawnPosition = validTiles[randomIndex];
+    
+    set({
+      wanderingTrader: {
+        position: spawnPosition,
+        turnsUntilMove: 5
+      }
+    });
+    
+    console.log(`[Wandering Trader] Spawned at (${spawnPosition.x}, ${spawnPosition.y})`);
+  },
+
+  /**
+   * Decrements the trader's turn counter.
+   *
+   * @description Called each player turn to count down until the trader moves.
+   */
+  advanceTraderTurn: () => {
+    set(state => {
+      if (!state.wanderingTrader) return {};
+      return {
+        wanderingTrader: {
+          ...state.wanderingTrader,
+          turnsUntilMove: state.wanderingTrader.turnsUntilMove - 1
+        }
+      };
+    });
+  },
+
+  /**
+   * Moves the trader to a new position and resets the turn counter.
+   *
+   * @param {Position} newPosition - The new position for the trader
+   */
+  moveTrader: (newPosition: Position) => {
+    set(state => {
+      if (!state.wanderingTrader) return {};
+      return {
+        wanderingTrader: {
+          position: newPosition,
+          turnsUntilMove: 5
+        }
+      };
+    });
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WORLD STATE SYSTEM (v1.8.0)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Activates a water pump at the specified location.
+   *
+   * @description Marks a pump as repaired and functional. The pump becomes
+   * a permanent water source that the player can interact with.
+   *
+   * @param {Position} location - Coordinates of the pump
+   *
+   * @remarks
+   * - Adds location to repairedPumps array
+   * - Removes from destroyedPumps if present
+   * - Persists in save/load system
+   * - Triggers visual marker on map
+   *
+   * @example
+   * activateWaterPump({ x: 45, y: 85 });
+   */
+  activateWaterPump: (location: Position) => {
+    set(state => {
+      const newRepaired = [...state.worldState.repairedPumps, location];
+      const newDestroyed = state.worldState.destroyedPumps.filter(
+        p => !(p.x === location.x && p.y === location.y)
+      );
+      
+      return {
+        worldState: {
+          ...state.worldState,
+          repairedPumps: newRepaired,
+          destroyedPumps: newDestroyed,
+        }
+      };
+    });
+    
+    get().addJournalEntry({
+      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è ora funzionante!`,
+      type: JournalEntryType.XP_GAIN,
+      color: '#38bdf8' // cyan
+    });
+  },
+
+  /**
+   * Destroys a water pump at the specified location.
+   *
+   * @description Marks a pump as permanently destroyed and unusable.
+   *
+   * @param {Position} location - Coordinates of the pump
+   *
+   * @remarks
+   * - Adds location to destroyedPumps array
+   * - Removes from repairedPumps if present
+   * - Persists in save/load system
+   *
+   * @example
+   * destroyWaterPump({ x: 45, y: 85 });
+   */
+  destroyWaterPump: (location: Position) => {
+    set(state => {
+      const newDestroyed = [...state.worldState.destroyedPumps, location];
+      const newRepaired = state.worldState.repairedPumps.filter(
+        p => !(p.x === location.x && p.y === location.y)
+      );
+      
+      return {
+        worldState: {
+          ...state.worldState,
+          repairedPumps: newRepaired,
+          destroyedPumps: newDestroyed,
+        }
+      };
+    });
+    
+    get().addJournalEntry({
+      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è stata distrutta.`,
+      type: JournalEntryType.SYSTEM_WARNING
+    });
+  },
+
+  /**
+   * Checks if a water pump at the specified location can be used.
+   *
+   * @description Returns true if pump is repaired and functional.
+   *
+   * @param {Position} location - Coordinates to check
+   * @returns {boolean} True if pump is usable
+   *
+   * @example
+   * if (canUseWaterPump({ x: 45, y: 85 })) {
+   *   // Show pump interaction option
+   * }
+   */
+  canUseWaterPump: (location: Position): boolean => {
+    const { repairedPumps } = get().worldState;
+    return repairedPumps.some(p => p.x === location.x && p.y === location.y);
+  },
+
+  /**
+   * Activates the water treatment plant.
+   *
+   * @description Marks the water plant as active, providing clean water
+   * in the surrounding area via Active Search.
+   *
+   * @param {Position} location - Coordinates of the plant
+   *
+   * @remarks
+   * v1.8.4 - Repair Quest System:
+   * - Sets waterPlantActive flag
+   * - Stores plant location
+   * - Modifies Active Search loot in area
+   * - Persists in save/load
+   *
+   * @example
+   * activateWaterPlant({ x: 50, y: 80 });
+   */
+  activateWaterPlant: (location: Position) => {
+    set(state => ({
+      worldState: {
+        ...state.worldState,
+        waterPlantActive: true,
+        waterPlantLocation: location,
+      }
+    }));
+    
+    get().addJournalEntry({
+      text: `[MONDO] L'impianto di depurazione è ora attivo! L'area circostante ha acqua pulita.`,
+      type: JournalEntryType.XP_GAIN,
+      color: '#38bdf8' // cyan
+    });
+  },
 }));

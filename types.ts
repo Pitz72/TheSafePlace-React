@@ -20,8 +20,12 @@ export enum GameState {
   EVENT_SCREEN,
   LEVEL_UP_SCREEN,
   COMBAT,
-  MAIN_QUEST,
+  MAIN_STORY,
   ASH_LULLABY_CHOICE,
+  QUEST_LOG,
+  OUTPOST,
+  DIALOGUE,
+  TRADING,
   GAME_OVER,
 }
 
@@ -34,6 +38,7 @@ export enum JournalEntryType {
   ITEM_ACQUIRED,
   SYSTEM_ERROR,
   SYSTEM_WARNING,
+  SYSTEM_MESSAGE,
   COMBAT,
   XP_GAIN,
   EVENT,
@@ -69,6 +74,35 @@ export interface TileInfo {
   name: string;
 }
 
+// --- Map & Tile System ---
+/**
+ * All possible tile types on the game map.
+ *
+ * @remarks
+ * Standard Tiles:
+ * - '.': Plains (Pianura)
+ * - 'F': Forest (Foresta)
+ * - '~': Water (Acqua)
+ * - 'M': Mountain (Montagna) - Impassable
+ * - 'R': Refuge (Rifugio)
+ * - 'C': City (Città)
+ * - 'V': Village (Villaggio)
+ * - 'S': Start Point (Punto di Partenza)
+ * - 'E': End/Destination (Destinazione)
+ *
+ * Special Location Tiles (v1.6.0):
+ * - 'A': Outpost (Avamposto "Il Crocevia")
+ * - 'N': Ash Nest (Nido della Cenere) - End-game location
+ * - 'T': Trader (Commerciante) - Dynamic, not placed on map
+ * - 'L': Laboratory (Laboratorio) - High-tech location
+ * - 'B': Library (Biblioteca) - Knowledge repository
+ *
+ * Quest Markers (overlay, not map tiles):
+ * - '!M': Main Quest Marker (red)
+ * - '!S': Sub Quest Marker (yellow)
+ */
+export type TileType = '.' | 'F' | 'C' | 'V' | 'R' | '~' | 'M' | 'E' | 'S' | 'A' | 'N' | 'T' | 'L' | 'B';
+
 // --- Weather System ---
 export enum WeatherType {
     SERENO = 'Sereno',
@@ -83,8 +117,8 @@ export interface WeatherState {
   duration: number; // in minutes
 }
 
-// --- Main Quest System ---
-export type QuestTriggerType =
+// --- Main Story System ---
+export type StoryTriggerType =
   | 'stepsTaken'
   | 'daysSurvived'
   | 'levelReached'
@@ -94,7 +128,7 @@ export type QuestTriggerType =
   | 'reachEnd'
   | 'nearEnd';
 
-export type QuestTrigger =
+export type StoryTrigger =
   | { type: 'stepsTaken'; value: number }
   | { type: 'daysSurvived'; value: number }
   | { type: 'levelReached'; value: number }
@@ -104,14 +138,157 @@ export type QuestTrigger =
   | { type: 'reachEnd' }
   | { type: 'nearEnd'; distance: number };
 
-export interface MainQuestChapter {
+export interface MainStoryChapter {
   stage: number;
   title: string;
   text: string;
-  trigger: QuestTrigger;
+  trigger: StoryTrigger;
   allowNightTrigger?: boolean;
 }
 
+// --- Quest System ---
+/**
+ * Type of quest: MAIN (main storyline) or SUB (side quest)
+ */
+export type QuestType = 'MAIN' | 'SUB';
+
+/**
+ * Types of triggers that can advance a quest stage
+ */
+export type QuestTriggerType =
+  | 'reachLocation'
+  | 'getItem'
+  | 'hasItems'
+  | 'useItem'
+  | 'enemyDefeated'
+  | 'interactWithObject'
+  | 'skillCheckSuccess'
+  | 'talkToNPC'
+  | 'completeEvent'
+  | 'mainStoryComplete'
+  | 'craftItem'
+  | 'successfulFlee'
+  | 'tacticRevealed';
+
+/**
+ * Defines a condition that must be met to advance a quest stage
+ */
+export interface QuestTrigger {
+  type: QuestTriggerType;
+  value: any; // e.g., { x: 10, y: 20 } for reachLocation, 'item_id' for getItem
+}
+
+/**
+ * Rewards granted upon quest completion
+ */
+export interface QuestReward {
+  xp?: number;
+  items?: Array<{ itemId: string; quantity: number }>;
+  statBoost?: { stat: keyof CharacterAttributes; amount: number };
+}
+
+/**
+ * A single stage/objective within a quest
+ */
+export interface QuestStage {
+  stage: number;
+  objective: string; // Description shown to player (e.g., "Find the old windmill.")
+  trigger: QuestTrigger;
+}
+
+/**
+ * Complete quest definition
+ */
+export interface Quest {
+  id: string; // Unique ID, e.g., "find_jonas_talisman"
+  title: string; // Title shown to player, e.g., "The Lost Talisman"
+  type: QuestType;
+  startText: string; // Narrative text shown when quest starts
+  stages: QuestStage[];
+  finalReward: QuestReward;
+}
+
+// --- Dialogue System (v1.7.0) ---
+/**
+ * Consequence that can result from a dialogue choice.
+ * Supports quest management, item exchange, skill checks, and dialogue flow control.
+ *
+ * @version 1.8.1 - Added upgradeArmor, learnRecipe, revealMapPOI
+ */
+export interface DialogueConsequence {
+  type: 'startQuest' | 'advanceQuest' | 'completeQuest' | 'failQuest' | 'giveItem' | 'takeItem' | 'skillCheck' | 'alignmentChange' | 'jumpToNode' | 'endDialogue' | 'addXp' | 'upgradeArmor' | 'learnRecipe' | 'revealMapPOI';
+  value?: any; // questId, itemId, { skill, dc, successNode, failureNode }, nodeId, { slot, defenseBonus, statusResistance }, recipeId, { x, y, name }, etc.
+}
+
+/**
+ * A single dialogue option that the player can choose.
+ */
+export interface DialogueOption {
+  text: string; // Text shown to player (e.g., "[1] Chi sei?")
+  consequence: DialogueConsequence;
+  showCondition?: {
+    questActive?: string;
+    questCompleted?: string;
+    hasItem?: string;
+    alignment?: 'lena' | 'elian';
+    minAlignmentValue?: number;
+  };
+}
+
+/**
+ * A single node in a dialogue tree.
+ * Contains NPC text and player response options.
+ */
+export interface DialogueNode {
+  id: string; // Node ID (e.g., "marcus_intro_1")
+  npcText: string; // What the NPC says
+  options: DialogueOption[];
+}
+
+/**
+ * Complete dialogue tree for an NPC or situation.
+ */
+export interface DialogueTree {
+  id: string; // Tree ID (e.g., "marcus_main")
+  npcName: string; // Display name (e.g., "Marcus")
+  nodes: Record<string, DialogueNode>;
+  startNodeId: string; // Initial node ID
+}
+
+// --- Trading System (v1.7.0) ---
+/**
+ * Represents an item in a trade offer.
+ */
+export interface TradeItem {
+  inventoryIndex: number; // Index in player's inventory or trader's inventory
+  itemId: string;
+  quantity: number;
+  value: number; // Total value (item.value × quantity)
+}
+
+/**
+ * Trader NPC definition with inventory.
+ */
+export interface Trader {
+  id: string; // e.g., "marcus", "wandering_trader"
+  name: string; // Display name
+  description: string;
+  inventory: Array<{ itemId: string; quantity: number }>;
+  baseMarkup: number; // Base markup percentage (e.g., 1.5 = 150%)
+}
+
+/**
+ * Current state of a trading session.
+ */
+export interface TradingSessionState {
+  traderId: string;
+  playerOffer: TradeItem[];
+  traderOffer: TradeItem[];
+  playerOfferValue: number;
+  traderOfferValue: number;
+  effectiveMarkup: number; // Markup after Persuasion skill adjustment
+  balance: number; // playerOfferValue - (traderOfferValue × effectiveMarkup)
+}
 
 // --- UI & Menu States ---
 export type VisualTheme = 'standard' | 'crt' | 'high_contrast';
@@ -134,7 +311,7 @@ export interface CraftingMenuState {
 
 // --- Cutscene System ---
 export interface CutsceneConsequence {
-    type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest';
+    type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest' | 'startQuest';
     payload?: any;
 }
 
@@ -161,7 +338,7 @@ export interface Cutscene {
 // --- Event System ---
 export type EventResultType = 
     | 'addItem' | 'removeItem' | 'addXp' | 'takeDamage' | 'advanceTime' 
-    | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special';
+    | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special' | 'startQuest';
 
 export interface EventResult {
     type: EventResultType;
@@ -233,10 +410,13 @@ export interface EnemyTactic {
   skillCheck?: { skill: SkillName; dc: number };
 }
 
+export type EnemyType = 'humanoid' | 'beast';
+
 export interface Enemy {
   id: string;
   name: string;
   description: string;
+  type: EnemyType;
   hp: number;
   ac: number;
   attack: {
@@ -245,6 +425,14 @@ export interface Enemy {
   };
   xp: number;
   biomes: string[];
+  isElite?: boolean; // v1.9.1 - Elite enemies with special abilities
+  specialAbility?: {
+    id: string;
+    name: string;
+    description: string;
+    trigger: 'turn_2' | 'player_miss' | 'low_hp';
+    probability?: number;
+  };
   tactics: {
     revealDc: number;
     description: string;
@@ -271,6 +459,15 @@ export interface CombatState {
     availableTacticalActions: EnemyTactic[];
     debuffs?: CombatDebuff[];
     victory?: boolean;
+    biome?: string; // v1.9.1 - Current biome for environmental actions
+    environmentalBonusActive?: boolean; // v1.9.1 - Cover/hide bonus active
+    environmentalBonusTurns?: number; // v1.9.1 - Turns remaining for bonus
+    specialAmmoActive?: 'piercing' | 'incendiary' | 'hollow_point' | null; // v1.9.1 - Active special ammo type
+    specialAmmoRounds?: number; // v1.9.1 - Rounds remaining with special ammo
+    enemyBurning?: boolean; // v1.9.1 - Enemy on fire (incendiary ammo)
+    enemyBurningTurns?: number; // v1.9.1 - Turns remaining for burning
+    turnCount?: number; // v1.9.1 - Combat turn counter for Elite abilities
+    abilityUsedThisCombat?: boolean; // v1.9.1 - Track if Elite ability already used
 }
 
 
@@ -282,9 +479,41 @@ export interface PlayerStatus {
 export type PlayerCombatActionPayload =
   | { type: 'attack' | 'analyze' | 'flee' }
   | { type: 'tactic', tacticId: string }
-  | { type: 'use_item', itemId: string };
+  | { type: 'use_item', itemId: string }
+  | { type: 'environmental', actionId: 'hide_in_trees' | 'seek_cover' }
+  | { type: 'load_special_ammo', ammoType: 'piercing' | 'incendiary' | 'hollow_point' };
 
 export type DeathCause = 'COMBAT' | 'STARVATION' | 'DEHYDRATION' | 'SICKNESS' | 'POISON' | 'ENVIRONMENT' | 'UNKNOWN';
+
+/**
+ * State of the Wandering Trader NPC (v1.6.0)
+ */
+export interface WanderingTraderState {
+  position: Position;
+  turnsUntilMove: number;
+}
+
+/**
+ * World State - Tracks permanent changes to the game world (v1.8.0+)
+ *
+ * @version 1.8.4 - Added water plant tracking
+ */
+export interface WorldState {
+  repairedPumps: Position[];
+  destroyedPumps: Position[];
+  waterPlantActive: boolean;
+  waterPlantLocation: Position | null;
+}
+
+/**
+ * Lore Archive Entry - Unlockable lore discoveries (v1.8.0)
+ */
+export interface LoreEntry {
+  id: string;
+  title: string;
+  text: string;
+  category: 'project' | 'history' | 'character' | 'world';
+}
 
 export interface GameStoreState {
   gameState: GameState;
@@ -301,16 +530,18 @@ export interface GameStoreState {
   lastLoreEventDay: number | null;
   lootedRefuges: Position[];
   visitedRefuges: Position[];
-  mainQuestStage: number;
+  mainStoryStage: number;
   totalSteps: number;
   totalCombatWins: number;
-  activeMainQuestEvent: MainQuestChapter | null;
+  activeMainStoryEvent: MainStoryChapter | null;
   activeCutscene: Cutscene | null;
   gameFlags: Set<string>;
-  mainQuestsToday: { day: number; count: number };
+  mainStoryEventsToday: { day: number; count: number };
   deathCause: DeathCause | null;
   visitedBiomes: Set<string>;
   damageFlash: boolean;
+  wanderingTrader: WanderingTraderState | null;
+  worldState: WorldState;
   
   // Actions
   triggerDamageFlash: () => void;
@@ -324,8 +555,8 @@ export interface GameStoreState {
   performQuickRest: () => void;
   performActiveSearch: () => void;
   openLevelUpScreen: () => void;
-  checkMainQuestTriggers: () => void;
-  resolveMainQuest: () => void;
+  checkMainStoryTriggers: () => void;
+  resolveMainStory: () => void;
   startCutscene: (id: string) => void;
   processCutsceneConsequences: (consequences: CutsceneConsequence[]) => void;
   endCutscene: () => void;
@@ -334,6 +565,17 @@ export interface GameStoreState {
   saveGame: (slot: number) => boolean;
   loadGame: (slot: number) => boolean;
   restoreState: (state: any) => void;
+  toJSON: () => object;
+  fromJSON: (json: any) => void;
+  // Wandering Trader System (v1.6.0)
+  initializeWanderingTrader: () => void;
+  advanceTraderTurn: () => void;
+  moveTrader: (newPosition: Position) => void;
+  // World State System (v1.8.0+)
+  activateWaterPump: (location: Position) => void;
+  destroyWaterPump: (location: Position) => void;
+  canUseWaterPump: (location: Position) => boolean;
+  activateWaterPlant: (location: Position) => void;
 }
 
 
@@ -364,6 +606,9 @@ export interface Attributes {
   sag: number;
   car: number;
 }
+
+// Type alias for CharacterAttributes (used in QuestReward)
+export type CharacterAttributes = Attributes;
 
 export interface Skill {
     proficient: boolean;
@@ -426,6 +671,11 @@ export interface CharacterState {
     knownRecipes: string[];
     unlockedTalents: string[];
     unlockedTrophies: Set<string>;
+    activeQuests: Record<string, number>; // questId -> currentStage
+    completedQuests: string[]; // Array for JSON serialization
+    loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
+    questKillCounts: Record<string, Record<string, number>>; // questId -> { enemyId -> count } (v1.8.3)
+    questFlags: Record<string, boolean>; // Quest achievement flags (v1.9.0)
 
     // Actions
     initCharacter: () => void;
@@ -448,6 +698,8 @@ export interface CharacterState {
     updateSurvivalStats: (minutes: number, weather: WeatherType) => void;
     calculateSurvivalCost: (minutes: number) => { satietyCost: number; hydrationCost: number };
     heal: (amount: number) => void;
+    updateFatigue: (amount: number) => void;
+    rest: (amount: number) => void;
     restoreSatiety: (amount: number) => void;
     restoreHydration: (amount: number) => void;
     changeAlignment: (type: 'lena' | 'elian', amount: number) => void;
@@ -459,8 +711,14 @@ export interface CharacterState {
     getTotalWeight: () => number;
     getMaxCarryWeight: () => number;
     unlockTrophy: (trophyId: string) => void;
+    addLoreEntry: (entryId: string) => void;
+    upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => void;
+    setQuestFlag: (flagName: string, value: boolean) => void;
+    getQuestFlag: (flagName: string) => boolean;
     // Save/Load System
     restoreState: (state: Partial<CharacterState>) => void;
+    toJSON: () => object;
+    fromJSON: (json: any) => void;
 }
 
 // --- Item System ---

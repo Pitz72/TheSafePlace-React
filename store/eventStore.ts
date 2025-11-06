@@ -7,6 +7,7 @@ import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useEnemyDatabaseStore } from '../data/enemyDatabase';
 import { useCombatStore } from './combatStore';
 import { useTimeStore } from './timeStore';
+import { questService } from '../services/questService';
 
 /**
  * @interface EventStoreState
@@ -144,6 +145,42 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             useGameStore.getState().setGameState(GameState.IN_GAME);
             return;
         }
+        
+        // If this was a wandering trader encounter, force trader to move
+        if (activeEventId === 'unique_wandering_trader_encounter') {
+            import('../services/gameService').then(({ gameService }) => {
+                gameService.updateWanderingTrader();
+            });
+        }
+        
+        // Check quest triggers after event completion (v1.8.0: completeEvent trigger)
+        import('../services/questService').then(({ questService }) => {
+            questService.checkQuestTriggers(undefined, undefined, activeEventId);
+        });
+        
+        // Auto-start and auto-complete lore quests (v1.8.0)
+        if (activeEventId === 'unique_ancient_library') {
+            import('../services/questService').then(({ questService }) => {
+                questService.startQuest('lore_quest_library');
+                // Small delay to ensure quest is started before completing
+                setTimeout(() => {
+                    questService.completeQuest('lore_quest_library');
+                    useCharacterStore.getState().addLoreEntry('lore_project_echo');
+                }, 100);
+            });
+        }
+        
+        if (activeEventId === 'unique_scientist_notes') {
+            import('../services/questService').then(({ questService }) => {
+                questService.startQuest('lore_quest_laboratory');
+                // Small delay to ensure quest is started before completing
+                setTimeout(() => {
+                    questService.completeQuest('lore_quest_laboratory');
+                    useCharacterStore.getState().addLoreEntry('lore_project_rebirth');
+                }, 100);
+            });
+        }
+        
         set(state => ({
             eventHistory: state.activeEvent?.isUnique ? [...state.eventHistory, activeEventId] : state.eventHistory,
             activeEvent: null,
@@ -176,17 +213,26 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             switch (result.type) {
                 case 'addItem':
                     addItem(result.value.itemId, result.value.quantity);
-                    message = `Hai ottenuto: ${itemDatabase[result.value.itemId].name} x${result.value.quantity}.`;
+                    const addedItem = itemDatabase[result.value.itemId];
+                    message = addedItem
+                        ? `Hai ottenuto: ${addedItem.name} x${result.value.quantity}.`
+                        : `Hai ottenuto: ${result.value.itemId} x${result.value.quantity}.`;
                     break;
                 case 'removeItem':
                     removeItem(result.value.itemId, result.value.quantity);
-                    message = `Hai perso: ${itemDatabase[result.value.itemId].name} x${result.value.quantity}.`;
+                    const removedItem = itemDatabase[result.value.itemId];
+                    message = removedItem
+                        ? `Hai perso: ${removedItem.name} x${result.value.quantity}.`
+                        : `Hai perso: ${result.value.itemId} x${result.value.quantity}.`;
                     break;
                 case 'addXp': addXp(result.value); message = `Hai guadagnato ${result.value} XP.`; break;
                 case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
                 case 'advanceTime': advanceTime(result.value, true); message = `Passano ${result.value} minuti.`; break;
                 case 'journalEntry': if (result.text) message = result.text; break;
-                case 'alignmentChange': changeAlignment(result.value.type, result.value.amount); message = `La tua bussola morale si sposta verso ${result.value.type}.`; break;
+                case 'alignmentChange':
+                    changeAlignment(result.value.type, result.value.amount);
+                    message = null; // changeAlignment handles its own journal entries
+                    break;
                 case 'statusChange': addStatus(result.value); message = `Sei ora in stato: ${result.value}.`; break;
                 case 'statBoost': {
                     const { stat, amount } = result.value as { stat: AttributeName; amount: number };
@@ -196,7 +242,78 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 }
                 case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
-                case 'special': message = result.text || `Si è verificato un evento speciale.`; break;
+                case 'special': {
+                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags)
+                    if (result.value && typeof result.value === 'object') {
+                        const { effect, dialogueId, traderId, location, flag } = result.value;
+                        
+                        if (effect === 'setFlag' && flag) {
+                            // v1.8.2: Set game flag for quest tracking
+                            useGameStore.setState(state => ({
+                                gameFlags: new Set(state.gameFlags).add(flag)
+                            }));
+                            message = result.text || `Flag ${flag} impostato.`;
+                            
+                            // Check if this completes any quest triggers
+                            import('../services/questService').then(({ questService }) => {
+                                questService.checkQuestTriggers();
+                            });
+                        } else if (effect === 'startDialogue' && dialogueId) {
+                            // Import dialogueService dynamically to avoid circular dependency
+                            import('../services/dialogueService').then(({ dialogueService }) => {
+                                dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
+                            });
+                            message = result.text || "Inizi una conversazione...";
+                        } else if (effect === 'startTrading' && traderId) {
+                            // Import tradingService dynamically to avoid circular dependency
+                            import('../services/tradingService').then(({ tradingService }) => {
+                                tradingService.startTradingSession(traderId, GameState.EVENT_SCREEN);
+                            });
+                            message = result.text || "Inizi a commerciare...";
+                        } else if (effect === 'activateWaterPump' && location) {
+                            // v1.8.0: Activate water pump
+                            useGameStore.getState().activateWaterPump(location);
+                            message = result.text || "La pompa è ora funzionante!";
+                        } else if (effect === 'destroyWaterPump' && location) {
+                            // v1.8.0: Destroy water pump
+                            useGameStore.getState().destroyWaterPump(location);
+                            message = result.text || "La pompa è stata distrutta.";
+                        } else if (effect === 'activateWaterPlant' && location) {
+                            // v1.8.4: Activate water treatment plant
+                            useGameStore.getState().activateWaterPlant(location);
+                            message = result.text || "L'impianto di depurazione è attivo!";
+                        } else if (effect === 'completeQuestFromEvent') {
+                            // v1.8.0: Complete quest from event
+                            const { questId } = result.value;
+                            import('../services/questService').then(({ questService }) => {
+                                questService.completeQuest(questId);
+                            });
+                            message = result.text || "Quest completata!";
+                        } else if (effect === 'failQuestFromEvent') {
+                            // v1.8.0: Fail quest from event
+                            const { questId } = result.value;
+                            const { activeQuests } = useCharacterStore.getState();
+                            const newActiveQuests = { ...activeQuests };
+                            delete newActiveQuests[questId];
+                            useCharacterStore.setState({ activeQuests: newActiveQuests });
+                            addJournalEntry({
+                                text: `[MISSIONE FALLITA] La quest è stata abbandonata.`,
+                                type: JournalEntryType.SYSTEM_WARNING,
+                                color: '#ef4444'
+                            });
+                            message = result.text || "Quest fallita.";
+                        } else {
+                            message = result.text || `Si è verificato un evento speciale.`;
+                        }
+                    } else {
+                        message = result.text || `Si è verificato un evento speciale.`;
+                    }
+                    break;
+                }
+                case 'startQuest':
+                    questService.startQuest(result.value as string);
+                    message = null; // Quest service handles journal entries
+                    break;
             }
             if (result.type !== 'journalEntry' && message) addJournalEntry({ text: message, type: JournalEntryType.NARRATIVE });
             return message;

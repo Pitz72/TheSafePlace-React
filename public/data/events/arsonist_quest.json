@@ -1,0 +1,234 @@
+[
+  {
+    "id": "unique_grandmothers_letter",
+    "title": "Lettera Ritrovata",
+    "description": "Frugando tra i documenti ammuffiti di un vecchio ufficio, trovi una lettera personale, protetta in una busta di plastica. La calligrafia è incerta, quella di una persona anziana. L'inchiostro è sbiadito, ma il testo è ancora leggibile.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi la lettera",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "La lettera recita: 'Mio caro nipote, so che non puoi ricevere questa lettera dove sei ora, nel Tubo N.403. Ma la scrivo lo stesso, perché scrivere è l'unico modo che ho per sentirti vicino. La vigna che tanto amavi è ancora lì, anche se nessuno la cura più. Ho conservato il tuo maglioncino a strisce rosse e bianche, quello che indossavi sempre da bambino. Ti aspetto, anche se so che non tornerai. Con tutto il mio amore, Nonna.'"
+            },
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "grandmothers_letter",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "startQuest",
+              "value": "the_arsonist_and_the_tube"
+            },
+            {
+              "type": "addXp",
+              "value": 100
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Lascia la lettera dov'è",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi di non disturbare questa corrispondenza privata. Alcune storie sono troppo personali."
+            }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_asylum_ruins",
+    "title": "Manicomio di Sant'Ambrogio",
+    "description": "Le rovine di un grande edificio si ergono davanti a te. Un cartello arrugginito recita 'Ospedale Psichiatrico Sant'Ambrogio - Fondato 1892'. Le finestre sono sbarrate, le porte sfondate. Un'aura di sofferenza permea questo luogo.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca negli archivi dei pazienti",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 14,
+          "successText": "Tra i registri dei pazienti, trovi una cartella clinica. 'Paziente: [NOME CENSURATO]. Soprannome: Il Piromane. Assegnato alla Sezione di Massima Sicurezza - Tubo N.403, Ala Est, Livello Sotterraneo.' Il registro menziona anche una 'terapia sperimentale di soppressione emotiva' a cui era stato sottoposto poco prima del Grande Silenzio. Le coordinate della sezione sono segnate su una mappa dell'edificio.",
+          "failureText": "Gli archivi sono un caos di documenti bruciati e illeggibili. Non trovi nulla di utile.",
+          "success": [
+            {
+              "type": "journalEntry",
+              "text": "[SCOPERTA] Hai trovato la location del Tubo N.403. È nell'ala est sotterranea del manicomio."
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "advance_quest_stage",
+                "questId": "the_arsonist_and_the_tube"
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 150
+            }
+          ],
+          "failure": [
+            {
+              "type": "addXp",
+              "value": 30
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Esplora le celle comuni",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "percezione",
+          "dc": 12,
+          "successText": "Le celle sono vuote e inquietanti. Trovi solo graffiti disperati e qualche oggetto personale abbandonato.",
+          "failureText": "Le celle sono troppo buie e pericolose. Ti allontani rapidamente.",
+          "success": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "old_coins",
+                "quantity": 20
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 40
+            }
+          ],
+          "failure": [
+            {
+              "type": "addXp",
+              "value": 10
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Questo posto è troppo inquietante. Vai via",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "L'atmosfera di questo luogo ti opprime. Decidi di tornare un'altra volta."
+            }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_find_the_arsonist",
+    "title": "Il Tubo N.403",
+    "description": "Scendi nelle profondità sotterranee del manicomio. L'aria diventa progressivamente più calda e soffocante. Segni di piccoli incendi sono ovunque - carta bruciata, legno carbonizzato, persino il metallo delle porte mostra segni di fusione.\n\nFinalmente raggiungi una porta massiccia con la scritta 'TUBO N.403 - MASSIMA SICUREZZA'. La porta è divelta, fusa dall'interno. Oltre la soglia, vedi una cella annerita.\n\nAl centro della stanza, accovacciata, c'è una figura. È un uomo, o ciò che ne resta. Incredibilmente magro e secco, la pelle tesa sulle ossa come pergamena bruciacchiata. Indossa i resti di un maglioncino a strisce rosse e bianche, quasi completamente bruciato ma ancora riconoscibile.\n\nAlza lentamente la testa. Non è un uomo. Non del tutto. Un occhio è umano, selvaggio e perso in un abisso di follia. L'altro è una lente scura e incrinata da cui proviene un debole bagliore rossastro. Parti del suo corpo sono fuse con cavi e placche metalliche annerite, ma il processo sembra... sbagliato. Incompleto. È un Angelo della Cenere mal riuscito, un abominio rifiutato persino dal suo stesso genere.\n\nNon ti attacca. Ti fissa. E con una voce che è un sibilo di statica e cenere, sussurra parole sconnesse: 'Nonna... la vigna... brucia... tutto brucia... così caldo... e comodo...'\n\nDalle sue dita scheletriche, una piccola fiamma si accende e si spegne, ipnotica.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "[QUEST] Mostragli la lettera della nonna",
+        "itemRequirements": [
+          {
+            "itemId": "grandmothers_letter",
+            "quantity": 1
+          }
+        ],
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Avvicini lentamente la lettera. I suoi occhi si fissano sulla calligrafia. La fiamma sulla sua mano si spegne. Il sibilo cessa. Per un istante, l'occhio umano sembra avere un lampo di lucidità, di dolore immenso. Sussurra una sola parola: 'More...'. Poi, il bagliore rosso nel suo occhio meccanico pulsa violentemente. Urla, un suono straziante di metallo e carne, e viene avvolto dalle fiamme, consumandosi in un mucchio di cenere e circuiti fumanti. Tra le ceneri, trovi un accendino di metallo, stranamente freddo al tatto."
+            },
+            {
+              "type": "removeItem",
+              "value": {
+                "itemId": "grandmothers_letter",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "pyromaniacs_lighter",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "complete_quest",
+                "questId": "the_arsonist_and_the_tube"
+              }
+            },
+            {
+              "type": "alignmentChange",
+              "value": {
+                "type": "lena",
+                "amount": 2
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 700
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Attacca. Metti fine alla sua sofferenza.",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi che la pietà è l'unica cosa che puoi offrirgli. Prepari la tua arma."
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "start_combat",
+                "enemyId": "aberrant_angel_arsonist"
+              }
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Allontanati. Lascialo alla sua follia.",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Non puoi affrontare questo orrore. Ti allontani lentamente, lasciando il Piromane alla sua veglia eterna di fiamme e follia. La lettera della nonna rimarrà non consegnata."
+            },
+            {
+              "type": "alignmentChange",
+              "value": {
+                "type": "elian",
+                "amount": 1
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 50
+            }
+          ]
+        }]
+      }
+    ]
+  }
+]

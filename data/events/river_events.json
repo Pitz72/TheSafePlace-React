@@ -1,0 +1,61 @@
+[
+  {
+    "id": "river_message_in_a_bottle",
+    "title": "Messaggio nella Bottiglia",
+    "description": "Una bottiglia di vetro ben sigillata galleggia vicino alla riva, impigliata tra le radici. All'interno, vedi un foglio di carta arrotolato.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Raccogli la bottiglia e leggi il messaggio",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il messaggio è scritto con una grafia tremante: 'Se leggi questo, il mio talismano portafortuna è caduto vicino al vecchio mulino a vento a sud di qui. Per me è troppo tardi, ma forse porterà fortuna a te. - Jonas'"
+              },
+              {
+                "type": "startQuest",
+                "value": "find_jonas_talisman"
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "bottle_empty",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 40
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Prendi solo la bottiglia",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ignori il messaggio. Una bottiglia vuota è una risorsa troppo preziosa per essere lasciata indietro."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "bottle_empty",
+                  "quantity": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

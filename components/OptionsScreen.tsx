@@ -17,7 +17,7 @@ type OptionRow = {
 
 const OPTIONS_CONFIG: readonly OptionRow[] = [
   { type: 'header', label: 'Gioco' },
-  { type: 'option', id: 'language', label: 'Lingua', kind: 'multiple', values: ['Italiano', 'Inglese', 'Francese', 'Tedesco', 'Spagnolo', 'Russo', 'Cinese Semplificato'] },
+  { type: 'option', id: 'language', label: 'Lingua', kind: 'multiple', values: ['Italiano', 'Inglese', 'Francese', 'Tedesco', 'Spagnolo', 'Portoghese', 'Russo', 'Cinese Semplificato'] },
   { type: 'option', id: 'fullscreen', label: 'Schermo', kind: 'multiple', values: ['Fullscreen', 'Finestra'] },
   { type: 'spacer' },
   { type: 'header', label: 'Audio' },
@@ -135,6 +135,21 @@ const OptionsScreen: React.FC = () => {
                 const newIndex = (currentIndex + delta + values.length) % values.length;
                  // @ts-ignore
                 newSettings[key] = newIndex;
+                
+                // Handle fullscreen toggle
+                if (key === 'fullscreen') {
+                    if (newIndex === 0) { // Fullscreen
+                        document.documentElement.requestFullscreen().catch(err => {
+                            console.log('Fullscreen request failed:', err);
+                        });
+                    } else { // Finestra
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen().catch(err => {
+                                console.log('Exit fullscreen failed:', err);
+                            });
+                        }
+                    }
+                }
             } else if (option.kind === 'slider' && option.max) {
                  // @ts-ignore
                 const currentValue = newSettings[key];

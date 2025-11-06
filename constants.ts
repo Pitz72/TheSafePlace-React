@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = "1.3.2";
+export const GAME_VERSION = "1.9.7";
 
 export const BOOT_TEXT = [
     'Runtime Radio BIOS v1.02',
@@ -38,46 +38,264 @@ export const MENU_ITEMS = [
     "Esci",
 ];
 
-export const INSTRUCTIONS_TEXT = `Figlio Mio, Ultimo...
+export const INSTRUCTIONS_TEXT = `═══ THE SAFE PLACE CHRONICLES - GUIDA ALLA SOPRAVVIVENZA ═══
 
-Se stai leggendo queste parole, significa che non sono tornato in tempo, e le scorte che ti ho lasciato stanno per finire. Il mio cuore è pesante, ma non c'è tempo per il dolore adesso. Devi essere forte, come ti ho insegnato. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.
+Benvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.
 
-═══ MOVIMENTO E SOPRAVVIVENZA ═══
+═══ MOVIMENTO E ESPLORAZIONE ═══
 
-Ricorda le basi, sempre. La mappa è la tua guida; segui la E segnata, è la speranza, il 'Safe Place'. Raggiungila. I tasti direzionali (W, A, S, D o le frecce) saranno le tue gambe. Ogni passo ha un costo: cibo e acqua sono vita. Non lasciarli mai scarseggiare, o la debolezza e il logorio degli HP ti consumeranno. 
+• WASD o FRECCE DIREZIONALI: Muoviti sulla mappa
+• La 'E' sulla mappa indica il tuo obiettivo: The Safe Place
+• Ogni passo consuma tempo e risorse vitali (Sazietà, Idratazione)
+• Esplora i biomi: Pianure, Foreste, Città, Villaggi, Fiumi
+• Alcuni tile (M - Montagna) sono invalicabili
 
-Vigila sulla tua Condizione – ferite, malanni, veleni, ipotermia – sono nemici silenziosi che ti indeboliranno. Alcune ti prosciugheranno lentamente la vita, altre falciranno le tue capacità. Trova o crea rimedi, non ignorarle mai.
+═══ GESTIONE RISORSE ═══
 
-═══ IL CICLO DEL TEMPO ═══
+• HP (Punti Vita): La tua sopravvivenza. Monitora costantemente.
+• SAZIETÀ: Il cibo è vita. Se scende a 0, morirai di fame.
+• IDRATAZIONE: L'acqua è essenziale. Trova fonti o filtra acqua contaminata.
+• FATICA: Accumuli stanchezza muovendoti. Riposa per recuperare.
+• CONDIZIONI: Ferite, malattie, veleni, ipotermia ti indeboliranno. Cura gli status negativi con oggetti specifici.
 
-Il tempo è un fiume crudele. Il giorno è un breve respiro prima del gelo e dei pericoli della notte. Camminare sotto le stelle ti esporrà a danni costanti – il freddo e l'oscurità sono spietati. Prima che il sole muoia, cerca un Rifugio. Lì troverai riposo sicuro fino all'alba e, con fortuna, qualcosa di utile. 
+═══ TEMPO E METEO ═══
 
-Esplorali di giorno, ma ricorda: ogni azione costa tempo. Anche il meteo è capriccioso – pioggia e tempesta ralenteranno il tuo cammino. Usa 'R' per un riposo rapido quando sei esausto, ma usalo con parsimonia.
+• Il tempo passa ad ogni azione: camminare, riposare, cercare, craftare
+• NOTTE (20:00 - 6:00): Molto pericolosa. Subisci danni costanti se sei all'aperto.
+• RIFUGI (R sulla mappa): Trova riparo prima del tramonto. Usali per dormire, riposare, cercare risorse e craftare.
+• METEO DINAMICO: Pioggia e tempeste rallentano i movimenti e causano danni.
 
-═══ INVENTARIO E CRAFTING ═══
+═══ AZIONI PRINCIPALI ═══
 
-Il tuo Inventario è limitato. Riempilo con ciò che è essenziale. Premi 'I' per aprirlo e naviga con i tasti. Usa i numeri per consumare oggetti rapidamente. Le armi e le armature si degradano – riparale o smontale per recuperare materiali.
+• [I] INVENTARIO: Gestisci oggetti, equipaggia armi/armature, usa consumabili
+• [R] RIPOSO RAPIDO: Recupera un po' di HP e fatica (1 volta al giorno)
+• [F] RICERCA ATTIVA: Cerca risorse nell'area (CD Sopravvivenza 10, 30 min)
+• [L] LEVEL UP: Quando disponibile, scegli attributo e talento
+• [ESC] PAUSA: Accedi al menu in-game, salva/carica partita
 
-Cerca Manuali di Crafting nel mondo: ti insegneranno ricette vitali. Nei Rifugi troverai banchi da lavoro. Lì potrai creare armi, armature, medicine e strumenti di sopravvivenza. La creazione è la chiave per progredire.
+═══ INVENTARIO E EQUIPAGGIAMENTO ═══
 
-═══ COMBATTIMENTO E CRESCITA ═══
+• Peso massimo limitato (basato su Forza)
+• ARMI: Equipaggiabili, si degradano. Riparale o smontale per materiali.
+• ARMATURE: Testa, Petto, Gambe. Aumentano la Classe Armatura (AC).
+• CONSUMABILI: Cibo, acqua, medicine. Alcuni curano status specifici.
+• MANUALI: Trovane di nuovi per sbloccare ricette di crafting.
 
-La strada ti metterà di fronte a Eventi e scelte difficili. Fidati del tuo Presagio, delle tue Abilità, ma soprattutto del tuo giudizio. Non tutte le lotte vanno combattute. A volte, la saggezza sta nel sapere quando fuggire o quando negoziare.
+═══ CRAFTING ═══
 
-Quando combatti, usa 'Analizza' per studiare il nemico e scoprirne le debolezze. Ogni vittoria ti darà esperienza. Quando accumuli abbastanza XP, premi 'L' per salire di livello: scegli un attributo da potenziare e un Talento che definirà il tuo stile. Pianifica bene – alcuni talenti si sbloccano solo ai livelli 5 e 8.
+• Nei RIFUGI troverai BANCHI DA LAVORO
+• Crea armi, armature, medicine, strumenti di sopravvivenza
+• Ogni ricetta richiede: Materiali, Skill (DC), Tempo
+• Impara nuove ricette trovando Manuali nel mondo
 
-═══ SCELTE MORALI ═══
+═══ COMBATTIMENTO ═══
 
-Le tue decisioni plasmeranno chi sei. La compassione e il pragmatismo sono entrambi validi, ma portano a percorsi diversi. Segui la Via di Lena (cuore) o quella di Elian (ragione) – o cerca un equilibrio. Quando una bilancia penderà abbastanza, otterrai nuove capacità.
+• Combatti nemici che incontri esplorando
+• Azioni: ATTACCA, ANALIZZA (svela debolezze), USA OGGETTO, FUGGI
+• Analizzando un nemico scopri tattiche speciali utilizzabili
+• La fuga è risolta con test di abilità (può fallire!)
+• Ogni vittoria dona XP
 
-Ti ho insegnato tutto ciò che potevo. Ora sei solo, è vero, ma non sei impreparato. La mia missione mi chiama lontano, e non so se queste parole saranno il mio ultimo abbraccio o solo un arrivederci. 
+═══ CRESCITA DEL PERSONAGGIO ═══
 
-Ma tu, Ultimo, tu devi sopravvivere. Trova il Safe Place. 
+• LIVELLI: Ottieni XP da esplorazione, eventi, combattimenti
+• TALENTI: Ad ogni level-up scegli un talento che definisce il tuo stile
+  - Livello 2: Talenti base (es. Scavenger, Guerrigliero)
+  - Livello 5: Talenti avanzati
+  - Livello 8: Talenti master
+• ATTRIBUTI: Aumenta FOR, DES, COS, INT, SAG, CAR ad ogni livello
+• ABILITÀ: 18 skill basate sugli attributi. Allena quelle che usi di più.
 
-Con tutto l'amore che un padre può dare,
-Papà
+═══ ALLINEAMENTO MORALE ═══
 
-P.S. – Ricorda: ESC per mettere in pausa, salva spesso (5 slot disponibili), e non dimenticare di esplorare. Il mondo nasconde segreti e trofei per i più coraggiosi.`;
+• Le tue scelte influenzano l'allineamento: LENA (Compassione) vs ELIAN (Pragmatismo)
+• Raggiungendo soglie alte sblocchi bonus passivi permanenti
+• Alcune scelte hanno conseguenze immediate o a lungo termine
+
+═══ CONSIGLI DI SOPRAVVIVENZA ═══
+
+• Salva spesso (5 slot disponibili + export/import JSON)
+• Esplora durante il giorno, riposati nei Rifugi di notte
+• Usa la Ricerca Attiva [F] per trovare risorse specifiche per bioma
+• Pianifica i livelli: alcuni talenti sono fondamentali
+• Non tutti i combattimenti vanno affrontati. Fuggire è una strategia valida.
+• L'acqua è rara: filtra acqua contaminata o cerca fiumi
+• Le condizioni negative possono ucciderti. Cura sempre MALATO, AVVELENATO, INFEZIONE.
+
+═══ MAIN STORY ═══
+
+• Durante il viaggio vivrai "Echi della Memoria": flashback narrativi che svelano il passato
+• Questi eventi sono attivati da trigger naturali (passi, giorni, posizione)
+• Non puoi perderli: si attivano automaticamente quando le condizioni sono soddisfatte
+• La tua storia personale è parte integrante del viaggio
+
+═══ SEGRETI E TROFEI ═══
+
+• 50 TROFEI da sbloccare, persistenti tra le partite
+• Eventi segreti estremamente rari nascosti nel mondo
+• Oggetti unici trovabili solo in determinate condizioni
+• La mappa nasconde più di quanto sembri...
+
+Ora vai, viaggiatore. The Safe Place ti aspetta a Est.
+Sopravvivi. Scopri la verità. E forse, un giorno, capirai.`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INSTRUCTIONS_PAGES - Sistema di paginazione per schermata Istruzioni
+// STATO: ✅ DEFINITIVO (29 Ottobre 2025)
+//
+// 14 pagine ottimizzate per leggibilità con navigazione keyboard-only.
+// Testo completo al 100%, formattazione compatta, nessun overflow.
+// NON MODIFICARE senza testare attentamente il layout visivo.
+// ═══════════════════════════════════════════════════════════════════════════
+export const INSTRUCTIONS_PAGES = [
+  `═══ THE SAFE PLACE CHRONICLES ═══
+GUIDA ALLA SOPRAVVIVENZA
+
+Benvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.`,
+
+  `═══ MOVIMENTO E ESPLORAZIONE ═══
+
+• WASD o FRECCE DIREZIONALI: Muoviti sulla mappa
+• La 'E' sulla mappa indica il tuo obiettivo: The Safe Place
+• Ogni passo consuma tempo e risorse vitali (Sazietà, Idratazione)
+• Esplora i biomi: Pianure, Foreste, Città, Villaggi, Fiumi
+• Alcuni tile (M - Montagna) sono invalicabili`,
+
+  `═══ GESTIONE RISORSE ═══
+
+• HP (Punti Vita): La tua sopravvivenza. Monitora costantemente.
+• SAZIETÀ: Il cibo è vita. Se scende a 0, morirai di fame.
+• IDRATAZIONE: L'acqua è essenziale. Trova fonti o filtra acqua contaminata.
+• FATICA: Accumuli stanchezza muovendoti. Riposa per recuperare.
+• CONDIZIONI: Ferite, malattie, veleni, ipotermia ti indeboliranno. Cura gli status negativi con oggetti specifici.`,
+
+  `═══ TEMPO E METEO ═══
+
+• Il tempo passa ad ogni azione: camminare, riposare, cercare, craftare
+• NOTTE (20:00 - 6:00): Molto pericolosa. Subisci danni costanti se sei all'aperto.
+• RIFUGI (R sulla mappa): Trova riparo prima del tramonto. Usali per dormire, riposare, cercare risorse e craftare.
+• METEO DINAMICO: Pioggia e tempeste rallentano i movimenti e causano danni.`,
+
+  `═══ AZIONI PRINCIPALI ═══
+
+• [I] INVENTARIO: Gestisci oggetti, equipaggia armi/armature, usa consumabili
+• [R] RIPOSO RAPIDO: Recupera un po' di HP e fatica (1 volta al giorno)
+• [F] RICERCA ATTIVA: Cerca risorse nell'area (CD Sopravvivenza 10, 30 min)
+• [L] LEVEL UP: Quando disponibile, scegli attributo e talento
+• [ESC] PAUSA: Accedi al menu in-game, salva/carica partita`,
+
+  `═══ INVENTARIO E EQUIPAGGIAMENTO ═══
+
+• Peso massimo limitato (basato su Forza)
+• ARMI: Equipaggiabili, si degradano. Riparale o smontale per materiali.
+• ARMATURE: Testa, Petto, Gambe. Aumentano la Classe Armatura (AC).
+• CONSUMABILI: Cibo, acqua, medicine. Alcuni curano status specifici.
+• MANUALI: Trovane di nuovi per sbloccare ricette di crafting.`,
+
+  `═══ CRAFTING ═══
+
+• Nei RIFUGI troverai BANCHI DA LAVORO
+• Crea armi, armature, medicine, strumenti di sopravvivenza
+• Ogni ricetta richiede: Materiali, Skill (DC), Tempo
+• Impara nuove ricette trovando Manuali nel mondo`,
+
+  `═══ COMBATTIMENTO ═══
+
+• Combatti nemici che incontri esplorando
+• Azioni: ATTACCA, ANALIZZA (svela debolezze), USA OGGETTO, FUGGI
+• Analizzando un nemico scopri tattiche speciali utilizzabili
+• La fuga è risolta con test di abilità (può fallire!)
+• Ogni vittoria dona XP`,
+
+  `═══ CRESCITA DEL PERSONAGGIO ═══
+
+• LIVELLI: Ottieni XP da esplorazione, eventi, combattimenti
+• TALENTI: Ad ogni level-up scegli un talento che definisce il tuo stile
+  - Livello 2: Talenti base (es. Scavenger, Guerrigliero)
+  - Livello 5: Talenti avanzati
+  - Livello 8: Talenti master
+• ATTRIBUTI: Aumenta FOR, DES, COS, INT, SAG, CAR ad ogni livello
+• ABILITÀ: 18 skill basate sugli attributi. Allena quelle che usi di più.`,
+
+  `═══ ALLINEAMENTO MORALE ═══
+
+• Le tue scelte influenzano l'allineamento: LENA (Compassione) vs ELIAN (Pragmatismo)
+• Raggiungendo soglie alte sblocchi bonus passivi permanenti
+• Alcune scelte hanno conseguenze immediate o a lungo termine`,
+
+  `═══ CONSIGLI DI SOPRAVVIVENZA ═══
+
+• Salva spesso (5 slot disponibili + export/import JSON)
+• Esplora durante il giorno, riposati nei Rifugi di notte
+• Usa la Ricerca Attiva [F] per trovare risorse specifiche per bioma
+• Pianifica i livelli: alcuni talenti sono fondamentali`,
+
+  `═══ CONSIGLI DI SOPRAVVIVENZA (2) ═══
+
+• Non tutti i combattimenti vanno affrontati. Fuggire è una strategia valida.
+• L'acqua è rara: filtra acqua contaminata o cerca fiumi
+• Le condizioni negative possono ucciderti. Cura sempre MALATO, AVVELENATO, INFEZIONE.`,
+
+  `═══ MAIN STORY ═══
+
+• Durante il viaggio vivrai "Echi della Memoria": flashback narrativi che svelano il passato
+• Questi eventi sono attivati da trigger naturali (passi, giorni, posizione)
+• Non puoi perderli: si attivano automaticamente quando le condizioni sono soddisfatte
+• La tua storia personale è parte integrante del viaggio`,
+
+  `═══ SEGRETI E TROFEI ═══
+
+• 50 TROFEI da sbloccare, persistenti tra le partite
+• Eventi segreti estremamente rari nascosti nel mondo
+• Oggetti unici trovabili solo in determinate condizioni
+• La mappa nasconde più di quanto sembri...
+
+Ora vai, viaggiatore. The Safe Place ti aspetta a Est. Sopravvivi. Scopri la verità. E forse, un giorno, capirai.`
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STORY_PAGES - Sistema di paginazione per schermata Storia
+// STATO: ✅ DEFINITIVO (29 Ottobre 2025)
+//
+// 5 pagine narrative con testo completo al 100% (nessun taglio o riassunto).
+// Divisione naturale per "respiro" narrativo, formattazione perfetta.
+// NON MODIFICARE - Approvato come definitivo.
+// ═══════════════════════════════════════════════════════════════════════════
+export const STORY_PAGES = [
+  `═══════════════════════════════
+L'ECO DEL SILENZIO
+═══════════════════════════════
+
+Il mondo che Ultimo conosceva era fatto di sussurri e acciaio freddo, di lezioni impartite da un padre con occhi stanchi ma mani salde. 
+
+Diciassette anni vissuti all'ombra di una catastrofe che aveva inghiottito il passato, lasciando solo echi distorti: la "Guerra Inespressa", il "Grande Silenzio".`,
+
+  `Della madre, Ultimo conservava solo un calore sbiadito nel petto, un nome quasi dimenticato. 
+
+Il "prima" era una favola raccontata a bassa voce, un sogno di cieli azzurri e città luminose, così diverso dai grigiori malati e dalle rovine scheletriche che ora graffiavano l'orizzonte dell'Europa Centrale.`,
+
+  `Suo padre gli aveva insegnato a leggere i segni del vento carico di polveri tossiche, a distinguere il fruscio di una bestia mutata da quello innocuo delle lamiere contorte, a trovare acqua dove sembrava esserci solo aridità. 
+
+Ogni giorno era una lezione di sopravvivenza, ogni notte un monito sulla fragilità della vita.`,
+
+  `Poi, anche il padre era partito. 
+
+Una missione avvolta nel mistero, un addio affrettato con la promessa di un ritorno che tardava troppo. 
+
+Le scorte lasciate con cura si assottigliavano, e con esse la speranza. 
+
+Rimaneva solo un messaggio frammentario, l'ultima eco della voce paterna: 
+
+"...trova il Safe Place, Ultimo. È la nostra unica possibilità..."`,
+
+  `Ora, il silenzio è il suo unico compagno. 
+
+Davanti a lui, un viaggio disperato attraverso un continente irriconoscibile, armato solo degli insegnamenti paterni e di una mappa verso un luogo che potrebbe essere leggenda, trappola, o forse, davvero, salvezza. 
+
+Il peso della solitudine è grande, ma la volontà di onorare la memoria del padre, e la primordiale necessità di vivere, lo spingono a muovere il primo passo in quel mondo ostile. 
+
+The Safe Place attende, da qualche parte oltre la desolazione.`
+];
 
 export const STORY_TEXT = `L'Eco del Silenzio
 
@@ -101,6 +319,7 @@ export const JOURNAL_ENTRY_COLORS: Record<JournalEntryType, string> = {
   [JournalEntryType.ITEM_ACQUIRED]: '#38bdf8', // Ciano/Azzurro (sky-400)
   [JournalEntryType.SYSTEM_ERROR]: '#ff0000', // Rosso Brillante
   [JournalEntryType.SYSTEM_WARNING]: '#fbbf24', // Giallo Brillante (amber-400)
+  [JournalEntryType.SYSTEM_MESSAGE]: '#a3a3a3', // Grigio Neutro (neutral-400)
   [JournalEntryType.COMBAT]: '#ef4444', // Rosso (red-500)
   [JournalEntryType.XP_GAIN]: '#f59e0b', // Oro/Giallo Scuro (amber-500)
   [JournalEntryType.EVENT]: '#a78bfa', // Viola (violet-400)
@@ -123,7 +342,12 @@ export const BIOME_MESSAGES: Record<string, string> = {
     'V': "Attraversi i resti di un piccolo villaggio.",
     'R': "Hai trovato un rifugio. Sembra sicuro, per ora.",
     'S': "Inizi il tuo viaggio in un punto relativamente tranquillo.",
-    'E': "La destinazione finale è vicina."
+    'E': "La destinazione finale è vicina.",
+    'A': "Vedi l'Avamposto 'Il Crocevia' davanti a te. Fumo sale da un fuoco centrale.",
+    'N': "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
+    'T': "Un commerciante ambulante ti saluta con cautela.",
+    'L': "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
+    'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
 };
 
 export const BIOME_COLORS: Record<string, string> = {
@@ -136,6 +360,11 @@ export const BIOME_COLORS: Record<string, string> = {
     'R': '#d97706', // amber-600 (Rifugio)
     'S': '#f59e0b', // amber-500 (Start)
     'E': '#ef4444', // red-500 (End)
+    'A': '#b45309', // amber-700 (Avamposto)
+    'N': '#7e22ce', // purple-700 (Nido della Cenere)
+    'T': '#f59e0b', // amber-500 (Commerciante)
+    'L': '#0891b2', // cyan-600 (Laboratorio)
+    'B': '#9f1239', // rose-800 (Biblioteca)
 };
 
 export const ATMOSPHERIC_MESSAGES: Record<string, { day: string[], night: string[], rain?: string[] }> = {

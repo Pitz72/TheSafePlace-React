@@ -13,6 +13,7 @@ import {
   JournalEntryType,
   PlayerStatusCondition,
   DeathCause,
+  GameState,
 } from '../types';
 import { SKILLS, XP_PER_LEVEL } from '../constants';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -22,8 +23,17 @@ import { audioManager } from '../utils/audio';
 import { useTrophyDatabaseStore } from '../data/trophyDatabase';
 import { addGlobalTrophy, loadGlobalTrophies, mergeWithGlobalTrophies } from '../services/globalTrophyService';
 
+/**
+ * Base value for survival stats (satiety, hydration, fatigue).
+ * @constant {number}
+ */
 const BASE_STAT_VALUE = 100;
 
+/**
+ * Initial attribute values for a new character.
+ * All attributes start at 10 (modifier +0).
+ * @constant {Attributes}
+ */
 const initialAttributes: Attributes = {
   for: 10,
   des: 10,
@@ -33,18 +43,49 @@ const initialAttributes: Attributes = {
   car: 10,
 };
 
-// Create initial skills record from SKILLS constant
+/**
+ * Initial skills record with all skills set to non-proficient.
+ * Created dynamically from SKILLS constant to ensure consistency.
+ * @constant {Record<SkillName, Skill>}
+ */
 const initialSkills: Record<SkillName, Skill> = Object.keys(SKILLS).reduce((acc, skill) => {
   acc[skill as SkillName] = { proficient: false };
   return acc;
 }, {} as Record<SkillName, Skill>);
 
+/**
+ * Initial alignment values (neutral).
+ * @constant {Alignment}
+ */
 const initialAlignment: Alignment = {
     lena: 0,
     elian: 0,
 };
 
-
+/**
+ * Character Store - Player character state management
+ *
+ * @description Manages all aspects of the player character including:
+ * - Level, XP, and progression
+ * - HP, satiety, hydration, fatigue (survival stats)
+ * - Attributes (FOR, DES, COS, INT, SAG, CAR)
+ * - Skills (18 total, proficiency-based)
+ * - Inventory and equipment (weapon, head, chest, legs)
+ * - Status conditions (FERITO, MALATO, AVVELENATO, etc.)
+ * - Alignment (Lena vs Elian moral compass)
+ * - Talents and recipes
+ * - Trophy system
+ *
+ * @remarks
+ * This is the most complex store in the game, handling character progression,
+ * survival mechanics, equipment management, and status effects.
+ *
+ * Architecture:
+ * - Integrates with gameStore for journal entries and game state
+ * - Integrates with itemDatabase for item details
+ * - Integrates with globalTrophyService for persistent achievements
+ * - Uses D&D 5e-inspired mechanics (d20, modifiers, proficiency)
+ */
 export const useCharacterStore = create<CharacterState>((set, get) => ({
     // --- State ---
     level: 1,
@@ -67,11 +108,47 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     knownRecipes: [],
     unlockedTalents: [],
     unlockedTrophies: new Set<string>(),
+    activeQuests: {},
+    completedQuests: [],
+    loreArchive: [],
+    questKillCounts: {},
+    questFlags: {},
 
     // --- Actions ---
     /**
-     * @function initCharacter
-     * @description Initializes the character with default values.
+     * Initializes a new character with default starting values and equipment.
+     *
+     * @description Sets up a fresh character for a new game with:
+     * - Level 1, 100 HP (base for 10 CON)
+     * - All attributes at 10 (modifier +0)
+     * - Starting proficiencies: Sopravvivenza, Medicina, Furtività
+     * - Survival starter kit (food, water, bandages, crafting materials)
+     * - 5 known recipes (water purification, basic repairs, bandages)
+     * - Global trophies loaded from localStorage
+     *
+     * Starting Inventory (10 items):
+     * - 1x Carillon Annerito (quest item)
+     * - 2x Razione Cibo
+     * - 2x Bottiglia Acqua
+     * - 3x Benda di Fortuna
+     * - 3x Metallo di Scarto
+     * - 3x Straccio Pulito
+     * - 2x Bottiglia Vuota
+     *
+     * Starting Recipes (5):
+     * - Purifica Acqua
+     * - Benda di Fortuna
+     * - Raccogli Acqua
+     * - Coltello di Fortuna
+     * - Kit Riparazione Base
+     *
+     * @remarks
+     * - Called when starting a new game
+     * - Loads global trophies from localStorage (persistent across games)
+     * - Starting proficiencies allow talent choices at level 2
+     * - Starter kit designed for v1.3.0 survival overhaul
+     *
+     * @see loadGlobalTrophies for trophy persistence system
      */
     initCharacter: () => {
         const maxHp = 100; // Base HP for 10 COS
@@ -121,13 +198,37 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ],
             unlockedTalents: [],
             unlockedTrophies: globalTrophies, // Inizia con i trofei globali
+            activeQuests: {},
+            completedQuests: [],
+            loreArchive: [],
+            questKillCounts: {},
+            questFlags: {},
         });
     },
 
     /**
-     * @function setAttributes
-     * @description Sets the character's attributes.
-     * @param {Attributes} newAttributes - The new attributes to set.
+     * Sets the character's attributes and recalculates derived stats.
+     *
+     * @description Updates all six attributes (FOR, DES, COS, INT, SAG, CAR) and
+     * automatically recalculates max HP based on the new Constitution value.
+     *
+     * HP Calculation:
+     * - Base HP: 100 (for 10 CON)
+     * - HP per CON modifier: +10 HP per point
+     * - Formula: 100 + (CON_modifier × 10)
+     *
+     * @param {Attributes} newAttributes - The new attribute values to set
+     *
+     * @remarks
+     * - Called during character creation after rolling stats
+     * - Heals character to full HP with new max
+     * - CON modifier: floor((CON - 10) / 2)
+     * - Example: CON 14 → modifier +2 → 120 max HP
+     *
+     * @example
+     * // After character creation with CON 14
+     * setAttributes({ for: 12, des: 10, cos: 14, int: 10, sag: 12, car: 8 });
+     * // Result: max HP = 100 + (2 × 10) = 120
      */
     setAttributes: (newAttributes) => {
         set(state => {
@@ -144,10 +245,32 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function getAttributeModifier
-     * @description Gets the modifier for a given attribute.
-     * @param {AttributeName} attribute - The attribute to get the modifier for.
-     * @returns {number} The modifier for the attribute.
+     * Calculates the D&D 5e-style modifier for a given attribute.
+     *
+     * @description Converts an attribute value (8-20+) to a modifier (-1 to +5+)
+     * using the standard D&D formula: floor((value - 10) / 2)
+     *
+     * Modifier Table:
+     * - 8-9: -1
+     * - 10-11: +0
+     * - 12-13: +1
+     * - 14-15: +2
+     * - 16-17: +3
+     * - 18-19: +4
+     * - 20+: +5+
+     *
+     * @param {AttributeName} attribute - The attribute to calculate modifier for
+     * @returns {number} The modifier value (typically -1 to +5)
+     *
+     * @remarks
+     * - Used in skill checks, AC calculation, HP calculation
+     * - Formula matches D&D 5e exactly
+     * - Negative modifiers possible if attribute < 10
+     *
+     * @example
+     * // Character with FOR 14
+     * const forMod = getAttributeModifier('for'); // Returns +2
+     * // Used in melee damage: weaponDamage + forMod
      */
     getAttributeModifier: (attribute) => {
         const value = get().attributes[attribute];
@@ -155,10 +278,55 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function getSkillBonus
-     * @description Gets the bonus for a given skill.
-     * @param {SkillName} skill - The skill to get the bonus for.
-     * @returns {number} The bonus for the skill.
+     * Calculates the total bonus for a skill check.
+     *
+     * @description Computes the complete skill bonus by combining:
+     * 1. Attribute modifier (based on skill's governing attribute)
+     * 2. Proficiency bonus (if proficient in the skill)
+     * 3. Alignment bonus (Lena/Elian moral compass)
+     * 4. Encumbrance penalty (when overloaded) - NEW
+     * 5. Status penalties (negative conditions)
+     * 6. Fatigue penalty (exhaustion)
+     *
+     * Bonus Components:
+     * - Attribute Modifier: floor((attribute - 10) / 2)
+     * - Proficiency Bonus: floor((level - 1) / 4) + 2 (if proficient)
+     * - Alignment Bonus: +2 for specific skills if alignment > 5
+     * - Encumbrance Penalty: -2 to Atletica/Acrobazia if overencumbered
+     * - Status Penalties: -1 to -3 depending on condition
+     * - Fatigue Penalty: -1 (fatigue > 50) or -2 (fatigue > 75)
+     *
+     * @param {SkillName} skill - The skill to calculate bonus for
+     * @returns {number} The total skill bonus (can be negative)
+     *
+     * @remarks
+     * Alignment Bonuses:
+     * - Lena (+5): +2 to Persuasione, Intuizione
+     * - Elian (+5): +2 to Sopravvivenza, Intimidire
+     *
+     * Encumbrance Penalty (NEW):
+     * - When totalWeight > maxCarryWeight
+     * - Affects: Atletica, Acrobazia (-2)
+     * - Makes climbing, dodging, fleeing harder when overloaded
+     *
+     * Status Penalties:
+     * - FERITO: -2 to physical skills
+     * - IPOTERMIA: -3 to all skills
+     * - ESAUSTO: -2 to physical skills
+     * - AFFAMATO: -1 to all skills
+     * - DISIDRATATO: -2 to perception/intelligence skills
+     * - INFEZIONE: -2 to all skills
+     *
+     * @example
+     * // Level 3, proficient Sopravvivenza, SAG 14, overencumbered
+     * const bonus = getSkillBonus('sopravvivenza');
+     * // = +2 (SAG) + 2 (prof) + 0 (encumbrance doesn't affect this skill) = +4
+     *
+     * const atleticaBonus = getSkillBonus('atletica');
+     * // = +1 (FOR) + 0 (not prof) - 2 (encumbrance) = -1
+     *
+     * @see performSkillCheck for how this bonus is used in d20 rolls
+     * @see getMaxCarryWeight for capacity calculation
      */
     getSkillBonus: (skill) => {
         const skillDef = SKILLS[skill];
@@ -191,6 +359,20 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
         }
         
+        // --- Encumbrance Penalty (NEW) ---
+        // When overencumbered, physical skills suffer
+        let encumbrancePenalty = 0;
+        const totalWeight = get().getTotalWeight();
+        const maxCarryWeight = get().getMaxCarryWeight();
+        const isOverEncumbered = totalWeight > maxCarryWeight;
+        
+        if (isOverEncumbered) {
+            const physicalSkills: SkillName[] = ['atletica', 'acrobazia'];
+            if (physicalSkills.includes(skill)) {
+                encumbrancePenalty = -2; // Heavy load makes climbing/dodging harder
+            }
+        }
+        
         // --- Status Penalty ---
         let statusPenalty = 0;
         const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita', 'rapiditaDiMano'];
@@ -218,15 +400,47 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             statusPenalty -= 2;
         }
 
-        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty + fatiguePenalty;
+        return attributeModifier + proficiencyBonus + alignmentBonus + statusPenalty + fatiguePenalty + encumbrancePenalty;
     },
 
     /**
-     * @function performSkillCheck
-     * @description Performs a skill check.
-     * @param {SkillName} skill - The skill to check.
-     * @param {number} dc - The difficulty class of the check.
-     * @returns {SkillCheckResult} The result of the skill check.
+     * Performs a d20 skill check against a difficulty class.
+     *
+     * @description Rolls 1d20, adds skill bonus, and compares to DC.
+     * This is the core mechanic for all skill-based actions in the game.
+     *
+     * Skill Check Formula:
+     * - Roll: 1d20 (random 1-20)
+     * - Bonus: getSkillBonus(skill)
+     * - Total: roll + bonus
+     * - Success: total >= DC
+     *
+     * Difficulty Classes (DC):
+     * - Very Easy: 5
+     * - Easy: 10
+     * - Medium: 12-13
+     * - Hard: 15-16
+     * - Very Hard: 18-20
+     * - Nearly Impossible: 25+
+     *
+     * @param {SkillName} skill - The skill to check (e.g., 'sopravvivenza', 'atletica')
+     * @param {number} dc - The difficulty class to beat
+     * @returns {SkillCheckResult} Complete result object with roll, bonus, total, and success
+     *
+     * @remarks
+     * - Natural 1 (roll = 1) is NOT automatic failure
+     * - Natural 20 (roll = 20) is NOT automatic success
+     * - Success determined purely by total >= DC
+     * - Result object includes all details for journal logging
+     *
+     * @example
+     * // Attempt to climb a wall (Atletica DC 12)
+     * const result = performSkillCheck('atletica', 12);
+     * if (result.success) {
+     *   console.log(`Success! Rolled ${result.roll} + ${result.bonus} = ${result.total}`);
+     * }
+     *
+     * @see getSkillBonus for bonus calculation details
      */
     performSkillCheck: (skill, dc) => {
         const roll = Math.floor(Math.random() * 20) + 1;
@@ -237,18 +451,40 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function gainExplorationXp
-     * @description Adds exploration experience to the character.
-     * v1.2.0: Increased from 1 to 3 XP per step for better progression
+     * Grants exploration XP for taking a step on the map.
+     *
+     * @description Awards 3 XP per step (v1.2.0: increased from 1 XP for better progression).
+     *
+     * @remarks
+     * - Called automatically after each successful movement
+     * - v1.2.0 balance: 1 XP → 3 XP (+200%)
+     * - Allows reaching level 6-8 by endgame instead of 2-3
+     *
+     * @see addXp for XP addition logic
      */
     gainExplorationXp: () => {
         get().addXp(3);
     },
 
     /**
-     * @function addXp
-     * @description Adds experience points to the character.
-     * @param {number} amount - The amount of experience to add.
+     * Adds experience points and checks for level up eligibility.
+     *
+     * @description Accumulates XP and sets levelUpPending flag when threshold reached.
+     * Allows XP overflow for multiple level ups.
+     *
+     * @param {number} amount - XP to add (typically 3-120)
+     *
+     * @remarks
+     * - XP accumulates even when levelUpPending is true
+     * - Player must manually level up (not automatic)
+     * - Remaining XP carries over after level up
+     * - Can trigger multiple level ups if enough XP
+     *
+     * @example
+     * addXp(60); // After defeating enemy
+     *
+     * @see applyLevelUp for level up process
+     * @see XP_PER_LEVEL for thresholds
      */
     addXp: (amount) => {
         if (get().levelUpPending) {
@@ -258,9 +494,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         set(state => {
             const newXp = state.xp.current + amount;
             if (newXp >= state.xp.next) {
-                return { 
+                return {
                     xp: { ...state.xp, current: newXp },
-                    levelUpPending: true 
+                    levelUpPending: true
                 };
             }
             return { xp: { ...state.xp, current: newXp } };
@@ -268,11 +504,34 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function applyLevelUp
-     * @description Applies the level up choices to the character.
-     * @param {object} choices - The choices made during level up.
-     * @param {AttributeName} choices.attribute - The attribute to increase.
-     * @param {string} choices.talentId - The ID of the talent to unlock.
+     * Applies level up choices and advances character to next level.
+     *
+     * @description Processes player choices (attribute + talent), increases level,
+     * grants HP, and checks for cutscenes/story triggers.
+     *
+     * Level Up Rewards:
+     * - Level +1
+     * - HP +5 + CON modifier
+     * - Full heal to new max HP
+     * - +1 to chosen attribute
+     * - Unlock chosen talent
+     * - XP overflow carries over
+     *
+     * @param {object} choices - Player's level up choices
+     * @param {AttributeName} choices.attribute - Attribute to increase
+     * @param {string} choices.talentId - Talent to unlock
+     *
+     * @remarks
+     * Special Triggers:
+     * - Level 5: CS_STRANGERS_REFLECTION cutscene (500ms delay)
+     * - Checks main story triggers
+     * - Checks cutscene triggers
+     * - Can chain level ups
+     *
+     * @example
+     * applyLevelUp({ attribute: 'des', talentId: 'guerrilla_fighter' });
+     *
+     * @see XP_PER_LEVEL for thresholds
      */
     applyLevelUp: (choices) => {
         set(state => {
@@ -309,8 +568,20 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             // Cannot call check triggers inside set state, so we do it after
             Promise.resolve().then(() => {
                 const gameStore = useGameStore.getState();
-                gameStore.checkMainQuestTriggers();
+                gameStore.checkMainStoryTriggers();
                 gameStore.checkCutsceneTriggers();
+                
+                // CS_STRANGERS_REFLECTION trigger: Reaching level 5 (mid-game)
+                if (newLevel === 5 && !gameStore.gameFlags.has('STRANGERS_REFLECTION_PLAYED')) {
+                    useGameStore.setState(state => ({ 
+                        gameFlags: new Set(state.gameFlags).add('STRANGERS_REFLECTION_PLAYED') 
+                    }));
+                    setTimeout(() => {
+                        if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                            useGameStore.getState().startCutscene('CS_STRANGERS_REFLECTION');
+                        }
+                    }, 500);
+                }
             });
 
             return newState;
@@ -318,10 +589,31 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function addItem
-     * @description Adds an item to the character's inventory.
-     * @param {string} itemId - The ID of the item to add.
-     * @param {number} [quantity=1] - The quantity of the item to add.
+     * Adds an item to the character's inventory.
+     *
+     * @description Handles both stackable and non-stackable items correctly.
+     * Stackable items merge quantities, non-stackable create separate entries.
+     *
+     * Item Handling:
+     * - Stackable (materials, consumables): Merges with existing stack
+     * - Non-stackable (weapons, armor): Creates individual entries
+     * - Durability items: Initializes durability to max
+     *
+     * @param {string} itemId - Item ID from itemDatabase
+     * @param {number} [quantity=1] - Quantity to add
+     *
+     * @remarks
+     * - Validates item exists in itemDatabase
+     * - Returns early if item not found (no error)
+     * - Non-stackable items added as quantity=1 entries
+     * - Durability initialized from itemDatabase
+     *
+     * @example
+     * addItem('CONS_002', 3); // Add 3 water bottles (stackable)
+     * addItem('WPN_KNIFE_COMBAT', 1); // Add combat knife (non-stackable)
+     *
+     * @see removeItem for removal logic
+     * @see itemDatabase for item definitions
      */
     addItem: (itemId, quantity = 1) => {
         set(state => {
@@ -350,13 +642,41 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
             return { inventory: newInventory };
         });
+        
+        // Check quest triggers after adding item (for getItem and hasItems triggers)
+        // Import questService dynamically to avoid circular dependency
+        import('../services/questService').then(({ questService }) => {
+            questService.checkQuestTriggers(itemId); // Checks both getItem and hasItems
+        });
     },
 
     /**
-     * @function removeItem
-     * @description Removes an item from the character's inventory.
-     * @param {string} itemId - The ID of the item to remove.
-     * @param {number} [quantity=1] - The quantity of the item to remove.
+     * Removes an item from inventory and updates equipped indices.
+     *
+     * @description Removes items by ID, handling stackable/non-stackable correctly.
+     * Automatically unequips items if removed and recalculates all equipped indices.
+     *
+     * Removal Logic:
+     * - Stackable: Decreases quantity or removes stack
+     * - Non-stackable: Removes from end of inventory (LIFO)
+     * - Equipped items: Automatically unequipped if removed
+     * - Index shifting: All equipped indices recalculated after removal
+     *
+     * @param {string} itemId - Item ID to remove
+     * @param {number} [quantity=1] - Quantity to remove
+     *
+     * @remarks
+     * Critical Fix (v1.2.3):
+     * - Recalculates equipped indices after removal
+     * - Prevents equipped items pointing to wrong inventory slots
+     * - Handles multiple removals correctly
+     *
+     * @example
+     * removeItem('scrap_metal', 2); // Remove 2 scrap metal
+     * // If scrap metal was at index 5 and equipped weapon at index 7
+     * // After removal, equipped weapon index becomes 6
+     *
+     * @see addItem for addition logic
      */
     removeItem: (itemId, quantity = 1) => {
         set(state => {
@@ -437,10 +757,24 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
     
     /**
-     * @function discardItem
-     * @description Discards an item from the character's inventory.
-     * @param {number} inventoryIndex - The index of the item in the inventory.
-     * @param {number} [quantity=1] - The quantity of the item to discard.
+     * Discards an item from inventory by index.
+     *
+     * @description Removes item from specific inventory slot, unequipping if necessary
+     * and recalculating equipped indices.
+     *
+     * @param {number} inventoryIndex - Index of item in inventory array
+     * @param {number} [quantity=1] - Quantity to discard
+     *
+     * @remarks
+     * - Automatically unequips if item is equipped
+     * - Recalculates all equipped indices after removal
+     * - Handles partial quantity removal for stackable items
+     * - Used by UI "Scarta" action in inventory screen
+     *
+     * @example
+     * discardItem(5, 1); // Discard 1 item from slot 5
+     *
+     * @see removeItem for removal by ID
      */
     discardItem: (inventoryIndex: number, quantity = 1) => {
         set(state => {
@@ -487,9 +821,36 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function equipItem
-     * @description Equips an item from the inventory.
-     * @param {number | string} inventoryIndexOrId - The index or ID of the item to equip.
+     * Equips an item from inventory to appropriate slot.
+     *
+     * @description Equips weapon or armor to correct slot based on item type.
+     * Supports both index-based and ID-based equipping.
+     *
+     * Equipment Slots:
+     * - Weapon: Single slot for any weapon type
+     * - Head: Helmet/head armor
+     * - Chest: Body armor (default if slot unspecified)
+     * - Legs: Leg armor
+     *
+     * @param {number | string} inventoryIndexOrId - Inventory index OR item ID
+     *
+     * @remarks
+     * ID-based equipping:
+     * - Finds first non-broken instance of item
+     * - Shows error if all instances broken
+     * - Shows error if item not found
+     *
+     * Validation:
+     * - Checks item exists
+     * - Checks durability > 0
+     * - Determines slot from item.slot property
+     * - Defaults to chest for armor without slot
+     *
+     * @example
+     * equipItem(5); // Equip item at index 5
+     * equipItem('WPN_KNIFE_COMBAT'); // Equip by ID
+     *
+     * @see unequipItem for unequipping
      */
     equipItem: (inventoryIndexOrId: number | string) => {
         set(state => {
@@ -545,9 +906,22 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function unequipItem
-     * @description Unequips an item from a specified slot.
-     * @param {'weapon' | 'armor' | 'head' | 'chest' | 'legs'} slot - The slot to unequip.
+     * Unequips an item from a specified equipment slot.
+     *
+     * @description Removes equipped item, returning it to inventory (stays at same index).
+     *
+     * @param {'weapon' | 'armor' | 'head' | 'chest' | 'legs'} slot - Slot to unequip
+     *
+     * @remarks
+     * - 'armor' and 'chest' are aliases (both unequip chest slot)
+     * - Item remains in inventory at same index
+     * - Used by UI "Togli" action in inventory screen
+     *
+     * @example
+     * unequipItem('weapon'); // Unequip weapon
+     * unequipItem('head'); // Unequip helmet
+     *
+     * @see equipItem for equipping
      */
     unequipItem: (slot) => {
         set(() => {
@@ -560,10 +934,27 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function damageEquippedItem
-     * @description Damages an equipped item.
-     * @param {'weapon' | 'armor'} slot - The slot of the item to damage.
-     * @param {number} amount - The amount of damage to inflict.
+     * Damages an equipped item's durability.
+     *
+     * @description Reduces durability of equipped weapon or armor.
+     * Automatically unequips if durability reaches 0.
+     *
+     * @param {'weapon' | 'armor'} slot - Slot of item to damage
+     * @param {number} amount - Durability damage (typically 1)
+     *
+     * @remarks
+     * - Called after each attack (weapon) or when hit (armor)
+     * - Broken items (durability = 0) auto-unequip
+     * - Shows journal message when item breaks
+     * - Plays error sound on break
+     * - Broken items can be salvaged for materials
+     *
+     * @example
+     * damageEquippedItem('weapon', 1); // After attack
+     * damageEquippedItem('armor', 1); // After being hit
+     *
+     * @see repairItem for repairing
+     * @see salvageItem for salvaging broken items
      */
     damageEquippedItem: (slot, amount) => {
         set(state => {
@@ -592,10 +983,25 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function repairItem
-     * @description Repairs an item in the inventory.
-     * @param {number} inventoryIndex - The index of the item to repair.
-     * @param {number} amount - The amount to repair.
+     * Repairs an item's durability using a repair kit.
+     *
+     * @description Restores durability up to item's maximum.
+     *
+     * @param {number} inventoryIndex - Index of item to repair
+     * @param {number} amount - Durability to restore (25 for basic kit, 75 for advanced)
+     *
+     * @remarks
+     * - Cannot exceed max durability
+     * - Repair kits consumed on use
+     * - Basic kit: +25 durability
+     * - Advanced kit: +75 durability
+     * - Only works on items with durability property
+     *
+     * @example
+     * repairItem(5, 25); // Repair item at index 5 with basic kit
+     * // If durability was 10/50, now 35/50
+     *
+     * @see damageEquippedItem for durability loss
      */
     repairItem: (inventoryIndex, amount) => {
         set(state => {
@@ -609,9 +1015,28 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function salvageItem
-     * @description Salvages a broken item for materials.
-     * @param {number} inventoryIndex - The index of the item to salvage.
+     * Salvages a broken item for crafting materials.
+     *
+     * @description Dismantles broken item (durability = 0) to recover materials.
+     *
+     * Material Recovery:
+     * - Common/Uncommon items → scrap_metal
+     * - Rare/Epic items → scrap_metal_high_quality
+     *
+     * @param {number} inventoryIndex - Index of broken item
+     *
+     * @remarks
+     * - Only works on broken items (durability = 0)
+     * - Returns early if item not broken
+     * - Removes item from inventory
+     * - Adds material to inventory
+     * - Shows journal message with recovered material
+     *
+     * @example
+     * salvageItem(3); // Salvage broken weapon at index 3
+     * // Removes weapon, adds scrap_metal
+     *
+     * @see discardItem for simple removal
      */
     salvageItem: (inventoryIndex) => {
         const { inventory, addItem, discardItem } = get();
@@ -634,16 +1059,75 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function takeDamage
-     * @description Inflicts damage to the character.
-     * @param {number} amount - The amount of damage to inflict.
-     * @param {DeathCause} [cause='UNKNOWN'] - The cause of death if the damage is fatal.
+     * Inflicts damage to the character and handles death/special triggers.
+     *
+     * @description Reduces HP by damage amount, triggers visual feedback,
+     * checks for death, and handles special cutscene triggers.
+     *
+     * Special Mechanics:
+     * - CS_THE_BRINK: Triggers when HP drops below 10% for first time
+     *   - Grants permanent +25% to all attributes
+     *   - One-time power-up reward
+     * - Death: Triggers game over with specified cause
+     * - Damage Flash: Visual red flash effect
+     *
+     * @param {number} amount - Damage amount (will be floored to integer)
+     * @param {DeathCause} [cause='UNKNOWN'] - Death cause if fatal
+     *
+     * @remarks
+     * v1.2.4 Fix:
+     * - Always rounds damage to ensure HP stays integer
+     * - Prevents decimal HP values (was possible before)
+     *
+     * Death Causes:
+     * - COMBAT, STARVATION, DEHYDRATION, SICKNESS, POISON, ENVIRONMENT, UNKNOWN
+     *
+     * @example
+     * takeDamage(15, 'COMBAT'); // Take 15 damage from combat
+     * // If HP was 100, now 85
+     * // If HP drops to 8/100 (8%), triggers CS_THE_BRINK
+     *
+     * @see heal for HP restoration
+     * @see setGameOver for death handling
      */
     takeDamage: (amount, cause: DeathCause = 'UNKNOWN') => {
         set(state => {
             // FIX v1.2.4: Always round damage to ensure HP remains integer
             const roundedDamage = Math.floor(amount);
             const newHp = Math.max(0, state.hp.current - roundedDamage);
+            
+            // CS_THE_BRINK trigger: HP drops below 10% for the first time
+            const hpPercentage = (newHp / state.hp.max) * 100;
+            if (hpPercentage > 0 && hpPercentage < 10 && !useGameStore.getState().gameFlags.has('THE_BRINK_TRIGGERED')) {
+                useGameStore.setState(s => ({ 
+                    gameFlags: new Set(s.gameFlags).add('THE_BRINK_TRIGGERED') 
+                }));
+                
+                // Trigger cutscene with delay to allow damage to register visually
+                setTimeout(() => {
+                    if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                        useGameStore.getState().startCutscene('CS_THE_BRINK');
+                    }
+                }, 1000);
+                
+                // Grant 25% bonus to all attributes as one-time reward
+                const bonusedAttributes = { ...state.attributes };
+                (Object.keys(bonusedAttributes) as AttributeName[]).forEach(attr => {
+                    const bonus = Math.ceil(bonusedAttributes[attr] * 0.25);
+                    bonusedAttributes[attr] += bonus;
+                });
+                
+                useGameStore.getState().addJournalEntry({
+                    text: "[SOPRAVVISSUTO ALL'ORLO] La tua determinazione ti ha reso più forte! +25% a tutti gli attributi!",
+                    type: JournalEntryType.XP_GAIN
+                });
+                
+                return { 
+                    hp: { ...state.hp, current: newHp },
+                    attributes: bonusedAttributes
+                };
+            }
+            
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
@@ -655,13 +1139,32 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
     
     /**
-     * @function calculateSurvivalCost
-     * @description Calculates the survival cost for a given amount of time.
-     * @param {number} minutes - The number of minutes to calculate the cost for.
-     * @returns {{satietyCost: number, hydrationCost: number}} The survival cost.
+     * Calculates survival resource costs for a time period (preview only).
+     *
+     * @description Computes how much satiety/hydration will be consumed.
+     * Used for UI preview, not actual stat updates.
+     *
+     * Decay Rates (per hour):
+     * - Satiety: -3.0
+     * - Hydration: -4.5
+     *
+     * @param {number} minutes - Time period to calculate for
+     * @returns {{satietyCost: number, hydrationCost: number}} Predicted costs
+     *
+     * @remarks
+     * - Does NOT modify character state
+     * - Used for UI display (e.g., "Sleeping will cost X satiety")
+     * - Does not account for weather (use updateSurvivalStats for actual)
+     * - Does not account for status effects
+     *
+     * @example
+     * const cost = calculateSurvivalCost(480); // 8 hours sleep
+     * // Returns: { satietyCost: 24, hydrationCost: 36 }
+     *
+     * @see updateSurvivalStats for actual stat updates
      */
     calculateSurvivalCost: (minutes) => {
-        let satietyDecay = 3.0; 
+        let satietyDecay = 3.0;
         let hydrationDecay = 4.5;
         
         const satietyCost = (minutes / 60) * satietyDecay;
@@ -671,10 +1174,53 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function updateSurvivalStats
-     * @description Updates the character's survival stats based on time passed and weather.
-     * @param {number} minutes - The number of minutes that have passed.
-     * @param {WeatherType} weather - The current weather.
+     * Updates all survival stats (satiety, hydration, fatigue, HP) based on time and conditions.
+     *
+     * @description Core survival system that processes:
+     * - Satiety/hydration decay over time
+     * - HP loss from starvation/dehydration
+     * - HP loss from status conditions
+     * - Fatigue accumulation
+     * - Auto-application/removal of status conditions
+     * - Death from survival failure
+     *
+     * Decay Rates (per hour):
+     * - Satiety: -3.0
+     * - Hydration: -4.5 (×1.5 during TEMPESTA)
+     * - Fatigue: +1.0 (×2 if overencumbered)
+     *
+     * HP Loss (per hour):
+     * - Satiety = 0: -2 HP
+     * - Hydration = 0: -3 HP
+     * - AVVELENATO: -2 HP
+     * - MALATO: -0.5 HP
+     * - IPOTERMIA: -1 HP
+     * - INFEZIONE: -1 HP
+     *
+     * Auto Status Management:
+     * - ESAUSTO: Applied at fatigue ≥85, removed at <70
+     * - AFFAMATO: Applied at satiety <20, removed at ≥40
+     * - DISIDRATATO: Applied at hydration <20, removed at ≥40
+     *
+     * @param {number} minutes - Time elapsed in minutes
+     * @param {WeatherType} weather - Current weather condition
+     *
+     * @remarks
+     * v1.2.4 Fix:
+     * - Always rounds HP loss to integer
+     * - Prevents decimal HP values
+     *
+     * Death Priority:
+     * 1. Status conditions (POISON, SICKNESS, ENVIRONMENT)
+     * 2. Starvation (if satiety = 0)
+     * 3. Dehydration (if hydration = 0)
+     *
+     * @example
+     * // After 60 minutes in TEMPESTA
+     * updateSurvivalStats(60, WeatherType.TEMPESTA);
+     * // Satiety: -3, Hydration: -6.75, Fatigue: +1
+     *
+     * @see calculateSurvivalCost for cost calculation only
      */
     updateSurvivalStats: (minutes, weather) => {
         const { setGameOver, addJournalEntry } = useGameStore.getState();
@@ -750,13 +1296,32 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             setGameOver(deathCause || 'UNKNOWN');
         }
 
-        let fatigueGain = (minutes / 60) * 1;
+        // --- Encumbrance System ---
+        // Check if player is overencumbered and apply fatigue penalty
         const totalWeight = get().getTotalWeight();
         const maxCarryWeight = get().getMaxCarryWeight();
-        if (totalWeight > maxCarryWeight) {
-            fatigueGain *= 2;
+        const wasOverEncumbered = currentState.fatigue.current > 0 &&
+                                  get().getTotalWeight() > get().getMaxCarryWeight(); // Previous state
+        const isOverEncumbered = totalWeight > maxCarryWeight;
+        
+        let fatigueGain = (minutes / 60) * 1;
+        if (isOverEncumbered) {
+            fatigueGain *= 2; // Double fatigue gain when overencumbered
         }
         const newFatigue = Math.min(currentState.fatigue.max, currentState.fatigue.current + fatigueGain);
+        
+        // Journal feedback when encumbrance state changes
+        if (!wasOverEncumbered && isOverEncumbered) {
+            addJournalEntry({
+                text: `[SISTEMA] Sei SOVRACCARICO (${totalWeight.toFixed(1)}/${maxCarryWeight.toFixed(1)} kg). Ti muovi con più fatica.`,
+                type: JournalEntryType.SYSTEM_WARNING
+            });
+        } else if (wasOverEncumbered && !isOverEncumbered) {
+            addJournalEntry({
+                text: `[SISTEMA] Non sei più sovraccarico. Ti muovi normalmente.`,
+                type: JournalEntryType.NARRATIVE
+            });
+        }
 
         // Auto-apply/remove status conditions based on stats
         const newStatus = new Set(currentState.status);
@@ -816,21 +1381,37 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
     
     /**
-     * @function heal
-     * @description Heals the character.
-     * @param {number} amount - The amount to heal.
+     * Heals character's HP.
+     *
+     * @param {number} amount - HP to restore (rounded up)
+     *
+     * @remarks
+     * - v1.2.4: Rounds up to ensure integer HP
+     * - Cannot exceed max HP
+     * - Sources: consumables, rest, level up, events
+     *
+     * @example
+     * heal(25); // Restore 25 HP
+     *
+     * @see takeDamage for HP loss
      */
     heal: (amount) => {
         set(state => ({
-            // FIX v1.2.4: Always round healing to ensure HP remains integer
             hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + Math.ceil(amount)) }
         }));
     },
     
     /**
-     * @function restoreSatiety
-     * @description Restores the character's satiety.
-     * @param {number} amount - The amount to restore.
+     * Restores satiety (hunger).
+     *
+     * @param {number} amount - Satiety to restore (typically 20-50)
+     *
+     * @remarks
+     * - Max: 100
+     * - Restoring ≥40 removes AFFAMATO status
+     * - Called when consuming food
+     *
+     * @see updateSurvivalStats for decay
      */
     restoreSatiety: (amount) => {
         set(state => ({
@@ -839,9 +1420,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
     
     /**
-     * @function restoreHydration
-     * @description Restores the character's hydration.
-     * @param {number} amount - The amount to restore.
+     * Restores hydration (thirst).
+     *
+     * @param {number} amount - Hydration to restore (typically 20-50)
+     *
+     * @remarks
+     * - Max: 100
+     * - Restoring ≥40 removes DISIDRATATO status
+     * - Called when consuming water/drinks
+     *
+     * @see updateSurvivalStats for decay
      */
     restoreHydration: (amount) => {
         set(state => ({
@@ -850,9 +1438,17 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function updateFatigue
-     * @description Updates the character's fatigue level.
-     * @param {number} amount - The amount to increase fatigue by.
+     * Increases fatigue level.
+     *
+     * @param {number} amount - Fatigue to add (typically 1-10)
+     *
+     * @remarks
+     * - Max: 100
+     * - ≥85: ESAUSTO status applied
+     * - >75: -2 to physical skills
+     * - >50: -1 to physical skills
+     *
+     * @see rest for reduction
      */
     updateFatigue: (amount) => {
         set(state => ({
@@ -861,9 +1457,17 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function rest
-     * @description Reduces the character's fatigue level.
-     * @param {number} amount - The amount to decrease fatigue by.
+     * Reduces fatigue (rest/sleep).
+     *
+     * @param {number} amount - Fatigue to remove (typically 15-50)
+     *
+     * @remarks
+     * - Min: 0
+     * - <70: ESAUSTO status removed
+     * - Quick rest: -15
+     * - Refuge sleep: -50
+     *
+     * @see updateFatigue for gain
      */
     rest: (amount) => {
         set(state => ({
@@ -871,12 +1475,52 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         }));
     },
     /**
-     * @function changeAlignment
-     * @description Changes the character's alignment.
-     * @param {'lena' | 'elian'} type - The type of alignment to change.
-     * @param {number} amount - The amount to change the alignment by.
+     * Changes character's moral alignment and triggers related cutscenes/bonuses.
+     *
+     * @description Adjusts Lena (compassion) or Elian (pragmatism) alignment values
+     * and provides feedback when crossing thresholds.
+     *
+     * Alignment System:
+     * - Lena: Compassionate choices (+value)
+     * - Elian: Pragmatic choices (+value)
+     * - Threshold: ±5 difference triggers bonuses
+     *
+     * Bonuses (when |difference| > 5):
+     * - Lena Dominant: +2 Persuasione, +2 Intuizione
+     * - Elian Dominant: +2 Sopravvivenza, +2 Intimidire
+     *
+     * Special Triggers:
+     * - CS_THE_WEIGHT_OF_CHOICE: First significant choice (±3+)
+     *
+     * @param {'lena' | 'elian'} type - Alignment type to increase
+     * @param {number} amount - Amount to add (typically 1-5)
+     *
+     * @remarks
+     * - Tracks threshold crossings (neutral ↔ aligned)
+     * - Provides journal feedback on bonus gain/loss
+     * - Cutscene triggered with 1000ms delay
+     * - Bonuses apply immediately to skill checks
+     *
+     * @example
+     * changeAlignment('lena', 3); // Compassionate choice
+     * // If this crosses threshold (+5), grants skill bonuses
+     *
+     * @see getSkillBonus for how alignment affects skills
      */
     changeAlignment: (type, amount) => {
+        // CS_THE_WEIGHT_OF_CHOICE trigger: Significant moral choice (±3+)
+        if (Math.abs(amount) >= 3 && !useGameStore.getState().gameFlags.has('WEIGHT_OF_CHOICE_PLAYED')) {
+            useGameStore.setState(state => ({ 
+                gameFlags: new Set(state.gameFlags).add('WEIGHT_OF_CHOICE_PLAYED') 
+            }));
+            // Delay cutscene to allow current event to complete
+            setTimeout(() => {
+                if (useGameStore.getState().gameState === GameState.IN_GAME) {
+                    useGameStore.getState().startCutscene('CS_THE_WEIGHT_OF_CHOICE');
+                }
+            }, 1000);
+        }
+        
         const oldAlignment = get().alignment;
         const oldDiff = oldAlignment.lena - oldAlignment.elian;
         
@@ -910,28 +1554,58 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         }
     },
     /**
-     * @function addStatus
-     * @description Adds a status condition to the character.
-     * @param {PlayerStatusCondition} newStatus - The status condition to add.
+     * Adds a negative status condition.
+     *
+     * @param {PlayerStatusCondition} newStatus - Status to apply
+     *
+     * @remarks
+     * Status Effects:
+     * - FERITO: -2 physical skills
+     * - MALATO: -0.5 HP/hour
+     * - AVVELENATO: -2 HP/hour
+     * - IPOTERMIA: -1 HP/hour, -3 all skills
+     * - ESAUSTO: -2 physical skills, +5min movement
+     * - AFFAMATO: -1 all skills
+     * - DISIDRATATO: -2 perception/intelligence
+     * - INFEZIONE: -1 HP/hour, -2 all skills
+     *
+     * @see removeStatus for curing
      */
     addStatus: (newStatus) => set(state => ({
         status: new Set(state.status).add(newStatus)
     })),
+
     /**
-     * @function removeStatus
-     * @description Removes a status condition from the character.
-     * @param {PlayerStatusCondition} statusToRemove - The status condition to remove.
+     * Removes a status condition (cure).
+     *
+     * @param {PlayerStatusCondition} statusToRemove - Status to remove
+     *
+     * @remarks
+     * - Called when using curative items
+     * - Some auto-remove when stats improve
+     * - Idempotent (safe if status not present)
+     *
+     * @see addStatus for application
      */
     removeStatus: (statusToRemove) => set(state => {
         const newStatus = new Set(state.status);
         newStatus.delete(statusToRemove);
         return { status: newStatus };
     }),
+
     /**
-     * @function boostAttribute
-     * @description Boosts an attribute of the character.
-     * @param {AttributeName} attribute - The attribute to boost.
-     * @param {number} amount - The amount to boost the attribute by.
+     * Permanently increases an attribute.
+     *
+     * @param {AttributeName} attribute - Attribute to boost
+     * @param {number} amount - Amount to increase (typically 1-3)
+     *
+     * @remarks
+     * - Permanent (not temporary buff)
+     * - Used by CS_THE_BRINK (+25% all attributes)
+     * - Used by special events
+     * - Affects derived stats (HP, AC, skills)
+     *
+     * @see applyLevelUp for normal increases
      */
     boostAttribute: (attribute, amount) => {
         set(state => ({
@@ -941,10 +1615,22 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
         }));
     },
+
     /**
-     * @function learnRecipe
-     * @description Teaches the character a new recipe.
-     * @param {string} recipeId - The ID of the recipe to learn.
+     * Teaches a new crafting recipe.
+     *
+     * @param {string} recipeId - Recipe ID from recipeDatabase
+     *
+     * @remarks
+     * - Checks if already known
+     * - Shows journal message
+     * - Recipes found via crafting manuals
+     * - Starting recipes: 5 (water, bandages, knife, repairs)
+     *
+     * @example
+     * learnRecipe('recipe_arrows'); // Learn arrow crafting
+     *
+     * @see recipeDatabase for all recipes
      */
     learnRecipe: (recipeId) => {
         set(state => {
@@ -967,9 +1653,35 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
     /**
-     * @function getPlayerAC
-     * @description Gets the player's armor class, summing defense from all equipped armor slots.
-     * @returns {number} The player's armor class.
+     * Calculates the player's total Armor Class (AC).
+     *
+     * @description Computes AC by summing base AC, DEX modifier, and all equipped armor.
+     *
+     * AC Formula:
+     * - Base AC: 10
+     * - DEX Modifier: floor((DES - 10) / 2)
+     * - Armor Bonus: Sum of all equipped armor defense values
+     * - Total: 10 + DEX_mod + armor_bonus
+     *
+     * Armor Slots Checked:
+     * - Chest (equippedArmor)
+     * - Head (equippedHead)
+     * - Legs (equippedLegs)
+     *
+     * @returns {number} Total armor class (typically 10-25)
+     *
+     * @remarks
+     * - Broken armor (durability = 0) provides no defense
+     * - All three armor slots contribute independently
+     * - Higher AC = harder to hit in combat
+     * - Used by combat system for attack rolls
+     *
+     * @example
+     * // Character: DES 14 (+2), Leather Chest (5), Combat Helmet (8)
+     * const ac = getPlayerAC();
+     * // = 10 + 2 + 5 + 8 = 25
+     *
+     * @see combatStore for how AC is used in combat
      */
     getPlayerAC: () => {
         const { getAttributeModifier, equippedArmor, equippedHead, equippedLegs, inventory } = get();
@@ -1002,9 +1714,34 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         return 10 + dexMod + totalArmorBonus;
     },
     /**
-     * @function unlockTrophy
-     * @description Unlocks a trophy for the character.
-     * @param {string} trophyId - The ID of the trophy to unlock.
+     * Unlocks a trophy and persists it globally across all games.
+     *
+     * @description Adds trophy to character's unlocked set and saves to global
+     * localStorage for permanent persistence.
+     *
+     * Trophy System (v1.2.1):
+     * - 50 total trophies
+     * - Persistent across games (global localStorage)
+     * - Never lost, even if save deleted
+     * - Merge with save file trophies on load
+     *
+     * @param {string} trophyId - Trophy ID from trophyDatabase
+     *
+     * @remarks
+     * - Checks if already unlocked (idempotent)
+     * - Plays level_up sound on unlock
+     * - Adds journal entry with trophy name
+     * - Immediately saves to global storage
+     * - Global trophies survive game resets
+     *
+     * @example
+     * unlockTrophy('trophy_mq_1'); // Unlock main story chapter 1
+     * // Trophy saved to localStorage: 'tspc_global_trophies'
+     * // Persists even if all save slots deleted
+     *
+     * @see addGlobalTrophy for persistence mechanism
+     * @see loadGlobalTrophies for loading on new game
+     * @see mergeWithGlobalTrophies for save/load merge
      */
     unlockTrophy: (trophyId: string) => {
         set(state => {
@@ -1033,18 +1770,27 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         });
     },
     /**
-     * @function restoreState
-     * @description Restores the character's state from a saved state.
-     * @param {CharacterState} newState - The state to restore.
+     * Restores character state (low-level).
+     *
+     * @param {Partial<CharacterState>} newState - State to restore
+     *
+     * @warning No validation. Use fromJSON() for safe deserialization.
+     * @internal
      */
     restoreState: (newState) => {
         set(newState);
     },
 
     /**
-     * @function toJSON
-     * @description Serializes the character's state to a JSON object.
-     * @returns {object} The serialized state.
+     * Serializes character state to JSON.
+     *
+     * @returns {object} JSON-serializable state
+     *
+     * @remarks
+     * - Converts Set → Array (status, trophies)
+     * - Compatible with save system v2.0.0
+     *
+     * @see fromJSON for deserialization
      */
     toJSON: () => {
         const state = get();
@@ -1052,30 +1798,99 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             ...state,
             status: Array.from(state.status),
             unlockedTrophies: Array.from(state.unlockedTrophies),
+            activeQuests: state.activeQuests,
+            completedQuests: state.completedQuests,
+            loreArchive: state.loreArchive,
+            questKillCounts: state.questKillCounts,
+            questFlags: state.questFlags,
         };
     },
 
     /**
-     * @function fromJSON
-     * @description Deserializes the character's state from a JSON object.
-     * @param {object} json - The JSON object to deserialize.
+     * Deserializes character state from JSON.
+     *
+     * @param {any} json - JSON from save file
+     *
+     * @remarks
+     * Trophy Merge (v1.2.1):
+     * - Merges save trophies with global trophies
+     * - Union of both sets (never lose trophies)
+     * - Global trophies persist even if save deleted
+     *
+     * @see toJSON for serialization
+     * @see mergeWithGlobalTrophies for merge logic
      */
     fromJSON: (json) => {
-        // Merge dei trofei del save con quelli globali
-        const saveTrophies = new Set(json.unlockedTrophies);
+        const saveTrophies = new Set<string>(json.unlockedTrophies || []);
         const mergedTrophies = mergeWithGlobalTrophies(saveTrophies);
         
         set({
             ...json,
             status: new Set(json.status),
-            unlockedTrophies: mergedTrophies, // Usa il set unificato
+            unlockedTrophies: mergedTrophies,
+            activeQuests: json.activeQuests || {},
+            completedQuests: json.completedQuests || [],
+            loreArchive: json.loreArchive || [],
+            questKillCounts: json.questKillCounts || {},
+            questFlags: json.questFlags || {},
         });
     },
 
     /**
-     * @function getTotalWeight
-     * @description Calculates the total weight of the character's inventory.
-     * @returns {number} The total weight of the inventory.
+     * Sets a quest achievement flag.
+     *
+     * @description Tracks player achievements for Main Quest "Prove del Padre" system.
+     * Flags persist across save/load and allow quest stages to be skipped if already completed.
+     *
+     * @param {string} flagName - Name of the flag (e.g., 'hasCraftedWater')
+     * @param {boolean} value - Flag value (typically true)
+     *
+     * @remarks
+     * v1.9.0 - Main Quest Multi-Stage System:
+     * - hasCraftedWater: Player has purified water
+     * - hasSuccessfullyFled: Player has fled from combat
+     * - hasRevealedTactic: Player has analyzed enemy
+     *
+     * @example
+     * setQuestFlag('hasCraftedWater', true);
+     * // Quest stage 2 will auto-skip if this is true
+     */
+    setQuestFlag: (flagName: string, value: boolean) => {
+        set(state => ({
+            questFlags: {
+                ...state.questFlags,
+                [flagName]: value
+            }
+        }));
+    },
+
+    /**
+     * Gets a quest achievement flag value.
+     *
+     * @param {string} flagName - Name of the flag to check
+     * @returns {boolean} Flag value (false if not set)
+     *
+     * @example
+     * const hasWater = getQuestFlag('hasCraftedWater');
+     * if (hasWater) {
+     *   // Skip water purification quest stage
+     * }
+     */
+    getQuestFlag: (flagName: string): boolean => {
+        return get().questFlags[flagName] || false;
+    },
+
+    /**
+     * Calculates total inventory weight.
+     *
+     * @returns {number} Total weight in kg
+     *
+     * @remarks
+     * - Sums weight × quantity for all items
+     * - Used for encumbrance check
+     * - Overencumbered: weight > maxCarryWeight → fatigue ×2
+     *
+     * @see getMaxCarryWeight for limit
      */
     getTotalWeight: () => {
         const { inventory } = get();
@@ -1087,12 +1902,165 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     },
 
     /**
-     * @function getMaxCarryWeight
-     * @description Calculates the maximum weight the character can carry.
-     * @returns {number} The maximum weight the character can carry.
+     * Calculates maximum carry weight based on Strength.
+     *
+     * @returns {number} Max weight in kg
+     *
+     * @description Determines how much weight the character can carry before
+     * becoming encumbered. Based on Strength attribute with modifier scaling.
+     *
+     * Formula: 15 + (FOR_modifier × 2)
+     *
+     * Examples:
+     * - FOR 8 (-1 mod): 15 + (-1 × 2) = 13kg
+     * - FOR 10 (+0 mod): 15 + (0 × 2) = 15kg
+     * - FOR 14 (+2 mod): 15 + (2 × 2) = 19kg
+     * - FOR 18 (+4 mod): 15 + (4 × 2) = 23kg
+     *
+     * @remarks
+     * Encumbrance Effects (when totalWeight > maxCarryWeight):
+     * - Fatigue gain ×2
+     * - -2 to Atletica and Acrobazia skill checks
+     * - Status "SOVRACCARICO" displayed in UI
+     * - Red warning in inventory panel
+     *
+     * Capacity Modifiers:
+     * - Upgraded backpack: +5kg (future implementation)
+     * - Military backpack: +10kg (future implementation)
+     *
+     * @see getTotalWeight for current weight
+     * @see getSkillBonus for skill penalty application
      */
     getMaxCarryWeight: () => {
-        const { attributes } = get();
-        return attributes.for * 10;
+        const { attributes, inventory } = get();
+        const forModifier = Math.floor((attributes.for - 10) / 2);
+        let baseCapacity = 15 + (forModifier * 2);
+        
+        // Check for backpack upgrades (future: zaini che aumentano capacità)
+        const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+        const hasUpgradedBackpack = inventory.some(item => {
+            const details = itemDatabase[item.itemId];
+            return details?.id === 'tool_upgraded_backpack'; // Future item
+        });
+        
+        if (hasUpgradedBackpack) {
+            baseCapacity += 5; // Upgraded backpack adds 5kg capacity
+        }
+        
+        return baseCapacity;
+    },
+
+    /**
+     * Adds a lore entry to the character's archive.
+     *
+     * @param {string} entryId - Lore entry ID from loreArchiveDatabase
+     *
+     * @remarks
+     * - Checks if already unlocked (idempotent)
+     * - Shows journal message
+     * - Lore entries found via special events and lore quests
+     * - Viewable in QuestScreen Archivio Lore tab
+     *
+     * @example
+     * addLoreEntry('lore_project_echo'); // Unlock Project Echo lore
+     *
+     * @see QuestScreen for lore archive display
+     */
+    addLoreEntry: (entryId: string) => {
+        set(state => {
+            if (state.loreArchive.includes(entryId)) {
+                return {}; // Already unlocked
+            }
+            
+            useGameStore.getState().addJournalEntry({
+                text: `[ARCHIVIO LORE] Nuova scoperta sbloccata! Consultabile nel Diario Missioni.`,
+                type: JournalEntryType.XP_GAIN,
+                color: '#a78bfa' // violet-400
+            });
+            
+            return { loreArchive: [...state.loreArchive, entryId] };
+        });
+    },
+
+    /**
+     * Upgrades equipped armor with enhanced defense.
+     *
+     * @description Permanently increases the defense value of equipped armor
+     * and fully restores its durability. Used by Anya's tech upgrades.
+     *
+     * @param {'head' | 'chest' | 'legs'} slot - Armor slot to upgrade
+     * @param {number} defenseBonus - Defense increase (typically 1-2)
+     *
+     * @remarks
+     * v1.8.1 - Anya's Echo System:
+     * - Restores armor to full durability
+     * - Adds permanent defense bonus
+     * - One-time upgrade per armor piece
+     * - Requires equipped armor in specified slot
+     *
+     * Implementation Note:
+     * - Since itemDatabase is immutable, we track upgrades via gameFlags
+     * - Defense bonus applied in getPlayerAC() calculation
+     * - Durability restoration is immediate
+     *
+     * @example
+     * upgradeEquippedArmor('chest', 2);
+     * // Chest armor defense +2, durability restored to max
+     *
+     * @see getPlayerAC for how defense is calculated
+     */
+    upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => {
+        const { inventory, equippedArmor, equippedHead, equippedLegs } = get();
+        const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+        
+        let equippedIndex: number | null = null;
+        if (slot === 'chest') equippedIndex = equippedArmor;
+        else if (slot === 'head') equippedIndex = equippedHead;
+        else if (slot === 'legs') equippedIndex = equippedLegs;
+        
+        if (equippedIndex === null) {
+            useGameStore.getState().addJournalEntry({
+                text: `Non hai nulla equipaggiato nello slot ${slot}.`,
+                type: JournalEntryType.ACTION_FAILURE
+            });
+            return;
+        }
+        
+        const armorItem = inventory[equippedIndex];
+        if (!armorItem) return;
+        
+        const armorDetails = itemDatabase[armorItem.itemId];
+        if (!armorDetails || armorDetails.type !== 'armor') {
+            useGameStore.getState().addJournalEntry({
+                text: `L'oggetto equipaggiato non è un'armatura.`,
+                type: JournalEntryType.ACTION_FAILURE
+            });
+            return;
+        }
+        
+        // Restore durability to max
+        set(state => {
+            const newInventory = [...state.inventory];
+            const upgradedArmor = { ...newInventory[equippedIndex!] };
+            
+            if (upgradedArmor.durability) {
+                upgradedArmor.durability.current = upgradedArmor.durability.max;
+            }
+            
+            newInventory[equippedIndex!] = upgradedArmor;
+            return { inventory: newInventory };
+        });
+        
+        // Set upgrade flag for defense bonus tracking
+        const upgradeFlag = `ARMOR_UPGRADED_${slot.toUpperCase()}_${defenseBonus}`;
+        useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add(upgradeFlag)
+        }));
+        
+        useGameStore.getState().addJournalEntry({
+            text: `[POTENZIAMENTO] ${armorDetails.name} migliorato! (+${defenseBonus} Difesa, Durabilità ripristinata)`,
+            type: JournalEntryType.XP_GAIN,
+            color: '#a855f7' // purple-500
+        });
     }
 }));

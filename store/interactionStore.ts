@@ -5,7 +5,7 @@ import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { audioManager } from '../utils/audio';
-import { useMainQuestDatabaseStore } from '../data/mainQuestDatabase';
+import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
 import { useTimeStore } from './timeStore';
 
 /**
@@ -56,11 +56,13 @@ interface InteractionStoreState {
     confirmActionMenuSelection: () => void;
     
     enterRefuge: () => void;
+    enterOutpost: () => void;
     leaveRefuge: () => void;
     navigateRefugeMenu: (direction: number) => void;
     confirmRefugeMenuSelection: () => void;
     searchRefuge: () => void;
     clearRefugeActionMessage: () => void;
+    startUniqueEvent: (eventId: string) => void;
 
     toggleCrafting: () => void;
     navigateCraftingMenu: (direction: number) => void;
@@ -323,19 +325,19 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * @description Enters a refuge.
      */
     enterRefuge: () => {
-        const { visitedRefuges, mainQuestStage, setGameState, activeMainQuestEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
+        const { visitedRefuges, mainStoryStage, setGameState, activeMainStoryEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
         const { gameTime } = useTimeStore.getState();
         const { refugeJustSearched } = get();
 
         const isFirstRefuge = visitedRefuges.length === 0;
         if (isFirstRefuge) {
-            const { mainQuestChapters } = useMainQuestDatabaseStore.getState();
-            const nextChapter = mainQuestChapters.find(c => c.stage === mainQuestStage);
+            const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
+            const nextChapter = mainStoryChapters.find(c => c.stage === mainStoryStage);
             if (nextChapter && nextChapter.trigger.type === 'firstRefugeEntry') {
                 const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
                 if (!isNight || nextChapter.allowNightTrigger) {
-                    useGameStore.setState({ activeMainQuestEvent: nextChapter, gameState: GameState.MAIN_QUEST });
-                    // Don't show the refuge menu until the quest is resolved
+                    useGameStore.setState({ activeMainStoryEvent: nextChapter, gameState: GameState.MAIN_STORY });
+                    // Don't show the refuge menu until the story event is resolved
                     return;
                 }
             }
@@ -356,6 +358,63 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             refugeMenuState: { isOpen: true, options, selectedIndex: 0 }
         });
         addJournalEntry({ text: "Sei entrato in un rifugio. Sei al sicuro.", type: JournalEntryType.NARRATIVE });
+    },
+
+    /**
+     * @function enterOutpost
+     * @description Enters the Outpost special location (v1.6.0).
+     */
+    enterOutpost: () => {
+        const { addJournalEntry } = useGameStore.getState();
+        useGameStore.getState().setGameState(GameState.OUTPOST);
+        audioManager.playSound('enter_refuge'); // Reuse appropriate sound
+        addJournalEntry({
+            text: "Sei arrivato al Crocevia. Un insediamento di fortuna, ma il primo segno di civiltà da settimane.",
+            type: JournalEntryType.NARRATIVE
+        });
+    },
+
+    /**
+     * @function startUniqueEvent
+     * @description Starts a unique event by ID (v1.6.0).
+     * Used for special location tiles (N, L, B) to trigger guaranteed unique events.
+     * @param {string} eventId - The ID of the unique event to start.
+     */
+    startUniqueEvent: async (eventId: string) => {
+        const { setGameState, addJournalEntry } = useGameStore.getState();
+        const { useEventStore } = await import('./eventStore');
+        const { useEventDatabaseStore } = await import('../data/eventDatabase');
+        
+        // Get all events from database (unique events are in biomeEvents and loreEvents)
+        const { loreEvents, biomeEvents } = useEventDatabaseStore.getState();
+        
+        // Search for the event in both lore and biome events
+        const allEvents = [...(loreEvents || []), ...(biomeEvents || [])];
+        const event = allEvents.find((e: any) => e.id === eventId);
+        
+        if (!event) {
+            console.error(`[startUniqueEvent] Event ${eventId} not found in database`);
+            console.log('Available events:', allEvents.map((e: any) => e.id));
+            addJournalEntry({
+                text: `Errore: evento ${eventId} non trovato.`,
+                type: JournalEntryType.SYSTEM_ERROR
+            });
+            return;
+        }
+        
+        // Set the event as active in eventStore and switch to event screen
+        useEventStore.setState({
+            activeEvent: event,
+            eventResolutionText: null
+        });
+        
+        setGameState(GameState.EVENT_SCREEN);
+        addJournalEntry({
+            text: `EVENTO SPECIALE: ${event.title}`,
+            type: JournalEntryType.EVENT
+        });
+        
+        audioManager.playSound('confirm');
     },
 
     /**
@@ -486,14 +545,15 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
     confirmRefugeMenuSelection: () => {
         get().clearRefugeActionMessage();
         const { refugeMenuState } = get();
-        const { addJournalEntry, setGameState, mainQuestStage, playerPos, gameFlags } = useGameStore.getState();
+        const { addJournalEntry, setGameState, mainStoryStage, playerPos, gameFlags } = useGameStore.getState();
         const { gameTime, advanceTime } = useTimeStore.getState();
         const { satiety, hydration } = useCharacterStore.getState();
         const selectedAction = refugeMenuState.options[refugeMenuState.selectedIndex];
         
         if (selectedAction === "Aspetta un'ora" || selectedAction === "Dormi fino all'alba") {
-            const hasMusicBox = useCharacterStore.getState().inventory.some(i => i.itemId === 'carillon_annerito');
-            if ( mainQuestStage >= 10 && playerPos.x > 80 && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST') && hasMusicBox ) {
+            // CS_ASH_LULLABY trigger: First refuge at night on day 3+
+            const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
+            if (gameTime.day >= 3 && isNight && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST')) {
                 useGameStore.setState(state => ({ gameFlags: new Set(state.gameFlags).add('LULLABY_CHOICE_OFFERED_THIS_REST') }));
                 setGameState(GameState.ASH_LULLABY_CHOICE);
                 audioManager.playSound('confirm');
@@ -578,7 +638,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             if (!isLooted && !refugeJustSearched) newOptions.push("Cerca nei dintorni");
             newOptions.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
             // FIX: Reset selectedIndex a 0 quando il menu cambia per evitare confusione
-            set(state => ({ refugeMenuState: { options: newOptions, selectedIndex: 0 } }));
+            set(state => ({ refugeMenuState: { isOpen: true, options: newOptions, selectedIndex: 0 } }));
         }
     },
 
@@ -681,6 +741,22 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         if (createdItemsText.length > 0) {
             const journalText = `Hai creato: ${createdItemsText}.`;
             addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+            
+            // v1.9.0: Set quest flags for Main Quest "Prove del Padre"
+            recipe.results.forEach(result => {
+                if (result.itemId === 'CONS_002') {
+                    // Player has purified water - set flag for Main Quest
+                    useCharacterStore.getState().setQuestFlag('hasCraftedWater', true);
+                    console.log('[CRAFTING] Quest flag set: hasCraftedWater = true');
+                }
+            });
+            
+            // Check quest triggers for craftItem type
+            import('../services/questService').then(({ questService }) => {
+                recipe.results.forEach(result => {
+                    questService.checkQuestTriggers(result.itemId);
+                });
+            });
         } else {
             addJournalEntry({ text: "Crafting fallito: nessun oggetto creato.", type: JournalEntryType.SYSTEM_ERROR });
         }

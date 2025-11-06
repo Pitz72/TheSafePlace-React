@@ -479,21 +479,23 @@
   {
     "id": "forest_ritual_circle",
     "title": "Cerchio Rituale",
-    "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate.",
+    "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate. L'aria qui sembra vibrare con una frequenza quasi impercettibile.",
     "biomes": ["Foresta"], "isUnique": true,
     "choices": [
       {
-        "text": "Esamina i simboli",
+        "text": "Esamina i simboli con attenzione",
         "outcomes": [{
           "type": "skillCheck", "skill": "storia", "dc": 15,
-          "successText": "Sono simboli pre-guerra di un culto apocalittico. Trovi un diario nascosto sotto una pietra.",
-          "failureText": "I simboli non hanno senso per te. Sono solo scarabocchi.",
+          "successText": "Sotto una delle pietre principali, protetto da un involucro di pelle cerata, trovi un diario. Le pagine sono piene di simboli astronomici, calcoli complessi e note scritte in una calligrafia frenetica. Parla di 'frequenze dissonanti', di 'armonizzare gli echi' e di un 'rituale di schermatura'. Non è il diario di un pazzo, ma di qualcuno che stava cercando disperatamente una soluzione.",
+          "failureText": "I simboli sono troppo complessi. Sembrano astronomici, ma non riesci a decifrarli. Trovi solo cenere e ossa.",
           "success": [
-            { "type": "addItem", "value": { "itemId": "sensitive_documents", "quantity": 1 } },
-            { "type": "addXp", "value": 45 }
+            { "type": "addItem", "value": { "itemId": "cultist_coded_journal", "quantity": 1 } },
+            { "type": "startQuest", "value": "signs_of_ash" },
+            { "type": "addXp", "value": 60 },
+            { "type": "journalEntry", "text": "[SCOPERTA] Il diario menziona altri due 'luoghi di potere' necessari per completare il rituale." }
           ],
           "failure": [
-            { "type": "addXp", "value": 5 }
+            { "type": "addXp", "value": 15 }
           ]
         }]
       },
@@ -854,6 +856,118 @@
             { "type": "takeDamage", "value": 20 },
             { "type": "statusChange", "value": "AVVELENATO" },
             { "type": "addXp", "value": 10 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_leonardus_vargeon",
+    "title": "Il Cavaliere Silente",
+    "description": "Ti fai strada attraverso un fitto bosco di querce secolari, fino a raggiungere una radura baciata da una luce pallida. L'aria qui è immobile, carica di un silenzio quasi reverenziale. E poi lo vedi.\n\nAppoggiato alla base di una quercia antica, come se si fosse seduto per riposare un istante secoli fa, c'è lo scheletro di un uomo. Ma non è un sopravvissuto come gli altri che hai visto. È vestito in un modo che non riesci a comprendere.\n\nIndossa una cotta di maglia annerita e ammaccata sopra un gambesone di stoffa spessa, ormai a brandelli. Un elmo di metallo rovinato giace accanto a lui, e le sue dita scheletriche sono ancora serrate attorno all'elsa di una grande spada a due mani, la cui lama è conficcata nel terreno davanti a sé.\n\nNon ci sono segni di tecnologia, né armi da fuoco, né plastica. Per un folle istante, la tua mente, priva di nozioni storiche, non riesce a collocarlo. È un guerriero di un'era dimenticata, un fantasma di un passato così remoto da precedere persino il mondo che è andato perduto?",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la spada e l'armatura",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 12,
+          "successText": "Tocchi il metallo freddo della spada. È pesante, ben bilanciata, un'arma forgiata da un vero artigiano. Noti un'incisione quasi cancellata sulla lama: 'In Hoc Signo Vinces'. L'armatura, sebbene rovinata, è un'opera di incredibile complessità, ogni anello intrecciato a mano. Ti rendi conto che, chiunque fosse quest'uomo, non era un semplice predone. Era qualcosa di più. Decidi di prendere la spada. È un'arma anacronistica, ma la sua fattura è senza tempo.",
+          "failureText": "La spada è troppo pesante e conficcata nel terreno. L'armatura è troppo corrosa. Non riesci a recuperare nulla di utile, solo schegge di metallo arrugginito. Il mistero di quest'uomo rimane intatto.",
+          "success": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "greatsword_vargeon",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "journalEntry",
+              "text": "Hai recuperato lo Spadone di Vargeon. Un'arma di un'epoca perduta."
+            },
+            {
+              "type": "addXp",
+              "value": 150
+            }
+          ],
+          "failure": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "scrap_metal",
+                "quantity": 2
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 30
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Cerca un'identificazione o degli effetti personali",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "percezione",
+          "dc": 14,
+          "successText": "Cerchi con delicatezza tra i resti del suo equipaggiamento. Nascosto in una piccola borsa di cuoio alla cintura, non trovi documenti, ma un oggetto strano: un medaglione di legno con un simbolo inciso che non riconosci - forse uno stemma di un'associazione? - e la scritta 'Leonardus Vargeon'. Accanto, un piccolo sacchetto di erbe essiccate, ancora aromatiche. Forse non era solo un guerriero.",
+          "failureText": "Il tempo ha consumato tutto. Non trovi nulla che possa dare un nome o una storia a questo guerriero silenzioso. Rimarrà un enigma.",
+          "success": [
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "vargeon_medallion",
+                "quantity": 1
+              }
+            },
+            {
+              "type": "addItem",
+              "value": {
+                "itemId": "MED_HEALING_HERBS",
+                "quantity": 2
+              }
+            },
+            {
+              "type": "journalEntry",
+              "text": "Hai trovato il medaglione di Leonardus Vargeon. Un mistero di un'epoca perduta."
+            },
+            {
+              "type": "addXp",
+              "value": 120
+            }
+          ],
+          "failure": [
+            {
+              "type": "addXp",
+              "value": 20
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Lascia il guerriero al suo riposo. Onora la sua veglia.",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi che questo luogo è una tomba, non un deposito da saccheggiare. C'è una strana pace in questa radura, una solennità che non vuoi violare. Fai un cenno di rispetto allo scheletro, un guerriero che ha trovato la sua fine in un'epoca che non era la sua. Riprendi il cammino, lasciandoti alle spalle l'eco silenzioso di una storia che non conoscerai mai, ma che ora senti parte della tua."
+            },
+            {
+              "type": "alignmentChange",
+              "value": {
+                "type": "lena",
+                "amount": 2
+              }
+            },
+            {
+              "type": "addXp",
+              "value": 100
+            }
           ]
         }]
       }

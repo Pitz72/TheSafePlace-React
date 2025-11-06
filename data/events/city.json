@@ -230,6 +230,53 @@
             { "type": "addXp", "value": 5 }
           ]
         }]
+      },
+      {
+        "text": "[QUEST] Usa un terminale per decifrare il chip",
+        "itemRequirements": [{ "itemId": "drone_memory_chip", "quantity": 1 }],
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 14,
+          "successText": "Dopo aver armeggiato con i cavi, riesci ad alimentare un vecchio terminale. Inserisci il chip. Sullo schermo appaiono delle coordinate e un messaggio: 'Deposito scorte emergenza 7-B. Integro.'",
+          "failureText": "Il terminale emette una scintilla e si spegne definitivamente. Il chip è fritto. L'informazione è persa per sempre.",
+          "success": [
+            {
+              "type": "removeItem",
+              "value": { "itemId": "drone_memory_chip", "quantity": 1 }
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "completeQuestFromEvent",
+                "questId": "decipher_drone_data"
+              },
+              "text": "Le coordinate del bunker militare sono state aggiunte alla tua mappa."
+            },
+            {
+              "type": "addXp",
+              "value": 100
+            }
+          ],
+          "failure": [
+            {
+              "type": "removeItem",
+              "value": { "itemId": "drone_memory_chip", "quantity": 1 }
+            },
+            {
+              "type": "special",
+              "value": {
+                "effect": "failQuestFromEvent",
+                "questId": "decipher_drone_data"
+              },
+              "text": "Hai perso l'opportunità di decifrare i dati."
+            },
+            {
+              "type": "addXp",
+              "value": 30
+            }
+          ]
+        }]
       }
     ]
   },
@@ -339,10 +386,10 @@
         "text": "Prova a sollevare la trave",
         "outcomes": [{
           "type": "skillCheck", "skill": "atletica", "dc": 15,
-          "successText": "Con uno sforzo immane, sollevi la trave. L'uomo è grato e ti dà una mappa.",
+          "successText": "Con uno sforzo immane, sollevi la trave abbastanza da permettergli di liberarsi. Ansima, grato, ma i suoi occhi sono pieni di panico. 'Grazie,' sussurra, 'ma mia figlia... era con me. È corsa a nascondersi nella vecchia scuola quando l'edificio è crollato. Ti prego, trovala. Il suo nome è Elara. Io andrò al Crocevia, l'avamposto a est. Se la trovi, portala lì. Ti sarò debitore per sempre.'",
           "failureText": "Non riesci a sollevare la trave. L'uomo muore davanti ai tuoi occhi.",
           "success": [
-            { "type": "addItem", "value": { "itemId": "city_map", "quantity": 1 } },
+            { "type": "startQuest", "value": "find_elara" },
             { "type": "addXp", "value": 50 },
             { "type": "alignmentChange", "value": {"type": "lena", "amount": 2} }
           ],
@@ -717,9 +764,20 @@
   {
     "id": "city_theater_ruins",
     "title": "Teatro in Rovina",
-    "description": "Un vecchio teatro abbandonato. Il palco è crollato, ma il retroscena potrebbe nascondere qualcosa.",
+    "description": "Un vecchio teatro abbandonato. Il palco è crollato, ma il retroscena potrebbe nascondere qualcosa. Al centro della sala, miracolosamente intatto, c'è un magnifico pianoforte a coda.",
     "biomes": ["Città"], "isUnique": true,
     "choices": [
+      {
+        "text": "Esamina il pianoforte",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            { "type": "journalEntry", "text": "Il pianoforte è una reliquia incredibile. I tasti sono intatti, ma quando premi uno, il suono è terribilmente stonato. Con gli strumenti giusti, forse potresti accordarlo..." },
+            { "type": "startQuest", "value": "broken_melody" },
+            { "type": "addXp", "value": 50 }
+          ]
+        }]
+      },
       {
         "text": "Cerca nel retroscena",
         "outcomes": [{
@@ -733,6 +791,30 @@
           ],
           "failure": [
             { "type": "addXp", "value": 5 }
+          ]
+        }]
+      },
+      {
+        "text": "[QUEST] Tenta di accordare il pianoforte",
+        "itemRequirements": [{ "itemId": "precision_tools", "quantity": 1 }],
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 15,
+          "successText": "Con pazienza infinita, accorda ogni corda. Poi, esitante, suoni alcune note. La melodia che ne esce è semplice, malinconica, ma pura. Per un istante, il suono della musica riempie le rovine, un'eco di bellezza in un mondo di cenere. Ti senti... più umano.",
+          "failureText": "Tenti di accordare le corde, ma una si spezza con un suono stridente. Il delicato meccanismo è compromesso. Il pianoforte non suonerà mai più.",
+          "success": [
+            { "type": "removeItem", "value": { "itemId": "precision_tools", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "completeQuestFromEvent", "questId": "broken_melody" } },
+            { "type": "statBoost", "value": { "stat": "car", "amount": 1 } },
+            { "type": "journalEntry", "text": "[EREDITÀ] Hai riportato in vita l'arte. Il tuo Carisma aumenta permanentemente." },
+            { "type": "addXp", "value": 200 }
+          ],
+          "failure": [
+            { "type": "removeItem", "value": { "itemId": "precision_tools", "quantity": 1 } },
+            { "type": "special", "value": { "effect": "failQuestFromEvent", "questId": "broken_melody" } },
+            { "type": "journalEntry", "text": "[FALLIMENTO] Il pianoforte è perduto per sempre." },
+            { "type": "addXp", "value": 50 }
           ]
         }]
       },
