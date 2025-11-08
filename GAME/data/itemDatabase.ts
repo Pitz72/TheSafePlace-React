@@ -9,13 +9,13 @@ type RawItem = Omit<IItem, 'color'>;
  */
 async function loadAllItems(): Promise<Record<string, IItem>> {
     const files = [
-        '/data/items/weapons.json',
-        '/data/items/armor.json',
-        '/data/items/consumables.json',
-        '/data/items/materials.json',
-        '/data/items/quest.json',
-        '/data/items/ammo.json',
-        '/data/items/repair_kits.json'
+        'data/items/weapons.json',
+        'data/items/armor.json',
+        'data/items/consumables.json',
+        'data/items/materials.json',
+        'data/items/quest.json',
+        'data/items/ammo.json',
+        'data/items/repair_kits.json'
     ];
     try {
         console.log('[ITEM DB] Inizio caricamento file JSON...', files);

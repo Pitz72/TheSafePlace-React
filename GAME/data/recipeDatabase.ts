@@ -7,7 +7,7 @@ import { Recipe } from '../types';
  */
 async function loadAllRecipes(): Promise<Recipe[]> {
     try {
-        const response = await fetch('/data/recipes.json');
+        const response = await fetch('data/recipes.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch recipes: ${response.statusText}`);
         }

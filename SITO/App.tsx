@@ -96,7 +96,7 @@ const App: React.FC = () => {
             <div className="text-center">
                 <p className="max-w-3xl mx-auto">La tua storia ti attende. Il mondo di The Safe Place Chronicles è pronto ad essere esplorato. Ogni feedback è prezioso per il futuro di questo progetto. Gioca, sopravvivi, scopri la verità e condividi la tua esperienza.</p>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-5 mt-10">
-                    <Button href="gioco/" variant="primary">INIZIA IL TUO VIAGGIO</Button>
+                    <Button href="/game/" variant="primary">INIZIA IL TUO VIAGGIO</Button>
                     <Button href="https://www.gofundme.com/f/sostieni-the-safe-place-un-rpg-retro-con-unanima" variant="primary">SUPPORTA SU GOFUNDME</Button>
                 </div>
                 <p className="mt-10">Per suggerimenti o segnalazioni, scrivi a: <strong className="text-[#aaffbe]">runtimeradio@gmail.com</strong></p>

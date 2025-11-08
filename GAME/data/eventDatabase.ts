@@ -7,23 +7,23 @@ import { GameEvent } from '../types';
  */
 async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounters: GameEvent[], loreEvents: GameEvent[], easterEggEvents: GameEvent[] }> {
     const biomeFiles = [
-        '/data/events/plains.json',
-        '/data/events/forest.json',
-        '/data/events/village.json',
-        '/data/events/city.json',
-        '/data/events/river_events.json',
-        '/data/events/unique_events.json',
-        '/data/events/village_pump.json',
-        '/data/events/forest_thief.json',
-        '/data/events/special_locations.json',
-        '/data/events/hermit_location.json',
-        '/data/events/repair_quests.json',
-        '/data/events/olivia_herbalist.json',
-        '/data/events/arsonist_quest.json'
+        'data/events/plains.json',
+        'data/events/forest.json',
+        'data/events/village.json',
+        'data/events/city.json',
+        'data/events/river_events.json',
+        'data/events/unique_events.json',
+        'data/events/village_pump.json',
+        'data/events/forest_thief.json',
+        'data/events/special_locations.json',
+        'data/events/hermit_location.json',
+        'data/events/repair_quests.json',
+        'data/events/olivia_herbalist.json',
+        'data/events/arsonist_quest.json'
     ];
-    const encounterFile = '/data/events/encounters.json';
-    const loreFile = '/data/events/lore.json';
-    const easterEggFile = '/data/events/easter_eggs.json';
+    const encounterFile = 'data/events/encounters.json';
+    const loreFile = 'data/events/lore.json';
+    const easterEggFile = 'data/events/easter_eggs.json';
 
     try {
         console.log('[EVENT DB] Loading biome events from:', biomeFiles.length, 'files');

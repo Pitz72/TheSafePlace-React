@@ -6,7 +6,7 @@ import { DialogueTree } from '../types';
  * @returns {Promise<Record<string, DialogueTree>>} A promise that resolves to a record of dialogue trees indexed by ID.
  */
 async function loadDialogues(): Promise<Record<string, DialogueTree>> {
-    const file = '/data/dialogues.json';
+    const file = 'data/dialogues.json';
     try {
         console.log('[DIALOGUE DB] Loading dialogues from:', file);
         const response = await fetch(file);

@@ -6,7 +6,7 @@ import { Quest } from '../types';
  * @returns {Promise<Record<string, Quest>>} A promise that resolves to a record of quests indexed by ID.
  */
 async function loadQuests(): Promise<Record<string, Quest>> {
-    const file = '/data/quests.json';
+    const file = 'data/quests.json';
     try {
         console.log('[QUEST DB] Loading quests from:', file);
         const response = await fetch(file);

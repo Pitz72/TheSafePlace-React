@@ -7,7 +7,7 @@ import { Trophy } from '../types';
  */
 async function loadAllTrophies(): Promise<Trophy[]> {
     try {
-        const response = await fetch('/data/trophies.json');
+        const response = await fetch('data/trophies.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch trophies: ${response.statusText}`);
         }

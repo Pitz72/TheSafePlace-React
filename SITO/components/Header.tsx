@@ -19,7 +19,7 @@ const Header: React.FC = () => {
           Le lezioni dal passato. Una lotta per il futuro. Un viaggio narrativo di sopravvivenza nel cuore di un mondo in rovina.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
-          <Button href="gioco/" variant="primary">ACCEDI AL TERMINALE &gt; GIOCA ORA</Button>
+          <Button href="/game/" variant="primary">ACCEDI AL TERMINALE &gt; GIOCA ORA</Button>
           <Button href="https://www.gofundme.com/f/sostieni-the-safe-place-un-rpg-retro-con-unanima" variant="primary">SUPPORTA SU GOFUNDME</Button>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { LoreEntry } from '../types';
  * @returns {Promise<Record<string, LoreEntry>>} A promise that resolves to a record of lore entries indexed by ID.
  */
 async function loadLoreEntries(): Promise<Record<string, LoreEntry>> {
-    const file = '/data/lore_archive.json';
+    const file = 'data/lore_archive.json';
     try {
         console.log('[LORE ARCHIVE DB] Loading lore entries from:', file);
         const response = await fetch(file);

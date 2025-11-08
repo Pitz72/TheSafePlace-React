@@ -7,7 +7,7 @@ import { MainStoryChapter } from '../types';
  */
 async function loadMainStory(): Promise<MainStoryChapter[]> {
     try {
-        const response = await fetch('/data/mainStory.json');
+        const response = await fetch('data/mainStory.json');
         if (!response.ok) {
             throw new Error(`Failed to fetch main story: ${response.statusText}`);
         }

@@ -82,6 +82,14 @@ L'interazione avviene interamente tramite tastiera:
 *   **Level Up:** `L` (quando disponibile).
 *   **Interazione:** `Invio` per confermare, `ESC` per annullare/indietro.
 
+### Deployment
+
+Il gioco è configurato per essere eseguito da una sottocartella di un dominio (es. `www.miosito.com/gioco`). La configurazione di Vite (`base: './'`) gestisce automaticamente la creazione di percorsi relativi in fase di build, garantendo che tutte le risorse vengano caricate correttamente.
+
+Per il deploy:
+1. Eseguire `npm run build`.
+2. Caricare il **contenuto** della cartella `dist` generata nella sottocartella desiderata sul server.
+
 ### Stato del Progetto e Sviluppi Futuri
 
 **Versione Corrente: v1.9.7** - Alignment Fix

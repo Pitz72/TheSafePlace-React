@@ -10,6 +10,17 @@ Questo repository contiene il codice sorgente di **The Safe Place**, un progetto
 
 ---
 
+## 🏛️ Architettura di Deployment
+
+L'architettura di questo progetto è pensata per un deployment su un unico dominio con la seguente struttura:
+
+-   **Sito Web (Landing Page):** Il contenuto del progetto `SITO` viene servito dalla **root** del dominio (es. `https://thesafeplace.runtimeradio.it/`).
+-   **Gioco:** Il contenuto del progetto `GAME` viene servito da una **sottocartella** (es. `https://thesafeplace.runtimeradio.it/gioco/`).
+
+Entrambi i progetti sono già configurati per supportare questa struttura. Il sito punta a una sottocartella per avviare il gioco, e il gioco è configurato per caricare tutte le sue risorse in modo relativo, garantendo la piena funzionalità.
+
+---
+
 ## 🎮 The Safe Place - Il Gioco
 
 Il cuore del progetto, un'avventura testuale con elementi GDR sviluppata per il web.

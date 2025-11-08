@@ -6,7 +6,7 @@ import { Trader } from '../types';
  * @returns {Promise<Record<string, Trader>>} A promise that resolves to a record of traders indexed by ID.
  */
 async function loadTraders(): Promise<Record<string, Trader>> {
-    const file = '/data/traders.json';
+    const file = 'data/traders.json';
     try {
         console.log('[TRADER DB] Loading traders from:', file);
         const response = await fetch(file);
