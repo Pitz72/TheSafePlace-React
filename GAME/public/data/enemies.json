@@ -1,0 +1,418 @@
+[
+  {
+    "id": "raider_desperate",
+    "name": "Predone Disperato",
+    "description": "Un uomo magro e dall'aspetto selvaggio, armato con un pezzo di tubo arrugginito. La fame nei suoi occhi lo rende imprevedibile.",
+    "type": "humanoid",
+    "hp": 30,
+    "ac": 12,
+    "attack": { "damage": 6, "bonus": 2 },
+    "xp": 50,
+    "biomes": ["Global"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "Noti che zoppica leggermente, favorendo la gamba destra. Sembra una vecchia ferita mai guarita del tutto.",
+      "actions": [
+        {
+          "id": "tactic_trip",
+          "name": "[Tattico] Sbilancialo",
+          "description": "Tenta di sbilanciare il predone colpendo la sua gamba ferita.",
+          "skillCheck": { "skill": "atletica", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mutated_wolf",
+    "name": "Lupo Mutato",
+    "description": "Un lupo più grosso del normale, con ciuffi di pelo mancanti che rivelano una pelle malata. I suoi occhi brillano di un'intelligenza innaturale e aggressiva.",
+    "type": "beast",
+    "hp": 25,
+    "ac": 13,
+    "attack": { "damage": 8, "bonus": 3 },
+    "xp": 60,
+    "biomes": ["Foresta", "Pianura"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "I suoi movimenti sono fulminei, ma noti che prima di ogni balzo, abbassa leggermente le orecchie. È un piccolo, ma rivelatore, tic.",
+      "actions": [
+        {
+          "id": "tactic_feint",
+          "name": "[Tattico] Finta per esporlo",
+          "description": "Fingi un attacco per costringere la bestia a una mossa avventata, lasciandola scoperta.",
+          "skillCheck": { "skill": "inganno", "dc": 14 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "raider_archer",
+    "name": "Predone con Arco",
+    "description": "Un predone armato con un arco improvvisato. Mantiene la distanza e colpisce con precisione inquietante.",
+    "type": "humanoid",
+    "hp": 28,
+    "ac": 13,
+    "attack": { "damage": 7, "bonus": 3 },
+    "xp": 80,
+    "biomes": ["Pianura"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "Tende a muoversi lateralmente per mantenere la distanza. Un attacco ravvicinato potrebbe metterlo in difficoltà.",
+      "actions": [
+        {
+          "id": "tactic_close_gap",
+          "name": "[Tattico] Chiudi la Distanza",
+          "description": "Corri verso di lui per impedirgli di usare l'arco efficacemente.",
+          "skillCheck": { "skill": "atletica", "dc": 12 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "wild_dog",
+    "name": "Cane Selvatico",
+    "description": "Un cane randagio tornato allo stato selvatico. Veloce, affamato e disperato.",
+    "type": "beast",
+    "hp": 20,
+    "ac": 14,
+    "attack": { "damage": 5, "bonus": 2 },
+    "xp": 70,
+    "biomes": ["Pianura", "Villaggio"],
+    "tactics": {
+      "revealDc": 12,
+      "description": "Si muove in cerchi, cercando un punto debole. È nervoso e può essere intimidito.",
+      "actions": [
+        {
+          "id": "tactic_intimidate_dog",
+          "name": "[Tattico] Intimidisci",
+          "description": "Usa la tua presenza per spaventare l'animale e farlo indietreggiare.",
+          "skillCheck": { "skill": "intimidire", "dc": 11 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hostile_merchant",
+    "name": "Mercante Ostile",
+    "description": "Un ex-mercante che ha perso ogni traccia di umanità. Protegge ferocemente il suo bottino di beni saccheggiati.",
+    "type": "humanoid",
+    "hp": 35,
+    "ac": 11,
+    "attack": { "damage": 6, "bonus": 1 },
+    "xp": 90,
+    "biomes": ["Pianura", "Villaggio"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "Porta uno zaino pesante che lo rallenta. Potrebbe essere convinto a negoziare invece di combattere.",
+      "actions": [
+        {
+          "id": "tactic_persuade_merchant",
+          "name": "[Tattico] Negozia",
+          "description": "Tenta di convincerlo che un accordo è più vantaggioso del combattimento.",
+          "skillCheck": { "skill": "persuasione", "dc": 15 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mutated_bear",
+    "name": "Orso Mutato",
+    "description": "Un enorme orso deformato dalle radiazioni. La sua massa è terrificante, ma i suoi movimenti sono goffi.",
+    "type": "beast",
+    "hp": 60,
+    "ac": 12,
+    "attack": { "damage": 12, "bonus": 4 },
+    "xp": 150,
+    "biomes": ["Foresta"],
+    "tactics": {
+      "revealDc": 15,
+      "description": "La sua massa lo rende lento. Potrebbe essere aggirato con agilità.",
+      "actions": [
+        {
+          "id": "tactic_dodge_bear",
+          "name": "[Tattico] Schivata Acrobatica",
+          "description": "Usa la tua agilità per evitare i suoi attacchi pesanti e colpire i fianchi.",
+          "skillCheck": { "skill": "acrobazia", "dc": 14 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mad_hunter",
+    "name": "Cacciatore Folle",
+    "description": "Un cacciatore impazzito che ha piazzato trappole ovunque nel suo territorio. Conosce ogni centimetro della foresta.",
+    "type": "humanoid",
+    "hp": 32,
+    "ac": 13,
+    "attack": { "damage": 7, "bonus": 2 },
+    "xp": 100,
+    "biomes": ["Foresta"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "Si muove in modo prevedibile, seguendo percorsi dove ha piazzato trappole. Con attenzione, puoi evitarle.",
+      "actions": [
+        {
+          "id": "tactic_avoid_traps",
+          "name": "[Tattico] Evita le Trappole",
+          "description": "Osserva il terreno e i suoi movimenti per evitare le sue trappole nascoste.",
+          "skillCheck": { "skill": "percezione", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "aggressive_boar",
+    "name": "Cinghiale Aggressivo",
+    "description": "Un cinghiale di dimensioni anomale, con zanne affilate come rasoi. Carica chiunque invada il suo territorio.",
+    "type": "beast",
+    "hp": 40,
+    "ac": 11,
+    "attack": { "damage": 10, "bonus": 3 },
+    "xp": 110,
+    "biomes": ["Foresta", "Pianura"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "Carica in linea retta. Se riesci a metterti di lato all'ultimo momento, potrebbe schiantarsi.",
+      "actions": [
+        {
+          "id": "tactic_sidestep_charge",
+          "name": "[Tattico] Schivata Laterale",
+          "description": "Aspetta la carica e spostati lateralmente all'ultimo istante.",
+          "skillCheck": { "skill": "acrobazia", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "armed_raider",
+    "name": "Predone Armato",
+    "description": "Un predone ben equipaggiato con una pistola funzionante. È pericoloso e sicuro di sé.",
+    "type": "humanoid",
+    "hp": 35,
+    "ac": 14,
+    "attack": { "damage": 9, "bonus": 3 },
+    "xp": 120,
+    "biomes": ["Città"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "Conta sulla sua arma da fuoco per intimidire. Se gli finiscono i colpi, diventa molto meno minaccioso.",
+      "actions": [
+        {
+          "id": "tactic_wait_reload",
+          "name": "[Tattico] Aspetta il Ricaricamento",
+          "description": "Resta coperto e attendi che debba ricaricare, poi attacca.",
+          "skillCheck": { "skill": "sopravvivenza", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "city_ghoul",
+    "name": "Ghoul Cittadino",
+    "description": "Un sopravvissuto trasformato in qualcosa di mostruoso dall'esposizione prolungata alle radiazioni. I suoi artigli trasudano veleno.",
+    "type": "humanoid",
+    "hp": 25,
+    "ac": 10,
+    "attack": { "damage": 6, "bonus": 2 },
+    "xp": 90,
+    "biomes": ["Città"],
+    "tactics": {
+      "revealDc": 12,
+      "description": "Si muove in modo goffo e prevedibile. I suoi attacchi sono telegrafati.",
+      "actions": [
+        {
+          "id": "tactic_predict_attack",
+          "name": "[Tattico] Prevedi e Parata",
+          "description": "Osserva i suoi movimenti goffi e parata il suo attacco prevedibile.",
+          "skillCheck": { "skill": "percezione", "dc": 11 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "crazed_guard",
+    "name": "Guardia Impazzita",
+    "description": "Un ex-guardia in armatura tattica che ha perso la ragione. Ancora crede di proteggere qualcosa che non esiste più.",
+    "type": "humanoid",
+    "hp": 40,
+    "ac": 15,
+    "attack": { "damage": 8, "bonus": 3 },
+    "xp": 130,
+    "biomes": ["Città"],
+    "tactics": {
+      "revealDc": 15,
+      "description": "La sua armatura è pesante. Si muove lentamente e la sua visione periferica è limitata.",
+      "actions": [
+        {
+          "id": "tactic_flank_guard",
+          "name": "[Tattico] Attacco ai Fianchi",
+          "description": "Aggiralo e colpisci da dietro dove l'armatura è più debole.",
+          "skillCheck": { "skill": "furtivita", "dc": 14 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "desperate_wanderer",
+    "name": "Viandante Disperato",
+    "description": "Un viaggiatore ridotto alla disperazione dalla fame e dalla paura. Attacca chiunque nella speranza di sopravvivere un altro giorno.",
+    "type": "humanoid",
+    "hp": 30,
+    "ac": 12,
+    "attack": { "damage": 6, "bonus": 2 },
+    "xp": 85,
+    "biomes": ["Global"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "È malnutrito e debole. Un colpo ben piazzato potrebbe terminare lo scontro rapidamente.",
+      "actions": [
+        {
+          "id": "tactic_precise_strike",
+          "name": "[Tattico] Colpo Preciso",
+          "description": "Mira a un punto vitale per terminare velocemente lo scontro.",
+          "skillCheck": { "skill": "medicina", "dc": 13 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mutant_beast",
+    "name": "Bestia Mutante",
+    "description": "Una creatura deformata di origine incerta. Potrebbe essere stata un tempo un cane, un gatto, o qualcosa di peggio.",
+    "type": "beast",
+    "hp": 45,
+    "ac": 13,
+    "attack": { "damage": 9, "bonus": 3 },
+    "xp": 115,
+    "biomes": ["Global"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "Le sue mutazioni lo rendono forte ma instabile. Certi suoni acuti sembrano disorientarlo.",
+      "actions": [
+        {
+          "id": "tactic_disorient_beast",
+          "name": "[Tattico] Disorientamento Acustico",
+          "description": "Usa un fischio o un suono acuto per confondere la creatura.",
+          "skillCheck": { "skill": "natura", "dc": 14 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "armed_survivor",
+    "name": "Sopravvissuto Armato",
+    "description": "Un altro sopravvissuto che ha scelto di prendere con la forza ciò di cui ha bisogno. Ben equipaggiato e determinato.",
+    "type": "humanoid",
+    "hp": 38,
+    "ac": 14,
+    "attack": { "damage": 8, "bonus": 3 },
+    "xp": 105,
+    "biomes": ["Global"],
+    "tactics": {
+      "revealDc": 14,
+      "description": "Ha esperienza di combattimento ma tende a sovrastimare le sue capacità. Puoi sfruttare la sua arroganza.",
+      "actions": [
+        {
+          "id": "tactic_exploit_arrogance",
+          "name": "[Tattico] Sfrutta l'Arroganza",
+          "description": "Fai leva sulla sua sicurezza eccessiva per indurlo a un errore tattico.",
+          "skillCheck": { "skill": "inganno", "dc": 14 }
+        }
+      ]
+    }
+  }
+  ,
+  {
+    "id": "alpha_wolf_pack_leader",
+    "name": "Capobranco dei Lupi Mutati",
+    "description": "Il leader di un branco di lupi mutati. Più grande, più forte, e molto più intelligente dei suoi simili. Le sue cicatrici raccontano di innumerevoli battaglie vinte.",
+    "type": "beast",
+    "hp": 55,
+    "ac": 14,
+    "attack": { "damage": 10, "bonus": 4 },
+    "xp": 200,
+    "biomes": ["Foresta"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "pack_call",
+      "name": "Richiamo del Branco",
+      "description": "Al secondo turno, ha 50% probabilità di chiamare un alleato lupo.",
+      "trigger": "turn_2",
+      "probability": 0.5
+    },
+    "tactics": {
+      "revealDc": 16,
+      "description": "Il suo ululato è il suo punto debole. Un suono forte e improvviso potrebbe disorientarlo e impedirgli di chiamare il branco.",
+      "actions": [
+        {
+          "id": "tactic_loud_noise",
+          "name": "[Tattico] Spara un Colpo in Aria",
+          "description": "Usa un'arma da fuoco per creare un rumore assordante che impedisce al Capobranco di ululare.",
+          "skillCheck": { "skill": "intimidire", "dc": 15 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "veteran_raider_chief",
+    "name": "Capo Predone Veterano",
+    "description": "Un predone esperto e spietato, veterano di innumerevoli scontri. La sua armatura è coperta di trofei presi ai nemici caduti. Combatte con un machete affilato e una sicurezza letale.",
+    "type": "humanoid",
+    "hp": 50,
+    "ac": 16,
+    "attack": { "damage": 11, "bonus": 4 },
+    "xp": 250,
+    "biomes": ["Città", "Foresta"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "counterattack",
+      "name": "Contrattacco",
+      "description": "Se il player manca un attacco, 30% probabilità di attacco di opportunità.",
+      "trigger": "player_miss",
+      "probability": 0.3
+    },
+    "tactics": {
+      "revealDc": 17,
+      "description": "La sua arroganza è il suo punto debole. Un inganno ben eseguito potrebbe indurlo a un attacco avventato, annullando il suo contrattacco e riducendo la sua difesa.",
+      "actions": [
+        {
+          "id": "tactic_feint_chief",
+          "name": "[Tattico] Finta Elaborata",
+          "description": "Fingi un attacco per indurlo a scoprirsi, annullando il suo contrattacco per questo turno.",
+          "skillCheck": { "skill": "inganno", "dc": 16 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "aberrant_angel_arsonist",
+    "name": "Angelo Aberrante - Il Piromane",
+    "description": "Una trasformazione fallita in Angelo della Cenere. Metà uomo, metà macchina, completamente folle. Il suo corpo è fuso con tecnologia aliena in modo grottesco e doloroso. Un occhio umano pieno di follia, l'altro una lente rossa incrinata. Indossa ancora i resti di un maglioncino a strisce rosse e bianche. Dalle sue mani emanano fiamme instabili.",
+    "type": "humanoid",
+    "hp": 45,
+    "ac": 12,
+    "attack": { "damage": 12, "bonus": 3 },
+    "xp": 600,
+    "biomes": ["Città"],
+    "isElite": true,
+    "specialAbility": {
+      "id": "pyromaniac_burst",
+      "name": "Esplosione Piromaniacale",
+      "description": "Quando i suoi HP scendono sotto il 50%, ha 40% probabilità di esplodere in fiamme, danneggiando il giocatore.",
+      "trigger": "low_hp",
+      "probability": 0.4
+    },
+    "tactics": {
+      "revealDc": 15,
+      "description": "La sua follia lo rende imprevedibile, ma le fiamme che emana sono la sua unica arma. L'acqua o il freddo potrebbero indebolirlo significativamente.",
+      "actions": [
+        {
+          "id": "tactic_douse_flames",
+          "name": "[Tattico] Spegni le Fiamme",
+          "description": "Usa acqua o un oggetto freddo per spegnere le sue fiamme e ridurre il suo potere.",
+          "skillCheck": { "skill": "sopravvivenza", "dc": 14 }
+        }
+      ]
+    }
+  }
+]

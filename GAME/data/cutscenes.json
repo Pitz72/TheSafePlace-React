@@ -1,0 +1,312 @@
+
+[
+  {
+    "id": "CS_OPENING",
+    "title": "L'Ultima Lezione",
+    "pages": [
+      {
+        "text": "Ti svegli nel silenzio del rifugio. Il freddo del mattino ti morde la pelle. Per un istante, ti aspetti di sentire la sua voce, il rumore dei suoi passi pesanti sul pavimento di cemento.\n\nMa non c'è nulla. Solo silenzio.\n\nTi alzi, confuso, e lo cerchi. Non è nel suo angolo abituale. Non è alla finestra. Non è da nessuna parte.\n\nSul tavolo centrale, sotto una pietra a ferma carte, c'è un foglio. Lo riconosci subito: la sua calligrafia irregolare, tracciata con un vecchio pezzo di carbone.\n\nÈ una lettera. Per te.",
+        "nextPage": 1
+      },
+      {
+        "text": "La raccogli con mani tremanti e inizi a leggere.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nUltimo, figlio mio...\n\nSe stai leggendo, significa che non sono tornato. E che non tornerò. La mia ultima ricognizione ha confermato i miei timori. Ho trovato le loro tracce, fresche. Un gruppo numeroso, e si stanno spostando verso questa valle. Non possiamo affrontarli insieme, e non possiamo fuggire entrambi. Il loro silenzio li precede.\n\nIo ho una missione da compiere. Devo portarli via da qui. Lontano dalla tua strada. È qualcosa che devo fare da solo, troppo pericoloso per trascinarti con me. Non provare a seguirmi. Sarebbe la tua fine, e renderebbe vano ogni mio sacrificio.",
+        "nextPage": 2
+      },
+      {
+        "text": "Nel tuo sacco, sotto le provviste, troverai una mappa. È vecchia, ma è l'unica che ho. Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile, lo so, forse solo una leggenda, ma è l'unica possibilità che ti resta.\n\nRicorda tutto ciò che ti ho insegnato. L'acqua, il cibo, i rifugi. Fidati del tuo istinto, ma non della tua rabbia. Guarda sempre, ascolta sempre. Il mondo là fuori è un lupo affamato, ma tu hai gli strumenti per non diventare la sua preda.\n\nNon tutte le lotte vanno combattute. A volte, la più grande vittoria è saper quando sparire.",
+        "nextPage": 3
+      },
+      {
+        "text": "Sii forte, Ultimo. Sii migliore di me. Sopravvivi.\n\nE forse, un giorno, capirai. O forse mi perdonerai.\n\nCon tutto l'amore che un padre distrutto può dare,\n\nPapà.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nLe tue mani tremano. Le parole si confondono davanti ai tuoi occhi. Rileggi la lettera, ancora e ancora, come se ripeterla potesse cambiarne il significato.\n\nMa non cambia. Lui se n'è andato. Ti ha lasciato solo.\n\nPer proteggerti, dice. Per salvarti.\n\nMa tu ti senti solo... abbandonato.",
+        "nextPage": 4
+      },
+      {
+        "text": "La carta trema tra le tue dita, le ultime parole incise a fuoco nella tua mente: \"Con tutto l'amore che un padre distrutto può dare, Papà.\"\n\nL'amore. Una parola che suona strana, quasi estranea, dopo anni di addestramento spietato. E ora, quel silenzio. Un silenzio assordante che urla una sola, terribile verità: sei solo.\n\nLa rabbia e la paura si mescolano nel tuo petto, un groviglio soffocante. La lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto.\n\nCosa ne fai?",
+        "choices": [
+          { "text": "[1] Strappi la lettera in un impeto di rabbia.", "targetPage": 5 },
+          { "text": "[2] Pieghi la lettera con cura e la metti in tasca.", "targetPage": 6 }
+        ]
+      },
+      {
+        "text": "Il suono della carta che si strappa è un urlo nel silenzio del rifugio. Un pezzo, poi un altro, finché le sue parole non sono che frammenti inutili sul pavimento polveroso.\n\nUn addestramento spietato per un abbandono altrettanto spietato. Questa è stata la sua ultima lezione. Non ci sarà più un'altra parola, un altro ordine. Solo questo.\n\nI frammenti bianchi ai tuoi piedi sembrano neve su un terreno morto.",
+        "consequences": [{ "type": "setFlag", "payload": "FATHERS_LETTER_DESTROYED" }],
+        "nextPage": 7
+      },
+      {
+        "text": "Le sue parole sono tutto ciò che ti resta di lui. Un testamento, una condanna, una speranza. Qualunque cosa siano, sono tue.\n\nCon una cura che non sapevi di possedere, pieghi il foglio lungo le sue pieghe consumate e lo infili nella tasca più interna degli stracci che indossi, vicino al cuore. Un peso piccolo, ma immenso.\n\nÈ un fardello che hai deciso di portare.",
+        "consequences": [{ "type": "addItem", "payload": { "itemId": "fathers_letter", "quantity": 1 } }],
+        "nextPage": 7
+      },
+      {
+        "text": "Ti trascini verso l'unica finestra del rifugio, una ferita di vetro sporco nel muro di cemento. Il mondo esterno è un mare grigio e indifferente, un panorama di desolazione che hai sempre guardato con lui al tuo fianco.\n\nMa ora la sua spalla non è più lì a cui appoggiarti.\n\nPer la prima volta, la parola \"solo\" ha un peso reale, un sapore di cenere in bocca. Una lacrima, poi un'altra, tracciano sentieri puliti sulla polvere del tuo viso.",
+        "nextPage": 8
+      },
+      {
+        "text": "Ma le lacrime si fermano, quasi subito. La sua voce, dura e inflessibile, risuona nella tua testa, un'eco di mille lezioni impartite.\n\n\"La paura è un lusso che non puoi permetterti.\"\n\"Il sangue è prezioso. Non sprecarlo.\"\n\"La fame è un'insegnante. Ascoltala, ma non lasciare che ti comandi.\"\n\nPiangere non purificherà l'acqua. La rabbia non cuocerà la carne. La disperazione non medicherà una ferita.\n\nTi alzi. L'addestramento è finito. La sopravvivenza è iniziata.",
+        "nextPage": 9
+      },
+      {
+        "text": "Mentre i tuoi occhi si adattano alla penombra, ora non più velati dal dolore ma acuti per necessità, noti qualcosa vicino alla porta che prima avevi ignorato.\n\nÈ un fagotto di tela cerata, compatto e pesante, legato con uno spago robusto. Non era lì ieri. L'ha lasciato per te. Un ultimo, pragmatico gesto di cura.\n\nSopra, c'è un altro biglietto, più piccolo.",
+        "nextPage": 10
+      },
+      {
+        "text": "Lo apri. La sua calligrafia è più frettolosa, quasi un appunto.\n\n\"Ultimo,\nSe stai leggendo questo, hai superato la prima prova: scegliere di vivere. Dentro troverai il necessario per i primi giorni: due borracce d'acqua già purificata, tre razioni di cibo a lunga conservazione, delle bende pulite. Non è molto, ma tu sai come trovare il resto.\n\nIl coltello che porti alla cintura è arrugginito, ma affilato. Gli stracci che indossi non ti proteggeranno, ma ti terranno al caldo. Spera di trovare di meglio.\n\nLa strada la conosci. Te l'ho insegnata. Ci rivedremo. Forse al Safe Place.\"",
+        "consequences": [
+          { "type": "addItem", "payload": { "itemId": "CONS_002", "quantity": 2 } },
+          { "type": "addItem", "payload": { "itemId": "CONS_001", "quantity": 3 } },
+          { "type": "addItem", "payload": { "itemId": "CONS_003", "quantity": 2 } },
+          { "type": "addItem", "payload": { "itemId": "weapon_knife_rusty", "quantity": 1 } },
+          { "type": "addItem", "payload": { "itemId": "armor_rags", "quantity": 1 } },
+          { "type": "equipItem", "payload": "weapon_knife_rusty" },
+          { "type": "equipItem", "payload": "armor_rags" }
+        ],
+        "nextPage": 11
+      },
+      {
+        "text": "Raccogli il fagotto, sentendone il peso rassicurante. Controlli il coltello alla cintura, il suo freddo metallo un'estensione della tua mano. Ti guardi gli stracci che indossi, un promemoria della tua vulnerabilità.\n\nGuardi la stanza per l'ultima volta. Per anni, queste quattro mura sono state la tua scuola, la tua prigione, il tuo unico mondo protetto. Ora, sono solo un guscio vuoto. Un ricordo.\n\nApri la porta e un refolo di vento freddo ti dà il benvenuto nel mondo reale.\n\nIl tuo viaggio è iniziato.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_RIVER_INTRO",
+    "title": "Lo Specchio Scuro",
+    "pages": [
+      {
+        "text": "Ti fermi. L'aria è cambiata. C'è un odore umido e terroso che non sentivi da tempo, e un suono basso, quasi impercettibile, che si fa strada attraverso il silenzio: il mormorio dell'acqua.\n\nPoco più avanti, una linea scura taglia la desolazione. Un fiume. Non è un ruscello innocente, ma una cicatrice liquida e torbida che scorre lenta, come sangue denso. La sua superficie è uno specchio nero che riflette il cielo grigio, un'apparente immobilità che stona con il resto del mondo.\n\nUn'oasi in mezzo al nulla. Un invito. Una trappola.",
+        "nextPage": 1
+      },
+      {
+        "text": "La lezione di tuo padre ti risuona in testa, chiara come il giorno in cui te l'ha impartita, proprio sulla riva di un fiume come questo.\n\n\"L'acqua è vita, Ultimo. Ma è anche morte. Non fidarti mai di ciò che sembra calmo. La corrente che non vedi è quella che ti trascina via. I predatori più pericolosi sono quelli che aspettano, immobili, appena sotto la superficie.\"\n\nOgni passo verso quella riva dovrà essere calcolato. Ogni sorso, una scommessa. Dietro quella calma apparente, sai che potrebbe nascondersi un pericolo invisibile, o peggio, la fine del tuo viaggio.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_BEING_WATCHED",
+    "title": "L'Ombra che non fa Rumore",
+    "pages": [
+      {
+        "text": "Il sole inizia a calare, tingendo il cielo di un arancione malato. Decidi che è il momento di fermarsi. Il riposo non è un lusso, è un'arma. Lo diceva sempre tuo padre.\n\nTrovi un riparo di fortuna, una nicchia tra due rocce crollate, e inizi la routine che ti è stata inculcata fin da bambino. I gesti sono automatici, quasi meccanici. Un piccolo fuoco, alimentato da sterpi secchi, prende vita con un crepitio familiare. L'acqua viene razionata, un sorso misurato. Un pezzo di carne essiccata viene masticato lentamente, ogni caloria un piccolo trionfo contro la fame.\n\nPer un istante, quasi ti dimentichi di essere solo. È un momento di calma, un'isola di normalità in un oceano di caos.",
+        "nextPage": 1
+      },
+      {
+        "text": "Poi, la senti.\n\nNon è un suono. Il vento continua a sibilare come sempre. Il fuoco continua a scoppiettare. Ma qualcosa è cambiato. È una sensazione fredda che ti serpeggia lungo la spina dorsale, un istinto primordiale che urla in silenzio.\n\nSei osservato.\n\nIl tuo corpo si irrigidisce. Ogni muscolo si tende, pronto a scattare. La mano corre istintivamente all'elsa del coltello. I tuoi occhi scattano da un'ombra all'altra, scrutando il crepuscolo. Non c'è niente. Nessun movimento. Nessuna forma innaturale tra le rovine. Eppure, la sensazione persiste, pesante come una cappa. Non sono gli occhi di una bestia affamata, né quelli di un predone in agguato. È qualcosa di diverso. Qualcosa di... antico. E freddo.",
+        "nextPage": 2
+      },
+      {
+        "text": "Rimani immobile per un tempo che sembra infinito, il cuore che batte all'impazzata, ogni respiro un rischio. Ma non accade nulla. Il silenzio torna ad essere solo silenzio.\n\nForse è solo la tua mente, logorata dalla solitudine e dalla tensione. Una paranoia da sopravvissuto.\n\nDecidi di riposare comunque, ma è un sonno leggero, da preda. Un occhio sempre socchiuso, un orecchio sempre teso.\n\nQuando finalmente ti rimetti in cammino, una figura alta e sottile, indistinguibile dalle ombre allungate delle rovine, si stacca silenziosamente da un muro e inizia a seguirti, i suoi passi che non lasciano impronte e non fanno alcun rumore.",
+        "consequences": [{ "type": "performModifiedRest" }],
+        "nextPage": null
+      }
+    ]
+  },
+    {
+    "id": "CS_ASH_LULLABY",
+    "title": "La Ninnananna della Cenere",
+    "pages": [
+      {
+        "text": "Le tue dita, tremanti, sollevano il coperchio. Il meccanismo scatta con un clic secco. Una melodia si leva nell'aria immobile. È flebile, incrinata, piena di note mancanti, come un ricordo che zoppica. Eppure, sotto la sua tristezza, c'è una dolcezza antica, quasi dimenticata. Una ninnananna.\n\nNon sai perché, ma senti le palpebre farsi pesanti. Il freddo sembra attenuarsi... Ti appoggi contro la parete fredda, e per la prima volta da quando tuo padre se n'è andato, il sonno non è una caduta nell'oscurità, ma un abbandono.",
+        "nextPage": 1
+      },
+      {
+        "text": "...Ti svegli di soprassalto.\n\nNon per un rumore. Ma per la sua assenza.\n\nLa musica è finita.\n\nL'aria è immobile, pesante, e gelida. Molto più gelida di prima. E c'è un odore. Non di umidità o di rovina. È un odore pulito, chimico, sterile. L'odore di cenere fredda.\n\nI tuoi occhi si aprono nel buio. Non sei solo.",
+        "nextPage": 2
+      },
+      {
+        "text": "Una figura è in piedi dall'altra parte della stanza, immobile come una statua, stagliata contro la luce malata che filtra dall'esterno. È alta, avvolta in un mantello scuro e pesante, il cappuccio calato sul volto. Un Angelo della Cenere.\n\nIl panico ti gela il sangue nelle vene. Le lezioni di tuo padre ti urlano nella testa: Non farti vedere. Corri. Non combattere.\n\nMa sei paralizzato. Puoi solo guardare.",
+        "nextPage": 3
+      },
+      {
+        "text": "La creatura non si muove verso di te. Lentamente, con un movimento fluido e innaturale, si china. Non verso di te. Verso il carillon, che giace a terra accanto a te.\n\nUna mano pallida, quasi traslucida, emerge dal mantello. Le dita sono lunghe e sottili. Non c'è aggressività nel gesto. Solo una sorta di... curiosità meccanica. La mano si ferma a un soffio dal piccolo oggetto, come se temesse di romperlo.",
+        "nextPage": 4
+      },
+      {
+        "text": "In quel momento, il cappuccio si sposta leggermente all'indietro. Non vedi un volto. Vedi solo un frammento: la curva di una guancia, pallida come marmo, e qualcosa che riflette la luce. Una lente scura, rotonda. Ma sotto la lente, o forse al posto dell'altro occhio, vedi un bagliore debole e azzurrognolo.\n\nLa creatura emette un suono. Non è una voce. È un sibilo basso, ritmico, come l'aria che passa attraverso circuiti rovinati. E mescolato al sibilo, un sussurro distorto, elettronico, quasi inudibile. Parole spezzate. Frammenti di un'eco:\n\n«... mio... sole... devi... dormire...»\n\nÈ una voce di macchina che cerca di cantare una ninnananna. La tua ninnananna.",
+        "nextPage": 5
+      },
+      {
+        "text": "Il terrore si trasforma in un orrore così profondo da farti male al petto. Quella cosa... quella cosa ti conosce.\n\nLa figura ritrae la mano. Si rialza lentamente. Per un istante terribile, la lente scura sembra fissarti. Non c'è minaccia nel suo sguardo. Né pietà. C'è solo un vuoto vasto e incomprensibile. Un abisso.\n\nPoi, con la stessa rapidità silenziosa con cui è apparsa, si volta e si dissolve nell'ombra più profonda della stanza. Svanita.",
+        "nextPage": 6
+      },
+      {
+        "text": "Rimani solo, tremante, nel freddo pungente. L'odore di cenere svanisce lentamente. Accanto a te, il carillon giace chiuso. Non è stato un sogno.\n\nTua madre.\n\nQuello era ciò che restava di tua madre.\n\nNon ti ha attaccato. Ti ha trovato. E ti ha lasciato andare.\n\nLa domanda che ora ti brucia dentro è peggiore di qualsiasi ferita.\n\nPerché?",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_FIRST_KILL",
+    "title": "Il Peso della Sopravvivenza",
+    "pages": [
+      {
+        "text": "Il corpo giace immobile ai tuoi piedi. Il sangue forma una pozza scura che si espande lentamente, tingendo la polvere di un rosso quasi nero. Le tue mani tremano ancora, strette all'arma. Il metallo è caldo, quasi febbrile, come se avesse assorbito la vita che ha appena spento.\n\nNon era un mostro. Era una persona. Forse disperata come te. Forse solo più affamata, più veloce, più disposta a uccidere per sopravvivere.\n\nMa ora è solo un cadavere. E tu sei vivo.\n\nQuesta è la sopravvivenza.",
+        "nextPage": 1
+      },
+      {
+        "text": "Tuo padre ti aveva preparato a questo momento. Ogni esercizio, ogni lezione brutale, ogni simulazione. \"Un giorno dovrai uccidere o essere ucciso,\" diceva con quella sua voce piatta e pragmatica. \"Non c'è spazio per i deboli. Non c'è spazio per il rimorso.\"\n\nMa ora che è successo, le sue parole suonano vuote. Teoriche. Come può averti preparato a questo peso nel petto? A questo vuoto nello stomaco? Al modo in cui il mondo sembra essere diventato improvvisamente più freddo, più silenzioso?\n\nGuardi le tue mani. Sono le stesse che tuo padre ti ha insegnato a usare per sopravvivere. Ora sono le mani di un assassino.",
+        "nextPage": 2
+      },
+      {
+        "text": "Un pensiero ti attraversa la mente, improvviso e lacerante: tua madre non avrebbe mai voluto questo per te.\n\nNon la ricordi. Non davvero. Solo frammenti: calore, una voce dolce, il profumo di qualcosa che non riesci a identificare. Ma sai, nel profondo, che lei non avrebbe mai allenato un bambino a diventare questo.\n\nTuo padre invece sì. E ora capisci perché. Perché questo mondo non perdona. Non dà seconde possibilità. Non c'è spazio per la gentilezza quando la fame ti rosicchia le viscere e la disperazione ti acceca.\n\nMa a quale prezzo?",
+        "nextPage": 3
+      },
+      {
+        "text": "Ti costringe a voltarti, ad allontanarti dal corpo. Ogni passo è un'eternità. Il mondo continua a girare, indifferente. Il vento soffia. Il cielo resta grigio. La desolazione resta desolazione.\n\nMa qualcosa dentro di te è cambiato. Una linea è stata attraversata. Non puoi più tornare indietro.\n\nForse tuo padre aveva ragione. Forse la sopravvivenza è questa: uccidere la parte di te che esita, che prova pietà, che si aggrappa all'umanità.\n\nO forse lui aveva torto. Forse puoi sopravvivere senza perdere te stesso.\n\nSolo il tempo te lo dirà. Ma per ora, sei vivo. E devi continuare a camminare.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_HALF_JOURNEY",
+    "title": "La Strada è Lunga",
+    "pages": [
+      {
+        "text": "Ti fermi.\n\nNon perché sei stanco. Non perché hai fame o sete. Ti fermi perché, per un momento, non riesci a ricordare perché stai camminando.\n\nI tuoi piedi hanno macinato chilometri di terra morta. Hai attraversato rovine che una volta erano città, foreste che erano giardini, pianure che erano campi. Hai visto il mondo ridotto a un'ombra di se stesso. Hai combattuto, saccheggiato, sopravvissuto.\n\nMa per cosa?\n\nLa risposta dovrebbe essere semplice: il Safe Place. La destinazione che tuo padre ti ha imposto. Ma quella parola, \"Safe Place\", suona sempre più vuota, più assurda. Un miraggio in un deserto di cenere.",
+        "nextPage": 1
+      },
+      {
+        "text": "Ti siedi su una roccia fredda e guardi l'orizzonte. Non c'è nulla lì. Solo più grigio, più desolazione, più niente.\n\nI ricordi di tuo padre iniziano a sfaldarsi nei dettagli. Il suono esatto della sua voce. La forma precisa del suo viso. Sono stati solo pochi giorni? Sembra un'eternità. La solitudine ha un modo di dilatare il tempo, di trasformare ore in anni.\n\nTi chiedi se lui pensasse a te, quando è partito. Se gli sia costato qualcosa, lasciarti. O se per lui sia stato solo un'altra decisione pragmatica, calcolata. \"Sopravvivenza prima di tutto.\"\n\nTi chiedi se ti abbia mai amato davvero, o se tu sia sempre stato solo un progetto. Un esperimento di sopravvivenza.",
+        "nextPage": 2
+      },
+      {
+        "text": "E tua madre? Quella figura fantasma che non hai mai conosciuto, ridotta a un Angelo della Cenere?\n\nSe lei fosse qui, cosa ti direbbe? Ti direbbe di continuare? Di arrenderti? Di trovare un altro scopo, una ragione diversa da quella che tuo padre ti ha imposto?\n\nUn pensiero terribile si fa strada nella tua mente: forse non c'è nessun Safe Place. Forse è solo un'altra bugia, un'altra lezione crudele. \"Cammina finché non puoi più. Questa è la sopravvivenza.\"\n\nMa se ti fermi ora, tutto ciò che hai passato non avrà avuto senso. Ogni ferita, ogni sacrificio, ogni vita che hai preso. Tutto inutile.",
+        "nextPage": 3
+      },
+      {
+        "text": "Prendi una decisione. Non è facile. Non è nemmeno consapevole. È solo un movimento: ti alzi.\n\nLe gambe protestano. Il corpo è stanco. Ma ti alzi comunque. Perché forse il Safe Place esiste. O forse no. Ma l'unica cosa peggiore di continuare è fermarsi qui, in mezzo al nulla, e arrendersi.\n\nNon per tuo padre. Non più.\n\nPer te stesso. Per quella parte di te che ancora crede, contro ogni evidenza, che ci sia qualcosa oltre questa desolazione. Qualcosa che valga la pena di raggiungere.\n\nE se quel qualcosa non esiste, allora lo troverai comunque. Perché devi. Perché l'alternativa è l'abisso.",
+        "nextPage": 4
+      },
+      {
+        "text": "Riprendi a camminare. Un passo dopo l'altro. La strada è lunga. Forse infinita.\n\nMa sei Ultimo. E finché respiri, finché puoi muoverti, continuerai.\n\nNon perché è giusto. Non perché è nobile.\n\nMa perché è l'unica cosa che sai fare.\n\nE forse, solo forse, questo basta.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_MOTHERS_ECHO",
+    "title": "Un Nome Sul Vento",
+    "pages": [
+      {
+        "text": "Stai frugando tra i detriti di un edificio crollato quando lo vedi: un pezzo di tessuto intrappolato sotto una trave. Non è diverso da mille altri stracci che hai trovato nel tuo viaggio.\n\nEppure, qualcosa ti spinge a tirarlo fuori.\n\nIl tessuto è sorprendentemente intatto. Un lembo di stoffa pesante, un tempo bianca, ora macchiata di grigio e ruggine. Ma quando lo giri, vedi qualcosa che ti ferma il respiro.\n\nUn nome, cucito con filo azzurro sbiadito. Lettere curve, fatte a mano, con cura. Con amore.\n\n«Lena»",
+        "nextPage": 1
+      },
+      {
+        "text": "Il mondo sembra fermarsi. Il rumore del vento si attenua. Il freddo pungente diventa irrilevante.\n\nLena.\n\nTuo padre non ha mai pronunciato quel nome. Mai. Tua madre era solo \"lei\". Un'entità astratta, un fantasma senza volto. \"Tua madre è andata perduta,\" diceva. Niente di più. Nessun dettaglio. Nessun ricordo condiviso. Come se cancellarla dalla memoria fosse più facile che affrontare il dolore.\n\nMa ora hai un nome. Una prova tangibile che lei era reale. Che esisteva. Che era una persona, non solo un'idea.\n\nLena.",
+        "nextPage": 2
+      },
+      {
+        "text": "Le tue dita tremano mentre stringi il tessuto. È un frammento di un camice medico, realizzi. Il tipo che indossavano i dottori prima della guerra. Il tipo che potrebbe aver indossato lei.\n\nNella tua mente, pezzi iniziano a combaciare. Gli Angeli della Cenere. Le creature che tuo padre ti ha sempre detto di evitare. Esseri ibridi, metà umani e metà macchine, creati per... cosa? Non lo sai. Nessuno lo sa.\n\nMa se tua madre è diventata uno di loro, allora era viva. In qualche modo, in qualche forma. E forse...\n\nNo. Non puoi permetterti speranze. Le speranze sono pericolose. Ti distraggono. Ti indeboliscono.",
+        "nextPage": 3
+      },
+      {
+        "text": "Eppure, un pensiero si insinua, testardo e cocciuto: e se potessi trovarla? Non per salvarla. Non sei così ingenuo. Ma per... sapere. Per avere risposte.\n\nPerché tuo padre non è mai tornato per lei? Cosa è successo davvero quel giorno? Perché ti ha dato il nome \"Ultimo\"? È una profezia? Un presagio? O solo la crudele ammissione che tutto ciò che avevano è finito con te?\n\nStringi il tessuto e lo infili nella tasca più interna del tuo zaino. È solo un pezzo di stoffa. Non cambierà nulla. Non ti riporterà indietro tua madre. Non renderà tuo padre meno distante.\n\nMa è tuo. Un frammento di verità in un mondo di bugie.",
+        "nextPage": 4
+      },
+      {
+        "text": "Quando esci dall'edificio, il mondo sembra diverso. Non più bello. Non meno ostile. Ma più... complesso. Come se le rovine nascondessero storie che non hai mai considerato. Come se ogni pezzo di detriti fosse l'eco di una vita vissuta, di un amore perduto, di un nome dimenticato.\n\nLena.\n\nRipeti il nome sottovoce, assaporandolo. È la prima volta che pronunci il nome di tua madre. Sembra strano. Intimo. Sacro.\n\nNon sai cosa significhi questo. Non sai se cambierà qualcosa. Ma una parte di te, quella parte che tuo padre ha cercato di soffocare con l'addestramento, si sente più leggera.\n\nPerché ora sai. Ora hai un nome.",
+        "nextPage": 5
+      },
+      {
+        "text": "Mentre cammini, una figura solitaria ti osserva da lontano, immobile come una statua di pietra.\n\nUn Angelo della Cenere.\n\nNon si muove. Non ti segue. Resta solo lì, un'ombra contro l'orizzonte grigio. Ma sotto il cappuccio, due occhi — uno umano, uno meccanico — ti seguono.\n\nE se potessi vederli da vicino, forse riconosceresti qualcosa in quello sguardo. Non minaccia. Non fame.\n\nQualcosa che assomiglia, pericolosamente, a un ricordo.\n\nA un dolore.",
+        "consequences": [{ "type": "addItem", "payload": { "itemId": "lena_cloth_fragment", "quantity": 1 } }],
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_POINT_OF_NO_RETURN",
+    "title": "L'Ultima Scelta",
+    "pages": [
+      {
+        "text": "La vedi.\n\nDall'alto di una collina, attraverso la foschia perenne, la vedi finalmente. La lettera \"E\" marcata sul terreno, visibile persino a questa distanza. Grande, tracciata con pietre bianche disposte con cura geometrica. Un segnale. Una promessa. O una trappola.\n\nIl Safe Place.\n\nSe esiste davvero, è lì. Pochi chilometri. Poche ore di cammino. Dopo tutto questo tempo, dopo tutto ciò che hai passato, la fine è vicina.\n\nMa non provi sollievo. Non provi gioia.\n\nProvi paura.",
+        "nextPage": 1
+      },
+      {
+        "text": "Ti siedi sulla collina e guardi la \"E\" in lontananza. È reale. Non è un miraggio. Ma questo solleva più domande di quante ne risolva.\n\nCosa ti aspetta lì? Un rifugio, come promesso? Un'oasi di sicurezza in questo mondo morto? O qualcosa di peggio? Un inganno elaborato. Un esperimento. Una tomba.\n\nE tuo padre? È lì? È vivo? Ti sta aspettando? O è morto da giorni, e tu hai camminato verso il nulla?\n\nE se è vivo... vuoi davvero vederlo? Dopo tutto ciò che ti ha fatto passare? Dopo tutto ciò che ti ha nascosto?",
+        "nextPage": 2
+      },
+      {
+        "text": "Pensi al viaggio. Ogni passo, ogni lotta, ogni scelta. Non sei più la persona che eri quando hai lasciato il rifugio. Quella persona era spaventata, indifesa, persa.\n\nTu ora sei... diverso. Più forte, forse. Più cinico, sicuramente. Hai ucciso. Hai rubato. Hai fatto cose che quella persona non avrebbe mai immaginato di dover fare.\n\nMa sei anche sopravvissuto. Hai trovato un nome per tua madre. Hai resistito alla solitudine, alla fame, alla disperazione. Hai attraversato la desolazione e sei ancora in piedi.\n\nForse non hai bisogno del Safe Place. Forse non hai bisogno di tuo padre.",
+        "choices": [
+          { "text": "[1] No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.", "targetPage": 3 },
+          { "text": "[2] Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.", "targetPage": 4 }
+        ]
+      },
+      {
+        "text": "Ti alzi. Le gambe protestano, ma obbediscono. Inizi a scendere dalla collina, verso la \"E\", verso le risposte.\n\nNon per tuo padre. Non più. Lo fai per te stesso. Perché devi sapere. Perché questa incertezza ti divorerebbe dall'interno.\n\nSe è una trappola, la affronterai. Se è un inganno, lo smaschererai. Se tuo padre è lì, gli chiederai conto di ogni bugia, di ogni verità nascosta.\n\nE se non c'è niente... almeno saprai.\n\nLa paura non scompare. Ma la sostituisci con qualcosa di più forte: determinazione.",
+        "consequences": [{ "type": "setFlag", "payload": "CHOSE_TRUTH" }],
+        "nextPage": 5
+      },
+      {
+        "text": "Ti alzi e guardi la \"E\" un'ultima volta. Poi ti volti.\n\nNo. Non così. Non correndo verso un'altra delle illusioni di tuo padre. Non vivendo per le sue aspettative, per i suoi piani.\n\nHai sopravvissuto. Hai camminato. Hai imparato. Ma la vera domanda non è \"dov'è il Safe Place?\". È \"cosa vuoi tu?\"\n\nE forse, in questo mondo morto, l'unica sicurezza vera è quella che ti costruisci da solo. Con le tue mani. Con le tue scelte.\n\nScendi dalla collina, ma non verso la \"E\". Verso un altro sentiero. Verso l'ignoto.\n\nForse è follia. Forse è libertà.\n\nMa è tua.",
+        "consequences": [
+          { "type": "setFlag", "payload": "CHOSE_FREEDOM" },
+          { "type": "alignmentChange", "value": {"type": "elian", "amount": 3} }
+        ],
+        "nextPage": 5
+      },
+      {
+        "text": "Qualunque cosa ti aspetti al Safe Place — salvezza, delusione, morte — ormai è irrilevante.\n\nCiò che conta è che hai scelto. Non tuo padre. Non il destino. Tu.\n\nE in questo mondo in cui tutto è stato deciso da altri — dalla guerra, dalla fame, dalla necessità — quella scelta, per quanto piccola, è la cosa più preziosa che possiedi.\n\nL'orizzonte si stende davanti a te, grigio e infinito.\n\nMa per la prima volta, non ti sembra una prigione.\n\nSembra una strada.\n\nE tu sei pronto a percorrerla.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_THE_WEIGHT_OF_CHOICE",
+    "title": "Il Peso della Scelta",
+    "pages": [
+      {
+        "text": "Prosegui il cammino. I tuoi passi sono fermi, decisi. Hai fatto ciò che dovevi fare. La scelta giusta. La scelta di un sopravvissuto.\n\nIl vento soffia alle tue spalle, portando con sé suoni lontani. Grida? Pianti? Non importa. Sono già lontani. Sono già passato. Sei vivo. Questo è tutto ciò che conta.\n\nO almeno, è quello che continui a ripeterti.",
+        "nextPage": 1
+      },
+      {
+        "text": "Quella notte, mentre il fuoco scoppietta e le stelle ti osservano in silenzio, la voce di tuo padre risuona nella tua testa.\n\n\"La pietà è un lusso che non puoi permetterti, Ultimo. La compassione ti ucciderà più velocemente della fame.\"\n\nAveva ragione. Lo sai. Eppure, c'è un sapore amaro in bocca che l'acqua non lava via. Un peso nel petto che non era lì prima.\n\nTi chiedi se anche lui, dopo la sua Scelta, dopo aver scelto te invece di lei, si sia sentito così.\n\nNon un vincitore. Solo... più solo.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_CITY_OF_GHOSTS",
+    "title": "La Città dei Fantasmi",
+    "pages": [
+      {
+        "text": "L'aria cambia.\n\nL'odore di terra e polvere, tuo compagno costante, lascia il posto a qualcosa di diverso. Cemento freddo. Ruggine. Un decadimento su scala monumentale, come se la morte stessa avesse un odore quando è applicata a un'intera civiltà.\n\nAlzi lo sguardo.\n\nScheletri di grattacieli graffiano il cielo grigio come dita scheletriche che si protendono verso un dio sordo. Strade, un tempo arterie pulsanti di vita, sono ora canyon silenziosi dove il vento ulula come un milione di fantasmi.\n\nNon hai mai visto niente di simile.",
+        "nextPage": 1
+      },
+      {
+        "text": "Le lezioni di tuo padre ti hanno preparato ai pericoli della natura selvaggia, ai predoni solitari, alle bestie mutate. Ma questo... questo è diverso.\n\nQuesto è il cimitero di un mondo intero. Ogni finestra rotta è un occhio spento. Ogni insegna sbiadita è un epitaffio di sogni morti. E tu sei solo un insetto che si muove tra lapidi gigantesche.\n\nLa promessa di risorse preziose, nascoste tra questi giganti caduti, è forte.\n\nMa la sensazione di essere schiacciato dal peso di un milione di storie finite è ancora più forte.\n\nInhali profondamente. L'aria sa di fine. E tu sei vivo. Per ora.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_STRANGERS_REFLECTION",
+    "title": "Il Riflesso di uno Sconosciuto",
+    "pages": [
+      {
+        "text": "Ti fermi per bere da una pozzanghera di acqua piovana, raccolta in un pezzo di lamiera piegata. L'acqua è torbida ma relativamente pulita. Abbassi la testa per bere.\n\nPer un istante, prima che le tue labbra increspino la superficie, vedi il tuo riflesso.\n\nE ti blocchi.\n\nIl volto che ti fissa non è quello del ragazzo che ha lasciato il rifugio di Elian. Gli occhi sono più infossati, più attenti, come quelli di un predatore che ha imparato che ogni ombra può nascondere la morte. C'è una cicatrice sulla guancia che prima non c'era. La pelle è bruciata dal sole e tirata dalla fame. Le labbra sono screpolate. Non c'è più morbidezza. Solo angoli duri, scolpiti dal dolore e dalla necessità.",
+        "nextPage": 1
+      },
+      {
+        "text": "Chi è questo sconosciuto?\n\nÈ la creatura che Elian ha forgiato con anni di addestramento brutale? O è qualcosa di nuovo, nato da questo viaggio solitario, temprato dalla solitudine e dalle scelte impossibili?\n\nLa domanda ti inquieta.\n\nDistogli lo sguardo, increspando l'acqua con le dita. Il riflesso si frantuma in mille pezzi, come tutto il resto.\n\nBevi. L'acqua è fredda e sa di metallo.\n\nNon ti piace la risposta che vedevi in quegli occhi. O forse, ti spaventa scoprire che quella risposta... ti piace.",
+        "nextPage": null
+      }
+    ]
+  },
+  {
+    "id": "CS_THE_BRINK",
+    "title": "Sull'Orlo",
+    "pages": [
+      {
+        "text": "Cadi in ginocchio.\n\nIl mondo si inclina pericolosamente. La vista si oscura ai bordi, come se qualcuno stesse spegnendo lentamente le luci. Ogni respiro è una scheggia di vetro nei polmoni. Il sapore metallico del sangue ti riempie la bocca, caldo e denso.\n\nLe tue mani affondano nella terra. È così che finisce? Qui? Dopo tutta questa strada, dopo tutto quello che hai sopportato?\n\nNo. No, non può essere questo.\n\nMa il tuo corpo non ti ascolta. Le forze ti abbandonano. Il buio avanza.",
+        "nextPage": 1
+      },
+      {
+        "text": "E poi, nel silenzio che precede la fine, la senti.\n\n\"Sopravvivi.\"\n\nLa voce di tuo padre. Non è un incoraggiamento. Non è conforto. È un ordine. Secco. Implacabile. Come sempre.\n\n\"Sopravvivi, Ultimo. Non per me. Non per lei. Per te. Perché questa è l'unica cosa che conta. L'unica cosa che hai sempre avuto.\"\n\nQualcosa si accende dentro di te. Non è speranza. Non è coraggio.\n\nÈ rabbia.\n\nPura, ostinata, feroce rabbia.\n\nCon uno sforzo che ti lacera i muscoli e ti strappa un urlo silenzioso dalla gola, ti rimetti in piedi. Barcollando. Sanguinante. Ma in piedi.\n\nNon morirai qui. Non gliela darai vinta. Non a questo mondo spietato. Non a lui. Non a te stesso.\n\nSei Ultimo. E finché respiri, combatti.",
+        "consequences": [{ "type": "setFlag", "payload": "THE_BRINK_SURVIVED" }],
+        "nextPage": null
+      }
+    ]
+  }
+]

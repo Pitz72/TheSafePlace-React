@@ -1,0 +1,52 @@
+import React, { useCallback, useMemo } from 'react';
+import { useGameStore } from '../store/gameStore';
+import { useKeyboardInput } from '../hooks/useKeyboardInput';
+
+/**
+ * MainStoryScreen component.
+ * This component renders the main story screen.
+ * @returns {JSX.Element | null} The rendered MainStoryScreen component or null.
+ */
+const MainStoryScreen: React.FC = () => {
+    const { activeMainStoryEvent, resolveMainStory } = useGameStore();
+
+    const handleConfirm = useCallback(() => {
+        resolveMainStory();
+    }, [resolveMainStory]);
+
+    const handlerMap = useMemo(() => ({
+        'Enter': handleConfirm,
+    }), [handleConfirm]);
+
+    useKeyboardInput(handlerMap);
+
+    if (!activeMainStoryEvent) {
+        return null;
+    }
+    
+    const formattedTitle = `Echo della Memoria #${activeMainStoryEvent.stage}: ${activeMainStoryEvent.title.replace('Ricordo: ', '').replace('Frammento: ', '').replace('Eco ', '')}`;
+
+    return (
+        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
+            <div className="w-full max-w-6xl border-8 border-double border-yellow-400/50 flex flex-col p-8 animate-pulse">
+                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6 text-yellow-300" style={{ textShadow: '0 0 8px #facc15' }}>
+                    ═══ {formattedTitle} ═══
+                </h1>
+                
+                <div 
+                    className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
+                    style={{ scrollbarWidth: 'none' }}
+                >
+                    <pre className="whitespace-pre-wrap leading-relaxed">{activeMainStoryEvent.text}</pre>
+                </div>
+
+                <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">
+                    [INVIO] Continua...
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MainStoryScreen;
+

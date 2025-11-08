@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'VT323', monospace;
+}
+.text-glow {
+  text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #008f25;
+}

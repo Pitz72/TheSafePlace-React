@@ -1,0 +1,84 @@
+[
+  {
+    "id": "marcus",
+    "name": "Marcus",
+    "description": "Il mercante stazionario dell'Avamposto 'Il Crocevia'. Offre merci di base sempre disponibili e una selezione rotante di oggetti più rari.",
+    "baseMarkup": 1.3,
+    "inventory": [
+      { "itemId": "CONS_001", "quantity": 10 },
+      { "itemId": "CONS_002", "quantity": 15 },
+      { "itemId": "dirty_water", "quantity": 20 },
+      { "itemId": "CONS_003", "quantity": 8 },
+      { "itemId": "MED_BANDAGE_BASIC", "quantity": 12 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 5 },
+      { "itemId": "scrap_metal", "quantity": 15 },
+      { "itemId": "clean_cloth", "quantity": 10 },
+      { "itemId": "bottle_empty", "quantity": 8 },
+      { "itemId": "firewood", "quantity": 12 },
+      { "itemId": "adhesive_tape", "quantity": 6 },
+      { "itemId": "nylon_wire", "quantity": 4 },
+      { "itemId": "AMMO_9MM", "quantity": 30 },
+      { "itemId": "AMMO_556", "quantity": 20 },
+      { "itemId": "AMMO_12G", "quantity": 15 },
+      { "itemId": "repair_kit_basic", "quantity": 3 },
+      { "itemId": "first_aid_kit", "quantity": 2 },
+      { "itemId": "manual_survival_basics", "quantity": 1 },
+      { "itemId": "manual_archery_basics", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "wandering_trader",
+    "name": "Commerciante Itinerante",
+    "description": "Un mercante nomade con un inventario piccolo e casuale che cambia a ogni incontro. Offre opportunità uniche ma imprevedibili.",
+    "baseMarkup": 1.4,
+    "inventory": [
+      { "itemId": "CONS_001", "quantity": 3 },
+      { "itemId": "CONS_002", "quantity": 5 },
+      { "itemId": "wild_berries", "quantity": 4 },
+      { "itemId": "edible_mushrooms", "quantity": 3 },
+      { "itemId": "MED_BANDAGE_BASIC", "quantity": 4 },
+      { "itemId": "tech_components", "quantity": 2 },
+      { "itemId": "chemical_substances", "quantity": 1 },
+      { "itemId": "AMMO_9MM", "quantity": 15 },
+      { "itemId": "repair_kit_basic", "quantity": 1 },
+      { "itemId": "manual_field_medicine", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "anya",
+    "name": "Anya, la Tecnica",
+    "description": "Una brillante scrapper ossessionata dalla tecnologia pre-catastrofe. Non commercia oggetti comuni, ma può trasformare artefatti rari in potenziamenti unici.",
+    "baseMarkup": 1.0,
+    "inventory": []
+  },
+  {
+    "id": "silas",
+    "name": "Silas, il Cacciatore",
+    "description": "Un cacciatore esperto e pragmatico che si occupa della sicurezza del Crocevia. Offre contratti di caccia e insegna tecniche di sopravvivenza in cambio di trofei.",
+    "baseMarkup": 1.2,
+    "inventory": [
+      { "itemId": "ammo_arrow", "quantity": 30 },
+      { "itemId": "AMMO_12G", "quantity": 20 },
+      { "itemId": "animal_hide", "quantity": 10 },
+      { "itemId": "bear_trap", "quantity": 3 },
+      { "itemId": "manual_wilderness_survival", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "olivia",
+    "name": "Olivia, l'Erborista",
+    "description": "Una botanica esperta che vive isolata in una capanna nella foresta. Specializzata in erbe medicinali e rimedi naturali. Offre cure e conoscenze botaniche rare.",
+    "baseMarkup": 1.15,
+    "inventory": [
+      { "itemId": "MED_HEALING_HERBS", "quantity": 8 },
+      { "itemId": "edible_mushrooms", "quantity": 12 },
+      { "itemId": "wild_berries", "quantity": 10 },
+      { "itemId": "MED_BANDAGE_BASIC", "quantity": 6 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 4 },
+      { "itemId": "antibiotics_expired", "quantity": 3 },
+      { "itemId": "MED_ANTIDOTE", "quantity": 2 },
+      { "itemId": "first_aid_kit", "quantity": 1 },
+      { "itemId": "manual_field_medicine", "quantity": 1 }
+    ]
+  }
+]

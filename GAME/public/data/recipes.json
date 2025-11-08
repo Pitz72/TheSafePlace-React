@@ -1,0 +1,344 @@
+[
+  {
+    "id": "recipe_purify_water",
+    "name": "Purifica Acqua",
+    "description": "Filtra e purifica acqua contaminata usando stracci puliti come filtro improvvisato. Una tecnica base di sopravvivenza.",
+    "skill": "sopravvivenza",
+    "dc": 8,
+    "timeCost": 10,
+    "ingredients": [
+      { "itemId": "dirty_water", "quantity": 1 },
+      { "itemId": "clean_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "CONS_002", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_bandage",
+    "name": "Benda di Fortuna",
+    "description": "Strappa e pulisci un pezzo di stoffa per creare una benda improvvisata. Non sterile, ma meglio di niente.",
+    "skill": "sopravvivenza",
+    "dc": 6,
+    "timeCost": 5,
+    "ingredients": [
+      { "itemId": "clean_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_BANDAGE_BASIC", "quantity": 2 }]
+  },
+  {
+    "id": "recipe_collect_water",
+    "name": "Raccogli Acqua",
+    "description": "Raccogli acqua da una fonte naturale in una bottiglia vuota. L'acqua raccolta va purificata prima di berla.",
+    "skill": "sopravvivenza",
+    "dc": 5,
+    "timeCost": 5,
+    "ingredients": [
+      { "itemId": "bottle_empty", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "dirty_water", "quantity": 2 }]
+  },
+  {
+    "id": "recipe_bandage_adv",
+    "name": "Benda Migliorata",
+    "description": "Combina una benda con del disinfettante per creare un bendaggio molto più efficace.",
+    "skill": "medicina",
+    "dc": 10,
+    "timeCost": 5,
+    "ingredients": [
+      { "itemId": "CONS_003", "quantity": 1 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_BANDAGE_ADVANCED", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_soup",
+    "name": "Zuppa Riscaldante",
+    "description": "Una semplice zuppa calda con verdure e acqua. Nutriente e idratante.",
+    "skill": "sopravvivenza",
+    "dc": 8,
+    "timeCost": 15,
+    "ingredients": [
+      { "itemId": "CONS_002", "quantity": 1 },
+      { "itemId": "carrot", "quantity": 1 },
+      { "itemId": "potato", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "FOOD_SOUP", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_knife",
+    "name": "Coltello di Fortuna",
+    "description": "Assembla un'arma da taglio di base usando rottami metallici e un po' di stoffa per l'impugnatura.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 2 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "makeshift_knife", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_arrows",
+    "name": "Frecce (x5)",
+    "description": "Intaglia dei dardi di legno e attacca delle punte affilate ricavate da rottami metallici.",
+    "skill": "sopravvivenza",
+    "dc": 11,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 1 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "ammo_arrow", "quantity": 5 }]
+  },
+  {
+    "id": "recipe_repair_kit_basic",
+    "name": "Kit Riparazione Base",
+    "description": "Assembla un kit di base per la manutenzione dell'equipaggiamento.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 3 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "tool_repair_kit_basic", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_repair_kit_advanced",
+    "name": "Kit Riparazione Avanzato",
+    "description": "Costruisci un kit di riparazione di qualità superiore usando componenti migliori.",
+    "skill": "sopravvivenza",
+    "dc": 16,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 2 },
+      { "itemId": "tech_components", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "tool_repair_kit_advanced", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_wooden_spear",
+    "name": "Lancia di Legno",
+    "description": "Una lancia rudimentale ma efficace. Buona per mantenere la distanza dai nemici.",
+    "skill": "sopravvivenza",
+    "dc": 10,
+    "timeCost": 25,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 2 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_wooden_spear", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_bow",
+    "name": "Arco Improvvisato",
+    "description": "Un arco semplice ma funzionale. Richiede frecce per essere utilizzato.",
+    "skill": "sopravvivenza",
+    "dc": 14,
+    "timeCost": 35,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_makeshift_bow", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_molotov",
+    "name": "Molotov",
+    "description": "Una bottiglia incendiaria improvvisata. Devastante ma ad uso singolo.",
+    "skill": "investigare",
+    "dc": 12,
+    "timeCost": 15,
+    "ingredients": [
+      { "itemId": "bottle_empty", "quantity": 1 },
+      { "itemId": "strong_liquor", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_molotov", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_sharp_dagger",
+    "name": "Pugnale Affilato",
+    "description": "Un pugnale ben bilanciato e affilato. Richiede materiali di qualità.",
+    "skill": "investigare",
+    "dc": 15,
+    "timeCost": 40,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_sharp_dagger", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_slingshot",
+    "name": "Fionda",
+    "description": "Una fionda semplice ma sorprendentemente efficace a distanza ravvicinata.",
+    "skill": "sopravvivenza",
+    "dc": 9,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "firewood", "quantity": 1 },
+      { "itemId": "rubber_gasket", "quantity": 1 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "weapon_slingshot", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_leather_chestpiece",
+    "name": "Pettorale di Cuoio",
+    "description": "Una protezione toracica robusta realizzata con pelli animali conciate.",
+    "skill": "sopravvivenza",
+    "dc": 13,
+    "timeCost": 50,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 3 }
+    ],
+    "results": [{ "itemId": "armor_leather_chestpiece", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_reinforced_leggings",
+    "name": "Gambali Rinforzati",
+    "description": "Protezioni per le gambe con inserti metallici per maggiore difesa.",
+    "skill": "investigare",
+    "dc": 14,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 2 },
+      { "itemId": "scrap_metal", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "leather_leggings", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_makeshift_helmet",
+    "name": "Elmo Improvvisato",
+    "description": "Un elmetto di fortuna realizzato con rottami metallici e imbottiture di stoffa.",
+    "skill": "investigare",
+    "dc": 13,
+    "timeCost": 35,
+    "ingredients": [
+      { "itemId": "scrap_metal", "quantity": 2 },
+      { "itemId": "durable_cloth", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "armor_makeshift_helmet", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_durable_boots",
+    "name": "Stivali Resistenti",
+    "description": "Stivali robusti che proteggono i piedi e migliorano la mobilità.",
+    "skill": "sopravvivenza",
+    "dc": 12,
+    "timeCost": 40,
+    "ingredients": [
+      { "itemId": "animal_hide", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "armor_durable_boots", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_natural_antidote",
+    "name": "Antidoto Naturale",
+    "description": "Un rimedio naturale contro veleni e tossine, preparato con funghi medicinali.",
+    "skill": "medicina",
+    "dc": 14,
+    "timeCost": 25,
+    "ingredients": [
+      { "itemId": "edible_mushrooms", "quantity": 2 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_ANTIDOTE", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_improvised_stimpack",
+    "name": "Stimpack Improvvisato",
+    "description": "Una pozione curativa di emergenza, combinando medicine scadute con disinfettante.",
+    "skill": "medicina",
+    "dc": 15,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "expired_medicine", "quantity": 1 },
+      { "itemId": "MED_ANTISEPTIC", "quantity": 1 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "MED_STIMPACK", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_preserved_meat",
+    "name": "Carne Conservata",
+    "description": "Conserva la carne o il pesce con sostanze chimiche per prolungarne la durata.",
+    "skill": "sopravvivenza",
+    "dc": 11,
+    "timeCost": 30,
+    "ingredients": [
+      { "itemId": "fresh_fish", "quantity": 1 },
+      { "itemId": "chemicals_basic", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "FOOD_PRESERVED_MEAT", "quantity": 2 }]
+  },
+  {
+    "id": "recipe_upgraded_backpack",
+    "name": "Zaino Migliorato",
+    "description": "Un grande zaino rinforzato che aumenta significativamente la capacità di carico.",
+    "skill": "investigare",
+    "dc": 16,
+    "timeCost": 60,
+    "ingredients": [
+      { "itemId": "durable_cloth", "quantity": 3 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "tool_upgraded_backpack", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_fishing_kit",
+    "name": "Kit Pesca Improvvisato",
+    "description": "Un semplice kit da pesca con lenza e ami improvvisati.",
+    "skill": "sopravvivenza",
+    "dc": 10,
+    "timeCost": 20,
+    "ingredients": [
+      { "itemId": "nylon_wire", "quantity": 1 },
+      { "itemId": "metal_piece", "quantity": 3 }
+    ],
+    "results": [{ "itemId": "tool_fishing_kit", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_advanced_bear_trap",
+    "name": "Trappola per Orsi Avanzata",
+    "description": "Una trappola mortale del Clan del Corvo, capace di catturare anche le prede più grandi. Tecnica segreta degli esploratori d'élite.",
+    "skill": "sopravvivenza",
+    "dc": 15,
+    "timeCost": 45,
+    "ingredients": [
+      { "itemId": "scrap_metal_high_quality", "quantity": 2 },
+      { "itemId": "nylon_wire", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "advanced_bear_trap", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_sonic_dissuader",
+    "name": "Dissuasore Sonico",
+    "description": "Un dispositivo che emette onde sonore ad alta frequenza per respingere gli Angeli della Cenere. Tecnologia degli Ascoltatori basata su frequenze dissonanti.",
+    "skill": "investigare",
+    "dc": 17,
+    "timeCost": 90,
+    "ingredients": [
+      { "itemId": "tech_components", "quantity": 3 },
+      { "itemId": "copper_wire", "quantity": 2 },
+      { "itemId": "precious_stone", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "sonic_dissuader", "quantity": 1 }]
+  },
+  {
+    "id": "recipe_elixir_of_fortitude",
+    "name": "Elisir della Tempra",
+    "description": "Un decotto potente preparato con il raro Fiore di Ghiaccio. Rinforza il corpo contro le avversità e protegge dal freddo estremo. Una ricetta antica tramandata da Olivia.",
+    "skill": "medicina",
+    "dc": 16,
+    "timeCost": 60,
+    "ingredients": [
+      { "itemId": "ice_flower", "quantity": 1 },
+      { "itemId": "MED_HEALING_HERBS", "quantity": 3 },
+      { "itemId": "CONS_002", "quantity": 1 }
+    ],
+    "results": [{ "itemId": "elixir_of_fortitude", "quantity": 1 }]
+  }
+]
