@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useTradingStore } from '../store/tradingStore';
 import { useTraderDatabaseStore } from '../data/traderDatabase';
 import { useCharacterStore } from '../store/characterStore';
@@ -38,6 +38,8 @@ const TradeScreen: React.FC = () => {
     removeFromTraderOffer,
   } = useTradingStore();
 
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+
   const { traders } = useTraderDatabaseStore();
   const { inventory } = useCharacterStore();
   const { itemDatabase } = useItemDatabaseStore();
@@ -49,13 +51,16 @@ const TradeScreen: React.FC = () => {
     if (!trader) return [];
     return trader.inventory.map((invItem, index) => {
       const itemData = itemDatabase[invItem.itemId];
+      if (!itemData) {
+        console.warn(`[TRADE] Item ${invItem.itemId} not found in database`);
+      }
       return {
         index,
         itemId: invItem.itemId,
-        name: itemData?.name || invItem.itemId,
+        name: itemData?.name || `[${invItem.itemId}]`,
         quantity: invItem.quantity,
         value: itemData?.value || 0,
-        color: itemData?.color || '#ffffff',
+        color: itemData?.color || '#a3a3a3',
       };
     });
   }, [trader, itemDatabase]);
@@ -64,13 +69,16 @@ const TradeScreen: React.FC = () => {
   const playerInventory = useMemo(() => {
     return inventory.map((invItem, index) => {
       const itemData = itemDatabase[invItem.itemId];
+      if (!itemData) {
+        console.warn(`[TRADE] Item ${invItem.itemId} not found in database`);
+      }
       return {
         index,
         itemId: invItem.itemId,
-        name: itemData?.name || invItem.itemId,
+        name: itemData?.name || `[${invItem.itemId}]`,
         quantity: invItem.quantity,
         value: itemData?.value || 0,
-        color: itemData?.color || '#ffffff',
+        color: itemData?.color || '#a3a3a3',
       };
     });
   }, [inventory, itemDatabase]);
@@ -87,6 +95,21 @@ const TradeScreen: React.FC = () => {
   const switchPanel = useCallback(() => {
     setSelectedPanel(selectedPanel === 'player' ? 'trader' : 'player');
   }, [selectedPanel, setSelectedPanel]);
+
+  // Adjust quantity for selected item
+  const adjustQuantity = useCallback((delta: number) => {
+    if (currentInventory.length === 0) return;
+    const selectedItem = currentInventory[selectedIndex];
+    if (!selectedItem) return;
+    
+    const newQuantity = Math.max(1, Math.min(selectedItem.quantity, selectedQuantity + delta));
+    setSelectedQuantity(newQuantity);
+  }, [currentInventory, selectedIndex, selectedQuantity]);
+
+  // Reset quantity when selection changes
+  useEffect(() => {
+    setSelectedQuantity(1);
+  }, [selectedIndex, selectedPanel]);
 
   // Toggle item in/out of offer
   const toggleItem = useCallback(() => {
@@ -105,14 +128,15 @@ const TradeScreen: React.FC = () => {
         // Remove from offer
         removeFromPlayerOffer(offerIndex);
       } else {
-        // Add to offer
+        // Add to offer with selected quantity
         const tradeItem: TradeItem = {
           inventoryIndex: selectedItem.index,
           itemId: selectedItem.itemId,
-          quantity: 1, // For now, always trade 1 at a time
-          value: selectedItem.value,
+          quantity: selectedQuantity,
+          value: selectedItem.value * selectedQuantity,
         };
         addToPlayerOffer(tradeItem);
+        setSelectedQuantity(1); // Reset after adding
       }
     } else {
       // Trader panel
@@ -124,17 +148,18 @@ const TradeScreen: React.FC = () => {
         // Remove from offer
         removeFromTraderOffer(offerIndex);
       } else {
-        // Add to offer
+        // Add to offer with selected quantity
         const tradeItem: TradeItem = {
           inventoryIndex: selectedItem.index,
           itemId: selectedItem.itemId,
-          quantity: 1,
-          value: selectedItem.value,
+          quantity: selectedQuantity,
+          value: selectedItem.value * selectedQuantity,
         };
         addToTraderOffer(tradeItem);
+        setSelectedQuantity(1); // Reset after adding
       }
     }
-  }, [selectedPanel, selectedIndex, currentInventory, playerOffer, traderOffer, addToPlayerOffer, addToTraderOffer, removeFromPlayerOffer, removeFromTraderOffer]);
+  }, [selectedPanel, selectedIndex, currentInventory, playerOffer, traderOffer, addToPlayerOffer, addToTraderOffer, removeFromPlayerOffer, removeFromTraderOffer, selectedQuantity]);
 
   // Confirm trade
   const confirmTrade = useCallback(() => {
@@ -159,8 +184,20 @@ const TradeScreen: React.FC = () => {
         break;
       case 'a':
       case 'ArrowLeft':
+        adjustQuantity(-1);
+        break;
       case 'd':
       case 'ArrowRight':
+        adjustQuantity(1);
+        break;
+      case 'q':
+      case 'Q':
+        if (selectedPanel === 'trader') switchPanel();
+        break;
+      case 'e':
+      case 'E':
+        if (selectedPanel === 'player') switchPanel();
+        break;
       case 'Tab':
         switchPanel();
         break;
@@ -176,7 +213,7 @@ const TradeScreen: React.FC = () => {
         cancelTrade();
         break;
     }
-  }, [navigate, switchPanel, toggleItem, confirmTrade, cancelTrade, balance, playerOffer, traderOffer]);
+  }, [navigate, switchPanel, adjustQuantity, toggleItem, confirmTrade, cancelTrade, balance, playerOffer, traderOffer]);
 
   const handlerMap = useMemo(() => ({
     'w': () => handleKeyPress('w'),
@@ -187,6 +224,10 @@ const TradeScreen: React.FC = () => {
     'ArrowLeft': () => handleKeyPress('ArrowLeft'),
     'd': () => handleKeyPress('d'),
     'ArrowRight': () => handleKeyPress('ArrowRight'),
+    'q': () => handleKeyPress('q'),
+    'Q': () => handleKeyPress('Q'),
+    'e': () => handleKeyPress('e'),
+    'E': () => handleKeyPress('E'),
     'Tab': () => handleKeyPress('Tab'),
     ' ': () => handleKeyPress(' '),
     'Enter': () => handleKeyPress('Enter'),
@@ -236,6 +277,9 @@ const TradeScreen: React.FC = () => {
                   style={{ color: !isSelected && !isInOffer ? item.color : undefined }}
                 >
                   {isSelected && '> '}{item.name} x{item.quantity} [{item.value}v]
+                  {isSelected && selectedPanel === 'player' && item.quantity > 1 && (
+                    <span className="ml-2 text-yellow-400">[Qtà: {selectedQuantity}]</span>
+                  )}
                 </div>
               );
             })}
@@ -305,6 +349,9 @@ const TradeScreen: React.FC = () => {
                   style={{ color: !isSelected && !isInOffer ? item.color : undefined }}
                 >
                   {isSelected && '> '}{item.name} x{item.quantity} [{item.value}v]
+                  {isSelected && selectedPanel === 'trader' && item.quantity > 1 && (
+                    <span className="ml-2 text-yellow-400">[Qtà: {selectedQuantity}]</span>
+                  )}
                 </div>
               );
             })}
@@ -325,7 +372,7 @@ const TradeScreen: React.FC = () => {
 
       {/* Controls */}
       <div className="text-center text-2xl mt-4 border-t-4 border-double border-gray-600 pt-4 text-gray-400">
-        [W/S / ↑↓] Naviga | [A/D / ←→ / TAB] Cambia Pannello | [SPAZIO] Aggiungi/Rimuovi | [INVIO] Conferma | [ESC] Annulla
+        [W/S / ↑↓] Naviga | [A/D / ←→] Quantità | [Q/E / TAB] Cambia Pannello | [SPAZIO] Aggiungi/Rimuovi | [INVIO] Conferma | [ESC] Annulla
       </div>
     </div>
   );

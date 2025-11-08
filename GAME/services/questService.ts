@@ -443,25 +443,36 @@ export const questService = {
         case 'reachLocation': {
           const targetPos = trigger.value as { x: number; y: number };
           if (playerPos.x === targetPos.x && playerPos.y === targetPos.y) {
-            triggerMet = true;
             console.log(`[QUEST SERVICE] reachLocation trigger met for ${questId}`);
             
             // SPECIAL ACTION: Trigger unique event instead of advancing quest
             // This allows location-based quests to show contextual events
             if (questId === 'find_jonas_talisman' && currentStage === 1) {
-              // Trigger the windmill search event
-              const { biomeEvents } = useEventDatabaseStore.getState();
-              const windmillEvent = biomeEvents.find(e => e.id === 'unique_lost_talisman_location');
-              if (windmillEvent) {
-                useEventStore.setState({
-                  activeEvent: windmillEvent,
-                  eventResolutionText: null
-                });
-                useGameStore.setState({ gameState: GameState.EVENT_SCREEN });
-                // Don't advance quest yet - will advance when item is found
-                triggerMet = false; // Override to prevent auto-advance
+              // Trigger the windmill search event ONLY if not already triggered
+              const { gameFlags } = useGameStore.getState();
+              if (!gameFlags.has('WINDMILL_EVENT_TRIGGERED')) {
+                const { biomeEvents } = useEventDatabaseStore.getState();
+                const windmillEvent = biomeEvents.find(e => e.id === 'unique_lost_talisman_location');
+                if (windmillEvent) {
+                  useEventStore.setState({
+                    activeEvent: windmillEvent,
+                    eventResolutionText: null
+                  });
+                  useGameStore.setState(state => ({
+                    gameState: GameState.EVENT_SCREEN,
+                    gameFlags: new Set(state.gameFlags).add('WINDMILL_EVENT_TRIGGERED')
+                  }));
+                  // Don't advance quest - will advance when item is found via getItem trigger
+                  return; // Exit early to prevent triggerMet = true
+                }
               }
+              // If event already triggered, don't trigger again but also don't advance quest
+              // Quest will advance via getItem trigger (stage 2)
+              return;
             }
+            
+            // For all other quests, normal behavior
+            triggerMet = true;
             
             // v1.8.0: Water pump repair quest
             if (questId === 'repair_water_pump' && currentStage === 2) {

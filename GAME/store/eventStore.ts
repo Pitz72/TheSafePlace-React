@@ -302,6 +302,29 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 color: '#ef4444'
                             });
                             message = result.text || "Quest fallita.";
+                        } else if (effect === 'triggerCombat' || effect === 'start_combat') {
+                            // v1.9.8: Trigger combat from event
+                            const { enemyId } = result.value;
+                            if (enemyId) {
+                                import('./combatStore').then(({ useCombatStore }) => {
+                                    useCombatStore.getState().startCombat(enemyId);
+                                });
+                                message = result.text || "Il combattimento inizia!";
+                            }
+                        } else if (effect === 'advance_quest_stage') {
+                            // v1.9.8: Advance quest from event
+                            const { questId } = result.value;
+                            import('../services/questService').then(({ questService }) => {
+                                questService.advanceQuest(questId);
+                            });
+                            message = result.text || "Quest avanzata!";
+                        } else if (effect === 'complete_quest') {
+                            // v1.9.8: Complete quest from event
+                            const { questId } = result.value;
+                            import('../services/questService').then(({ questService }) => {
+                                questService.completeQuest(questId);
+                            });
+                            message = result.text || "Quest completata!";
                         } else {
                             message = result.text || `Si è verificato un evento speciale.`;
                         }

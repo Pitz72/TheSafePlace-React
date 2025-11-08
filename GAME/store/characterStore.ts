@@ -367,9 +367,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const isOverEncumbered = totalWeight > maxCarryWeight;
         
         if (isOverEncumbered) {
-            const physicalSkills: SkillName[] = ['atletica', 'acrobazia'];
+            const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita'];
             if (physicalSkills.includes(skill)) {
-                encumbrancePenalty = -2; // Heavy load makes climbing/dodging harder
+                encumbrancePenalty = -2; // Heavy load makes climbing/dodging/sneaking harder
             }
         }
         
@@ -1261,7 +1261,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             hpLossFromStatus += damage;
             deathCause = deathCause || 'SICKNESS';
             addJournalEntry({
-                text: `Il tuo stato di MALATO ti indebolisce... (-${Math.ceil(damage)} HP)`,
+                text: `Il tuo stato di MALATO ti indebolisce col passare del tempo... (-${Math.ceil(damage)} HP)`,
                 type: JournalEntryType.COMBAT
             });
         }
@@ -1330,7 +1330,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         if (newFatigue >= 85 && !newStatus.has('ESAUSTO')) {
             newStatus.add('ESAUSTO');
             addJournalEntry({
-                text: `Sei completamente ESAUSTO. La fatica ti opprime.`,
+                text: `Sei completamente ESAUSTO. La fatica ti opprime e rallenta ogni tuo movimento.`,
                 type: JournalEntryType.SYSTEM_WARNING
             });
         } else if (newFatigue < 70 && newStatus.has('ESAUSTO')) {

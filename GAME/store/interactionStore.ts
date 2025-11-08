@@ -390,7 +390,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         
         // Search for the event in both lore and biome events
         const allEvents = [...(loreEvents || []), ...(biomeEvents || [])];
-        const event = allEvents.find((e: any) => e.id === eventId);
+        let event = allEvents.find((e: any) => e.id === eventId);
         
         if (!event) {
             console.error(`[startUniqueEvent] Event ${eventId} not found in database`);
@@ -400,6 +400,28 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 type: JournalEntryType.SYSTEM_ERROR
             });
             return;
+        }
+        
+        // v1.9.8: Check if event requires an active quest
+        if (event.requiresQuest) {
+            const { activeQuests } = useCharacterStore.getState();
+            if (!activeQuests[event.requiresQuest]) {
+                // Quest not active - try to find alternative event
+                const alternativeEventId = eventId.replace('unique_find_the_arsonist', 'unique_empty_cell_403');
+                const alternativeEvent = allEvents.find((e: any) => e.id === alternativeEventId);
+                
+                if (alternativeEvent) {
+                    event = alternativeEvent;
+                    console.log(`[startUniqueEvent] Quest ${event.requiresQuest} not active, using alternative event: ${alternativeEventId}`);
+                } else {
+                    console.warn(`[startUniqueEvent] Event requires quest ${event.requiresQuest} but quest not active and no alternative found`);
+                    addJournalEntry({
+                        text: `Questo luogo sembra vuoto. Forse c'è qualcosa che devi scoprire prima di tornare qui.`,
+                        type: JournalEntryType.NARRATIVE
+                    });
+                    return;
+                }
+            }
         }
         
         // Set the event as active in eventStore and switch to event screen

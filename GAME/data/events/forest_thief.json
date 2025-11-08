@@ -13,15 +13,18 @@
           "skill": "furtivita",
           "dc": 14,
           "successText": "Ti avvicini silenziosamente e sganci l'orologio dalla cintura. Il predone non si sveglia.",
-          "failureText": "Il predone si sveglia! Devi combattere!",
+          "failureText": "Il predone si sveglia di soprassalto e ti attacca!",
           "success": [
             { "type": "addItem", "value": { "itemId": "old_watch", "quantity": 1 } },
             { "type": "addXp", "value": 50 },
             { "type": "alignmentChange", "value": { "type": "elian", "amount": 1 } }
           ],
           "failure": [
-            { "type": "takeDamage", "value": 30 },
-            { "type": "addXp", "value": 20 }
+            {
+              "type": "special",
+              "value": { "effect": "triggerCombat", "enemyId": "thief_raider" },
+              "text": "Il predone ti attacca con furia!"
+            }
           ]
         }]
       },

@@ -371,6 +371,7 @@ export interface GameEvent {
     biomes: string[];
     isUnique: boolean;
     choices: EventChoice[];
+    requiresQuest?: string; // v1.9.8 - Optional quest requirement for event activation
 }
 
 // --- Crafting System ---

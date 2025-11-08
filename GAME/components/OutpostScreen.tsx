@@ -173,11 +173,11 @@ const OutpostScreen: React.FC = () => {
                         return (
                             <div
                                 key={option}
-                                className={`pl-4 py-1 transition-colors duration-100 ${
-                                    index === selectedIndex 
-                                        ? 'bg-amber-500 text-black' 
-                                        : isPlaceholder 
-                                            ? 'text-gray-600' 
+                                className={`pl-4 py-1 ${
+                                    index === selectedIndex
+                                        ? 'bg-amber-500 text-black'
+                                        : isPlaceholder
+                                            ? 'text-gray-600'
                                             : 'bg-transparent text-amber-400'
                                 }`}
                             >

@@ -320,8 +320,30 @@
         }
       ]
     }
-  }
-  ,
+  },
+  {
+    "id": "thief_raider",
+    "name": "Predone Ladro",
+    "description": "Il ladro dell'orologio di Marcus. Un predone esperto e vigile, armato con un coltello da combattimento. Non sarà facile sconfiggerlo.",
+    "type": "humanoid",
+    "hp": 32,
+    "ac": 13,
+    "attack": { "damage": 7, "bonus": 3 },
+    "xp": 95,
+    "biomes": ["Foresta"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "È veloce e agile, ma tende a proteggere eccessivamente il suo lato sinistro. Una vecchia ferita, forse.",
+      "actions": [
+        {
+          "id": "tactic_exploit_wound",
+          "name": "[Tattico] Colpisci il Lato Debole",
+          "description": "Mira al suo lato sinistro dove sembra avere una vecchia ferita.",
+          "skillCheck": { "skill": "percezione", "dc": 12 }
+        }
+      ]
+    }
+  },
   {
     "id": "alpha_wolf_pack_leader",
     "name": "Capobranco dei Lupi Mutati",

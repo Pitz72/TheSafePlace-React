@@ -85,6 +85,87 @@
           }
         ]
       },
+      "hub": {
+        "id": "hub",
+        "npcText": "C'è altro che vuoi sapere?",
+        "options": [
+          {
+            "text": "Chi sei?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "who_are_you"
+            }
+          },
+          {
+            "text": "Cos'è questo posto?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "what_is_this_place"
+            }
+          },
+          {
+            "text": "[Persuasione] Parlami dei pericoli della zona.",
+            "consequence": {
+              "type": "skillCheck",
+              "value": {
+                "skill": "persuasione",
+                "dc": 12,
+                "successNode": "dangers_success",
+                "failureNode": "dangers_failure"
+              }
+            }
+          },
+          {
+            "text": "[QUEST] Ho visto un avviso su un orologio rubato...",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_investigation_start"
+            },
+            "showCondition": {
+              "questActive": "crossroads_investigation"
+            }
+          },
+          {
+            "text": "[QUEST] Ho recuperato il tuo orologio.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_investigation_complete"
+            },
+            "showCondition": {
+              "questActive": "crossroads_investigation",
+              "hasItem": "old_watch"
+            }
+          },
+          {
+            "text": "[QUEST] Conosci questo simbolo?",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "marcus_talisman_knowledge"
+            },
+            "showCondition": {
+              "questActive": "find_jonas_talisman",
+              "hasItem": "jonas_talisman"
+            }
+          },
+          {
+            "text": "[QUEST] Ho un pacco per questo avamposto.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "quest_delivery"
+            },
+            "showCondition": {
+              "questActive": "deliver_last_message",
+              "hasItem": "sealed_package_quest"
+            }
+          },
+          {
+            "text": "Non ho tempo per chiacchierare. Addio.",
+            "consequence": {
+              "type": "endDialogue"
+            }
+          }
+        ]
+      },
       "who_are_you": {
         "id": "who_are_you",
         "npcText": "Il mio nome è Marcus. Diciamo che sono il... custode non ufficiale di questo posto. Vendo, compro, scambio. Cerco di tenere insieme i pezzi, come tutti.",
@@ -93,7 +174,7 @@
             "text": "Interessante. Ho altre domande.",
             "consequence": {
               "type": "jumpToNode",
-              "value": "start"
+              "value": "hub"
             }
           },
           {
@@ -112,7 +193,7 @@
             "text": "Capisco. Grazie.",
             "consequence": {
               "type": "jumpToNode",
-              "value": "start"
+              "value": "hub"
             }
           },
           {
@@ -130,15 +211,15 @@
           {
             "text": "Grazie dell'avvertimento. Starò attento.",
             "consequence": {
-              "type": "addXp",
-              "value": 25
+              "type": "jumpToNode",
+              "value": "hub"
             }
           },
           {
             "text": "Ho altre domande.",
             "consequence": {
               "type": "jumpToNode",
-              "value": "start"
+              "value": "hub"
             }
           }
         ]
@@ -151,7 +232,7 @@
             "text": "Va bene, come non detto.",
             "consequence": {
               "type": "jumpToNode",
-              "value": "start"
+              "value": "hub"
             }
           },
           {
@@ -170,7 +251,7 @@
             "text": "Lo troverò e recupererò l'orologio.",
             "consequence": {
               "type": "jumpToNode",
-              "value": "start"
+              "value": "hub"
             }
           }
         ]
@@ -202,8 +283,8 @@
           {
             "text": "Grazie per le informazioni.",
             "consequence": {
-              "type": "addXp",
-              "value": 100
+              "type": "jumpToNode",
+              "value": "hub"
             }
           }
         ]
@@ -424,6 +505,13 @@
             }
           },
           {
+            "text": "Ho altre domande.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "start"
+            }
+          },
+          {
             "text": "Capisco. Addio.",
             "consequence": {
               "type": "endDialogue"
@@ -578,8 +666,8 @@
           {
             "text": "Grazie.",
             "consequence": {
-              "type": "takeItem",
-              "value": { "itemId": "eurocenter_business_card", "quantity": 1 }
+              "type": "jumpToNode",
+              "value": "anya_after_eurocenter"
             }
           }
         ]
@@ -591,8 +679,8 @@
           {
             "text": "Lo farò. Grazie.",
             "consequence": {
-              "type": "giveItem",
-              "value": { "itemId": "tool_multitool", "quantity": 1 }
+              "type": "jumpToNode",
+              "value": "start"
             }
           }
         ]

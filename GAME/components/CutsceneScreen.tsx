@@ -12,10 +12,16 @@ import { audioManager } from '../utils/audio';
 const CutsceneScreen: React.FC = () => {
     const { activeCutscene, processCutsceneConsequences, endCutscene } = useGameStore();
     const [pageIndex, setPageIndex] = useState(0);
-    const [displayedText, setDisplayedText] = useState('');
-    const [isTyping, setIsTyping] = useState(true);
+    const [visibleParagraphs, setVisibleParagraphs] = useState(0);
+    const [allParagraphsVisible, setAllParagraphsVisible] = useState(false);
 
     const currentPage: CutscenePage | null = activeCutscene ? activeCutscene.pages[pageIndex] : null;
+    
+    // Split text into paragraphs
+    const paragraphs = useMemo(() => {
+        if (!currentPage) return [];
+        return currentPage.text.split('\n\n').filter(p => p.trim().length > 0);
+    }, [currentPage]);
 
     useEffect(() => {
         if (!currentPage) return;
@@ -25,32 +31,33 @@ const CutsceneScreen: React.FC = () => {
             processCutsceneConsequences(currentPage.consequences);
         }
 
-        setIsTyping(true);
-        setDisplayedText('');
-        let charIndex = 0;
-        const typingInterval = setInterval(() => {
-            if (charIndex < currentPage.text.length) {
-                setDisplayedText(currentPage.text.substring(0, charIndex + 1));
-                charIndex++;
-            } else {
-                clearInterval(typingInterval);
-                setIsTyping(false);
+        // Reset paragraph visibility
+        setVisibleParagraphs(0);
+        setAllParagraphsVisible(false);
+        
+        // Show paragraphs one by one with 1 second delay
+        let currentParagraph = 0;
+        const paragraphInterval = setInterval(() => {
+            currentParagraph++;
+            setVisibleParagraphs(currentParagraph);
+            
+            if (currentParagraph >= paragraphs.length) {
+                clearInterval(paragraphInterval);
+                setAllParagraphsVisible(true);
             }
-        }, 20);
+        }, 1000);
 
-        return () => clearInterval(typingInterval);
-    }, [currentPage, processCutsceneConsequences]);
+        return () => clearInterval(paragraphInterval);
+    }, [currentPage, processCutsceneConsequences, paragraphs.length]);
     
-    const finishTyping = useCallback(() => {
-        if (currentPage) {
-            setIsTyping(false);
-            setDisplayedText(currentPage.text);
-        }
-    }, [currentPage]);
+    const showAllParagraphs = useCallback(() => {
+        setVisibleParagraphs(paragraphs.length);
+        setAllParagraphsVisible(true);
+    }, [paragraphs.length]);
 
     const handleAdvance = useCallback(() => {
-        if (isTyping) {
-            finishTyping();
+        if (!allParagraphsVisible) {
+            showAllParagraphs();
             return;
         }
 
@@ -63,17 +70,17 @@ const CutsceneScreen: React.FC = () => {
                 endCutscene();
             }
         }
-    }, [isTyping, finishTyping, currentPage, endCutscene]);
+    }, [allParagraphsVisible, showAllParagraphs, currentPage, endCutscene]);
 
     const handleChoice = useCallback((choiceIndex: number) => {
-        if (isTyping || !currentPage?.choices) return;
+        if (!allParagraphsVisible || !currentPage?.choices) return;
 
         const choice = currentPage.choices[choiceIndex];
         if (choice) {
             audioManager.playSound('confirm');
             setPageIndex(choice.targetPage);
         }
-    }, [isTyping, currentPage]);
+    }, [allParagraphsVisible, currentPage]);
 
     const handlerMap = useMemo(() => {
         const map: { [key: string]: () => void } = {
@@ -97,15 +104,18 @@ const CutsceneScreen: React.FC = () => {
                 {/* Text Content Area - Scrollable if needed */}
                 <div className="flex-1 flex items-center justify-center overflow-hidden">
                     <div className="border-y-4 border-double border-[var(--border-primary)] py-6 px-4 max-h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                        <div className="whitespace-pre-wrap text-3xl leading-snug text-center font-mono max-w-5xl mx-auto">
-                            <span>{displayedText}</span>
-                            {isTyping && <span className="bg-[var(--text-primary)] w-4 h-7 inline-block animate-pulse ml-1" />}
+                        <div className="text-3xl leading-snug text-center font-mono max-w-5xl mx-auto space-y-6">
+                            {paragraphs.slice(0, visibleParagraphs).map((paragraph, index) => (
+                                <p key={index} className="whitespace-pre-wrap">
+                                    {paragraph}
+                                </p>
+                            ))}
                         </div>
                     </div>
                 </div>
 
                 {/* Choices Area - Fixed at bottom */}
-                {!isTyping && currentPage.choices && (
+                {allParagraphsVisible && currentPage.choices && (
                     <div className="mt-6 text-center text-2xl space-y-3 flex-shrink-0">
                         {currentPage.choices.map((choice, index) => (
                             <p key={index} className="text-amber-400">{choice.text}</p>
@@ -115,7 +125,10 @@ const CutsceneScreen: React.FC = () => {
                 
                 {/* Continue Prompt - Fixed at bottom */}
                 <div className="mt-6 text-center text-2xl animate-pulse flex-shrink-0">
-                   {!isTyping && !currentPage.choices && (
+                   {!allParagraphsVisible && (
+                       <span className="text-[var(--text-accent)]">[INVIO per mostrare tutto]</span>
+                   )}
+                   {allParagraphsVisible && !currentPage.choices && (
                        <span className="text-[var(--text-accent)]">[INVIO per continuare]</span>
                    )}
                 </div>

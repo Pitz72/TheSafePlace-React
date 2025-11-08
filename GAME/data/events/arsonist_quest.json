@@ -136,6 +136,7 @@
     "description": "Scendi nelle profondità sotterranee del manicomio. L'aria diventa progressivamente più calda e soffocante. Segni di piccoli incendi sono ovunque - carta bruciata, legno carbonizzato, persino il metallo delle porte mostra segni di fusione.\n\nFinalmente raggiungi una porta massiccia con la scritta 'TUBO N.403 - MASSIMA SICUREZZA'. La porta è divelta, fusa dall'interno. Oltre la soglia, vedi una cella annerita.\n\nAl centro della stanza, accovacciata, c'è una figura. È un uomo, o ciò che ne resta. Incredibilmente magro e secco, la pelle tesa sulle ossa come pergamena bruciacchiata. Indossa i resti di un maglioncino a strisce rosse e bianche, quasi completamente bruciato ma ancora riconoscibile.\n\nAlza lentamente la testa. Non è un uomo. Non del tutto. Un occhio è umano, selvaggio e perso in un abisso di follia. L'altro è una lente scura e incrinata da cui proviene un debole bagliore rossastro. Parti del suo corpo sono fuse con cavi e placche metalliche annerite, ma il processo sembra... sbagliato. Incompleto. È un Angelo della Cenere mal riuscito, un abominio rifiutato persino dal suo stesso genere.\n\nNon ti attacca. Ti fissa. E con una voce che è un sibilo di statica e cenere, sussurra parole sconnesse: 'Nonna... la vigna... brucia... tutto brucia... così caldo... e comodo...'\n\nDalle sue dita scheletriche, una piccola fiamma si accende e si spegne, ipnotica.",
     "biomes": ["Città"],
     "isUnique": true,
+    "requiresQuest": "the_arsonist_and_the_tube",
     "choices": [
       {
         "text": "[QUEST] Mostragli la lettera della nonna",
@@ -225,6 +226,49 @@
             {
               "type": "addXp",
               "value": 50
+            }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_empty_cell_403",
+    "title": "Cella Bruciata",
+    "description": "Scendi nelle profondità sotterranee del manicomio. L'aria diventa progressivamente più calda e soffocante. Segni di piccoli incendi sono ovunque.\n\nFinalmente raggiungi una porta massiccia con la scritta 'TUBO N.403 - MASSIMA SICUREZZA'. La porta è divelta, fusa dall'interno. Oltre la soglia, vedi una cella annerita e vuota.\n\nC'è un odore opprimente di cenere e follia, ma non c'è nessuno. Chiunque fosse qui, se n'è andato da tempo... o è diventato qualcos'altro.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la cella",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 12,
+          "successText": "Trovi solo cenere e rottami fusi. Nessun indizio su cosa sia successo qui.",
+          "failureText": "L'atmosfera opprimente ti spinge ad andartene rapidamente.",
+          "success": [
+            {
+              "type": "addXp",
+              "value": 50
+            }
+          ],
+          "failure": [
+            {
+              "type": "addXp",
+              "value": 20
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Vai via da questo luogo maledetto",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Decidi di non indugiare in questo luogo di sofferenza. Ti allontani rapidamente."
             }
           ]
         }]

@@ -56,7 +56,7 @@
         "objective": "Hai imparato le lezioni. Ora raggiungi il Safe Place e confrontati con la verità.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 149, "y": 146 }
+          "value": { "x": 145, "y": 146 }
         }
       }
     ],

@@ -56,7 +56,9 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             const weaponItem = characterState.equippedWeapon !== null ? characterState.inventory[characterState.equippedWeapon] : null;
             const weaponDetails = weaponItem ? useItemDatabaseStore.getState().itemDatabase[weaponItem.itemId] : null;
             const baseDamage = weaponDetails?.damage || 2;
-            const damageBonus = characterState.getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for');
+            // v1.9.8: Thrown weapons use DEX like ranged
+            const usesDex = weaponDetails?.weaponType === 'ranged' || weaponDetails?.weaponType === 'thrown';
+            const damageBonus = characterState.getAttributeModifier(usesDex ? 'des' : 'for');
             const damage = baseDamage + damageBonus;
             initialHp = Math.max(0, initialHp - damage);
             log.push({ text: `[Guerrigliero] Tendi un'imboscata e colpisci per primo! Infliggi ${damage} danni.`, color: '#38bdf8' });
@@ -145,7 +147,9 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                      addLog(`La tua arma è rotta! Non puoi attaccare.`, '#ff8c00');
                 } else {
                     const attackRoll = Math.floor(Math.random() * 20) + 1;
-                    const attackBonus = getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for');
+                    // v1.9.8: Thrown weapons use DEX like ranged
+                    const usesDex = weaponDetails?.weaponType === 'ranged' || weaponDetails?.weaponType === 'thrown';
+                    const attackBonus = getAttributeModifier(usesDex ? 'des' : 'for');
                     const totalAttack = attackRoll + attackBonus;
                     
                     // v1.9.1 - Special ammo effects on AC
@@ -160,7 +164,9 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     if (totalAttack >= effectiveEnemyAC) {
                         audioManager.playSound('hit_enemy');
                         const baseDamage = weaponDetails?.damage || 2;
-                        let damage = baseDamage + getAttributeModifier(weaponDetails?.weaponType === 'ranged' ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2;
+                        // v1.9.8: Thrown weapons use DEX like ranged
+                        const usesDex = weaponDetails?.weaponType === 'ranged' || weaponDetails?.weaponType === 'thrown';
+                        let damage = baseDamage + getAttributeModifier(usesDex ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2;
                         
                         // v1.9.1 - Special ammo damage effects
                         if (combatState.specialAmmoActive === 'hollow_point' && combatState.specialAmmoRounds! > 0) {

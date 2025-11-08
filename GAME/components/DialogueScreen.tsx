@@ -41,7 +41,7 @@ const DialogueScreen: React.FC = () => {
     setIsTyping(true);
 
     let currentIndex = 0;
-    const typingSpeed = 30; // milliseconds per character
+    const typingSpeed = 10; // v1.9.8: Reduced from 30ms to 10ms for faster typing
 
     const typeInterval = setInterval(() => {
       if (currentIndex < text.length) {
