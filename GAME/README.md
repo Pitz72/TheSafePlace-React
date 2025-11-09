@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.8)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.8.1)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,16 +92,56 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.8** - The Polishing Pass
+**Versione Corrente: v1.9.8.1** - WIP Polish
 
-**MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (97%)**
+**MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (98%)**
 
-Con la versione 1.9.8, il progetto raggiunge un nuovo livello di stabilità, coerenza e user experience. Risolti 12 bug critici, implementate 2 feature e applicati 3 miglioramenti UX identificati durante testing approfondito.
+Con le versioni 1.9.8 e 1.9.8.1, il progetto raggiunge il massimo livello di stabilità, coerenza e user experience. Risolti 18 bug totali, implementate 2 feature e applicati 3 miglioramenti UX, con polish finale su inventory, trading e eventi.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT)
 - Ulteriori omaggi ai donatori rimanenti (~20)
-- Testing finale e minor polish
+- Testing finale approfondito
+
+#### Novità v1.9.8.1 (9 Novembre 2025) - **WIP POLISH**
+
+Micro-patch di rifinitura che completa il lavoro di v1.9.8.
+
+**BUG FIX:**
+- **TRADING ID**: Case sensitivity risolto (ammo/kit lowercase)
+  - Fix: AMMO_9MM → ammo_9mm, AMMO_556 → ammo_rifle, AMMO_12G → ammo_shotgun
+  - Impatto: Trading completamente funzionale, zero errori console
+
+- **INVENTORY DESCRIZIONI**: Formattazione professionale
+  - Fix: Tipo, rarità, effetti tradotti in linguaggio naturale
+  - Impatto: UX significativamente migliorata
+
+- **EVENTI NOMI OGGETTI**: Logging e fallback
+  - Fix: Nomi sempre leggibili, logging per debug
+  - Impatto: Messaggi sempre chiari
+
+- **QUEST DEBOUNCE**: Previene duplicazioni
+  - Fix: Cooldown 100ms tra update
+  - Impatto: Journal pulito, no duplicati
+
+- **EVENTI SPECIAL EFFECTS**: Messaggi specifici
+  - Fix: learn_disease_symptoms con testo narrativo
+  - Impatto: Nessun messaggio generico
+
+- **EVENTO EREMITA**: Dialogo funzionante
+  - Fix: Struttura outcome corretta
+  - Impatto: Evento completamente funzionale
+
+**IMPATTO:**
+- 6 bug risolti (2 alti, 3 medi, 1 basso)
+- Trading system perfettamente funzionante
+- Inventory UX professionale
+- Eventi tutti funzionali
+- Zero bug noti rimanenti
+
+**Risultato:** Il gioco raggiunge il massimo standard di qualità e stabilità. Pronto per testing finale.
+
+---
 
 #### Novità v1.9.8 (8 Novembre 2025) - **THE POLISHING PASS**
 

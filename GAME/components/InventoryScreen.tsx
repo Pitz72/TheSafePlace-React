@@ -21,6 +21,53 @@ const DetailLine: React.FC<{ label: string, value: React.ReactNode }> = ({ label
 );
 
 /**
+ * Helper function to format item type for display
+ */
+const formatItemType = (type: string): string => {
+    const typeMap: Record<string, string> = {
+        'weapon': 'Arma',
+        'armor': 'Armatura',
+        'consumable': 'Consumabile',
+        'material': 'Materiale',
+        'quest': 'Oggetto Missione',
+        'ammo': 'Munizioni',
+        'manual': 'Manuale',
+        'tool': 'Strumento'
+    };
+    return typeMap[type] || type;
+};
+
+/**
+ * Helper function to format rarity for display
+ */
+const formatRarity = (rarity: string): { text: string, color: string } => {
+    const rarityMap: Record<string, { text: string, color: string }> = {
+        'common': { text: 'Comune', color: '#a3a3a3' },
+        'uncommon': { text: 'Non Comune', color: '#22c55e' },
+        'rare': { text: 'Raro', color: '#3b82f6' },
+        'epic': { text: 'Epico', color: '#a855f7' },
+        'quest': { text: 'Missione', color: '#facc15' }
+    };
+    return rarityMap[rarity] || { text: rarity, color: '#ffffff' };
+};
+
+/**
+ * Helper function to format effect for display
+ */
+const formatEffect = (effect: { type: string, value: any }): string => {
+    switch (effect.type) {
+        case 'heal': return `Ripristina ${effect.value} HP`;
+        case 'satiety': return `Ripristina ${effect.value} Sazietà`;
+        case 'hydration': return `Ripristina ${effect.value} Idratazione`;
+        case 'cureStatus': return `Cura lo stato ${effect.value}`;
+        case 'light': return `Fornisce luce per ${effect.value} ore`;
+        case 'repair': return `Ripara ${effect.value} punti durabilità`;
+        case 'antirad': return `Riduce radiazioni di ${effect.value}`;
+        default: return `${effect.type} (+${effect.value})`;
+    }
+};
+
+/**
  * ItemDetails component.
  * This component renders the details of a selected item.
  * @param {object} props - The props for the component.
@@ -37,7 +84,11 @@ const ItemDetails: React.FC<{ item: IItem | null, invItem: InventoryItem | null 
         );
     }
 
-    const formattedEffects = item.effects?.map(e => `${e.type} (+${e.value})`).join(', ');
+    const formattedType = formatItemType(item.type);
+    const formattedRarity = formatRarity(item.rarity);
+    const formattedEffects = item.effects?.map(formatEffect).join(' | ');
+    const formattedWeaponType = item.weaponType === 'melee' ? 'Mischia' : item.weaponType === 'ranged' ? 'Distanza' : item.weaponType === 'thrown' ? 'Lancio' : item.weaponType;
+    const formattedSlot = item.slot === 'head' ? 'Testa' : item.slot === 'chest' ? 'Petto' : item.slot === 'legs' ? 'Gambe' : item.slot;
 
     return (
         <div className="space-y-4 text-3xl h-full flex flex-col">
@@ -48,15 +99,15 @@ const ItemDetails: React.FC<{ item: IItem | null, invItem: InventoryItem | null 
                 {item.description}
             </p>
             <div className="flex-shrink-0 space-y-3 pt-4 border-t-2 border-green-400/20">
-                <DetailLine label="Tipo" value={item.type} />
-                <DetailLine label="Rarità" value={item.rarity} />
-                <DetailLine label="Peso" value={item.weight} />
-                <DetailLine label="Valore" value={item.value} />
+                <DetailLine label="Tipo" value={formattedType} />
+                <DetailLine label="Rarità" value={<span style={{ color: formattedRarity.color }}>{formattedRarity.text}</span>} />
+                <DetailLine label="Peso" value={`${item.weight} kg`} />
+                <DetailLine label="Valore" value={`${item.value} monete`} />
                 {invItem?.durability && <DetailLine label="Durabilità" value={`${invItem.durability.current} / ${invItem.durability.max}`} />}
                 {item.damage !== undefined && <DetailLine label="Danno" value={item.damage} />}
-                {item.weaponType && <DetailLine label="Tipo Arma" value={item.weaponType} />}
-                {item.defense !== undefined && <DetailLine label="Difesa" value={item.defense} />}
-                {item.slot && <DetailLine label="Slot" value={item.slot} />}
+                {item.weaponType && <DetailLine label="Tipo Arma" value={formattedWeaponType} />}
+                {item.defense !== undefined && <DetailLine label="Difesa" value={`+${item.defense} CA`} />}
+                {item.slot && <DetailLine label="Slot Armatura" value={formattedSlot} />}
                 {formattedEffects && <DetailLine label="Effetti" value={formattedEffects} />}
             </div>
         </div>

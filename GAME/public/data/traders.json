@@ -17,10 +17,10 @@
       { "itemId": "firewood", "quantity": 12 },
       { "itemId": "adhesive_tape", "quantity": 6 },
       { "itemId": "nylon_wire", "quantity": 4 },
-      { "itemId": "AMMO_9MM", "quantity": 30 },
-      { "itemId": "AMMO_556", "quantity": 20 },
-      { "itemId": "AMMO_12G", "quantity": 15 },
-      { "itemId": "repair_kit_basic", "quantity": 3 },
+      { "itemId": "ammo_9mm", "quantity": 30 },
+      { "itemId": "ammo_rifle", "quantity": 20 },
+      { "itemId": "ammo_shotgun", "quantity": 15 },
+      { "itemId": "tool_repair_kit_basic", "quantity": 3 },
       { "itemId": "first_aid_kit", "quantity": 2 },
       { "itemId": "manual_survival_basics", "quantity": 1 },
       { "itemId": "manual_archery_basics", "quantity": 1 }
@@ -39,8 +39,8 @@
       { "itemId": "MED_BANDAGE_BASIC", "quantity": 4 },
       { "itemId": "tech_components", "quantity": 2 },
       { "itemId": "chemical_substances", "quantity": 1 },
-      { "itemId": "AMMO_9MM", "quantity": 15 },
-      { "itemId": "repair_kit_basic", "quantity": 1 },
+      { "itemId": "ammo_9mm", "quantity": 15 },
+      { "itemId": "tool_repair_kit_basic", "quantity": 1 },
       { "itemId": "manual_field_medicine", "quantity": 1 }
     ]
   },
@@ -58,7 +58,7 @@
     "baseMarkup": 1.2,
     "inventory": [
       { "itemId": "ammo_arrow", "quantity": 30 },
-      { "itemId": "AMMO_12G", "quantity": 20 },
+      { "itemId": "ammo_shotgun", "quantity": 20 },
       { "itemId": "animal_hide", "quantity": 10 },
       { "itemId": "bear_trap", "quantity": 3 },
       { "itemId": "manual_wilderness_survival", "quantity": 1 }

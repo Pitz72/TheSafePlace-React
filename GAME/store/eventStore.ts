@@ -214,16 +214,22 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 case 'addItem':
                     addItem(result.value.itemId, result.value.quantity);
                     const addedItem = itemDatabase[result.value.itemId];
+                    if (!addedItem) {
+                        console.warn(`[EVENT] Item ${result.value.itemId} not found in database`);
+                    }
                     message = addedItem
                         ? `Hai ottenuto: ${addedItem.name} x${result.value.quantity}.`
-                        : `Hai ottenuto: ${result.value.itemId} x${result.value.quantity}.`;
+                        : `Hai ottenuto un oggetto sconosciuto (${result.value.itemId}).`;
                     break;
                 case 'removeItem':
                     removeItem(result.value.itemId, result.value.quantity);
                     const removedItem = itemDatabase[result.value.itemId];
+                    if (!removedItem) {
+                        console.warn(`[EVENT] Item ${result.value.itemId} not found in database`);
+                    }
                     message = removedItem
                         ? `Hai perso: ${removedItem.name} x${result.value.quantity}.`
-                        : `Hai perso: ${result.value.itemId} x${result.value.quantity}.`;
+                        : `Hai perso un oggetto (${result.value.itemId}).`;
                     break;
                 case 'addXp': addXp(result.value); message = `Hai guadagnato ${result.value} XP.`; break;
                 case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
@@ -243,11 +249,14 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
                 case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
                 case 'special': {
-                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags)
+                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags, v1.9.8.1: learn effects)
                     if (result.value && typeof result.value === 'object') {
                         const { effect, dialogueId, traderId, location, flag } = result.value;
                         
-                        if (effect === 'setFlag' && flag) {
+                        if (effect === 'learn_disease_symptoms') {
+                            // v1.9.8.1: Learn to recognize disease symptoms
+                            message = "Studiando gli appunti del dottore, ora sei in grado di riconoscere i primi sintomi delle infezioni più comuni.";
+                        } else if (effect === 'setFlag' && flag) {
                             // v1.8.2: Set game flag for quest tracking
                             useGameStore.setState(state => ({
                                 gameFlags: new Set(state.gameFlags).add(flag)

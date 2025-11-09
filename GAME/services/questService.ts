@@ -22,6 +22,10 @@ import { useEventStore } from '../store/eventStore';
 import { useEventDatabaseStore } from '../data/eventDatabase';
 import { JournalEntryType, GameState, Position, QuestType, InventoryItem } from '../types';
 
+// v1.9.8.1: Debounce system to prevent duplicate quest updates
+let questUpdateDebounce: Record<string, number> = {};
+const QUEST_UPDATE_COOLDOWN = 100; // ms
+
 /**
  * Gets all active quest marker locations with their types.
  *
@@ -147,6 +151,14 @@ export const questService = {
    * // Journal: "[MISSIONE AGGIORNATA] Il Talismano Perduto"
    */
   advanceQuest: (questId: string) => {
+    // v1.9.8.1: Debounce to prevent duplicate updates
+    const now = Date.now();
+    if (questUpdateDebounce[questId] && now - questUpdateDebounce[questId] < QUEST_UPDATE_COOLDOWN) {
+      console.log(`[QUEST SERVICE] Quest ${questId} update debounced (too soon)`);
+      return;
+    }
+    questUpdateDebounce[questId] = now;
+
     const { quests } = useQuestDatabaseStore.getState();
     const { activeQuests, getQuestFlag } = useCharacterStore.getState();
     const { addJournalEntry } = useGameStore.getState();

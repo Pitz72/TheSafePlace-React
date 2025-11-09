@@ -9,12 +9,17 @@
       {
         "text": "Saluta l'eremita",
         "outcomes": [{
-          "type": "special",
-          "value": {
-            "effect": "startDialogue",
-            "dialogueId": "hermit_main"
-          },
-          "results": []
+          "type": "direct",
+          "results": [
+            {
+              "type": "special",
+              "value": {
+                "effect": "startDialogue",
+                "dialogueId": "hermit_main"
+              },
+              "text": "Inizi una conversazione con l'Ascoltatore..."
+            }
+          ]
         }]
       },
       {
