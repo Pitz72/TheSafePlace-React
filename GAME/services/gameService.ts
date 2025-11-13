@@ -40,7 +40,7 @@ const TILE_NAMES: Record<string, string> = {
     'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
     'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu',
     'A': 'Avamposto', 'N': 'Nido della Cenere', 'T': 'Commerciante',
-    'L': 'Laboratorio', 'B': 'Biblioteca'
+    'L': 'Laboratorio', 'B': 'Biblioteca', 'H': 'Capanna Erborista'
 };
 
 /**
@@ -54,7 +54,7 @@ const IMPASSABLE_TILES = new Set(['M']);
  * @constant
  * @version 1.6.0 - Added special location tiles
  */
-const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B']);
+const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B', 'H']);
 
 /**
  * Base time cost in minutes for a single movement.
@@ -231,6 +231,19 @@ export const gameService = {
           }));
           specialTileActionTaken = true;
         }
+        break;
+
+      case 'H': // Herbalist Cabin - Direct dialogue trigger (v1.9.9)
+        useGameStore.setState({ playerPos: newPos });
+        // Import dialogueService dynamically to avoid circular dependency
+        import('./dialogueService').then(({ dialogueService }) => {
+          dialogueService.startDialogue('olivia_main');
+        });
+        addJournalEntry({
+          text: "Sei arrivato alla Capanna dell'Erborista. Un'oasi di vita in un mondo di morte.",
+          type: JournalEntryType.NARRATIVE
+        });
+        specialTileActionTaken = true;
         break;
     }
 

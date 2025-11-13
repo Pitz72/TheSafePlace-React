@@ -250,8 +250,8 @@
           {
             "text": "Lo troverò e recupererò l'orologio.",
             "consequence": {
-              "type": "jumpToNode",
-              "value": "hub"
+              "type": "startQuest",
+              "value": "crossroads_investigation"
             }
           }
         ]
@@ -263,15 +263,15 @@
           {
             "text": "Scelgo il Pugnale Affilato.",
             "consequence": {
-              "type": "giveItem",
-              "value": { "itemId": "weapon_sharp_dagger", "quantity": 1 }
+              "type": "completeQuest",
+              "value": "crossroads_investigation"
             }
           },
           {
             "text": "Scelgo l'Arco Improvvisato.",
             "consequence": {
-              "type": "giveItem",
-              "value": { "itemId": "weapon_makeshift_bow", "quantity": 1 }
+              "type": "completeQuest",
+              "value": "crossroads_investigation"
             }
           }
         ]

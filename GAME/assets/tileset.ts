@@ -130,7 +130,14 @@ export const TILESET_SRC = `data:image/svg+xml;base64,${btoa(`
     <path d="M6 6h10a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6V6zm20 20V9a3 3 0 0 0-3-3h-4" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     <line x1="11" y1="12" x2="11" y2="20" stroke="#be123c" stroke-width="1"/>
   </g>
-  <g transform="translate(96, 96)"><rect width="32" height="32" fill="black"/></g>
+  <g transform="translate(96, 96)">
+    <title>Herbalist Cabin (H)</title>
+    <rect width="32" height="32" fill="#14532d"/>
+    <polygon points="16,6 6,14 26,14" fill="#166534"/>
+    <rect x="10" y="14" width="12" height="12" fill="#78350f"/>
+    <rect x="14" y="18" width="4" height="8" fill="#422006"/>
+    <circle cx="20" cy="10" r="1.5" fill="#4ade80"/>
+  </g>
   <g transform="translate(128, 96)"><rect width="32" height="32" fill="black"/></g>
 
 </svg>
@@ -154,4 +161,5 @@ export const TILE_MAP: { [key: string]: { x: number; y: number } } = {
   'T': { x: 0 * TILE_SIZE, y: 3 * TILE_SIZE },   // Trader (v1.6.0)
   'L': { x: 1 * TILE_SIZE, y: 3 * TILE_SIZE },   // Laboratory (v1.6.0)
   'B': { x: 2 * TILE_SIZE, y: 3 * TILE_SIZE },   // Library (v1.6.0)
+  'H': { x: 3 * TILE_SIZE, y: 3 * TILE_SIZE },   // Herbalist Cabin (v1.9.9)
 };

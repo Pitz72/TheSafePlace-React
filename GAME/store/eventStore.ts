@@ -59,6 +59,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         const biomeCharToName: Record<string, string> = { '.': 'Pianura', 'F': 'Foresta', 'V': 'Villaggio', 'C': 'Città', '~': 'Acqua' };
         const currentBiomeName = biomeCharToName[currentBiome] || 'Global';
         
+        // v1.9.9 - Enhanced logging
+        console.log(`[EVENT STORE] ═══ TRIGGER ENCOUNTER ═══`);
+        console.log(`[EVENT STORE] Biome: ${currentBiomeName} (${currentBiome}), Forced: ${forceBiomeEvent}`);
+        
         if (!forceBiomeEvent) {
             const cooldownMinutes = currentBiome === '.' ? 240 : 90;
             if (lastEncounterTime && (timeToMinutes(gameTime) - timeToMinutes(lastEncounterTime) < cooldownMinutes)) {
@@ -200,10 +204,24 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         const { advanceTime } = useTimeStore.getState();
         const { addItem, removeItem, addXp, takeDamage, performSkillCheck, changeAlignment, heal, addStatus, boostAttribute } = useCharacterStore.getState();
         const { itemDatabase } = useItemDatabaseStore.getState();
-        if (!activeEvent) return;
+        
+        // v1.9.9 - Enhanced logging
+        console.log(`[EVENT STORE] ─── RESOLVE CHOICE ───`);
+        console.log(`[EVENT STORE] Event: ${activeEvent?.id}, Choice: ${choiceIndex}`);
+        
+        if (!activeEvent) {
+          console.error(`[EVENT STORE] ❌ No active event`);
+          return;
+        }
 
         const choice = activeEvent.choices[choiceIndex];
-        if (!choice) return;
+        if (!choice) {
+          console.error(`[EVENT STORE] ❌ Choice ${choiceIndex} not found`);
+          return;
+        }
+        
+        console.log(`[EVENT STORE] Choice text: "${choice.text}"`);
+        console.log(`[EVENT STORE] Outcomes: ${choice.outcomes.length}`);
 
         addJournalEntry({ text: `Hai scelto: "${choice.text}"`, type: JournalEntryType.NARRATIVE });
         let resolutionSummary: string[] = [];
@@ -252,6 +270,9 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags, v1.9.8.1: learn effects)
                     if (result.value && typeof result.value === 'object') {
                         const { effect, dialogueId, traderId, location, flag } = result.value;
+                        
+                        // v1.9.9 - Log special effect
+                        console.log(`[EVENT STORE] Special effect: ${effect}`, result.value);
                         
                         if (effect === 'learn_disease_symptoms') {
                             // v1.9.8.1: Learn to recognize disease symptoms

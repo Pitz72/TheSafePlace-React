@@ -33,6 +33,8 @@ import Panel from './Panel';
 import AlignmentPanel from './AlignmentPanel';
 import { useInteractionStore } from '../store/interactionStore';
 import { useTimeStore } from '../store/timeStore';
+import { DebugPanel } from './DebugPanel';
+import { CompassRose } from './CompassRose';
 
 /**
  * Color mapping for player status conditions.
@@ -657,7 +659,9 @@ const GameScreen: React.FC = () => {
 
 
   return (
-    <div className="game-screen-container w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
+    <>
+      <DebugPanel />
+      <div className="game-screen-container w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
       {/* Left Column (25%) */}
       <div className="w-1/4 h-full flex flex-col space-y-1">
         <SurvivalPanel />
@@ -674,6 +678,7 @@ const GameScreen: React.FC = () => {
              <h2 className="text-center bg-[var(--text-primary)]/10 py-0.5 font-bold tracking-widest uppercase text-base flex-shrink-0">MAPPA DEL MONDO</h2>
              <div className="flex-grow relative">
                 <CanvasMap />
+                <CompassRose />
              </div>
           </div>
 
@@ -692,6 +697,7 @@ const GameScreen: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

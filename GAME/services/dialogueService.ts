@@ -55,9 +55,13 @@ export const dialogueService = {
     const { setActiveDialogue } = useDialogueStore.getState();
     const { setGameState, addJournalEntry, gameState: currentState } = useGameStore.getState();
 
+    // v1.9.9 - Enhanced logging
+    console.log(`[DIALOGUE] ═══ START DIALOGUE: ${dialogueId} ═══`);
+    console.log(`[DIALOGUE] Return state: ${returnState || currentState}`);
+
     const dialogue = dialogues[dialogueId];
     if (!dialogue) {
-      console.error(`[DIALOGUE SERVICE] Dialogue ${dialogueId} not found in database`);
+      console.error(`[DIALOGUE SERVICE] ❌ Dialogue ${dialogueId} not found in database`);
       addJournalEntry({
         text: `Errore: dialogo ${dialogueId} non trovato.`,
         type: JournalEntryType.SYSTEM_ERROR
@@ -106,38 +110,45 @@ export const dialogueService = {
     const { setGameState, addJournalEntry } = useGameStore.getState();
     const { performSkillCheck, addItem, removeItem, changeAlignment, addXp } = useCharacterStore.getState();
 
+    // v1.9.9 - Enhanced logging
+    console.log(`[DIALOGUE] ─── Option Selected: ${optionIndex} ───`);
+    console.log(`[DIALOGUE] Active: ${activeDialogueId}, Node: ${currentNodeId}`);
+
     if (!activeDialogueId || !currentNodeId) {
-      console.error('[DIALOGUE SERVICE] No active dialogue');
+      console.error('[DIALOGUE SERVICE] ❌ No active dialogue');
       return;
     }
 
     const dialogue = dialogues[activeDialogueId];
     if (!dialogue) {
-      console.error(`[DIALOGUE SERVICE] Dialogue ${activeDialogueId} not found`);
+      console.error(`[DIALOGUE SERVICE] ❌ Dialogue ${activeDialogueId} not found`);
       return;
     }
 
     const currentNode = dialogue.nodes[currentNodeId];
     if (!currentNode) {
-      console.error(`[DIALOGUE SERVICE] Node ${currentNodeId} not found in dialogue ${activeDialogueId}`);
+      console.error(`[DIALOGUE SERVICE] ❌ Node ${currentNodeId} not found in dialogue ${activeDialogueId}`);
       return;
     }
 
     const selectedOption = currentNode.options[optionIndex];
     if (!selectedOption) {
-      console.error(`[DIALOGUE SERVICE] Option ${optionIndex} not found in node ${currentNodeId}`);
+      console.error(`[DIALOGUE SERVICE] ❌ Option ${optionIndex} not found in node ${currentNodeId}`);
       return;
     }
 
     audioManager.playSound('confirm');
     const consequence = selectedOption.consequence;
+    
+    // v1.9.9 - Log consequence type
+    console.log(`[DIALOGUE] Consequence type: ${consequence.type}`, consequence.value);
 
     // Execute consequence
     switch (consequence.type) {
       case 'jumpToNode': {
         const targetNodeId = consequence.value as string;
+        console.log(`[DIALOGUE] → Jump to node: ${targetNodeId}`);
         setCurrentNode(targetNodeId);
-        console.log(`[DIALOGUE SERVICE] Jumped to node: ${targetNodeId}`);
         
         // Check quest triggers after dialogue node (v1.8.0)
         questService.checkQuestTriggers(undefined, targetNodeId);
@@ -187,6 +198,7 @@ export const dialogueService = {
 
       case 'startQuest': {
         const questId = consequence.value as string;
+        console.log(`[DIALOGUE] → Start quest: ${questId}`);
         questService.startQuest(questId);
         // Don't end dialogue - let player continue talking
         break;
@@ -254,6 +266,25 @@ export const dialogueService = {
 
       case 'completeQuest': {
         const questId = consequence.value as string;
+        
+        // Special handling for crossroads_investigation - give weapon choice
+        if (questId === 'crossroads_investigation') {
+          // Determine which weapon based on current node
+          const weaponId = currentNodeId === 'marcus_investigation_complete'
+            ? (optionIndex === 0 ? 'weapon_sharp_dagger' : 'weapon_makeshift_bow')
+            : null;
+          
+          if (weaponId) {
+            addItem(weaponId, 1);
+            const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+            const weaponName = itemDatabase[weaponId]?.name || 'arma';
+            addJournalEntry({
+              text: `Marcus ti ha dato: ${weaponName}.`,
+              type: JournalEntryType.ITEM_ACQUIRED
+            });
+          }
+        }
+        
         questService.completeQuest(questId);
         // End dialogue after quest completion
         setTimeout(() => {

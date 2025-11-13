@@ -138,7 +138,7 @@
   { "id": "rubber_ball", "name": "Palla di Gomma", "description": "Una palla di gomma, può essere usata come distrazione.", "type": "material", "weight": 0.2, "value": 2, "stackable": false, "rarity": "common" },
   { "id": "resistant_wire", "name": "Filo Resistente", "description": "Un filo metallico resistente, utile per trappole o riparazioni.", "type": "material", "weight": 0.3, "value": 8, "stackable": true, "rarity": "common" },
   { "id": "metal_piece", "name": "Pezzo di Metallo Piccolo", "description": "Piccoli pezzi di metallo, utili per il crafting.", "type": "material", "weight": 0.2, "value": 2, "stackable": true, "rarity": "common" },
-  { "id": "grain_sack", "name": "Sacco di Grano", "description": "Un sacco di grano secco, ancora commestibile se macinato.", "type": "material", "weight": 5.0, "value": 15, "stackable": false, "rarity": "uncommon" },
+  { "id": "grain_sack", "name": "Sacco di Grano", "description": "Un sacco di grano secco, ancora commestibile se macinato.", "type": "material", "weight": 5.0, "value": 15, "stackable": true, "rarity": "uncommon" },
   { "id": "cleaning_supplies", "name": "Prodotti per Pulizia", "description": "Solventi e reagenti chimici, utili per creare composti.", "type": "material", "weight": 1.0, "value": 10, "stackable": false, "rarity": "uncommon" },
   { "id": "dry_paper", "name": "Carta Secca", "description": "Fogli di carta secca, perfetti per accendere un fuoco o come materiale per il crafting.", "type": "material", "weight": 0.1, "value": 1, "stackable": true, "rarity": "common" },
   {

@@ -191,10 +191,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             equippedLegs: null,
             knownRecipes: [
                 'recipe_purify_water',
-                'recipe_makeshift_bandage', 
+                'recipe_makeshift_bandage',
                 'recipe_collect_water',
-                'recipe_makeshift_knife', 
-                'recipe_repair_kit_basic'
+                'recipe_makeshift_knife',
+                'recipe_repair_kit_basic',
+                'recipe_arrows',
+                'recipe_wooden_spear'
             ],
             unlockedTalents: [],
             unlockedTrophies: globalTrophies, // Inizia con i trofei globali

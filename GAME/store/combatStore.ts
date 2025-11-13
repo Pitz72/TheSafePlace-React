@@ -382,7 +382,9 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             // Calculate loot tier based on enemy power
             const enemyTier = combatState.enemy.xp < 80 ? 'common' : combatState.enemy.xp < 120 ? 'uncommon' : 'rare';
             
-            // Loot pools by tier
+            // v1.9.9 - Loot pools by tier with EQUIPMENT from humanoids
+            const enemyIsHumanoid = combatState.enemy.type === 'humanoid';
+            
             const lootTables = {
                 common: [
                     { id: 'scrap_metal', weight: 30, quantity: [1, 3] },
@@ -390,6 +392,11 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     { id: 'MED_BANDAGE_BASIC', weight: 20, quantity: [1, 2] },
                     { id: 'bottle_empty', weight: 15, quantity: [1, 2] },
                     { id: 'CONS_001', weight: 10, quantity: [1, 1] },
+                    // v1.9.9 - Humanoids can drop basic armor
+                    ...(enemyIsHumanoid ? [
+                        { id: 'armor_makeshift_helmet', weight: 8, quantity: [1, 1] },
+                        { id: 'armor_durable_boots', weight: 8, quantity: [1, 1] }
+                    ] : [])
                 ],
                 uncommon: [
                     { id: 'animal_hide', weight: 25, quantity: [1, 2] },
@@ -399,6 +406,12 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     { id: 'CONS_002', weight: 10, quantity: [1, 1] },
                     { id: 'adhesive_tape', weight: 10, quantity: [1, 1] },
                     { id: 'MED_ANTISEPTIC', weight: 5, quantity: [1, 1] },
+                    // v1.9.9 - Humanoids can drop better armor
+                    ...(enemyIsHumanoid ? [
+                        { id: 'armor_leather_chestpiece', weight: 12, quantity: [1, 1] },
+                        { id: 'leather_leggings', weight: 12, quantity: [1, 1] },
+                        { id: 'combat_helmet', weight: 10, quantity: [1, 1] }
+                    ] : [])
                 ],
                 rare: [
                     { id: 'scrap_metal_high_quality', weight: 20, quantity: [1, 2] },
@@ -408,6 +421,12 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     { id: 'MED_ANTISEPTIC', weight: 10, quantity: [1, 2] },
                     { id: 'tech_components', weight: 10, quantity: [1, 1] },
                     { id: 'MED_PAINKILLER', weight: 10, quantity: [1, 1] },
+                    // v1.9.9 - Humanoids can drop rare armor
+                    ...(enemyIsHumanoid ? [
+                        { id: 'kevlar_vest', weight: 15, quantity: [1, 1] },
+                        { id: 'reinforced_jeans', weight: 12, quantity: [1, 1] },
+                        { id: 'tactical_helmet', weight: 12, quantity: [1, 1] }
+                    ] : [])
                 ]
             };
             

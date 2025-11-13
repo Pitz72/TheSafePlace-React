@@ -987,6 +987,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         return false;
       }
 
+      // v1.9.9 - Fix: Initialize wandering trader if not present in save
+      if (!get().wanderingTrader) {
+        console.log('[LOAD GAME] Wandering Trader not in save, initializing...');
+        get().initializeWanderingTrader();
+      }
+
       localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
       get().addJournalEntry({ text: `Partita caricata dallo slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
       

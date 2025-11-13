@@ -434,6 +434,15 @@ export const questService = {
     const { activeQuests, inventory, questKillCounts } = useCharacterStore.getState();
     const { playerPos } = useGameStore.getState();
 
+    // v1.9.9 - Enhanced logging for debugging
+    const triggerSource = lastAddedItemId ? `addItem(${lastAddedItemId})` :
+                         lastDialogueNodeId ? `dialogue(${lastDialogueNodeId})` :
+                         lastCompletedEventId ? `event(${lastCompletedEventId})` :
+                         lastDefeatedEnemyId ? `enemyDefeated(${lastDefeatedEnemyId})` :
+                         'movePlayer()';
+    console.log(`[QUEST CHECK] ═══ Triggered by: ${triggerSource} ═══`);
+    console.log(`[QUEST CHECK] Active quests: ${Object.keys(activeQuests).length}`, Object.keys(activeQuests));
+
     // Iterate through all active quests
     Object.keys(activeQuests).forEach(questId => {
       const quest = quests[questId];
@@ -443,19 +452,24 @@ export const questService = {
       const stageData = quest.stages.find(s => s.stage === currentStage);
 
       if (!stageData) {
-        console.warn(`[QUEST SERVICE] Stage ${currentStage} not found for quest ${questId}`);
+        console.warn(`[QUEST SERVICE] ⚠️ Stage ${currentStage} not found for quest ${questId}`);
         return;
       }
 
       const trigger = stageData.trigger;
       let triggerMet = false;
+      
+      // v1.9.9 - Log each quest check
+      console.log(`[QUEST CHECK] Checking '${questId}' Stage ${currentStage}: trigger type '${trigger.type}'`);
 
       // Check trigger type
       switch (trigger.type) {
         case 'reachLocation': {
           const targetPos = trigger.value as { x: number; y: number };
-          if (playerPos.x === targetPos.x && playerPos.y === targetPos.y) {
-            console.log(`[QUEST SERVICE] reachLocation trigger met for ${questId}`);
+          const isAtLocation = playerPos.x === targetPos.x && playerPos.y === targetPos.y;
+          console.log(`[QUEST CHECK] '${questId}' reachLocation: player(${playerPos.x},${playerPos.y}) vs target(${targetPos.x},${targetPos.y}) → ${isAtLocation ? '✓ MET' : '✗ FAILED'}`);
+          
+          if (isAtLocation) {
             
             // SPECIAL ACTION: Trigger unique event instead of advancing quest
             // This allows location-based quests to show contextual events
@@ -539,9 +553,11 @@ export const questService = {
 
         case 'getItem': {
           const targetItemId = trigger.value as string;
-          if (lastAddedItemId === targetItemId) {
+          const itemMatches = lastAddedItemId === targetItemId;
+          console.log(`[QUEST CHECK] '${questId}' getItem: need '${targetItemId}', got '${lastAddedItemId || 'none'}' → ${itemMatches ? '✓ MET' : '✗ FAILED'}`);
+          
+          if (itemMatches) {
             triggerMet = true;
-            console.log(`[QUEST SERVICE] getItem trigger met for ${questId} (${targetItemId})`);
           }
           break;
         }
@@ -550,11 +566,14 @@ export const questService = {
           const requiredItems = trigger.value as Array<{itemId: string, quantity: number}>;
           const hasAll = requiredItems.every(req => {
             const playerItem = inventory.find((i: InventoryItem) => i.itemId === req.itemId);
-            return playerItem && playerItem.quantity >= req.quantity;
+            const has = playerItem && playerItem.quantity >= req.quantity;
+            console.log(`[QUEST CHECK]   - ${req.itemId}: need ${req.quantity}, have ${playerItem?.quantity || 0} → ${has ? '✓' : '✗'}`);
+            return has;
           });
+          console.log(`[QUEST CHECK] '${questId}' hasItems: ${hasAll ? '✓ MET' : '✗ FAILED'}`);
+          
           if (hasAll) {
             triggerMet = true;
-            console.log(`[QUEST SERVICE] hasItems trigger met for ${questId}`);
           }
           break;
         }

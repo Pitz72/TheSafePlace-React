@@ -5,16 +5,26 @@
     "choices": [
       { "text": "Cerca negli armadietti della postazione", "outcomes": [{
         "type": "skillCheck", "skill": "investigare", "dc": 12,
-        "successText": "La maggior parte sono vuoti, ma in uno trovi un kit di pronto soccorso militare e un paio di granate fumogene.",
+        "successText": "La maggior parte sono vuoti, ma in uno trovi un kit di pronto soccorso militare, granate fumogene e un manuale tattico militare.",
         "failureText": "I posti di guardia sono stati saccheggiati a fondo e ora rivelano solo detriti e spazzatura.",
-        "success": [{ "type": "addItem", "value": { "itemId": "first_aid_kit", "quantity": 1 } }, { "type": "addItem", "value": { "itemId": "smoke_grenade", "quantity": 2 } }, { "type": "addXp", "value": 35 }],
+        "success": [
+          { "type": "addItem", "value": { "itemId": "first_aid_kit", "quantity": 1 } },
+          { "type": "addItem", "value": { "itemId": "smoke_grenade", "quantity": 2 } },
+          { "type": "addItem", "value": { "itemId": "manual_advanced_repairs", "quantity": 1 } },
+          { "type": "addXp", "value": 35 }
+        ],
         "failure": [{ "type": "addXp", "value": 10 }]
       }] },
       { "text": "Forza il container chiuso", "outcomes": [{
         "type": "skillCheck", "skill": "atletica", "dc": 14,
-        "successText": "Con uno sforzo immenso, riesci a far leva sulla serratura, che si spezza. All'interno trovi una cassa di munizioni per fucile e alcune razioni a lunga conservazione.",
+        "successText": "Con uno sforzo immenso, riesci a far leva sulla serratura, che si spezza. All'interno trovi una cassa di munizioni per fucile, razioni e un manuale di sopravvivenza militare.",
         "failureText": "Il container è sigillato ermeticamente. Le serrature sono troppo resistenti anche per i tuoi sforzi.",
-        "success": [{ "type": "addItem", "value": { "itemId": "ammo_rifle", "quantity": 10 } }, { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } }, { "type": "addXp", "value": 40 }],
+        "success": [
+          { "type": "addItem", "value": { "itemId": "ammo_rifle", "quantity": 10 } },
+          { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
+          { "type": "addItem", "value": { "itemId": "manual_wilderness_survival", "quantity": 1 } },
+          { "type": "addXp", "value": 40 }
+        ],
         "failure": [{ "type": "addXp", "value": 15 }]
       }] }
     ]

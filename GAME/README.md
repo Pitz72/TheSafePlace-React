@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.8.1)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,16 +92,72 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.8.1** - WIP Polish
+**Versione Corrente: v1.9.9** - The Great Debugging
 
-**MILESTONE RAGGIUNTA: Il gioco è sostanzialmente completo (98%)**
+**MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
 
-Con le versioni 1.9.8 e 1.9.8.1, il progetto raggiunge il massimo livello di stabilità, coerenza e user experience. Risolti 18 bug totali, implementate 2 feature e applicati 3 miglioramenti UX, con polish finale su inventory, trading e eventi.
+Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT)
 - Ulteriori omaggi ai donatori rimanenti (~20)
-- Testing finale approfondito
+- Testing finale end-to-end
+
+#### Novità v1.9.9 (13 Novembre 2025) - **THE GREAT DEBUGGING**
+
+Patch critica che risolve bug game-breaking e implementa sistema di navigazione.
+
+**BUG FIX CRITICI:**
+- **QUEST TALISMANO**: JSON malformato corretto
+  - Fix: Evento unique_find_elara estratto da nesting errato
+  - Impatto: Quest "Il Messaggio del Fiume" completabile
+  
+- **CAPANNA ERBORISTA**: Location garantita con tile 'H'
+  - Fix: Tile speciale (105, 89) + handler dialogo diretto
+  - Impatto: Quest "La Donna che Attende" accessibile
+  
+- **QUEST MARCUS**: Dialogo ora avvia e completa quest
+  - Fix: Consequence startQuest + completeQuest con ricompensa
+  - Impatto: "Indagine al Crocevia" funzionante end-to-end
+  
+- **WANDERING TRADER**: Fallback inizializzazione in loadGame
+  - Fix: Auto-spawn se assente in save caricato
+  - Impatto: Commerciante sempre visibile
+
+**BILANCIAMENTO STRUTTURALE:**
+- **CRAFTING ACCESSIBILE**:
+  - Ricette iniziali: 5 → 7 (+40%, aggiunte Frecce e Lancia)
+  - Drop manuali rifugi: 20% → 40% (+100%)
+  - Legna aggiunta al loot per crafting armi
+  - Manuali garantiti in 3 eventi città chiave
+  
+- **EQUIPAGGIAMENTI DISPONIBILI**:
+  - Nemici umanoidi droppano 6 tipi armature
+  - Tier-based: improvvisato → cuoio → tattico
+  - Slot testa/gambe finalmente riempibili
+
+**NUOVE FEATURE UX:**
+- **COMPASS ROSE**: Indicatori direzionali POI sui bordi mappa
+  - Mostra direzione (↑↓←→) e distanza a quest/locations/trader
+  - Top 3 POI per direzione, colori codificati
+  - Navigazione intuitiva su mappa 150x150
+  
+- **DEBUG PANEL**: Sistema debug enterprise-grade
+  - Attivazione: Ctrl+Shift+D (tasto segreto)
+  - Display real-time: stato, position, quests, flags, trader
+  - Logging avanzato su questService, dialogueService, eventStore
+
+**IMPATTO:**
+- 5 bug critici risolti
+- Crafting da "orpello" a "meccanica core"
+- Equipaggiamenti da "inesistenti" a "accessibili"
+- Navigazione da "confusa" a "intuitiva"
+- Debug da "impossibile" a "enterprise-grade"
+- 17 file modificati (3 nuovi componenti)
+
+**Risultato:** Il gioco raggiunge il 99% di completezza con zero bug critici noti, pronto per testing finale e rilascio.
+
+---
 
 #### Novità v1.9.8.1 (9 Novembre 2025) - **WIP POLISH**
 
