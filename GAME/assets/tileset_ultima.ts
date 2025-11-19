@@ -3,22 +3,22 @@
 // Generated as SVG Data URI for immediate usage
 
 const C64_COLORS = {
-    BLACK: '#000000',
-    WHITE: '#FFFFFF',
-    RED: '#880000',
-    CYAN: '#AAFFEE',
-    PURPLE: '#CC44CC',
-    GREEN: '#00CC55',
-    BLUE: '#0000AA',
-    YELLOW: '#EEEE77',
-    ORANGE: '#DD8855',
-    BROWN: '#664400',
-    LIGHTRED: '#FF7777',
-    DARKGREY: '#333333',
-    GREY: '#777777',
-    LIGHTGREEN: '#AAFF66',
-    LIGHTBLUE: '#0088FF',
-    LIGHTGREY: '#BBBBBB',
+  BLACK: '#000000',
+  WHITE: '#FFFFFF',
+  RED: '#880000',
+  CYAN: '#AAFFEE',
+  PURPLE: '#CC44CC',
+  GREEN: '#00CC55',
+  BLUE: '#0000AA',
+  YELLOW: '#EEEE77',
+  ORANGE: '#DD8855',
+  BROWN: '#664400',
+  LIGHTRED: '#FF7777',
+  DARKGREY: '#333333',
+  GREY: '#777777',
+  LIGHTGREEN: '#AAFF66',
+  LIGHTBLUE: '#0088FF',
+  LIGHTGREY: '#BBBBBB',
 };
 
 // SVG Construction
@@ -136,6 +136,23 @@ const svgContent = `
     <circle cx="20" cy="14" r="2" fill="${C64_COLORS.YELLOW}" />
   </g>
 
+  <!-- 3,1: START (S) -->
+  <g transform="translate(96, 32)">
+    <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
+    <rect x="4" y="4" width="24" height="24" fill="${C64_COLORS.BLUE}" />
+    <text x="16" y="24" font-family="monospace" font-size="24" fill="${C64_COLORS.WHITE}" text-anchor="middle">S</text>
+    <path d="M16 4 L16 28" stroke="${C64_COLORS.WHITE}" stroke-width="2" />
+    <path d="M16 4 L28 10 L16 16" fill="${C64_COLORS.WHITE}" />
+  </g>
+
+  <!-- 4,1: SHELTER (R) -->
+  <g transform="translate(128, 32)">
+    <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
+    <path d="M16 4 L4 16 L4 28 L28 28 L28 16 Z" fill="${C64_COLORS.BROWN}" />
+    <rect x="12" y="20" width="8" height="8" fill="${C64_COLORS.BLACK}" />
+    <path d="M16 4 L28 16 L4 16 Z" fill="${C64_COLORS.ORANGE}" /> <!-- Roof -->
+  </g>
+
   <!-- ROW 2: MARKERS & SPECIALS -->
 
   <!-- 0,2: MAIN QUEST (!M) -->
@@ -205,23 +222,25 @@ export const TILESET_SRC = `data:image/svg+xml;base64,${btoa(svgContent)}`;
 
 // Mapping characters to tile coordinates (x, y in pixels)
 export const TILE_MAP: Record<string, { x: number; y: number }> = {
-    '.': { x: 0, y: 0 },   // Grass
-    'F': { x: 32, y: 0 },  // Forest
-    'M': { x: 64, y: 0 },  // Mountain
-    '~': { x: 96, y: 0 },  // Water
-    'C': { x: 128, y: 0 }, // City
-    '#': { x: 160, y: 0 }, // Wall
+  '.': { x: 0, y: 0 },   // Grass
+  'F': { x: 32, y: 0 },  // Forest
+  'M': { x: 64, y: 0 },  // Mountain
+  '~': { x: 96, y: 0 },  // Water
+  'C': { x: 128, y: 0 }, // City
+  '#': { x: 160, y: 0 }, // Wall
 
-    '@': { x: 0, y: 32 },  // Player
-    'T': { x: 32, y: 32 }, // Trader
-    'X': { x: 64, y: 32 }, // Enemy
+  '@': { x: 0, y: 32 },  // Player
+  'T': { x: 32, y: 32 }, // Trader
+  'X': { x: 64, y: 32 }, // Enemy
+  'S': { x: 96, y: 32 }, // Start
+  'R': { x: 128, y: 32 },// Shelter
 
-    '!M': { x: 0, y: 64 },   // Main Quest
-    '!S': { x: 32, y: 64 },  // Sub Quest
-    'A': { x: 64, y: 64 },   // Crossroads
-    'H': { x: 96, y: 64 },   // Herbalist
-    'B': { x: 128, y: 64 },  // Library
-    'L': { x: 160, y: 64 },  // Lab
-    'N': { x: 192, y: 64 },  // Nest
-    'E': { x: 224, y: 64 },  // Destination
+  '!M': { x: 0, y: 64 },   // Main Quest
+  '!S': { x: 32, y: 64 },  // Sub Quest
+  'A': { x: 64, y: 64 },   // Crossroads
+  'H': { x: 96, y: 64 },   // Herbalist
+  'B': { x: 128, y: 64 },  // Library
+  'L': { x: 160, y: 64 },  // Lab
+  'N': { x: 192, y: 64 },  // Nest
+  'E': { x: 224, y: 64 },  // Destination
 };
