@@ -63,10 +63,10 @@ export interface GameTime {
 }
 
 export interface JournalEntry {
-    type: JournalEntryType;
-    text: string;
-    time: GameTime;
-    color?: string;
+  type: JournalEntryType;
+  text: string;
+  time: GameTime;
+  color?: string;
 }
 
 export interface TileInfo {
@@ -105,11 +105,11 @@ export type TileType = '.' | 'F' | 'C' | 'V' | 'R' | '~' | 'M' | 'E' | 'S' | 'A'
 
 // --- Weather System ---
 export enum WeatherType {
-    SERENO = 'Sereno',
-    NUVOLOSO = 'Nuvoloso',
-    PIOGGIA = 'Pioggia',
-    TEMPESTA = 'Tempesta',
-    NEBBIA = 'Nebbia',
+  SERENO = 'Sereno',
+  NUVOLOSO = 'Nuvoloso',
+  PIOGGIA = 'Pioggia',
+  TEMPESTA = 'Tempesta',
+  NEBBIA = 'Nebbia',
 }
 
 export interface WeatherState {
@@ -232,6 +232,7 @@ export interface DialogueOption {
     hasItem?: string;
     alignment?: 'lena' | 'elian';
     minAlignmentValue?: number;
+    gameFlags?: string[]; // v1.9.9 - Check for specific game flags (ALL must be present)
   };
 }
 
@@ -294,104 +295,104 @@ export interface TradingSessionState {
 export type VisualTheme = 'standard' | 'crt' | 'high_contrast';
 
 export interface ActionMenuState {
-    isOpen: boolean;
-    options: string[];
-    selectedIndex: number;
+  isOpen: boolean;
+  options: string[];
+  selectedIndex: number;
 }
 
 export interface RefugeMenuState {
-    isOpen: boolean;
-    options: string[];
-    selectedIndex: number;
+  isOpen: boolean;
+  options: string[];
+  selectedIndex: number;
 }
 
 export interface CraftingMenuState {
-    selectedIndex: number;
+  selectedIndex: number;
 }
 
 // --- Cutscene System ---
 export interface CutsceneConsequence {
-    type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest' | 'startQuest';
-    payload?: any;
+  type: 'setFlag' | 'addItem' | 'equipItemByIndex' | 'performModifiedRest' | 'startQuest';
+  payload?: any;
 }
 
 export interface CutsceneChoice {
-    text: string;
-    targetPage: number;
+  text: string;
+  targetPage: number;
 }
 
 export interface CutscenePage {
-    text: string;
-    choices?: CutsceneChoice[];
-    consequences?: CutsceneConsequence[];
-    nextPage?: number | null;
+  text: string;
+  choices?: CutsceneChoice[];
+  consequences?: CutsceneConsequence[];
+  nextPage?: number | null;
 }
 
 export interface Cutscene {
-    id: string;
-    title: string;
+  id: string;
+  title: string;
 
-    pages: CutscenePage[];
+  pages: CutscenePage[];
 }
 
 
 // --- Event System ---
-export type EventResultType = 
-    | 'addItem' | 'removeItem' | 'addXp' | 'takeDamage' | 'advanceTime' 
-    | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special' | 'startQuest';
+export type EventResultType =
+  | 'addItem' | 'removeItem' | 'addXp' | 'takeDamage' | 'advanceTime'
+  | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'statBoost' | 'revealMapPOI' | 'heal' | 'special' | 'startQuest';
 
 export interface EventResult {
-    type: EventResultType;
-    value: any;
-    text?: string;
+  type: EventResultType;
+  value: any;
+  text?: string;
 }
 
 export interface EventOutcome {
-    type: 'direct' | 'skillCheck';
-    skill?: SkillName;
-    dc?: number;
-    success?: EventResult[];
-    failure?: EventResult[];
-    results?: EventResult[]; // For direct outcomes
-    successText?: string;
-    failureText?: string;
+  type: 'direct' | 'skillCheck';
+  skill?: SkillName;
+  dc?: number;
+  success?: EventResult[];
+  failure?: EventResult[];
+  results?: EventResult[]; // For direct outcomes
+  successText?: string;
+  failureText?: string;
 }
 
 export interface EventChoice {
-    text: string;
-    alignment?: 'Lena' | 'Elian';
-    itemRequirements?: { itemId: string; quantity: number }[];
-    outcomes: EventOutcome[];
+  text: string;
+  alignment?: 'Lena' | 'Elian';
+  itemRequirements?: { itemId: string; quantity: number }[];
+  outcomes: EventOutcome[];
 }
 
 export interface GameEvent {
-    id: string;
-    title: string;
-    description: string;
-    biomes: string[];
-    isUnique: boolean;
-    choices: EventChoice[];
-    requiresQuest?: string; // v1.9.8 - Optional quest requirement for event activation
+  id: string;
+  title: string;
+  description: string;
+  biomes: string[];
+  isUnique: boolean;
+  choices: EventChoice[];
+  requiresQuest?: string; // v1.9.8 - Optional quest requirement for event activation
 }
 
 // --- Crafting System ---
 export interface Ingredient {
-    itemId: string;
-    quantity: number;
+  itemId: string;
+  quantity: number;
 }
 
 export interface Recipe {
-    id: string;
-    name: string;
-    description: string;
-    skill: SkillName;
-    dc: number;
-    timeCost: number; // in minutes
-    ingredients: Ingredient[];
-    results: {
-        itemId: string;
-        quantity: number;
-    }[];
+  id: string;
+  name: string;
+  description: string;
+  skill: SkillName;
+  dc: number;
+  timeCost: number; // in minutes
+  ingredients: Ingredient[];
+  results: {
+    itemId: string;
+    quantity: number;
+  }[];
 }
 
 // --- Talent System ---
@@ -442,39 +443,39 @@ export interface Enemy {
 }
 
 export interface CombatLogEntry {
-    text: string;
-    color?: string;
+  text: string;
+  color?: string;
 }
 
 export interface CombatDebuff {
-    type: 'stunned';
-    turns: number;
+  type: 'stunned';
+  turns: number;
 }
 
 export interface CombatState {
-    enemy: Enemy;
-    enemyHp: Stat;
-    playerTurn: boolean;
-    log: CombatLogEntry[];
-    revealedTactics: boolean;
-    availableTacticalActions: EnemyTactic[];
-    debuffs?: CombatDebuff[];
-    victory?: boolean;
-    biome?: string; // v1.9.1 - Current biome for environmental actions
-    environmentalBonusActive?: boolean; // v1.9.1 - Cover/hide bonus active
-    environmentalBonusTurns?: number; // v1.9.1 - Turns remaining for bonus
-    specialAmmoActive?: 'piercing' | 'incendiary' | 'hollow_point' | null; // v1.9.1 - Active special ammo type
-    specialAmmoRounds?: number; // v1.9.1 - Rounds remaining with special ammo
-    enemyBurning?: boolean; // v1.9.1 - Enemy on fire (incendiary ammo)
-    enemyBurningTurns?: number; // v1.9.1 - Turns remaining for burning
-    turnCount?: number; // v1.9.1 - Combat turn counter for Elite abilities
-    abilityUsedThisCombat?: boolean; // v1.9.1 - Track if Elite ability already used
+  enemy: Enemy;
+  enemyHp: Stat;
+  playerTurn: boolean;
+  log: CombatLogEntry[];
+  revealedTactics: boolean;
+  availableTacticalActions: EnemyTactic[];
+  debuffs?: CombatDebuff[];
+  victory?: boolean;
+  biome?: string; // v1.9.1 - Current biome for environmental actions
+  environmentalBonusActive?: boolean; // v1.9.1 - Cover/hide bonus active
+  environmentalBonusTurns?: number; // v1.9.1 - Turns remaining for bonus
+  specialAmmoActive?: 'piercing' | 'incendiary' | 'hollow_point' | null; // v1.9.1 - Active special ammo type
+  specialAmmoRounds?: number; // v1.9.1 - Rounds remaining with special ammo
+  enemyBurning?: boolean; // v1.9.1 - Enemy on fire (incendiary ammo)
+  enemyBurningTurns?: number; // v1.9.1 - Turns remaining for burning
+  turnCount?: number; // v1.9.1 - Combat turn counter for Elite abilities
+  abilityUsedThisCombat?: boolean; // v1.9.1 - Track if Elite ability already used
 }
 
 
 // --- Store States ---
 export interface PlayerStatus {
-    isExitingWater: boolean;
+  isExitingWater: boolean;
 }
 
 export type PlayerCombatActionPayload =
@@ -543,7 +544,7 @@ export interface GameStoreState {
   damageFlash: boolean;
   wanderingTrader: WanderingTraderState | null;
   worldState: WorldState;
-  
+
   // Actions
   triggerDamageFlash: () => void;
   setGameState: (newState: GameState) => void;
@@ -583,13 +584,13 @@ export interface GameStoreState {
 // --- Character System ---
 export type AttributeName = 'for' | 'des' | 'cos' | 'int' | 'sag' | 'car';
 
-export type SkillName = 
+export type SkillName =
   | 'atletica' | 'acrobazia' | 'furtivita' | 'rapiditaDiMano'
   | 'arcanismo' | 'storia' | 'investigare' | 'natura' | 'religione'
   | 'addestrareAnimali' | 'intuizione' | 'medicina' | 'percezione' | 'sopravvivenza'
   | 'inganno' | 'intimidire' | 'persuasione' | 'spettacolo';
 
-export type PlayerStatusCondition = 
+export type PlayerStatusCondition =
   | 'FERITO'          // -2 skill fisiche
   | 'MALATO'          // -0.5 HP/ora
   | 'AVVELENATO'      // -2 HP/ora
@@ -612,7 +613,7 @@ export interface Attributes {
 export type CharacterAttributes = Attributes;
 
 export interface Skill {
-    proficient: boolean;
+  proficient: boolean;
 }
 
 export interface SkillDefinition {
@@ -629,22 +630,22 @@ export interface SkillCheckResult {
 }
 
 export interface Stat {
-    current: number;
-    max: number;
+  current: number;
+  max: number;
 }
 
 export interface XPState {
-    current: number;
-    next: number;
+  current: number;
+  next: number;
 }
 
 export interface InventoryItem {
-    itemId: string;
-    quantity: number;
-    durability?: {
-      current: number;
-      max: number;
-    };
+  itemId: string;
+  quantity: number;
+  durability?: {
+    current: number;
+    max: number;
+  };
 }
 
 export interface Alignment {
@@ -653,73 +654,73 @@ export interface Alignment {
 }
 
 export interface CharacterState {
-    level: number;
-    xp: XPState;
-    hp: Stat;
-    satiety: Stat;
-    hydration: Stat;
-    fatigue: Stat;
-    attributes: Attributes;
-    skills: Record<SkillName, Skill>;
-    inventory: InventoryItem[];
-    equippedWeapon: number | null; // Index in inventory array
-    equippedArmor: number | null;  // Index in inventory array (chest slot)
-    equippedHead: number | null;   // Index in inventory array
-    equippedLegs: number | null;   // Index in inventory array
-    alignment: Alignment;
-    status: Set<PlayerStatusCondition>;
-    levelUpPending: boolean;
-    knownRecipes: string[];
-    unlockedTalents: string[];
-    unlockedTrophies: Set<string>;
-    activeQuests: Record<string, number>; // questId -> currentStage
-    completedQuests: string[]; // Array for JSON serialization
-    loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
-    questKillCounts: Record<string, Record<string, number>>; // questId -> { enemyId -> count } (v1.8.3)
-    questFlags: Record<string, boolean>; // Quest achievement flags (v1.9.0)
+  level: number;
+  xp: XPState;
+  hp: Stat;
+  satiety: Stat;
+  hydration: Stat;
+  fatigue: Stat;
+  attributes: Attributes;
+  skills: Record<SkillName, Skill>;
+  inventory: InventoryItem[];
+  equippedWeapon: number | null; // Index in inventory array
+  equippedArmor: number | null;  // Index in inventory array (chest slot)
+  equippedHead: number | null;   // Index in inventory array
+  equippedLegs: number | null;   // Index in inventory array
+  alignment: Alignment;
+  status: Set<PlayerStatusCondition>;
+  levelUpPending: boolean;
+  knownRecipes: string[];
+  unlockedTalents: string[];
+  unlockedTrophies: Set<string>;
+  activeQuests: Record<string, number>; // questId -> currentStage
+  completedQuests: string[]; // Array for JSON serialization
+  loreArchive: string[]; // Array of unlocked lore entry IDs (v1.8.0)
+  questKillCounts: Record<string, Record<string, number>>; // questId -> { enemyId -> count } (v1.8.3)
+  questFlags: Record<string, boolean>; // Quest achievement flags (v1.9.0)
 
-    // Actions
-    initCharacter: () => void;
-    setAttributes: (newAttributes: Attributes) => void;
-    getAttributeModifier: (attribute: AttributeName) => number;
-    getSkillBonus: (skill: SkillName) => number;
-    performSkillCheck: (skill: SkillName, dc: number) => SkillCheckResult;
-    addXp: (amount: number) => void;
-    gainExplorationXp: () => void;
-    applyLevelUp: (choices: { attribute: AttributeName, talentId: string }) => void;
-    addItem: (itemId: string, quantity?: number) => void;
-    removeItem: (itemId: string, quantity?: number) => void;
-    discardItem: (inventoryIndex: number, quantity?: number) => void;
-    equipItem: (inventoryIndex: number) => void;
-    unequipItem: (slot: 'weapon' | 'armor' | 'head' | 'chest' | 'legs') => void;
-    damageEquippedItem: (slot: 'weapon' | 'armor', amount: number) => void;
-    repairItem: (inventoryIndex: number, amount: number) => void;
-    salvageItem: (inventoryIndex: number) => void;
-    takeDamage: (amount: number, cause?: DeathCause) => void;
-    updateSurvivalStats: (minutes: number, weather: WeatherType) => void;
-    calculateSurvivalCost: (minutes: number) => { satietyCost: number; hydrationCost: number };
-    heal: (amount: number) => void;
-    updateFatigue: (amount: number) => void;
-    rest: (amount: number) => void;
-    restoreSatiety: (amount: number) => void;
-    restoreHydration: (amount: number) => void;
-    changeAlignment: (type: 'lena' | 'elian', amount: number) => void;
-    addStatus: (newStatus: PlayerStatusCondition) => void;
-    removeStatus: (statusToRemove: PlayerStatusCondition) => void;
-    boostAttribute: (attribute: AttributeName, amount: number) => void;
-    learnRecipe: (recipeId: string) => void;
-    getPlayerAC: () => number;
-    getTotalWeight: () => number;
-    getMaxCarryWeight: () => number;
-    unlockTrophy: (trophyId: string) => void;
-    addLoreEntry: (entryId: string) => void;
-    upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => void;
-    setQuestFlag: (flagName: string, value: boolean) => void;
-    getQuestFlag: (flagName: string) => boolean;
-    // Save/Load System
-    restoreState: (state: Partial<CharacterState>) => void;
-    toJSON: () => object;
-    fromJSON: (json: any) => void;
+  // Actions
+  initCharacter: () => void;
+  setAttributes: (newAttributes: Attributes) => void;
+  getAttributeModifier: (attribute: AttributeName) => number;
+  getSkillBonus: (skill: SkillName) => number;
+  performSkillCheck: (skill: SkillName, dc: number) => SkillCheckResult;
+  addXp: (amount: number) => void;
+  gainExplorationXp: () => void;
+  applyLevelUp: (choices: { attribute: AttributeName, talentId: string }) => void;
+  addItem: (itemId: string, quantity?: number) => void;
+  removeItem: (itemId: string, quantity?: number) => void;
+  discardItem: (inventoryIndex: number, quantity?: number) => void;
+  equipItem: (inventoryIndex: number) => void;
+  unequipItem: (slot: 'weapon' | 'armor' | 'head' | 'chest' | 'legs') => void;
+  damageEquippedItem: (slot: 'weapon' | 'armor', amount: number) => void;
+  repairItem: (inventoryIndex: number, amount: number) => void;
+  salvageItem: (inventoryIndex: number) => void;
+  takeDamage: (amount: number, cause?: DeathCause) => void;
+  updateSurvivalStats: (minutes: number, weather: WeatherType) => void;
+  calculateSurvivalCost: (minutes: number) => { satietyCost: number; hydrationCost: number };
+  heal: (amount: number) => void;
+  updateFatigue: (amount: number) => void;
+  rest: (amount: number) => void;
+  restoreSatiety: (amount: number) => void;
+  restoreHydration: (amount: number) => void;
+  changeAlignment: (type: 'lena' | 'elian', amount: number) => void;
+  addStatus: (newStatus: PlayerStatusCondition) => void;
+  removeStatus: (statusToRemove: PlayerStatusCondition) => void;
+  boostAttribute: (attribute: AttributeName, amount: number) => void;
+  learnRecipe: (recipeId: string) => void;
+  getPlayerAC: () => number;
+  getTotalWeight: () => number;
+  getMaxCarryWeight: () => number;
+  unlockTrophy: (trophyId: string) => void;
+  addLoreEntry: (entryId: string) => void;
+  upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => void;
+  setQuestFlag: (flagName: string, value: boolean) => void;
+  getQuestFlag: (flagName: string) => boolean;
+  // Save/Load System
+  restoreState: (state: Partial<CharacterState>) => void;
+  toJSON: () => object;
+  fromJSON: (json: any) => void;
 }
 
 // --- Item System ---
@@ -727,31 +728,31 @@ export type ItemType = 'weapon' | 'armor' | 'consumable' | 'material' | 'quest' 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'quest';
 export type WeaponType = 'melee' | 'ranged' | 'thrown';
 export type ArmorSlot = 'head' | 'chest' | 'legs';
-export type ItemEffectType = 
-    | 'heal' | 'satiety' | 'hydration' | 'light' | 'trap' | 'container' 
-    | 'vision' | 'repair' | 'shelter' | 'random' | 'antirad' | 'power' 
-    | 'fishing' | 'smoke' | 'communication' | 'fire' | 'cureStatus';
+export type ItemEffectType =
+  | 'heal' | 'satiety' | 'hydration' | 'light' | 'trap' | 'container'
+  | 'vision' | 'repair' | 'shelter' | 'random' | 'antirad' | 'power'
+  | 'fishing' | 'smoke' | 'communication' | 'fire' | 'cureStatus';
 
 export interface ItemEffect {
-    type: ItemEffectType;
-    value: number | string;
+  type: ItemEffectType;
+  value: number | string;
 }
 
 export interface IItem {
-    id: string;
-    name: string;
-    description: string;
-    type: ItemType;
-    rarity: Rarity;
-    weight: number;
-    value: number;
-    stackable: boolean;
-    color: string;
-    damage?: number;
-    durability?: number; // Max durability
-    weaponType?: WeaponType;
-    defense?: number;
-    slot?: ArmorSlot;
-    effects?: ItemEffect[];
-    unlocksRecipe?: string;
+  id: string;
+  name: string;
+  description: string;
+  type: ItemType;
+  rarity: Rarity;
+  weight: number;
+  value: number;
+  stackable: boolean;
+  color: string;
+  damage?: number;
+  durability?: number; // Max durability
+  weaponType?: WeaponType;
+  defense?: number;
+  slot?: ArmorSlot;
+  effects?: ItemEffect[];
+  unlocksRecipe?: string;
 }

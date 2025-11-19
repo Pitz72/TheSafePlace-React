@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDialogueStore } from '../store/dialogueStore';
+import { useGameStore } from '../store/gameStore';
 import { useDialogueDatabaseStore } from '../data/dialogueDatabase';
 import { useCharacterStore } from '../store/characterStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
@@ -22,7 +23,7 @@ const DialogueScreen: React.FC = () => {
   const { activeDialogueId, currentNodeId, skillCheckResult } = useDialogueStore();
   const { dialogues } = useDialogueDatabaseStore();
   const { activeQuests, completedQuests, inventory, alignment } = useCharacterStore();
-  
+
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [fullText, setFullText] = useState('');
@@ -34,7 +35,7 @@ const DialogueScreen: React.FC = () => {
   // Typewriter effect
   useEffect(() => {
     if (!currentNode) return;
-    
+
     const text = currentNode.npcText;
     setFullText(text);
     setDisplayedText('');
@@ -59,27 +60,27 @@ const DialogueScreen: React.FC = () => {
   // Filter options based on show conditions
   const visibleOptions = useMemo(() => {
     if (!currentNode) return [];
-    
+
     return currentNode.options.filter(option => {
       if (!option.showCondition) return true;
-      
+
       const condition = option.showCondition;
-      
+
       // Check quest active condition
       if (condition.questActive && !activeQuests[condition.questActive]) {
         return false;
       }
-      
+
       // Check quest completed condition
       if (condition.questCompleted && !completedQuests.includes(condition.questCompleted)) {
         return false;
       }
-      
+
       // Check has item condition
       if (condition.hasItem && !inventory.some(i => i.itemId === condition.hasItem)) {
         return false;
       }
-      
+
       // Check alignment condition
       if (condition.alignment && condition.minAlignmentValue) {
         const alignmentValue = alignment[condition.alignment];
@@ -87,7 +88,16 @@ const DialogueScreen: React.FC = () => {
           return false;
         }
       }
-      
+
+      // Check game flags condition (v1.9.9)
+      if (condition.gameFlags && condition.gameFlags.length > 0) {
+        const { gameFlags } = useGameStore.getState();
+        const hasAllFlags = condition.gameFlags.every(flag => gameFlags.has(flag));
+        if (!hasAllFlags) {
+          return false;
+        }
+      }
+
       return true;
     });
   }, [currentNode, activeQuests, completedQuests, inventory, alignment]);
@@ -96,13 +106,13 @@ const DialogueScreen: React.FC = () => {
   const handleKeyPress = useCallback((key: string) => {
     // Don't allow input while typing or showing skill check result
     if (isTyping || skillCheckResult) return;
-    
+
     // ESC to exit dialogue
     if (key === 'Escape') {
       dialogueService.endDialogue();
       return;
     }
-    
+
     // Number keys 1-9 for options
     const numberMatch = key.match(/^[1-9]$/);
     if (numberMatch) {
@@ -111,7 +121,7 @@ const DialogueScreen: React.FC = () => {
         dialogueService.selectOption(optionIndex);
       }
     }
-    
+
     // SPACE to skip typewriter effect
     if (key === ' ' && isTyping) {
       setDisplayedText(fullText);
@@ -124,12 +134,12 @@ const DialogueScreen: React.FC = () => {
       'Escape': () => handleKeyPress('Escape'),
       ' ': () => handleKeyPress(' '),
     };
-    
+
     // Add number key handlers
     for (let i = 1; i <= 9; i++) {
       map[i.toString()] = () => handleKeyPress(i.toString());
     }
-    
+
     return map;
   }, [handleKeyPress]);
 
@@ -147,7 +157,7 @@ const DialogueScreen: React.FC = () => {
   return (
     <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
       <div className="w-full max-w-5xl border-8 border-double border-amber-600/50 flex flex-col p-8 bg-black/80">
-        
+
         {/* NPC Name Header */}
         <div className="text-center mb-6">
           <h1 className="text-6xl font-bold tracking-widest uppercase text-amber-500">
@@ -165,11 +175,10 @@ const DialogueScreen: React.FC = () => {
 
         {/* Skill Check Result Display */}
         {skillCheckResult && (
-          <div className={`mb-6 p-4 border-2 text-center text-3xl ${
-            skillCheckResult.success 
-              ? 'border-green-500 bg-green-950/30 text-green-400' 
-              : 'border-red-500 bg-red-950/30 text-red-400'
-          }`}>
+          <div className={`mb-6 p-4 border-2 text-center text-3xl ${skillCheckResult.success
+            ? 'border-green-500 bg-green-950/30 text-green-400'
+            : 'border-red-500 bg-red-950/30 text-red-400'
+            }`}>
             {skillCheckResult.text}
           </div>
         )}

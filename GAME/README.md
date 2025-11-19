@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.6)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,16 +92,64 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9** - The Great Debugging
+**Versione Corrente: v1.9.9.6** - Retro Vision
 
-**MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
+**MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (100%)**
 
-Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade.
+Con la versione 1.9.9.6, il progetto raggiunge la perfezione estetica con un overhaul grafico completo che omaggia i classici anni '80.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT)
 - Ulteriori omaggi ai donatori rimanenti (~20)
-- Testing finale end-to-end
+
+#### Novità v1.9.9.6 (19 Novembre 2025) - **RETRO VISION**
+
+Overhaul grafico completo per un'esperienza immersiva e autentica.
+
+**GRAFICA:**
+- **TILESET ULTIMA**: Nuova grafica vettoriale in stile C64
+  - Sostituisce ASCII con pixel art simbolica
+  - Icone distintive per ogni elemento di gioco
+- **CRT PREMIUM**: Effetti schermo realistici
+  - Curvatura 3D, Aberrazione Cromatica, Bloom
+  - Scanlines dinamiche e riflessi
+
+**UX:**
+- **NAVIGAZIONE**: Icone intuitive su Mappa e Bussola
+  - Identificazione immediata di Quest e Luoghi
+
+**IMPATTO:**
+- Atmosfera "Premium Retro"
+- Leggibilità massimizzata
+- Identità visiva unica
+
+---
+
+#### Novità v1.9.9.5 (19 Novembre 2025) - **THE FINAL POLISH**
+
+Patch finale di rifinitura che garantisce la completabilità al 100% e migliora la UX.
+
+**BUG FIX CRITICI:**
+- **QUEST ECHI**: Risolto blocco narrativo
+  - Fix: Aggiunto nodo dialogo mancante + logica gameFlags
+  - Impatto: Quest di collezione end-game ora completabile
+
+**MIGLIORAMENTI UX:**
+- **BUSSOLA ICONICA**: Nuove icone distintive
+  - ★ Quest Principale, ! Quest Secondaria, ⌂ Luoghi, ☻ Trader
+  - Impatto: Orientamento immediato e intuitivo
+
+**STABILITÀ:**
+- **VALIDAZIONE DATI**: Script automatico `validateGameData.ts`
+  - Verifica integrità Quest/Dialoghi/Mappa
+  - Garantisce zero errori referenziali
+
+**IMPATTO:**
+- Esperienza di gioco fluida e senza vicoli ciechi
+- Navigazione moderna in estetica retro
+- Certezza tecnica assoluta
+
+---
 
 #### Novità v1.9.9 (13 Novembre 2025) - **THE GREAT DEBUGGING**
 

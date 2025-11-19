@@ -74,7 +74,7 @@ export const dialogueService = {
     const stateToReturn = returnState || (currentState === GameState.OUTPOST ? GameState.OUTPOST : GameState.IN_GAME);
     setActiveDialogue(dialogueId, dialogue.startNodeId, stateToReturn);
     setGameState(GameState.DIALOGUE);
-    
+
     audioManager.playSound('confirm');
     console.log(`[DIALOGUE SERVICE] ✅ Started dialogue: ${dialogueId} (${dialogue.npcName})`);
   },
@@ -139,7 +139,7 @@ export const dialogueService = {
 
     audioManager.playSound('confirm');
     const consequence = selectedOption.consequence;
-    
+
     // v1.9.9 - Log consequence type
     console.log(`[DIALOGUE] Consequence type: ${consequence.type}`, consequence.value);
 
@@ -149,7 +149,7 @@ export const dialogueService = {
         const targetNodeId = consequence.value as string;
         console.log(`[DIALOGUE] → Jump to node: ${targetNodeId}`);
         setCurrentNode(targetNodeId);
-        
+
         // Check quest triggers after dialogue node (v1.8.0)
         questService.checkQuestTriggers(undefined, targetNodeId);
         break;
@@ -223,21 +223,34 @@ export const dialogueService = {
       case 'takeItem': {
         const { itemId, quantity } = consequence.value as { itemId: string; quantity: number };
         removeItem(itemId, quantity);
-        
+
         // Special handling for Anya's Eurocenter card
         if (itemId === 'eurocenter_business_card') {
           // Mark echo as delivered
           useGameStore.setState(state => ({
             gameFlags: new Set(state.gameFlags).add('ANYA_ECHO_EUROCENTER')
           }));
-          
+
           addJournalEntry({
             text: `Hai consegnato il biglietto da visita ad Anya.`,
             type: JournalEntryType.NARRATIVE
           });
-          
+
           // Jump to reward node
           setCurrentNode('anya_after_eurocenter');
+        } else if (itemId === 'captains_last_broadcast') {
+          // Mark echo as delivered
+          useGameStore.setState(state => ({
+            gameFlags: new Set(state.gameFlags).add('ANYA_ECHO_CAPTAINS_BROADCAST')
+          }));
+
+          addJournalEntry({
+            text: `Hai consegnato la registrazione ad Anya.`,
+            type: JournalEntryType.NARRATIVE
+          });
+
+          // Jump to reward node
+          setCurrentNode('anya_after_broadcast');
         } else {
           addJournalEntry({
             text: `Hai dato un oggetto.`,
@@ -266,14 +279,14 @@ export const dialogueService = {
 
       case 'completeQuest': {
         const questId = consequence.value as string;
-        
+
         // Special handling for crossroads_investigation - give weapon choice
         if (questId === 'crossroads_investigation') {
           // Determine which weapon based on current node
           const weaponId = currentNodeId === 'marcus_investigation_complete'
             ? (optionIndex === 0 ? 'weapon_sharp_dagger' : 'weapon_makeshift_bow')
             : null;
-          
+
           if (weaponId) {
             addItem(weaponId, 1);
             const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
@@ -284,7 +297,7 @@ export const dialogueService = {
             });
           }
         }
-        
+
         questService.completeQuest(questId);
         // End dialogue after quest completion
         setTimeout(() => {
@@ -300,7 +313,7 @@ export const dialogueService = {
         const newActiveQuests = { ...activeQuests };
         delete newActiveQuests[questId];
         useCharacterStore.setState({ activeQuests: newActiveQuests });
-        
+
         addJournalEntry({
           text: `[MISSIONE FALLITA] La quest è stata abbandonata.`,
           type: JournalEntryType.SYSTEM_WARNING,
@@ -313,16 +326,16 @@ export const dialogueService = {
         const recipeId = consequence.value as string;
         const { learnRecipe } = useCharacterStore.getState();
         learnRecipe(recipeId);
-        
+
         // Mark echo as delivered
         const echoFlag = `ANYA_ECHO_PIXELDEBH`;
         useGameStore.setState(state => ({
           gameFlags: new Set(state.gameFlags).add(echoFlag)
         }));
-        
+
         // Remove the item from inventory
         removeItem('pixeldebh_plate', 1);
-        
+
         // End dialogue after reward
         setTimeout(() => {
           dialogueService.endDialogue();
@@ -336,13 +349,13 @@ export const dialogueService = {
           defenseBonus: number;
           statusResistance?: string;
         };
-        
+
         const { upgradeEquippedArmor } = useCharacterStore.getState();
-        
+
         // Determine which echo item to remove
         let echoFlag = '';
         let itemToRemove = '';
-        
+
         if (slot === 'chest') {
           echoFlag = 'ANYA_ECHO_DRONE_CHIP';
           itemToRemove = 'drone_memory_chip';
@@ -350,18 +363,18 @@ export const dialogueService = {
           echoFlag = 'ANYA_ECHO_PROJECT_REBIRTH';
           itemToRemove = 'research_notes_rebirth';
         }
-        
+
         // Upgrade the armor
         upgradeEquippedArmor(slot, defenseBonus);
-        
+
         // Mark echo as delivered
         useGameStore.setState(state => ({
           gameFlags: new Set(state.gameFlags).add(echoFlag)
         }));
-        
+
         // Remove the echo item
         removeItem(itemToRemove, 1);
-        
+
         // End dialogue after upgrade
         setTimeout(() => {
           dialogueService.endDialogue();
@@ -371,25 +384,25 @@ export const dialogueService = {
 
       case 'revealMapPOI': {
         const { x, y, name } = consequence.value as { x: number; y: number; name: string };
-        
+
         // Mark echo as delivered
         const echoFlag = 'ANYA_ECHO_CRYPTIC_RECORDING';
         useGameStore.setState(state => ({
           gameFlags: new Set(state.gameFlags).add(echoFlag)
         }));
-        
+
         // Remove the item
         removeItem('cryptic_recording', 1);
-        
+
         addJournalEntry({
           text: `[SCOPERTA] ${name} rivelato alle coordinate (${x}, ${y})!`,
           type: JournalEntryType.XP_GAIN,
           color: '#38bdf8' // cyan-400
         });
-        
+
         // Add XP for discovery
         addXp(75);
-        
+
         // End dialogue after reveal
         setTimeout(() => {
           dialogueService.endDialogue();
@@ -420,7 +433,7 @@ export const dialogueService = {
     reset();
     setGameState(targetState);
     audioManager.playSound('cancel');
-    
+
     console.log('[DIALOGUE SERVICE] ✅ Dialogue ended');
   },
 };

@@ -490,6 +490,23 @@
             "consequence": {
               "type": "endDialogue"
             }
+          },
+          {
+            "text": "[QUEST] Ho trovato tutti gli Echi.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_all_echoes_delivered"
+            },
+            "showCondition": {
+              "gameFlags": [
+                "ANYA_ECHO_PIXELDEBH",
+                "ANYA_ECHO_DRONE_CHIP",
+                "ANYA_ECHO_CRYPTIC_RECORDING",
+                "ANYA_ECHO_PROJECT_REBIRTH",
+                "ANYA_ECHO_EUROCENTER",
+                "ANYA_ECHO_CAPTAINS_BROADCAST"
+              ]
+            }
           }
         ]
       },
@@ -584,6 +601,23 @@
             "text": "Non ora. Addio.",
             "consequence": {
               "type": "endDialogue"
+            }
+          },
+          {
+            "text": "[QUEST] Ho trovato tutti gli Echi.",
+            "consequence": {
+              "type": "jumpToNode",
+              "value": "anya_all_echoes_delivered"
+            },
+            "showCondition": {
+              "gameFlags": [
+                "ANYA_ECHO_PIXELDEBH",
+                "ANYA_ECHO_DRONE_CHIP",
+                "ANYA_ECHO_CRYPTIC_RECORDING",
+                "ANYA_ECHO_PROJECT_REBIRTH",
+                "ANYA_ECHO_EUROCENTER",
+                "ANYA_ECHO_CAPTAINS_BROADCAST"
+              ]
             }
           }
         ]
@@ -707,6 +741,19 @@
             "consequence": {
               "type": "upgradeArmor",
               "value": { "slot": "head", "defenseBonus": 2 }
+            }
+          }
+        ]
+      },
+      "anya_all_echoes_delivered": {
+        "id": "anya_all_echoes_delivered",
+        "npcText": "Hai... hai trovato tutto? (Anya guarda la collezione completa di artefatti, visibilmente commossa). Non pensavo fosse possibile. Questi frammenti... insieme raccontano la storia di come il mondo è finito, ma anche di come ha cercato di salvarsi. Grazie, viaggiatore. La tua dedizione merita una ricompensa speciale. Ho modificato i miei schemi basandomi su questi dati. Ora sei più forte, più saggio.",
+        "options": [
+          {
+            "text": "È stato un lungo viaggio.",
+            "consequence": {
+              "type": "completeQuest",
+              "value": "collect_world_echoes"
             }
           }
         ]

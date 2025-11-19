@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
-import { TILESET_SRC, TILE_MAP, TILE_SIZE as BASE_TILE_SIZE } from '../assets/tileset';
+import { TILESET_SRC, TILE_MAP, TILE_SIZE as BASE_TILE_SIZE } from '../assets/tileset_ultima';
 import { getActiveQuestMarkers } from '../services/questService';
 
 const CanvasMap: React.FC = () => {
@@ -71,29 +71,29 @@ const CanvasMap: React.FC = () => {
                         tilesetImage,
                         tile.x, tile.y,
                         BASE_TILE_SIZE, BASE_TILE_SIZE,
-                        screenX, screenY, 
+                        screenX, screenY,
                         Math.ceil(tileSize), Math.ceil(tileSize)
                     );
                 }
             }
         }
-        
+
         // Render quest markers (after terrain, before player)
         const questMarkers = getActiveQuestMarkers();
         questMarkers.forEach(marker => {
             const { pos, type } = marker;
-            
+
             // Only render if marker is in viewport
             if (pos.x >= startCol && pos.x < endCol &&
                 pos.y >= startRow && pos.y < endRow) {
-                
+
                 // Choose marker tile based on quest type
                 const markerTileKey = type === 'MAIN' ? '!M' : '!S';
                 const markerTile = TILE_MAP[markerTileKey];
-                
+
                 const screenX = Math.round((pos.x - cameraX) * tileSize);
                 const screenY = Math.round((pos.y - cameraY) * tileSize);
-                
+
                 ctx.drawImage(
                     tilesetImage,
                     markerTile.x, markerTile.y,
@@ -103,19 +103,19 @@ const CanvasMap: React.FC = () => {
                 );
             }
         });
-        
+
         // Render Wandering Trader (v1.6.0) - after markers, before player
         if (wanderingTrader) {
             const { position } = wanderingTrader;
-            
+
             // Only render if trader is in viewport
             if (position.x >= startCol && position.x < endCol &&
                 position.y >= startRow && position.y < endRow) {
-                
+
                 const traderTile = TILE_MAP['T'];
                 const screenX = Math.round((position.x - cameraX) * tileSize);
                 const screenY = Math.round((position.y - cameraY) * tileSize);
-                
+
                 ctx.drawImage(
                     tilesetImage,
                     traderTile.x, traderTile.y,
@@ -125,22 +125,22 @@ const CanvasMap: React.FC = () => {
                 );
             }
         }
-        
+
         // Render player (always on top)
         const playerScreenX = Math.round((playerPos.x - cameraX) * tileSize);
         const playerScreenY = Math.round((playerPos.y - cameraY) * tileSize);
         const playerTile = TILE_MAP['@'];
-        
+
         ctx.drawImage(
             tilesetImage,
             playerTile.x, playerTile.y,
             BASE_TILE_SIZE, BASE_TILE_SIZE,
-            playerScreenX, playerScreenY, 
+            playerScreenX, playerScreenY,
             Math.ceil(tileSize), Math.ceil(tileSize)
         );
 
     }, [map, playerPos, wanderingTrader, activeQuests, tilesetImage]);
-    
+
     // Store the latest renderMap function in a ref
     useEffect(() => {
         renderMapRef.current = renderMap;
@@ -152,7 +152,7 @@ const CanvasMap: React.FC = () => {
         if (!canvas) return;
         const container = canvas.parentElement;
         if (!container) return;
-        
+
         const resizeObserver = new ResizeObserver(entries => {
             // Defer this logic to the next animation frame to avoid resize loops.
             window.requestAnimationFrame(() => {
@@ -168,7 +168,7 @@ const CanvasMap: React.FC = () => {
                 }
             });
         });
-        
+
         resizeObserver.observe(container);
 
         // Disconnect observer on cleanup.

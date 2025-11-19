@@ -22,7 +22,7 @@ import { Position } from '../types';
  * - East border: POI to the east
  * - West border: POI to the west
  * 
- * Format: "↑ Nome (25t)" where 25t = distance in tiles
+ * Format: "↑ [ICON] Nome (25t)" where 25t = distance in tiles
  * 
  * @version 1.9.9
  */
@@ -32,6 +32,7 @@ interface POI {
   position: Position;
   color: string;
   priority: number; // Higher = more important
+  icon: string; // v1.9.9 - Distinctive icon
 }
 
 export const CompassRose: React.FC = () => {
@@ -50,18 +51,19 @@ export const CompassRose: React.FC = () => {
         name: marker.type === 'MAIN' ? 'QUEST PRINCIPALE' : 'Quest',
         position: marker.pos,
         color: marker.type === 'MAIN' ? '#ef4444' : '#facc15',
-        priority: marker.type === 'MAIN' ? 100 : 80
+        priority: marker.type === 'MAIN' ? 100 : 80,
+        icon: marker.type === 'MAIN' ? '★' : '!'
       });
     });
 
     // Special locations (scan map for tiles)
-    const specialTiles: Record<string, { name: string; color: string; priority: number }> = {
-      'A': { name: 'Crocevia', color: '#f59e0b', priority: 70 },
-      'H': { name: 'Capanna Erborista', color: '#4ade80', priority: 65 },
-      'B': { name: 'Biblioteca', color: '#9f1239', priority: 60 },
-      'L': { name: 'Laboratorio', color: '#0891b2', priority: 60 },
-      'N': { name: 'Nido Cenere', color: '#7e22ce', priority: 50 },
-      'E': { name: 'DESTINAZIONE', color: '#dc2626', priority: 90 }
+    const specialTiles: Record<string, { name: string; color: string; priority: number; icon: string }> = {
+      'A': { name: 'Crocevia', color: '#f59e0b', priority: 70, icon: '⌂' },
+      'H': { name: 'Capanna Erborista', color: '#4ade80', priority: 65, icon: '♣' },
+      'B': { name: 'Biblioteca', color: '#9f1239', priority: 60, icon: '📖' },
+      'L': { name: 'Laboratorio', color: '#0891b2', priority: 60, icon: '⚡' },
+      'N': { name: 'Nido Cenere', color: '#7e22ce', priority: 50, icon: '☠' },
+      'E': { name: 'DESTINAZIONE', color: '#dc2626', priority: 90, icon: '🏁' }
     };
 
     // Scan map for special tiles
@@ -73,7 +75,8 @@ export const CompassRose: React.FC = () => {
             name: specialTiles[tile].name,
             position: { x, y },
             color: specialTiles[tile].color,
-            priority: specialTiles[tile].priority
+            priority: specialTiles[tile].priority,
+            icon: specialTiles[tile].icon
           });
         }
       }
@@ -85,7 +88,8 @@ export const CompassRose: React.FC = () => {
         name: 'Commerciante',
         position: wanderingTrader.position,
         color: '#facc15',
-        priority: 75
+        priority: 75,
+        icon: '☻'
       });
     }
 
@@ -96,7 +100,7 @@ export const CompassRose: React.FC = () => {
   const getDirection = (poi: POI): 'north' | 'south' | 'east' | 'west' | null => {
     const dx = poi.position.x - playerPos.x;
     const dy = poi.position.y - playerPos.y;
-    
+
     // If very close (within 3 tiles), don't show
     const distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < 3) return null;
@@ -149,10 +153,12 @@ export const CompassRose: React.FC = () => {
     return (
       <div
         key={`${poi.name}-${poi.position.x}-${poi.position.y}`}
-        className="text-xs whitespace-nowrap"
+        className="text-xs whitespace-nowrap flex items-center gap-1"
         style={{ color: poi.color }}
       >
-        {arrow} {poi.name} ({distance}t)
+        <span>{arrow}</span>
+        <span className="text-base">{poi.icon}</span>
+        <span>{poi.name} ({distance}t)</span>
       </div>
     );
   };

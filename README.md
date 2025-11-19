@@ -31,7 +31,8 @@ Il cuore del progetto, un'avventura testuale con elementi GDR sviluppata per il 
 -   **Linguaggio**: [TypeScript](https://www.typescriptlang.org/) (`v5.8.2`)
 -   **Build Tool**: [Vite](https://vitejs.dev/) (`v6.2.0`)
 -   **State Management**: [Zustand](https://github.com/pmndrs/zustand) (`v5.0.8`)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/) (`v4.1.14`)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/) (`v4.1.14`) + **Custom CRT Shaders**
+-   **Graphics**: **Custom SVG Tileset** (Ultima IV/V Style)
 -   **Testing**: [Vitest](https://vitest.dev/) e [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
 ### Struttura del Progetto `GAME/`
