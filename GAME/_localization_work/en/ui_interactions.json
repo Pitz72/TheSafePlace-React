@@ -1,0 +1,82 @@
+{
+    "EVENT_SCREEN": {
+        "TITLE_PREFIX": "═══",
+        "TITLE_SUFFIX": "═══",
+        "OUTCOME_TITLE": "OUTCOME",
+        "CHOICE_REQUIREMENT": "(Requires: {item} x{quantity})",
+        "PROMPT_CHOICE": "[W/S / ↑↓] Select | [ENTER] Confirm Choice",
+        "PROMPT_RESOLUTION": "[W/S / ↑↓] Scroll | [ENTER] Continue"
+    },
+    "DIALOGUE_SCREEN": {
+        "ERROR_NOT_FOUND": "Error: Dialogue not found",
+        "TITLE_PREFIX": "═══",
+        "TITLE_SUFFIX": "═══",
+        "PROMPT_TYPING": "[SPACE] Skip animation",
+        "PROMPT_WAITING": "Waiting...",
+        "PROMPT_CHOICE": "[1-9] Select option | [ESC] End dialogue"
+    },
+    "TRADE_SCREEN": {
+        "ERROR_NOT_FOUND": "Error: Trader not found",
+        "TITLE": "═══ TRADE WITH {name} ═══",
+        "SUBTITLE": "Markup: {markup}% | Barter System",
+        "PLAYER_INVENTORY_TITLE": "YOUR INVENTORY",
+        "TRADER_INVENTORY_TITLE": "{name}'S INVENTORY",
+        "PLAYER_OFFER_TITLE": "YOUR OFFER",
+        "TRADER_OFFER_TITLE": "THEIR OFFER",
+        "EMPTY": "Empty",
+        "TOTAL": "Total: {value}v",
+        "QUANTITY_INDICATOR": "[Qty: {quantity}]",
+        "BALANCE": "BALANCE: {sign}{value} Value",
+        "INSUFFICIENT_OFFER": "Insufficient offer!",
+        "VALID_TRADE": "Valid trade - Press ENTER",
+        "PROMPT": "[W/S / ↑↓] Navigate | [A/D / ←→] Quantity | [Q/E / TAB] Switch Panel | [SPACE] Add/Remove | [ENTER] Confirm | [ESC] Cancel"
+    },
+    "CRAFTING_SCREEN": {
+        "TITLE": "═══ WORKBENCH ═══",
+        "NO_RECIPES": "-- No Known Recipes --",
+        "SELECT_PROMPT": "Select a recipe to see details.",
+        "DETAILS": {
+            "SKILL_REQUIRED": "Skill Required",
+            "TIME_REQUIRED": "Time Required",
+            "INGREDIENTS": "Ingredients:",
+            "NO_INGREDIENTS": "No ingredients",
+            "RESULT": "Result:",
+            "NO_RESULT": "No result"
+        },
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Craft | [ESC] Close"
+    },
+    "REFUGE_SCREEN": {
+        "TITLE": "═══ SHELTER ═══",
+        "DESCRIPTION": "You are safe. The outside world awaits. What do you want to do?",
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Confirm"
+    },
+    "OUTPOST_SCREEN": {
+        "TITLE": "═══ THE CROSSROADS ═══",
+        "DESCRIPTION": "You have arrived at The Crossroads. It's not much: a handful of rusty containers and patched tents arranged in a circle around a smoking fire. Yet, it is the first place in weeks that smells of humanity and not decay. Some survivors watch you warily as you approach.",
+        "ACTIONS": {
+            "TALK_MARCUS": "Talk to Marcus (the merchant)",
+            "TALK_ANYA": "Talk to Anya (the technician)",
+            "TALK_SILAS": "Talk to Silas (the hunter)",
+            "TRADE": "Trade",
+            "REST": "Rest in a safe place (8 hours)",
+            "LEAVE": "Leave the Outpost"
+        },
+        "MESSAGES": {
+            "REST_INSUFFICIENT": "You don't have enough resources to rest. Required: {food} food, {water} water.",
+            "REST_SUCCESS": "You rested for {hours} hours. Recovered {hp} HP and you feel much less tired."
+        },
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Confirm | [ESC] Leave"
+    },
+    "QUEST_SCREEN": {
+        "TITLE": "═══ QUEST LOG ═══",
+        "MAIN_QUESTS": "MAIN QUESTS",
+        "SUB_QUESTS": "SIDE QUESTS",
+        "LORE_ARCHIVE": "LORE ARCHIVE",
+        "COMPLETED": "COMPLETED",
+        "NO_MAIN_ACTIVE": "-- No active main quests --",
+        "NO_SUB_ACTIVE": "-- No active side quests --",
+        "NO_LORE": "-- No discoveries yet --",
+        "UNKNOWN_OBJECTIVE": "Unknown objective",
+        "PROMPT": "[ESC] Close | [J] Close"
+    }
+}

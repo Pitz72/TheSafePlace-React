@@ -1,0 +1,763 @@
+[
+    {
+        "id": "MQ_THE_ECHO_OF_THE_JOURNEY",
+        "title": "The Echo of the Journey",
+        "type": "MAIN",
+        "startText": "Your father's letter is a weight in your heart and in your pocket. His last instruction is clear: survive and reach the Safe Place, to the East.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Follow your father's map East, to the place marked as 'The Safe Place'.",
+                "trigger": {
+                    "type": "mainStoryComplete",
+                    "value": 2
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "PROOF: Prove you learned the lesson about water. Purify some water to survive.",
+                "trigger": {
+                    "type": "craftItem",
+                    "value": "CONS_002"
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "Continue your journey East.",
+                "trigger": {
+                    "type": "mainStoryComplete",
+                    "value": 3
+                }
+            },
+            {
+                "stage": 4,
+                "objective": "PROOF: Prove you know when not to fight. Successfully flee from a fight.",
+                "trigger": {
+                    "type": "successfulFlee"
+                }
+            },
+            {
+                "stage": 5,
+                "objective": "The road is still long. Continue towards the Safe Place.",
+                "trigger": {
+                    "type": "mainStoryComplete",
+                    "value": 6
+                }
+            },
+            {
+                "stage": 6,
+                "objective": "PROOF: Study your enemy. Discover a tactical weakness of an opponent.",
+                "trigger": {
+                    "type": "tacticRevealed"
+                }
+            },
+            {
+                "stage": 7,
+                "objective": "You have learned the lessons. Now reach the Safe Place and confront the truth.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 149,
+                        "y": 146
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 1000
+        }
+    },
+    {
+        "id": "find_jonas_talisman",
+        "title": "The Message of the River",
+        "type": "SUB",
+        "startText": "The message in the bottle speaks of a lost lucky talisman near an old windmill. Its owner, Jonas, hopes it can bring luck to whoever finds it.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find the old windmill mentioned in the message.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 78,
+                        "y": 9
+                    }
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Search for Jonas's talisman near the mill.",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "jonas_talisman"
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "The talisman has strange engravings. Maybe someone at the Crossroads knows what they mean.",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "marcus_talisman_knowledge"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 250,
+            "items": [
+                {
+                    "itemId": "manual_advanced_trap",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "repair_water_pump",
+        "title": "The Silent Pump",
+        "type": "SUB",
+        "startText": "This pump could become a reliable water source for my travels in this area. I need to find the necessary materials to attempt a repair.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Collect materials: 1× Rubber Gasket, 2× Scrap Metal",
+                "trigger": {
+                    "type": "hasItems",
+                    "value": [
+                        {
+                            "itemId": "rubber_gasket",
+                            "quantity": 1
+                        },
+                        {
+                            "itemId": "scrap_metal",
+                            "quantity": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Return to the Broken Pump to attempt the repair",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 45,
+                        "y": 85
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 200
+        }
+    },
+    {
+        "id": "crossroads_investigation",
+        "title": "Crossroads Investigation",
+        "type": "SUB",
+        "startText": "Marcus is looking for a stolen watch. The thief is hiding in the forests north of the Crossroads. I must find him and recover the watch.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Talk to Marcus at 'The Crossroads' Outpost for more details",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "marcus_investigation_start"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Find the raider's camp in the forests north of the Crossroads",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 95,
+                        "y": 50
+                    }
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "Recover the pocket watch",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "old_watch"
+                }
+            },
+            {
+                "stage": 4,
+                "objective": "Return the watch to Marcus at the Crossroads",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "marcus_investigation_complete"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 300
+        }
+    },
+    {
+        "id": "lore_quest_library",
+        "title": "Lost Knowledge",
+        "type": "SUB",
+        "startText": "You discovered secrets of Project Echo in the ancient library.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Explore the Library and discover Project Echo",
+                "trigger": {
+                    "type": "completeEvent",
+                    "value": "unique_ancient_library"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 150,
+            "statBoost": {
+                "stat": "int",
+                "amount": 1
+            }
+        }
+    },
+    {
+        "id": "lore_quest_laboratory",
+        "title": "The Echo of Silence",
+        "type": "SUB",
+        "startText": "You discovered secrets of Project Rebirth in the abandoned laboratory.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Explore the Laboratory and discover Project Rebirth",
+                "trigger": {
+                    "type": "completeEvent",
+                    "value": "unique_scientist_notes"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 150,
+            "statBoost": {
+                "stat": "int",
+                "amount": 1
+            }
+        }
+    },
+    {
+        "id": "deliver_last_message",
+        "title": "The Last Messenger",
+        "type": "SUB",
+        "startText": "You found a sealed package on the body of a fallen messenger. It is addressed to an 'outpost to the north'. Honoring his last task might be the right thing to do... and might earn you a reward.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find the outpost to the north mentioned in the delivery order.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 41,
+                        "y": 39
+                    }
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Talk to Marcus at the Crossroads and deliver the package.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "marcus_dialogue_delivery"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 250,
+            "items": [
+                {
+                    "itemId": "compass",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "decipher_drone_data",
+        "title": "The Eye in the Sky",
+        "type": "SUB",
+        "startText": "You recovered the memory chip from a surveillance drone. It contains encrypted data. Perhaps a working terminal, like the one in a police station, could read it.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find a police station with a working terminal.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "police_terminal_interaction"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 300
+        }
+    },
+    {
+        "id": "find_elara",
+        "title": "The Survivor's Debt",
+        "type": "SUB",
+        "startText": "You saved a man named Liam. His daughter, Elara, hid in the ruined school during the collapse. You must find her and bring her to safety at the Crossroads.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Search for Elara in the ruined school in the city.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 70,
+                        "y": 95
+                    }
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "You found Elara. Escort her to 'The Crossroads' Outpost.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 41,
+                        "y": 39
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 400,
+            "items": [
+                {
+                    "itemId": "tool_repair_kit_advanced",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "find_family_treasure",
+        "title": "The Child's Promise",
+        "type": "SUB",
+        "startText": "A child you helped told you about a family treasure, hidden under an 'iron tower where voices run fast'. You must find this place.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find and investigate the Radio Tower.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "radio_tower_search_treasure"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 200,
+            "items": [
+                {
+                    "itemId": "silver_locket",
+                    "quantity": 1
+                },
+                {
+                    "itemId": "first_aid_kit",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "check_on_alenkos",
+        "title": "The Weight of Choice",
+        "type": "SUB",
+        "startText": "You helped the Alenko family, heading to the Crossroads. You promised to check on them if you passed by there.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Ask about them to Marcus, at the Crossroads.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "marcus_dialogue_alenkos"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 100
+        }
+    },
+    {
+        "id": "collect_world_echoes",
+        "title": "Echoes of the Lost World",
+        "type": "SUB",
+        "startText": "Anya, the technician at the Crossroads, is looking for rare technological artifacts and fragments of knowledge from the pre-catastrophe world. Bringing her these 'Echoes' could unlock unique rewards.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find Echoes of the lost world and bring them to Anya at the Crossroads. (Progress tracked via dialogues)",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "anya_all_echoes_delivered"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 500,
+            "statBoost": {
+                "stat": "int",
+                "amount": 2
+            }
+        }
+    },
+    {
+        "id": "signs_of_ash",
+        "title": "Signs of Ash",
+        "type": "SUB",
+        "startText": "You found the journal of a 'Listener' who studied the Ash Angels. The text is in code, but it speaks of two other 'places of power' needed to complete a 'shielding ritual'. Perhaps these places can reveal more.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find the other two ritual sites mentioned in the journal. (0/2 found)",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "visited_all_ritual_sites"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "You have gathered all the clues, but the journal is still incomprehensible. Maybe someone wiser can help you.",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "hermit_deciphers_journal"
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "The hermit needs rare herbs to help you. Gather 3× Healing Herbs and 5× Edible Mushrooms.",
+                "trigger": {
+                    "type": "hasItems",
+                    "value": [
+                        {
+                            "itemId": "MED_HEALING_HERBS",
+                            "quantity": 3
+                        },
+                        {
+                            "itemId": "edible_mushrooms",
+                            "quantity": 5
+                        }
+                    ]
+                }
+            },
+            {
+                "stage": 4,
+                "objective": "Bring the herbs to the hermit for the final deciphering.",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "hermit_receives_herbs"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 500,
+            "items": [
+                {
+                    "itemId": "manual_sonic_dissuader",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "bounty_kill_boars",
+        "title": "Bounty: Boar Scourge",
+        "type": "SUB",
+        "isBounty": true,
+        "startText": "Silas asked you to eliminate some aggressive boars threatening the paths near the Crossroads. They are dangerous and unpredictable.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Kill 3 Aggressive Boars. (Progress tracked automatically)",
+                "trigger": {
+                    "type": "enemyDefeated",
+                    "value": {
+                        "enemyId": "aggressive_boar",
+                        "quantity": 3
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 350,
+            "items": [
+                {
+                    "itemId": "AMMO_12G",
+                    "quantity": 15
+                },
+                {
+                    "itemId": "animal_hide",
+                    "quantity": 5
+                }
+            ]
+        }
+    },
+    {
+        "id": "bounty_kill_wolves",
+        "title": "Bounty: Wolf Pack",
+        "type": "SUB",
+        "isBounty": true,
+        "startText": "Silas tasked you with eliminating a pack of mutated wolves attacking travelers in the surrounding forests.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Kill 4 Mutated Wolves. (Progress tracked automatically)",
+                "trigger": {
+                    "type": "enemyDefeated",
+                    "value": {
+                        "enemyId": "mutated_wolf",
+                        "quantity": 4
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 400,
+            "items": [
+                {
+                    "itemId": "ammo_arrow",
+                    "quantity": 20
+                },
+                {
+                    "itemId": "animal_hide",
+                    "quantity": 6
+                }
+            ]
+        }
+    },
+    {
+        "id": "bounty_kill_raiders",
+        "title": "Bounty: Armed Raiders",
+        "type": "SUB",
+        "isBounty": true,
+        "startText": "Silas asked you to eliminate some armed raiders terrorizing the nearby areas. They are dangerous and well-equipped.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Kill 5 Armed Raiders. (Progress tracked automatically)",
+                "trigger": {
+                    "type": "enemyDefeated",
+                    "value": {
+                        "enemyId": "armed_raider",
+                        "quantity": 5
+                    }
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 500,
+            "items": [
+                {
+                    "itemId": "AMMO_9MM",
+                    "quantity": 30
+                },
+                {
+                    "itemId": "first_aid_kit",
+                    "quantity": 2
+                }
+            ]
+        }
+    },
+    {
+        "id": "broken_melody",
+        "title": "The Broken Melody",
+        "type": "SUB",
+        "startText": "This piano is an incredible relic of the past world. The keys are intact, but the sound is terribly out of tune. With the right tools, maybe you could try to tune it and hear a real melody again.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find Precision Tools to tune the piano.",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "precision_tools"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Return to the Ruined Theater and tune the piano.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "piano_tuning_complete"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 200,
+            "statBoost": {
+                "stat": "car",
+                "amount": 1
+            }
+        }
+    },
+    {
+        "id": "tower_of_light",
+        "title": "The Light in the Tower",
+        "type": "SUB",
+        "startText": "This radio tower's console is in pieces, but the main wiring and antenna seem intact. With high-quality components, you might be able to reactivate the emergency signal. It could be a way to find out if there is anyone else out there.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Recover the necessary components: 3× Military Grade Electronics, 1× Portable Generator.",
+                "trigger": {
+                    "type": "hasItems",
+                    "value": [
+                        {
+                            "itemId": "military_grade_electronics",
+                            "quantity": 3
+                        },
+                        {
+                            "itemId": "portable_generator",
+                            "quantity": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Return to a radio tower to install the components.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "radio_tower_repair_complete"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 600,
+            "items": [
+                {
+                    "itemId": "walkie_talkie",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "id": "water_of_life",
+        "title": "The Water of Life",
+        "type": "SUB",
+        "startText": "This purification plant is largely intact, but the main generator and filtration system are offline. Reactivating it could provide clean water to this whole part of the city.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find a Maintenance Manual for hydraulic systems.",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "hydraulic_manual"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Recover 3 Industrial Filters.",
+                "trigger": {
+                    "type": "hasItems",
+                    "value": [
+                        {
+                            "itemId": "industrial_filter",
+                            "quantity": 3
+                        }
+                    ]
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "Find a Heavy Vehicle Battery to restart the generator.",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "vehicle_battery"
+                }
+            },
+            {
+                "stage": 4,
+                "objective": "Return to the purification plant to complete the repair.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "water_plant_repair_complete"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 800
+        }
+    },
+    {
+        "id": "the_waiting_woman",
+        "title": "The Waiting Woman",
+        "type": "SUB",
+        "startText": "Olivia, the herbalist, asked you to find her a rare herb called 'Ice Flower'. She said it only grows in cold and high places, on the mountains to the north.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Find the 'Ice Flower' on the mountains to the north.",
+                "trigger": {
+                    "type": "getItem",
+                    "value": "ice_flower"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "Bring the 'Ice Flower' to Olivia in her hut.",
+                "trigger": {
+                    "type": "talkToNPC",
+                    "value": "olivia_quest_complete"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 500,
+            "statBoost": {
+                "stat": "sag",
+                "amount": 1
+            }
+        }
+    },
+    {
+        "id": "the_arsonist_and_the_tube",
+        "title": "Tube No.403",
+        "type": "SUB",
+        "startText": "You found the heartbreaking letter from a grandmother to her grandson, an 'arsonist' imprisoned in a place called 'Tube No.403'. The letter talks about a vineyard and a small sweater. Maybe there is still someone to find, or a story to conclude.",
+        "stages": [
+            {
+                "stage": 1,
+                "objective": "Discover what or where 'Tube No.403' is. Perhaps the records of a prison or a mental hospital can help.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "asylum_records_found"
+                }
+            },
+            {
+                "stage": 2,
+                "objective": "The records indicate that Tube No.403 was a maximum security section of the Sant'Ambrogio Asylum, located in the hills east of the city. Find this place.",
+                "trigger": {
+                    "type": "reachLocation",
+                    "value": {
+                        "x": 120,
+                        "y": 85
+                    }
+                }
+            },
+            {
+                "stage": 3,
+                "objective": "You arrived at the ruined asylum. Find the 'Tube No.403' section and discover what became of the Arsonist.",
+                "trigger": {
+                    "type": "interactWithObject",
+                    "value": "found_the_arsonist"
+                }
+            }
+        ],
+        "finalReward": {
+            "xp": 700,
+            "items": [
+                {
+                    "itemId": "pyromaniacs_lighter",
+                    "quantity": 1
+                }
+            ]
+        }
+    }
+]

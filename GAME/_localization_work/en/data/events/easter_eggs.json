@@ -1,0 +1,239 @@
+[
+    {
+        "id": "city_easter_egg_pixeldebh_v2",
+        "title": "Strange Metal Find",
+        "description": "Rummaging through metal debris and crumbling concrete, the sunlight reflects off a strange shiny object. It is a silver plate with an unusual symbol and the partially legible writing 'PixelDebh'. It seems like a piece of a larger machine.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Clean the plate and inspect it",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "Cleaning the plate, you discover it is an access panel. Behind it, embedded in a piece of machinery, is a small kit of high-quality electronic components and an energy drink, probably a technician's stash.",
+                        "failureText": "The plate is just a piece of decoration. There is nothing interesting or useful underneath. You just wasted time.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "military_grade_electronics",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "energy_drink_nuclear",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Keep it as a lucky charm",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide to keep the strange plate. It is a piece of a world you don't understand, but it has a... lucky air. You put it in your backpack."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "pixeldebh_plate",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_eurocenter",
+        "title": "Remains of a Distant Era",
+        "description": "You stumble upon the ruins of what seems like an old office. A twisted metal sign, fallen to the ground, reads '...mobiliare Eurocenter'. Inside, among the soggy papers, you notice the skeleton of a man in an elegant suit, now in tatters. Around his neck he still wears an ID badge: 'Marco G.'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Rummage through his belongings",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "With a certain respect, you check his pockets. You find a pack of cigarettes still sealed, a bottle of painkillers, and a professional business card. Poor Marco G., whatever his story was."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "MED_PAINKILLER",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cigarettes_pack",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "eurocenter_business_card",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "easter_egg_runtime_radio",
+        "title": "A Voice from the Ether",
+        "description": "As you walk in the oppressive silence, a portable radio receiver you have with you, which you thought capable only of picking up static, suddenly comes to life. A clear and warm voice, accompanied by pre-catastrophe music, fills the air: \"...and that was 'Take on Me' by a-ha, this is Runtime Radio, your one and only voice in the desolation. Don't give up, survivors. You are not alone.\" The broadcast is so clean and alive it seems impossible.",
+        "biomes": [
+            "Plains",
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Listen to the broadcast",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You stop for a few minutes, mesmerized by that fragment of the lost world. The music and the hopeful voice give you an unexpected boost. Before the signal fades back into static, you manage to record a piece of the song on an old cassette."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rare_music_cassettes",
+                                    "quantity": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Try to triangulate the signal",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 15,
+                        "successText": "Manipulating the antenna, you manage to get a rough idea of the signal's direction. It seems to come from very, very far away, to the east. It's vague information, but it's better than nothing.",
+                        "failureText": "You try to tune better, but the signal is unstable. With a final crackle, it fades, leaving you with more questions than answers.",
+                        "success": [
+                            {
+                                "type": "revealMapPOI",
+                                "text": "You triangulated the signal! It seems to come from a remote area to the east."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 75
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_magnetar",
+        "title": "A Mysterious Box",
+        "description": "Leaning against a collapsed wall, you see the mummified body of a man. He clutches a small black metal box to his chest, as if it were the most precious thing in the world. On the box, a label almost completely corroded by time and weather reveals a silvery writing: '...gnetar...thing...'.",
+        "biomes": [
+            "City",
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Force the box open",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You manage to open the box with some effort. Inside, protected by a layer of insulating foam, is a military-type medical injector and a high-calorie energy bar. A real treasure, left here by an unfortunate traveler."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "stimpak_military",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "high_energy_bar",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

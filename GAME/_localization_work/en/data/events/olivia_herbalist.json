@@ -1,0 +1,116 @@
+[
+    {
+        "id": "olivia_herbalist_cabin",
+        "title": "The Herbalist's Cabin",
+        "description": "In a small clearing protected by ancient trees, you see a cabin made of wood and sheet metal, almost choked by climbing plants. A wisp of smoke comes from a makeshift chimney and the air smells of aromatic herbs and damp earth. It is an oasis of life in a world of death.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Approach the cabin",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "A calm voice greets you from inside: 'A traveler. It is rare to see new faces. Enter, if you come in peace.'"
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "start_dialogue",
+                                    "dialogueId": "olivia_main"
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Watch from afar and leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to disturb. Maybe you will come back another time."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_find_ice_flower",
+        "title": "The Ice Flower",
+        "description": "Climbing a ledge exposed to the freezing wind, you notice a spot of unnatural color. In a crack in the rock, protected from the worst of the weather, grows a single, small pale blue flower. Its petals are almost transparent and seem to glow with their own light. It is the Ice Flower Olivia was looking for.",
+        "biomes": [
+            "Mountain"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Pick the flower gently",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 12,
+                        "successText": "With delicate hands, you pick the flower without damaging it. It is cold to the touch and seems to pulse with a faint light. A rare botanical treasure.",
+                        "failureText": "The flower is too fragile. As you try to pick it, the petals crumble between your fingers. It is lost forever.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ice_flower",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "You picked the Ice Flower! Olivia will be happy to see it."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The flower disintegrated. You will never find another one in this place."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the flower where it is",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to disturb this natural wonder. Maybe you will come back another time."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

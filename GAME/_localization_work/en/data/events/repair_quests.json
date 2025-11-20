@@ -1,0 +1,293 @@
+[
+    {
+        "id": "unique_radio_tower_console",
+        "title": "Radio Tower Console",
+        "description": "The tower's broadcast room is in ruins. The main console is damaged, but the antenna on the roof seems intact. With the right components, you could reactivate the emergency signal.",
+        "biomes": [
+            "Plains",
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the console",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The console is severely damaged. You would need military-grade components and a generator to reactivate it. But if you succeeded... you could broadcast an emergency signal."
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "tower_of_light"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 75
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[QUEST] Install components and reactivate the tower",
+                "itemRequirements": [
+                    {
+                        "itemId": "military_grade_electronics",
+                        "quantity": 3
+                    },
+                    {
+                        "itemId": "portable_generator",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 17,
+                        "successText": "After hours of feverish work, you connect the last cable. The generator coughs, then starts with a steady hum. The console lights turn on one by one. You activate the emergency transmitter. For a long moment, there is only static. Then, a faint voice, almost drowned by the noise: '...this is Station Delta... is anyone listening?... I repeat, is anyone...' You found other survivors!",
+                        "failureText": "A wrong connection. You smell burning and the console shuts down permanently. You fried the main circuits. This tower is lost forever.",
+                        "success": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "military_grade_electronics",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "portable_generator",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "completeQuestFromEvent",
+                                    "questId": "tower_of_light"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[DISCOVERY] You established contact with Station Delta! A new hope."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 400
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "military_grade_electronics",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "portable_generator",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "failQuestFromEvent",
+                                    "questId": "tower_of_light"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[FAILURE] The tower is lost. The opportunity is gone."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Not now. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Maybe one day you will return with the necessary components."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_water_treatment_plant",
+        "title": "Water Treatment Plant",
+        "description": "A vast industrial complex, surprisingly intact. The huge treatment tanks are empty, the pumps silent. But the main systems seem only turned off, not destroyed. This plant could provide clean water to an entire urban area.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Inspect the main systems",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The generator is offline, the filters are clogged, but the structure is solid. With the right manual, new filters, and a powerful battery, you could reactivate everything. Clean water for anyone passing through here."
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "water_of_life"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[QUEST] Repair the treatment plant",
+                "itemRequirements": [
+                    {
+                        "itemId": "hydraulic_manual",
+                        "quantity": 1
+                    },
+                    {
+                        "itemId": "industrial_filter",
+                        "quantity": 3
+                    },
+                    {
+                        "itemId": "vehicle_battery",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 16,
+                        "successText": "You follow the manual's instructions step by step. You replace the filters, connect the battery, restart the pumps. With a deep rumble, the old machines come back to life. Water starts flowing through the filters. In fountains and taps throughout the neighborhood, water flows again, clean and drinkable. You brought a piece of civilization back to life.",
+                        "failureText": "A critical skill check fails. An electrical overload irreparably damages the control system. The plant is lost.",
+                        "success": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "hydraulic_manual",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "industrial_filter",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "vehicle_battery",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "activateWaterPlant",
+                                    "location": {
+                                        "x": 0,
+                                        "y": 0
+                                    }
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "completeQuestFromEvent",
+                                    "questId": "water_of_life"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[LEGACY] You reactivated the plant! The surrounding area now has clean water."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 600
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "hydraulic_manual",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "industrial_filter",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "vehicle_battery",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "failQuestFromEvent",
+                                    "questId": "water_of_life"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[FAILURE] The plant is irreparably damaged."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 150
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Too complex. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "This project requires preparation. Maybe one day you will return."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

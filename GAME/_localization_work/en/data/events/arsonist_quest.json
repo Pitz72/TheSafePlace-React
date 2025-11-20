@@ -1,0 +1,256 @@
+[
+    {
+        "id": "unique_grandmothers_letter",
+        "title": "Found Letter",
+        "description": "Rummaging through the moldy documents of an old office, you find a personal letter, protected in a plastic envelope. The handwriting is shaky, that of an elderly person. The ink is faded, but the text is still legible.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Read the letter",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The letter reads: 'My dear grandson, I know you cannot receive this letter where you are now, in Tube No.403. But I write it anyway, because writing is the only way I have to feel close to you. The vineyard you loved so much is still there, even if no one tends to it anymore. I kept your red and white striped sweater, the one you always wore as a child. I wait for you, even though I know you won't come back. With all my love, Grandma.'"
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "grandmothers_letter",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "the_arsonist_and_the_tube"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the letter where it is",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to disturb this private correspondence. Some stories are too personal."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_asylum_ruins",
+        "title": "Sant'Ambrogio Asylum",
+        "description": "The ruins of a large building stand before you. A rusty sign reads 'Sant'Ambrogio Psychiatric Hospital - Founded 1892'. The windows are barred, the doors smashed in. An aura of suffering permeates this place.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the patient archives",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 14,
+                        "successText": "Among the patient records, you find a medical file. 'Patient: [NAME REDACTED]. Nickname: The Arsonist. Assigned to Maximum Security Section - Tube No.403, East Wing, Underground Level.' The record also mentions an 'experimental emotional suppression therapy' he was subjected to shortly before the Great Silence. The section's coordinates are marked on a map of the building.",
+                        "failureText": "The archives are a mess of burnt and illegible documents. You find nothing useful.",
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "[DISCOVERY] You found the location of Tube No.403. It is in the underground east wing of the asylum."
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "advance_quest_stage",
+                                    "questId": "the_arsonist_and_the_tube"
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 150
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Explore the common cells",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 12,
+                        "successText": "The cells are empty and eerie. You find only desperate graffiti and some abandoned personal items.",
+                        "failureText": "The cells are too dark and dangerous. You move away quickly.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 20
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "This place is too disturbing. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The atmosphere of this place oppresses you. You decide to come back another time."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_find_the_arsonist",
+        "title": "Tube No.403",
+        "description": "You descend into the underground depths of the asylum. The air becomes progressively hotter and stifling. Signs of small fires are everywhere - burnt paper, charred wood, even the metal of the doors shows signs of melting.\n\nFinally you reach a massive door with the inscription 'TUBE N.403 - MAXIMUM SECURITY'. The door is torn off, melted from the inside. Beyond the threshold, you see a blackened cell.\n\nIn the center of the room, crouching, is a figure. It is a man, or what remains of him. Incredibly thin and dry, skin stretched over bones like scorched parchment. He wears the remains of a red and white striped sweater, almost completely burnt but still recognizable.\n\nHe slowly raises his head. He is not a man. Not entirely. One eye is human, wild and lost in an abyss of madness. The other is a dark, cracked lens from which a faint reddish glow emanates. Parts of his body are fused with blackened cables and metal plates, but the process seems... wrong. Incomplete. He is a failed Ash Angel, an abomination rejected even by his own kind.\n\nHe does not attack you. He stares at you. And with a voice that is a hiss of static and ash, he whispers disjointed words: 'Grandma... the vineyard... burns... everything burns... so warm... and comfortable...'\n\nFrom his skeletal fingers, a small flame lights up and goes out, hypnotic.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[QUEST] Show him the grandmother's letter",
+                "itemRequirements": [
+                    {
+                        "itemId": "grandmothers_letter",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You slowly bring the letter closer. His eyes fix on the handwriting. The flame on his hand goes out. The hissing stops. For an instant, the human eye seems to have a flash of lucidity, of immense pain. He whispers a single word: 'Die...'. Then, the red glow in his mechanical eye pulses violently. He screams, a harrowing sound of metal and flesh, and is engulfed in flames, consuming himself into a pile of ash and smoking circuits. Among the ashes, you find a metal lighter, strangely cold to the touch."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "grandmothers_letter",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "pyromaniacs_lighter",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "complete_quest",
+                                    "questId": "the_arsonist_and_the_tube"
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 700
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Attack. End his suffering.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide that mercy is the only thing you can offer him. You ready your weapon."
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "start_combat",
+                                    "enemyId": "aberrant_angel_arsonist"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Walk away. Leave him to his madness.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You cannot face this horror. You walk away slowly, leaving the Arsonist to his eternal vigil of flames and madness. The grandmother's letter will remain undelivered."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,40 @@
+[
+    {
+        "id": "unique_hermit_cabin",
+        "title": "The Listener's Cabin",
+        "description": "Hidden deep in the forest, you find an isolated cabin. Smoke rises from the chimney. At the door, metal wind chimes tinkle softly. An old man with eyes clouded by cataracts watches you from the threshold. 'I heard you coming from afar,' he says with a raspy voice. 'The world is full of sounds for those who know how to listen.'",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Greet the hermit",
+                "outcomes": [
+                    {
+                        "type": "special",
+                        "value": {
+                            "effect": "startDialogue",
+                            "dialogueId": "hermit_main"
+                        },
+                        "results": []
+                    }
+                ]
+            },
+            {
+                "text": "Leave without disturbing",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to disturb the old man. Maybe you will come back another time."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

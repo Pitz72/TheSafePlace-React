@@ -1,0 +1,342 @@
+[
+    {
+        "id": "scrap_metal",
+        "name": "Scrap Metal",
+        "description": "A piece of rusty metal of indeterminate origin. Useful for reinforcing structures or creating rudimentary weapons.",
+        "type": "material",
+        "weight": 0.8,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "scrap_metal_high_quality",
+        "name": "High Quality Scrap Metal",
+        "description": "A piece of superior alloy metal, less corroded and more resistant. Perfect for quality repairs and creations.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 15,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "tech_components",
+        "name": "Tech Components",
+        "description": "Circuits, wires, and chips recovered from old electronic devices. Essential for repairing or creating technological items.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 40,
+        "stackable": true,
+        "rarity": "rare"
+    },
+    {
+        "id": "copper_wire",
+        "name": "Copper Wire",
+        "description": "A roll of copper wire, excellent conductor. Useful for electric traps or electronic repairs.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 10,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "nylon_wire",
+        "name": "Nylon Wire",
+        "description": "An extremely strong and thin synthetic wire. Ideal for traps, fishing lines, or makeshift sutures.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "durable_cloth",
+        "name": "Durable Cloth",
+        "description": "A piece of thick and sturdy canvas, like that used for sails or military tents. Great for repairing backpacks or creating light armor.",
+        "type": "material",
+        "weight": 0.4,
+        "value": 12,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "animal_hide",
+        "name": "Animal Hide",
+        "description": "The raw hide of an animal. If tanned, it can be turned into leather for armor and other items.",
+        "type": "material",
+        "weight": 1.5,
+        "value": 18,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "mutant_wolf_pelt",
+        "name": "Mutant Wolf Pelt",
+        "description": "The unusually thick and resistant hide of a mutated wolf. A high-quality material for armor.",
+        "type": "material",
+        "weight": 2.0,
+        "value": 45,
+        "stackable": true,
+        "rarity": "rare"
+    },
+    {
+        "id": "meteorite_fragment",
+        "name": "Meteorite Fragment",
+        "description": "A piece of metal of strange shape, not terrestrial. It is strangely light and cold to the touch.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 200,
+        "stackable": false,
+        "rarity": "epic"
+    },
+    {
+        "id": "fulgurite_shard",
+        "name": "Fulgurite Shard",
+        "description": "A fragment of natural glass, created by lightning striking sand. Coursing with strange energy, it is warm to the touch.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 70,
+        "stackable": true,
+        "rarity": "rare"
+    },
+    {
+        "id": "obsidian_shard",
+        "name": "Obsidian Shard",
+        "description": "A piece of black volcanic glass, razor sharp. Perfect for creating arrowheads or improvised blades.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 10,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "ash_petals",
+        "name": "Ash Petals",
+        "description": "The petals of a surreal flower the color of ash. Their pollen has slight soporific and antiseptic properties.",
+        "type": "material",
+        "weight": 0.05,
+        "value": 25,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "chemicals_basic",
+        "name": "Basic Chemicals",
+        "description": "A container with various recovered chemicals. Could be used to create explosives, solvents, or drugs.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 30,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "firewood",
+        "name": "Firewood",
+        "description": "Dry wood, perfect for starting a fire.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 2,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "spider_silk",
+        "name": "Spider Silk",
+        "description": "Spider silk thread, incredibly strong and light.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 15,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "tool_hammer",
+        "name": "Hammer",
+        "description": "A carpenter's hammer, useful for building and destroying.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 10,
+        "stackable": false,
+        "rarity": "common"
+    },
+    {
+        "id": "nails_box",
+        "name": "Box of Nails",
+        "description": "A box full of nails of various sizes.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "garden_tools",
+        "name": "Garden Tools",
+        "description": "A small set of tools for cultivating the land.",
+        "type": "material",
+        "weight": 1.2,
+        "value": 12,
+        "stackable": false,
+        "rarity": "common"
+    },
+    {
+        "id": "rubber_gasket",
+        "name": "Rubber Gasket",
+        "description": "A rubber gasket, useful for plumbing repairs.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 4,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "rubber_ball",
+        "name": "Rubber Ball",
+        "description": "A rubber ball, can be used as a distraction.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 2,
+        "stackable": false,
+        "rarity": "common"
+    },
+    {
+        "id": "resistant_wire",
+        "name": "Resistant Wire",
+        "description": "A strong metal wire, useful for traps or repairs.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "metal_piece",
+        "name": "Small Metal Piece",
+        "description": "Small pieces of metal, useful for crafting.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 2,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "grain_sack",
+        "name": "Grain Sack",
+        "description": "A sack of dry grain, still edible if ground.",
+        "type": "material",
+        "weight": 5.0,
+        "value": 15,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "cleaning_supplies",
+        "name": "Cleaning Supplies",
+        "description": "Solvents and chemical reagents, useful for creating compounds.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 10,
+        "stackable": false,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "dry_paper",
+        "name": "Dry Paper",
+        "description": "Sheets of dry paper, perfect for starting a fire or as crafting material.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 1,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "military_grade_electronics",
+        "name": "Military Grade Electronics",
+        "description": "Robust and shielded electronic components, recovered from military equipment. Extremely rare and valuable for advanced crafting.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 150,
+        "stackable": true,
+        "rarity": "rare"
+    },
+    {
+        "id": "bottle_empty",
+        "name": "Empty Bottle",
+        "description": "An empty glass or plastic bottle. Perfect for collecting and purifying water.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 2,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "dirty_water",
+        "name": "Contaminated Water",
+        "description": "Water from an uncertain source, turbid and potentially dangerous. Must be purified before drinking.",
+        "type": "material",
+        "weight": 0.8,
+        "value": 1,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "adhesive_tape",
+        "name": "Adhesive Tape",
+        "description": "Roll of strong adhesive tape. Useful for quick repairs and improvisations.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 3,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "clean_cloth",
+        "name": "Clean Cloth",
+        "description": "A piece of clean cloth, ideal for makeshift bandages or improvised filters.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 2,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "portable_generator",
+        "name": "Portable Generator",
+        "description": "A small gasoline generator, still functioning. Can provide electricity for short periods.",
+        "type": "material",
+        "weight": 15.0,
+        "value": 250,
+        "stackable": false,
+        "rarity": "rare"
+    },
+    {
+        "id": "industrial_filter",
+        "name": "Industrial Filter",
+        "description": "A filter for water purification plants. Heavy but essential for purifying large quantities of water.",
+        "type": "material",
+        "weight": 3.0,
+        "value": 80,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "vehicle_battery",
+        "name": "Heavy Vehicle Battery",
+        "description": "An industrial battery from a truck or generator. Heavy but with enormous energy capacity.",
+        "type": "material",
+        "weight": 20.0,
+        "value": 200,
+        "stackable": false,
+        "rarity": "rare"
+    },
+    {
+        "id": "hydraulic_manual",
+        "name": "Hydraulic Systems Maintenance Manual",
+        "description": "A detailed technical manual on the maintenance of water purification plants. Precious knowledge of the lost world.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 100,
+        "stackable": false,
+        "rarity": "uncommon"
+    }
+]

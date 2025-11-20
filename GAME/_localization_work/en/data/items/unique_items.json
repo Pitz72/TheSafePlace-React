@@ -1,0 +1,117 @@
+[
+    {
+        "id": "titanic_cassette",
+        "name": "'Titanic' Cassette",
+        "description": "A music cassette found in a submerged car. The cover shows a ship and two lovers. The music is an echo of a world that believed itself unsinkable.",
+        "type": "material",
+        "rarity": "rare",
+        "weight": 0.1,
+        "value": 50,
+        "stackable": false,
+        "color": "#3b82f6",
+        "effects": []
+    },
+    {
+        "id": "broken_drone",
+        "name": "DogBuster Drone",
+        "description": "A small colorful toy drone. A sticker reads 'DogBuster'. It is broken, but the components could be useful.",
+        "type": "material",
+        "rarity": "uncommon",
+        "weight": 0.5,
+        "value": 30,
+        "stackable": false,
+        "color": "#ef4444",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "advanced_tool_kit",
+        "name": "Advanced Tool Kit",
+        "description": "A set of high-quality tools, well maintained. Includes precision screwdrivers, wrenches, and measuring instruments. Indispensable for complex repairs.",
+        "type": "tool",
+        "rarity": "rare",
+        "weight": 2.0,
+        "value": 100,
+        "stackable": false,
+        "color": "#f59e0b",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 50
+            }
+        ]
+    },
+    {
+        "id": "tech_components",
+        "name": "Tech Components",
+        "description": "Circuits, chips, and wires recovered from advanced equipment. Valuable for those who know how to use them.",
+        "type": "material",
+        "rarity": "uncommon",
+        "weight": 0.1,
+        "value": 20,
+        "stackable": true,
+        "color": "#10b981",
+        "effects": []
+    },
+    {
+        "id": "vintage_film_reel",
+        "name": "Vintage Film Reel",
+        "description": "An 8mm film reel. Contains images of daily life pre-apocalypse. An invaluable historical document.",
+        "type": "material",
+        "rarity": "epic",
+        "weight": 0.3,
+        "value": 150,
+        "stackable": false,
+        "color": "#8b5cf6",
+        "effects": []
+    },
+    {
+        "id": "vinyl_record_moon",
+        "name": "'Haistulf' Vinyl",
+        "description": "A vinyl record titled 'Play Rock To The Moon'. The music is powerful and spatial.",
+        "type": "material",
+        "rarity": "rare",
+        "weight": 0.4,
+        "value": 60,
+        "stackable": false,
+        "color": "#6366f1",
+        "effects": []
+    },
+    {
+        "id": "energy_drink",
+        "name": "Energy Drink",
+        "description": "A can of energy drink full of sugar and caffeine. The taste is chemical, but it wakes you up.",
+        "type": "consumable",
+        "rarity": "common",
+        "weight": 0.3,
+        "value": 10,
+        "stackable": true,
+        "color": "#facc15",
+        "effects": [
+            {
+                "type": "hydration",
+                "value": 10
+            },
+            {
+                "type": "satiety",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "electronic_parts",
+        "name": "Electronic Parts",
+        "description": "Generic electronic components. Useful for crafting.",
+        "type": "material",
+        "rarity": "common",
+        "weight": 0.1,
+        "value": 15,
+        "stackable": true,
+        "color": "#9ca3af",
+        "effects": []
+    }
+]

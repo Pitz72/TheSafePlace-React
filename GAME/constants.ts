@@ -1,41 +1,59 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = "1.9.9";
+export const GAME_VERSION = '1.9.9.6';
 
 export const BOOT_TEXT = [
-    'Runtime Radio BIOS v1.02',
-    'Copyright (C) 1983 Runtime Radio Corp.',
-    '',
-    'CPU: R-8088 @ 4.77MHz',
-    'Memory Test: 640K OK',
-    '',
-    'Checking drives...',
-    'Drive A: Floppy Disk',
-    'Drive C: Hard Disk',
-    '',
-    'Booting from C:...',
-    'Starting RR-DOS...',
-    '',
-    'HIMEM is testing extended memory...done.',
-    'RR-DOS Mouse Driver installed.',
-    'RR-DOS CD-ROM Driver installed.',
-    'Sound Blaster 8 card detected at A220 I5 D1.',
-    '',
-    'C:\\> autoexec.bat',
-    'C:\\> echo off',
-    'C:\\> load game.exe',
-    'Loading TSP Chronicles...',
+  'Runtime Radio BIOS v1.02',
+  'Copyright (C) 1983 Runtime Radio Corp.',
+  '',
+  'CPU: R-8088 @ 4.77MHz',
+  'Memory Test: 640K OK',
+  '',
+  'Checking drives...',
+  'Drive A: Floppy Disk',
+  'Drive C: Hard Disk',
+  '',
+  'Booting from C:...',
+  'Starting RR-DOS...',
+  '',
+  'HIMEM is testing extended memory...done.',
+  'RR-DOS Mouse Driver installed.',
+  'RR-DOS CD-ROM Driver installed.',
+  'Sound Blaster 8 card detected at A220 I5 D1.',
+  '',
+  'C:\\> autoexec.bat',
+  'C:\\> echo off',
+  'C:\\> load game.exe',
+  'Loading TSP Chronicles...',
+];
+
+export const DONOR_NAMES = [
+  'Paolo Nicoletti',
+  'Michele Bancheri',
+  'Ennio Vitelli',
+  'Massimiliano Libralesso',
+  'Vincenzo Falce',
+  'Matteo Garza',
+  'Mattia Seppolini',
+  'Ruggero Celva',
+  'Monica Piu',
+  'Adriana Coppe',
+  'Gabriel Mele',
+  'Claudio Marro Filosa',
+  'Angelo Mastrogiacomo',
+  'Tommaso Sciara',
+  'Samuele Palazzolo'
 ];
 
 export const MENU_ITEMS = [
-    "Nuova Partita",
-    "Continua Partita",
-    "Carica Partita",
-    "Storia",
-    "Istruzioni",
-    "Opzioni",
-    "Trofei",
-    "Esci",
+  "Nuova Partita",
+  "Continua Partita",
+  "Carica Partita",
+  "Storia",
+  "Istruzioni",
+  "Opzioni",
+  "Trofei",
+  "Esci",
 ];
 
 export const INSTRUCTIONS_TEXT = `═══ THE SAFE PLACE CHRONICLES - GUIDA ALLA SOPRAVVIVENZA ═══
@@ -327,71 +345,71 @@ export const JOURNAL_ENTRY_COLORS: Record<JournalEntryType, string> = {
 };
 
 export const MOUNTAIN_MESSAGES = [
-    "Non puoi passare. È una montagna.",
-    "Scalare questa parete rocciosa a mani nude sarebbe un suicidio.",
-    "Anche le capre di montagna guarderebbero questa parete e direbbero 'No, grazie'.",
-    "La montagna ti osserva, impassibile. Non passerai."
+  "Non puoi passare. È una montagna.",
+  "Scalare questa parete rocciosa a mani nude sarebbe un suicidio.",
+  "Anche le capre di montagna guarderebbero questa parete e direbbero 'No, grazie'.",
+  "La montagna ti osserva, impassibile. Non passerai."
 ];
 
 export const BIOME_MESSAGES: Record<string, string> = {
-    '.': "Ti trovi in una vasta pianura aperta.",
-    'F': "Stai entrando in una fitta foresta.",
-    '~': "Le acque di un fiume si stendono davanti a te.",
-    'M': "Imponenti montagne bloccano il tuo cammino.",
-    'C': "Le rovine silenziose di una città si ergono all'orizzonte.",
-    'V': "Attraversi i resti di un piccolo villaggio.",
-    'R': "Hai trovato un rifugio. Sembra sicuro, per ora.",
-    'S': "Inizi il tuo viaggio in un punto relativamente tranquillo.",
-    'E': "La destinazione finale è vicina.",
-    'A': "Vedi l'Avamposto 'Il Crocevia' davanti a te. Fumo sale da un fuoco centrale.",
-    'N': "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
-    'T': "Un commerciante ambulante ti saluta con cautela.",
-    'L': "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
-    'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
+  '.': "Ti trovi in una vasta pianura aperta.",
+  'F': "Stai entrando in una fitta foresta.",
+  '~': "Le acque di un fiume si stendono davanti a te.",
+  'M': "Imponenti montagne bloccano il tuo cammino.",
+  'C': "Le rovine silenziose di una città si ergono all'orizzonte.",
+  'V': "Attraversi i resti di un piccolo villaggio.",
+  'R': "Hai trovato un rifugio. Sembra sicuro, per ora.",
+  'S': "Inizi il tuo viaggio in un punto relativamente tranquillo.",
+  'E': "La destinazione finale è vicina.",
+  'A': "Vedi l'Avamposto 'Il Crocevia' davanti a te. Fumo sale da un fuoco centrale.",
+  'N': "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
+  'T': "Un commerciante ambulante ti saluta con cautela.",
+  'L': "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
+  'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
 };
 
 export const BIOME_COLORS: Record<string, string> = {
-    '.': '#a3a3a3', // neutral-400 (Pianura)
-    'F': '#22c55e', // green-500 (Foresta)
-    '~': '#38bdf8', // sky-400 (Acqua)
-    'M': '#9ca3af', // gray-400 (Montagna)
-    'C': '#78716c', // stone-500 (Città)
-    'V': '#a16207', // yellow-700 (Villaggio)
-    'R': '#d97706', // amber-600 (Rifugio)
-    'S': '#f59e0b', // amber-500 (Start)
-    'E': '#ef4444', // red-500 (End)
-    'A': '#b45309', // amber-700 (Avamposto)
-    'N': '#7e22ce', // purple-700 (Nido della Cenere)
-    'T': '#f59e0b', // amber-500 (Commerciante)
-    'L': '#0891b2', // cyan-600 (Laboratorio)
-    'B': '#9f1239', // rose-800 (Biblioteca)
+  '.': '#a3a3a3', // neutral-400 (Pianura)
+  'F': '#22c55e', // green-500 (Foresta)
+  '~': '#38bdf8', // sky-400 (Acqua)
+  'M': '#9ca3af', // gray-400 (Montagna)
+  'C': '#78716c', // stone-500 (Città)
+  'V': '#a16207', // yellow-700 (Villaggio)
+  'R': '#d97706', // amber-600 (Rifugio)
+  'S': '#f59e0b', // amber-500 (Start)
+  'E': '#ef4444', // red-500 (End)
+  'A': '#b45309', // amber-700 (Avamposto)
+  'N': '#7e22ce', // purple-700 (Nido della Cenere)
+  'T': '#f59e0b', // amber-500 (Commerciante)
+  'L': '#0891b2', // cyan-600 (Laboratorio)
+  'B': '#9f1239', // rose-800 (Biblioteca)
 };
 
 export const ATMOSPHERIC_MESSAGES: Record<string, { day: string[], night: string[], rain?: string[] }> = {
-    '.': { // Pianura
-        day: ["Il vento sibila tra l'erba alta.", "Un falco volteggia in alto nel cielo.", "Il sole picchia sulla tua pelle."],
-        night: ["Il richiamo lontano di un predatore notturno ti fa rabbrividire.", "Le stelle brillano intense nel cielo senza nubi.", "Un silenzio innaturale avvolge la pianura."],
-        rain: ["Le gocce di pioggia tamburellano sul tuo equipaggiamento.", "Il terreno aperto offre poco riparo dalla pioggia battente."]
-    },
-    'F': { // Foresta
-        day: ["Un raggio di sole filtra attraverso le fitte chiome degli alberi.", "Il fruscio di qualcosa tra i cespugli ti mette in allerta.", "L'odore di terra umida e muschio riempie l'aria."],
-        night: ["Il verso di un gufo rompe il silenzio della notte.", "Rami scricchiolano nelle vicinanze, spezzati da un peso invisibile.", "L'oscurità nella foresta è quasi totale."],
-        rain: ["La pioggia gocciola dalle foglie, creando una sinfonia costante.", "L'odore di pioggia e terra bagnata è intenso qui."]
-    },
-    'C': { // Città
-        day: ["Il vento ulula tra le rovine degli edifici.", "Un pezzo di metallo cade da un grattacielo scheletrico, echeggiando nel silenzio.", "La polvere si solleva ad ogni tua mossa."],
-        night: ["Ombre inquietanti danzano tra i palazzi distrutti.", "Un rumore metallico in lontananza ti fa sussultare.", "La luna illumina spettralmente le strade deserte."],
-        rain: ["L'acqua scorre in rivoli scuri lungo le strade dissestate.", "Il rumore della pioggia che colpisce le lamiere contorte è assordante."]
-    },
-     'V': { // Villaggio
-        day: ["Una porta sbatte per il vento in una casa abbandonata.", "Resti di vita quotidiana sono sparsi ovunque, congelati nel tempo.", "Un silenzio spettrale regna tra le case."],
-        night: ["Ogni ombra sembra nascondere una minaccia.", "Hai la strana sensazione di essere osservato dalle finestre vuote.", "Il vento fischia attraverso i tetti sfondati."],
-        rain: ["La pioggia trasforma le strade sterrate in fango.", "L'acqua gocciola tristemente dai tetti rotti."]
-    },
-    'R': { // Rifugio
-        day: ["Questo posto sembra offrire una tregua temporanea dal mondo esterno.", "Qualcuno ha lasciato delle provviste qui molto tempo fa.", "La polvere danza nei rari raggi di luce che filtrano dall'interno."],
-        night: ["I suoni del mondo esterno sembrano attutiti qui dentro.", "È un sollievo essere al riparo, anche se solo per poco.", "Il buio all'interno del rifugio è denso e quasi tangibile."],
-    }
+  '.': { // Pianura
+    day: ["Il vento sibila tra l'erba alta.", "Un falco volteggia in alto nel cielo.", "Il sole picchia sulla tua pelle."],
+    night: ["Il richiamo lontano di un predatore notturno ti fa rabbrividire.", "Le stelle brillano intense nel cielo senza nubi.", "Un silenzio innaturale avvolge la pianura."],
+    rain: ["Le gocce di pioggia tamburellano sul tuo equipaggiamento.", "Il terreno aperto offre poco riparo dalla pioggia battente."]
+  },
+  'F': { // Foresta
+    day: ["Un raggio di sole filtra attraverso le fitte chiome degli alberi.", "Il fruscio di qualcosa tra i cespugli ti mette in allerta.", "L'odore di terra umida e muschio riempie l'aria."],
+    night: ["Il verso di un gufo rompe il silenzio della notte.", "Rami scricchiolano nelle vicinanze, spezzati da un peso invisibile.", "L'oscurità nella foresta è quasi totale."],
+    rain: ["La pioggia gocciola dalle foglie, creando una sinfonia costante.", "L'odore di pioggia e terra bagnata è intenso qui."]
+  },
+  'C': { // Città
+    day: ["Il vento ulula tra le rovine degli edifici.", "Un pezzo di metallo cade da un grattacielo scheletrico, echeggiando nel silenzio.", "La polvere si solleva ad ogni tua mossa."],
+    night: ["Ombre inquietanti danzano tra i palazzi distrutti.", "Un rumore metallico in lontananza ti fa sussultare.", "La luna illumina spettralmente le strade deserte."],
+    rain: ["L'acqua scorre in rivoli scuri lungo le strade dissestate.", "Il rumore della pioggia che colpisce le lamiere contorte è assordante."]
+  },
+  'V': { // Villaggio
+    day: ["Una porta sbatte per il vento in una casa abbandonata.", "Resti di vita quotidiana sono sparsi ovunque, congelati nel tempo.", "Un silenzio spettrale regna tra le case."],
+    night: ["Ogni ombra sembra nascondere una minaccia.", "Hai la strana sensazione di essere osservato dalle finestre vuote.", "Il vento fischia attraverso i tetti sfondati."],
+    rain: ["La pioggia trasforma le strade sterrate in fango.", "L'acqua gocciola tristemente dai tetti rotti."]
+  },
+  'R': { // Rifugio
+    day: ["Questo posto sembra offrire una tregua temporanea dal mondo esterno.", "Qualcuno ha lasciato delle provviste qui molto tempo fa.", "La polvere danza nei rari raggi di luce che filtrano dall'interno."],
+    night: ["I suoni del mondo esterno sembrano attutiti qui dentro.", "È un sollievo essere al riparo, anche se solo per poco.", "Il buio all'interno del rifugio è denso e quasi tangibile."],
+  }
 };
 
 

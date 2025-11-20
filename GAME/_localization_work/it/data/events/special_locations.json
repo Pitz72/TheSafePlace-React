@@ -1,0 +1,95 @@
+[
+  {
+    "id": "unique_scientist_notes",
+    "title": "Il Laboratorio Dimenticato",
+    "description": "Entri in un laboratorio abbandonato, ancora illuminato da luci di emergenza tremolanti. Terminali spenti, attrezzature scientifiche rovesciate, e un odore chimico persistente nell'aria. Su una scrivania, trovi un fascicolo di documenti con il sigillo 'PROGETTO RINASCITA - MASSIMA SEGRETEZZA'.",
+    "biomes": ["Laboratorio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi i documenti del Progetto Rinascita",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 13,
+          "successText": "I documenti rivelano segreti inquietanti: il Progetto Rinascita era un tentativo disperato di invertire gli effetti del Grande Silenzio. Gli scienziati studiavano gli 'Angeli della Cenere', scoprendo che non erano mutazioni casuali ma trasformazioni guidate. Le note parlano di 'matrici energetiche' e 'frequenze di risveglio'. Questo cambia tutto ciò che pensavi di sapere.",
+          "failureText": "Il gergo tecnico è troppo complesso. Capisci solo frammenti: esperimenti falliti, soggetti perduti, speranze infrante.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "research_notes_rebirth", "quantity": 1 } },
+            { "type": "addXp", "value": 100 },
+            { "type": "statBoost", "value": { "stat": "int", "amount": 1 } }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 30 }
+          ]
+        }]
+      },
+      {
+        "text": "Cerca materiali utili nel laboratorio",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "medicina",
+          "dc": 12,
+          "successText": "Trovi un armadietto medico ancora sigillato con antibiotici, stimpack militari e componenti chimici di alta qualità.",
+          "failureText": "La maggior parte delle scorte è scaduta o contaminata. Recuperi solo pochi oggetti.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "antibiotics", "quantity": 2 } },
+            { "type": "addItem", "value": { "itemId": "stimpak_military", "quantity": 1 } },
+            { "type": "addItem", "value": { "itemId": "chemicals_basic", "quantity": 3 } },
+            { "type": "addXp", "value": 50 }
+          ],
+          "failure": [
+            { "type": "addItem", "value": { "itemId": "chemicals_basic", "quantity": 1 } },
+            { "type": "addXp", "value": 15 }
+          ]
+        }]
+      }
+    ]
+  },
+  {
+    "id": "unique_ancient_library",
+    "title": "La Biblioteca dei Sussurri",
+    "description": "Entri in un'antica biblioteca, miracolosamente intatta. Gli scaffali sono carichi di libri polverosi. Al centro della sala, un terminale di consultazione è ancora alimentato da pannelli solari sul tetto. Sullo schermo lampeggia un messaggio: 'ARCHIVIO PROGETTO ECO - ACCESSO PUBBLICO'.",
+    "biomes": ["Biblioteca"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Accedi all'archivio del Progetto Eco",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 12,
+          "successText": "Il terminale si anima. File dopo file, scopri la verità sul Progetto Eco: un'interfaccia neurale collettiva che avrebbe dovuto unire l'umanità. Ma qualcosa andò storto. Il sistema creò il Grande Silenzio - un'onda di frequenze che spense non solo le macchine, ma qualcosa di fondamentale nell'animo umano. Non era un'arma. Era un errore. Un errore che costò tutto.",
+          "failureText": "Il terminale si blocca. Riesci a leggere solo frammenti prima che si spenga definitivamente.",
+          "success": [
+            { "type": "addXp", "value": 100 },
+            { "type": "statBoost", "value": { "stat": "int", "amount": 1 } },
+            { "type": "journalEntry", "text": "[SCOPERTA] Hai svelato i segreti del Progetto Eco. La verità è più terribile di quanto immaginassi." }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 30 }
+          ]
+        }]
+      },
+      {
+        "text": "Cerca manuali tecnici tra i libri",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "investigare",
+          "dc": 11,
+          "successText": "Tra i volumi trovi manuali di sopravvivenza, medicina e ingegneria. Conoscenza preziosa del mondo perduto.",
+          "failureText": "La maggior parte dei libri sono romanzi o saggi filosofici. Nulla di pratico.",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "manual_wilderness_survival", "quantity": 1 } },
+            { "type": "addItem", "value": { "itemId": "manual_field_medicine", "quantity": 1 } },
+            { "type": "addItem", "value": { "itemId": "manual_advanced_repairs", "quantity": 1 } },
+            { "type": "addXp", "value": 60 }
+          ],
+          "failure": [
+            { "type": "addXp", "value": 10 }
+          ]
+        }]
+      }
+    ]
+  }
+]

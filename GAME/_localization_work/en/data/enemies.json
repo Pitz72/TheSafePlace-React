@@ -1,0 +1,558 @@
+[
+    {
+        "id": "raider_desperate",
+        "name": "Desperate Raider",
+        "description": "A thin, wild-looking man armed with a rusty piece of pipe. The hunger in his eyes makes him unpredictable.",
+        "type": "humanoid",
+        "hp": 30,
+        "ac": 12,
+        "attack": {
+            "damage": 6,
+            "bonus": 2
+        },
+        "xp": 50,
+        "biomes": [
+            "Global"
+        ],
+        "tactics": {
+            "revealDc": 13,
+            "description": "You notice he limps slightly, favoring his right leg. Looks like an old wound that never fully healed.",
+            "actions": [
+                {
+                    "id": "tactic_trip",
+                    "name": "[Tactical] Trip Him",
+                    "description": "Attempt to unbalance the raider by striking his injured leg.",
+                    "skillCheck": {
+                        "skill": "athletics",
+                        "dc": 13
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "mutated_wolf",
+        "name": "Mutated Wolf",
+        "description": "A wolf larger than normal, with missing patches of fur revealing sickly skin. Its eyes glow with an unnatural, aggressive intelligence.",
+        "type": "beast",
+        "hp": 25,
+        "ac": 13,
+        "attack": {
+            "damage": 8,
+            "bonus": 3
+        },
+        "xp": 60,
+        "biomes": [
+            "Forest",
+            "Plains"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "Its movements are lightning fast, but you notice that before every pounce, it lowers its ears slightly. It's a small, but telling, tic.",
+            "actions": [
+                {
+                    "id": "tactic_feint",
+                    "name": "[Tactical] Feint to Expose",
+                    "description": "Feint an attack to force the beast into a rash move, leaving it exposed.",
+                    "skillCheck": {
+                        "skill": "deception",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "raider_archer",
+        "name": "Raider Archer",
+        "description": "A raider armed with a makeshift bow. Keeps his distance and strikes with uncanny precision.",
+        "type": "humanoid",
+        "hp": 28,
+        "ac": 13,
+        "attack": {
+            "damage": 7,
+            "bonus": 3
+        },
+        "xp": 80,
+        "biomes": [
+            "Plains"
+        ],
+        "tactics": {
+            "revealDc": 13,
+            "description": "He tends to move laterally to keep his distance. A close-range attack could put him in trouble.",
+            "actions": [
+                {
+                    "id": "tactic_close_gap",
+                    "name": "[Tactical] Close the Gap",
+                    "description": "Run towards him to prevent him from using the bow effectively.",
+                    "skillCheck": {
+                        "skill": "athletics",
+                        "dc": 12
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "wild_dog",
+        "name": "Wild Dog",
+        "description": "A stray dog returned to the wild. Fast, hungry, and desperate.",
+        "type": "beast",
+        "hp": 20,
+        "ac": 14,
+        "attack": {
+            "damage": 5,
+            "bonus": 2
+        },
+        "xp": 70,
+        "biomes": [
+            "Plains",
+            "Village"
+        ],
+        "tactics": {
+            "revealDc": 12,
+            "description": "It moves in circles, looking for a weak spot. It is nervous and can be intimidated.",
+            "actions": [
+                {
+                    "id": "tactic_intimidate_dog",
+                    "name": "[Tactical] Intimidate",
+                    "description": "Use your presence to scare the animal and make it back off.",
+                    "skillCheck": {
+                        "skill": "intimidation",
+                        "dc": 11
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "hostile_merchant",
+        "name": "Hostile Merchant",
+        "description": "An ex-merchant who has lost all trace of humanity. Fiercely protects his loot of scavenged goods.",
+        "type": "humanoid",
+        "hp": 35,
+        "ac": 11,
+        "attack": {
+            "damage": 6,
+            "bonus": 1
+        },
+        "xp": 90,
+        "biomes": [
+            "Plains",
+            "Village"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "He carries a heavy backpack that slows him down. He might be convinced to negotiate instead of fighting.",
+            "actions": [
+                {
+                    "id": "tactic_persuade_merchant",
+                    "name": "[Tactical] Negotiate",
+                    "description": "Attempt to convince him that a deal is more profitable than combat.",
+                    "skillCheck": {
+                        "skill": "persuasion",
+                        "dc": 15
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "mutated_bear",
+        "name": "Mutated Bear",
+        "description": "A huge bear deformed by radiation. Its bulk is terrifying, but its movements are clumsy.",
+        "type": "beast",
+        "hp": 60,
+        "ac": 12,
+        "attack": {
+            "damage": 12,
+            "bonus": 4
+        },
+        "xp": 150,
+        "biomes": [
+            "Forest"
+        ],
+        "tactics": {
+            "revealDc": 15,
+            "description": "Its bulk makes it slow. It could be outmaneuvered with agility.",
+            "actions": [
+                {
+                    "id": "tactic_dodge_bear",
+                    "name": "[Tactical] Acrobatic Dodge",
+                    "description": "Use your agility to avoid its heavy attacks and strike the flanks.",
+                    "skillCheck": {
+                        "skill": "acrobatics",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "mad_hunter",
+        "name": "Mad Hunter",
+        "description": "A crazed hunter who has placed traps everywhere in his territory. Knows every inch of the forest.",
+        "type": "humanoid",
+        "hp": 32,
+        "ac": 13,
+        "attack": {
+            "damage": 7,
+            "bonus": 2
+        },
+        "xp": 100,
+        "biomes": [
+            "Forest"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "He moves predictably, following paths where he has placed traps. With care, you can avoid them.",
+            "actions": [
+                {
+                    "id": "tactic_avoid_traps",
+                    "name": "[Tactical] Avoid Traps",
+                    "description": "Observe the ground and his movements to avoid his hidden traps.",
+                    "skillCheck": {
+                        "skill": "perception",
+                        "dc": 13
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "aggressive_boar",
+        "name": "Aggressive Boar",
+        "description": "A boar of abnormal size, with razor-sharp tusks. Charges anyone who invades its territory.",
+        "type": "beast",
+        "hp": 40,
+        "ac": 11,
+        "attack": {
+            "damage": 10,
+            "bonus": 3
+        },
+        "xp": 110,
+        "biomes": [
+            "Forest",
+            "Plains"
+        ],
+        "tactics": {
+            "revealDc": 13,
+            "description": "It charges in a straight line. If you can step aside at the last moment, it might crash.",
+            "actions": [
+                {
+                    "id": "tactic_sidestep_charge",
+                    "name": "[Tactical] Sidestep",
+                    "description": "Wait for the charge and move sideways at the last instant.",
+                    "skillCheck": {
+                        "skill": "acrobatics",
+                        "dc": 13
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "armed_raider",
+        "name": "Armed Raider",
+        "description": "A well-equipped raider with a functioning pistol. Dangerous and confident.",
+        "type": "humanoid",
+        "hp": 35,
+        "ac": 14,
+        "attack": {
+            "damage": 9,
+            "bonus": 3
+        },
+        "xp": 120,
+        "biomes": [
+            "City"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "He relies on his firearm to intimidate. If he runs out of ammo, he becomes much less threatening.",
+            "actions": [
+                {
+                    "id": "tactic_wait_reload",
+                    "name": "[Tactical] Wait for Reload",
+                    "description": "Stay covered and wait for him to reload, then attack.",
+                    "skillCheck": {
+                        "skill": "survival",
+                        "dc": 13
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "city_ghoul",
+        "name": "City Ghoul",
+        "description": "A survivor transformed into something monstrous by prolonged exposure to radiation. Its claws ooze poison.",
+        "type": "humanoid",
+        "hp": 25,
+        "ac": 10,
+        "attack": {
+            "damage": 6,
+            "bonus": 2
+        },
+        "xp": 90,
+        "biomes": [
+            "City"
+        ],
+        "tactics": {
+            "revealDc": 12,
+            "description": "It moves in a clumsy and predictable way. Its attacks are telegraphed.",
+            "actions": [
+                {
+                    "id": "tactic_predict_attack",
+                    "name": "[Tactical] Predict and Parry",
+                    "description": "Observe its clumsy movements and parry its predictable attack.",
+                    "skillCheck": {
+                        "skill": "perception",
+                        "dc": 11
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "crazed_guard",
+        "name": "Crazed Guard",
+        "description": "An ex-guard in tactical armor who has lost his mind. Still believes he is protecting something that no longer exists.",
+        "type": "humanoid",
+        "hp": 40,
+        "ac": 15,
+        "attack": {
+            "damage": 8,
+            "bonus": 3
+        },
+        "xp": 130,
+        "biomes": [
+            "City"
+        ],
+        "tactics": {
+            "revealDc": 15,
+            "description": "His armor is heavy. He moves slowly and his peripheral vision is limited.",
+            "actions": [
+                {
+                    "id": "tactic_flank_guard",
+                    "name": "[Tactical] Flank Attack",
+                    "description": "Outflank him and strike from behind where the armor is weaker.",
+                    "skillCheck": {
+                        "skill": "stealth",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "desperate_wanderer",
+        "name": "Desperate Wanderer",
+        "description": "A traveler reduced to desperation by hunger and fear. Attacks anyone in hopes of surviving another day.",
+        "type": "humanoid",
+        "hp": 30,
+        "ac": 12,
+        "attack": {
+            "damage": 6,
+            "bonus": 2
+        },
+        "xp": 85,
+        "biomes": [
+            "Global"
+        ],
+        "tactics": {
+            "revealDc": 13,
+            "description": "He is malnourished and weak. A well-placed blow could end the fight quickly.",
+            "actions": [
+                {
+                    "id": "tactic_precise_strike",
+                    "name": "[Tactical] Precise Strike",
+                    "description": "Aim for a vital spot to end the fight quickly.",
+                    "skillCheck": {
+                        "skill": "medicine",
+                        "dc": 13
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "mutant_beast",
+        "name": "Mutant Beast",
+        "description": "A deformed creature of uncertain origin. Might have once been a dog, a cat, or something worse.",
+        "type": "beast",
+        "hp": 45,
+        "ac": 13,
+        "attack": {
+            "damage": 9,
+            "bonus": 3
+        },
+        "xp": 115,
+        "biomes": [
+            "Global"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "Its mutations make it strong but unstable. Certain high-pitched sounds seem to disorient it.",
+            "actions": [
+                {
+                    "id": "tactic_disorient_beast",
+                    "name": "[Tactical] Sonic Disorientation",
+                    "description": "Use a whistle or a high-pitched sound to confuse the creature.",
+                    "skillCheck": {
+                        "skill": "nature",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "armed_survivor",
+        "name": "Armed Survivor",
+        "description": "Another survivor who has chosen to take what he needs by force. Well-equipped and determined.",
+        "type": "humanoid",
+        "hp": 38,
+        "ac": 14,
+        "attack": {
+            "damage": 8,
+            "bonus": 3
+        },
+        "xp": 105,
+        "biomes": [
+            "Global"
+        ],
+        "tactics": {
+            "revealDc": 14,
+            "description": "He has combat experience but tends to overestimate his abilities. You can exploit his arrogance.",
+            "actions": [
+                {
+                    "id": "tactic_exploit_arrogance",
+                    "name": "[Tactical] Exploit Arrogance",
+                    "description": "Leverage his overconfidence to induce a tactical error.",
+                    "skillCheck": {
+                        "skill": "deception",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "alpha_wolf_pack_leader",
+        "name": "Mutated Wolf Pack Leader",
+        "description": "The leader of a pack of mutated wolves. Larger, stronger, and much smarter than his kin. His scars tell of countless battles won.",
+        "type": "beast",
+        "hp": 55,
+        "ac": 14,
+        "attack": {
+            "damage": 10,
+            "bonus": 4
+        },
+        "xp": 200,
+        "biomes": [
+            "Forest"
+        ],
+        "isElite": true,
+        "specialAbility": {
+            "id": "pack_call",
+            "name": "Pack Call",
+            "description": "On the second turn, has 50% chance to call a wolf ally.",
+            "trigger": "turn_2",
+            "probability": 0.5
+        },
+        "tactics": {
+            "revealDc": 16,
+            "description": "His howl is his weak point. A loud and sudden sound could disorient him and prevent him from calling the pack.",
+            "actions": [
+                {
+                    "id": "tactic_loud_noise",
+                    "name": "[Tactical] Fire a Shot in the Air",
+                    "description": "Use a firearm to create a deafening noise that prevents the Pack Leader from howling.",
+                    "skillCheck": {
+                        "skill": "intimidation",
+                        "dc": 15
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "veteran_raider_chief",
+        "name": "Veteran Raider Chief",
+        "description": "An experienced and ruthless raider, veteran of countless clashes. His armor is covered in trophies taken from fallen enemies. Fights with a sharp machete and lethal confidence.",
+        "type": "humanoid",
+        "hp": 50,
+        "ac": 16,
+        "attack": {
+            "damage": 11,
+            "bonus": 4
+        },
+        "xp": 250,
+        "biomes": [
+            "City",
+            "Forest"
+        ],
+        "isElite": true,
+        "specialAbility": {
+            "id": "counterattack",
+            "name": "Counterattack",
+            "description": "If the player misses an attack, 30% chance of opportunity attack.",
+            "trigger": "player_miss",
+            "probability": 0.3
+        },
+        "tactics": {
+            "revealDc": 17,
+            "description": "His arrogance is his weak point. A well-executed deception could induce him into a rash attack, nullifying his counterattack and reducing his defense.",
+            "actions": [
+                {
+                    "id": "tactic_feint_chief",
+                    "name": "[Tactical] Elaborate Feint",
+                    "description": "Feint an attack to trick him into exposing himself, nullifying his counterattack for this turn.",
+                    "skillCheck": {
+                        "skill": "deception",
+                        "dc": 16
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "aberrant_angel_arsonist",
+        "name": "Aberrant Angel - The Arsonist",
+        "description": "A failed transformation into an Ash Angel. Half man, half machine, completely insane. His body is fused with alien technology in a grotesque and painful way. One human eye full of madness, the other a cracked red lens. He still wears the remains of a red and white striped sweater. Unstable flames emanate from his hands.",
+        "type": "humanoid",
+        "hp": 45,
+        "ac": 12,
+        "attack": {
+            "damage": 12,
+            "bonus": 3
+        },
+        "xp": 600,
+        "biomes": [
+            "City"
+        ],
+        "isElite": true,
+        "specialAbility": {
+            "id": "pyromaniac_burst",
+            "name": "Pyromaniac Burst",
+            "description": "When his HP drops below 50%, has 40% chance to explode in flames, damaging the player.",
+            "trigger": "low_hp",
+            "probability": 0.4
+        },
+        "tactics": {
+            "revealDc": 15,
+            "description": "His madness makes him unpredictable, but the flames he emits are his only weapon. Water or cold could weaken him significantly.",
+            "actions": [
+                {
+                    "id": "tactic_douse_flames",
+                    "name": "[Tactical] Douse Flames",
+                    "description": "Use water or a cold object to extinguish his flames and reduce his power.",
+                    "skillCheck": {
+                        "skill": "survival",
+                        "dc": 14
+                    }
+                }
+            ]
+        }
+    }
+]

@@ -1,0 +1,1040 @@
+[
+    {
+        "id": "CONS_001",
+        "name": "Food Ration",
+        "description": "Canned food for one day. Restores a small amount of satiety.",
+        "type": "consumable",
+        "weight": 0.5,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "CONS_002",
+        "name": "Water Bottle",
+        "description": "Potable water. Essential for survival.",
+        "type": "consumable",
+        "weight": 1,
+        "value": 3,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "hydration",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "CONS_003",
+        "name": "Bandages",
+        "description": "Clean bandages to dress light wounds.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 10,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "MED_BANDAGE_BASIC",
+        "name": "Makeshift Bandage",
+        "description": "Improvised bandage made with clean rags. Stops bleeding but isn't sterile.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 3,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "MED_BANDAGE_ADVANCED",
+        "name": "Improved Bandage",
+        "description": "A clean bandage soaked in antiseptic. Much more effective than a normal bandage.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 25,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "FOOD_SOUP",
+        "name": "Warming Soup",
+        "description": "A hot soup prepared with scavenged vegetables. Restores satiety and hydration.",
+        "type": "consumable",
+        "weight": 0.4,
+        "value": 15,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 30
+            },
+            {
+                "type": "hydration",
+                "value": 20
+            }
+        ]
+    },
+    {
+        "id": "MED_ANTISEPTIC",
+        "name": "Antiseptic",
+        "description": "Alcoholic solution to disinfect wounds. Prevents infections.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 15,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 8
+            }
+        ]
+    },
+    {
+        "id": "MED_PAINKILLER",
+        "name": "Painkillers",
+        "description": "Pills to alleviate pain. Provides temporary relief and helps recover from debilitating injuries.",
+        "type": "consumable",
+        "weight": 0.05,
+        "value": 12,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 5
+            },
+            {
+                "type": "cureStatus",
+                "value": "FERITO"
+            }
+        ]
+    },
+    {
+        "id": "MED_ANTIDOTE",
+        "name": "Antidote",
+        "description": "A syringe containing a universal serum to neutralize common poisons.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 50,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "cureStatus",
+                "value": "AVVELENATO"
+            }
+        ]
+    },
+    {
+        "id": "MED_SUTURE_KIT",
+        "name": "Suture Kit",
+        "description": "Needle and surgical thread to suture deep wounds. Requires medical skills.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 35,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "TOOL_TORCH_BASIC",
+        "name": "Improvised Torch",
+        "description": "A stick with rags soaked in fuel. Provides light for exploring.",
+        "type": "consumable",
+        "weight": 0.8,
+        "value": 4,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "light",
+                "value": 60
+            }
+        ]
+    },
+    {
+        "id": "TRAP_SIMPLE",
+        "name": "Simple Trap",
+        "description": "A rudimentary trap made with rope and wood. Can catch small animals.",
+        "type": "consumable",
+        "weight": 1.5,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "trap",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "bear_trap",
+        "name": "Bear Trap",
+        "description": "A heavy trap for large animals. Very effective but dangerous to handle.",
+        "type": "consumable",
+        "weight": 3.0,
+        "value": 25,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "trap",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "advanced_bear_trap",
+        "name": "Advanced Bear Trap",
+        "description": "A sophisticated trap of the Raven Clan, with a quick-snap mechanism and reinforced jaws. Deadly even against the largest prey.",
+        "type": "consumable",
+        "weight": 4.0,
+        "value": 60,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "trap",
+                "value": 5
+            }
+        ],
+        "color": "#a855f7"
+    },
+    {
+        "id": "expired_medicine",
+        "name": "Expired Medicine",
+        "description": "Drugs expired long ago. Might still have some effect, but with risks.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 8
+            }
+        ]
+    },
+    {
+        "id": "survival_backpack",
+        "name": "Survival Backpack",
+        "description": "A well-equipped backpack with essential survival tools.",
+        "type": "consumable",
+        "weight": 2.5,
+        "value": 50,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "container",
+                "value": 20
+            }
+        ]
+    },
+    {
+        "id": "fresh_fish",
+        "name": "Fresh Fish",
+        "description": "Freshly caught fish. Great source of protein if cooked.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 20
+            }
+        ]
+    },
+    {
+        "id": "binoculars",
+        "name": "Binoculars",
+        "description": "Optical instrument to see far away. Useful for exploration and spotting.",
+        "type": "consumable",
+        "weight": 0.8,
+        "value": 30,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "vision",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "tool_box",
+        "name": "Toolbox",
+        "description": "A box containing various tools for repairs and construction.",
+        "type": "consumable",
+        "weight": 4.0,
+        "value": 40,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "hiking_backpack",
+        "name": "Hiking Backpack",
+        "description": "Durable backpack for long hikes, with multiple pockets.",
+        "type": "consumable",
+        "weight": 1.8,
+        "value": 35,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "container",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "edible_mushrooms",
+        "name": "Edible Mushrooms",
+        "description": "Wild mushrooms safe to eat. Rich in nutrients.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 6,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "portable_tent",
+        "name": "Portable Tent",
+        "description": "A small lightweight tent for temporary shelter.",
+        "type": "consumable",
+        "weight": 2.0,
+        "value": 45,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "shelter",
+                "value": 8
+            }
+        ]
+    },
+    {
+        "id": "glowing_mushrooms",
+        "name": "Glowing Mushrooms",
+        "description": "Rare mushrooms that emit light. Have unique healing properties.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 25,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 12
+            }
+        ]
+    },
+    {
+        "id": "random_item",
+        "name": "Rare Random Item",
+        "description": "A valuable item found randomly. Could be anything useful.",
+        "type": "consumable",
+        "weight": 1.0,
+        "value": 20,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "random",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "military_backpack",
+        "name": "Military Backpack",
+        "description": "Tactical military backpack with many pockets and compartments.",
+        "type": "consumable",
+        "weight": 3.0,
+        "value": 60,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "container",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "medkit_advanced",
+        "name": "Advanced Medkit",
+        "description": "Professional medical kit with surgical instruments and medicines.",
+        "type": "consumable",
+        "weight": 1.5,
+        "value": 80,
+        "stackable": false,
+        "rarity": "epic",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 35
+            },
+            {
+                "type": "cureStatus",
+                "value": "FERITO"
+            }
+        ]
+    },
+    {
+        "id": "medkit_field",
+        "name": "Field Medkit",
+        "description": "Portable medical kit for field use.",
+        "type": "consumable",
+        "weight": 0.8,
+        "value": 40,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 20
+            },
+            {
+                "type": "cureStatus",
+                "value": "FERITO"
+            }
+        ]
+    },
+    {
+        "id": "weapon_repair_kit",
+        "name": "Weapon Repair Kit",
+        "description": "Tools and parts to repair firearms.",
+        "type": "consumable",
+        "weight": 1.2,
+        "value": 35,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 20
+            }
+        ]
+    },
+    {
+        "id": "rad_away_pills",
+        "name": "Anti-Rad Pills",
+        "description": "Specific medicine against radiation poisoning.",
+        "type": "consumable",
+        "weight": 0.05,
+        "value": 50,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "antirad",
+                "value": 100
+            }
+        ]
+    },
+    {
+        "id": "batteries_pack",
+        "name": "Battery Pack",
+        "description": "Set of rechargeable batteries for electronic devices.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 15,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "power",
+                "value": 50
+            }
+        ]
+    },
+    {
+        "id": "fishing_kit",
+        "name": "Fishing Kit",
+        "description": "Complete tools for fishing: rod, hooks, bait.",
+        "type": "consumable",
+        "weight": 1.5,
+        "value": 25,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "fishing",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "hook_set",
+        "name": "Hook Set",
+        "description": "Various fishing hooks of different sizes.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "fishing",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "waterproof_case",
+        "name": "Waterproof Case",
+        "description": "Sealed case to protect items from water.",
+        "type": "consumable",
+        "weight": 0.5,
+        "value": 18,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "container",
+                "value": 8
+            }
+        ]
+    },
+    {
+        "id": "smoke_grenade",
+        "name": "Smoke Grenade",
+        "description": "Grenade that produces a thick cloud of smoke for cover.",
+        "type": "consumable",
+        "weight": 0.4,
+        "value": 20,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "smoke",
+                "value": 30
+            }
+        ]
+    },
+    {
+        "id": "walkie_talkie",
+        "name": "Portable Radio",
+        "description": "Short-range communication device.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 35,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "communication",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "torch",
+        "name": "Torch",
+        "description": "A simple torch made with rags and fuel.",
+        "type": "consumable",
+        "weight": 0.5,
+        "value": 8,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "light",
+                "value": 45
+            }
+        ]
+    },
+    {
+        "id": "tarp",
+        "name": "Tarp",
+        "description": "A waterproof plastic sheet to shelter from rain.",
+        "type": "consumable",
+        "weight": 1.0,
+        "value": 12,
+        "stackable": false,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "shelter",
+                "value": 6
+            }
+        ]
+    },
+    {
+        "id": "lighter",
+        "name": "Lighter",
+        "description": "A working lighter to start fires or torches.",
+        "type": "consumable",
+        "weight": 0.05,
+        "value": 15,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "fire",
+                "value": 100
+            }
+        ]
+    },
+    {
+        "id": "energy_bar",
+        "name": "Energy Bar",
+        "description": "High-calorie bar for rapid energy recovery.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 10,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 40
+            }
+        ]
+    },
+    {
+        "id": "flashlight",
+        "name": "Flashlight",
+        "description": "A battery-powered flashlight, reliable and long-lasting.",
+        "type": "consumable",
+        "weight": 0.4,
+        "value": 20,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "light",
+                "value": 120
+            }
+        ]
+    },
+    {
+        "id": "first_aid_kit",
+        "name": "First Aid Kit",
+        "description": "A well-stocked medical kit for medium injuries.",
+        "type": "consumable",
+        "weight": 0.7,
+        "value": 30,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 30
+            },
+            {
+                "type": "cureStatus",
+                "value": "FERITO"
+            }
+        ]
+    },
+    {
+        "id": "carrot",
+        "name": "Carrot",
+        "description": "A fresh carrot, recovered from an abandoned garden.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 4,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "potato",
+        "name": "Potato",
+        "description": "A raw potato. Better if cooked, but edible.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "mechanic_toolkit",
+        "name": "Mechanic Toolkit",
+        "description": "A set of good quality tools for complex mechanical repairs.",
+        "type": "consumable",
+        "weight": 3.0,
+        "value": 60,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "antibiotics_expired",
+        "name": "Expired Antibiotics",
+        "description": "Expired antibiotics. Might cure a disease, but there is a risk of side effects.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 5,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 5
+            },
+            {
+                "type": "cureStatus",
+                "value": "MALATO"
+            }
+        ]
+    },
+    {
+        "id": "strong_liquor",
+        "name": "Strong Liquor",
+        "description": "A bottle of hard liquor of dubious origin. Warms the spirit, but dehydrates.",
+        "type": "consumable",
+        "weight": 0.7,
+        "value": 20,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 2
+            },
+            {
+                "type": "hydration",
+                "value": -10
+            }
+        ]
+    },
+    {
+        "id": "cigars_box",
+        "name": "Box of Cigars",
+        "description": "A box of luxury cigars, still sealed. A rare luxury in this world.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 40,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": []
+    },
+    {
+        "id": "wild_berries",
+        "name": "Wild Berries",
+        "description": "A handful of berries found in the woods. Edible and sweet.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 3,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 10
+            },
+            {
+                "type": "hydration",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "multitool",
+        "name": "Multitool",
+        "description": "A compact tool with pliers, screwdrivers, and a small blade. Incredibly versatile.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 80,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "precision_tools",
+        "name": "Precision Tools",
+        "description": "A set of small screwdrivers and tweezers for delicate work on electronic components.",
+        "type": "consumable",
+        "weight": 0.4,
+        "value": 70,
+        "stackable": false,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 15
+            }
+        ]
+    },
+    {
+        "id": "sewing_kit_professional",
+        "name": "Professional Sewing Kit",
+        "description": "A complete kit with needles, strong threads, and patches. Perfect for repairing clothes and armor.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 45,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 12
+            }
+        ]
+    },
+    {
+        "id": "gourmet_canned_food",
+        "name": "Gourmet Canned Food",
+        "description": "A delicacy from the past world. Extremely nutritious and a luxury for morale.",
+        "type": "consumable",
+        "weight": 0.5,
+        "value": 50,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 60
+            },
+            {
+                "type": "heal",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "energy_drink_nuclear",
+        "name": "Nuclear Energy Drink",
+        "description": "A can of brightly colored energy drink with a suspicious name. Promises 'an atomic charge'.",
+        "type": "consumable",
+        "weight": 0.4,
+        "value": 30,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 10
+            },
+            {
+                "type": "hydration",
+                "value": 20
+            },
+            {
+                "type": "heal",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "cigarettes_pack",
+        "name": "Pack of Cigarettes",
+        "description": "A pack of pre-catastrophe cigarettes, still sealed. A valuable trade good, or a vice to indulge in.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 25,
+        "stackable": false,
+        "rarity": "uncommon",
+        "effects": []
+    },
+    {
+        "id": "stimpak_military",
+        "name": "Military Medical Injector",
+        "description": "An auto-injector filled with a cocktail of fast-acting drugs. Heals serious wounds in seconds.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 150,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 75
+            },
+            {
+                "type": "cureStatus",
+                "value": "FERITO"
+            }
+        ]
+    },
+    {
+        "id": "high_energy_bar",
+        "name": "High-Energy Bar",
+        "description": "A dense and compact bar, designed to provide maximum caloric intake in an extreme survival situation.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 60,
+        "stackable": true,
+        "rarity": "rare",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 80
+            },
+            {
+                "type": "heal",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "food_honey",
+        "name": "Honey",
+        "description": "A jar of golden honey, miraculously preserved. Sweet, nutritious, and healing.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 35,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "satiety",
+                "value": 30
+            },
+            {
+                "type": "heal",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "sonic_dissuader",
+        "name": "Sonic Dissuader",
+        "description": "A crude device assembled with radio components and crystals. When activated, it emits a high-frequency sound wave, inaudible to humans, but apparently intolerable to Ash Angels. Grants 6 hours of safe travel.",
+        "type": "consumable",
+        "weight": 1.2,
+        "value": 300,
+        "stackable": true,
+        "rarity": "epic",
+        "effects": [
+            {
+                "type": "special",
+                "value": "ash_angel_protection_6h"
+            }
+        ],
+        "color": "#8b5cf6"
+    },
+    {
+        "id": "MED_HEALING_HERBS",
+        "name": "Healing Herbs",
+        "description": "A bunch of rare medicinal herbs with potent healing properties. Can cure infections and diseases.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 40,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 20
+            },
+            {
+                "type": "cureStatus",
+                "value": "INFEZIONE"
+            }
+        ]
+    },
+    {
+        "id": "elixir_of_fortitude",
+        "name": "Elixir of Fortitude",
+        "description": "A thick and aromatic decoction prepared with the Ice Flower. Warms from the inside and seems to strengthen bones. Grants resistance to cold and temporarily increases constitution.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 200,
+        "stackable": true,
+        "rarity": "epic",
+        "effects": [
+            {
+                "type": "heal",
+                "value": 30
+            },
+            {
+                "type": "cureStatus",
+                "value": "IPOTERMIA"
+            },
+            {
+                "type": "special",
+                "value": "fortitude_buff_12h"
+            }
+        ],
+        "color": "#60a5fa"
+    },
+    {
+        "id": "pyromaniacs_lighter",
+        "name": "The Pyromaniac's Lighter",
+        "description": "An old petrol lighter, strangely cold to the touch. A small vine is engraved on the side. It never runs out. A tragic legacy turned into a survival tool.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 500,
+        "stackable": false,
+        "rarity": "epic",
+        "effects": [
+            {
+                "type": "fire",
+                "value": 999999
+            }
+        ],
+        "color": "#ef4444"
+    }
+]

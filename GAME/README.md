@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.7)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,16 +92,27 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9** - The Great Debugging
+**Versione Corrente: v1.9.9.7** - Localization Kickoff
 
 **MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
 
 Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade.
 
 **Cosa Rimane:**
-- Traduzioni multilingua (EN, ES, FR, DE, PT)
+- Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO (v1.9.9.7)**
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Testing finale end-to-end
+
+#### Novità v1.9.9.7 (20 Novembre 2025) - **LOCALIZATION KICKOFF**
+
+Inizio ufficiale dei lavori di localizzazione in inglese.
+
+**LOCALIZZAZIONE:**
+- Creata infrastruttura `_localization_work/en`
+- Completata traduzione automatica di tutti i file `data/` (Eventi, Narrativa, Database)
+- Predisposto ambiente per traduzione UI
+
+---
 
 #### Novità v1.9.9 (13 Novembre 2025) - **THE GREAT DEBUGGING**
 
@@ -404,18 +415,24 @@ Questa versione espande massivamente il sistema di combattimento con meccaniche 
 
 **IMPATTO:**
 - Combattimento tattico vs ripetitivo
-- Ambiente risorsa strategica
-- Preparazione premiata (munizioni)
-- Boss memorabili e sfidanti
-- Skill Furtività/Percezione valorizzate
+  - Ambiente risorsa strategica
+  - Preparazione premiata (munizioni)
+  - Boss memorabili e sfidanti
+  - Skill Furtività/Percezione valorizzate
 
-**Risultato:** Il combattimento evolve da "meccanica isolata" a "sistema tattico integrato" dove ambiente, equipaggiamento e preparazione determinano vittoria o sconfitta.
+**Risultato:** Il combattimento evolve da "meccanica isolata" a "sistema tattico integrato" dove ambiente, equipaggiamento e preparazione determinano vittoria## 📦 Version 1.9.9.6
 
----
+**Current Release:** v1.9.9.6 "Echoes of Gratitude" (November 2025)
 
-#### Novità v1.9.0 (4 Novembre 2025) - **LE PROVE DEL PADRE**
+### Recent Updates
+- **Credits Update:** Complete overhaul of the credits screen to honor all supporters.
+- **Donor Events:** Added 10 unique "Echoes of Donors" events.
+- **Dynamic Names:** Implemented a system to display random donor names in specific game contexts (graves, badges).
+- **Bug Fixes:** 
+    - Fixed "undefined item" error in donor events.
+    - Fixed missing Village tileset rendering.
 
-Con la versione 1.9.0, il gioco introduce il **sistema Main Quest multi-stage** - la quest principale diventa un viaggio strutturato con "Prove" attive che valorizzano le lezioni del padre.
+See `log/` directory for full changelogs.trutturato con "Prove" attive che valorizzano le lezioni del padre.
 
 Con la versione 1.9.0, il gioco introduce il **sistema Main Quest multi-stage** - la quest principale diventa un viaggio strutturato con "Prove" attive che valorizzano le lezioni del padre.
 

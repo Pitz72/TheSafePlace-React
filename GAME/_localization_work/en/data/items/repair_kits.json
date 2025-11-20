@@ -1,0 +1,34 @@
+[
+    {
+        "id": "tool_repair_kit_basic",
+        "name": "Basic Repair Kit",
+        "description": "A set of rudimentary tools and consumables for basic maintenance of weapons and armor. Restores a small amount of durability.",
+        "type": "tool",
+        "weight": 1.0,
+        "value": 40,
+        "stackable": true,
+        "rarity": "common",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 25
+            }
+        ]
+    },
+    {
+        "id": "tool_repair_kit_advanced",
+        "name": "Advanced Repair Kit",
+        "description": "Precision instruments and high-quality materials for complex repairs. Restores a large amount of durability.",
+        "type": "tool",
+        "weight": 1.5,
+        "value": 100,
+        "stackable": true,
+        "rarity": "uncommon",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 75
+            }
+        ]
+    }
+]

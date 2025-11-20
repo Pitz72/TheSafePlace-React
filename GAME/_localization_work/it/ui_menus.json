@@ -1,0 +1,121 @@
+{
+    "MAIN_MENU": {
+        "TITLE_1": "THE SAFE PLACE CHRONICLES",
+        "TITLE_2": "THE ECHO",
+        "TITLE_3": "OF THE",
+        "TITLE_4": "JOURNEY",
+        "SUBTITLE": "Un GDR di Simone Pizzi",
+        "COPYRIGHT": "(C) 2025 Runtime Radio - gioco di ispirazione retrocomputazionale realizzato tramite supporto LLM",
+        "ITEMS": {
+            "NEW_GAME": "Nuova Partita",
+            "CONTINUE_GAME": "Continua Partita",
+            "LOAD_GAME": "Carica Partita",
+            "STORY": "Storia",
+            "INSTRUCTIONS": "Istruzioni",
+            "OPTIONS": "Opzioni",
+            "TROPHIES": "Trofei",
+            "EXIT": "Esci"
+        },
+        "MESSAGES": {
+            "NO_SAVE_FOUND": "Nessun salvataggio precedente trovato.",
+            "EXITING": "Exiting game..."
+        }
+    },
+    "OPTIONS_SCREEN": {
+        "TITLE": "═══ IMPOSTAZIONI ═══",
+        "SUBTITLE": "Configura le opzioni di gioco",
+        "HEADERS": {
+            "GAME": "Gioco",
+            "AUDIO": "Audio",
+            "VIDEO": "Video"
+        },
+        "LABELS": {
+            "LANGUAGE": "Lingua",
+            "FULLSCREEN": "Schermo",
+            "SOUND": "Suono",
+            "VOLUME": "Volume",
+            "DISPLAY": "Visualizzazione"
+        },
+        "VALUES": {
+            "LANGUAGES": [
+                "Italiano",
+                "Inglese",
+                "Francese",
+                "Tedesco",
+                "Spagnolo",
+                "Portoghese",
+                "Russo",
+                "Cinese Semplificato"
+            ],
+            "FULLSCREEN": [
+                "Fullscreen",
+                "Finestra"
+            ],
+            "SOUND": [
+                "On",
+                "Off"
+            ],
+            "DISPLAY": [
+                "Standard",
+                "CRT Fosfori Verdi",
+                "Alto Contrasto"
+            ]
+        },
+        "FOOTER": "[W/S/↑↓] Muovi | [A/D/←→] Cambia | [ESC] Torna Indietro"
+    },
+    "SAVE_LOAD_SCREEN": {
+        "TITLES": {
+            "SAVE": "SALVA PARTITA",
+            "LOAD": "CARICA PARTITA",
+            "EXPORT": "ESPORTA SLOT"
+        },
+        "ACTIONS": {
+            "IMPORT_FROM_FILE": "Importa da File JSON",
+            "EXPORT_TO_FILE": "Esporta Slot in File JSON",
+            "GO_BACK": "Torna Indietro",
+            "EXPORT": "Esporta",
+            "DELETE": "Elimina",
+            "IMPORT": "Importa",
+            "CLOSE_MENU": "Chiudi Menu",
+            "BACK": "Indietro",
+            "SELECT": "Seleziona",
+            "CONFIRM": "Conferma"
+        },
+        "MESSAGES": {
+            "EXPORT_SUCCESS": "Salvataggio slot {slot} esportato con successo!",
+            "EXPORT_ERROR": "Errore durante l'esportazione: {error}",
+            "IMPORT_SUCCESS": "Salvataggio importato nello slot {slot} con successo!",
+            "IMPORT_ERROR": "Errore durante l'importazione: {error}",
+            "SLOT_FULL_WARNING": "Attenzione: tutti gli slot sono pieni. Sovrascrivendo lo slot 1...",
+            "DELETE_SUCCESS": "Slot {slot} eliminato con successo.",
+            "DELETE_ERROR": "Errore durante l'eliminazione: {error}",
+            "SLOT_EMPTY": "Questo slot è vuoto.",
+            "SLOT_EMPTY_EXPORT": "Questo slot è vuoto. Seleziona uno slot con un salvataggio.",
+            "SAVE_SUCCESS": "Partita salvata nello slot {slot}.",
+            "SAVE_ERROR": "Errore durante il salvataggio.",
+            "SELECT_EXPORT": "Seleziona lo slot da esportare e premi INVIO"
+        },
+        "FOOTER": {
+            "EXPORT_MODE": "[↑↓] Seleziona Slot | [INVIO] Esporta | [ESC] Annulla",
+            "SAVE_ACTIONS": "[E] Esporta | [D] Elimina | [A] Chiudi Menu | [ESC] Indietro",
+            "LOAD_ACTIONS": "[D] Elimina | [A] Chiudi Menu | [ESC] Indietro",
+            "IMPORT_ACTIONS": "[I] Importa | [A] Chiudi Menu | [ESC] Indietro",
+            "DEFAULT_ACTIONS": "[A] Chiudi Menu | [ESC] Indietro",
+            "NAVIGATION": "[↑↓] Seleziona | [INVIO] Conferma | [A] Azioni Slot | [ESC] Indietro"
+        }
+    },
+    "GAME_OVER_SCREEN": {
+        "TITLE": "GAME OVER",
+        "MESSAGES": {
+            "COMBAT": "Sconfitto in combattimento. La tua guardia non era abbastanza alta.",
+            "STARVATION": "La fame ti ha consumato. Il tuo viaggio finisce con lo stomaco vuoto.",
+            "DEHYDRATION": "La sete ti ha prosciugato. Anche il più forte degli uomini non può vivere senz'acqua.",
+            "SICKNESS": "La malattia ha avuto la meglio. Il tuo corpo non ha più retto.",
+            "POISON": "Il veleno ha percorso le tue vene, mettendo fine alla tua lotta.",
+            "ENVIRONMENT": "Il mondo stesso ti ha reclamato. Una caduta, un passo falso... a volte basta poco.",
+            "UNKNOWN": "La tua avventura è giunta al termine.",
+            "EASTER_EGG": "Sei morto di... MORTE!"
+        },
+        "PROMPT": "[INVIO per tornare al Menu Principale]"
+    }
+}

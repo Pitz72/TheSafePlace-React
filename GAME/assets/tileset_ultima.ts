@@ -100,6 +100,15 @@ const svgContent = `
     <line x1="24" y1="16" x2="24" y2="24" stroke="${C64_COLORS.BLACK}" stroke-width="2" />
   </g>
 
+  <!-- 6,0: VILLAGE (V) -->
+  <g transform="translate(192, 0)">
+    <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
+    <rect x="4" y="12" width="10" height="10" fill="${C64_COLORS.BROWN}" />
+    <path d="M4 12 L9 6 L14 12 Z" fill="${C64_COLORS.ORANGE}" />
+    <rect x="18" y="12" width="10" height="10" fill="${C64_COLORS.BROWN}" />
+    <path d="M18 12 L23 6 L28 12 Z" fill="${C64_COLORS.ORANGE}" />
+  </g>
+
   <!-- ROW 1: ACTORS -->
 
   <!-- 0,1: PLAYER (@) -->
@@ -228,6 +237,7 @@ export const TILE_MAP: Record<string, { x: number; y: number }> = {
   '~': { x: 96, y: 0 },  // Water
   'C': { x: 128, y: 0 }, // City
   '#': { x: 160, y: 0 }, // Wall
+  'V': { x: 192, y: 0 }, // Village
 
   '@': { x: 0, y: 32 },  // Player
   'T': { x: 32, y: 32 }, // Trader

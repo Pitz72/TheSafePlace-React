@@ -15,13 +15,14 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
         'data/items/materials.json',
         'data/items/quest.json',
         'data/items/ammo.json',
-        'data/items/repair_kits.json'
+        'data/items/repair_kits.json',
+        'data/items/unique_items.json'
     ];
     try {
         console.log('[ITEM DB] Inizio caricamento file JSON...', files);
         const responses = await Promise.all(files.map(file => fetch(file)));
         console.log('[ITEM DB] Risposte ricevute:', responses.length);
-        for(const res of responses) {
+        for (const res of responses) {
             if (!res.ok) {
                 throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
             }
@@ -32,20 +33,20 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
 
         const allRawItems: RawItem[] = jsonDataArrays.flat();
         console.log('[ITEM DB] Items totali:', allRawItems.length);
-        
+
         const finalDatabase: Record<string, IItem> = {};
 
         allRawItems.forEach(item => {
             let color = '#ffffff'; // Default color: white
 
             switch (item.type) {
-                case 'weapon':    color = '#ef4444'; break; // red-500
-                case 'ammo':      color = '#f97316'; break; // orange-500
-                case 'armor':     color = '#d1d5db'; break; // gray-300
-                case 'material':  color = '#a16207'; break; // yellow-700
-                case 'quest':     color = '#facc15'; break; // yellow-400
-                case 'manual':    color = '#c084fc'; break; // purple-400
-                case 'tool':      color = '#3b82f6'; break; // blue-500
+                case 'weapon': color = '#ef4444'; break; // red-500
+                case 'ammo': color = '#f97316'; break; // orange-500
+                case 'armor': color = '#d1d5db'; break; // gray-300
+                case 'material': color = '#a16207'; break; // yellow-700
+                case 'quest': color = '#facc15'; break; // yellow-400
+                case 'manual': color = '#c084fc'; break; // purple-400
+                case 'tool': color = '#3b82f6'; break; // blue-500
                 case 'consumable':
                     if (item.id.includes('med') || item.effects?.some(e => e.type === 'heal')) {
                         color = '#4ade80'; // green-400 for medical
@@ -58,7 +59,7 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
                     }
                     break;
                 default:
-                     color = '#ffffff';
+                    color = '#ffffff';
             }
             finalDatabase[item.id] = { ...item, color };
         });

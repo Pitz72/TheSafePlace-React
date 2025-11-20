@@ -1,0 +1,297 @@
+[
+  {
+    "id": "lore_sick_traveler",
+    "title": "L'Eco di una Tosse",
+    "description": "Senti un colpo di tosse secca, fragile, che le squarcia i polmoni. Appoggiato a un albero crollato, vedi un uomo. È poco più di uno scheletro tenuto insieme da stracci. Accanto a lui, una ragazza molto giovane trema, scossa da una febbre evidente e con macchie scure che le affiorano sulla pelle. Ti guardano con occhi privi di speranza. Sono deboli, forse troppo per essere una minaccia. Forse.",
+    "biomes": ["Foresta", "Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Offri una piccola parte delle tue provviste",
+        "alignment": "Lena",
+        "itemRequirements": [
+          { "itemId": "CONS_001", "quantity": 1 },
+          { "itemId": "CONS_002", "quantity": 1 }
+        ],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "removeItem", "value": { "itemId": "CONS_001", "quantity": 1 } },
+              { "type": "removeItem", "value": { "itemId": "CONS_002", "quantity": 1 } }
+            ]
+          },
+          {
+            "type": "skillCheck",
+            "skill": "persuasione",
+            "dc": 10,
+            "successText": "Esiti un istante, poi porgi loro del cibo e dell'acqua. L'uomo piange in silenzio mentre la ragazza beve avidamente. I loro occhi ti comunicano una gratitudine profonda.",
+            "failureText": "Offri loro del cibo. Lo prendono con avidità, ma i loro sguardi rimangono diffidenti. Non ricevi un grazie. Senti un peso sullo stomaco, la sensazione di aver sprecato una risorsa preziosa per nulla.",
+            "success": [
+              { "type": "statusChange", "value": "SPERANZOSO" },
+              { "type": "journalEntry", "text": "Riflessione: Mentre condividi le tue risorse, senti un calore nel petto. È questo che avrebbe fatto mamma? Ma la paura ti sussurra: e se non bastasse per te?" },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 3 } },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": -1 } }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "La generosità, in questo mondo, è un lusso pericoloso." }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignorali e tira dritto",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Stringi i denti e prosegui. Le tue scorte sono solo tue. La loro silenziosa disperazione ti segue come un'ombra. È questa la lezione che ti ha insegnato tuo padre: sopravvivere significa, a volte, lasciare che altri muoiano." },
+              { "type": "journalEntry", "text": "Riflessione: Li guardi allontanarsi e senti un peso nel petto. Papà... è così che ti sei sentito ogni volta? È questo il prezzo della sopravvivenza?" },
+              { "type": "statusChange", "value": "INASPRITO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 3 } },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": -1 } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_broken_radio",
+    "title": "Voci nel Silenzio",
+    "description": "Tra le macerie di un negozio di elettronica, trovi una vecchia radio a onde corte. Sembra danneggiata, ma un debole led rosso lampeggia ancora. Potresti provare a ripararla per cercare segnali, o smontarla per recuperare componenti preziosi.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Tenta di riparare la radio",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 14,
+            "successText": "Con pazienza, riesci a ricollegare alcuni fili. Giri la manopola e, tra la statica, senti una voce cantare una vecchia ninna nanna. Dura solo un istante, poi svanisce. La radio è di nuovo morta, ma per un secondo, non eri solo.",
+            "failureText": "Armeggi con i circuiti, ma un filo sbagliato provoca una scintilla. Il led rosso si spegne per sempre. Hai perso la possibilità di sentire qualcosa oltre al suono del vento.",
+            "success": [
+              { "type": "statusChange", "value": "ISPIRATO" },
+              { "type": "journalEntry", "text": "Riflessione: Per un istante, quella voce nella radio... sembrava quella di mamma. Era solo immaginazione, ma il cuore mi ha battuto più forte." },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 2 } },
+              { "type": "special", "value": {"effect": "lenaMemoryUnlocked", "id": "ninna_nanna_memory"}},
+              { "type": "addItem", "value": { "itemId": "cryptic_recording", "quantity": 1 } }
+            ],
+            "failure": [
+              { "type": "statusChange", "value": "DELUSO" }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Smontala per i componenti",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "La speranza non riempie lo stomaco. Smonti la radio, recuperando alcuni componenti elettronici. Mentre lo fai, il led rosso si spegne, e con esso, l'ultima, flebile possibilità di un contatto." },
+              { "type": "addItem", "value": { "itemId": "tech_components", "quantity": 3 } },
+              { "type": "journalEntry", "text": "Riflessione: Papà aveva ragione. La sopravvivenza viene prima di tutto. Ma perché sento questo vuoto nel petto?" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 3 } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_bridge_choice",
+    "title": "Il Ponte Crollato",
+    "description": "Arrivi a un ponte crollato su un fiume impetuoso. C'è un'unica, precaria trave di metallo. Mentre ti prepari ad attraversare, senti un lamento. Sotto il ponte, aggrappato a dei detriti, c'è un uomo con una gamba ferita, trascinato dalla corrente. Puoi tentare di salvarlo, ma perderesti tempo prezioso.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Tenta di salvare l'uomo",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 15,
+            "successText": "Con uno sforzo immane, riesci a tirare l'uomo sulla riva. È ferito e delirante, ma vivo. Ti ringrazia balbettando e ti dà una piccola chiave arrugginita che teneva stretta.",
+            "failureText": "Provi a tirarlo, ma la corrente è troppo forte. La sua presa scivola e viene trascinato via, scomparendo tra i flutti. Rimani sulla riva, ansimante, con il suono del suo ultimo lamento nelle orecchie.",
+            "success": [
+              { "type": "addItem", "value": { "itemId": "rusty_key", "quantity": 1 } },
+              { "type": "advanceTime", "value": 120 },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 4 } },
+              { "type": "journalEntry", "text": "Riflessione: Mentre tendo la mano verso di lui, sento la voce di mamma che sussurra: 'Ogni vita ha valore'. Ma se fallisco, chi salverà me?" }
+            ],
+            "failure": [
+              { "type": "statusChange", "value": "COLPEVOLE" },
+              { "type": "advanceTime", "value": 120 }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Attraversa la trave e ignoralo",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Chiudi gli occhi e la mente. Il suo destino non è il tuo. Attraversi rapidamente la trave. Le sue grida svaniscono, inghiottite dal rumore dell'acqua. Sei al sicuro. Sei solo. Proprio come voleva tuo padre." },
+              { "type": "statusChange", "value": "TORMENTATO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 4 } },
+              { "type": "journalEntry", "text": "Riflessione: Le sue grida mi seguono anche dopo aver attraversato. Papà... è così che ti sei sentito quando hai lasciato mamma?" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_unmarked_grave",
+    "title": "Tomba Senza Nome",
+    "description": "Trovi una piccola tomba improvvisata, segnata da un cumulo di pietre. Qualcuno ha seppellito una persona cara qui. Accanto al tumulo c'è un piccolo zaino, apparentemente dimenticato.",
+    "biomes": ["Pianura", "Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Prendi lo zaino. I morti non ne hanno bisogno.",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Il pragmatismo vince. Apri lo zaino e trovi delle provviste essenziali. Eviti di guardare il tumulo di pietre. La sopravvivenza non ha spazio per il sentimentalismo." },
+              { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
+              { "type": "addItem", "value": { "itemId": "CONS_003", "quantity": 1 } },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 3 } },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": -1 } },
+              { "type": "journalEntry", "text": "Riflessione: I morti non hanno bisogno di cibo. Ma mentre prendo le loro cose, sento il peso del loro silenzio." }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia lo zaino come offerta e rendi omaggio.",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Decidi di rispettare questo luogo. È un piccolo, inutile gesto di umanità. Non hai guadagnato nulla di materiale, ma il tuo passo sembra più saldo." },
+              { "type": "statBoost", "value": { "stat": "car", "amount": 1 } },
+              { "type": "statusChange", "value": "PACIFICO" },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 3 } },
+              { "type": "journalEntry", "text": "Riflessione: Mamma diceva sempre che rispettare i morti ci mantiene umani. Forse aveva ragione. Forse è questo che ci distingue dalle bestie." }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_last_message",
+    "title": "L'Ultimo Messaggio",
+    "description": "In un terminale militare ancora alimentato da una batteria di emergenza, trovi un singolo log non corrotto, datato il giorno del \"Grande Silenzio\".",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi il log pubblico",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              { "type": "journalEntry", "text": "Il log pubblico recita: \"AVVISO URGENTE: Cessate il fuoco unilaterale in atto. Evento di contenimento a livello continentale. Mantenere la calma. Attendere ulteriori istruzioni.\" Il messaggio si ripete in loop, ma non arrivano altre istruzioni." }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Hackera il terminale (Intelligenza DC 15)",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "intelligenza",
+            "dc": 15,
+            "successText": "Riesci a bypassare la sicurezza di base e accedi a un log personale, non ufficiale, di un ufficiale in preda al panico. È frammentario, pieno di errori di battitura.\n\n\"...non è un'arma. Ripeto, NON è un'arma. È una... frequenza? Un segnale. Stanno dicendo che ha 'calmato' le cose. Calmare? Ha spento tutto. Le macchine, le comunicazioni... le persone. Alcuni sono solo... caduti. Altri... altri stanno cambiando. Ho visto cosa succede.\n\nIl 'Progetto Eco' era un errore. Stavano cercando di creare un'interfaccia neurale collettiva, non un coro silenzioso. Ora è troppo tardi.\n\nIl Silenzio non è la fine della guerra. È l'inizio di qualcos'altro.\"",
+            "failureText": "Armeggi con i controlli, ma un allarme silenzioso si attiva. Il terminale si spegne, i dati persi per sempre. Hai sprecato tempo prezioso.",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: Progetto Eco... un'interfaccia neurale collettiva. Il Silenzio non è quello che pensavo." },
+              { "type": "statusChange", "value": "SCONVOLTO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 2 } }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Un'altra opportunità persa. Forse alcune verità sono meglio lasciarle sepolte." },
+              { "type": "statusChange", "value": "FRUSTRATO" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lore_ash_nest",
+    "title": "Il Nido della Cenere",
+    "description": "Trovi un luogo dove diversi Angeli della Cenere sono immobili, in cerchio attorno a una strana antenna o a un dispositivo tecnologico ronzante. Non sembrano ostili, sono in uno stato di \"ricarica\" o \"comunione\". Al centro, vedi che stanno \"coltivando\" qualcosa: corpi umani ricoperti da un bozzolo di cavi e cenere cristallizzata. È un processo di trasformazione.",
+    "biomes": ["Città", "Montagna"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Fuggi silenziosamente (Furtività DC 14)",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 14,
+            "successText": "Ti muovi con la grazia di un fantasma, allontanandoti dal nido senza attirare l'attenzione. L'immagine dei bozzoli ti perseguiterà, ma sei al sicuro. Per ora.",
+            "failureText": "Un rametto si spezza sotto il tuo piede. Uno degli Angeli si muove, la testa scatta nella tua direzione. Devi fuggire in fretta!",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: Ho visto abbastanza. Non sono solo mostri. Sono... qualcosa di più. E non voglio farne parte." },
+              { "type": "statusChange", "value": "TERRORIZZATO" },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": 2 } }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Sono stato troppo lento. La loro attenzione è su di me. Devo scappare!" },
+              { "type": "takeDamage", "value": 5 },
+              { "type": "statusChange", "value": "FERITO" },
+              { "type": "statusChange", "value": "TERRORIZZATO" }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Avvicinati per osservare (Percezione DC 16)",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 16,
+            "successText": "Con un brivido di orrore, ti avvicini abbastanza da distinguere i volti. In uno dei bozzoli più freschi, riconosci un volto familiare: è [Nome NPC]. Gli Angeli non uccidono e basta: raccolgono. E trasformano.",
+            "failureText": "Non riesci a distinguere nulla di significativo tra i bozzoli. L'orrore è sufficiente. Ti ritiri, l'immagine di quei corpi avvolti ti brucia nella mente.",
+            "success": [
+              { "type": "journalEntry", "text": "Riflessione: [Nome NPC]... è qui. È diventato uno di loro. Cosa significa questo per tutti noi?" },
+              { "type": "statusChange", "value": "SCONVOLTO" },
+              { "type": "statusChange", "value": "COLPEVOLE" },
+              { "type": "alignmentChange", "value": { "type": "lena", "amount": 2 } },
+              { "type": "alignmentChange", "value": { "type": "elian", "amount": -1 } },
+              { "type": "setFlag", "value": "ASH_NEST_OBSERVED" }
+            ],
+            "failure": [
+              { "type": "journalEntry", "text": "Riflessione: Non ho visto abbastanza, ma ho visto troppo. Questo posto è un incubo." },
+              { "type": "statusChange", "value": "TERRORIZZATO" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

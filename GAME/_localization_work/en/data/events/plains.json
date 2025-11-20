@@ -1,0 +1,1732 @@
+[
+    {
+        "id": "due_stranieri",
+        "title": "Two Strangers in Need",
+        "description": "Crossing a windswept clearing, you notice two figures slumped on the ground. Approaching cautiously, you see a man desperately trying to staunch a bad wound on a woman's leg, clearly in shock. The man looks up, his eyes full of fear and hope.\n\n\"Please,\" he whispers, \"We've run out of bandages and water. Can you help us? Anything...\"",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Lena] Offer them a bandage and a bottle of water.",
+                "alignment": "Lena",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_003",
+                        "quantity": 1
+                    },
+                    {
+                        "itemId": "CONS_002",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "The man thanks you with tears in his eyes. You use your resources to help them."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] Ignore them and move on. Your resources are too precious.",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You harden your heart and continue on your way, leaving them to their fate. Survival comes first."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Approach with weapon drawn and rob them of what they have.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intimidate",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Your threat is effective. The man, terrified, hands you a small bag. Inside you find some ammunition."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The man is not intimidated. He sees your hesitation and pulls out a knife. A brief struggle ensues."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "animale_ferito",
+        "title": "The Suffering Creature",
+        "description": "A pitiful moan draws your attention. Hidden in the tall grass, you find a fawn with a clearly broken front leg, trapped in an old rusty bear trap. The animal looks at you with large terrified eyes, unable to escape.\n\nA memory surfaces: your mother teaching you to respect every creature. But you also hear the echo of your father's words: 'In today's world, pity is a luxury we cannot afford.'",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Lena] Free and treat the animal.",
+                "alignment": "Lena",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_003",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "medicine",
+                        "dc": 10,
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "With a steady hand and patience, you manage to free the fawn's leg and splint it with branches and a bandage. The animal limps away, disappearing into the tall grass."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You try to help, but your attempts are clumsy. The fawn, frightened, struggles worsening the wound. You are forced to leave it to its fate, having wasted time and a bandage."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] Put the animal down to recover meat.",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is a difficult but pragmatic choice. You end the fawn's suffering and recover meat and hide useful for survival."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the scene and move on.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to intervene. Nature will take its course."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_abandoned_truck",
+        "title": "Abandoned Truck",
+        "description": "An old rusty truck lies on its side, tires half-buried in the dirt. The trailer is still closed.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Force the trailer lock",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 11,
+                        "successText": "The lock gives way. Inside you find crates of military supplies still sealed.",
+                        "failureText": "The lock doesn't give way. You hurt your hands trying.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 5
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the driver's cabin",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You find an old road map and some music CDs. Nothing useful."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_wild_horses",
+        "title": "Wild Horses",
+        "description": "A small herd of wild horses grazes in the distance. They look healthy.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Try to approach to tame them",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "animalHandling",
+                        "dc": 15,
+                        "successText": "A horse lets you approach. You spend some time together before it moves away. You learned something.",
+                        "failureText": "The horses get scared and gallop away. One hits you with a hoof.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Watch them from afar",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is beautiful to see life still free in this devastated world. You grant yourself a moment of peace."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 5
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_raider_ambush",
+        "title": "Ambush",
+        "description": "You hear voices in the distance. Approaching cautiously, you see three raiders dividing the loot of a robbery.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Attack them by surprise",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 14,
+                        "successText": "You surprise them completely. They flee leaving part of their loot.",
+                        "failureText": "They hear you coming. A violent clash ensues.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 60
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid them",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Three against one are not good odds. You take a wide detour to avoid them."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_old_windmill",
+        "title": "Old Windmill",
+        "description": "A ruined windmill stands against the sky. Its blades creak in the wind.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Climb to the top for a better view",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 12,
+                        "successText": "From the top you see for miles. You spot a shelter to the east that could be useful.",
+                        "failureText": "A rotten board gives way under your weight. You fall painfully.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Explore the base of the mill",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "At the base you find old farming tools and a stock of now useless seeds."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_dust_storm",
+        "title": "Dust Storm",
+        "description": "A dense cloud of dust rises on the horizon, approaching rapidly. You have a few minutes.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Seek immediate shelter",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 11,
+                        "successText": "You find a depression in the ground and cover yourself with the tarp. The storm passes.",
+                        "failureText": "You don't find adequate shelter. Dust gets into your eyes and lungs.",
+                        "success": [
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "SICK"
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Run through the storm",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You cover your face and run. It is painful but you come out the other side."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_crashed_plane",
+        "title": "Plane Wreckage",
+        "description": "The remains of a small touring plane are scattered over a wide area. It clearly dates back to before the war.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Explore the wreckage",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "You find the plane's emergency kit still intact and some useful tools.",
+                        "failureText": "The wreckage is dangerous. You cut yourself on a sharp edge.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "tool_repair_kit_basic",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 45
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is just another monument to tragedy. There is nothing for you here."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_merchant_caravan",
+        "title": "Merchant Caravan",
+        "description": "Three people with heavy backpacks walk in a line. One of them notices you and raises a hand in cautious greeting.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Approach and try to trade",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "persuasion",
+                        "dc": 13,
+                        "successText": "They are willing to trade. They offer you medicines in exchange for metal.",
+                        "failureText": "They are suspicious and refuse to deal. They move away quickly.",
+                        "success": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore them and move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't need trouble. You continue on your way."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_old_battlefield",
+        "title": "Battlefield",
+        "description": "Human skeletons and scrap metal cover a wide area. It must have been a terrible battle.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search through the remains",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 11,
+                        "successText": "You find weapons and ammunition still usable among the remains.",
+                        "failureText": "Everything is too corroded or broken. You only waste time in this macabre place.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "makeshift_knife",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 15
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Move away with respect",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "These were people once. You leave their remains in peace."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_wild_dog_pack",
+        "title": "Wild Dog Pack",
+        "description": "A pack of five stray dogs has noticed you. They are deciding whether to attack or not.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Intimidate them",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intimidate",
+                        "dc": 12,
+                        "successText": "You raise your arms and yell. The dogs get scared and flee.",
+                        "failureText": "It doesn't work. The pack attacks.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Throw them some food",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_001",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The dogs devour the food and let you pass without problems."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_scarecrow_field",
+        "title": "Scarecrow Field",
+        "description": "Dozens of scarecrows are arranged in an old field. Some seem... dressed in real clothes.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the scarecrows",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "You find useful items in the pockets of the clothes. Someone used them as a hiding place.",
+                        "failureText": "One of the scarecrows... moves. It's not a scarecrow! It's a trap!",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "durable_cloth",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "The place gives you the creeps. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "There is something deeply wrong here. You leave quickly."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_travelling_doctor",
+        "title": "Traveling Doctor",
+        "description": "An elderly man with a medical backpack greets you. 'I offer treatment in exchange for food or water,' he says with a tired smile.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Accept his treatment",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_002",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The doctor works competently. You feel better and learned something."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "heal",
+                                "value": 30
+                            },
+                            {
+                                "type": "removeStatus",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Decline and move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You have no resources to share. The doctor nods understandingly and walks away."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_radio_tower",
+        "title": "Abandoned Radio Tower",
+        "description": "An old radio transmission tower stands lonely. The door is open.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Climb to the transmission room",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 14,
+                        "successText": "You find pre-war audio recordings and still functioning electronic components.",
+                        "failureText": "The electrical system is dangerous. You get a shock.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "tech_components",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rare_music_cassettes",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Too dangerous. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Abandoned structures can be deadly. You decide not to risk it."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_lone_child",
+        "title": "Lone Child",
+        "description": "A child of perhaps 8 years sits alone near an extinguished fire. He looks at you with wide eyes.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Lena] Offer him food and comfort",
+                "alignment": "Lena",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_001",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The child eats greedily. He tells you his parents died. He thanks you and walks away south."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] Leave him. You can't save everyone",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's tough, but in today's world everyone has to make it on their own. You move on."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_bee_swarm",
+        "title": "Bee Swarm",
+        "description": "A wild beehive has fallen from a dead tree. The bees are furious.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Run away quickly",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 11,
+                        "successText": "You run as fast as you can. The bees don't catch you.",
+                        "failureText": "You are not fast enough. The bees attack you.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Use smoke to calm them",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 13,
+                        "successText": "The smoke works. You manage to gather some precious honey.",
+                        "failureText": "It doesn't work. The bees attack you anyway.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "food_honey",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_strange_monolith",
+        "title": "Mysterious Monolith",
+        "description": "A shiny metal structure rises from the ground. It looks neither natural nor pre-war. What could it be?",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine it closely",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "arcana",
+                        "dc": 16,
+                        "successText": "It's modern art! A pre-war art installation. Nothing mysterious.",
+                        "failureText": "You can't figure it out. Maybe it's better not to know.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Stay away from that thing",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Something about that structure makes you uneasy. You decide not to approach."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_quicksand",
+        "title": "Quicksand",
+        "description": "The ground beneath your feet suddenly becomes yielding. You are sinking!",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Keep calm and move slowly",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 12,
+                        "successText": "You remember your father's lessons. You lie flat and roll out of the quicksand.",
+                        "failureText": "Panic makes you move badly. You sink further before freeing yourself.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Struggle with force",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The more you struggle, the more you sink. Only with great effort do you manage to free yourself."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_supply_cache",
+        "title": "Supply Cache",
+        "description": "You notice disturbed earth and signs of recent digging. Someone hid something here.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Dig to see what's there",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 11,
+                        "successText": "You find a sealed metal crate full of supplies!",
+                        "failureText": "You dig for an hour finding nothing. Maybe you were wrong.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Could be a trap. Move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "When in doubt, better not risk it. You leave the cache intact."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_vultures_circle",
+        "title": "Vultures in the Sky",
+        "description": "A group of vultures circles overhead up ahead. They found something.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Go see what they found",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is a decomposing corpse. You search the remains and find something useful."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the dead in peace",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't need to loot the dead. You continue on your way."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_refugee_family",
+        "title": "Refugee Family",
+        "description": "A family of four walks slowly south. They seem exhausted and hungry.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "[Lena] Share your supplies",
+                "alignment": "Lena",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_001",
+                        "quantity": 2
+                    },
+                    {
+                        "itemId": "CONS_002",
+                        "quantity": 2
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The family thanks you with tears in their eyes. The father offers you an old map in exchange."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "local_map",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] You don't have enough for yourself",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Your resources are limited. You have to think of yourself first."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_lightning_strike",
+        "title": "Lightning Strike",
+        "description": "A sudden thunderstorm breaks out. A lightning bolt hits a nearby tree, setting it on fire.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Seek shelter immediately",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You take shelter and wait for the storm to pass. You are soaked but unharmed."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Gather burning wood from the tree",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 10,
+                        "successText": "You gather wood still burning before the fire goes out. Useful for starting fires.",
+                        "failureText": "You burn your hand gathering the wood too quickly.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "firewood",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "plains_buried_bunker",
+        "title": "Buried Bunker",
+        "description": "A half-buried steel door sticks out of the ground. It seems to lead underground.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Dig and open the door",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 13,
+                        "successText": "After an hour of strenuous digging, you manage to open the door. Inside you find a small bunker with military supplies.",
+                        "failureText": "The door is too heavy and the ground too compact. You can't open it.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_rifle",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore it",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't have time to waste digging. You move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

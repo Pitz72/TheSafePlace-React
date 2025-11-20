@@ -1,0 +1,197 @@
+[
+    {
+        "id": "unique_lost_talisman_location",
+        "title": "The Old Windmill",
+        "description": "You arrived at the old windmill mentioned in Jonas's message. The wind creaks through the rusty blades. It's the right place to start looking.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search carefully at the base of the mill",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 12,
+                        "successText": "After a long search among the tall grass and stones, you see it. A small dark wooden object, almost camouflaged with the ground. You found Jonas's Talisman.",
+                        "failureText": "You search for almost an hour, but find nothing. Maybe it was buried by time or taken away by some animal.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "jonas_talisman",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_find_elara",
+        "title": "The Hidden Child",
+        "description": "You enter the ruined school. The silence is broken only by the dripping of water. You call the name 'Elara' softly. After a moment of hesitation, a frightened little girl emerges from behind an overturned desk. 'Dad... did dad send you?' she asks with a trembling voice.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Yes, your father is safe. I'm taking you to him.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Elara looks at you with eyes full of hope and fear. She nods and takes your hand. 'Let's go,' she whispers. Now you must escort her to the Crossroads."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_ritual_cave",
+        "title": "The Cave of Whispers",
+        "description": "You enter a cave hidden among the rocks. The walls are covered with the same astronomical symbols you saw in the ritual circle. In the center, a stone altar with still warm ash. Someone was here recently.",
+        "biomes": [
+            "Mountain"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the altar and symbols",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "The symbols form a complex pattern. You recognize some constellations and sound frequency calculations. This place was used to 'listen' to something. You note everything in the journal you found.",
+                        "failureText": "The symbols are too complex. You manage to copy only some of them into the journal.",
+                        "success": [
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "setFlag",
+                                    "flag": "RITUAL_SITE_CAVE_VISITED"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[RITUAL] You documented the second place of power. The pattern starts to take shape."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 75
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "This place is disturbing. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The air here vibrates unnaturally. You decide not to stay."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_ancient_tree_ritual",
+        "title": "The Marked Tree",
+        "description": "You stand before an ancient and mammoth tree. Its bark is covered with deep carvings - the same symbols of the ritual circle and the cave. At the base of the tree, ash and crystals arranged in a precise pattern.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Study the carvings and the pattern",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 14,
+                        "successText": "The tree is alive, but the symbols are ancient. Someone has used this place for years, maybe decades. The crystals at the base vibrate slightly when you approach. You document everything accurately.",
+                        "failureText": "The carvings are too eroded by time. You manage to copy only some of them.",
+                        "success": [
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "setFlag",
+                                    "flag": "RITUAL_SITE_TREE_VISITED"
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[RITUAL] You documented the third place of power. Now you have all the pieces of the puzzle."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 75
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Don't touch anything. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Something in this place makes you uncomfortable. Better not to interfere."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

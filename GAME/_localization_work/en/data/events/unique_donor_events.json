@@ -1,0 +1,379 @@
+[
+    {
+        "id": "unique_titanic_car",
+        "title": "The Terrestrial Shipwreck",
+        "description": "In a mud-flooded depression, the rusty roof of an old car sticks out. The windows are intact, sealing the interior like a time capsule. Inside, you see two skeletons sitting in the front seats. They are holding hands. On the dashboard is a clear plastic case.",
+        "biomes": [
+            "Plains",
+            "Water"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Strength DC 12] Open the door.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "titanic_cassette",
+                                "text": "The stale air escapes with a hiss. You take the case. The cover shows a gigantic ship with four smoking funnels, and two faces looking at each other. Inside is a tape cassette. The label says 'Music from the Motion Picture'. You don't know what it means, but you feel it speaks of something unsinkable that sank anyway."
+                            },
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "You found a music cassette in a mud-submerged car.",
+                                    "type": "ITEM_ACQUIRED"
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "The door is jammed by rust and mud. You can't open it.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave them in peace.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "You decide not to disturb their rest.",
+                                    "type": "NARRATIVE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_dogbuster_drone",
+        "title": "The Lost Drone",
+        "description": "Stuck between the low branches of a dry tree in an old city park, you see a small four-propeller aircraft. It is colorful, almost a toy. On the body is a sticker: 'DogBuster'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Investigate DC 10] Examine the drone.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "broken_drone",
+                                "text": "You find a note stuck in the battery compartment, protected from the rain. The handwriting is childish: 'Dad, I found this thing in the garden. I called Mr. Simon Rest. He said to take it to the DogBusters headquarters. Can you do it?'. There is no headquarters, and no Simon Rest. Just a task left half-done."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "You can't retrieve the drone without risking breaking it or falling.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave it there as a monument.",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                },
+                                "text": "You leave the drone where it is, a small monument to an interrupted game."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_romeros_builders",
+        "title": "The Builders",
+        "description": "You find a building that looks different from the others. It hasn't collapsed, it was... disassembled and reassembled. Walls reinforced with care, an ingenious rainwater collection system on the roof. On the door is a painted symbol: two shaking hands and the writing 'Los Romeros - Here we build, we don't destroy'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Enter and read the journal on the table.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "advanced_tool_kit",
+                                "text": "On the table you find an open journal: 'Day 400 of the Silence. The East gang wanted our supplies. Jimmy said no to weapons. We repaired their generator in exchange for peace. It works. We can rebuild this world, one brick at a time, amigos.'"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_bio_ai_lab",
+        "title": "The Fatal Error",
+        "description": "You enter an underground server room. The air is cold. In the center, two desks face a huge central monitor, now off. On the chairs, two mummified corpses wear lab coats. The ID badges read: 'Dr. W. Galerius' and 'Eng. L. Franke'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Intelligence DC 14] Access the emergency terminal.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "int",
+                        "dc": 14,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "tech_components",
+                                "quantity": 5,
+                                "text": "The final log flashes on the green phosphor screen. 'Attempt 49. The bio-organic AI responded. Not with data, but with... hunger. We tried to isolate the code, but it got into the ventilation system. Franke is coughing spores. I can't feel my legs anymore. If anyone reads this: do not reactivate the mainframe. Let her sleep.'"
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 5,
+                                "text": "As you read, you inhale residual spores. You feel a burning in your lungs."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "The terminal is locked or damaged. You cannot access the logs.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_analog_calculator",
+        "title": "The Analog Calculator",
+        "description": "In a shattered glass case, you find a beautiful and incomprehensible object. It has no screens, no keys. It is a complex system of brass gears, levers, and numbered discs. A tag reads: 'Analog Calculator - Donation of the Tomaiuolo Collection'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Investigate DC 13] Try to use it.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "success": [
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "int",
+                                    "amount": 1
+                                },
+                                "text": "You move the levers. The mechanisms click with a precision that rust hasn't touched. Without electricity, without software, this machine can still calculate the course of the stars. It is a technology that the Great Silence could not shut down. (INTELLIGENCE +1)"
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "You can't figure out how this complex mechanism works.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_benefactor_letter",
+        "title": "The Benefactor's Letter",
+        "description": "Among the mail scattered on the floor of a ruined post office, an envelope catches your attention. It is of fine, heavy paper.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Read the letter.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                },
+                                "text": "'Dear Mr. Paul S., I don't know who you are, but the doctors say the operation is paid for. My daughter will walk thanks to you. In a world that is becoming dark, you were our light. May God protect you, wherever you are.' The letter was never sent."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 100,
+                                "text": "Reading these words fills you with a strange inner peace."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_1k_chess",
+        "title": "1K of Genius",
+        "description": "In a technical office, an old compact computer, a museum piece even before the end, is connected to a small CRT TV. There is a post-it on the screen: 'Stefano says it's impossible'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Intelligence DC 12] Turn it on.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "int",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "electronic_parts",
+                                "quantity": 3,
+                                "text": "The screen flickers. It loads a program. '1K CHESS'. You play a game against the machine. It beats you in 4 moves. A perfect intelligence enclosed in less memory than it takes to write your name. Incredible."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "The computer doesn't turn on, maybe you connected something wrong.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_shadow_gamer",
+        "title": "The Shadow Game",
+        "description": "In an apartment, you find a skeleton sitting on a beanbag chair, in front of an off console. The skeleton wears a synthetic blonde wig, absurdly teased, which time hasn't degraded. In its hands it clutches a game case: 'Shadow of the Urbe'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Look closer.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "energy_drink",
+                                "text": "You look at the cover. There is a man dressed as a priest running on rooftops. You don't understand what a 'videogame' is. You think it's a religious icon. 'Must have been a very... disheveled saint', you murmur. Do you take the wig? No, it's too ridiculous even for the end of the world. You find a can under the armchair."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_bluigger_box",
+        "title": "The Time Box",
+        "description": "Half-buried in the dirt of the road, you find a rusty metal box. Engraved on it is 'BLUIGGER - Docu'. The author seems to be a certain Al'x G.",
+        "biomes": [
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Open the box.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "vintage_film_reel",
+                                "text": "Inside is a film reel (a 'double wheel with spokes'). Unrolling a piece towards the light, you see tiny images of people laughing, eating, living. It's not a hero movie. It's a documentary about normal life. The most precious thing that exists now."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_moon_rock_record",
+        "title": "The Moon Record",
+        "description": "Among the broken vinyls of an old shop, one is intact, protected by a heavy plastic cover. The band is called 'Haistulf'. The title is 'Play Rock To The Moon'.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Take the record.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "vinyl_record_moon",
+                                "text": "The cover depicts men playing music looking at space. Maybe they thought music could save us by taking us away from here. Or maybe they just wanted the universe to know we were here, and we made noise."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

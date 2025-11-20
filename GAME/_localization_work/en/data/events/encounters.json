@@ -1,0 +1,1051 @@
+[
+    {
+        "id": "random_lone_raider",
+        "title": "Eyes in the Desolation",
+        "description": "A solitary figure stands before you. It is a raider, thin and desperate, armed with a piece of rusty pipe. His eyes are full of a hunger that is not just for food. 'Give me everything you have,' he hisses, his voice hoarse. 'Today is not your lucky day.'",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Intimidate him, showing yourself more dangerous than him.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intimidate",
+                        "dc": 13,
+                        "successText": "You stare straight into his eyes, without a shred of fear. Your icy determination shakes him. He sees a predator in you, not prey. He mutters a curse and retreats into the shadows.",
+                        "failureText": "Your fake bravado doesn't convince him. He sees only your fear. He growls and lunges to attack.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Attack first, without hesitation.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 12,
+                        "successText": "You act before he can even finish the sentence. Your lightning attack catches him by surprise. After a brief and brutal fight, he lies defeated.",
+                        "failureText": "Your attack is clumsy. The raider easily parries the blow and counterattacks. The fight begins.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_cry_for_help",
+        "title": "Deceptive Voice",
+        "description": "You hear a weak voice asking for help from behind a pile of ruins. 'Help... I'm hurt... please...' It could be a survivor in trouble or bait for an ambush.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Approach with caution to help.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 14,
+                        "successText": "You approach and realize it's just bait. You notice fresh tracks and the unnatural way the voice echoes. It's a trap. You move away silently before the hidden bandits notice you.",
+                        "failureText": "You run to help and fall straight into the ambush. Two raiders jump out of the ruins, weapons drawn.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the request and move on.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Your father's lessons were clear: never trust. It could be an innocent, but the risk is too high. You move on, heart heavy."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_wandering_trader",
+        "title": "A Deal in the Dust",
+        "description": "You meet an old merchant pushing a creaking cart full of junk. He greets you with a toothless smile. 'A traveler! Rare these days. Want to take a look at my goods? I have things you won't find anywhere else.'",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Trade with him.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You spend some time examining his goods, but decide not to buy anything for now."
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "trade_screen_placeholder"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Attempt to rob him.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 15,
+                        "successText": "With a lightning movement, you manage to grab a valuable object from the cart and run away before the old man can react. You feel like a worm, but you have a new item.",
+                        "failureText": "The old man is faster than he looks. He screams, attracting the attention of an armed guard you hadn't seen. Now you are in trouble.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "multitool",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_wounded_beast",
+        "title": "Wounded Beast",
+        "description": "You find a large mutated wolf, with a paw trapped in an old trap. It growls weakly at your approach, more scared than aggressive. It is a dangerous predator, but currently vulnerable.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Finish it to recover meat and hide.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is the cruel law of this world. With a quick blow, you end its suffering. Its carcass will provide you with food and a durable hide."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Attempt to free it.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 14,
+                        "successText": "Using a long branch to keep its head at bay, you manage to open the trap. The wolf, surprised, stares at you for a moment, then limps away, without attacking you.",
+                        "failureText": "As you approach, the wolf, in a fit of pain and fear, struggles and manages to bite you before freeing itself and fleeing. The wound is deep.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "wolf_gratitude"
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_sudden_storm",
+        "title": "The Fury of the Sky",
+        "description": "Suddenly, a violent storm hits you, with lashing rain and lightning tearing the horizon. You must find shelter, and fast.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Seek immediate shelter (cave, ruin).",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 11,
+                        "successText": "Your survivor instinct prevails. You spot a small cave and slip into it just in time to avoid the worst of the storm.",
+                        "failureText": "You don't find any adequate shelter. You are exposed to the fury of the elements, taking cold damage and starting to feel feverish.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "SICK"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Resist the storm and keep going.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 15,
+                        "successText": "You grit your teeth and face the storm head-on. It is a very hard test, but your endurance allows you to overcome it. When the rain stops, you feel stronger and tempered.",
+                        "failureText": "The storm is too strong. The cold gets into your bones, you are completely soaked and your strength abandons you. You come out of it broken.",
+                        "success": [
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "con",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_traveler_remains",
+        "title": "Silent Travel Companion",
+        "description": "You find the remains of another survivor slumped against a rock, backpack still on his shoulder.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search the backpack with respect.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "With a silent nod to the fallen traveler, you open his backpack. Inside you find a handful of supplies."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Bury him summarily.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 10,
+                        "successText": "You spend some time covering the body with stones and earth. It is a small gesture of humanity. You feel strangely at peace and more determined to continue.",
+                        "failureText": "The ground is too hard and you are too tired. You give up, leaving the traveler to his fate, with a sense of bitterness.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_ground_symbol",
+        "title": "The Mark on the Dust",
+        "description": "You notice a strange symbol traced in the dust or mud. It doesn't look natural.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Attempt to interpret the symbol.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "You recognize the symbol! It is an old traveler code indicating a hidden stash of supplies. You find bandages and bullets.",
+                        "failureText": "The symbol is incomprehensible. It could mean anything. You decide not to risk it.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Erase it to leave no traces.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Whoever left it, you don't want them to know you passed through here. You erase the symbol with your feet and move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_mutant_insect_swarm",
+        "title": "Threatening Buzz",
+        "description": "A dense swarm of flying insects, as big as your thumb and with an aggressive buzz, blocks your path.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Try to cross it quickly.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 12,
+                        "successText": "Running breathlessly, you manage to pass through the swarm suffering only a few minor stings.",
+                        "failureText": "The swarm envelops you. The stings burn and leave you disoriented and weakened.",
+                        "success": [
+                            {
+                                "type": "takeDamage",
+                                "value": 3
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "SICK"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Use smoke to drive them away.",
+                "itemRequirements": [
+                    {
+                        "itemId": "torch",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You quickly light a torch. The dense smoke annoys the insects, which disperse long enough to allow you to pass unharmed."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "torch",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_laughter_echo",
+        "title": "The Echo of a Laughter",
+        "description": "For an instant, you seem to have clearly heard the echo of a child's laughter, carried by the wind. It lasts a moment, then fades.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Investigate the source of the sound.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You search for a while, but find nothing. It was probably just a trick of the wind and your tired mind. The search made you lose time."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the sound and grip your weapon tighter.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "True or not, anything that makes sounds in this world is potentially a threat. You ignore the distraction and your vigilance increases."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_acid_rain",
+        "title": "Corrosive Rain",
+        "description": "Dark clouds gather quickly above you and heavy, sizzling drops begin to fall. It is acid rain. You must find shelter, immediately.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Seek makeshift shelter (cave, building).",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 10,
+                        "successText": "You manage to quickly find a small rocky ledge that offers sufficient shelter. You wait for the corrosive rain to pass.",
+                        "failureText": "You don't find adequate shelter in time. The rain soaks you, slightly corroding your armor and irritating your skin.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 5
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Your armor is slightly damaged."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Use a waterproof tarp to protect yourself.",
+                "itemRequirements": [
+                    {
+                        "itemId": "tarp",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You quickly pull out your waterproof tarp and create a makeshift shelter, staying protected from the acid rain."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_surveillance_drone",
+        "title": "The Eye in the Sky",
+        "description": "A high-pitched hum draws your attention to the sky. A small surveillance drone is flying over you, a single red eye staring at you. It doesn't seem armed, but it is clearly recording your position.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Attempt to shoot it down with a stone.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 14,
+                        "successText": "You hit one of the rotors! The drone crashes. You recover its components and an intact memory chip.",
+                        "failureText": "The stone misses the target. The drone beeps, signaling your presence, before moving away at high speed.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "tech_components",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "drone_memory_chip",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "decipher_drone_data"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The drone signals your position. You feel a shiver down your spine, now you are more exposed."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Hide and wait for it to leave.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You throw yourself to the ground behind cover and remain motionless. After a few minutes, the drone seems to lose sight of you and moves away."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_minefield",
+        "title": "A False Step",
+        "description": "You are about to take a step when you notice something unnatural in the ground: the top of an old landmine, almost completely buried. Looking around, you realize you are on the edge of a forgotten minefield.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Attempt to cross it with extreme caution.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 15,
+                        "successText": "You study the ground, looking for signs of other mines. You manage to trace a safe path. On the other side, you find the remains of someone less lucky.",
+                        "failureText": "A metallic click under your boot. The explosion throws you to the ground, leaving you seriously injured.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "military_backpack",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "medkit_advanced",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 40
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Go back and bypass the area.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You take a step back, slowly, then steer clear. It will take more time, but your life is worth more."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 90
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_hidden_stash",
+        "title": "The X on the Rock",
+        "description": "You notice an 'X' roughly painted with faded red paint on a large rock. It might be nothing, or it might be the sign of a hidden stash.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Dig at the base of the rock.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 11,
+                        "successText": "After moving some heavy stones, you find a small metal box. It contains food, water, and ammunition.",
+                        "failureText": "You dig for a while, but find nothing. Either the sign was a joke, or someone else has already passed through.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_shotgun",
+                                    "quantity": 4
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Use intelligence: the sign is a clue.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "You study the sign. You notice that one arm of the 'X' points to a hollow tree. Inside you find the real stash, much richer.",
+                        "failureText": "The sign tells you nothing. You can't deduce any hidden meaning.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "medkit_field",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "weapon_repair_kit",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_radiation_pocket",
+        "title": "Heavy Air",
+        "description": "You start to taste metal in your mouth and your skin tingles. The air feels unnaturally heavy. You have entered a pocket of low-level radiation, invisible but dangerous.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Cross the area as quickly as possible.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You hold your breath and run. You leave the area feeling nauseous, but limiting exposure."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Use anti-radiation drugs.",
+                "itemRequirements": [
+                    {
+                        "itemId": "rad_away_pills",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You quickly swallow an anti-radiation pill. Its effects protect you while you cross the area. You come out unharmed."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "rad_away_pills",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "random_fallen_messenger",
+        "title": "Silent Messenger",
+        "description": "You find the body of a man in sturdy clothes, with a large leather bag over his shoulder. He looks like a messenger. There are no signs of violence; maybe he died of hardship.",
+        "biomes": [
+            "Global"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Take the bag and its contents.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The living need resources more than the dead. You take the bag. Inside, you find a sealed package and a knife."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "sealed_package_quest",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "folding_knife",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "deliver_last_message"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search only for clues about his mission.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "You decide not to loot him, but you find a delivery order for a 'northern outpost'. Knowledge of this place could guide you.",
+                        "failureText": "You find no documents or clues. His story dies with him.",
+                        "success": [
+                            {
+                                "type": "startQuest",
+                                "value": "deliver_last_message"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

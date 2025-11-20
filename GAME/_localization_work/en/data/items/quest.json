@@ -1,0 +1,408 @@
+[
+    {
+        "id": "fathers_letter",
+        "name": "Father's Letter",
+        "description": "Your father's last words, written on a crumpled piece of paper. A testament, a condemnation, a hope.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "manual_field_medicine",
+        "name": "Manual: Field Medicine",
+        "description": "An illustrated manual teaching advanced first aid techniques, including creating improved bandages.",
+        "type": "manual",
+        "weight": 0.5,
+        "value": 100,
+        "stackable": false,
+        "rarity": "uncommon",
+        "unlocksRecipe": "recipe_bandage_adv"
+    },
+    {
+        "id": "manual_survival_basics",
+        "name": "Manual: Survival Basics",
+        "description": "A pamphlet on how to make the best use of natural resources, with instructions for cooking nutritious soups and crafting arrows.",
+        "type": "manual",
+        "weight": 0.5,
+        "value": 100,
+        "stackable": false,
+        "rarity": "uncommon",
+        "unlocksRecipe": "recipe_soup"
+    },
+    {
+        "id": "manual_archery_basics",
+        "name": "Manual: Archery Basics",
+        "description": "An old military manual explaining how to build rudimentary but effective arrows from scrap materials.",
+        "type": "manual",
+        "weight": 0.5,
+        "value": 100,
+        "stackable": false,
+        "rarity": "uncommon",
+        "unlocksRecipe": "recipe_arrows"
+    },
+    {
+        "id": "manual_advanced_repairs",
+        "name": "Manual: Advanced Repairs",
+        "description": "A technical manual on advanced maintenance of field equipment, with instructions for creating professional repair kits.",
+        "type": "manual",
+        "weight": 0.5,
+        "value": 150,
+        "stackable": false,
+        "rarity": "rare",
+        "unlocksRecipe": "recipe_repair_kit_advanced"
+    },
+    {
+        "id": "sealed_package_quest",
+        "name": "Sealed Package",
+        "description": "A package wrapped in oilcloth and carefully sealed. You don't know what it contains, but it seems important. It is addressed to an 'outpost to the north'.",
+        "type": "quest",
+        "weight": 1.0,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "sensitive_documents",
+        "name": "Sensitive Documents",
+        "description": "A folder containing documents with the seal of a now-defunct government agency. They seem to contain classified information.",
+        "type": "quest",
+        "weight": 0.5,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "rugged_laptop_military",
+        "name": "Armored Military Laptop",
+        "description": "An old military-type laptop, heavy and obsolete. Its internal battery still has some residual charge and might contain valuable data.",
+        "type": "quest",
+        "weight": 5.0,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "local_map",
+        "name": "Local Map",
+        "description": "A hand-drawn map of the surrounding area, found in an abandoned camp. Might reveal unknown points of interest.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "silver_medallion",
+        "name": "Silver Medallion",
+        "description": "A small silver medallion blackened by time, found in the offering box of an old church. Might have sentimental or historical value.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 50,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "old_coins",
+        "name": "Old Coins",
+        "description": "A handful of coins from a past era. They are no longer legal tender, but could be used as trade goods with some collector.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 5,
+        "stackable": true,
+        "rarity": "quest"
+    },
+    {
+        "id": "gold_coin",
+        "name": "Gold Coin",
+        "description": "An old gold coin, still shiny. A small treasure of the past world.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 100,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "precious_stone",
+        "name": "Precious Stone",
+        "description": "A small rough gem, probably a ruby or garnet. Sparkles even in the gloom.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 150,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "gold_bar",
+        "name": "Gold Bar",
+        "description": "A small but heavy gold bar, found in a bank vault. A treasure of inestimable value in the old world, and perhaps even in this one.",
+        "type": "quest",
+        "weight": 1.0,
+        "value": 1000,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "fathers_compass",
+        "name": "Father's Compass",
+        "description": "Your father's old compass. It is battered but always points north. A reminder of a simpler time and the lessons he taught you.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "mechanic_manual",
+        "name": "Mechanics Manual",
+        "description": "A technical manual on engines and simple machinery. Might unlock new crafting recipes.",
+        "type": "quest",
+        "weight": 0.5,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "first_aid_book",
+        "name": "First Aid Manual",
+        "description": "An illustrated book on first aid procedures. Reading it might improve your medical skills.",
+        "type": "quest",
+        "weight": 0.5,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "code_list",
+        "name": "Code List",
+        "description": "A sheet with a series of numerical codes and radio frequencies. Could be useful for accessing locked places or communications.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "rusty_key",
+        "name": "Rusty Key",
+        "description": "An old and rusty key. Who knows what it might open.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "carillon_annerito",
+        "name": "Blackened Music Box",
+        "description": "A small wooden music box, blackened by soot. A faded label on the bottom bears a warning written by your father: 'Never open it. Its sound... attracts the wrong memories'.",
+        "type": "quest",
+        "weight": 0.5,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "pixeldebh_plate",
+        "name": "PixelDebh Plate",
+        "description": "A shiny metal plate with a stylized symbol and the inscription 'PixelDebh'. A fragment of a forgotten technological era.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "rare_music_cassettes",
+        "name": "Rare Music Cassette",
+        "description": "An old music cassette with a fragment of music recorded from the ether. A treasure in a silent world.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "lena_cloth_fragment",
+        "name": "Fabric Fragment",
+        "description": "A piece of white cloth, once part of a medical coat. Carefully stitched onto the fabric is a name in blue thread: 'Lena'. Your mother's name.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "cryptic_recording",
+        "name": "Cryptic Recording",
+        "description": "An audio fragment recorded from an old radio. Contains a sequence of numbers and distorted sounds. Could be a coded message or just white noise.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "jonas_talisman",
+        "name": "Jonas's Talisman",
+        "description": "A small wooden talisman carved in the shape of a crow. Emanates a faint sensation of warmth. Seems to have been important to someone.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 100,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "old_watch",
+        "name": "Pocket Watch",
+        "description": "An old silver pocket watch with elaborate engravings. Belongs to Marcus and has great sentimental value for him.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 80,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "manual_advanced_trap",
+        "name": "Manual: Advanced Raven Clan Traps",
+        "description": "A manual of the legendary Raven Clan teaching how to build sophisticated traps for hunting and defense.",
+        "type": "manual",
+        "weight": 0.3,
+        "value": 120,
+        "stackable": false,
+        "rarity": "uncommon",
+        "unlocksRecipe": "recipe_advanced_bear_trap"
+    },
+    {
+        "id": "compass",
+        "name": "Reliable Compass",
+        "description": "A finely crafted compass, still perfectly functional. Always points north with precision. A valuable tool for a traveler.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 150,
+        "stackable": false,
+        "rarity": "uncommon",
+        "color": "#60BF77"
+    },
+    {
+        "id": "drone_memory_chip",
+        "name": "Drone Memory Chip",
+        "description": "A memory chip recovered from a surveillance drone. It is damaged but the data seems recoverable with the right equipment.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest",
+        "color": "#38bdf8"
+    },
+    {
+        "id": "research_notes_rebirth",
+        "name": "Project Rebirth Notes",
+        "description": "Detailed scientific documents on the mysterious 'Project Rebirth'. Contain schematics, formulas, and disturbing notes on the nature of the Ash Angels.",
+        "type": "quest",
+        "weight": 0.3,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest",
+        "color": "#a78bfa"
+    },
+    {
+        "id": "eurocenter_business_card",
+        "name": "Business Card - Marco G.",
+        "description": "An elegant but yellowed business card: 'Marco G. - Real Estate Consultant - Eurocenter: Your Future Starts Here'. A fragment of an era of dreams and promises.",
+        "type": "quest",
+        "weight": 0.05,
+        "value": 5,
+        "stackable": false,
+        "rarity": "quest"
+    },
+    {
+        "id": "tool_multitool",
+        "name": "Professional Multitool",
+        "description": "A high-quality multi-purpose tool with pliers, blades, screwdrivers, and other tools. Indispensable for repairs and advanced crafting.",
+        "type": "tool",
+        "weight": 0.4,
+        "value": 200,
+        "stackable": false,
+        "rarity": "rare",
+        "color": "#a855f7"
+    },
+    {
+        "id": "silver_locket",
+        "name": "Silver Locket",
+        "description": "A delicate silver locket with a faded photo inside. A treasure of inestimable sentimental value.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 150,
+        "stackable": false,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "cultist_coded_journal",
+        "name": "Listeners' Coded Journal",
+        "description": "A leather-bound journal filled with astronomical symbols, complex calculations, and cryptic notes. Speaks of 'dissonant frequencies', 'harmonizing echoes', and a 'shielding ritual'. Not the work of a madman, but of someone desperately trying to protect themselves from the Ash Angels.",
+        "type": "quest",
+        "weight": 0.4,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest",
+        "color": "#8b5cf6"
+    },
+    {
+        "id": "manual_sonic_dissuader",
+        "name": "Manual: Sonic Dissuader",
+        "description": "Detailed instructions to build a device that emits high-intensity frequencies, apparently intolerable to Ash Angels. A revolutionary discovery of the Listeners.",
+        "type": "manual",
+        "weight": 0.3,
+        "value": 250,
+        "stackable": false,
+        "rarity": "epic",
+        "unlocksRecipe": "recipe_sonic_dissuader",
+        "color": "#8b5cf6"
+    },
+    {
+        "id": "ice_flower",
+        "name": "Ice Flower",
+        "description": "A small flower with almost transparent petals, pale blue. It is cold to the touch and incredibly resilient. Emanates a faint scent of ozone and snow.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "rare",
+        "color": "#60a5fa"
+    },
+    {
+        "id": "vargeon_medallion",
+        "name": "Vargeon Medallion",
+        "description": "A wooden medallion carved with a crest you don't recognize and the inscription 'Leonardus Vargeon'. Next to it, a small bag of dried herbs still aromatic. An artifact of a lost era, perhaps even predating the Great Silence.",
+        "type": "quest",
+        "weight": 0.2,
+        "value": 0,
+        "stackable": false,
+        "rarity": "rare",
+        "color": "#a855f7"
+    },
+    {
+        "id": "grandmothers_letter",
+        "name": "Grandmother's Letter",
+        "description": "A letter written in shaky handwriting on yellowed paper. Addressed to 'My dear grandson, the Pyromaniac of Pipe No. 403'. Speaks of a vineyard, a red and white striped sweater, and an unconditional love that not even madness can break. It is heartbreaking.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "quest",
+        "color": "#ef4444"
+    },
+    {
+        "id": "captains_last_broadcast",
+        "name": "Captain's Last Broadcast",
+        "description": "An audio cassette with the last broadcast of Captain Keith Arrow of The Elder Radio. His warm voice speaks of hope and music in a dying world. A precious echo of lost humanity.",
+        "type": "quest",
+        "weight": 0.1,
+        "value": 0,
+        "stackable": false,
+        "rarity": "rare",
+        "color": "#60a5fa"
+    }
+]

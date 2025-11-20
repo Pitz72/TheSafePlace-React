@@ -1,0 +1,117 @@
+[
+    {
+        "id": "titanic_cassette",
+        "name": "Cassetta 'Titanic'",
+        "description": "Una cassetta musicale trovata in un'auto sommersa. La copertina mostra una nave e due innamorati. La musica è un'eco di un mondo che credeva di essere inaffondabile.",
+        "type": "material",
+        "rarity": "rare",
+        "weight": 0.1,
+        "value": 50,
+        "stackable": false,
+        "color": "#3b82f6",
+        "effects": []
+    },
+    {
+        "id": "broken_drone",
+        "name": "Drone DogBuster",
+        "description": "Un piccolo drone giocattolo colorato. Un adesivo recita 'DogBuster'. È rotto, ma i componenti potrebbero essere utili.",
+        "type": "material",
+        "rarity": "uncommon",
+        "weight": 0.5,
+        "value": 30,
+        "stackable": false,
+        "color": "#ef4444",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "id": "advanced_tool_kit",
+        "name": "Kit Attrezzi Avanzato",
+        "description": "Un set di attrezzi di alta qualità, ben tenuti. Include cacciaviti di precisione, chiavi inglesi e strumenti di misura. Indispensabile per riparazioni complesse.",
+        "type": "tool",
+        "rarity": "rare",
+        "weight": 2.0,
+        "value": 100,
+        "stackable": false,
+        "color": "#f59e0b",
+        "effects": [
+            {
+                "type": "repair",
+                "value": 50
+            }
+        ]
+    },
+    {
+        "id": "tech_components",
+        "name": "Componenti Tech",
+        "description": "Circuiti, chip e cavi recuperati da apparecchiature avanzate. Preziosi per chi sa come usarli.",
+        "type": "material",
+        "rarity": "uncommon",
+        "weight": 0.1,
+        "value": 20,
+        "stackable": true,
+        "color": "#10b981",
+        "effects": []
+    },
+    {
+        "id": "vintage_film_reel",
+        "name": "Pellicola Vintage",
+        "description": "Una bobina di pellicola 8mm. Contiene immagini di vita quotidiana pre-apocalisse. Un documento storico inestimabile.",
+        "type": "material",
+        "rarity": "epic",
+        "weight": 0.3,
+        "value": 150,
+        "stackable": false,
+        "color": "#8b5cf6",
+        "effects": []
+    },
+    {
+        "id": "vinyl_record_moon",
+        "name": "Vinile 'Haistulf'",
+        "description": "Un disco in vinile intitolato 'Play Rock To The Moon'. La musica è potente e spaziale.",
+        "type": "material",
+        "rarity": "rare",
+        "weight": 0.4,
+        "value": 60,
+        "stackable": false,
+        "color": "#6366f1",
+        "effects": []
+    },
+    {
+        "id": "energy_drink",
+        "name": "Energy Drink",
+        "description": "Una lattina di bevanda energetica piena di zuccheri e caffeina. Il gusto è chimico, ma ti sveglia.",
+        "type": "consumable",
+        "rarity": "common",
+        "weight": 0.3,
+        "value": 10,
+        "stackable": true,
+        "color": "#facc15",
+        "effects": [
+            {
+                "type": "hydration",
+                "value": 10
+            },
+            {
+                "type": "satiety",
+                "value": 5
+            }
+        ]
+    },
+    {
+        "id": "electronic_parts",
+        "name": "Parti Elettroniche",
+        "description": "Componenti elettronici generici. Utili per il crafting.",
+        "type": "material",
+        "rarity": "common",
+        "weight": 0.1,
+        "value": 15,
+        "stackable": true,
+        "color": "#9ca3af",
+        "effects": []
+    }
+]

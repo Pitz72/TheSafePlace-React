@@ -1,0 +1,121 @@
+{
+    "MAIN_MENU": {
+        "TITLE_1": "THE SAFE PLACE CHRONICLES",
+        "TITLE_2": "THE ECHO",
+        "TITLE_3": "OF THE",
+        "TITLE_4": "JOURNEY",
+        "SUBTITLE": "An RPG by Simone Pizzi",
+        "COPYRIGHT": "(C) 2025 Runtime Radio - retro-computing inspired game made with LLM support",
+        "ITEMS": {
+            "NEW_GAME": "New Game",
+            "CONTINUE_GAME": "Continue Game",
+            "LOAD_GAME": "Load Game",
+            "STORY": "Story",
+            "INSTRUCTIONS": "Instructions",
+            "OPTIONS": "Options",
+            "TROPHIES": "Trophies",
+            "EXIT": "Exit"
+        },
+        "MESSAGES": {
+            "NO_SAVE_FOUND": "No previous save found.",
+            "EXITING": "Exiting game..."
+        }
+    },
+    "OPTIONS_SCREEN": {
+        "TITLE": "═══ SETTINGS ═══",
+        "SUBTITLE": "Configure game options",
+        "HEADERS": {
+            "GAME": "Game",
+            "AUDIO": "Audio",
+            "VIDEO": "Video"
+        },
+        "LABELS": {
+            "LANGUAGE": "Language",
+            "FULLSCREEN": "Screen",
+            "SOUND": "Sound",
+            "VOLUME": "Volume",
+            "DISPLAY": "Display"
+        },
+        "VALUES": {
+            "LANGUAGES": [
+                "Italian",
+                "English",
+                "French",
+                "German",
+                "Spanish",
+                "Portuguese",
+                "Russian",
+                "Simplified Chinese"
+            ],
+            "FULLSCREEN": [
+                "Fullscreen",
+                "Window"
+            ],
+            "SOUND": [
+                "On",
+                "Off"
+            ],
+            "DISPLAY": [
+                "Standard",
+                "Green Phosphor CRT",
+                "High Contrast"
+            ]
+        },
+        "FOOTER": "[W/S/↑↓] Move | [A/D/←→] Change | [ESC] Go Back"
+    },
+    "SAVE_LOAD_SCREEN": {
+        "TITLES": {
+            "SAVE": "SAVE GAME",
+            "LOAD": "LOAD GAME",
+            "EXPORT": "EXPORT SLOT"
+        },
+        "ACTIONS": {
+            "IMPORT_FROM_FILE": "Import from JSON File",
+            "EXPORT_TO_FILE": "Export Slot to JSON File",
+            "GO_BACK": "Go Back",
+            "EXPORT": "Export",
+            "DELETE": "Delete",
+            "IMPORT": "Import",
+            "CLOSE_MENU": "Close Menu",
+            "BACK": "Back",
+            "SELECT": "Select",
+            "CONFIRM": "Confirm"
+        },
+        "MESSAGES": {
+            "EXPORT_SUCCESS": "Save slot {slot} exported successfully!",
+            "EXPORT_ERROR": "Error during export: {error}",
+            "IMPORT_SUCCESS": "Save imported into slot {slot} successfully!",
+            "IMPORT_ERROR": "Error during import: {error}",
+            "SLOT_FULL_WARNING": "Warning: all slots are full. Overwriting slot 1...",
+            "DELETE_SUCCESS": "Slot {slot} deleted successfully.",
+            "DELETE_ERROR": "Error during deletion: {error}",
+            "SLOT_EMPTY": "This slot is empty.",
+            "SLOT_EMPTY_EXPORT": "This slot is empty. Select a slot with a save file.",
+            "SAVE_SUCCESS": "Game saved in slot {slot}.",
+            "SAVE_ERROR": "Error during save.",
+            "SELECT_EXPORT": "Select the slot to export and press ENTER"
+        },
+        "FOOTER": {
+            "EXPORT_MODE": "[↑↓] Select Slot | [ENTER] Export | [ESC] Cancel",
+            "SAVE_ACTIONS": "[E] Export | [D] Delete | [A] Close Menu | [ESC] Back",
+            "LOAD_ACTIONS": "[D] Delete | [A] Close Menu | [ESC] Back",
+            "IMPORT_ACTIONS": "[I] Import | [A] Close Menu | [ESC] Back",
+            "DEFAULT_ACTIONS": "[A] Close Menu | [ESC] Back",
+            "NAVIGATION": "[↑↓] Select | [ENTER] Confirm | [A] Slot Actions | [ESC] Back"
+        }
+    },
+    "GAME_OVER_SCREEN": {
+        "TITLE": "GAME OVER",
+        "MESSAGES": {
+            "COMBAT": "Defeated in combat. Your guard wasn't high enough.",
+            "STARVATION": "Hunger consumed you. Your journey ends with an empty stomach.",
+            "DEHYDRATION": "Thirst drained you. Even the strongest man cannot live without water.",
+            "SICKNESS": "Sickness got the better of you. Your body couldn't take it anymore.",
+            "POISON": "Poison coursed through your veins, ending your struggle.",
+            "ENVIRONMENT": "The world itself claimed you. A fall, a misstep... sometimes that's all it takes.",
+            "UNKNOWN": "Your adventure has come to an end.",
+            "EASTER_EGG": "You died of... DEATH!"
+        },
+        "PROMPT": "[ENTER to return to Main Menu]"
+    }
+}

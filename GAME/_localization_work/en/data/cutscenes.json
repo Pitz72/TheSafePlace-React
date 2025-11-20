@@ -1,0 +1,403 @@
+[
+    {
+        "id": "CS_OPENING",
+        "title": "The Last Lesson",
+        "pages": [
+            {
+                "text": "You wake up in the silence of the shelter. The morning cold bites your skin. For a moment, you expect to hear his voice, the sound of his heavy footsteps on the concrete floor.\n\nBut there is nothing. Only silence.\n\nYou get up, confused, and look for him. He's not in his usual corner. He's not at the window. He's nowhere.\n\nOn the central table, under a stone paperweight, there is a sheet of paper. You recognize it immediately: his irregular handwriting, traced with an old piece of charcoal.\n\nIt's a letter. For you.",
+                "nextPage": 1
+            },
+            {
+                "text": "You pick it up with trembling hands and begin to read.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nUltimo, my son...\n\nIf you are reading this, it means I haven't returned. And that I won't return. My last reconnaissance confirmed my fears. I found their tracks, fresh. A large group, and they are moving towards this valley. We cannot face them together, and we cannot both escape. Their silence precedes them.\n\nI have a mission to accomplish. I must lead them away from here. Far from your path. It is something I must do alone, too dangerous to drag you with me. Do not try to follow me. It would be your end, and would make every sacrifice of mine in vain.",
+                "nextPage": 2
+            },
+            {
+                "text": "In your sack, under the supplies, you will find a map. It is old, but it is the only one I have. It will lead you East, towards a place called \"The Safe Place\". It is a faint hope, I know, perhaps just a legend, but it is the only chance you have left.\n\nRemember everything I taught you. Water, food, shelters. Trust your instincts, but not your anger. Always watch, always listen. The world out there is a hungry wolf, but you have the tools not to become its prey.\n\nNot every fight must be fought. Sometimes, the greatest victory is knowing when to disappear.",
+                "nextPage": 3
+            },
+            {
+                "text": "Be strong, Ultimo. Be better than me. Survive.\n\nAnd perhaps, one day, you will understand. Or perhaps you will forgive me.\n\nWith all the love a broken father can give,\n\nDad.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nYour hands tremble. The words blur before your eyes. You read the letter again, and again, as if repeating it could change its meaning.\n\nBut it doesn't change. He is gone. He left you alone.\n\nTo protect you, he says. To save you.\n\nBut you feel alone... abandoned.",
+                "nextPage": 4
+            },
+            {
+                "text": "The paper trembles between your fingers, the last words burned into your mind: \"With all the love a broken father can give, Dad.\"\n\nLove. A word that sounds strange, almost foreign, after years of ruthless training. And now, that silence. A deafening silence that screams a single, terrible truth: you are alone.\n\nAnger and fear mix in your chest, a suffocating tangle. The letter, this fragile piece of paper, is the only thing binding you to him, to the past, to this mission he imposed on you.\n\nWhat do you do with it?",
+                "choices": [
+                    {
+                        "text": "[1] You tear the letter in a fit of rage.",
+                        "targetPage": 5
+                    },
+                    {
+                        "text": "[2] You fold the letter carefully and put it in your pocket.",
+                        "targetPage": 6
+                    }
+                ]
+            },
+            {
+                "text": "The sound of tearing paper is a scream in the silence of the shelter. One piece, then another, until his words are nothing but useless fragments on the dusty floor.\n\nA ruthless training for an equally ruthless abandonment. This was his last lesson. There will be no more words, no other orders. Only this.\n\nThe white fragments at your feet look like snow on dead ground.",
+                "consequences": [
+                    {
+                        "type": "setFlag",
+                        "payload": "FATHERS_LETTER_DESTROYED"
+                    }
+                ],
+                "nextPage": 7
+            },
+            {
+                "text": "His words are all you have left of him. A testament, a sentence, a hope. Whatever they are, they are yours.\n\nWith a care you didn't know you possessed, you fold the sheet along its worn creases and tuck it into the innermost pocket of the rags you wear, close to your heart. A small weight, but immense.\n\nIt is a burden you have decided to carry.",
+                "consequences": [
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "fathers_letter",
+                            "quantity": 1
+                        }
+                    }
+                ],
+                "nextPage": 7
+            },
+            {
+                "text": "You drag yourself to the shelter's only window, a wound of dirty glass in the concrete wall. The outside world is a gray and indifferent sea, a landscape of desolation you have always looked at with him by your side.\n\nBut now his shoulder is no longer there to lean on.\n\nFor the first time, the word \"alone\" has real weight, a taste of ash in your mouth. A tear, then another, trace clean paths on the dust of your face.",
+                "nextPage": 8
+            },
+            {
+                "text": "But the tears stop, almost immediately. His voice, hard and inflexible, echoes in your head, an echo of a thousand lessons taught.\n\n\"Fear is a luxury you cannot afford.\"\n\"Blood is precious. Do not waste it.\"\n\"Hunger is a teacher. Listen to it, but do not let it command you.\"\n\nCrying will not purify water. Anger will not cook meat. Despair will not heal a wound.\n\nYou stand up. The training is over. Survival has begun.",
+                "nextPage": 9
+            },
+            {
+                "text": "As your eyes adjust to the gloom, no longer veiled by pain but sharp out of necessity, you notice something near the door that you had ignored before.\n\nIt is a bundle of oilcloth, compact and heavy, tied with sturdy twine. It wasn't there yesterday. He left it for you. A final, pragmatic gesture of care.\n\nOn top, there is another note, smaller.",
+                "nextPage": 10
+            },
+            {
+                "text": "You open it. His handwriting is more hurried, almost a note.\n\n\"Ultimo,\nIf you are reading this, you have passed the first test: choosing to live. Inside you will find the necessities for the first few days: two canteens of already purified water, three long-life food rations, clean bandages. It's not much, but you know how to find the rest.\n\nThe knife you carry at your belt is rusty, but sharp. The rags you wear will not protect you, but they will keep you warm. Hope to find better.\n\nYou know the way. I taught it to you. We will meet again. Perhaps at the Safe Place.\"",
+                "consequences": [
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "CONS_002",
+                            "quantity": 2
+                        }
+                    },
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "CONS_001",
+                            "quantity": 3
+                        }
+                    },
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "CONS_003",
+                            "quantity": 2
+                        }
+                    },
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "weapon_knife_rusty",
+                            "quantity": 1
+                        }
+                    },
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "armor_rags",
+                            "quantity": 1
+                        }
+                    },
+                    {
+                        "type": "equipItem",
+                        "payload": "weapon_knife_rusty"
+                    },
+                    {
+                        "type": "equipItem",
+                        "payload": "armor_rags"
+                    }
+                ],
+                "nextPage": 11
+            },
+            {
+                "text": "You pick up the bundle, feeling its reassuring weight. You check the knife at your belt, its cold metal an extension of your hand. You look at the rags you wear, a reminder of your vulnerability.\n\nYou look at the room for the last time. For years, these four walls have been your school, your prison, your only protected world. Now, they are just an empty shell. A memory.\n\nYou open the door and a gust of cold wind welcomes you to the real world.\n\nYour journey has begun.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_RIVER_INTRO",
+        "title": "The Dark Mirror",
+        "pages": [
+            {
+                "text": "You stop. The air has changed. There is a damp, earthy smell you haven't smelled in a long time, and a low, almost imperceptible sound making its way through the silence: the murmur of water.\n\nA little further ahead, a dark line cuts through the desolation. A river. It is not an innocent stream, but a liquid and turbid scar flowing slowly, like thick blood. Its surface is a black mirror reflecting the gray sky, an apparent stillness that clashes with the rest of the world.\n\nAn oasis in the middle of nowhere. An invitation. A trap.",
+                "nextPage": 1
+            },
+            {
+                "text": "Your father's lesson resonates in your head, clear as the day he taught it to you, right on the bank of a river like this one.\n\n\"Water is life, Ultimo. But it is also death. Never trust what seems calm. The current you don't see is the one that drags you away. The most dangerous predators are those that wait, motionless, just below the surface.\"\n\nEvery step towards that bank must be calculated. Every sip, a gamble. Behind that apparent calm, you know an invisible danger could be hiding, or worse, the end of your journey.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_BEING_WATCHED",
+        "title": "The Silent Shadow",
+        "pages": [
+            {
+                "text": "The sun begins to set, dyeing the sky a sickly orange. You decide it's time to stop. Rest is not a luxury, it is a weapon. Your father always said so.\n\nYou find a makeshift shelter, a niche between two collapsed rocks, and begin the routine that was instilled in you since childhood. The gestures are automatic, almost mechanical. A small fire, fueled by dry brushwood, comes to life with a familiar crackle. Water is rationed, a measured sip. A piece of dried meat is chewed slowly, every calorie a small triumph against hunger.\n\nFor a moment, you almost forget you are alone. It is a moment of calm, an island of normality in an ocean of chaos.",
+                "nextPage": 1
+            },
+            {
+                "text": "Then, you feel it.\n\nIt is not a sound. The wind continues to hiss as always. The fire continues to crackle. But something has changed. It is a cold sensation snaking down your spine, a primal instinct screaming in silence.\n\nYou are being watched.\n\nYour body stiffens. Every muscle tenses, ready to snap. Your hand instinctively runs to the hilt of your knife. Your eyes dart from one shadow to another, scanning the twilight. There is nothing. No movement. No unnatural shape among the ruins. Yet, the sensation persists, heavy as a cloak. They are not the eyes of a hungry beast, nor those of a lurking raider. It is something different. Something... ancient. And cold.",
+                "nextPage": 2
+            },
+            {
+                "text": "You remain motionless for a time that seems infinite, your heart beating wildly, every breath a risk. But nothing happens. The silence returns to being just silence.\n\nMaybe it's just your mind, worn down by solitude and tension. A survivor's paranoia.\n\nYou decide to rest anyway, but it is a light sleep, like prey. One eye always half-open, one ear always strained.\n\nWhen you finally get back on the road, a tall, thin figure, indistinguishable from the elongated shadows of the ruins, silently detaches itself from a wall and begins to follow you, its steps leaving no footprints and making no sound.",
+                "consequences": [
+                    {
+                        "type": "performModifiedRest"
+                    }
+                ],
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_ASH_LULLABY",
+        "title": "The Ash Lullaby",
+        "pages": [
+            {
+                "text": "Your fingers, trembling, lift the lid. The mechanism clicks dryly. A melody rises in the still air. It is faint, cracked, full of missing notes, like a limping memory. Yet, beneath its sadness, there is an ancient sweetness, almost forgotten. A lullaby.\n\nYou don't know why, but you feel your eyelids growing heavy. The cold seems to lessen... You lean against the cold wall, and for the first time since your father left, sleep is not a fall into darkness, but a surrender.",
+                "nextPage": 1
+            },
+            {
+                "text": "...You wake with a start.\n\nNot because of a noise. But because of its absence.\n\nThe music has stopped.\n\nThe air is still, heavy, and freezing. Much colder than before. And there is a smell. Not of dampness or ruin. It is a clean, chemical, sterile smell. The smell of cold ash.\n\nYour eyes open in the dark. You are not alone.",
+                "nextPage": 2
+            },
+            {
+                "text": "A figure is standing on the other side of the room, motionless as a statue, silhouetted against the sickly light filtering from outside. It is tall, wrapped in a heavy dark cloak, the hood pulled down over its face. An Ash Angel.\n\nPanic freezes the blood in your veins. Your father's lessons scream in your head: Don't be seen. Run. Don't fight.\n\nBut you are paralyzed. You can only watch.",
+                "nextPage": 3
+            },
+            {
+                "text": "The creature does not move towards you. Slowly, with a fluid and unnatural movement, it bends down. Not towards you. Towards the music box, lying on the ground next to you.\n\nA pale, almost translucent hand emerges from the cloak. The fingers are long and thin. There is no aggression in the gesture. Only a sort of... mechanical curiosity. The hand stops a breath away from the small object, as if afraid of breaking it.",
+                "nextPage": 4
+            },
+            {
+                "text": "In that moment, the hood shifts slightly back. You don't see a face. You only see a fragment: the curve of a cheek, pale as marble, and something reflecting the light. A dark, round lens. But under the lens, or perhaps in place of the other eye, you see a faint, bluish glow.\n\nThe creature makes a sound. It is not a voice. It is a low, rhythmic hiss, like air passing through damaged circuits. And mixed with the hiss, a distorted, electronic whisper, almost inaudible. Broken words. Fragments of an echo:\n\n«... my... sun... must... sleep...»\n\nIt is a machine voice trying to sing a lullaby. Your lullaby.",
+                "nextPage": 5
+            },
+            {
+                "text": "Terror turns into a horror so deep it hurts your chest. That thing... that thing knows you.\n\nThe figure withdraws its hand. It stands up slowly. For a terrible instant, the dark lens seems to stare at you. There is no threat in its gaze. Nor pity. There is only a vast and incomprehensible void. An abyss.\n\nThen, with the same silent speed with which it appeared, it turns and dissolves into the deepest shadow of the room. Gone.",
+                "nextPage": 6
+            },
+            {
+                "text": "You remain alone, shivering, in the biting cold. The smell of ash fades slowly. Beside you, the music box lies closed. It wasn't a dream.\n\nYour mother.\n\nThat was what remained of your mother.\n\nShe didn't attack you. She found you. And she let you go.\n\nThe question that now burns inside you is worse than any wound.\n\nWhy?",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_FIRST_KILL",
+        "title": "The Weight of Survival",
+        "pages": [
+            {
+                "text": "The body lies motionless at your feet. Blood forms a dark pool expanding slowly, dyeing the dust an almost black red. Your hands still tremble, gripping the weapon. The metal is hot, almost feverish, as if it had absorbed the life it just extinguished.\n\nIt wasn't a monster. It was a person. Perhaps as desperate as you. Perhaps just hungrier, faster, more willing to kill to survive.\n\nBut now it is just a corpse. And you are alive.\n\nThis is survival.",
+                "nextPage": 1
+            },
+            {
+                "text": "Your father had prepared you for this moment. Every exercise, every brutal lesson, every simulation. \"One day you will have to kill or be killed,\" he said with that flat, pragmatic voice of his. \"There is no room for the weak. There is no room for remorse.\"\n\nBut now that it has happened, his words sound empty. Theoretical. How can he have prepared you for this weight in your chest? For this emptiness in your stomach? For the way the world seems to have suddenly become colder, quieter?\n\nYou look at your hands. They are the same ones your father taught you to use to survive. Now they are the hands of a killer.",
+                "nextPage": 2
+            },
+            {
+                "text": "A thought crosses your mind, sudden and tearing: your mother would never have wanted this for you.\n\nYou don't remember her. Not really. Only fragments: warmth, a sweet voice, the scent of something you can't identify. But you know, deep down, that she would never have trained a child to become this.\n\nYour father did, however. And now you understand why. Because this world does not forgive. It gives no second chances. There is no room for kindness when hunger gnaws at your guts and despair blinds you.\n\nBut at what price?",
+                "nextPage": 3
+            },
+            {
+                "text": "You force yourself to turn away, to move away from the body. Every step is an eternity. The world keeps turning, indifferent. The wind blows. The sky remains gray. Desolation remains desolation.\n\nBut something inside you has changed. A line has been crossed. You can no longer go back.\n\nMaybe your father was right. Maybe survival is this: killing the part of you that hesitates, that feels pity, that clings to humanity.\n\nOr maybe he was wrong. Maybe you can survive without losing yourself.\n\nOnly time will tell. But for now, you are alive. And you must keep walking.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_HALF_JOURNEY",
+        "title": "The Road is Long",
+        "pages": [
+            {
+                "text": "You stop.\n\nNot because you are tired. Not because you are hungry or thirsty. You stop because, for a moment, you can't remember why you are walking.\n\nYour feet have ground miles of dead earth. You have crossed ruins that were once cities, forests that were gardens, plains that were fields. You have seen the world reduced to a shadow of itself. You have fought, scavenged, survived.\n\nBut for what?\n\nThe answer should be simple: the Safe Place. The destination your father imposed on you. But that word, \"Safe Place\", sounds increasingly empty, more absurd. A mirage in a desert of ash.",
+                "nextPage": 1
+            },
+            {
+                "text": "You sit on a cold rock and look at the horizon. There is nothing there. Only more gray, more desolation, more nothing.\n\nMemories of your father begin to crumble in the details. The exact sound of his voice. The precise shape of his face. Has it only been a few days? It feels like an eternity. Solitude has a way of dilating time, of turning hours into years.\n\nYou wonder if he thought of you, when he left. If it cost him anything, leaving you. Or if for him it was just another pragmatic, calculated decision. \"Survival first of all.\"\n\nYou wonder if he ever really loved you, or if you were always just a project. A survival experiment.",
+                "nextPage": 2
+            },
+            {
+                "text": "And your mother? That ghost figure you never knew, reduced to an Ash Angel?\n\nIf she were here, what would she tell you? Would she tell you to continue? To give up? To find another purpose, a reason different from the one your father imposed on you?\n\nA terrible thought makes its way into your mind: maybe there is no Safe Place. Maybe it's just another lie, another cruel lesson. \"Walk until you can't anymore. This is survival.\"\n\nBut if you stop now, everything you have gone through will have been meaningless. Every wound, every sacrifice, every life you have taken. All useless.",
+                "nextPage": 3
+            },
+            {
+                "text": "You make a decision. It's not easy. It's not even conscious. It's just a movement: you stand up.\n\nYour legs protest. Your body is tired. But you stand up anyway. Because maybe the Safe Place exists. Or maybe not. But the only thing worse than continuing is stopping here, in the middle of nowhere, and giving up.\n\nNot for your father. Not anymore.\n\nFor yourself. For that part of you that still believes, against all evidence, that there is something beyond this desolation. Something worth reaching.\n\nAnd if that something doesn't exist, then you will find it anyway. Because you must. Because the alternative is the abyss.",
+                "nextPage": 4
+            },
+            {
+                "text": "You resume walking. One step after another. The road is long. Perhaps infinite.\n\nBut you are Ultimo. And as long as you breathe, as long as you can move, you will continue.\n\nNot because it is right. Not because it is noble.\n\nBut because it is the only thing you know how to do.\n\nAnd maybe, just maybe, that is enough.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_MOTHERS_ECHO",
+        "title": "A Name on the Wind",
+        "pages": [
+            {
+                "text": "You are rummaging through the debris of a collapsed building when you see it: a piece of fabric trapped under a beam. It is no different from a thousand other rags you have found on your journey.\n\nYet, something pushes you to pull it out.\n\nThe fabric is surprisingly intact. A strip of heavy cloth, once white, now stained with gray and rust. But when you turn it over, you see something that stops your breath.\n\nA name, stitched with faded blue thread. Curved letters, handmade, with care. With love.\n\n«Lena»",
+                "nextPage": 1
+            },
+            {
+                "text": "The world seems to stop. The sound of the wind fades. The biting cold becomes irrelevant.\n\nLena.\n\nYour father never spoke that name. Never. Your mother was just \"her\". An abstract entity, a faceless ghost. \"Your mother was lost,\" he said. Nothing more. No details. No shared memories. As if erasing her from memory was easier than facing the pain.\n\nBut now you have a name. Tangible proof that she was real. That she existed. That she was a person, not just an idea.\n\nLena.",
+                "nextPage": 2
+            },
+            {
+                "text": "Your fingers tremble as you clutch the fabric. It is a fragment of a medical coat, you realize. The kind doctors wore before the war. The kind she might have worn.\n\nIn your mind, pieces begin to fit together. The Ash Angels. The creatures your father always told you to avoid. Hybrid beings, half human and half machine, created for... what? You don't know. No one knows.\n\nBut if your mother became one of them, then she was alive. Somehow, in some form. And maybe...\n\nNo. You cannot afford hope. Hopes are dangerous. They distract you. They weaken you.",
+                "nextPage": 3
+            },
+            {
+                "text": "Yet, a thought creeps in, stubborn and obstinate: what if you could find her? Not to save her. You are not that naive. But to... know. To have answers.\n\nWhy did your father never go back for her? What really happened that day? Why did he give you the name \"Ultimo\"? Is it a prophecy? An omen? Or just the cruel admission that everything they had ended with you?\n\nYou clutch the fabric and tuck it into the innermost pocket of your backpack. It is just a piece of cloth. It won't change anything. It won't bring your mother back. It won't make your father less distant.\n\nBut it is yours. A fragment of truth in a world of lies.",
+                "nextPage": 4
+            },
+            {
+                "text": "When you leave the building, the world looks different. No more beautiful. No less hostile. But more... complex. As if the ruins hid stories you never considered. As if every piece of debris was the echo of a life lived, of a lost love, of a forgotten name.\n\nLena.\n\nYou repeat the name under your breath, savoring it. It is the first time you pronounce your mother's name. It seems strange. Intimate. Sacred.\n\nYou don't know what this means. You don't know if it will change anything. But a part of you, that part your father tried to stifle with training, feels lighter.\n\nBecause now you know. Now you have a name.",
+                "nextPage": 5
+            },
+            {
+                "text": "As you walk, a solitary figure watches you from afar, motionless as a stone statue.\n\nAn Ash Angel.\n\nIt doesn't move. It doesn't follow you. It just stays there, a shadow against the gray horizon. But under the hood, two eyes — one human, one mechanical — follow you.\n\nAnd if you could see them up close, perhaps you would recognize something in that gaze. Not threat. Not hunger.\n\nSomething that looks, dangerously, like a memory.\n\nLike pain.",
+                "consequences": [
+                    {
+                        "type": "addItem",
+                        "payload": {
+                            "itemId": "lena_cloth_fragment",
+                            "quantity": 1
+                        }
+                    }
+                ],
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_POINT_OF_NO_RETURN",
+        "title": "The Final Choice",
+        "pages": [
+            {
+                "text": "You see it.\n\nFrom the top of a hill, through the perennial haze, you finally see it. The letter \"E\" marked on the ground, visible even at this distance. Large, traced with white stones arranged with geometric care. A signal. A promise. Or a trap.\n\nThe Safe Place.\n\nIf it really exists, it is there. A few kilometers. A few hours' walk. After all this time, after everything you have been through, the end is near.\n\nBut you feel no relief. You feel no joy.\n\nYou feel fear.",
+                "nextPage": 1
+            },
+            {
+                "text": "You sit on the hill and look at the \"E\" in the distance. It is real. It is not a mirage. But this raises more questions than it solves.\n\nWhat awaits you there? A shelter, as promised? An oasis of safety in this dead world? Or something worse? An elaborate deception. An experiment. A grave.\n\nAnd your father? Is he there? Is he alive? Is he waiting for you? Or has he been dead for days, and you have walked towards nothingness?\n\nAnd if he is alive... do you really want to see him? After everything he put you through? After everything he hid from you?",
+                "nextPage": 2
+            },
+            {
+                "text": "You think about the journey. Every step, every struggle, every choice. You are no longer the person you were when you left the shelter. That person was scared, helpless, lost.\n\nYou are now... different. Stronger, perhaps. More cynical, certainly. You have killed. You have stolen. You have done things that person would never have imagined having to do.\n\nBut you also survived. You found a name for your mother. You withstood loneliness, hunger, despair. You crossed the desolation and are still standing.\n\nMaybe you don't need the Safe Place. Maybe you don't need your father.",
+                "choices": [
+                    {
+                        "text": "[1] No. You must know. You must finish what you started. Go towards the 'E'.",
+                        "targetPage": 3
+                    },
+                    {
+                        "text": "[2] This journey is not about your father. It is about you. But you must see with your own eyes.",
+                        "targetPage": 4
+                    }
+                ]
+            },
+            {
+                "text": "You stand up. Your legs protest, but obey. You start descending the hill, towards the \"E\", towards the answers.\n\nNot for your father. Not anymore. You do it for yourself. Because you must know. Because this uncertainty would eat you from the inside.\n\nIf it is a trap, you will face it. If it is a deception, you will unmask it. If your father is there, you will ask him to account for every lie, every hidden truth.\n\nAnd if there is nothing... at least you will know.\n\nThe fear does not disappear. But you replace it with something stronger: determination.",
+                "consequences": [
+                    {
+                        "type": "setFlag",
+                        "payload": "CHOSE_TRUTH"
+                    }
+                ],
+                "nextPage": 5
+            },
+            {
+                "text": "You stand up and look at the \"E\" one last time. Then you turn away.\n\nNo. Not like this. Not running towards another of your father's illusions. Not living for his expectations, for his plans.\n\nYou survived. You walked. You learned. But the real question is not \"where is the Safe Place?\". It is \"what do you want?\"\n\nAnd perhaps, in this dead world, the only true safety is the one you build yourself. With your own hands. With your own choices.\n\nYou descend the hill, but not towards the \"E\". Towards another path. Towards the unknown.\n\nMaybe it is madness. Maybe it is freedom.\n\nBut it is yours.",
+                "consequences": [
+                    {
+                        "type": "setFlag",
+                        "payload": "CHOSE_FREEDOM"
+                    },
+                    {
+                        "type": "alignmentChange",
+                        "value": {
+                            "type": "elian",
+                            "amount": 3
+                        }
+                    }
+                ],
+                "nextPage": 5
+            },
+            {
+                "text": "Whatever awaits you at the Safe Place — salvation, disappointment, death — is now irrelevant.\n\nWhat matters is that you chose. Not your father. Not fate. You.\n\nAnd in this world where everything has been decided by others — by war, by hunger, by necessity — that choice, however small, is the most precious thing you possess.\n\nThe horizon stretches before you, gray and infinite.\n\nBut for the first time, it doesn't feel like a prison.\n\nIt feels like a road.\n\nAnd you are ready to walk it.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_THE_WEIGHT_OF_CHOICE",
+        "title": "The Weight of Choice",
+        "pages": [
+            {
+                "text": "You continue the journey. Your steps are firm, decisive. You did what you had to do. The right choice. A survivor's choice.\n\nThe wind blows at your back, carrying distant sounds with it. Screams? Cries? It doesn't matter. They are already far away. They are already past. You are alive. That is all that matters.\n\nOr at least, that is what you keep telling yourself.",
+                "nextPage": 1
+            },
+            {
+                "text": "That night, as the fire crackles and the stars watch you in silence, your father's voice echoes in your head.\n\n\"Pity is a luxury you cannot afford, Ultimo. Compassion will kill you faster than hunger.\"\n\nHe was right. You know it. Yet, there is a bitter taste in your mouth that water does not wash away. A weight in your chest that wasn't there before.\n\nYou wonder if he too, after his Choice, after choosing you instead of her, felt like this.\n\nNot a winner. Just... lonelier.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_CITY_OF_GHOSTS",
+        "title": "The City of Ghosts",
+        "pages": [
+            {
+                "text": "The air changes.\n\nThe smell of earth and dust, your constant companion, gives way to something different. Cold concrete. Rust. A decay on a monumental scale, as if death itself had a smell when applied to an entire civilization.\n\nYou look up.\n\nSkeletons of skyscrapers scratch the gray sky like skeletal fingers reaching out to a deaf god. Streets, once pulsing arteries of life, are now silent canyons where the wind howls like a million ghosts.\n\nYou have never seen anything like it.",
+                "nextPage": 1
+            },
+            {
+                "text": "Your father's lessons prepared you for the dangers of the wild, for solitary raiders, for mutated beasts. But this... this is different.\n\nThis is the graveyard of an entire world. Every broken window is a dead eye. Every faded sign is an epitaph of dead dreams. And you are just an insect moving among gigantic tombstones.\n\nThe promise of precious resources, hidden among these fallen giants, is strong.\n\nBut the feeling of being crushed by the weight of a million ended stories is even stronger.\n\nYou inhale deeply. The air tastes of the end. And you are alive. For now.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_STRANGERS_REFLECTION",
+        "title": "A Stranger's Reflection",
+        "pages": [
+            {
+                "text": "You stop to drink from a puddle of rainwater, collected in a piece of bent sheet metal. The water is turbid but relatively clean. You lower your head to drink.\n\nFor an instant, before your lips ripple the surface, you see your reflection.\n\nAnd you freeze.\n\nThe face staring back at you is not that of the boy who left Elian's shelter. The eyes are more sunken, more alert, like those of a predator who has learned that every shadow can hide death. There is a scar on the cheek that wasn't there before. The skin is sunburnt and pulled by hunger. The lips are chapped. There is no more softness. Only hard angles, sculpted by pain and necessity.",
+                "nextPage": 1
+            },
+            {
+                "text": "Who is this stranger?\n\nIs it the creature Elian forged with years of brutal training? Or is it something new, born from this solitary journey, tempered by solitude and impossible choices?\n\nThe question disturbs you.\n\nYou look away, rippling the water with your fingers. The reflection shatters into a thousand pieces, like everything else.\n\nYou drink. The water is cold and tastes of metal.\n\nYou don't like the answer you saw in those eyes. Or maybe, you are scared to discover that that answer... you like it.",
+                "nextPage": null
+            }
+        ]
+    },
+    {
+        "id": "CS_THE_BRINK",
+        "title": "On the Brink",
+        "pages": [
+            {
+                "text": "You fall to your knees.\n\nThe world tilts dangerously. Your vision darkens at the edges, as if someone were slowly turning off the lights. Every breath is a shard of glass in your lungs. The metallic taste of blood fills your mouth, warm and thick.\n\nYour hands sink into the earth. Is this how it ends? Here? After all this way, after everything you have endured?\n\nNo. No, it can't be this.\n\nBut your body doesn't listen to you. Your strength abandons you. The darkness advances.",
+                "nextPage": 1
+            },
+            {
+                "text": "And then, in the silence preceding the end, you hear it.\n\n\"Survive.\"\n\nYour father's voice. It is not encouragement. It is not comfort. It is an order. Dry. Relentless. As always.\n\n\"Survive, Ultimo. Not for me. Not for her. For you. Because this is the only thing that matters. The only thing you have always had.\"\n\nSomething lights up inside you. It is not hope. It is not courage.\n\nIt is anger.\n\nPure, stubborn, fierce anger.\n\nWith an effort that tears your muscles and rips a silent scream from your throat, you get back on your feet. Staggering. Bleeding. But standing.\n\nYou will not die here. You will not let it win. Not this ruthless world. Not him. Not yourself.\n\nYou are Ultimo. And as long as you breathe, you fight.",
+                "consequences": [
+                    {
+                        "type": "setFlag",
+                        "payload": "THE_BRINK_SURVIVED"
+                    }
+                ],
+                "nextPage": null
+            }
+        ]
+    }
+]

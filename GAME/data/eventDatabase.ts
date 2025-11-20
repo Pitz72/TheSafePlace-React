@@ -19,7 +19,8 @@ async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounter
         'data/events/hermit_location.json',
         'data/events/repair_quests.json',
         'data/events/olivia_herbalist.json',
-        'data/events/arsonist_quest.json'
+        'data/events/arsonist_quest.json',
+        'data/events/unique_donor_events.json'
     ];
     const encounterFile = 'data/events/encounters.json';
     const loreFile = 'data/events/lore.json';
@@ -40,12 +41,12 @@ async function loadEvents(): Promise<{ biomeEvents: GameEvent[], globalEncounter
         if (!encounterResponse.ok) throw new Error(`Failed to fetch ${encounterResponse.url}: ${encounterResponse.statusText}`);
         const globalEncounters: GameEvent[] = await encounterResponse.json();
         console.log('[EVENT DB] Global encounters loaded:', globalEncounters.length);
-        
+
         const loreResponse = await fetch(loreFile);
         if (!loreResponse.ok) throw new Error(`Failed to fetch ${loreResponse.url}: ${loreResponse.statusText}`);
         const loreEvents: GameEvent[] = await loreResponse.json();
         console.log('[EVENT DB] Lore events loaded:', loreEvents.length);
-        
+
         const easterEggResponse = await fetch(easterEggFile);
         if (!easterEggResponse.ok) throw new Error(`Failed to fetch ${easterEggResponse.url}: ${easterEggResponse.statusText}`);
         const easterEggEvents: GameEvent[] = await easterEggResponse.json();

@@ -1,0 +1,126 @@
+[
+    {
+        "id": "unique_thief_camp",
+        "title": "Raider's Camp",
+        "description": "You find a camp hidden among the trees. An armed man sleeps near a dying fire. You see the watch hanging from his belt.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Steal the watch without being seen",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 14,
+                        "successText": "You approach silently and unhook the watch from the belt. The raider does not wake up.",
+                        "failureText": "The raider wakes up! You must fight!",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_watch",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Confront the raider directly",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You wake the raider and confront him. After a brief fight, you defeat him and recover the watch."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_watch",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 60
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Convince the raider to return the watch",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "persuasion",
+                        "dc": 16,
+                        "successText": "You explain that Marcus is a good man and the watch has only sentimental value. The raider, surprisingly, is moved and returns it to you.",
+                        "failureText": "The raider laughs at your naivety and attacks you!",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_watch",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 80
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 35
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

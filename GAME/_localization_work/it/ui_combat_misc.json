@@ -1,0 +1,39 @@
+{
+    "COMBAT_SCREEN": {
+        "TITLE": "═══ COMBATTIMENTO ═══",
+        "VICTORY_TITLE": "VITTORIA",
+        "PROMPT_CONTINUE": "[INVIO] per continuare",
+        "ENEMY_STATUS": {
+            "UNHARMED": "Illeso",
+            "LIGHTLY_WOUNDED": "Leggermente Ferito",
+            "WOUNDED": "Ferito",
+            "CRITICAL": "In Fin di Vita",
+            "DEFEATED": "Sconfitto"
+        },
+        "ACTIONS": {
+            "ATTACK": "Attacca",
+            "ANALYZE": "Analizza",
+            "USE_ITEM": "Usa Oggetto",
+            "FLEE": "Fuggi"
+        },
+        "LABELS": {
+            "YOU": "TU:",
+            "ACTIONS": "AZIONI:"
+        },
+        "PROMPT_MAIN": "[↑↓] Naviga | [INVIO] Conferma",
+        "PROMPT_ITEM": "[↑↓] Seleziona | [INVIO] Usa | [ESC] Indietro"
+    },
+    "CUTSCENE_SCREEN": {
+        "PROMPT_SHOW_ALL": "[INVIO per mostrare tutto]",
+        "PROMPT_CONTINUE": "[INVIO per continuare]"
+    },
+    "ASH_LULLABY_SCREEN": {
+        "TITLE": "═══ UN RICORDO PESANTE ═══",
+        "DESCRIPTION": "Mentre ti prepari a riposare, la tua mano sfiora qualcosa di freddo e spigoloso nella tasca. Il carillon annerito. L'avvertimento di tuo padre ti risuona in testa: \"Non aprirlo mai. Il suo suono... attira i ricordi sbagliati\".\n\nEppure, qui, nel silenzio del rifugio, senti un'attrazione inspiegabile. Una curiosità dolorosa.",
+        "CHOICES": {
+            "OPEN": "Apri il carillon.",
+            "IGNORE": "Ignoralo e riposa."
+        },
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Conferma"
+    }
+}

@@ -1,0 +1,379 @@
+[
+    {
+        "id": "unique_titanic_car",
+        "title": "Il Naufragio Terrestre",
+        "description": "In una depressione del terreno allagata dal fango, spunta il tetto arrugginito di una vecchia automobile. I finestrini sono intatti, sigillando l'interno come una capsula del tempo. Dentro, vedi due scheletri seduti sui sedili anteriori. Si tengono per mano. Sul cruscotto c'è una custodia di plastica trasparente.",
+        "biomes": [
+            "Pianura",
+            "Acqua"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Forza DC 12] Apri la portiera.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "atletica",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "titanic_cassette",
+                                "text": "L'aria viziata esce con un sibilo. Prendi la custodia. La copertina mostra una nave gigantesca con quattro comignoli che fumano, e due volti che si guardano. Dentro c'è una cassetta a nastro. Sulla label c'è scritto 'Music from the Motion Picture'. Non sai cosa significhi, ma senti che parla di qualcosa di inaffondabile che è affondato lo stesso."
+                            },
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Hai trovato una cassetta musicale in un'auto sommersa dal fango.",
+                                    "type": "ITEM_ACQUIRED"
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "La portiera è bloccata dalla ruggine e dal fango. Non riesci ad aprirla.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Lasciali in pace.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Decidi di non disturbare il loro riposo.",
+                                    "type": "NARRATIVE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_dogbuster_drone",
+        "title": "Il Drone Perduto",
+        "description": "Incastrato tra i rami bassi di un albero secco in un vecchio parco cittadino, vedi un piccolo velivolo a quattro eliche. È colorato, quasi un giocattolo. Sulla scocca c'è un adesivo: 'DogBuster'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Investigare DC 10] Esamina il drone.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigare",
+                        "dc": 10,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "broken_drone",
+                                "text": "Trovi un biglietto incastrato nel vano batteria, protetto dalla pioggia. La grafia è infantile: 'Papà, ho trovato questo coso in giardino. Ho chiamato il signor Simon Rest. Ha detto di portarlo alla sede DogBusters. Puoi farlo tu?'. Non c'è nessuna sede, e nessun Simon Rest. Solo un compito lasciato a metà."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Non riesci a recuperare il drone senza rischiare di romperlo o cadere.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Lascialo lì come monumento.",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                },
+                                "text": "Lasci il drone dov'è, un piccolo monumento a un gioco interrotto."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_romeros_builders",
+        "title": "I Costruttori",
+        "description": "Trovi un edificio che sembra diverso dagli altri. Non è crollato, è stato... smontato e rimontato. Mura rinforzate con cura, un sistema di raccolta piovana ingegnoso sul tetto. Sulla porta c'è un simbolo dipinto: due mani che si stringono e la scritta 'Los Romeros - Qui si costruisce, non si distrugge'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Entra e leggi il diario sul tavolo.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "advanced_tool_kit",
+                                "text": "Sul tavolo trovi un diario aperto: 'Giorno 400 del Silenzio. La banda dell'Est voleva le nostre scorte. Jimmy ha detto di no alle armi. Abbiamo riparato il loro generatore in cambio di pace. Funziona. Possiamo ricostruire questo mondo, un mattone alla volta, amigos.'"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_bio_ai_lab",
+        "title": "L'Errore Fatale",
+        "description": "Entri in una sala server sotterranea. L'aria è fredda. Al centro, due scrivanie sono rivolte verso un enorme monitor centrale, ora spento. Sulle sedie, due cadaveri mummificati indossano camici da laboratorio. I badge identificativi recitano: 'Dr. W. Galerius' e 'Ing. L. Franke'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Intelligenza DC 14] Accedi al terminale di emergenza.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "int",
+                        "dc": 14,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "tech_components",
+                                "quantity": 5,
+                                "text": "Il log finale lampeggia sullo schermo a fosfori verdi. 'Tentativo 49. L'IA bio-organica ha risposto. Non con dati, ma con... fame. Abbiamo provato a isolare il codice, ma è entrata nel sistema di aerazione. Franke sta tossendo spore. Io non sento più le gambe. Se qualcuno legge questo: non riattivate il mainframe. Lasciatela dormire.'"
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 5,
+                                "text": "Mentre leggi, inali delle spore residue. Senti un bruciore ai polmoni."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Il terminale è bloccato o danneggiato. Non riesci ad accedere ai log.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_analog_calculator",
+        "title": "Il Calcolatore Analogico",
+        "description": "In una teca di vetro infranta, trovi un oggetto bellissimo e incomprensibile. Non ha schermi, né tasti. È un complesso sistema di ingranaggi d'ottone, leve e dischi numerati. Un cartellino recita: 'Calcolatore Analogico - Donazione della Collezione Tomaiuolo'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Investigare DC 13] Prova a usarlo.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigare",
+                        "dc": 13,
+                        "success": [
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "int",
+                                    "amount": 1
+                                },
+                                "text": "Muovi le leve. I meccanismi scattano con una precisione che la ruggine non ha intaccato. Senza elettricità, senza software, questa macchina può ancora calcolare la rotta delle stelle. È una tecnologia che il Grande Silenzio non ha potuto spegnere. (INTELLIGENZA +1)"
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Non riesci a capire come funziona questo complesso meccanismo.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_benefactor_letter",
+        "title": "La Lettera del Benefattore",
+        "description": "Tra la corrispondenza sparsa sul pavimento di un ufficio postale in rovina, una busta cattura la tua attenzione. È di carta pregiata, pesante.",
+        "biomes": [
+            "Villaggio"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Leggi la lettera.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                },
+                                "text": "'Caro Signor Paul S., non so chi lei sia, ma i dottori dicono che l'operazione è pagata. Mia figlia camminerà grazie a lei. In un mondo che sta diventando buio, lei è stata la nostra luce. Che Dio la protegga, ovunque lei sia.' La lettera non è mai stata spedita."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 100,
+                                "text": "Leggere queste parole ti riempie di una strana pace interiore."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_1k_chess",
+        "title": "1K di Genio",
+        "description": "In un ufficio tecnico, un vecchio computer compatto, un pezzo da museo già prima della fine, è collegato a un piccolo televisore a tubo catodico. C'è un post-it sullo schermo: 'Stefano dice che è impossibile'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Intelligenza DC 12] Accendilo.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "int",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": "electronic_parts",
+                                "quantity": 3,
+                                "text": "Lo schermo sfarfalla. Carica un programma. '1K CHESS'. Giochi una partita contro la macchina. Ti batte in 4 mosse. Un'intelligenza perfetta racchiusa in meno memoria di quanta ne serva per scrivere il tuo nome. Incredibile."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "value": {
+                                    "text": "Il computer non si accende, forse hai sbagliato qualcosa nel collegamento.",
+                                    "type": "ACTION_FAILURE"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_shadow_gamer",
+        "title": "Il Gioco delle Ombre",
+        "description": "In un appartamento, trovi uno scheletro seduto su una poltrona sacco, davanti a una console spenta. Lo scheletro indossa una parrucca sintetica bionda, cotonata in modo assurdo, che il tempo non ha degradato. Tra le mani stringe la custodia di un gioco: 'Shadow of the Urbe'.",
+        "biomes": [
+            "Città"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Osserva meglio.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "energy_drink",
+                                "text": "Guardi la copertina. C'è un uomo vestito da prete che corre sui tetti. Non capisci cosa sia un 'videogioco'. Pensi sia un'icona religiosa. 'Dev'essere stato un santo molto... spettinato', mormori. Prendi la parrucca? No, è troppo ridicola anche per la fine del mondo. Trovi una lattina sotto la poltrona."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_bluigger_box",
+        "title": "La Scatola del Tempo",
+        "description": "Semi-sepolta nella terra della strada, trovi una scatola di metallo arrugginita. Sopra c'è inciso 'BLUIGGER - Docu'. L'autore sembra essere un certo Al'x G.",
+        "biomes": [
+            "Pianura"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Apri la scatola.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "vintage_film_reel",
+                                "text": "Dentro c'è una bobina di pellicola (una 'ruota doppia con raggi'). Srotolando un pezzo verso la luce, vedi minuscole immagini di persone che ridono, mangiano, vivono. Non è un film di eroi. È un documentario sulla vita normale. La cosa più preziosa che esista ora."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_moon_rock_record",
+        "title": "Il Disco Lunare",
+        "description": "Tra i vinili rotti di un vecchio negozio, uno è intatto, protetto da una copertina di plastica pesante. La band si chiama 'Haistulf'. Il titolo è 'Play Rock To The Moon'.",
+        "biomes": [
+            "Villaggio"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Prendi il disco.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "addItem",
+                                "value": "vinyl_record_moon",
+                                "text": "La copertina ritrae uomini che suonano guardando lo spazio. Forse pensavano che la musica potesse salvarci portandoci via da qui. O forse volevano solo che l'universo sapesse che eravamo qui, e facevamo casino."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

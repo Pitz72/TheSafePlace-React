@@ -1,0 +1,180 @@
+[
+    {
+        "id": "trigger_pump_quest",
+        "title": "Broken Pump",
+        "description": "In the center of a small desolate square, you see an old hand water pump, rusty and clearly out of order. Once it must have been the heart of this village. With the right pieces, maybe you could get it working again.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the pump",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The pump is damaged but repairable. You will need: 1 Rubber Gasket and 2 Scrap Metal."
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "repair_water_pump"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the pump",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't have time for repair projects. Move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "complete_pump_repair",
+        "title": "Pump Repair",
+        "description": "You are back in front of the broken pump. You have everything needed to try to repair it.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Attempt repair (requires 1x Gasket, 2x Scrap)",
+                "itemRequirements": [
+                    {
+                        "itemId": "rubber_gasket",
+                        "quantity": 1
+                    },
+                    {
+                        "itemId": "scrap_metal",
+                        "quantity": 2
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "With patience and a bit of ingenuity, you dismantle the rusty mechanism, replace the worn parts, and reassemble everything. You operate the lever... and after a few squeaks, a stream of clean water gushes from the spout. You brought a small piece of the world back to life.",
+                        "failureText": "You try to repair the mechanism, but a crucial piece breaks under your efforts. The pump is irreparably damaged. The materials you used are wasted.",
+                        "success": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "rubber_gasket",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "activateWaterPump",
+                                    "location": {
+                                        "x": 45,
+                                        "y": 85
+                                    }
+                                },
+                                "text": "The pump is now working! You can return here to collect clean water."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "rubber_gasket",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "destroyWaterPump",
+                                    "location": {
+                                        "x": 45,
+                                        "y": 85
+                                    }
+                                },
+                                "text": "The pump is now irreparably broken."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "use_water_pump",
+        "title": "Water Pump",
+        "description": "The pump you repaired works perfectly. You can collect clean water here.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Collect water (requires empty bottles)",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You operate the pump lever and fill your canteens with fresh, clean water."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,39 @@
+{
+    "COMBAT_SCREEN": {
+        "TITLE": "═══ COMBAT ═══",
+        "VICTORY_TITLE": "VICTORY",
+        "PROMPT_CONTINUE": "[ENTER] to continue",
+        "ENEMY_STATUS": {
+            "UNHARMED": "Unharmed",
+            "LIGHTLY_WOUNDED": "Lightly Wounded",
+            "WOUNDED": "Wounded",
+            "CRITICAL": "Critical Condition",
+            "DEFEATED": "Defeated"
+        },
+        "ACTIONS": {
+            "ATTACK": "Attack",
+            "ANALYZE": "Analyze",
+            "USE_ITEM": "Use Item",
+            "FLEE": "Flee"
+        },
+        "LABELS": {
+            "YOU": "YOU:",
+            "ACTIONS": "ACTIONS:"
+        },
+        "PROMPT_MAIN": "[↑↓] Navigate | [ENTER] Confirm",
+        "PROMPT_ITEM": "[↑↓] Select | [ENTER] Use | [ESC] Back"
+    },
+    "CUTSCENE_SCREEN": {
+        "PROMPT_SHOW_ALL": "[ENTER to show all]",
+        "PROMPT_CONTINUE": "[ENTER to continue]"
+    },
+    "ASH_LULLABY_SCREEN": {
+        "TITLE": "═══ A HEAVY MEMORY ═══",
+        "DESCRIPTION": "As you prepare to rest, your hand brushes against something cold and angular in your pocket. The blackened music box. Your father's warning echoes in your head: \"Never open it. Its sound... attracts the wrong memories.\"\n\nYet, here, in the silence of the shelter, you feel an inexplicable pull. A painful curiosity.",
+        "CHOICES": {
+            "OPEN": "Open the music box.",
+            "IGNORE": "Ignore it and rest."
+        },
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Confirm"
+    }
+}

@@ -1,0 +1,169 @@
+{
+    "BOOT_TEXT": [
+        "Runtime Radio BIOS v1.02",
+        "Copyright (C) 1983 Runtime Radio Corp.",
+        "",
+        "CPU: R-8088 @ 4.77MHz",
+        "Memory Test: 640K OK",
+        "",
+        "Checking drives...",
+        "Drive A: Floppy Disk",
+        "Drive C: Hard Disk",
+        "",
+        "Booting from C:...",
+        "Starting RR-DOS...",
+        "",
+        "HIMEM is testing extended memory...done.",
+        "RR-DOS Mouse Driver installed.",
+        "RR-DOS CD-ROM Driver installed.",
+        "Sound Blaster 8 card detected at A220 I5 D1.",
+        "",
+        "C:\\> autoexec.bat",
+        "C:\\> echo off",
+        "C:\\> load game.exe",
+        "Loading TSP Chronicles..."
+    ],
+    "MENU_ITEMS": [
+        "New Game",
+        "Continue Game",
+        "Load Game",
+        "Story",
+        "Instructions",
+        "Options",
+        "Trophies",
+        "Exit"
+    ],
+    "INSTRUCTIONS_TEXT": "═══ THE SAFE PLACE CHRONICLES - SURVIVAL GUIDE ═══\n\nWelcome, traveler. This world is no longer what it used to be. The Unspoken War left only ruins and silence. But you have the tools to survive.\n\n═══ MOVEMENT AND EXPLORATION ═══\n\n• WASD or ARROW KEYS: Move on the map\n• The 'E' on the map indicates your objective: The Safe Place\n• Every step consumes time and vital resources (Satiety, Hydration)\n• Explore biomes: Plains, Forests, Cities, Villages, Rivers\n• Some tiles (M - Mountain) are impassable\n\n═══ RESOURCE MANAGEMENT ═══\n\n• HP (Health Points): Your survival. Monitor constantly.\n• SATIETY: Food is life. If it drops to 0, you will starve.\n• HYDRATION: Water is essential. Find sources or filter contaminated water.\n• FATIGUE: You accumulate tiredness by moving. Rest to recover.\n• CONDITIONS: Wounds, diseases, poisons, hypothermia will weaken you. Cure negative statuses with specific items.\n\n═══ TIME AND WEATHER ═══\n\n• Time passes with every action: walking, resting, searching, crafting\n• NIGHT (20:00 - 6:00): Very dangerous. You take constant damage if outdoors.\n• SHELTERS (R on the map): Find shelter before sunset. Use them to sleep, rest, search for resources, and craft.\n• DYNAMIC WEATHER: Rain and storms slow movement and cause damage.\n\n═══ MAIN ACTIONS ═══\n\n• [I] INVENTORY: Manage items, equip weapons/armor, use consumables\n• [R] QUICK REST: Recover some HP and fatigue (once per day)\n• [F] ACTIVE SEARCH: Search for resources in the area (Survival DC 10, 30 min)\n• [L] LEVEL UP: When available, choose attribute and talent\n• [ESC] PAUSE: Access in-game menu, save/load game\n\n═══ INVENTORY AND EQUIPMENT ═══\n\n• Max weight limited (based on Strength)\n• WEAPONS: Equippable, they degrade. Repair or dismantle them for materials.\n• ARMOR: Head, Chest, Legs. Increase Armor Class (AC).\n• CONSUMABLES: Food, water, medicine. Some cure specific statuses.\n• MANUALS: Find new ones to unlock crafting recipes.\n\n═══ CRAFTING ═══\n\n• In SHELTERS you will find WORKBENCHES\n• Create weapons, armor, medicine, survival tools\n• Each recipe requires: Materials, Skill (DC), Time\n• Learn new recipes by finding Manuals in the world\n\n═══ COMBAT ═══\n\n• Fight enemies you encounter while exploring\n• Actions: ATTACK, ANALYZE (reveal weaknesses), USE ITEM, FLEE\n• Analyzing an enemy reveals special tactics you can use\n• Fleeing is resolved with a skill check (can fail!)\n• Every victory grants XP\n\n═══ CHARACTER GROWTH ═══\n\n• LEVELS: Gain XP from exploration, events, combat\n• TALENTS: At every level-up choose a talent that defines your style\n  - Level 2: Basic talents (e.g., Scavenger, Guerrilla)\n  - Level 5: Advanced talents\n  - Level 8: Master talents\n• ATTRIBUTES: Increase STR, DEX, CON, INT, WIS, CHA at every level\n• SKILLS: 18 attribute-based skills. Train the ones you use most.\n\n═══ MORAL ALIGNMENT ═══\n\n• Your choices influence alignment: LENA (Compassion) vs ELIAN (Pragmatism)\n• Reaching high thresholds unlocks permanent passive bonuses\n• Some choices have immediate or long-term consequences\n\n═══ SURVIVAL TIPS ═══\n\n• Save often (5 slots available + JSON export/import)\n• Explore during the day, rest in Shelters at night\n• Use Active Search [F] to find biome-specific resources\n• Plan your levels: some talents are fundamental\n• Not all fights must be fought. Fleeing is a valid strategy.\n• Water is rare: filter contaminated water or search for rivers\n• Negative conditions can kill you. Always cure SICK, POISONED, INFECTION.\n\n═══ MAIN STORY ═══\n\n• During the journey you will experience \"Memory Echoes\": narrative flashbacks revealing the past\n• These events are triggered by natural triggers (steps, days, position)\n• You cannot miss them: they trigger automatically when conditions are met\n• Your personal story is an integral part of the journey\n\n═══ SECRETS AND TROPHIES ═══\n\n• 50 TROPHIES to unlock, persistent across playthroughs\n• Extremely rare secret events hidden in the world\n• Unique items found only under certain conditions\n• The map hides more than it seems...\n\nNow go, traveler. The Safe Place awaits to the East.\nSurvive. Discover the truth. And perhaps, one day, you will understand.",
+    "INSTRUCTIONS_PAGES": [
+        "═══ THE SAFE PLACE CHRONICLES ═══\nSURVIVAL GUIDE\n\nWelcome, traveler. This world is no longer what it used to be. The Unspoken War left only ruins and silence. But you have the tools to survive.",
+        "═══ MOVEMENT AND EXPLORATION ═══\n\n• WASD or ARROW KEYS: Move on the map\n• The 'E' on the map indicates your objective: The Safe Place\n• Every step consumes time and vital resources (Satiety, Hydration)\n• Explore biomes: Plains, Forests, Cities, Villages, Rivers\n• Some tiles (M - Mountain) are impassable",
+        "═══ RESOURCE MANAGEMENT ═══\n\n• HP (Health Points): Your survival. Monitor constantly.\n• SATIETY: Food is life. If it drops to 0, you will starve.\n• HYDRATION: Water is essential. Find sources or filter contaminated water.\n• FATIGUE: You accumulate tiredness by moving. Rest to recover.\n• CONDITIONS: Wounds, diseases, poisons, hypothermia will weaken you. Cure negative statuses with specific items.",
+        "═══ TIME AND WEATHER ═══\n\n• Time passes with every action: walking, resting, searching, crafting\n• NIGHT (20:00 - 6:00): Very dangerous. You take constant damage if outdoors.\n• SHELTERS (R on the map): Find shelter before sunset. Use them to sleep, rest, search for resources, and craft.\n• DYNAMIC WEATHER: Rain and storms slow movement and cause damage.",
+        "═══ MAIN ACTIONS ═══\n\n• [I] INVENTORY: Manage items, equip weapons/armor, use consumables\n• [R] QUICK REST: Recover some HP and fatigue (once per day)\n• [F] ACTIVE SEARCH: Search for resources in the area (Survival DC 10, 30 min)\n• [L] LEVEL UP: When available, choose attribute and talent\n• [ESC] PAUSE: Access in-game menu, save/load game",
+        "═══ INVENTORY AND EQUIPMENT ═══\n\n• Max weight limited (based on Strength)\n• WEAPONS: Equippable, they degrade. Repair or dismantle them for materials.\n• ARMOR: Head, Chest, Legs. Increase Armor Class (AC).\n• CONSUMABLES: Food, water, medicine. Some cure specific statuses.\n• MANUALS: Find new ones to unlock crafting recipes.",
+        "═══ CRAFTING ═══\n\n• In SHELTERS you will find WORKBENCHES\n• Create weapons, armor, medicine, survival tools\n• Each recipe requires: Materials, Skill (DC), Time\n• Learn new recipes by finding Manuals in the world",
+        "═══ COMBAT ═══\n\n• Fight enemies you encounter while exploring\n• Actions: ATTACK, ANALYZE (reveal weaknesses), USE ITEM, FLEE\n• Analyzing an enemy reveals special tactics you can use\n• Fleeing is resolved with a skill check (can fail!)\n• Every victory grants XP",
+        "═══ CHARACTER GROWTH ═══\n\n• LEVELS: Gain XP from exploration, events, combat\n• TALENTS: At every level-up choose a talent that defines your style\n  - Level 2: Basic talents (e.g., Scavenger, Guerrilla)\n  - Level 5: Advanced talents\n  - Level 8: Master talents\n• ATTRIBUTES: Increase STR, DEX, CON, INT, WIS, CHA at every level\n• SKILLS: 18 attribute-based skills. Train the ones you use most.",
+        "═══ MORAL ALIGNMENT ═══\n\n• Your choices influence alignment: LENA (Compassion) vs ELIAN (Pragmatism)\n• Reaching high thresholds unlocks permanent passive bonuses\n• Some choices have immediate or long-term consequences",
+        "═══ SURVIVAL TIPS ═══\n\n• Save often (5 slots available + JSON export/import)\n• Explore during the day, rest in Shelters at night\n• Use Active Search [F] to find biome-specific resources\n• Plan your levels: some talents are fundamental",
+        "═══ SURVIVAL TIPS (2) ═══\n\n• Not all fights must be fought. Fleeing is a valid strategy.\n• Water is rare: filter contaminated water or search for rivers\n• Negative conditions can kill you. Always cure SICK, POISONED, INFECTION.",
+        "═══ MAIN STORY ═══\n\n• During the journey you will experience \"Memory Echoes\": narrative flashbacks revealing the past\n• These events are triggered by natural triggers (steps, days, position)\n• You cannot miss them: they trigger automatically when conditions are met\n• Your personal story is an integral part of the journey",
+        "═══ SECRETS AND TROPHIES ═══\n\n• 50 TROPHIES to unlock, persistent across playthroughs\n• Extremely rare secret events hidden in the world\n• Unique items found only under certain conditions\n• The map hides more than it seems...\n\nNow go, traveler. The Safe Place awaits to the East. Survive. Discover the truth. And perhaps, one day, you will understand."
+    ],
+    "STORY_PAGES": [
+        "═══════════════════════════════\nTHE ECHO OF SILENCE\n═══════════════════════════════\n\nThe world Ultimo knew was made of whispers and cold steel, of lessons taught by a father with tired eyes but steady hands. \n\nSeventeen years lived in the shadow of a catastrophe that had swallowed the past, leaving only distorted echoes: the \"Unspoken War\", the \"Great Silence\".",
+        "Of his mother, Ultimo kept only a faded warmth in his chest, a name almost forgotten. \n\nThe \"before\" was a fairy tale told in a low voice, a dream of blue skies and bright cities, so different from the sickly grays and skeletal ruins that now scratched the horizon of Central Europe.",
+        "His father had taught him to read the signs of the wind laden with toxic dust, to distinguish the rustle of a mutated beast from the harmless one of twisted metal, to find water where there seemed to be only aridity. \n\nEvery day was a lesson in survival, every night a warning about the fragility of life.",
+        "Then, his father had left too. \n\nA mission shrouded in mystery, a hasty goodbye with the promise of a return that was taking too long. \n\nThe supplies left with care were dwindling, and with them, hope. \n\nOnly a fragmentary message remained, the last echo of his father's voice: \n\n\"...find the Safe Place, Ultimo. It is our only chance...\"",
+        "Now, silence is his only companion. \n\nBefore him, a desperate journey across an unrecognizable continent, armed only with his father's teachings and a map to a place that could be legend, trap, or perhaps, truly, salvation. \n\nThe weight of loneliness is great, but the will to honor his father's memory, and the primal need to live, push him to take the first step into that hostile world. \n\nThe Safe Place awaits, somewhere beyond the desolation."
+    ],
+    "STORY_TEXT": "The Echo of Silence\n\nThe world Ultimo knew was made of whispers and cold steel, of lessons taught by a father with tired eyes but steady hands. Seventeen years lived in the shadow of a catastrophe that had swallowed the past, leaving only distorted echoes: the \"Unspoken War\", the \"Great Silence\".\n\nOf his mother, Ultimo kept only a faded warmth in his chest, a name almost forgotten. The \"before\" was a fairy tale told in a low voice, a dream of blue skies and bright cities, so different from the sickly grays and skeletal ruins that now scratched the horizon of Central Europe.\n\nHis father had taught him to read the signs of the wind laden with toxic dust, to distinguish the rustle of a mutated beast from the harmless one of twisted metal, to find water where there seemed to be only aridity. Every day was a lesson in survival, every night a warning about the fragility of life.\n\nThen, his father had left too. A mission shrouded in mystery, a hasty goodbye with the promise of a return that was taking too long. The supplies left with care were dwindling, and with them, hope. Only a fragmentary message remained, the last echo of his father's voice: \"...find the Safe Place, Ultimo. It is our only chance...\"\n\nNow, silence is his only companion. Before him, a desperate journey across an unrecognizable continent, armed only with his father's teachings and a map to a place that could be legend, trap, or perhaps, truly, salvation. The weight of loneliness is great, but the will to honor his father's memory, and the primal need to live, push him to take the first step into that hostile world. The Safe Place awaits, somewhere beyond the desolation.",
+    "MOUNTAIN_MESSAGES": [
+        "You cannot pass. It is a mountain.",
+        "Climbing this rock face with bare hands would be suicide.",
+        "Even mountain goats would look at this wall and say 'No, thanks'.",
+        "The mountain watches you, impassive. You shall not pass."
+    ],
+    "BIOME_MESSAGES": {
+        ".": "You are in a vast open plain.",
+        "F": "You are entering a dense forest.",
+        "~": "The waters of a river stretch before you.",
+        "M": "Imposing mountains block your path.",
+        "C": "The silent ruins of a city rise on the horizon.",
+        "V": "You cross the remains of a small village.",
+        "R": "You found a shelter. It seems safe, for now.",
+        "S": "You begin your journey in a relatively quiet spot.",
+        "E": "The final destination is near.",
+        "A": "You see 'The Crossroads' Outpost ahead. Smoke rises from a central fire.",
+        "N": "A dark cave opens before you. The air is thick and unnatural.",
+        "T": "A wandering trader greets you cautiously.",
+        "L": "The armored doors of an abandoned lab are ajar.",
+        "B": "A vast library stands before you, keeper of lost knowledge."
+    },
+    "ATMOSPHERIC_MESSAGES": {
+        ".": {
+            "day": [
+                "The wind whistles through the tall grass.",
+                "A hawk circles high in the sky.",
+                "The sun beats down on your skin."
+            ],
+            "night": [
+                "The distant call of a nocturnal predator makes you shiver.",
+                "The stars shine bright in the cloudless sky.",
+                "An unnatural silence envelops the plain."
+            ],
+            "rain": [
+                "Raindrops drum on your equipment.",
+                "The open ground offers little shelter from the pouring rain."
+            ]
+        },
+        "F": {
+            "day": [
+                "A ray of sunlight filters through the dense tree canopy.",
+                "The rustle of something in the bushes puts you on alert.",
+                "The smell of damp earth and moss fills the air."
+            ],
+            "night": [
+                "The hoot of an owl breaks the silence of the night.",
+                "Branches creak nearby, snapped by an invisible weight.",
+                "The darkness in the forest is almost total."
+            ],
+            "rain": [
+                "Rain drips from the leaves, creating a constant symphony.",
+                "The smell of rain and wet earth is intense here."
+            ]
+        },
+        "C": {
+            "day": [
+                "The wind howls through the ruins of buildings.",
+                "A piece of metal falls from a skeletal skyscraper, echoing in the silence.",
+                "Dust rises with your every move."
+            ],
+            "night": [
+                "Eerie shadows dance among the destroyed buildings.",
+                "A metallic noise in the distance makes you jump.",
+                "The moon spectrally illuminates the deserted streets."
+            ],
+            "rain": [
+                "Water flows in dark rivulets along the broken streets.",
+                "The sound of rain hitting twisted metal is deafening."
+            ]
+        },
+        "V": {
+            "day": [
+                "A door slams in the wind in an abandoned house.",
+                "Remnants of daily life are scattered everywhere, frozen in time.",
+                "A ghostly silence reigns among the houses."
+            ],
+            "night": [
+                "Every shadow seems to hide a threat.",
+                "You have the strange feeling of being watched from empty windows.",
+                "The wind whistles through the caved-in roofs."
+            ],
+            "rain": [
+                "Rain turns dirt roads into mud.",
+                "Water drips sadly from broken roofs."
+            ]
+        },
+        "R": {
+            "day": [
+                "This place seems to offer a temporary respite from the outside world.",
+                "Someone left supplies here a long time ago.",
+                "Dust dances in the rare rays of light filtering from inside."
+            ],
+            "night": [
+                "Sounds of the outside world seem muffled in here.",
+                "It is a relief to be sheltered, even if only for a short while.",
+                "The darkness inside the shelter is thick and almost tangible."
+            ]
+        }
+    },
+    "ATTRIBUTE_LABELS": {
+        "for": "Strength",
+        "des": "Dexterity",
+        "cos": "Constitution",
+        "int": "Intelligence",
+        "sag": "Wisdom",
+        "car": "Charisma"
+    }
+}

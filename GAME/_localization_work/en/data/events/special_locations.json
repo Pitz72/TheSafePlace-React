@@ -1,0 +1,194 @@
+[
+    {
+        "id": "unique_scientist_notes",
+        "title": "The Forgotten Laboratory",
+        "description": "You enter an abandoned laboratory, still lit by flickering emergency lights. Dead terminals, overturned scientific equipment, and a persistent chemical smell in the air. On a desk, you find a file folder with the seal 'PROJECT REBIRTH - TOP SECRET'.",
+        "biomes": [
+            "Laboratory"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Read the Project Rebirth documents",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "The documents reveal disturbing secrets: Project Rebirth was a desperate attempt to reverse the effects of the Great Silence. Scientists studied the 'Ash Angels', discovering they were not random mutations but guided transformations. The notes speak of 'energy matrices' and 'awakening frequencies'. This changes everything you thought you knew.",
+                        "failureText": "The technical jargon is too complex. You understand only fragments: failed experiments, lost subjects, shattered hopes.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "research_notes_rebirth",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            },
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "int",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search for useful materials in the laboratory",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "medicine",
+                        "dc": 12,
+                        "successText": "You find a medical cabinet still sealed with antibiotics, military stimpaks, and high-quality chemical components.",
+                        "failureText": "Most supplies are expired or contaminated. You recover only a few items.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "antibiotics",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "stimpak_military",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "chemicals_basic",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "chemicals_basic",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_ancient_library",
+        "title": "The Library of Whispers",
+        "description": "You enter an ancient library, miraculously intact. The shelves are laden with dusty books. In the center of the room, a consultation terminal is still powered by solar panels on the roof. A message flashes on the screen: 'PROJECT ECHO ARCHIVE - PUBLIC ACCESS'.",
+        "biomes": [
+            "Library"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Access the Project Echo archive",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "The terminal comes to life. File after file, you discover the truth about Project Echo: a collective neural interface that was supposed to unite humanity. But something went wrong. The system created the Great Silence - a wave of frequencies that shut down not only machines, but something fundamental in the human soul. It wasn't a weapon. It was a mistake. A mistake that cost everything.",
+                        "failureText": "The terminal freezes. You manage to read only fragments before it shuts down permanently.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            },
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "int",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[DISCOVERY] You revealed the secrets of Project Echo. The truth is more terrible than you imagined."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search for technical manuals among the books",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "Among the volumes you find survival, medicine, and engineering manuals. Precious knowledge of the lost world.",
+                        "failureText": "Most books are novels or philosophical essays. Nothing practical.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_wilderness_survival",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_field_medicine",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_advanced_repairs",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 60
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

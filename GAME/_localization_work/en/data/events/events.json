@@ -1,0 +1,243 @@
+[
+    {
+        "id": "due_stranieri",
+        "title": "Two Strangers in Need",
+        "description": "Crossing a windswept clearing, you notice two figures slumped on the ground. Approaching cautiously, you see a man desperately trying to dab a nasty wound on a woman's leg, clearly in shock. The man looks up, his eyes full of fear and hope.\n\n\"Please,\" he whispers, \"We ran out of bandages and water. Can you help us? Anything...\"",
+        "biomes": [
+            "."
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Lena] Offer them a bandage and a bottle of water.",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "The man thanks you with tears in his eyes. You use your resources to help them."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] Ignore them and move on. You cannot trust anyone and your resources are too precious.",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You harden your heart and go on your way, leaving them to their fate. Survival comes first."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Approach with weapon drawn and rob them of what they have.",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intimidate",
+                        "dc": 12,
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Your threat is effective. The man, terrified, hands you a small bag. Inside you find some ammunition."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 2
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The man is not intimidated. He sees your hesitation and pulls out a knife. A brief struggle ensues."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "animale_ferito",
+        "title": "The Suffering Creature",
+        "description": "A pitiful moan catches your attention. Hidden in the tall grass, you find a fawn with a clearly broken front leg, trapped in an old rusty trap. The animal looks at you with large, terrified eyes, unable to escape.\n\nA memory surfaces: your mother teaching you to respect every creature. But you also hear the echo of your father's words: 'In today's world, pity is a luxury we cannot afford.'",
+        "biomes": [
+            "."
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "[Lena] Use time and resources to free and treat the animal.",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "medicine",
+                        "dc": 10,
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "With a steady hand and patience, you manage to free the fawn's leg and splint it with branches and a bandage. The animal limps away, disappearing into the tall grass."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You try to help, but your attempts are clumsy. The fawn, frightened, struggles, worsening the wound. You are forced to leave it to its fate, having wasted time and a bandage."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[Elian] Put the animal down to end its suffering and recover the meat.",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It is a difficult but pragmatic choice. You end the fawn's suffering and recover meat and hide useful for survival."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the scene and move on. It's not your problem.",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to intervene. Nature will take its course. You continue on your way."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

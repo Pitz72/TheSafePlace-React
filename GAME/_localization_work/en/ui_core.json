@@ -1,0 +1,164 @@
+{
+    "GAME_SCREEN": {
+        "PANELS": {
+            "SURVIVAL": "SURVIVAL",
+            "INVENTORY": "INVENTORY",
+            "COMMANDS": "COMMANDS",
+            "MAP": "WORLD MAP",
+            "INFO": "INFORMATION",
+            "EQUIPMENT": "EQUIPMENT",
+            "STATS": "STATISTICS",
+            "JOURNAL": "TRAVEL JOURNAL"
+        },
+        "SURVIVAL": {
+            "HP": "HP",
+            "SATIETY": "Satiety",
+            "HYDRATION": "Hydration",
+            "FATIGUE": "Fatigue",
+            "STATUS": "Status",
+            "NORMAL": "Normal",
+            "CONDITIONS": {
+                "FERITO": "WOUNDED",
+                "MALATO": "SICK",
+                "AVVELENATO": "POISONED",
+                "IPOTERMIA": "HYPOTHERMIA",
+                "ESAUSTO": "EXHAUSTED",
+                "AFFAMATO": "STARVING",
+                "DISIDRATATO": "DEHYDRATED",
+                "INFEZIONE": "INFECTION",
+                "SOVRACCARICO": "OVERENCUMBERED"
+            }
+        },
+        "INVENTORY": {
+            "WEIGHT": "Weight",
+            "EMPTY": "-- Empty --",
+            "BROKEN": "[BROKEN]",
+            "EQUIPPED": "(E)"
+        },
+        "COMMANDS": {
+            "MOVE": "Movement/Navigation",
+            "INVENTORY": "Inventory",
+            "QUESTS": "Quests",
+            "REST": "Quick Rest",
+            "SEARCH": "Search Resources",
+            "LEVEL_UP": "Level Up",
+            "MENU": "Menu/Back"
+        },
+        "INFO": {
+            "POSITION": "Position",
+            "LOCATION": "Location",
+            "DAY": "Day",
+            "EFFECTS": "Effects",
+            "WEATHER": {
+                "RAIN_EFFECT": "Movement slowed",
+                "STORM_EFFECT": "Mov. slowed, +consumption",
+                "FOG_EFFECT": "Reduced visibility",
+                "NONE": "No effect"
+            }
+        },
+        "EQUIPMENT": {
+            "WEAPON": "WEAPON",
+            "HEAD": "HEAD",
+            "CHEST": "CHEST",
+            "LEGS": "LEGS",
+            "NONE": "None"
+        },
+        "STATS": {
+            "LEVEL": "Level",
+            "XP": "XP",
+            "ATTRIBUTES": {
+                "FOR": "STR",
+                "DES": "DEX",
+                "COS": "CON",
+                "INT": "INT",
+                "SAG": "WIS",
+                "CAR": "CHA"
+            }
+        },
+        "JOURNAL": {
+            "EMPTY_TITLE": "Your journey will begin soon...",
+            "EMPTY_SUBTITLE": "Your adventures will be recorded here"
+        }
+    },
+    "INVENTORY_SCREEN": {
+        "TITLE": "═══ INVENTORY ═══",
+        "WEIGHT": "Weight",
+        "OVERENCUMBERED": "[OVERENCUMBERED]",
+        "EMPTY": "-- Inventory Empty --",
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Actions | [ESC] Close",
+        "DETAILS": {
+            "SELECT_PROMPT": "Select an item to see details.",
+            "TYPE": "Type",
+            "RARITY": "Rarity",
+            "WEIGHT": "Weight",
+            "VALUE": "Value",
+            "DURABILITY": "Durability",
+            "DAMAGE": "Damage",
+            "WEAPON_TYPE": "Weapon Type",
+            "DEFENSE": "Defense",
+            "ARMOR_SLOT": "Armor Slot",
+            "EFFECTS": "Effects"
+        },
+        "TYPES": {
+            "WEAPON": "Weapon",
+            "ARMOR": "Armor",
+            "CONSUMABLE": "Consumable",
+            "MATERIAL": "Material",
+            "QUEST": "Quest Item",
+            "AMMO": "Ammo",
+            "MANUAL": "Manual",
+            "TOOL": "Tool"
+        },
+        "RARITY": {
+            "COMMON": "Common",
+            "UNCOMMON": "Uncommon",
+            "RARE": "Rare",
+            "EPIC": "Epic",
+            "QUEST": "Quest"
+        },
+        "WEAPON_TYPES": {
+            "MELEE": "Melee",
+            "RANGED": "Ranged",
+            "THROWN": "Thrown"
+        },
+        "SLOTS": {
+            "HEAD": "Head",
+            "CHEST": "Chest",
+            "LEGS": "Legs"
+        },
+        "EFFECTS": {
+            "HEAL": "Restores {value} HP",
+            "SATIETY": "Restores {value} Satiety",
+            "HYDRATION": "Restores {value} Hydration",
+            "CURE_STATUS": "Cures status {value}",
+            "LIGHT": "Provides light for {value} hours",
+            "REPAIR": "Repairs {value} durability points",
+            "ANTIRAD": "Reduces radiation by {value}"
+        }
+    },
+    "CHARACTER_CREATION": {
+        "TITLE": "═══ CHARACTER CREATION ═══",
+        "GENERATING": "Generating statistics...",
+        "COMPLETE": "Creation completed. [Press ENTER to start adventure]"
+    },
+    "LEVEL_UP": {
+        "TITLE": "═══ LEVEL UP ═══",
+        "SUBTITLE": "Choose an attribute to improve and a new talent to learn.",
+        "ATTRIBUTE_HEADER": "Attribute (+1)",
+        "TALENT_HEADER": "Choose a Talent",
+        "NO_TALENTS": "No talents available.",
+        "REQUIRES": "Requires: Proficiency in {skill}, Level {level}",
+        "PROMPT": "[←→] Select Section | [↑↓] Select Option | [ENTER] Confirm"
+    },
+    "IN_GAME_MENU": {
+        "TITLE": "═══ PAUSE ═══",
+        "ITEMS": {
+            "CONTINUE": "Continue",
+            "SAVE": "Save Game",
+            "LOAD": "Load Game",
+            "OPTIONS": "Options",
+            "MAIN_MENU": "Main Menu"
+        },
+        "PROMPT": "[W/S / ↑↓] Select | [ENTER] Confirm | [ESC] Continue"
+    }
+}

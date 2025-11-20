@@ -1,0 +1,213 @@
+[
+    {
+        "id": "marcus",
+        "name": "Marcus",
+        "description": "The stationary merchant at 'The Crossroads' Outpost. Offers basic goods always available and a rotating selection of rarer items.",
+        "baseMarkup": 1.3,
+        "inventory": [
+            {
+                "itemId": "CONS_001",
+                "quantity": 10
+            },
+            {
+                "itemId": "CONS_002",
+                "quantity": 15
+            },
+            {
+                "itemId": "dirty_water",
+                "quantity": 20
+            },
+            {
+                "itemId": "CONS_003",
+                "quantity": 8
+            },
+            {
+                "itemId": "MED_BANDAGE_BASIC",
+                "quantity": 12
+            },
+            {
+                "itemId": "MED_ANTISEPTIC",
+                "quantity": 5
+            },
+            {
+                "itemId": "scrap_metal",
+                "quantity": 15
+            },
+            {
+                "itemId": "clean_cloth",
+                "quantity": 10
+            },
+            {
+                "itemId": "bottle_empty",
+                "quantity": 8
+            },
+            {
+                "itemId": "firewood",
+                "quantity": 12
+            },
+            {
+                "itemId": "adhesive_tape",
+                "quantity": 6
+            },
+            {
+                "itemId": "nylon_wire",
+                "quantity": 4
+            },
+            {
+                "itemId": "ammo_9mm",
+                "quantity": 30
+            },
+            {
+                "itemId": "ammo_rifle",
+                "quantity": 20
+            },
+            {
+                "itemId": "ammo_shotgun",
+                "quantity": 15
+            },
+            {
+                "itemId": "tool_repair_kit_basic",
+                "quantity": 3
+            },
+            {
+                "itemId": "first_aid_kit",
+                "quantity": 2
+            },
+            {
+                "itemId": "manual_survival_basics",
+                "quantity": 1
+            },
+            {
+                "itemId": "manual_archery_basics",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "wandering_trader",
+        "name": "Wandering Trader",
+        "description": "A nomadic merchant with a small and random inventory that changes with every encounter. Offers unique but unpredictable opportunities.",
+        "baseMarkup": 1.4,
+        "inventory": [
+            {
+                "itemId": "CONS_001",
+                "quantity": 3
+            },
+            {
+                "itemId": "CONS_002",
+                "quantity": 5
+            },
+            {
+                "itemId": "wild_berries",
+                "quantity": 4
+            },
+            {
+                "itemId": "edible_mushrooms",
+                "quantity": 3
+            },
+            {
+                "itemId": "MED_BANDAGE_BASIC",
+                "quantity": 4
+            },
+            {
+                "itemId": "tech_components",
+                "quantity": 2
+            },
+            {
+                "itemId": "chemical_substances",
+                "quantity": 1
+            },
+            {
+                "itemId": "ammo_9mm",
+                "quantity": 15
+            },
+            {
+                "itemId": "tool_repair_kit_basic",
+                "quantity": 1
+            },
+            {
+                "itemId": "manual_field_medicine",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "anya",
+        "name": "Anya, the Technician",
+        "description": "A brilliant scrapper obsessed with pre-catastrophe technology. Does not trade common items, but can transform rare artifacts into unique upgrades.",
+        "baseMarkup": 1.0,
+        "inventory": []
+    },
+    {
+        "id": "silas",
+        "name": "Silas, the Hunter",
+        "description": "An expert and pragmatic hunter who takes care of the Crossroads' security. Offers hunting contracts and teaches survival techniques in exchange for trophies.",
+        "baseMarkup": 1.2,
+        "inventory": [
+            {
+                "itemId": "ammo_arrow",
+                "quantity": 30
+            },
+            {
+                "itemId": "ammo_shotgun",
+                "quantity": 20
+            },
+            {
+                "itemId": "animal_hide",
+                "quantity": 10
+            },
+            {
+                "itemId": "bear_trap",
+                "quantity": 3
+            },
+            {
+                "itemId": "manual_wilderness_survival",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "olivia",
+        "name": "Olivia, the Herbalist",
+        "description": "An expert botanist living isolated in a hut in the forest. Specialized in medicinal herbs and natural remedies. Offers cures and rare botanical knowledge.",
+        "baseMarkup": 1.15,
+        "inventory": [
+            {
+                "itemId": "MED_HEALING_HERBS",
+                "quantity": 8
+            },
+            {
+                "itemId": "edible_mushrooms",
+                "quantity": 12
+            },
+            {
+                "itemId": "wild_berries",
+                "quantity": 10
+            },
+            {
+                "itemId": "MED_BANDAGE_BASIC",
+                "quantity": 6
+            },
+            {
+                "itemId": "MED_ANTISEPTIC",
+                "quantity": 4
+            },
+            {
+                "itemId": "antibiotics_expired",
+                "quantity": 3
+            },
+            {
+                "itemId": "MED_ANTIDOTE",
+                "quantity": 2
+            },
+            {
+                "itemId": "first_aid_kit",
+                "quantity": 1
+            },
+            {
+                "itemId": "manual_field_medicine",
+                "quantity": 1
+            }
+        ]
+    }
+]

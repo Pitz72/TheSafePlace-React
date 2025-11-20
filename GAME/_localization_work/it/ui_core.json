@@ -1,0 +1,164 @@
+{
+    "GAME_SCREEN": {
+        "PANELS": {
+            "SURVIVAL": "SOPRAVVIVENZA",
+            "INVENTORY": "INVENTARIO",
+            "COMMANDS": "COMANDI",
+            "MAP": "MAPPA DEL MONDO",
+            "INFO": "INFORMAZIONI",
+            "EQUIPMENT": "EQUIPAGGIAMENTO",
+            "STATS": "STATISTICHE",
+            "JOURNAL": "DIARIO DI VIAGGIO"
+        },
+        "SURVIVAL": {
+            "HP": "HP",
+            "SATIETY": "Sazietà",
+            "HYDRATION": "Idratazione",
+            "FATIGUE": "Stanchezza",
+            "STATUS": "Status",
+            "NORMAL": "Normale",
+            "CONDITIONS": {
+                "FERITO": "FERITO",
+                "MALATO": "MALATO",
+                "AVVELENATO": "AVVELENATO",
+                "IPOTERMIA": "IPOTERMIA",
+                "ESAUSTO": "ESAUSTO",
+                "AFFAMATO": "AFFAMATO",
+                "DISIDRATATO": "DISIDRATATO",
+                "INFEZIONE": "INFEZIONE",
+                "SOVRACCARICO": "SOVRACCARICO"
+            }
+        },
+        "INVENTORY": {
+            "WEIGHT": "Peso",
+            "EMPTY": "-- Vuoto --",
+            "BROKEN": "[ROTTO]",
+            "EQUIPPED": "(E)"
+        },
+        "COMMANDS": {
+            "MOVE": "Movimento/Navigazione",
+            "INVENTORY": "Inventario",
+            "QUESTS": "Missioni",
+            "REST": "Riposo Breve",
+            "SEARCH": "Cerca Risorse",
+            "LEVEL_UP": "Level Up",
+            "MENU": "Menu/Indietro"
+        },
+        "INFO": {
+            "POSITION": "Posizione",
+            "LOCATION": "Luogo",
+            "DAY": "Giorno",
+            "EFFECTS": "Effetti",
+            "WEATHER": {
+                "RAIN_EFFECT": "Movimento rallentato",
+                "STORM_EFFECT": "Mov. rallentato, +consumo",
+                "FOG_EFFECT": "Visibilità ridotta",
+                "NONE": "Nessun effetto"
+            }
+        },
+        "EQUIPMENT": {
+            "WEAPON": "ARMA",
+            "HEAD": "TESTA",
+            "CHEST": "TORSO",
+            "LEGS": "GAMBE",
+            "NONE": "Nessuna"
+        },
+        "STATS": {
+            "LEVEL": "Livello",
+            "XP": "XP",
+            "ATTRIBUTES": {
+                "FOR": "FOR",
+                "DES": "DES",
+                "COS": "COS",
+                "INT": "INT",
+                "SAG": "SAG",
+                "CAR": "CAR"
+            }
+        },
+        "JOURNAL": {
+            "EMPTY_TITLE": "Il tuo viaggio inizierà presto...",
+            "EMPTY_SUBTITLE": "Le tue avventure saranno registrate qui"
+        }
+    },
+    "INVENTORY_SCREEN": {
+        "TITLE": "═══ INVENTARIO ═══",
+        "WEIGHT": "Peso",
+        "OVERENCUMBERED": "[SOVRACCARICO]",
+        "EMPTY": "-- Inventario Vuoto --",
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Azioni | [ESC] Chiudi",
+        "DETAILS": {
+            "SELECT_PROMPT": "Seleziona un oggetto per vederne i dettagli.",
+            "TYPE": "Tipo",
+            "RARITY": "Rarità",
+            "WEIGHT": "Peso",
+            "VALUE": "Valore",
+            "DURABILITY": "Durabilità",
+            "DAMAGE": "Danno",
+            "WEAPON_TYPE": "Tipo Arma",
+            "DEFENSE": "Difesa",
+            "ARMOR_SLOT": "Slot Armatura",
+            "EFFECTS": "Effetti"
+        },
+        "TYPES": {
+            "WEAPON": "Arma",
+            "ARMOR": "Armatura",
+            "CONSUMABLE": "Consumabile",
+            "MATERIAL": "Materiale",
+            "QUEST": "Oggetto Missione",
+            "AMMO": "Munizioni",
+            "MANUAL": "Manuale",
+            "TOOL": "Strumento"
+        },
+        "RARITY": {
+            "COMMON": "Comune",
+            "UNCOMMON": "Non Comune",
+            "RARE": "Raro",
+            "EPIC": "Epico",
+            "QUEST": "Missione"
+        },
+        "WEAPON_TYPES": {
+            "MELEE": "Mischia",
+            "RANGED": "Distanza",
+            "THROWN": "Lancio"
+        },
+        "SLOTS": {
+            "HEAD": "Testa",
+            "CHEST": "Petto",
+            "LEGS": "Gambe"
+        },
+        "EFFECTS": {
+            "HEAL": "Ripristina {value} HP",
+            "SATIETY": "Ripristina {value} Sazietà",
+            "HYDRATION": "Ripristina {value} Idratazione",
+            "CURE_STATUS": "Cura lo stato {value}",
+            "LIGHT": "Fornisce luce per {value} ore",
+            "REPAIR": "Ripara {value} punti durabilità",
+            "ANTIRAD": "Riduce radiazioni di {value}"
+        }
+    },
+    "CHARACTER_CREATION": {
+        "TITLE": "═══ CREAZIONE PERSONAGGIO ═══",
+        "GENERATING": "Generazione statistiche in corso...",
+        "COMPLETE": "Creazione completata. [Premi INVIO per iniziare l'avventura]"
+    },
+    "LEVEL_UP": {
+        "TITLE": "═══ AUMENTO DI LIVELLO ═══",
+        "SUBTITLE": "Scegli un attributo da migliorare e un nuovo talento da apprendere.",
+        "ATTRIBUTE_HEADER": "Attributo (+1)",
+        "TALENT_HEADER": "Scegli un Talento",
+        "NO_TALENTS": "Nessun talento disponibile.",
+        "REQUIRES": "Richiede: Competenza in {skill}, Livello {level}",
+        "PROMPT": "[←→] Seleziona Sezione | [↑↓] Seleziona Opzione | [INVIO] Conferma"
+    },
+    "IN_GAME_MENU": {
+        "TITLE": "═══ PAUSA ═══",
+        "ITEMS": {
+            "CONTINUE": "Continua",
+            "SAVE": "Salva Partita",
+            "LOAD": "Carica Partita",
+            "OPTIONS": "Opzioni",
+            "MAIN_MENU": "Menu Principale"
+        },
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Conferma | [ESC] Continua"
+    }
+}

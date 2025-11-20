@@ -1,0 +1,808 @@
+[
+    {
+        "id": "city_military_checkpoint",
+        "title": "Military Checkpoint",
+        "isUnique": true,
+        "biomes": [
+            "City"
+        ],
+        "description": "Concrete barricades and barbed wire block a street. There are signs of an old military checkpoint, with abandoned guard posts and a sealed container.",
+        "choices": [
+            {
+                "text": "Search the guard post lockers",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "Most are empty, but in one you find a military first aid kit, smoke grenades, and a tactical manual.",
+                        "failureText": "The guard posts have been thoroughly looted and now reveal only debris and trash.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "first_aid_kit",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "smoke_grenade",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_advanced_repairs",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Force the locked container",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 14,
+                        "successText": "With immense effort, you manage to pry open the lock, which snaps. Inside you find a crate of rifle ammunition, rations, and a military survival manual.",
+                        "failureText": "The container is hermetically sealed. The locks are too strong even for your efforts.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_rifle",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_wilderness_survival",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_broken_pharmacy",
+        "title": "Looted Pharmacy",
+        "isUnique": true,
+        "biomes": [
+            "City"
+        ],
+        "description": "A pharmacy with a shattered window. The shelves have been almost completely emptied, but something might have escaped the looters.",
+        "choices": [
+            {
+                "text": "Search the remaining shelves",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "Behind an overturned box of cotton wool, you recover a box of expired antibiotics and some still-sealed bandages.",
+                        "failureText": "You searched everywhere, but absolutely nothing useful remains.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "antibiotics_expired",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Check the back room",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 12,
+                        "successText": "You sneak past a precarious shelf in the back and find a staff locker. Inside are painkillers and a medical manual.",
+                        "failureText": "In an attempt to pass, you bump into the shelf which collapses with a crash, making noise and forcing you to a quick retreat.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "MED_PAINKILLER",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_field_medicine",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_subway_entrance",
+        "title": "Subway Entrance",
+        "isUnique": true,
+        "biomes": [
+            "City"
+        ],
+        "description": "A staircase leads into the darkness of an underground station. You hear dripping water and a distant hum. The air is damp and cold.",
+        "choices": [
+            {
+                "text": "Descend and explore",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 13,
+                        "successText": "You move cautiously in the darkness, finding the remains of makeshift shelters. You recover a pack of batteries and an old walkie-talkie.",
+                        "failureText": "You slip on the wet steps and get lost in the dark corridors. After wandering for a while, you decide it's too dangerous and go back up.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "batteries_pack",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "walkie_talkie",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid the underground",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "A wave of foreboding assails you. Better not risk ambushes in the dark."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_collapsed_building",
+        "title": "Collapsed Building",
+        "description": "A building has partially collapsed, creating a mountain of rubble. Interior rooms can still be seen accessible.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search through the rubble",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "You find personal items among the debris: photos, documents, and a pocket watch still working.",
+                        "failureText": "The rubble is too unstable. You risk being buried and move away.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_watch",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "sensitive_documents",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid the danger",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Unstable buildings are death traps. Better not risk it."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_burning_car",
+        "title": "Burning Car",
+        "description": "A car burns on the side of the road, with flames still high. Explosions are unpredictable.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search the trunk before it explodes",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 14,
+                        "successText": "You open the trunk quickly and grab a backpack with supplies before moving away.",
+                        "failureText": "The heat is too intense. You are forced to retreat with nothing.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Stay away",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Moments after bypassing it, the car explodes with a deafening roar."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_sewer_grate",
+        "title": "Open Sewer Grate",
+        "description": "A manhole cover has been forced and left open. The sewers below might hide something.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Descend into the sewers",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 11,
+                        "successText": "You descend cautiously. The sewers house abandoned shelters. You find supplies.",
+                        "failureText": "You slip and fall into the sewer. You get hurt and the smell is unbearable.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Close the grate and move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The sewers are full of dangers. Better to avoid."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_looters_camp",
+        "title": "Looters' Camp",
+        "description": "A group of looters has left a makeshift camp. It looks abandoned... or maybe not?",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Rummage through the camp",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 13,
+                        "successText": "No one is around. You quickly steal food, ammo, and a knife.",
+                        "failureText": "A looter returns and sees you! You have to fight to escape.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid the camp",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Stealing from looters is risky. Better to move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_police_station",
+        "title": "Abandoned Police Station",
+        "description": "The police building has been partially burned. The cells are empty, but the armory might still have something.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the armory",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 14,
+                        "successText": "You pick the armory door lock. You find a still-functioning pistol and ammunition.",
+                        "failureText": "The armory is empty. Someone else got here before you.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "weapon_handgun",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_9mm",
+                                    "quantity": 20
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 50
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the offices",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "You find confidential documents, pre-war city maps, and an old intact corporate badge. It belonged to a certain {RANDOM_DONOR}.",
+                        "failureText": "The offices have been thoroughly looted. Nothing useful.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "sensitive_documents",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "[QUEST] Use a terminal to decipher the chip",
+                "itemRequirements": [
+                    {
+                        "itemId": "drone_memory_chip",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 14,
+                        "successText": "After fiddling with the cables, you manage to power up an old terminal. You insert the chip. Coordinates and a message appear on the screen: 'Emergency supply depot 7-B. Intact.'",
+                        "failureText": "The terminal sparks and shuts down for good. The chip is fried. The information is lost forever.",
+                        "success": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "drone_memory_chip",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "completeQuestFromEvent",
+                                    "questId": "decipher_drone_data"
+                                },
+                                "text": "The military bunker coordinates have been added to your map."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "drone_memory_chip",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "failQuestFromEvent",
+                                    "questId": "decipher_drone_data"
+                                },
+                                "text": "You lost the opportunity to decipher the data."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_rooftop_garden",
+        "title": "Rooftop Garden",
+        "description": "On an accessible roof there is a small garden with spontaneously grown plants. Some vegetables are still edible.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Harvest the vegetables",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 10,
+                        "successText": "You harvest tomatoes, carrots, and herbs. Fresh food is rare.",
+                        "failureText": "Many vegetables are rotten or infested with pests. You recover few.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest on the roof",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The view from above is breathtaking. For a moment you forget the world that was lost."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "city_flooded_street",
+        "title": "Flooded Street",
+        "description": "A street is completely flooded by a broken pipe. The water is murky and could hide dangers.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Wade through the water",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 12,
+                        "successText": "You cross the water carefully, avoiding submerged debris.",
+                        "failureText": "You slip and fall into the water. You get completely soaked and lose time.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Go around",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's not worth getting wet. You find an alternative route."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

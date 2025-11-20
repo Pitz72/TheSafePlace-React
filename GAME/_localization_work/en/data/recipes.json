@@ -1,0 +1,642 @@
+[
+    {
+        "id": "recipe_purify_water",
+        "name": "Purify Water",
+        "description": "Filter and purify contaminated water using clean rags as a makeshift filter. A basic survival technique.",
+        "skill": "survival",
+        "dc": 8,
+        "timeCost": 10,
+        "ingredients": [
+            {
+                "itemId": "dirty_water",
+                "quantity": 1
+            },
+            {
+                "itemId": "clean_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "CONS_002",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_makeshift_bandage",
+        "name": "Makeshift Bandage",
+        "description": "Tear and clean a piece of cloth to create a makeshift bandage. Not sterile, but better than nothing.",
+        "skill": "survival",
+        "dc": 6,
+        "timeCost": 5,
+        "ingredients": [
+            {
+                "itemId": "clean_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "MED_BANDAGE_BASIC",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": "recipe_collect_water",
+        "name": "Collect Water",
+        "description": "Collect water from a natural source into an empty bottle. Collected water must be purified before drinking.",
+        "skill": "survival",
+        "dc": 5,
+        "timeCost": 5,
+        "ingredients": [
+            {
+                "itemId": "bottle_empty",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "dirty_water",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": "recipe_bandage_adv",
+        "name": "Improved Bandage",
+        "description": "Combine a bandage with antiseptic to create a much more effective dressing.",
+        "skill": "medicine",
+        "dc": 10,
+        "timeCost": 5,
+        "ingredients": [
+            {
+                "itemId": "CONS_003",
+                "quantity": 1
+            },
+            {
+                "itemId": "MED_ANTISEPTIC",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "MED_BANDAGE_ADVANCED",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_soup",
+        "name": "Warming Soup",
+        "description": "A simple hot soup with vegetables and water. Nutritious and hydrating.",
+        "skill": "survival",
+        "dc": 8,
+        "timeCost": 15,
+        "ingredients": [
+            {
+                "itemId": "CONS_002",
+                "quantity": 1
+            },
+            {
+                "itemId": "carrot",
+                "quantity": 1
+            },
+            {
+                "itemId": "potato",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "FOOD_SOUP",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_makeshift_knife",
+        "name": "Makeshift Knife",
+        "description": "Assemble a basic cutting weapon using scrap metal and some cloth for the handle.",
+        "skill": "survival",
+        "dc": 12,
+        "timeCost": 30,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal",
+                "quantity": 2
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "makeshift_knife",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_arrows",
+        "name": "Arrows (x5)",
+        "description": "Carve wooden shafts and attach sharp tips made from scrap metal.",
+        "skill": "survival",
+        "dc": 11,
+        "timeCost": 20,
+        "ingredients": [
+            {
+                "itemId": "firewood",
+                "quantity": 1
+            },
+            {
+                "itemId": "scrap_metal",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "ammo_arrow",
+                "quantity": 5
+            }
+        ]
+    },
+    {
+        "id": "recipe_repair_kit_basic",
+        "name": "Basic Repair Kit",
+        "description": "Assemble a basic kit for equipment maintenance.",
+        "skill": "survival",
+        "dc": 12,
+        "timeCost": 20,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal",
+                "quantity": 3
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "tool_repair_kit_basic",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_repair_kit_advanced",
+        "name": "Advanced Repair Kit",
+        "description": "Build a superior quality repair kit using better components.",
+        "skill": "survival",
+        "dc": 16,
+        "timeCost": 45,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal_high_quality",
+                "quantity": 2
+            },
+            {
+                "itemId": "tech_components",
+                "quantity": 1
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "tool_repair_kit_advanced",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_wooden_spear",
+        "name": "Wooden Spear",
+        "description": "A rudimentary but effective spear. Good for keeping distance from enemies.",
+        "skill": "survival",
+        "dc": 10,
+        "timeCost": 25,
+        "ingredients": [
+            {
+                "itemId": "firewood",
+                "quantity": 2
+            },
+            {
+                "itemId": "scrap_metal",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "weapon_wooden_spear",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_makeshift_bow",
+        "name": "Makeshift Bow",
+        "description": "A simple but functional bow. Requires arrows to be used.",
+        "skill": "survival",
+        "dc": 14,
+        "timeCost": 35,
+        "ingredients": [
+            {
+                "itemId": "firewood",
+                "quantity": 2
+            },
+            {
+                "itemId": "nylon_wire",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "weapon_makeshift_bow",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_molotov",
+        "name": "Molotov",
+        "description": "An improvised incendiary bottle. Devastating but single use.",
+        "skill": "investigate",
+        "dc": 12,
+        "timeCost": 15,
+        "ingredients": [
+            {
+                "itemId": "bottle_empty",
+                "quantity": 1
+            },
+            {
+                "itemId": "strong_liquor",
+                "quantity": 1
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "weapon_molotov",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_sharp_dagger",
+        "name": "Sharp Dagger",
+        "description": "A well-balanced and sharp dagger. Requires quality materials.",
+        "skill": "investigate",
+        "dc": 15,
+        "timeCost": 40,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal_high_quality",
+                "quantity": 1
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "weapon_sharp_dagger",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_slingshot",
+        "name": "Slingshot",
+        "description": "A simple but surprisingly effective slingshot at close range.",
+        "skill": "survival",
+        "dc": 9,
+        "timeCost": 20,
+        "ingredients": [
+            {
+                "itemId": "firewood",
+                "quantity": 1
+            },
+            {
+                "itemId": "rubber_gasket",
+                "quantity": 1
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "weapon_slingshot",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_leather_chestpiece",
+        "name": "Leather Chestpiece",
+        "description": "A sturdy chest protection made from tanned animal hides.",
+        "skill": "survival",
+        "dc": 13,
+        "timeCost": 50,
+        "ingredients": [
+            {
+                "itemId": "animal_hide",
+                "quantity": 3
+            }
+        ],
+        "results": [
+            {
+                "itemId": "armor_leather_chestpiece",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_reinforced_leggings",
+        "name": "Reinforced Leggings",
+        "description": "Leg protection with metal inserts for greater defense.",
+        "skill": "investigate",
+        "dc": 14,
+        "timeCost": 45,
+        "ingredients": [
+            {
+                "itemId": "animal_hide",
+                "quantity": 2
+            },
+            {
+                "itemId": "scrap_metal",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "leather_leggings",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_makeshift_helmet",
+        "name": "Makeshift Helmet",
+        "description": "A makeshift helmet made with scrap metal and cloth padding.",
+        "skill": "investigate",
+        "dc": 13,
+        "timeCost": 35,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal",
+                "quantity": 2
+            },
+            {
+                "itemId": "durable_cloth",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "armor_makeshift_helmet",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_durable_boots",
+        "name": "Durable Boots",
+        "description": "Sturdy boots that protect feet and improve mobility.",
+        "skill": "survival",
+        "dc": 12,
+        "timeCost": 40,
+        "ingredients": [
+            {
+                "itemId": "animal_hide",
+                "quantity": 2
+            },
+            {
+                "itemId": "nylon_wire",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "armor_durable_boots",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_natural_antidote",
+        "name": "Natural Antidote",
+        "description": "A natural remedy against poisons and toxins, prepared with medicinal mushrooms.",
+        "skill": "medicine",
+        "dc": 14,
+        "timeCost": 25,
+        "ingredients": [
+            {
+                "itemId": "edible_mushrooms",
+                "quantity": 2
+            },
+            {
+                "itemId": "chemicals_basic",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "MED_ANTIDOTE",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_improvised_stimpack",
+        "name": "Improvised Stimpack",
+        "description": "An emergency healing potion, combining expired medicine with antiseptic.",
+        "skill": "medicine",
+        "dc": 15,
+        "timeCost": 30,
+        "ingredients": [
+            {
+                "itemId": "expired_medicine",
+                "quantity": 1
+            },
+            {
+                "itemId": "MED_ANTISEPTIC",
+                "quantity": 1
+            },
+            {
+                "itemId": "chemicals_basic",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "MED_STIMPACK",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_preserved_meat",
+        "name": "Preserved Meat",
+        "description": "Preserve meat or fish with chemicals to extend its shelf life.",
+        "skill": "survival",
+        "dc": 11,
+        "timeCost": 30,
+        "ingredients": [
+            {
+                "itemId": "fresh_fish",
+                "quantity": 1
+            },
+            {
+                "itemId": "chemicals_basic",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "FOOD_PRESERVED_MEAT",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": "recipe_upgraded_backpack",
+        "name": "Upgraded Backpack",
+        "description": "A large reinforced backpack that significantly increases carrying capacity.",
+        "skill": "investigate",
+        "dc": 16,
+        "timeCost": 60,
+        "ingredients": [
+            {
+                "itemId": "durable_cloth",
+                "quantity": 3
+            },
+            {
+                "itemId": "nylon_wire",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "tool_upgraded_backpack",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_fishing_kit",
+        "name": "Improvised Fishing Kit",
+        "description": "A simple fishing kit with line and improvised hooks.",
+        "skill": "survival",
+        "dc": 10,
+        "timeCost": 20,
+        "ingredients": [
+            {
+                "itemId": "nylon_wire",
+                "quantity": 1
+            },
+            {
+                "itemId": "metal_piece",
+                "quantity": 3
+            }
+        ],
+        "results": [
+            {
+                "itemId": "tool_fishing_kit",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_advanced_bear_trap",
+        "name": "Advanced Bear Trap",
+        "description": "A deadly trap of the Raven Clan, capable of catching even the largest prey. Secret technique of elite scouts.",
+        "skill": "survival",
+        "dc": 15,
+        "timeCost": 45,
+        "ingredients": [
+            {
+                "itemId": "scrap_metal_high_quality",
+                "quantity": 2
+            },
+            {
+                "itemId": "nylon_wire",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "advanced_bear_trap",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_sonic_dissuader",
+        "name": "Sonic Dissuader",
+        "description": "A device that emits high-frequency sound waves to repel Ash Angels. Listener technology based on dissonant frequencies.",
+        "skill": "investigate",
+        "dc": 17,
+        "timeCost": 90,
+        "ingredients": [
+            {
+                "itemId": "tech_components",
+                "quantity": 3
+            },
+            {
+                "itemId": "copper_wire",
+                "quantity": 2
+            },
+            {
+                "itemId": "precious_stone",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "sonic_dissuader",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": "recipe_elixir_of_fortitude",
+        "name": "Elixir of Fortitude",
+        "description": "A potent decoction prepared with the rare Ice Flower. Strengthens the body against adversity and protects from extreme cold. An ancient recipe handed down by Olivia.",
+        "skill": "medicine",
+        "dc": 16,
+        "timeCost": 60,
+        "ingredients": [
+            {
+                "itemId": "ice_flower",
+                "quantity": 1
+            },
+            {
+                "itemId": "MED_HEALING_HERBS",
+                "quantity": 3
+            },
+            {
+                "itemId": "CONS_002",
+                "quantity": 1
+            }
+        ],
+        "results": [
+            {
+                "itemId": "elixir_of_fortitude",
+                "quantity": 1
+            }
+        ]
+    }
+]

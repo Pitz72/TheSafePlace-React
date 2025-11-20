@@ -1,0 +1,112 @@
+[
+    {
+        "stage": 1,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 10
+        },
+        "title": "The Silence",
+        "text": "As you take your first steps in this desolate world, an unnatural silence envelops you, identical to that of so many years ago. The day it all ended comes back to mind. Not with a bang, but with a held breath.\n\nThe constant rumble on the horizon, that dull companion of your childhood, simply ceased. The birds stopped singing. Even the wind seemed afraid to move.\n\nYou remember your father Elian's hand gripping yours. Too tight. In his eyes there was not only fear, but the recognition of an end. The 'Unspoken War' was over, and the world had stopped breathing."
+    },
+    {
+        "stage": 2,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 15
+        },
+        "title": "The Lesson of Water",
+        "text": "Your throat burns. Thirst, this constant companion, brings you back to another moment, near a stream that smelled of metal and death. You were just a child, guided by instinct, ready to drink from that poisonous broth.\n\nElian's hand grabbed you, firm, almost violent. 'No!', an order that allowed no replies. Then, with a patience that seemed to clash with his urgency, he took a filthy rag, sand, pebbles, and built a rudimentary filter inside a rusty tin.\n\n'The world is no longer a friend,' he told you, handing you the water, still turbid but less lethal. 'Every sip, every bite, you have to earn it. And you have to understand what you can take, and what will kill you.'"
+    },
+    {
+        "stage": 3,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 30
+        },
+        "title": "The Taste of Blood",
+        "text": "The adrenaline rushing through your veins brings you back to the old train station. The raiders. The flash of a chipped knife. Your father fighting, a desperate fury against a pack of two-legged wolves.\n\nAnd then, his order, which tore your soul more than the blade of a knife: 'RUN! DON'T LOOK BACK!'.\n\nYou remember your flight, your heart hammering against your ribs, the bitter taste of dust and fear in your mouth. Hours later, Elian caught up with you, limping, his face a mask of sweat and congealed blood. He said nothing, but that night, huddled in the dark, you understood a terrible lesson: sometimes, surviving means leaving someone behind."
+    },
+    {
+        "stage": 4,
+        "trigger": {
+            "type": "daysSurvived",
+            "value": 2
+        },
+        "title": "Echo of the Collapse",
+        "text": "Thunder tears the sky, so close it shakes the earth beneath your feet. For an instant, you are not here.\n\nYou are small, enveloped in smoke, the air thick with dust burning your lungs. There is a deafening noise of metal and concrete twisting, a dying giant's lament. Someone is holding you tight, so tight it hurts... your father. He screams your name, but his voice is a distant echo, stifled by the chaos.\n\nIn front of you, among the rubble of a gutted building, a motionless shape...\n\nThe memory dissolves, leaving you with your heart in your throat and the taste of ash on your tongue.",
+        "allowNightTrigger": true
+    },
+    {
+        "stage": 5,
+        "trigger": {
+            "type": "firstRefugeEntry"
+        },
+        "title": "The Unanswered Question",
+        "text": "This fragile glimmer of safety reminds you of the old farm. And the farm reminds you of the questions. The ones you asked your father on cold nights, when the silence became too heavy.\n\n'And mom? What happened to her?'\n\nElian never really answered. His voice would crack, his eyes lost in an abyss of suffering. 'Lena... she would have wanted you to be strong,' he would say, almost to himself. 'That's what you need to know.'\n\nBut you started reading between the lines. There was a secret, a burden your father carried alone. A secret tied to that name, Lena, and to the motionless shape that haunts your nightmares.",
+        "allowNightTrigger": true
+    },
+    {
+        "stage": 6,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 80
+        },
+        "title": "The Ash Angels",
+        "text": "An acrid, chemical smell stings your nostrils. It is the smell of ash, but of a different, sterile ash. The clearing comes back to mind, the twisted human shapes, fused in poses of silent agony. And the hooded figures moving among them.\n\n'They are not \"who\", Ultimo. They are \"what\",' your father had whispered, and for the first time you had heard pure terror in his voice. 'A symptom of this world's disease. They bring only death. And silence.'\n\nThat day you understood that out there were horrors worse than raiders and hunger. Horrors moving in the smoke, silent as the ash they left behind.",
+        "allowNightTrigger": true
+    },
+    {
+        "stage": 7,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 120
+        },
+        "title": "The Burden of Truth",
+        "text": "The new strength you feel in your limbs, the awareness sharpened by survival, brings you back to a confrontation with your father, one afternoon on the roof of the farm.\n\n'Why do you never tell me anything?', you had screamed at him, the frustration of a boy who felt treated like a child.\n\nAnd for the first time, you had seen a naked, almost unbearable pain in his eyes. 'There are things a son should never know,' he had replied, his voice low and hoarse. 'Knowing wouldn't change anything, boy. In fact, maybe it would make everything harder to bear. The truth, sometimes, is too heavy a burden.'\n\nNow, perhaps, you begin to understand what burden he meant."
+    },
+    {
+        "stage": 8,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 160
+        },
+        "title": "The Last Lesson",
+        "text": "This old worn map in your hands... reminds you of the one your father left you. You remember that freezing morning, when you woke up and he wasn't there. And the letter.\n\n'I found their tracks... I must lead them away from here. Far from your path.'\n\nBack then, his words had seemed like a heroic act, a sacrifice. Now, in the light of your fragmented memories, they sound different. More desperate. Like an escape. Not just from an external threat, but from something inside him.\n\nThat letter wasn't just a testament. It was the beginning of his last lesson: teaching you to survive alone, because he could no longer bear to do it by your side."
+    },
+    {
+        "stage": 9,
+        "trigger": {
+            "type": "daysSurvived",
+            "value": 4
+        },
+        "title": "The Meaning of a Name",
+        "text": "Solitude makes you think of your name. Ultimo. Your mother gave it to you, Elian once told you. But why?\n\nNow, in this absolute silence, that name takes on a new, terrible, almost prophetic meaning. Are you really the last? The last of your family? The last to carry a burden of broken hopes?\n\nThe word resonates in your head, a mocking echo. Only you, the promise torn from a fugitive father and the ghost of a mother lost twice.",
+        "allowNightTrigger": true
+    },
+    {
+        "stage": 10,
+        "trigger": {
+            "type": "stepsTaken",
+            "value": 200
+        },
+        "title": "The Echo of a Choice",
+        "text": "The choice you just made leaves a strange taste in your mouth. Brutal pragmatism or risky compassion. Suddenly, you understand. This is the abyss your father looked into every single day. This is the choice he had to make.\n\nHis hardness, his silences, his ruthless training... maybe they weren't cruelty. Maybe they were just the scars left by an impossible choice, made in an instant, between smoke and rubble. A choice that broke him."
+    },
+    {
+        "stage": 11,
+        "trigger": {
+            "type": "nearEnd",
+            "distance": 15
+        },
+        "title": "The Complete Memory",
+        "text": "You stop, breathless. It's not fatigue stopping you. It's a wave of frost starting from your chest. The world around you dissolves.\n\nThe smoke. Thick, suffocating. The smell of ozone and ash.\n\nYou are back there. Small. Helpless.\n\nMom is on the ground. A metal beam crushes her leg. She is looking at you, a smile strained by pain. 'Save the child, Elian,' you hear her whisper, her voice a broken thread. 'Run. Promise me.'\n\nAnd then you see your father's look. He's not looking at her. He's looking at you.\n\nIn his eyes, a universe of agony is consumed in a fraction of a second. The choice.\n\nHe grabs you. He lifts you. The world turns upside down.\n\nYou don't look back. He doesn't look back. You run.\n\nBehind you, only silence.\n\nNow you remember. You weren't saved from a tragedy. You were the cause of a choice."
+    },
+    {
+        "stage": 12,
+        "trigger": {
+            "type": "reachEnd"
+        },
+        "title": "The Truth",
+        "text": "You have arrived. The 'Safe Place' is a small bunker, clean and safe.\n\nElian is there, sitting on a cot, older, more fragile. He looks up and a tired but genuine smile lights up his face.\n\n'You made it, Ultimo. I knew you made it.'\n\nNow you must decide what to do with this truth. The weight of your memory. And the terrible knowledge of your mother's fate.\n\n[Here begins the final confrontation with Elian, where your moral choices along the journey will determine the available dialogue options and the conclusion of the story.]"
+    }
+]

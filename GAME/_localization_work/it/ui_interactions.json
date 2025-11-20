@@ -1,0 +1,82 @@
+{
+    "EVENT_SCREEN": {
+        "TITLE_PREFIX": "═══",
+        "TITLE_SUFFIX": "═══",
+        "OUTCOME_TITLE": "ESITO",
+        "CHOICE_REQUIREMENT": "(Richiede: {item} x{quantity})",
+        "PROMPT_CHOICE": "[W/S / ↑↓] Seleziona | [INVIO] Conferma la Scelta",
+        "PROMPT_RESOLUTION": "[W/S / ↑↓] Scorri | [INVIO] Continua"
+    },
+    "DIALOGUE_SCREEN": {
+        "ERROR_NOT_FOUND": "Errore: Dialogo non trovato",
+        "TITLE_PREFIX": "═══",
+        "TITLE_SUFFIX": "═══",
+        "PROMPT_TYPING": "[SPAZIO] Salta animazione",
+        "PROMPT_WAITING": "Attendere...",
+        "PROMPT_CHOICE": "[1-9] Seleziona opzione | [ESC] Termina dialogo"
+    },
+    "TRADE_SCREEN": {
+        "ERROR_NOT_FOUND": "Errore: Mercante non trovato",
+        "TITLE": "═══ COMMERCIO CON {name} ═══",
+        "SUBTITLE": "Markup: {markup}% | Sistema di Baratto",
+        "PLAYER_INVENTORY_TITLE": "IL TUO INVENTARIO",
+        "TRADER_INVENTORY_TITLE": "INVENTARIO {name}",
+        "PLAYER_OFFER_TITLE": "LA TUA OFFERTA",
+        "TRADER_OFFER_TITLE": "LA SUA OFFERTA",
+        "EMPTY": "Vuoto",
+        "TOTAL": "Totale: {value}v",
+        "QUANTITY_INDICATOR": "[Qtà: {quantity}]",
+        "BALANCE": "BILANCIO: {sign}{value} Valore",
+        "INSUFFICIENT_OFFER": "Offerta insufficiente!",
+        "VALID_TRADE": "Scambio valido - Premi INVIO",
+        "PROMPT": "[W/S / ↑↓] Naviga | [A/D / ←→] Quantità | [Q/E / TAB] Cambia Pannello | [SPAZIO] Aggiungi/Rimuovi | [INVIO] Conferma | [ESC] Annulla"
+    },
+    "CRAFTING_SCREEN": {
+        "TITLE": "═══ BANCO DI LAVORO ═══",
+        "NO_RECIPES": "-- Nessuna Ricetta Conosciuta --",
+        "SELECT_PROMPT": "Seleziona una ricetta per vederne i dettagli.",
+        "DETAILS": {
+            "SKILL_REQUIRED": "Abilità Richiesta",
+            "TIME_REQUIRED": "Tempo Richiesto",
+            "INGREDIENTS": "Ingredienti:",
+            "NO_INGREDIENTS": "Nessun ingrediente",
+            "RESULT": "Risultato:",
+            "NO_RESULT": "Nessun risultato"
+        },
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Crea | [ESC] Chiudi"
+    },
+    "REFUGE_SCREEN": {
+        "TITLE": "═══ RIFUGIO ═══",
+        "DESCRIPTION": "Sei al sicuro. Il mondo esterno attende. Cosa vuoi fare?",
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Conferma"
+    },
+    "OUTPOST_SCREEN": {
+        "TITLE": "═══ IL CROCEVIA ═══",
+        "DESCRIPTION": "Sei arrivato al Crocevia. Non è molto: un pugno di container arrugginiti e tende rattoppate disposte in cerchio attorno a un fuoco fumante. Eppure, è il primo luogo da settimane che odora di umanità e non di decadenza. Alcuni sopravvissuti ti osservano con cautela mentre ti avvicini.",
+        "ACTIONS": {
+            "TALK_MARCUS": "Parla con Marcus (il mercante)",
+            "TALK_ANYA": "Parla con Anya (la tecnica)",
+            "TALK_SILAS": "Parla con Silas (il cacciatore)",
+            "TRADE": "Commercia",
+            "REST": "Riposa in un luogo sicuro (8 ore)",
+            "LEAVE": "Lascia l'Avamposto"
+        },
+        "MESSAGES": {
+            "REST_INSUFFICIENT": "Non hai abbastanza risorse per riposare. Necessari: {food} cibo, {water} acqua.",
+            "REST_SUCCESS": "Hai riposato per {hours} ore. Recuperati {hp} HP e ti senti molto meno stanco."
+        },
+        "PROMPT": "[W/S / ↑↓] Seleziona | [INVIO] Conferma | [ESC] Esci"
+    },
+    "QUEST_SCREEN": {
+        "TITLE": "═══ DIARIO MISSIONI ═══",
+        "MAIN_QUESTS": "MISSIONI PRINCIPALI",
+        "SUB_QUESTS": "MISSIONI SECONDARIE",
+        "LORE_ARCHIVE": "ARCHIVIO LORE",
+        "COMPLETED": "COMPLETATE",
+        "NO_MAIN_ACTIVE": "-- Nessuna missione principale attiva --",
+        "NO_SUB_ACTIVE": "-- Nessuna missione secondaria attiva --",
+        "NO_LORE": "-- Nessuna scoperta ancora --",
+        "UNKNOWN_OBJECTIVE": "Obiettivo sconosciuto",
+        "PROMPT": "[ESC] Chiudi | [J] Chiudi"
+    }
+}

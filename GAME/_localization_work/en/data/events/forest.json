@@ -1,0 +1,1581 @@
+[
+    {
+        "id": "forest_hidden_trap",
+        "title": "Hidden Trap",
+        "description": "As you walk through the trees, your foot bumps into something metallic half-buried under the leaves. It's an old rusty bear trap.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Disarm it carefully",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 12,
+                        "successText": "With precise movements, you manage to deactivate the mechanism. Now you can take it to use as a trap.",
+                        "failureText": "The rusty mechanism snaps and grabs your ankle. The pain is excruciating.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "bear_trap",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid it and move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You are careful not to trip again and continue your journey."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_spider_webs",
+        "title": "Giant Spider Webs",
+        "description": "You come across a patch of forest covered in thick, sticky webs. They seem deserted, but you can't be sure.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Cross them carefully",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 13,
+                        "successText": "You move slowly, avoiding the thickest strands. You manage to get to the other side without problems.",
+                        "failureText": "You get tangled. As you free yourself, a spider the size of a fist descends and bites you before fleeing.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "POISONED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Look for another path",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide it's not worth the risk. You find an alternative path, but lose precious time."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_hermit_shelter",
+        "title": "Hermit's Shelter",
+        "description": "You discover a small abandoned cabin, hidden among the trees. The door is open and it seems no one has been there for a long time.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Explore the interior",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "Inside you find a small survival stash: canned food, clean water, and expired but still usable medicines.",
+                        "failureText": "The cabin was looted long ago. Nothing useful remains, only dust and cobwebs.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "expired_medicine",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest here for a while",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You take a regenerating break under shelter. You feel more rested."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_ancient_tree",
+        "title": "Ancient Tree",
+        "description": "A massive and ancient tree dominates the clearing. At its base is an opening leading into the hollow trunk.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Explore the inside of the trunk",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 11,
+                        "successText": "Inside you find an old hunter's shelter with supplies and tools.",
+                        "failureText": "The trunk is full of aggressive insects. You are forced to exit quickly.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "firewood",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "bear_trap",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest in the shade of the tree",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "There is something peaceful about this place. You feel invigorated."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_wolf_den",
+        "title": "Wolf Den",
+        "description": "Wolf tracks and gnawed bones indicate a den nearby. You hear distant howls.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Avoid the area carefully",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 13,
+                        "successText": "You move silently and bypass the den without being noticed.",
+                        "failureText": "A wolf spots you and attacks before you can move away.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the den when the wolves are away",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 14,
+                        "successText": "You find the den empty and recover some useful hides and bones.",
+                        "failureText": "The wolves return while you are in the den. You have to fight to get out.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 30
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_mushroom_patch",
+        "title": "Mushroom Patch",
+        "description": "A vast area covered in colorful mushrooms. Some look edible, others... definitely not.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather edible mushrooms",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 12,
+                        "successText": "You recognize the safe mushrooms and gather several. They are nutritious.",
+                        "failureText": "You are mistaken. Some mushrooms are toxic. You eat them and get sick.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "edible_mushrooms",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "POISONED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Don't risk it. Leave the mushrooms",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Without proper knowledge, mushrooms can be deadly. Better to avoid."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_hunters_cache",
+        "title": "Hunter's Cache",
+        "description": "You discover a shed camouflaged among the trees. It seems recently used.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Rummage through the shed",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "The hunter left equipment and ammunition. You take them.",
+                        "failureText": "The shed is empty. Maybe the hunter will return soon. Better to go.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_arrow",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Do not disturb others' things",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's not right to steal from another survivor. You walk away."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_hanging_corpse",
+        "title": "Hanged Man",
+        "description": "A corpse dangles from a tree, hung by a rope. It doesn't look like a suicide.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Scout the area",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "It's a warning. You find signs of raiders nearby. You also find something in the dead man's pockets.",
+                        "failureText": "You find no clues. Only the macabre sight of a violent death.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Move away quickly",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Whoever did this might still be around. Better not stay."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_deer_hunting",
+        "title": "Grazing Deer",
+        "description": "An adult deer grazes peacefully, unaware of your presence. Fresh meat...",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Attempt to hunt it",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 14,
+                        "successText": "You approach silently and strike. The deer falls. You have meat and hides.",
+                        "failureText": "The deer hears you and runs away. You lost the opportunity.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 45
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave it alone",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "There is already too much death in this world. You let the animal live."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_poison_ivy",
+        "title": "Poison Ivy",
+        "description": "You walk through an area densely covered with vegetation. Too late you realize it's poison ivy!",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Wash exposed skin immediately",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_002",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You use water to remove the poisonous oils. You avoid the worst."
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the itch",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Hours later, the skin starts to burn and swell. You have been poisoned."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "POISONED"
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 120
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_bee_hive",
+        "title": "Hidden Beehive",
+        "description": "A large beehive is hidden among the branches of a tree. It drips golden honey.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Use smoke to gather honey",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 13,
+                        "successText": "The smoke calms the bees. You gather precious honey.",
+                        "failureText": "The bees get angry and attack you en masse.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "food_honey",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the hive alone",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's not worth risking potentially deadly stings."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_wild_boar",
+        "title": "Territorial Boar",
+        "description": "A massive boar blocks the path, growling. It is clear it doesn't want company.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Intimidate the animal",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intimidate",
+                        "dc": 13,
+                        "successText": "You make enough noise to scare the boar. It moves away growling.",
+                        "failureText": "The boar charges! Its impact is devastating.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 30
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Take a long detour",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Better not risk a fight. You bypass the animal carefully."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_abandoned_campsite",
+        "title": "Abandoned Campsite",
+        "description": "Remains of a campsite with torn tents and an extinguished fire. Something went wrong here.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search through the ruins",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 11,
+                        "successText": "You find scattered supplies and still usable equipment.",
+                        "failureText": "There is nothing of value. Only signs of violence.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "firewood",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave quickly",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Whoever attacked this camp might return."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_bear_tracks",
+        "title": "Bear Tracks",
+        "description": "Huge footprints in the damp ground. A bear, and a big one. Recent.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Follow the tracks carefully",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 14,
+                        "successText": "You find the bear's den. It is empty and contains remains of prey. You find something useful.",
+                        "failureText": "The bear is in the den! It attacks you furiously.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 40
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Change direction",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "A bear is not something to mess with. You choose another path."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_ritual_circle",
+        "title": "Ritual Circle",
+        "description": "Stones arranged in a circle with strange symbols carved on them. In the center, ash and burnt bones. The air here seems to vibrate with an almost imperceptible frequency.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the symbols carefully",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "history",
+                        "dc": 15,
+                        "successText": "Under one of the main stones, protected by a waxed leather wrapping, you find a journal. The pages are full of astronomical symbols, complex calculations, and notes written in a frantic handwriting. It speaks of 'dissonant frequencies', of 'harmonizing echoes', and of a 'shielding ritual'. It is not the diary of a madman, but of someone who was desperately looking for a solution.",
+                        "failureText": "The symbols are too complex. They look astronomical, but you can't decipher them. You find only ash and bones.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cultist_coded_journal",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "signs_of_ash"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 60
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "[DISCOVERY] The journal mentions two other 'places of power' needed to complete the ritual."
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "This place gives you the creeps. Leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "There is a dark energy here. You decide not to stay."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_clear_stream",
+        "title": "Clear Stream",
+        "description": "A crystal clear stream flows between the rocks. The water looks clean.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Fill all your canteens",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 10,
+                        "successText": "The water is clean and fresh. You fill your reserves.",
+                        "failureText": "You drink too fast and get a stomach ache.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest by the stream",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The sound of water is relaxing. You take a break."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_snare_trap",
+        "title": "Snare Trap",
+        "description": "Your foot trips on a wire. A snare tightens around your ankle and lifts you upside down!",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Cut the rope with your knife",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "sleightOfHand",
+                        "dc": 12,
+                        "successText": "You cut the rope and fall controlling the fall. You are free.",
+                        "failureText": "You fall badly and get hurt.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 15
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Try to free yourself by wriggling",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "After long minutes of painful effort, you manage to free your foot."
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_owl_nest",
+        "title": "Owl's Nest",
+        "description": "A large nest on a tall tree. Inside shine shiny objects that the owl has collected.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Climb to get the items",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 13,
+                        "successText": "You reach the nest while the owl is away. You find coins and a small jewel.",
+                        "failureText": "The owl returns and attacks your eyes. You fall from the tree.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 15
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "silver_medallion",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the animal alone",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's not right to steal from an animal's nest. You leave it alone."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_medicinal_herbs",
+        "title": "Medicinal Herbs",
+        "description": "You recognize some plants with healing properties growing in this area.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather the herbs",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "medicine",
+                        "dc": 11,
+                        "successText": "You gather the herbs correctly. They are powerful natural medicines.",
+                        "failureText": "You get confused and gather the wrong plants. Useless.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "edible_mushrooms",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Not sure. Forget it",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Without botanical knowledge, you could do more harm than good."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_woodcutter_cabin",
+        "title": "Woodcutter's Cabin",
+        "description": "An old cabin with rusty axes and saws scattered everywhere. The door is open.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Rummage through the cabin",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "You find tools still in good condition and wood already cut.",
+                        "failureText": "The cabin is full of cobwebs and mold. Nothing useful.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "firewood",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest here for a while",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You take a break under shelter. You feel less tired."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 10
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_fairy_ring",
+        "title": "Mushroom Ring",
+        "description": "A perfect circle of white mushrooms. Legends said they were fairy portals. Now you know they are just mushrooms.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather the mushrooms from the circle",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 13,
+                        "successText": "They are edible and nutritious mushrooms. You gather many.",
+                        "failureText": "They are poisonous! You taste one by mistake and get sick.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "edible_mushrooms",
+                                    "quantity": 8
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "POISONED"
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the circle alone",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Old superstitions die slowly. You decide not to risk it."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_fallen_tree",
+        "title": "Fallen Tree",
+        "description": "A huge felled tree blocks the path. You will have to climb over it or go around it.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Climb over it",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 10,
+                        "successText": "You climb over the tree without problems.",
+                        "failureText": "You slip and fall on the other side, hurting yourself.",
+                        "success": [
+                            {
+                                "type": "addXp",
+                                "value": 15
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 10
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Go around",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You go around the tree carefully. You lose some time but arrive safe and sound."
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_raven_flock",
+        "title": "Raven Flock",
+        "description": "Hundreds of black ravens gather on the trees, watching you with their bright eyes. It is unsettling.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Continue ignoring them",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The ravens croak and fly away. They are just birds."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Follow the ravens",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 12,
+                        "successText": "The ravens guide you to a fresh carcass. You recover meat and hides.",
+                        "failureText": "The ravens fly away without leading you anywhere. You lose time.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_hide",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "forest_old_mine_entrance",
+        "title": "Abandoned Mine Entrance",
+        "description": "The entrance to an old mine opens into the rock. Dark and threatening.",
+        "biomes": [
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Explore the mine",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 13,
+                        "successText": "You find old mining tools and precious minerals in the upper tunnels.",
+                        "failureText": "You get lost in the dark and take hours to get out. You wasted time and energy.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal_high_quality",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 45
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 120
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Stay away",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Mines are dangerous places. You decide not to enter."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

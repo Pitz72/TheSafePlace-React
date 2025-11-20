@@ -1,0 +1,252 @@
+[
+    {
+        "id": "trophy_mq_1",
+        "name": "The Journey Begins",
+        "description": "Complete the first chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_2",
+        "name": "Water Lesson",
+        "description": "Complete the second chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_3",
+        "name": "Taste of Blood",
+        "description": "Complete the third chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_4",
+        "name": "Learning the Dark",
+        "description": "Complete the fourth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_5",
+        "name": "The Unanswered Question",
+        "description": "Complete the fifth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_6",
+        "name": "Ash Angels",
+        "description": "Complete the sixth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_7",
+        "name": "The Burden",
+        "description": "Complete the seventh chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_8",
+        "name": "The Last Lesson",
+        "description": "Complete the eighth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_9",
+        "name": "The Meaning of a Name",
+        "description": "Complete the ninth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_10",
+        "name": "Echo of a Choice",
+        "description": "Complete the tenth chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_11",
+        "name": "The Confession",
+        "description": "Complete the eleventh chapter of the Main Quest."
+    },
+    {
+        "id": "trophy_mq_12",
+        "name": "Echo of the Journey",
+        "description": "Complete the Main Quest."
+    },
+    {
+        "id": "trophy_explore_100_steps",
+        "name": "First Steps",
+        "description": "Take 100 steps in the game world."
+    },
+    {
+        "id": "trophy_explore_500_steps",
+        "name": "Tireless Explorer",
+        "description": "Take 500 steps in the game world."
+    },
+    {
+        "id": "trophy_explore_all_biomes",
+        "name": "Cartographer",
+        "description": "Visit every type of biome (Plains, Forest, City, Village, Water)."
+    },
+    {
+        "id": "trophy_survive_7_days",
+        "name": "Survivor",
+        "description": "Survive for 7 days."
+    },
+    {
+        "id": "trophy_survive_30_days",
+        "name": "Wasteland Veteran",
+        "description": "Survive for 30 days."
+    },
+    {
+        "id": "trophy_combat_first_win",
+        "name": "First Blood",
+        "description": "Win your first fight."
+    },
+    {
+        "id": "trophy_combat_no_damage",
+        "name": "Untouchable",
+        "description": "Win a fight without taking any damage."
+    },
+    {
+        "id": "trophy_combat_10_wins",
+        "name": "Road Warrior",
+        "description": "Win 10 fights."
+    },
+    {
+        "id": "trophy_combat_tactic",
+        "name": "Strategist",
+        "description": "Defeat an enemy using a tactical action."
+    },
+    {
+        "id": "trophy_craft_first_item",
+        "name": "Novice Craftsman",
+        "description": "Craft your first item."
+    },
+    {
+        "id": "trophy_craft_all_recipes",
+        "name": "Master Craftsman",
+        "description": "Learn and craft every type of recipe."
+    },
+    {
+        "id": "trophy_craft_repair",
+        "name": "Handyman",
+        "description": "Repair an item."
+    },
+    {
+        "id": "trophy_craft_salvage",
+        "name": "Recycler",
+        "description": "Salvage materials from a broken item."
+    },
+    {
+        "id": "trophy_char_level_up",
+        "name": "Stronger",
+        "description": "Level up for the first time."
+    },
+    {
+        "id": "trophy_char_level_10",
+        "name": "Force of Nature",
+        "description": "Reach level 10."
+    },
+    {
+        "id": "trophy_char_talent",
+        "name": "Specialist",
+        "description": "Unlock your first talent."
+    },
+    {
+        "id": "trophy_char_max_for",
+        "name": "Hercules",
+        "description": "Raise Strength attribute to 20."
+    },
+    {
+        "id": "trophy_char_max_des",
+        "name": "Shadow",
+        "description": "Raise Dexterity attribute to 20."
+    },
+    {
+        "id": "trophy_char_max_cos",
+        "name": "Titan",
+        "description": "Raise Constitution attribute to 20."
+    },
+    {
+        "id": "trophy_char_max_int",
+        "name": "Genius",
+        "description": "Raise Intelligence attribute to 20."
+    },
+    {
+        "id": "trophy_char_max_sag",
+        "name": "Oracle",
+        "description": "Raise Wisdom attribute to 20."
+    },
+    {
+        "id": "trophy_char_max_car",
+        "name": "Leader",
+        "description": "Raise Charisma attribute to 20."
+    },
+    {
+        "id": "trophy_align_max_lena",
+        "name": "Beacon of Hope",
+        "description": "Reach maximum alignment with Lena's philosophy."
+    },
+    {
+        "id": "trophy_align_max_elian",
+        "name": "The Pragmatic Shadow",
+        "description": "Reach maximum alignment with Elian's philosophy."
+    },
+    {
+        "id": "trophy_secret_destroy_letter",
+        "name": "Ashes in the Wind",
+        "description": "Tear up your father's letter at the start of the game."
+    },
+    {
+        "id": "trophy_secret_keep_letter",
+        "name": "Keeper of Memory",
+        "description": "Keep your father's letter."
+    },
+    {
+        "id": "trophy_secret_ash_lullaby",
+        "name": "The Ash Lullaby",
+        "description": "Reveal the secret of the blackened music box."
+    },
+    {
+        "id": "trophy_secret_all_easter_eggs",
+        "name": "Secret Hunter",
+        "description": "Discover all secret events (Easter Eggs)."
+    },
+    {
+        "id": "trophy_secret_help_strangers",
+        "name": "Good Samaritan",
+        "description": "Help the two strangers in need without asking for anything in return."
+    },
+    {
+        "id": "trophy_secret_free_animal",
+        "name": "Animal Friend",
+        "description": "Successfully free and heal the injured animal."
+    },
+    {
+        "id": "trophy_secret_save_drowning_man",
+        "name": "Improvised Hero",
+        "description": "Save the drowning man at the collapsed bridge."
+    },
+    {
+        "id": "trophy_secret_honor_grave",
+        "name": "Respect for the Fallen",
+        "description": "Pay respects to the nameless grave without taking anything."
+    },
+    {
+        "id": "trophy_misc_first_death",
+        "name": "Lesson Learned",
+        "description": "Die for the first time."
+    },
+    {
+        "id": "trophy_misc_death_by_starvation",
+        "name": "Empty Stomach",
+        "description": "Die of starvation."
+    },
+    {
+        "id": "trophy_misc_death_by_dehydration",
+        "name": "Dry Throat",
+        "description": "Die of thirst."
+    },
+    {
+        "id": "trophy_misc_no_combat_3_days",
+        "name": "Ghost",
+        "description": "Survive for 3 consecutive days without entering combat."
+    },
+    {
+        "id": "trophy_misc_full_inventory",
+        "name": "Compulsive Collector",
+        "description": "Fill every slot in your inventory."
+    },
+    {
+        "id": "trophy_misc_eat_rotten_food",
+        "name": "Iron Stomach",
+        "description": "Survive after eating rotten food."
+    }
+]

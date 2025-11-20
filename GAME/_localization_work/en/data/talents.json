@@ -1,0 +1,72 @@
+[
+    {
+        "id": "scavenger",
+        "name": "Scavenger",
+        "description": "Increases the amount of items found while scavenging shelters.",
+        "requiredSkill": "survival",
+        "levelRequirement": 2
+    },
+    {
+        "id": "field_medic",
+        "name": "Field Medic",
+        "description": "Increases the effectiveness of all healing items by 25%.",
+        "requiredSkill": "medicine",
+        "levelRequirement": 2
+    },
+    {
+        "id": "guerrilla_fighter",
+        "name": "Guerrilla Fighter",
+        "description": "If you start combat in a forest, perform a surprise attack before the first turn begins.",
+        "requiredSkill": "stealth",
+        "levelRequirement": 2
+    },
+    {
+        "id": "expert_hunter",
+        "name": "Expert Hunter",
+        "description": "+50% resources from killed animals and automatically reveals creature weaknesses.",
+        "requiredSkill": "survival",
+        "levelRequirement": 2
+    },
+    {
+        "id": "field_armorer",
+        "name": "Field Armorer",
+        "description": "Crafted weapons have +10 durability and require -20% crafting time.",
+        "requiredSkill": "investigate",
+        "levelRequirement": 2
+    },
+    {
+        "id": "wasteland_runner",
+        "name": "Wasteland Runner",
+        "description": "Movement takes 2 minutes less and +25% fatigue resistance.",
+        "requiredSkill": "athletics",
+        "levelRequirement": 2
+    },
+    {
+        "id": "combat_master",
+        "name": "Combat Master",
+        "description": "+1 damage with all melee weapons. Weapons lose 50% less durability.",
+        "requiredSkill": "athletics",
+        "levelRequirement": 5
+    },
+    {
+        "id": "hawks_eye",
+        "name": "Hawk's Eye",
+        "description": "+2 bonus to ranged attack rolls. Automatically reveals traps.",
+        "requiredSkill": "perception",
+        "levelRequirement": 5
+    },
+    {
+        "id": "veteran_survivor",
+        "name": "Veteran Survivor",
+        "description": "+50% HP from healing. -25% hunger and hydration consumption.",
+        "requiredSkill": "survival",
+        "levelRequirement": 8
+    },
+    {
+        "id": "twilight_shadow",
+        "name": "Twilight Shadow",
+        "description": "+4 to escape checks. The first attack in combat is always a critical hit.",
+        "requiredSkill": "stealth",
+        "levelRequirement": 8
+    }
+]

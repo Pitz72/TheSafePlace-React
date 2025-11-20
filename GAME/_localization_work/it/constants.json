@@ -1,0 +1,169 @@
+{
+    "BOOT_TEXT": [
+        "Runtime Radio BIOS v1.02",
+        "Copyright (C) 1983 Runtime Radio Corp.",
+        "",
+        "CPU: R-8088 @ 4.77MHz",
+        "Memory Test: 640K OK",
+        "",
+        "Checking drives...",
+        "Drive A: Floppy Disk",
+        "Drive C: Hard Disk",
+        "",
+        "Booting from C:...",
+        "Starting RR-DOS...",
+        "",
+        "HIMEM is testing extended memory...done.",
+        "RR-DOS Mouse Driver installed.",
+        "RR-DOS CD-ROM Driver installed.",
+        "Sound Blaster 8 card detected at A220 I5 D1.",
+        "",
+        "C:\\> autoexec.bat",
+        "C:\\> echo off",
+        "C:\\> load game.exe",
+        "Loading TSP Chronicles..."
+    ],
+    "MENU_ITEMS": [
+        "Nuova Partita",
+        "Continua Partita",
+        "Carica Partita",
+        "Storia",
+        "Istruzioni",
+        "Opzioni",
+        "Trofei",
+        "Esci"
+    ],
+    "INSTRUCTIONS_TEXT": "═══ THE SAFE PLACE CHRONICLES - GUIDA ALLA SOPRAVVIVENZA ═══\n\nBenvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.\n\n═══ MOVIMENTO E ESPLORAZIONE ═══\n\n• WASD o FRECCE DIREZIONALI: Muoviti sulla mappa\n• La 'E' sulla mappa indica il tuo obiettivo: The Safe Place\n• Ogni passo consuma tempo e risorse vitali (Sazietà, Idratazione)\n• Esplora i biomi: Pianure, Foreste, Città, Villaggi, Fiumi\n• Alcuni tile (M - Montagna) sono invalicabili\n\n═══ GESTIONE RISORSE ═══\n\n• HP (Punti Vita): La tua sopravvivenza. Monitora costantemente.\n• SAZIETÀ: Il cibo è vita. Se scende a 0, morirai di fame.\n• IDRATAZIONE: L'acqua è essenziale. Trova fonti o filtra acqua contaminata.\n• FATICA: Accumuli stanchezza muovendoti. Riposa per recuperare.\n• CONDIZIONI: Ferite, malattie, veleni, ipotermia ti indeboliranno. Cura gli status negativi con oggetti specifici.\n\n═══ TEMPO E METEO ═══\n\n• Il tempo passa ad ogni azione: camminare, riposare, cercare, craftare\n• NOTTE (20:00 - 6:00): Molto pericolosa. Subisci danni costanti se sei all'aperto.\n• RIFUGI (R sulla mappa): Trova riparo prima del tramonto. Usali per dormire, riposare, cercare risorse e craftare.\n• METEO DINAMICO: Pioggia e tempeste rallentano i movimenti e causano danni.\n\n═══ AZIONI PRINCIPALI ═══\n\n• [I] INVENTARIO: Gestisci oggetti, equipaggia armi/armature, usa consumabili\n• [R] RIPOSO RAPIDO: Recupera un po' di HP e fatica (1 volta al giorno)\n• [F] RICERCA ATTIVA: Cerca risorse nell'area (CD Sopravvivenza 10, 30 min)\n• [L] LEVEL UP: Quando disponibile, scegli attributo e talento\n• [ESC] PAUSA: Accedi al menu in-game, salva/carica partita\n\n═══ INVENTARIO E EQUIPAGGIAMENTO ═══\n\n• Peso massimo limitato (basato su Forza)\n• ARMI: Equipaggiabili, si degradano. Riparale o smontale per materiali.\n• ARMATURE: Testa, Petto, Gambe. Aumentano la Classe Armatura (AC).\n• CONSUMABILI: Cibo, acqua, medicine. Alcuni curano status specifici.\n• MANUALI: Trovane di nuovi per sbloccare ricette di crafting.\n\n═══ CRAFTING ═══\n\n• Nei RIFUGI troverai BANCHI DA LAVORO\n• Crea armi, armature, medicine, strumenti di sopravvivenza\n• Ogni ricetta richiede: Materiali, Skill (DC), Tempo\n• Impara nuove ricette trovando Manuali nel mondo\n\n═══ COMBATTIMENTO ═══\n\n• Combatti nemici che incontri esplorando\n• Azioni: ATTACCA, ANALIZZA (svela debolezze), USA OGGETTO, FUGGI\n• Analizzando un nemico scopri tattiche speciali utilizzabili\n• La fuga è risolta con test di abilità (può fallire!)\n• Ogni vittoria dona XP\n\n═══ CRESCITA DEL PERSONAGGIO ═══\n\n• LIVELLI: Ottieni XP da esplorazione, eventi, combattimenti\n• TALENTI: Ad ogni level-up scegli un talento che definisce il tuo stile\n  - Livello 2: Talenti base (es. Scavenger, Guerrigliero)\n  - Livello 5: Talenti avanzati\n  - Livello 8: Talenti master\n• ATTRIBUTI: Aumenta FOR, DES, COS, INT, SAG, CAR ad ogni livello\n• ABILITÀ: 18 skill basate sugli attributi. Allena quelle che usi di più.\n\n═══ ALLINEAMENTO MORALE ═══\n\n• Le tue scelte influenzano l'allineamento: LENA (Compassione) vs ELIAN (Pragmatismo)\n• Raggiungendo soglie alte sblocchi bonus passivi permanenti\n• Alcune scelte hanno conseguenze immediate o a lungo termine\n\n═══ CONSIGLI DI SOPRAVVIVENZA ═══\n\n• Salva spesso (5 slot disponibili + export/import JSON)\n• Esplora durante il giorno, riposati nei Rifugi di notte\n• Usa la Ricerca Attiva [F] per trovare risorse specifiche per bioma\n• Pianifica i livelli: alcuni talenti sono fondamentali\n• Non tutti i combattimenti vanno affrontati. Fuggire è una strategia valida.\n• L'acqua è rara: filtra acqua contaminata o cerca fiumi\n• Le condizioni negative possono ucciderti. Cura sempre MALATO, AVVELENATO, INFEZIONE.\n\n═══ MAIN STORY ═══\n\n• Durante il viaggio vivrai \"Echi della Memoria\": flashback narrativi che svelano il passato\n• Questi eventi sono attivati da trigger naturali (passi, giorni, posizione)\n• Non puoi perderli: si attivano automaticamente quando le condizioni sono soddisfatte\n• La tua storia personale è parte integrante del viaggio\n\n═══ SEGRETI E TROFEI ═══\n\n• 50 TROFEI da sbloccare, persistenti tra le partite\n• Eventi segreti estremamente rari nascosti nel mondo\n• Oggetti unici trovabili solo in determinate condizioni\n• La mappa nasconde più di quanto sembri...\n\nOra vai, viaggiatore. The Safe Place ti aspetta a Est.\nSopravvivi. Scopri la verità. E forse, un giorno, capirai.",
+    "INSTRUCTIONS_PAGES": [
+        "═══ THE SAFE PLACE CHRONICLES ═══\nGUIDA ALLA SOPRAVVIVENZA\n\nBenvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.",
+        "═══ MOVIMENTO E ESPLORAZIONE ═══\n\n• WASD o FRECCE DIREZIONALI: Muoviti sulla mappa\n• La 'E' sulla mappa indica il tuo obiettivo: The Safe Place\n• Ogni passo consuma tempo e risorse vitali (Sazietà, Idratazione)\n• Esplora i biomi: Pianure, Foreste, Città, Villaggi, Fiumi\n• Alcuni tile (M - Montagna) sono invalicabili",
+        "═══ GESTIONE RISORSE ═══\n\n• HP (Punti Vita): La tua sopravvivenza. Monitora costantemente.\n• SAZIETÀ: Il cibo è vita. Se scende a 0, morirai di fame.\n• IDRATAZIONE: L'acqua è essenziale. Trova fonti o filtra acqua contaminata.\n• FATICA: Accumuli stanchezza muovendoti. Riposa per recuperare.\n• CONDIZIONI: Ferite, malattie, veleni, ipotermia ti indeboliranno. Cura gli status negativi con oggetti specifici.",
+        "═══ TEMPO E METEO ═══\n\n• Il tempo passa ad ogni azione: camminare, riposare, cercare, craftare\n• NOTTE (20:00 - 6:00): Molto pericolosa. Subisci danni costanti se sei all'aperto.\n• RIFUGI (R sulla mappa): Trova riparo prima del tramonto. Usali per dormire, riposare, cercare risorse e craftare.\n• METEO DINAMICO: Pioggia e tempeste rallentano i movimenti e causano danni.",
+        "═══ AZIONI PRINCIPALI ═══\n\n• [I] INVENTARIO: Gestisci oggetti, equipaggia armi/armature, usa consumabili\n• [R] RIPOSO RAPIDO: Recupera un po' di HP e fatica (1 volta al giorno)\n• [F] RICERCA ATTIVA: Cerca risorse nell'area (CD Sopravvivenza 10, 30 min)\n• [L] LEVEL UP: Quando disponibile, scegli attributo e talento\n• [ESC] PAUSA: Accedi al menu in-game, salva/carica partita",
+        "═══ INVENTARIO E EQUIPAGGIAMENTO ═══\n\n• Peso massimo limitato (basato su Forza)\n• ARMI: Equipaggiabili, si degradano. Riparale o smontale per materiali.\n• ARMATURE: Testa, Petto, Gambe. Aumentano la Classe Armatura (AC).\n• CONSUMABILI: Cibo, acqua, medicine. Alcuni curano status specifici.\n• MANUALI: Trovane di nuovi per sbloccare ricette di crafting.",
+        "═══ CRAFTING ═══\n\n• Nei RIFUGI troverai BANCHI DA LAVORO\n• Crea armi, armature, medicine, strumenti di sopravvivenza\n• Ogni ricetta richiede: Materiali, Skill (DC), Tempo\n• Impara nuove ricette trovando Manuali nel mondo",
+        "═══ COMBATTIMENTO ═══\n\n• Combatti nemici che incontri esplorando\n• Azioni: ATTACCA, ANALIZZA (svela debolezze), USA OGGETTO, FUGGI\n• Analizzando un nemico scopri tattiche speciali utilizzabili\n• La fuga è risolta con test di abilità (può fallire!)\n• Ogni vittoria dona XP",
+        "═══ CRESCITA DEL PERSONAGGIO ═══\n\n• LIVELLI: Ottieni XP da esplorazione, eventi, combattimenti\n• TALENTI: Ad ogni level-up scegli un talento che definisce il tuo stile\n  - Livello 2: Talenti base (es. Scavenger, Guerrigliero)\n  - Livello 5: Talenti avanzati\n  - Livello 8: Talenti master\n• ATTRIBUTI: Aumenta FOR, DES, COS, INT, SAG, CAR ad ogni livello\n• ABILITÀ: 18 skill basate sugli attributi. Allena quelle che usi di più.",
+        "═══ ALLINEAMENTO MORALE ═══\n\n• Le tue scelte influenzano l'allineamento: LENA (Compassione) vs ELIAN (Pragmatismo)\n• Raggiungendo soglie alte sblocchi bonus passivi permanenti\n• Alcune scelte hanno conseguenze immediate o a lungo termine",
+        "═══ CONSIGLI DI SOPRAVVIVENZA ═══\n\n• Salva spesso (5 slot disponibili + export/import JSON)\n• Esplora durante il giorno, riposati nei Rifugi di notte\n• Usa la Ricerca Attiva [F] per trovare risorse specifiche per bioma\n• Pianifica i livelli: alcuni talenti sono fondamentali",
+        "═══ CONSIGLI DI SOPRAVVIVENZA (2) ═══\n\n• Non tutti i combattimenti vanno affrontati. Fuggire è una strategia valida.\n• L'acqua è rara: filtra acqua contaminata o cerca fiumi\n• Le condizioni negative possono ucciderti. Cura sempre MALATO, AVVELENATO, INFEZIONE.",
+        "═══ MAIN STORY ═══\n\n• Durante il viaggio vivrai \"Echi della Memoria\": flashback narrativi che svelano il passato\n• Questi eventi sono attivati da trigger naturali (passi, giorni, posizione)\n• Non puoi perderli: si attivano automaticamente quando le condizioni sono soddisfatte\n• La tua storia personale è parte integrante del viaggio",
+        "═══ SEGRETI E TROFEI ═══\n\n• 50 TROFEI da sbloccare, persistenti tra le partite\n• Eventi segreti estremamente rari nascosti nel mondo\n• Oggetti unici trovabili solo in determinate condizioni\n• La mappa nasconde più di quanto sembri...\n\nOra vai, viaggiatore. The Safe Place ti aspetta a Est. Sopravvivi. Scopri la verità. E forse, un giorno, capirai."
+    ],
+    "STORY_PAGES": [
+        "═══════════════════════════════\nL'ECO DEL SILENZIO\n═══════════════════════════════\n\nIl mondo che Ultimo conosceva era fatto di sussurri e acciaio freddo, di lezioni impartite da un padre con occhi stanchi ma mani salde. \n\nDiciassette anni vissuti all'ombra di una catastrofe che aveva inghiottito il passato, lasciando solo echi distorti: la \"Guerra Inespressa\", il \"Grande Silenzio\".",
+        "Della madre, Ultimo conservava solo un calore sbiadito nel petto, un nome quasi dimenticato. \n\nIl \"prima\" era una favola raccontata a bassa voce, un sogno di cieli azzurri e città luminose, così diverso dai grigiori malati e dalle rovine scheletriche che ora graffiavano l'orizzonte dell'Europa Centrale.",
+        "Suo padre gli aveva insegnato a leggere i segni del vento carico di polveri tossiche, a distinguere il fruscio di una bestia mutata da quello innocuo delle lamiere contorte, a trovare acqua dove sembrava esserci solo aridità. \n\nOgni giorno era una lezione di sopravvivenza, ogni notte un monito sulla fragilità della vita.",
+        "Poi, anche il padre era partito. \n\nUna missione avvolta nel mistero, un addio affrettato con la promessa di un ritorno che tardava troppo. \n\nLe scorte lasciate con cura si assottigliavano, e con esse la speranza. \n\nRimaneva solo un messaggio frammentario, l'ultima eco della voce paterna: \n\n\"...trova il Safe Place, Ultimo. È la nostra unica possibilità...\"",
+        "Ora, il silenzio è il suo unico compagno. \n\nDavanti a lui, un viaggio disperato attraverso un continente irriconoscibile, armato solo degli insegnamenti paterni e di una mappa verso un luogo che potrebbe essere leggenda, trappola, o forse, davvero, salvezza. \n\nIl peso della solitudine è grande, ma la volontà di onorare la memoria del padre, e la primordiale necessità di vivere, lo spingono a muovere il primo passo in quel mondo ostile. \n\nThe Safe Place attende, da qualche parte oltre la desolazione."
+    ],
+    "STORY_TEXT": "L'Eco del Silenzio\n\nIl mondo che Ultimo conosceva era fatto di sussurri e acciaio freddo, di lezioni impartite da un padre con occhi stanchi ma mani salde. Diciassette anni vissuti all'ombra di una catastrofe che aveva inghiottito il passato, lasciando solo echi distorti: la \"Guerra Inespressa\", il \"Grande Silenzio\".\n\nDella madre, Ultimo conservava solo un calore sbiadito nel petto, un nome quasi dimenticato. Il \"prima\" era una favola raccontata a bassa voce, un sogno di cieli azzurri e città luminose, così diverso dai grigiori malati e dalle rovine scheletriche che ora graffiavano l'orizzonte dell'Europa Centrale.\n\nSuo padre gli aveva insegnato a leggere i segni del vento carico di polveri tossiche, a distinguere il fruscio di una bestia mutata da quello innocuo delle lamiere contorte, a trovare acqua dove sembrava esserci solo aridità. Ogni giorno era una lezione di sopravvivenza, ogni notte un monito sulla fragilità della vita.\n\nPoi, anche il padre era partito. Una missione avvolta nel mistero, un addio affrettato con la promessa di un ritorno che tardava troppo. Le scorte lasciate con cura si assottigliavano, e con esse la speranza. Rimaneva solo un messaggio frammentario, l'ultima eco della voce paterna: \"...trova il Safe Place, Ultimo. È la nostra unica possibilità...\"\n\nOra, il silenzio è il suo unico compagno. Davanti a lui, un viaggio disperato attraverso un continente irriconoscibile, armato solo degli insegnamenti paterni e di una mappa verso un luogo che potrebbe essere leggenda, trappola, o forse, davvero, salvezza. Il peso della solitudine è grande, ma la volontà di onorare la memoria del padre, e la primordiale necessità di vivere, lo spingono a muovere il primo passo in quel mondo ostile. Il Safe Place attende, da qualche parte oltre la desolazione.",
+    "MOUNTAIN_MESSAGES": [
+        "Non puoi passare. È una montagna.",
+        "Scalare questa parete rocciosa a mani nude sarebbe un suicidio.",
+        "Anche le capre di montagna guarderebbero questa parete e direbbero 'No, grazie'.",
+        "La montagna ti osserva, impassibile. Non passerai."
+    ],
+    "BIOME_MESSAGES": {
+        ".": "Ti trovi in una vasta pianura aperta.",
+        "F": "Stai entrando in una fitta foresta.",
+        "~": "Le acque di un fiume si stendono davanti a te.",
+        "M": "Imponenti montagne bloccano il tuo cammino.",
+        "C": "Le rovine silenziose di una città si ergono all'orizzonte.",
+        "V": "Attraversi i resti di un piccolo villaggio.",
+        "R": "Hai trovato un rifugio. Sembra sicuro, per ora.",
+        "S": "Inizi il tuo viaggio in un punto relativamente tranquillo.",
+        "E": "La destinazione finale è vicina.",
+        "A": "Vedi l'Avamposto 'Il Crocevia' davanti a te. Fumo sale da un fuoco centrale.",
+        "N": "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
+        "T": "Un commerciante ambulante ti saluta con cautela.",
+        "L": "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
+        "B": "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
+    },
+    "ATMOSPHERIC_MESSAGES": {
+        ".": {
+            "day": [
+                "Il vento sibila tra l'erba alta.",
+                "Un falco volteggia in alto nel cielo.",
+                "Il sole picchia sulla tua pelle."
+            ],
+            "night": [
+                "Il richiamo lontano di un predatore notturno ti fa rabbrividire.",
+                "Le stelle brillano intense nel cielo senza nubi.",
+                "Un silenzio innaturale avvolge la pianura."
+            ],
+            "rain": [
+                "Le gocce di pioggia tamburellano sul tuo equipaggiamento.",
+                "Il terreno aperto offre poco riparo dalla pioggia battente."
+            ]
+        },
+        "F": {
+            "day": [
+                "Un raggio di sole filtra attraverso le fitte chiome degli alberi.",
+                "Il fruscio di qualcosa tra i cespugli ti mette in allerta.",
+                "L'odore di terra umida e muschio riempie l'aria."
+            ],
+            "night": [
+                "Il verso di un gufo rompe il silenzio della notte.",
+                "Rami scricchiolano nelle vicinanze, spezzati da un peso invisibile.",
+                "L'oscurità nella foresta è quasi totale."
+            ],
+            "rain": [
+                "La pioggia gocciola dalle foglie, creando una sinfonia costante.",
+                "L'odore di pioggia e terra bagnata è intenso qui."
+            ]
+        },
+        "C": {
+            "day": [
+                "Il vento ulula tra le rovine degli edifici.",
+                "Un pezzo di metallo cade da un grattacielo scheletrico, echeggiando nel silenzio.",
+                "La polvere si solleva ad ogni tua mossa."
+            ],
+            "night": [
+                "Ombre inquietanti danzano tra i palazzi distrutti.",
+                "Un rumore metallico in lontananza ti fa sussultare.",
+                "La luna illumina spettralmente le strade deserte."
+            ],
+            "rain": [
+                "L'acqua scorre in rivoli scuri lungo le strade dissestate.",
+                "Il rumore della pioggia che colpisce le lamiere contorte è assordante."
+            ]
+        },
+        "V": {
+            "day": [
+                "Una porta sbatte per il vento in una casa abbandonata.",
+                "Resti di vita quotidiana sono sparsi ovunque, congelati nel tempo.",
+                "Un silenzio spettrale regna tra le case."
+            ],
+            "night": [
+                "Ogni ombra sembra nascondere una minaccia.",
+                "Hai la strana sensazione di essere osservato dalle finestre vuote.",
+                "Il vento fischia attraverso i tetti sfondati."
+            ],
+            "rain": [
+                "La pioggia trasforma le strade sterrate in fango.",
+                "L'acqua gocciola tristemente dai tetti rotti."
+            ]
+        },
+        "R": {
+            "day": [
+                "Questo posto sembra offrire una tregua temporanea dal mondo esterno.",
+                "Qualcuno ha lasciato delle provviste qui molto tempo fa.",
+                "La polvere danza nei rari raggi di luce che filtrano dall'interno."
+            ],
+            "night": [
+                "I suoni del mondo esterno sembrano attutiti qui dentro.",
+                "È un sollievo essere al riparo, anche se solo per poco.",
+                "Il buio all'interno del rifugio è denso e quasi tangibile."
+            ]
+        }
+    },
+    "ATTRIBUTE_LABELS": {
+        "for": "Forza",
+        "des": "Destrezza",
+        "cos": "Costituzione",
+        "int": "Intelligenza",
+        "sag": "Saggezza",
+        "car": "Carisma"
+    }
+}

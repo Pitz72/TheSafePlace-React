@@ -1,0 +1,19 @@
+{
+    "TITLE": "THE SAFE PLACE CHRONICLES",
+    "SUBTITLE": "The Echo of the Journey",
+    "CREDITS": {
+        "DESIGNED_BY": "Designed and created by:",
+        "TECHNICAL_SUPPORT": "Technical support, consulting and executive development:",
+        "GIT_SUPPORT": "Technical support in git management and IT consulting:",
+        "SPRITE_DESIGN": "Player sprite design:",
+        "EXECUTIVE_PRODUCTION": "Executive production:",
+        "SPECIAL_THANKS_YOUTUBE": "Special thanks to the YouTube channels of:",
+        "PRODUCTION_SUPPORT": "Production, collaboration and direct support:",
+        "COPYRIGHT": "© Runtime Radio 2025",
+        "DONORS_INTRO": "This project was realized and expanded thanks to the contribution of:"
+    },
+    "PROMPTS": {
+        "SCROLL_INSTRUCTION": "PRESS ARROWS TO SCROLL - ENTER TO CONTINUE",
+        "START_INSTRUCTION": "PRESS ANY KEY TO START"
+    }
+}

@@ -1,0 +1,582 @@
+[
+    {
+        "id": "lore_sick_traveler",
+        "title": "The Echo of a Cough",
+        "description": "You hear a dry, fragile cough that tears at her lungs. Leaning against a fallen tree, you see a man. He is little more than a skeleton held together by rags. Beside him, a very young girl shivers, shaken by an obvious fever and with dark spots surfacing on her skin. They look at you with eyes devoid of hope. They are weak, perhaps too weak to be a threat. Perhaps.",
+        "biomes": [
+            "Forest",
+            "Plains"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Offer a small part of your supplies",
+                "alignment": "Lena",
+                "itemRequirements": [
+                    {
+                        "itemId": "CONS_001",
+                        "quantity": 1
+                    },
+                    {
+                        "itemId": "CONS_002",
+                        "quantity": 1
+                    }
+                ],
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "removeItem",
+                                "value": {
+                                    "itemId": "CONS_002",
+                                    "quantity": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "skillCheck",
+                        "skill": "persuasion",
+                        "dc": 10,
+                        "successText": "You hesitate for a moment, then hand them some food and water. The man weeps silently while the girl drinks greedily. Their eyes communicate deep gratitude.",
+                        "failureText": "You offer them food. They take it greedily, but their gazes remain wary. You receive no thanks. You feel a weight in your stomach, the feeling of having wasted a precious resource for nothing.",
+                        "success": [
+                            {
+                                "type": "statusChange",
+                                "value": "HOPEFUL"
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: As you share your resources, you feel a warmth in your chest. Is this what mom would have done? But fear whispers: what if it's not enough for you?"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 3
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": -1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Generosity, in this world, is a dangerous luxury."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore them and keep going",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You grit your teeth and move on. Your supplies are yours alone. Their silent desperation follows you like a shadow. Is this the lesson your father taught you: surviving means, sometimes, letting others die."
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: You watch them walk away and feel a weight in your chest. Dad... is this how you felt every time? Is this the price of survival?"
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "HARDENED"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 3
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": -1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lore_broken_radio",
+        "title": "Voices in the Silence",
+        "description": "Among the rubble of an electronics store, you find an old shortwave radio. It seems damaged, but a faint red LED still blinks. You could try to repair it to search for signals, or dismantle it to recover valuable components.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Attempt to repair the radio",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 14,
+                        "successText": "With patience, you manage to reconnect some wires. You turn the knob and, through the static, you hear a voice singing an old lullaby. It lasts only a moment, then fades. The radio is dead again, but for a second, you weren't alone.",
+                        "failureText": "You fumble with the circuits, but a wrong wire causes a spark. The red LED goes out forever. You lost the chance to hear anything beyond the sound of the wind.",
+                        "success": [
+                            {
+                                "type": "statusChange",
+                                "value": "INSPIRED"
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: For a moment, that voice on the radio... sounded like mom's. It was just imagination, but my heart beat faster."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "lenaMemoryUnlocked",
+                                    "id": "ninna_nanna_memory"
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cryptic_recording",
+                                    "quantity": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "statusChange",
+                                "value": "DISAPPOINTED"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Dismantle it for components",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Hope doesn't fill the stomach. You dismantle the radio, recovering some electronic components. As you do, the red LED goes out, and with it, the last, faint chance of contact."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "tech_components",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: Dad was right. Survival comes first. But why do I feel this emptiness in my chest?"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 3
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lore_bridge_choice",
+        "title": "The Collapsed Bridge",
+        "description": "You arrive at a collapsed bridge over a rushing river. There is a single, precarious metal beam. As you prepare to cross, you hear a moan. Under the bridge, clinging to debris, is a man with an injured leg, dragged by the current. You can try to save him, but you would lose precious time.",
+        "biomes": [
+            "Water"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Attempt to save the man",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 15,
+                        "successText": "With immense effort, you manage to pull the man onto the bank. He is injured and delirious, but alive. He thanks you stammering and gives you a small rusty key he was holding tight.",
+                        "failureText": "You try to pull him, but the current is too strong. His grip slips and he is dragged away, disappearing into the waves. You remain on the bank, panting, with the sound of his last moan in your ears.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rusty_key",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 120
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 4
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: As I reach out to him, I hear mom's voice whispering: 'Every life has value'. But if I fail, who will save me?"
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "statusChange",
+                                "value": "GUILTY"
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 120
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Cross the beam and ignore him",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You close your eyes and mind. His fate is not yours. You cross the beam quickly. His cries fade, swallowed by the noise of the water. You are safe. You are alone. Just as your father wanted."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "TORMENTED"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 4
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: His cries follow me even after crossing. Dad... is this how you felt when you left mom?"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lore_unmarked_grave",
+        "title": "Nameless Grave",
+        "description": "You find a small makeshift grave, marked by a pile of stones. Someone buried a loved one here. Next to the mound is a small backpack, apparently forgotten.",
+        "biomes": [
+            "Plains",
+            "Forest"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Take the backpack. The dead don't need it.",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Pragmatism wins. You open the backpack and find essential supplies. You avoid looking at the pile of stones. Survival has no room for sentimentality."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_003",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 3
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": -1
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: The dead don't need food. But as I take their things, I feel the weight of their silence."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the backpack as an offering and pay respects.",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide to respect this place. It is a small, useless gesture of humanity. You gained nothing material, but your step seems steadier."
+                            },
+                            {
+                                "type": "statBoost",
+                                "value": {
+                                    "stat": "cha",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "PEACEFUL"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 3
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: Mom always said that respecting the dead keeps us human. Maybe she was right. Maybe that's what distinguishes us from beasts."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lore_last_message",
+        "title": "The Last Message",
+        "description": "In a military terminal still powered by an emergency battery, you find a single uncorrupted log, dated the day of the 'Great Silence'.",
+        "biomes": [
+            "City"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Read the public log",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The public log reads: 'URGENT NOTICE: Unilateral ceasefire in effect. Continental containment event. Remain calm. Wait for further instructions.' The message repeats in a loop, but no other instructions arrive."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Hack the terminal (Intelligence DC 15)",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "intelligence",
+                        "dc": 15,
+                        "successText": "You manage to bypass basic security and access a personal, unofficial log of a panicked officer. It is fragmentary, full of typos.\n\n'...it's not a weapon. I repeat, it is NOT a weapon. Is it a... frequency? A signal. They are saying it 'calmed' things down. Calm? It shut everything down. Machines, communications... people. Some just... fell. Others... others are changing. I saw what happens.\n\n'Project Echo' was a mistake. They were trying to create a collective neural interface, not a silent choir. Now it's too late.\n\nThe Silence is not the end of the war. It is the beginning of something else.'",
+                        "failureText": "You fumble with the controls, but a silent alarm triggers. The terminal shuts down, data lost forever. You wasted precious time.",
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: Project Echo... a collective neural interface. The Silence is not what I thought."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "SHOCKED"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 2
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: Another lost opportunity. Maybe some truths are better left buried."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "FRUSTRATED"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lore_ash_nest",
+        "title": "The Ash Nest",
+        "description": "You find a place where several Ash Angels are motionless, in a circle around a strange antenna or a humming technological device. They don't seem hostile, they are in a state of 'recharging' or 'communion'. In the center, you see they are 'cultivating' something: human bodies covered by a cocoon of cables and crystallized ash. It is a transformation process.",
+        "biomes": [
+            "City",
+            "Mountain"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Flee silently (Stealth DC 14)",
+                "alignment": "Elian",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "stealth",
+                        "dc": 14,
+                        "successText": "You move with the grace of a ghost, moving away from the nest without attracting attention. The image of the cocoons will haunt you, but you are safe. For now.",
+                        "failureText": "A twig snaps under your foot. One of the Angels moves, its head snaps in your direction. You must flee quickly!",
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: I've seen enough. They are not just monsters. They are... something more. And I don't want to be part of it."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "TERRIFIED"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 2
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: I was too slow. Their attention is on me. I must run!"
+                            },
+                            {
+                                "type": "takeDamage",
+                                "value": 5
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "INJURED"
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "TERRIFIED"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Approach to observe (Perception DC 16)",
+                "alignment": "Lena",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 16,
+                        "successText": "With a shiver of horror, you get close enough to distinguish the faces. In one of the freshest cocoons, you recognize a familiar face: it is [NPC Name]. The Angels don't just kill: they harvest. And transform.",
+                        "failureText": "You can't distinguish anything significant among the cocoons. The horror is enough. You retreat, the image of those wrapped bodies burns in your mind.",
+                        "success": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: [NPC Name]... is here. He has become one of them. What does this mean for all of us?"
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "SHOCKED"
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "GUILTY"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": -1
+                                }
+                            },
+                            {
+                                "type": "setFlag",
+                                "value": "ASH_NEST_OBSERVED"
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Reflection: I didn't see enough, but I saw too much. This place is a nightmare."
+                            },
+                            {
+                                "type": "statusChange",
+                                "value": "TERRIFIED"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -4,6 +4,8 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 import { useEventStore } from '../store/eventStore';
 
+import { DONOR_NAMES } from '../constants';
+
 /**
  * EventScreen component.
  * This component renders the event screen, which displays an event and allows the player to make a choice.
@@ -15,6 +17,21 @@ const EventScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const descriptionBoxRef = useRef<HTMLDivElement>(null);
     const resolutionBoxRef = useRef<HTMLDivElement>(null);
+
+    // Generate a stable random donor name for this event instance
+    const randomDonorName = useMemo(() => {
+        return DONOR_NAMES[Math.floor(Math.random() * DONOR_NAMES.length)];
+    }, [activeEvent]);
+
+    const processedDescription = useMemo(() => {
+        if (!activeEvent) return '';
+        return activeEvent.description.replace(/{RANDOM_DONOR}/g, randomDonorName).replace(/\\n/g, '\n');
+    }, [activeEvent, randomDonorName]);
+
+    const processedResolutionText = useMemo(() => {
+        if (!eventResolutionText) return '';
+        return eventResolutionText.replace(/{RANDOM_DONOR}/g, randomDonorName).replace(/\\n/g, '\n');
+    }, [eventResolutionText, randomDonorName]);
 
     const choiceStatus = useMemo(() => {
         if (!activeEvent) return [];
@@ -58,7 +75,7 @@ const EventScreen: React.FC = () => {
             audioManager.playSound('error');
         }
     }, [activeEvent, selectedIndex, resolveEventChoice, choiceStatus, eventResolutionText, dismissEventResolution]);
-    
+
     const handleScrollDescription = useCallback((direction: 'up' | 'down') => {
         const box = eventResolutionText ? resolutionBoxRef.current : descriptionBoxRef.current;
         if (box) {
@@ -102,13 +119,13 @@ const EventScreen: React.FC = () => {
                     <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">
                         ═══ ESITO: {activeEvent.title} ═══
                     </h1>
-                    
+
                     <div
                         ref={resolutionBoxRef}
                         className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                         style={{ scrollbarWidth: 'none' }}
                     >
-                        <pre className="whitespace-pre-wrap leading-relaxed">{eventResolutionText.replace(/\\n/g, '\n')}</pre>
+                        <pre className="whitespace-pre-wrap leading-relaxed">{processedResolutionText}</pre>
                     </div>
 
                     <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4 animate-pulse">
@@ -125,33 +142,33 @@ const EventScreen: React.FC = () => {
                 <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">
                     ═══ {activeEvent.title} ═══
                 </h1>
-                
+
                 <div
                     ref={descriptionBoxRef}
                     className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                     style={{ scrollbarWidth: 'none' }}
                 >
-                    <pre className="whitespace-pre-wrap leading-relaxed">{activeEvent.description.replace(/\\n/g, '\n')}</pre>
+                    <pre className="whitespace-pre-wrap leading-relaxed">{processedDescription}</pre>
                 </div>
 
                 <div className="w-full max-w-4xl mx-auto text-4xl space-y-4">
                     {activeEvent.choices.map((choice, index) => {
-                         const isSelected = index === selectedIndex;
-                         const isMet = choiceStatus[index]?.met;
-                         const requirementText = choiceStatus[index]?.text;
+                        const isSelected = index === selectedIndex;
+                        const isMet = choiceStatus[index]?.met;
+                        const requirementText = choiceStatus[index]?.text;
 
                         return (
-                        <div
-                            key={index}
-                            className={`pl-4 py-2 transition-colors duration-100 ${
-                                isSelected && isMet ? 'bg-green-400 text-black' 
-                                : isMet ? 'bg-transparent' : 'text-gray-500'
-                            }`}
-                        >
-                            {isSelected && isMet && '> '}{choice.text}
-                            {!isMet && <span className="text-red-500/80 italic">{requirementText}</span>}
-                        </div>
-                    )})}
+                            <div
+                                key={index}
+                                className={`pl-4 py-2 transition-colors duration-100 ${isSelected && isMet ? 'bg-green-400 text-black'
+                                        : isMet ? 'bg-transparent' : 'text-gray-500'
+                                    }`}
+                            >
+                                {isSelected && isMet && '> '}{choice.text}
+                                {!isMet && <span className="text-red-500/80 italic">{requirementText}</span>}
+                            </div>
+                        )
+                    })}
                 </div>
 
                 <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">

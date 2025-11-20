@@ -1,0 +1,52 @@
+[
+    {
+        "id": "ammo_9mm",
+        "name": "9mm Ammo",
+        "description": "A box of common 9mm bullets, suitable for most semi-automatic pistols.",
+        "type": "ammo",
+        "weight": 0.4,
+        "value": 15,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "ammo_rifle",
+        "name": "Rifle Ammo",
+        "description": "Higher caliber ammunition, designed for hunting or assault rifles. Powerful and accurate at long range.",
+        "type": "ammo",
+        "weight": 0.8,
+        "value": 25,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "ammo_shotgun",
+        "name": "Shotgun Shells",
+        "description": "12-gauge shells loaded with buckshot. Devastating at close range, but ineffective at distance.",
+        "type": "ammo",
+        "weight": 0.6,
+        "value": 20,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "ammo_arrow",
+        "name": "Arrows",
+        "description": "Wooden arrows with a makeshift metal tip. Silent and potentially recoverable.",
+        "type": "ammo",
+        "weight": 0.1,
+        "value": 3,
+        "stackable": true,
+        "rarity": "common"
+    },
+    {
+        "id": "special_ammo",
+        "name": "Special Ammo",
+        "description": "Advanced ammunition with unique properties, such as armor-piercing or incendiary rounds. Extremely rare and valuable.",
+        "type": "ammo",
+        "weight": 0.3,
+        "value": 40,
+        "stackable": true,
+        "rarity": "rare"
+    }
+]

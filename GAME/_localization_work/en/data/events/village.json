@@ -1,0 +1,1968 @@
+[
+    {
+        "id": "village_community_board",
+        "title": "Village Notice Board",
+        "description": "An old wooden notice board with a handwritten notice: 'NOTICE: A pocket watch of great sentimental value was stolen from me. I suspect a raider hiding in the forests north of here. I offer a generous reward to anyone who brings it back to me. - Marcus, The Crossroads.'",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Accept the task",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "startQuest",
+                                "value": "crossroads_investigation"
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "You agreed to help Marcus. You must go to the Crossroads to speak with him."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Ignore the notice",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't have time to play detective. You move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_water_mill",
+        "title": "The Silent Wheel",
+        "isUnique": true,
+        "biomes": [
+            "Village"
+        ],
+        "description": "You come across the ruins of an old water mill. The structure seems solid and you could inspect the internal mechanisms or search the adjacent barn.",
+        "choices": [
+            {
+                "text": "Inspect the internal mechanism",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 13,
+                        "successText": "Among rusty gears, you find a small mechanic's toolkit of excellent quality.",
+                        "failureText": "The mechanisms are an incomprehensible tangle of corroded metal. You find nothing useful.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "mechanic_toolkit",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the adjacent barn",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Under a tarp, you find some sacks of dry grain still edible."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "grain_sack",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_post_office",
+        "title": "Unfinished Correspondence",
+        "isUnique": true,
+        "biomes": [
+            "Village"
+        ],
+        "description": "You find an abandoned post office, with letters and packages scattered everywhere.",
+        "choices": [
+            {
+                "text": "Search through undelivered packages",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Most packages are ruined, but you find a small heavy one. Inside is a set of throwing knives."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "throwing_knives",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Read some of the letters",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "A letter catches your attention: a resident writes of a 'family stash hidden under the old well'.",
+                        "failureText": "The letters are mostly illegible, the ink smudged.",
+                        "success": [
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "lore_clue",
+                                    "clueId": "village_well_cache"
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_general_store",
+        "title": "The Silent Emporium",
+        "isUnique": true,
+        "biomes": [
+            "Village"
+        ],
+        "description": "You are in front of an old general store. The window is covered in dust and the wooden sign is almost illegible. The door is ajar.",
+        "choices": [
+            {
+                "text": "Rummage behind the counter",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "Under the counter, in a hidden drawer, you find a survival manual and a box of cigars.",
+                        "failureText": "You search everywhere, but find only faded receipts and dust.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_survival_basics",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cigars_box",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Inspect the back storage",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The storage is damp and dark. You find a crowbar leaning against a wall and some scrap metal."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "crowbar",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scrap_metal",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_doctor_clinic",
+        "title": "The Silent Oath",
+        "isUnique": true,
+        "biomes": [
+            "Village"
+        ],
+        "description": "The door to a country doctor's clinic is ajar.",
+        "choices": [
+            {
+                "text": "Search the medicine cabinet",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "medicine",
+                        "dc": 12,
+                        "successText": "You identify some painkillers and antibiotics still effective.",
+                        "failureText": "You find only empty bottles and torn boxes. Someone cleaned it out.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "MED_PAINKILLER",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "antibiotics_expired",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Read the notes on the desk",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You find the doctor's journal. The last pages describe the symptoms of a strange disease. You learn something about biological threats."
+                            },
+                            {
+                                "type": "special",
+                                "value": {
+                                    "effect": "learn_disease_symptoms"
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_old_well",
+        "title": "Abandoned Well",
+        "description": "An old stone well in the center of the village. The water is stagnant, but you might find something at the bottom.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Lower a rope and descend",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "athletics",
+                        "dc": 12,
+                        "successText": "You descend cautiously. At the bottom you find a wooden box with old coins and a ring.",
+                        "failureText": "The rope gives way and you fall into the water. You get hurt and completely wet.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 25
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "silver_ring",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Forget it",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The well looks too deep and dangerous. You move on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_church_ruins",
+        "title": "Ruined Church",
+        "description": "A small country church with a partially collapsed roof. The pews are still intact.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the sacristy",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "You find candles, liturgical wine still sealed, and an old silver crucifix.",
+                        "failureText": "The sacristy is empty. There is nothing of value.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "candles_bundle",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_wine",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "silver_cross",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Pray for a moment",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You sit on a pew and pray. You don't know if anyone is listening, but you feel more serene."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_barn",
+        "title": "Abandoned Barn",
+        "description": "A large barn with doors wide open. Inside are hay bales and old farming tools.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search through the tools",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "You find a scythe still sharp, ropes, and nails.",
+                        "failureText": "The tools are too rusty to be useful.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "scythe",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rope_coil",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "nails_box",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest in the hay",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The hay is soft and still smells of summer. You grant yourself a well-deserved rest."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_school_house",
+        "title": "Country School",
+        "description": "A small school with a single classroom. Desks are overturned and books scattered everywhere.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search through the books",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "You find a first aid manual for teachers and an old atlas.",
+                        "failureText": "Most books are water damaged. Useless.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "manual_first_aid",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_atlas",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Look at the children's drawings",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Colorful drawings of happy families cover the walls. A world lost forever."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_blacksmith_shop",
+        "title": "Blacksmith's Forge",
+        "description": "An abandoned forge with the anvil still in place. Tools are scattered everywhere.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search through blacksmith tools",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "You find hammers, tongs, and raw metal ingots. Precious materials for crafting.",
+                        "failureText": "The tools are too heavy or unusable. You take nothing.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "hammer_heavy",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "metal_ingots",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search for incomplete weapons",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 13,
+                        "successText": "You find a partially forged sword and some spear tips.",
+                        "failureText": "There is nothing complete. Only unusable pieces of metal.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "unfinished_sword",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "spear_tips",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_graveyard",
+        "title": "Village Graveyard",
+        "description": "A small fenced graveyard. Some graves have been desecrated.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the desecrated graves",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "Someone dug recently. You find scattered funeral jewelry.",
+                        "failureText": "The graves are empty. The looters have already taken everything.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "gold_ring",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "silver_medallion",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "elian",
+                                    "amount": 1
+                                }
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Read the names on the tombstones",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You clear moss from a stone slab. The engraving reads: 'Here lies {RANDOM_DONOR}, who tried to rebuild the world.'"
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            },
+                            {
+                                "type": "heal",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Respect the dead and leave",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Desecrating graves is a barbaric act. You will not stoop to this level."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_tavern",
+        "title": "Village Tavern",
+        "description": "A small tavern with overturned chairs and broken glasses on the floor.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the cellar",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "The cellar is full of still sealed bottles. Quality alcohol.",
+                        "failureText": "The cellar is flooded. Nothing is recoverable.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "whiskey_bottle",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_wine",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the back room",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "You find preserved food supplies and kitchen utensils.",
+                        "failureText": "Everything has gone bad. The smell is unbearable.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "CONS_001",
+                                    "quantity": 4
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "kitchen_knife",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_windmill",
+        "title": "Windmill",
+        "description": "An old windmill with stationary blades. The structure is still solid.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Climb to the top",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "acrobatics",
+                        "dc": 12,
+                        "successText": "The view from the top is spectacular. You also find an old spyglass.",
+                        "failureText": "The wooden stairs give way. You fall and get hurt.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "spyglass",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 20
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the ground floor",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "On the ground floor you find sacks of flour still dry."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "flour_sack",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_mayor_house",
+        "title": "Mayor's House",
+        "description": "The largest house in the village, with a plaque indicating 'Mayor'. It has been looted but there might still be something.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the study",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "You find official documents, maps, and a safe with money and jewelry.",
+                        "failureText": "The study has been completely emptied.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "official_documents",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 40
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "gold_ring",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest in the bedroom",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The bed is soft and inviting. You grant yourself an extended rest."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 25
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 90
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_pig_farm",
+        "title": "Pig Farm",
+        "description": "An abandoned farm with empty pens. The smell is still strong.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search the feed storage",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "You find sacks of feed still closed and farming equipment.",
+                        "failureText": "The feed is moldy. There is nothing usable.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "animal_feed",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "pitchfork",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave quickly",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The smell is unbearable. You leave quickly."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_chicken_coop",
+        "title": "Abandoned Chicken Coop",
+        "description": "A chicken coop with open doors. There are still feathers everywhere but no chickens.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search for eggs in the nests",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 11,
+                        "successText": "You find some eggs still fresh. Precious food.",
+                        "failureText": "The eggs are all rotten. Nothing to recover.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "fresh_eggs",
+                                    "quantity": 6
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Forget it",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "It's not worth searching in an empty chicken coop."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_tool_shed",
+        "title": "Tool Shed",
+        "description": "A small shed with gardening tools hanging on the walls.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Take useful tools",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You collect hoes, shovels, and a still sharp axe."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "shovel",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "hand_axe",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_orchard",
+        "title": "Abandoned Orchard",
+        "description": "A small orchard with fruit trees still laden. Apples, pears, and plums are ripe.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather the fruit",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 10,
+                        "successText": "You gather fresh and healthy fruit. Nutritious food.",
+                        "failureText": "Most of the fruit is wormy or rotten.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "fresh_fruit",
+                                    "quantity": 8
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "fresh_fruit",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest under the trees",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The shade is cool and the air smells of fruit. A moment of peace."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 15
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_old_bridge",
+        "title": "Stone Bridge",
+        "description": "An old stone bridge crossing a stream. The structure seems solid.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Fish in the stream",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 12,
+                        "successText": "You catch some river fish. Fresh food.",
+                        "failureText": "The stream is almost dry. No fish.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "fresh_fish",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "advanceTime",
+                                "value": 30
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Cross and move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The bridge is solid. You cross it without problems."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_abandoned_cart",
+        "title": "Abandoned Cart",
+        "description": "An old wooden cart overturned on the side of the road. The cargo is scattered everywhere.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Rummage through the cargo",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "You find fabrics, ropes, and some tools still usable.",
+                        "failureText": "The cargo is ruined and unusable.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cloth_roll",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rope_coil",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "There seems to be nothing useful. You go on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_flower_field",
+        "title": "Wildflower Field",
+        "description": "A field covered in colorful flowers. An oasis of beauty in a dead world.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather medicinal herbs",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "nature",
+                        "dc": 12,
+                        "successText": "You recognize some plants with healing properties. You gather them.",
+                        "failureText": "You can't distinguish useful plants from common weeds.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "medicinal_herbs",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest among the flowers",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The scent of flowers is relaxing. For a moment you forget the devastation."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 45
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_hunters_cabin",
+        "title": "Hunter's Cabin",
+        "description": "A small cabin isolated in the woods. Animal skins hang outside.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Search the interior",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 11,
+                        "successText": "You find traps, ammunition, and dried meat.",
+                        "failureText": "The cabin is empty. The hunter took everything away.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "bear_trap",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "ammo_arrow",
+                                    "quantity": 15
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "dried_meat",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Rest in the cabin",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The cabin is cozy. You rest in the warmth."
+                            },
+                            {
+                                "type": "heal",
+                                "value": 20
+                            },
+                            {
+                                "type": "advanceTime",
+                                "value": 60
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_scarecrow_field",
+        "title": "Scarecrow Field",
+        "description": "A farm field with creepy scarecrows swaying in the wind.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Check the scarecrows",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "perception",
+                        "dc": 12,
+                        "successText": "One of the scarecrows hides a human body. You find items in the pockets.",
+                        "failureText": "They are just scarecrows. Nothing strange.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 15
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rusty_key",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Avoid the field",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Something about that field makes you uneasy. Better to avoid."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_vegetable_garden",
+        "title": "Community Garden",
+        "description": "A garden with vegetables still growing. Tomatoes, carrots, and lettuce grow lush.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Gather the vegetables",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You gather fresh vegetables. Healthy and nutritious food."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "fresh_vegetables",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 25
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_bee_hives",
+        "title": "Abandoned Beehives",
+        "description": "Some wooden beehives are still active. Bees buzz menacingly.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Use smoke to calm the bees",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 13,
+                        "successText": "The smoke calms the bees. You gather precious honey and wax.",
+                        "failureText": "The bees get angry and attack you en masse!",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "food_honey",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "beeswax",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 35
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "takeDamage",
+                                "value": 25
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave the hives alone",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "Bees are dangerous. Better not risk it."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_hanging_laundry",
+        "title": "Hanging Laundry",
+        "description": "Clothes hanging on a line sway in the wind. They have been there for months.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Take clothes still good",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "survival",
+                        "dc": 10,
+                        "successText": "Some clothes are still in good condition. You take them.",
+                        "failureText": "The clothes are completely ruined by the weather.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_clothes",
+                                    "quantity": 5
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "cloth_scraps",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Move on",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You don't need clothes right now. You go on."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "village_childrens_playground",
+        "title": "Playground",
+        "description": "A small playground with rusty swings and a broken slide. Children's toys are scattered everywhere.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": false,
+        "choices": [
+            {
+                "text": "Search through the toys",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 10,
+                        "successText": "You find a ball, some metal toys, and lost coins.",
+                        "failureText": "Everything is broken or useless.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "old_coins",
+                                    "quantity": 10
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "metal_toys",
+                                    "quantity": 3
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 20
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Sit on the swing for a moment",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You sit on the swing and remember when you were a child. A lost world."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "unique_elder_radio_car",
+        "title": "The Light Blue Compact Car",
+        "description": "At the end of a dead-end alley, half-hidden under a tattered tarp, you notice the silhouette of a small car. It is an old model compact car, whose paint, once a bright blue, is now peeling and dull. The driver's door is ajar.\n\nApproaching, you see that the interior has been transformed into a sort of makeshift studio. Cables run everywhere, connecting an old microphone to a modified radio transmitter, all powered by a series of car batteries connected in series. On the dashboard, a piece of yellowed tape bears a marker inscription: 'The Katzus'.\n\nIt seems that someone, in this small corner of the world, tried to keep a voice alive in the silence.",
+        "biomes": [
+            "Village"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Examine the radio equipment",
+                "outcomes": [
+                    {
+                        "type": "skillCheck",
+                        "skill": "investigate",
+                        "dc": 12,
+                        "successText": "The equipment is a masterpiece of ingenuity and improvisation. The transmitter has been modified to work at low power, but with a wide range. You find a tape recorder connected to the mixer. You press 'play'. A warm and slightly tired voice fills the cabin: '...and this was the last message from Captain Keith Arrow for The Elder Radio. If anyone is listening... don't give up. There is always a song worth listening to. Over and out.' The recording ends. You recover the cassette and some useful electronic components.",
+                        "failureText": "The equipment is too complex and damaged. Touching a wrong cable, you cause a short circuit. The last light on the transmitter goes out with a hiss. Whatever secret it held, it is lost.",
+                        "success": [
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "captains_last_broadcast",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "tech_components",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "journalEntry",
+                                "text": "You recovered Captain Keith Arrow's last broadcast. An echo of hope in a silent world."
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 150
+                            }
+                        ],
+                        "failure": [
+                            {
+                                "type": "addXp",
+                                "value": 30
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Search the glove compartment and under the seats",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "In the glove compartment, you find a collection of cassettes with handwritten labels: 'Classic Rock', '80s', 'For Lonely Nights'. Under the passenger seat, a map of the region with dozens of circles and notes. It seems the 'Captain' was trying to map other settlements, perhaps to create a network of listeners. It is the map of a dreamer."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "rare_music_cassettes",
+                                    "quantity": 2
+                                }
+                            },
+                            {
+                                "type": "revealMapPOI",
+                                "value": {
+                                    "x": 55,
+                                    "y": 120,
+                                    "name": "Signaled Shelter"
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 120
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Leave this sanctuary intact",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You decide not to touch anything. This is not a depot to be looted; it is the monument to someone who fought the Silence with the only weapon he had: his voice. You close the door of the light blue compact car softly, leaving 'The Katzus' to its rest. The idea that someone, somewhere, tried to keep a human connection alive gives you a strange strength."
+                            },
+                            {
+                                "type": "alignmentChange",
+                                "value": {
+                                    "type": "lena",
+                                    "amount": 2
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 100
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

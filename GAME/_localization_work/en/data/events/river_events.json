@@ -1,0 +1,63 @@
+[
+    {
+        "id": "river_message_in_a_bottle",
+        "title": "Message in a Bottle",
+        "description": "A well-sealed glass bottle floats near the shore, caught among the roots. Inside, you see a rolled-up piece of paper.",
+        "biomes": [
+            "Water"
+        ],
+        "isUnique": true,
+        "choices": [
+            {
+                "text": "Pick up the bottle and read the message",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "The message is written in shaky handwriting: 'If you read this, my lucky talisman fell near the old windmill south of here. It's too late for me, but maybe it will bring you luck. - Jonas'"
+                            },
+                            {
+                                "type": "startQuest",
+                                "value": "find_jonas_talisman"
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "bottle_empty",
+                                    "quantity": 1
+                                }
+                            },
+                            {
+                                "type": "addXp",
+                                "value": 40
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "Take only the bottle",
+                "outcomes": [
+                    {
+                        "type": "direct",
+                        "results": [
+                            {
+                                "type": "journalEntry",
+                                "text": "You ignore the message. An empty bottle is too precious a resource to leave behind."
+                            },
+                            {
+                                "type": "addItem",
+                                "value": {
+                                    "itemId": "bottle_empty",
+                                    "quantity": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

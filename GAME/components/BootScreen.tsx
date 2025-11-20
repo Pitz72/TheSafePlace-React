@@ -109,33 +109,34 @@ const BootScreen: React.FC = () => {
           <p className="text-center mb-6 text-[var(--text-accent)] presents-title text-4xl">THE SAFE PLACE CHRONICLES</p>
           <p className="text-center mb-8 text-3xl">The Echo of the Journey</p>
           
-          <p className="text-center mb-6 text-3xl">Progettato e realizzato da<br/><span className="text-[var(--text-accent)]">Simone Pizzi</span></p>
+          <p className="text-center mb-6 text-3xl">Progettato e realizzato da:<br/><span className="text-[var(--text-accent)]">Simone Pizzi</span></p>
           
-          <p className="text-center mb-6 text-2xl">Supporto tecnico, consulenza e sviluppo esecutivo:<br/>Gemini 2.5 Pro, Kilo Code, Claude Sonnet 4.5</p>
+          <p className="text-center mb-6 text-2xl">Supporto tecnico, consulenza e sviluppo esecutivo:<br/>Gemini 2.5 Pro, Kilo Code, Claude Sonnet 4.5 e Gemini 3.0</p>
           
-          <p className="text-center mb-6 text-2xl">Supporto tecnico nella gestione git:<br/>Giuseppe Pugliese</p>
+          <p className="text-center mb-6 text-2xl">Supporto tecnico nella gestione git e consulenza informatica:<br/>Giuseppe Pugliese</p>
           
           <p className="text-center mb-6 text-2xl">Design dello sprite del player:<br/>Carlo Santagostino</p>
           
-          <p className="text-center mb-8 text-2xl">Ringraziamento speciale:<br/>Michela De Paola</p>
+          <p className="text-center mb-8 text-2xl">Produzione esecutiva:<br/>Michela De Paola</p>
           
-          <p className="text-center mb-4 text-3xl text-[var(--text-accent)]">Questo progetto è stato realizzato ed espanso grazie al contributo di:</p>
-          
-          <p className="text-center mb-6 text-2xl leading-relaxed">
-            Adriana Coppe, Alessandro Raccuglia Giaminardi, Alirio Bruni, Angelo Mastrogiacomo,<br/>
-            Claudio Marro Filosa, Cristian Spaccapaniccia, Cristiano Caliendo,<br/>
-            Ennio Vitelli, Gabriel Mele, Jimmy Romero, Leonardo Tomassetti,<br/>
-            Luca Francesca, Massimiliano Libralesso, Matteo Garza, Mattia Seppolini,<br/>
-            Michele Bancheri, Monica Piu, Olivia Quattrocchi, Paolo Sammartino,<br/>
-            Roberto Tomaiuolo, Ruggero Celva, Samuele Palazzolo, Simone Di Resta,<br/>
-            Stefano Paganini, Tommaso Sciara, Valerio Galano, Vincenzo Falce
-          </p>
-          
-          <p className="text-center mb-6 text-2xl">Si ringraziano i canali YouTube di<br/>PixelDebh e di Mille e Una Avventura</p>
+          <p className="text-center mb-6 text-2xl">Si ringraziano i canali YouTube di:<br/>PixelDebh, Lara Padawan e Mille e Una Avventura</p>
           
           <p className="text-center mb-6 text-2xl">Produzione, collaborazione e supporto diretto:<br/>Runtime Radio, Archeologia Informatica,<br/>Glitch Podcast, Good Vibrations Podcast</p>
           
           <p className="text-center mt-8 presents-signature text-2xl">© Runtime Radio 2025</p>
+
+          <p className="text-center mb-4 text-3xl text-[var(--text-accent)] mt-8">Questo progetto è stato realizzato ed espanso grazie al contributo di:</p>
+          
+          <p className="text-center mb-6 text-2xl leading-relaxed">
+            Adriana Coppe, Alessandro Raccuglia Giaminardi, Alirio Bruni, <br/>
+            Angelo Mastrogiacomo, Claudio Marro Filosa, Cristian Spaccapaniccia, <br/>
+            Cristiano Caliendo, Ennio Vitelli, Gabriel Mele, Jimmy Romero, <br/>
+            Leonardo Tomassetti, Luca Francesca, Massimiliano Libralesso, <br/>
+            Matteo Garza, Mattia Seppolini, Michele Bancheri, Monica Piu, <br/>
+            Olivia Quattrocchi, Paolo Nicoletti, Paolo Sammartino, Pietro Bernasconi,<br/>
+            Roberto Tomaiuolo, Ruggero Celva, Samuele Palazzolo, Simone Di Resta, <br/>
+            Stefano Paganini, Tommaso Sciara, Valerio Galano, Vincenzo Falce.
+          </p>
         </div>
         <p className="whitespace-pre mt-8 text-center text-3xl">
           <span className="animate-pulse">PREMI FRECCE PER SCORRERE - INVIO PER ANDARE AVANTI</span>
