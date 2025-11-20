@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.7)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.8)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,7 +92,7 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9.7** - Localization Kickoff
+**Versione Corrente: v1.9.9.8** - Crafting Refactor
 
 **MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
 
@@ -102,6 +102,22 @@ Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzio
 - Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO (v1.9.9.7)**
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Testing finale end-to-end
+
+#### Novità v1.9.9.8 (20 Novembre 2025) - **CRAFTING REFACTOR**
+
+Patch di bilanciamento che semplifica drasticamente il crafting per sbloccare la progressione.
+
+**MODIFICHE CRAFTING:**
+- **Ingredienti Semplificati**: Rimossi item rari (nastro, colla) dalle ricette base.
+- **Materiali Comuni**: Ora si usano `scrap_metal`, `firewood`, `clean_cloth` per quasi tutto.
+- **Nuova Ricetta**: Aggiunta `Torcia` (Legna + Stracci).
+- **Zuppa Accessibile**: Ora richiede `dirty_water` + `Razione` invece di verdure rare.
+
+**IMPATTO:**
+- Crafting accessibile fin da subito.
+- Niente più blocchi dovuti all'RNG.
+
+---
 
 #### Novità v1.9.9.7 (20 Novembre 2025) - **LOCALIZATION KICKOFF**
 
