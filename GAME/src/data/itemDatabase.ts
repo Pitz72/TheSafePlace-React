@@ -11,11 +11,12 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
         './data/items/consumables.json',
         './data/items/materials.json',
         './data/items/quest.json',
-        './data/items/ammo.json'
+        './data/items/ammo.json',
+        './data/items/restored_items.json'
     ];
     try {
         const responses = await Promise.all(files.map(file => fetch(file)));
-        for(const res of responses) {
+        for (const res of responses) {
             if (!res.ok) {
                 throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
             }
@@ -23,18 +24,18 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
         const jsonDataArrays = await Promise.all(responses.map(res => res.json()));
 
         const allRawItems: RawItem[] = jsonDataArrays.flat();
-        
+
         const finalDatabase: Record<string, IItem> = {};
 
         allRawItems.forEach(item => {
             let color = '#ffffff'; // Default color: white
 
             switch (item.type) {
-                case 'weapon':    color = '#ef4444'; break; // red-500
-                case 'ammo':      color = '#f97316'; break; // orange-500
-                case 'armor':     color = '#d1d5db'; break; // gray-300
-                case 'material':  color = '#a16207'; break; // yellow-700
-                case 'quest':     color = '#facc15'; break; // yellow-400
+                case 'weapon': color = '#ef4444'; break; // red-500
+                case 'ammo': color = '#f97316'; break; // orange-500
+                case 'armor': color = '#d1d5db'; break; // gray-300
+                case 'material': color = '#a16207'; break; // yellow-700
+                case 'quest': color = '#facc15'; break; // yellow-400
                 case 'consumable':
                     if (item.id.includes('med') || item.effects?.some(e => e.type === 'heal')) {
                         color = '#4ade80'; // green-400 for medical
@@ -47,7 +48,7 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
                     }
                     break;
                 default:
-                     color = '#ffffff';
+                    color = '#ffffff';
             }
             finalDatabase[item.id] = { ...item, color };
         });

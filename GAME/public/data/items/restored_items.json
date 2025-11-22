@@ -1,0 +1,413 @@
+[
+    {
+        "id": "gold_ring",
+        "name": "Anello d'Oro",
+        "description": "Un semplice anello d'oro. Ha un certo valore per i commercianti.",
+        "type": "material",
+        "weight": 0.05,
+        "value": 50,
+        "stackable": true,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "official_documents",
+        "name": "Documenti Ufficiali",
+        "description": "Vecchi documenti con timbri governativi. Potrebbero contenere informazioni interessanti o essere venduti.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 20,
+        "stackable": true,
+        "rarity": "rare"
+    },
+    {
+        "id": "toys",
+        "name": "Giocattoli",
+        "description": "Un piccolo sacchetto di giocattoli di plastica. Inutili per la sopravvivenza, ma preziosi per il morale di un bambino.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 5,
+        "stackable": false,
+        "rarity": "common"
+    },
+    {
+        "id": "weapon_handgun",
+        "name": "Pistola 9mm",
+        "description": "Una pistola semi-automatica standard. Affidabile e facile da usare.",
+        "type": "weapon",
+        "weaponType": "ranged",
+        "damage": 15,
+        "durability": 70,
+        "weight": 1.0,
+        "value": 150,
+        "stackable": false,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "titanic_cassette",
+        "name": "Cassetta 'Titanic'",
+        "description": "Una vecchia audiocassetta con la colonna sonora del film Titanic. Un cimelio del vecchio mondo.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 100,
+        "stackable": false,
+        "rarity": "epic"
+    },
+    {
+        "id": "portable_gps",
+        "name": "GPS Portatile",
+        "description": "Un dispositivo GPS ancora funzionante. Raro e prezioso per orientarsi.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 120,
+        "stackable": false,
+        "rarity": "rare"
+    },
+    {
+        "id": "drone_memory_chip",
+        "name": "Chip di Memoria Drone",
+        "description": "Un chip di memoria recuperato da un drone di sorveglianza. Contiene dati criptati.",
+        "type": "material",
+        "weight": 0.05,
+        "value": 200,
+        "stackable": false,
+        "rarity": "epic"
+    },
+    {
+        "id": "weapon_sniper_rifle",
+        "name": "Fucile di Precisione",
+        "description": "Un fucile di precisione ad alta potenza.",
+        "type": "weapon",
+        "weaponType": "ranged",
+        "damage": 40,
+        "weight": 4.5,
+        "value": 350,
+        "rarity": "rare"
+    },
+    {
+        "id": "manual_wilderness_survival",
+        "name": "Manuale di Sopravvivenza",
+        "description": "Guida pratica per sopravvivere nelle terre selvagge.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 50,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "antibiotics",
+        "name": "Antibiotici",
+        "description": "Farmaci essenziali per curare infezioni.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 80,
+        "rarity": "rare"
+    },
+    {
+        "id": "electronics_advanced",
+        "name": "Elettronica Avanzata",
+        "description": "Componenti elettronici complessi.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 100,
+        "rarity": "rare"
+    },
+    {
+        "id": "tool_kit",
+        "name": "Cassetta degli Attrezzi",
+        "description": "Un set completo di attrezzi.",
+        "type": "material",
+        "weight": 2.0,
+        "value": 60,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "fuel_canister",
+        "name": "Tanica di Carburante",
+        "description": "Una tanica piena di benzina.",
+        "type": "material",
+        "weight": 3.0,
+        "value": 40,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "silver_ring",
+        "name": "Anello d'Argento",
+        "description": "Un anello d'argento lavorato.",
+        "type": "material",
+        "weight": 0.05,
+        "value": 30,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "candles_bundle",
+        "name": "Mazzo di Candele",
+        "description": "Un mazzo di candele di cera.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 10,
+        "rarity": "common"
+    },
+    {
+        "id": "old_wine",
+        "name": "Vino Invecchiato",
+        "description": "Una bottiglia di vino sopravvissuta al tempo.",
+        "type": "consumable",
+        "weight": 1.0,
+        "value": 50,
+        "rarity": "rare"
+    },
+    {
+        "id": "silver_cross",
+        "name": "Croce d'Argento",
+        "description": "Un simbolo religioso in argento.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 40,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "scythe",
+        "name": "Falce",
+        "description": "Un attrezzo agricolo, usabile come arma.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 12,
+        "weight": 2.5,
+        "value": 30,
+        "rarity": "common"
+    },
+    {
+        "id": "rope_coil",
+        "name": "Corda",
+        "description": "Una robusta corda di canapa.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 15,
+        "rarity": "common"
+    },
+    {
+        "id": "manual_first_aid",
+        "name": "Manuale di Primo Soccorso",
+        "description": "Istruzioni base per trattare ferite.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 40,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "old_atlas",
+        "name": "Vecchio Atlante",
+        "description": "Un libro di mappe del vecchio mondo.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 25,
+        "rarity": "common"
+    },
+    {
+        "id": "hammer_heavy",
+        "name": "Martello Pesante",
+        "description": "Un grosso martello da fabbro.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 18,
+        "weight": 3.0,
+        "value": 45,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "metal_ingots",
+        "name": "Lingotti di Metallo",
+        "description": "Metallo fuso e purificato.",
+        "type": "material",
+        "weight": 2.0,
+        "value": 30,
+        "rarity": "uncommon"
+    },
+    {
+        "id": "unfinished_sword",
+        "name": "Spada Non Finita",
+        "description": "Una lama di spada ancora da affilare.",
+        "type": "material",
+        "weight": 1.5,
+        "value": 20,
+        "rarity": "common"
+    },
+    {
+        "id": "spear_tips",
+        "name": "Punte di Lancia",
+        "description": "Punte metalliche per lance.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 15,
+        "rarity": "common"
+    },
+    {
+        "id": "whiskey_bottle",
+        "name": "Bottiglia di Whiskey",
+        "description": "Alcolico forte, buono per disinfettare o bere.",
+        "type": "consumable",
+        "weight": 1.0,
+        "value": 60,
+        "rarity": "rare"
+    },
+    {
+        "id": "kitchen_knife",
+        "name": "Coltello da Cucina",
+        "description": "Utensile da cucina affilato.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 8,
+        "weight": 0.3,
+        "value": 10,
+        "rarity": "common"
+    },
+    {
+        "id": "spyglass",
+        "name": "Cannocchiale",
+        "description": "Strumento ottico per vedere lontano.",
+        "type": "material",
+        "weight": 0.5,
+        "value": 80,
+        "rarity": "rare"
+    },
+    {
+        "id": "flour_sack",
+        "name": "Sacco di Farina",
+        "description": "Farina macinata grossolanamente.",
+        "type": "material",
+        "weight": 2.0,
+        "value": 10,
+        "rarity": "common"
+    },
+    {
+        "id": "animal_feed",
+        "name": "Mangime",
+        "description": "Cibo per animali.",
+        "type": "material",
+        "weight": 2.0,
+        "value": 5,
+        "rarity": "common"
+    },
+    {
+        "id": "pitchfork",
+        "name": "Forcone",
+        "description": "Attrezzo agricolo a punte.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 14,
+        "weight": 2.0,
+        "value": 25,
+        "rarity": "common"
+    },
+    {
+        "id": "fresh_eggs",
+        "name": "Uova Fresche",
+        "description": "Uova appena deposte.",
+        "type": "consumable",
+        "weight": 0.1,
+        "value": 5,
+        "rarity": "common"
+    },
+    {
+        "id": "shovel",
+        "name": "Pala",
+        "description": "Attrezzo per scavare.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 10,
+        "weight": 2.5,
+        "value": 20,
+        "rarity": "common"
+    },
+    {
+        "id": "hand_axe",
+        "name": "Accetta",
+        "description": "Piccola ascia per legna.",
+        "type": "weapon",
+        "weaponType": "melee",
+        "damage": 12,
+        "weight": 1.5,
+        "value": 35,
+        "rarity": "common"
+    },
+    {
+        "id": "fresh_fruit",
+        "name": "Frutta Fresca",
+        "description": "Frutta di stagione.",
+        "type": "consumable",
+        "weight": 0.2,
+        "value": 8,
+        "rarity": "common"
+    },
+    {
+        "id": "cloth_roll",
+        "name": "Rotolo di Stoffa",
+        "description": "Tessuto grezzo in rotolo.",
+        "type": "material",
+        "weight": 1.0,
+        "value": 15,
+        "rarity": "common"
+    },
+    {
+        "id": "medicinal_herbs",
+        "name": "Erbe Medicinali",
+        "description": "Erbe con proprietà curative.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 12,
+        "rarity": "common"
+    },
+    {
+        "id": "dried_meat",
+        "name": "Carne Essiccata",
+        "description": "Carne conservata sotto sale.",
+        "type": "consumable",
+        "weight": 0.3,
+        "value": 15,
+        "rarity": "common"
+    },
+    {
+        "id": "fresh_vegetables",
+        "name": "Verdure Fresche",
+        "description": "Ortaggi appena colti.",
+        "type": "consumable",
+        "weight": 0.5,
+        "value": 8,
+        "rarity": "common"
+    },
+    {
+        "id": "beeswax",
+        "name": "Cera d'Api",
+        "description": "Cera naturale.",
+        "type": "material",
+        "weight": 0.2,
+        "value": 10,
+        "rarity": "common"
+    },
+    {
+        "id": "old_clothes",
+        "name": "Vecchi Vestiti",
+        "description": "Abiti logori ma utilizzabili.",
+        "type": "material",
+        "weight": 0.8,
+        "value": 5,
+        "rarity": "common"
+    },
+    {
+        "id": "cloth_scraps",
+        "name": "Scampoli di Stoffa",
+        "description": "Pezzi di tessuto avanzati.",
+        "type": "material",
+        "weight": 0.1,
+        "value": 1,
+        "rarity": "common"
+    },
+    {
+        "id": "metal_toys",
+        "name": "Giocattoli di Metallo",
+        "description": "Vecchi giocattoli in latta.",
+        "type": "material",
+        "weight": 0.3,
+        "value": 15,
+        "rarity": "uncommon"
+    }
+]

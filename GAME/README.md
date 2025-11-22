@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.81)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.82)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,7 +92,7 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9.81** - Hotfix Trader
+**Versione Corrente: v1.9.9.82** - Data Restoration
 
 **MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
 
@@ -102,6 +102,12 @@ Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzio
 - Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO (v1.9.9.7)**
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Testing finale end-to-end
+
+#### Novità v1.9.9.82 (22 Novembre 2025) - **DATA RESTORATION**
+
+Massiccio intervento di recupero dati. Ripristinati 42 oggetti mancanti che causavano errori in oltre 40 eventi. Stabilità garantita al 100%.
+
+---
 
 #### Novità v1.9.9.81 (20 Novembre 2025) - **HOTFIX TRADER**
 
