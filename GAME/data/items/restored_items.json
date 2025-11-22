@@ -26,7 +26,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 5,
-        "stackable": false,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -81,6 +81,7 @@
         "damage": 40,
         "weight": 4.5,
         "value": 350,
+        "stackable": false,
         "rarity": "rare"
     },
     {
@@ -90,6 +91,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 50,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -99,6 +101,7 @@
         "type": "consumable",
         "weight": 0.1,
         "value": 80,
+        "stackable": true,
         "rarity": "rare"
     },
     {
@@ -108,6 +111,7 @@
         "type": "material",
         "weight": 0.3,
         "value": 100,
+        "stackable": true,
         "rarity": "rare"
     },
     {
@@ -117,6 +121,7 @@
         "type": "material",
         "weight": 2.0,
         "value": 60,
+        "stackable": false,
         "rarity": "uncommon"
     },
     {
@@ -126,6 +131,7 @@
         "type": "material",
         "weight": 3.0,
         "value": 40,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -135,6 +141,7 @@
         "type": "material",
         "weight": 0.05,
         "value": 30,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -144,6 +151,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 10,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -153,6 +161,7 @@
         "type": "consumable",
         "weight": 1.0,
         "value": 50,
+        "stackable": true,
         "rarity": "rare"
     },
     {
@@ -162,6 +171,7 @@
         "type": "material",
         "weight": 0.1,
         "value": 40,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -173,6 +183,7 @@
         "damage": 12,
         "weight": 2.5,
         "value": 30,
+        "stackable": false,
         "rarity": "common"
     },
     {
@@ -182,6 +193,7 @@
         "type": "material",
         "weight": 1.0,
         "value": 15,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -191,6 +203,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 40,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -200,6 +213,7 @@
         "type": "material",
         "weight": 1.0,
         "value": 25,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -211,6 +225,7 @@
         "damage": 18,
         "weight": 3.0,
         "value": 45,
+        "stackable": false,
         "rarity": "uncommon"
     },
     {
@@ -220,6 +235,7 @@
         "type": "material",
         "weight": 2.0,
         "value": 30,
+        "stackable": true,
         "rarity": "uncommon"
     },
     {
@@ -229,6 +245,7 @@
         "type": "material",
         "weight": 1.5,
         "value": 20,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -238,6 +255,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 15,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -247,6 +265,7 @@
         "type": "consumable",
         "weight": 1.0,
         "value": 60,
+        "stackable": true,
         "rarity": "rare"
     },
     {
@@ -258,6 +277,7 @@
         "damage": 8,
         "weight": 0.3,
         "value": 10,
+        "stackable": false,
         "rarity": "common"
     },
     {
@@ -267,6 +287,7 @@
         "type": "material",
         "weight": 0.5,
         "value": 80,
+        "stackable": false,
         "rarity": "rare"
     },
     {
@@ -276,6 +297,7 @@
         "type": "material",
         "weight": 2.0,
         "value": 10,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -285,6 +307,7 @@
         "type": "material",
         "weight": 2.0,
         "value": 5,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -296,6 +319,7 @@
         "damage": 14,
         "weight": 2.0,
         "value": 25,
+        "stackable": false,
         "rarity": "common"
     },
     {
@@ -305,6 +329,7 @@
         "type": "consumable",
         "weight": 0.1,
         "value": 5,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -316,6 +341,7 @@
         "damage": 10,
         "weight": 2.5,
         "value": 20,
+        "stackable": false,
         "rarity": "common"
     },
     {
@@ -327,6 +353,7 @@
         "damage": 12,
         "weight": 1.5,
         "value": 35,
+        "stackable": false,
         "rarity": "common"
     },
     {
@@ -336,6 +363,7 @@
         "type": "consumable",
         "weight": 0.2,
         "value": 8,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -345,6 +373,7 @@
         "type": "material",
         "weight": 1.0,
         "value": 15,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -354,6 +383,7 @@
         "type": "material",
         "weight": 0.1,
         "value": 12,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -363,6 +393,7 @@
         "type": "consumable",
         "weight": 0.3,
         "value": 15,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -372,6 +403,7 @@
         "type": "consumable",
         "weight": 0.5,
         "value": 8,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -381,6 +413,7 @@
         "type": "material",
         "weight": 0.2,
         "value": 10,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -390,6 +423,7 @@
         "type": "material",
         "weight": 0.8,
         "value": 5,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -399,6 +433,7 @@
         "type": "material",
         "weight": 0.1,
         "value": 1,
+        "stackable": true,
         "rarity": "common"
     },
     {
@@ -408,6 +443,7 @@
         "type": "material",
         "weight": 0.3,
         "value": 15,
+        "stackable": true,
         "rarity": "uncommon"
     }
 ]
