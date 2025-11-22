@@ -1,7 +1,7 @@
 
-# The Safe Place - Progetto React
+# The Safe Place Chronicles - Progetto React
 
-Questo repository contiene il codice sorgente di **The Safe Place**, un progetto suddiviso in due parti principali: il gioco e il sito web dedicato. Entrambi sono sviluppati in React e TypeScript, ma gestiti come progetti separati all'interno di questa monorepo.
+Questo repository contiene il codice sorgente di **The Safe Place Chronicles: The Echo of the Journey**, un progetto suddiviso in due parti principali: il gioco e il sito web dedicato. Entrambi sono sviluppati in React e TypeScript, ma gestiti come progetti separati all'interno di questa monorepo.
 
 ## Struttura del Repository
 
@@ -21,7 +21,7 @@ Entrambi i progetti sono già configurati per supportare questa struttura. Il si
 
 ---
 
-## 🎮 The Safe Place - Il Gioco
+## 🎮 The Safe Place Chronicles: The Echo of the Journey (v1.9.9.83)
 
 Il cuore del progetto, un'avventura testuale con elementi GDR sviluppata per il web.
 
