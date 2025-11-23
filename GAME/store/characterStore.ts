@@ -1,19 +1,19 @@
 import { create } from 'zustand';
 import {
-  CharacterState,
-  Attributes,
-  AttributeName,
-  SkillName,
-  SkillCheckResult,
-  WeatherType,
-  InventoryItem,
-  Stat,
-  Skill,
-  Alignment,
-  JournalEntryType,
-  PlayerStatusCondition,
-  DeathCause,
-  GameState,
+    CharacterState,
+    Attributes,
+    AttributeName,
+    SkillName,
+    SkillCheckResult,
+    WeatherType,
+    InventoryItem,
+    Stat,
+    Skill,
+    Alignment,
+    JournalEntryType,
+    PlayerStatusCondition,
+    DeathCause,
+    GameState,
 } from '../types';
 import { SKILLS, XP_PER_LEVEL } from '../constants';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -35,12 +35,12 @@ const BASE_STAT_VALUE = 100;
  * @constant {Attributes}
  */
 const initialAttributes: Attributes = {
-  for: 10,
-  des: 10,
-  cos: 10,
-  int: 10,
-  sag: 10,
-  car: 10,
+    for: 10,
+    des: 10,
+    cos: 10,
+    int: 10,
+    sag: 10,
+    car: 10,
 };
 
 /**
@@ -49,8 +49,8 @@ const initialAttributes: Attributes = {
  * @constant {Record<SkillName, Skill>}
  */
 const initialSkills: Record<SkillName, Skill> = Object.keys(SKILLS).reduce((acc, skill) => {
-  acc[skill as SkillName] = { proficient: false };
-  return acc;
+    acc[skill as SkillName] = { proficient: false };
+    return acc;
 }, {} as Record<SkillName, Skill>);
 
 /**
@@ -333,11 +333,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     getSkillBonus: (skill) => {
         const skillDef = SKILLS[skill];
         if (!skillDef) return 0;
-        
+
         const { alignment, level, skills, status, fatigue } = get();
         const attributeModifier = get().getAttributeModifier(skillDef.attribute);
         const proficiencyBonus = skills[skill].proficient ? Math.floor((level - 1) / 4) + 2 : 0;
-        
+
         // --- Fatigue Penalty ---
         let fatiguePenalty = 0;
         if (fatigue.current > 75) {
@@ -360,27 +360,27 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 alignmentBonus = 2;
             }
         }
-        
+
         // --- Encumbrance Penalty (NEW) ---
         // When overencumbered, physical skills suffer
         let encumbrancePenalty = 0;
         const totalWeight = get().getTotalWeight();
         const maxCarryWeight = get().getMaxCarryWeight();
         const isOverEncumbered = totalWeight > maxCarryWeight;
-        
+
         if (isOverEncumbered) {
             const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita'];
             if (physicalSkills.includes(skill)) {
                 encumbrancePenalty = -2; // Heavy load makes climbing/dodging/sneaking harder
             }
         }
-        
+
         // --- Status Penalty ---
         let statusPenalty = 0;
         const physicalSkills: SkillName[] = ['atletica', 'acrobazia', 'furtivita', 'rapiditaDiMano'];
         const perceptionSkills: SkillName[] = ['percezione', 'intuizione', 'medicina', 'sopravvivenza', 'addestrareAnimali'];
         const intelligenceSkills: SkillName[] = ['arcanismo', 'storia', 'investigare', 'natura', 'religione'];
-        
+
         if (status.has('FERITO') && physicalSkills.includes(skill)) {
             statusPenalty -= 2;
         }
@@ -490,8 +490,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      */
     addXp: (amount) => {
         if (get().levelUpPending) {
-             set(state => ({ xp: { ...state.xp, current: state.xp.current + amount } }));
-             return;
+            set(state => ({ xp: { ...state.xp, current: state.xp.current + amount } }));
+            return;
         }
         set(state => {
             const newXp = state.xp.current + amount;
@@ -542,16 +542,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             const newLevel = state.level + 1;
             const xpForNextLevel = XP_PER_LEVEL[newLevel + 1] || state.xp.next;
             const remainingXp = state.xp.current - state.xp.next;
-            
+
             const constitutionModifier = get().getAttributeModifier('cos');
             const hpIncrease = 5 + constitutionModifier;
             const newMaxHp = state.hp.max + hpIncrease;
 
             const newAttributes = { ...state.attributes };
             newAttributes[choices.attribute] += 1;
-            
+
             const newUnlockedTalents = [...state.unlockedTalents, choices.talentId];
-            
+
             audioManager.playSound('level_up');
             useGameStore.getState().addJournalEntry({
                 text: `Sei salito al livello ${newLevel}! Le tue abilità migliorano.`,
@@ -572,11 +572,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 const gameStore = useGameStore.getState();
                 gameStore.checkMainStoryTriggers();
                 gameStore.checkCutsceneTriggers();
-                
+
                 // CS_STRANGERS_REFLECTION trigger: Reaching level 5 (mid-game)
                 if (newLevel === 5 && !gameStore.gameFlags.has('STRANGERS_REFLECTION_PLAYED')) {
-                    useGameStore.setState(state => ({ 
-                        gameFlags: new Set(state.gameFlags).add('STRANGERS_REFLECTION_PLAYED') 
+                    useGameStore.setState(state => ({
+                        gameFlags: new Set(state.gameFlags).add('STRANGERS_REFLECTION_PLAYED')
                     }));
                     setTimeout(() => {
                         if (useGameStore.getState().gameState === GameState.IN_GAME) {
@@ -622,9 +622,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
             const itemDetails = itemDatabase[itemId];
             if (!itemDetails) return {};
-    
+
             const newInventory = [...state.inventory];
-            
+
             if (itemDetails.stackable) {
                 const existingItemIndex = newInventory.findIndex(i => i.itemId === itemId);
                 if (existingItemIndex > -1) {
@@ -644,7 +644,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             }
             return { inventory: newInventory };
         });
-        
+
         // Check quest triggers after adding item (for getItem and hasItems triggers)
         // Import questService dynamically to avoid circular dependency
         import('../services/questService').then(({ questService }) => {
@@ -684,16 +684,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         set(state => {
             const itemDetails = useItemDatabaseStore.getState().itemDatabase[itemId];
             if (!itemDetails) return {};
-    
+
             let newInventory = [...state.inventory];
             let remainingToRemove = quantity;
             let removedIndices: number[] = [];
-            
+
             let newEquippedWeapon = state.equippedWeapon;
             let newEquippedArmor = state.equippedArmor;
             let newEquippedHead = state.equippedHead;
             let newEquippedLegs = state.equippedLegs;
-    
+
             if (itemDetails.stackable) {
                 const itemIndex = newInventory.findIndex(i => i.itemId === itemId);
                 if (itemIndex > -1) {
@@ -714,7 +714,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                     }
                 }
             }
-            
+
             // FIX: Recalculate equipped indices after removing items
             removedIndices.sort((a, b) => a - b); // Sort in ascending order
             for (const removedIndex of removedIndices) {
@@ -747,8 +747,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                     }
                 }
             }
-            
-            return { 
+
+            return {
                 inventory: newInventory,
                 equippedWeapon: newEquippedWeapon,
                 equippedArmor: newEquippedArmor,
@@ -757,7 +757,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             };
         });
     },
-    
+
     /**
      * Discards an item from inventory by index.
      *
@@ -782,25 +782,25 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         set(state => {
             const itemInInventory = state.inventory[inventoryIndex];
             if (!itemInInventory) return {};
-        
+
             const newInventory = [...state.inventory];
-            const isEquipped = state.equippedWeapon === inventoryIndex || 
-                             state.equippedArmor === inventoryIndex ||
-                             state.equippedHead === inventoryIndex ||
-                             state.equippedLegs === inventoryIndex;
-            
+            const isEquipped = state.equippedWeapon === inventoryIndex ||
+                state.equippedArmor === inventoryIndex ||
+                state.equippedHead === inventoryIndex ||
+                state.equippedLegs === inventoryIndex;
+
             let newEquippedWeapon = state.equippedWeapon;
             let newEquippedArmor = state.equippedArmor;
             let newEquippedHead = state.equippedHead;
             let newEquippedLegs = state.equippedLegs;
-            
+
             if (isEquipped) {
-                 if(state.equippedWeapon === inventoryIndex) newEquippedWeapon = null;
-                 if(state.equippedArmor === inventoryIndex) newEquippedArmor = null;
-                 if(state.equippedHead === inventoryIndex) newEquippedHead = null;
-                 if(state.equippedLegs === inventoryIndex) newEquippedLegs = null;
+                if (state.equippedWeapon === inventoryIndex) newEquippedWeapon = null;
+                if (state.equippedArmor === inventoryIndex) newEquippedArmor = null;
+                if (state.equippedHead === inventoryIndex) newEquippedHead = null;
+                if (state.equippedLegs === inventoryIndex) newEquippedLegs = null;
             }
-            
+
             if (newInventory[inventoryIndex].quantity > quantity) {
                 newInventory[inventoryIndex].quantity -= quantity;
             } else {
@@ -812,9 +812,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 if (newEquippedLegs !== null && newEquippedLegs > inventoryIndex) newEquippedLegs--;
             }
 
-            return { 
-                inventory: newInventory, 
-                equippedWeapon: newEquippedWeapon, 
+            return {
+                inventory: newInventory,
+                equippedWeapon: newEquippedWeapon,
                 equippedArmor: newEquippedArmor,
                 equippedHead: newEquippedHead,
                 equippedLegs: newEquippedLegs
@@ -862,16 +862,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 const itemId = inventoryIndexOrId;
                 // Find the first non-broken instance of this item
                 inventoryIndex = state.inventory.findIndex(i => i.itemId === itemId && (!i.durability || i.durability.current > 0));
-                
+
                 if (inventoryIndex === -1) {
-                     // Maybe it's broken, find it anyway to give a proper message
-                     if (state.inventory.some(i => i.itemId === itemId)) {
-                         const itemDetails = useItemDatabaseStore.getState().itemDatabase[itemId];
-                         useGameStore.getState().addJournalEntry({ text: `${itemDetails?.name || 'Oggetto'} è rotto e non può essere equipaggiato.`, type: JournalEntryType.ACTION_FAILURE });
-                     } else {
-                         useGameStore.getState().addJournalEntry({ text: `Oggetto ${itemId} non trovato nell'inventario.`, type: JournalEntryType.SYSTEM_ERROR });
-                     }
-                     return {};
+                    // Maybe it's broken, find it anyway to give a proper message
+                    if (state.inventory.some(i => i.itemId === itemId)) {
+                        const itemDetails = useItemDatabaseStore.getState().itemDatabase[itemId];
+                        useGameStore.getState().addJournalEntry({ text: `${itemDetails?.name || 'Oggetto'} è rotto e non può essere equipaggiato.`, type: JournalEntryType.ACTION_FAILURE });
+                    } else {
+                        useGameStore.getState().addJournalEntry({ text: `Oggetto ${itemId} non trovato nell'inventario.`, type: JournalEntryType.SYSTEM_ERROR });
+                    }
+                    return {};
                 }
             } else {
                 inventoryIndex = inventoryIndexOrId;
@@ -962,7 +962,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         set(state => {
             const equippedIndex = slot === 'weapon' ? state.equippedWeapon : state.equippedArmor;
             if (equippedIndex === null) return {};
-            
+
             const newInventory = [...state.inventory];
             const item = newInventory[equippedIndex];
             if (!item || !item.durability) return {};
@@ -979,7 +979,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 const newEquipped = slot === 'weapon' ? { equippedWeapon: null } : { equippedArmor: null };
                 return { inventory: newInventory, ...newEquipped };
             }
-            
+
             return { inventory: newInventory };
         });
     },
@@ -1050,7 +1050,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         if (itemDetails.rarity === 'rare' || itemDetails.rarity === 'epic') {
             materialId = 'scrap_metal_high_quality';
         }
-        
+
         discardItem(inventoryIndex, 1);
         addItem(materialId, 1);
 
@@ -1097,39 +1097,39 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             // FIX v1.2.4: Always round damage to ensure HP remains integer
             const roundedDamage = Math.floor(amount);
             const newHp = Math.max(0, state.hp.current - roundedDamage);
-            
+
             // CS_THE_BRINK trigger: HP drops below 10% for the first time
             const hpPercentage = (newHp / state.hp.max) * 100;
             if (hpPercentage > 0 && hpPercentage < 10 && !useGameStore.getState().gameFlags.has('THE_BRINK_TRIGGERED')) {
-                useGameStore.setState(s => ({ 
-                    gameFlags: new Set(s.gameFlags).add('THE_BRINK_TRIGGERED') 
+                useGameStore.setState(s => ({
+                    gameFlags: new Set(s.gameFlags).add('THE_BRINK_TRIGGERED')
                 }));
-                
+
                 // Trigger cutscene with delay to allow damage to register visually
                 setTimeout(() => {
                     if (useGameStore.getState().gameState === GameState.IN_GAME) {
                         useGameStore.getState().startCutscene('CS_THE_BRINK');
                     }
                 }, 1000);
-                
+
                 // Grant 25% bonus to all attributes as one-time reward
                 const bonusedAttributes = { ...state.attributes };
                 (Object.keys(bonusedAttributes) as AttributeName[]).forEach(attr => {
                     const bonus = Math.ceil(bonusedAttributes[attr] * 0.25);
                     bonusedAttributes[attr] += bonus;
                 });
-                
+
                 useGameStore.getState().addJournalEntry({
                     text: "[SOPRAVVISSUTO ALL'ORLO] La tua determinazione ti ha reso più forte! +25% a tutti gli attributi!",
                     type: JournalEntryType.XP_GAIN
                 });
-                
-                return { 
+
+                return {
                     hp: { ...state.hp, current: newHp },
                     attributes: bonusedAttributes
                 };
             }
-            
+
             if (newHp <= 0 && state.hp.current > 0) {
                 useGameStore.getState().setGameOver(cause);
             }
@@ -1139,7 +1139,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             return { hp: { ...state.hp, current: newHp } };
         });
     },
-    
+
     /**
      * Calculates survival resource costs for a time period (preview only).
      *
@@ -1168,10 +1168,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     calculateSurvivalCost: (minutes) => {
         let satietyDecay = 3.0;
         let hydrationDecay = 4.5;
-        
+
         const satietyCost = (minutes / 60) * satietyDecay;
         const hydrationCost = (minutes / 60) * hydrationDecay;
-        
+
         return { satietyCost, hydrationCost };
     },
 
@@ -1285,7 +1285,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 type: JournalEntryType.COMBAT
             });
         }
-        
+
         if (hpLossFromSurvival > 0) {
             deathCause = deathCause || (newSatiety === 0 ? 'STARVATION' : 'DEHYDRATION');
         }
@@ -1303,15 +1303,15 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const totalWeight = get().getTotalWeight();
         const maxCarryWeight = get().getMaxCarryWeight();
         const wasOverEncumbered = currentState.fatigue.current > 0 &&
-                                  get().getTotalWeight() > get().getMaxCarryWeight(); // Previous state
+            get().getTotalWeight() > get().getMaxCarryWeight(); // Previous state
         const isOverEncumbered = totalWeight > maxCarryWeight;
-        
+
         let fatigueGain = (minutes / 60) * 1;
         if (isOverEncumbered) {
             fatigueGain *= 2; // Double fatigue gain when overencumbered
         }
         const newFatigue = Math.min(currentState.fatigue.max, currentState.fatigue.current + fatigueGain);
-        
+
         // Journal feedback when encumbrance state changes
         if (!wasOverEncumbered && isOverEncumbered) {
             addJournalEntry({
@@ -1327,7 +1327,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
         // Auto-apply/remove status conditions based on stats
         const newStatus = new Set(currentState.status);
-        
+
         // ESAUSTO: Fatigue >= 85
         if (newFatigue >= 85 && !newStatus.has('ESAUSTO')) {
             newStatus.add('ESAUSTO');
@@ -1342,7 +1342,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 type: JournalEntryType.NARRATIVE
             });
         }
-        
+
         // AFFAMATO: Satiety < 20
         if (newSatiety < 20 && !newStatus.has('AFFAMATO')) {
             newStatus.add('AFFAMATO');
@@ -1357,7 +1357,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 type: JournalEntryType.NARRATIVE
             });
         }
-        
+
         // DISIDRATATO: Hydration < 20
         if (newHydration < 20 && !newStatus.has('DISIDRATATO')) {
             newStatus.add('DISIDRATATO');
@@ -1381,7 +1381,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             status: newStatus
         });
     },
-    
+
     /**
      * Heals character's HP.
      *
@@ -1398,11 +1398,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
      * @see takeDamage for HP loss
      */
     heal: (amount) => {
+        const actualHeal = Math.ceil(amount);
         set(state => ({
-            hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + Math.ceil(amount)) }
+            hp: { ...state.hp, current: Math.min(state.hp.max, state.hp.current + actualHeal) }
         }));
+        useGameStore.getState().addJournalEntry({
+            text: `Recuperi ${actualHeal} HP.`,
+            type: JournalEntryType.SYSTEM_MESSAGE
+        });
     },
-    
+
     /**
      * Restores satiety (hunger).
      *
@@ -1420,7 +1425,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             satiety: { ...state.satiety, current: Math.min(state.satiety.max, state.satiety.current + amount) }
         }));
     },
-    
+
     /**
      * Restores hydration (thirst).
      *
@@ -1512,8 +1517,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     changeAlignment: (type, amount) => {
         // CS_THE_WEIGHT_OF_CHOICE trigger: Significant moral choice (±3+)
         if (Math.abs(amount) >= 3 && !useGameStore.getState().gameFlags.has('WEIGHT_OF_CHOICE_PLAYED')) {
-            useGameStore.setState(state => ({ 
-                gameFlags: new Set(state.gameFlags).add('WEIGHT_OF_CHOICE_PLAYED') 
+            useGameStore.setState(state => ({
+                gameFlags: new Set(state.gameFlags).add('WEIGHT_OF_CHOICE_PLAYED')
             }));
             // Delay cutscene to allow current event to complete
             setTimeout(() => {
@@ -1522,10 +1527,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
                 }
             }, 1000);
         }
-        
+
         const oldAlignment = get().alignment;
         const oldDiff = oldAlignment.lena - oldAlignment.elian;
-        
+
         set(state => ({
             alignment: {
                 ...state.alignment,
@@ -1544,15 +1549,15 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         }
         // Check for crossing into Elian's territory
         else if (oldDiff >= -THRESHOLD && newDiff < -THRESHOLD) {
-             addJournalEntry({ text: "Il tuo pragmatismo ti tempra. Ottieni un bonus a Sopravvivenza e Intimidire.", type: JournalEntryType.XP_GAIN });
+            addJournalEntry({ text: "Il tuo pragmatismo ti tempra. Ottieni un bonus a Sopravvivenza e Intimidire.", type: JournalEntryType.XP_GAIN });
         }
         // Check for returning to neutral from Lena
         else if (oldDiff > THRESHOLD && newDiff <= THRESHOLD) {
-             addJournalEntry({ text: "Il tuo percorso è ora più equilibrato. I bonus di allineamento sono svaniti.", type: JournalEntryType.SYSTEM_WARNING });
+            addJournalEntry({ text: "Il tuo percorso è ora più equilibrato. I bonus di allineamento sono svaniti.", type: JournalEntryType.SYSTEM_WARNING });
         }
         // Check for returning to neutral from Elian
         else if (oldDiff < -THRESHOLD && newDiff >= -THRESHOLD) {
-             addJournalEntry({ text: "Il tuo percorso è ora più equilibrato. I bonus di allineamento sono svaniti.", type: JournalEntryType.SYSTEM_WARNING });
+            addJournalEntry({ text: "Il tuo percorso è ora più equilibrato. I bonus di allineamento sono svaniti.", type: JournalEntryType.SYSTEM_WARNING });
         }
     },
     /**
@@ -1689,30 +1694,30 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const { getAttributeModifier, equippedArmor, equippedHead, equippedLegs, inventory } = get();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
         const dexMod = getAttributeModifier('des');
-        
+
         let totalArmorBonus = 0;
-        
+
         // Check chest armor
         const chestItem = equippedArmor !== null ? inventory[equippedArmor] : null;
         if (chestItem && (!chestItem.durability || chestItem.durability.current > 0)) {
             const chestDetails = itemDatabase[chestItem.itemId];
             totalArmorBonus += chestDetails?.defense || 0;
         }
-        
+
         // Check head armor
         const headItem = equippedHead !== null ? inventory[equippedHead] : null;
         if (headItem && (!headItem.durability || headItem.durability.current > 0)) {
             const headDetails = itemDatabase[headItem.itemId];
             totalArmorBonus += headDetails?.defense || 0;
         }
-        
+
         // Check legs armor
         const legsItem = equippedLegs !== null ? inventory[equippedLegs] : null;
         if (legsItem && (!legsItem.durability || legsItem.durability.current > 0)) {
             const legsDetails = itemDatabase[legsItem.itemId];
             totalArmorBonus += legsDetails?.defense || 0;
         }
-        
+
         return 10 + dexMod + totalArmorBonus;
     },
     /**
@@ -1750,10 +1755,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             if (state.unlockedTrophies.has(trophyId)) {
                 return {}; // Already unlocked, do nothing
             }
-            
+
             const { trophies } = useTrophyDatabaseStore.getState();
             const trophy = trophies.find(t => t.id === trophyId);
-            
+
             if (trophy) {
                 audioManager.playSound('level_up');
                 useGameStore.getState().addJournalEntry({
@@ -1764,10 +1769,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
             const newTrophies = new Set(state.unlockedTrophies);
             newTrophies.add(trophyId);
-            
+
             // Salva immediatamente in localStorage globale
             addGlobalTrophy(trophyId);
-            
+
             return { unlockedTrophies: newTrophies };
         });
     },
@@ -1825,7 +1830,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     fromJSON: (json) => {
         const saveTrophies = new Set<string>(json.unlockedTrophies || []);
         const mergedTrophies = mergeWithGlobalTrophies(saveTrophies);
-        
+
         set({
             ...json,
             status: new Set(json.status),
@@ -1937,18 +1942,18 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         const { attributes, inventory } = get();
         const forModifier = Math.floor((attributes.for - 10) / 2);
         let baseCapacity = 15 + (forModifier * 2);
-        
+
         // Check for backpack upgrades (future: zaini che aumentano capacità)
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
         const hasUpgradedBackpack = inventory.some(item => {
             const details = itemDatabase[item.itemId];
             return details?.id === 'tool_upgraded_backpack'; // Future item
         });
-        
+
         if (hasUpgradedBackpack) {
             baseCapacity += 5; // Upgraded backpack adds 5kg capacity
         }
-        
+
         return baseCapacity;
     },
 
@@ -1973,13 +1978,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             if (state.loreArchive.includes(entryId)) {
                 return {}; // Already unlocked
             }
-            
+
             useGameStore.getState().addJournalEntry({
                 text: `[ARCHIVIO LORE] Nuova scoperta sbloccata! Consultabile nel Diario Missioni.`,
                 type: JournalEntryType.XP_GAIN,
                 color: '#a78bfa' // violet-400
             });
-            
+
             return { loreArchive: [...state.loreArchive, entryId] };
         });
     },
@@ -2014,12 +2019,12 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     upgradeEquippedArmor: (slot: 'head' | 'chest' | 'legs', defenseBonus: number) => {
         const { inventory, equippedArmor, equippedHead, equippedLegs } = get();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
-        
+
         let equippedIndex: number | null = null;
         if (slot === 'chest') equippedIndex = equippedArmor;
         else if (slot === 'head') equippedIndex = equippedHead;
         else if (slot === 'legs') equippedIndex = equippedLegs;
-        
+
         if (equippedIndex === null) {
             useGameStore.getState().addJournalEntry({
                 text: `Non hai nulla equipaggiato nello slot ${slot}.`,
@@ -2027,10 +2032,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             });
             return;
         }
-        
+
         const armorItem = inventory[equippedIndex];
         if (!armorItem) return;
-        
+
         const armorDetails = itemDatabase[armorItem.itemId];
         if (!armorDetails || armorDetails.type !== 'armor') {
             useGameStore.getState().addJournalEntry({
@@ -2039,26 +2044,26 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             });
             return;
         }
-        
+
         // Restore durability to max
         set(state => {
             const newInventory = [...state.inventory];
             const upgradedArmor = { ...newInventory[equippedIndex!] };
-            
+
             if (upgradedArmor.durability) {
                 upgradedArmor.durability.current = upgradedArmor.durability.max;
             }
-            
+
             newInventory[equippedIndex!] = upgradedArmor;
             return { inventory: newInventory };
         });
-        
+
         // Set upgrade flag for defense bonus tracking
         const upgradeFlag = `ARMOR_UPGRADED_${slot.toUpperCase()}_${defenseBonus}`;
         useGameStore.setState(state => ({
             gameFlags: new Set(state.gameFlags).add(upgradeFlag)
         }));
-        
+
         useGameStore.getState().addJournalEntry({
             text: `[POTENZIAMENTO] ${armorDetails.name} migliorato! (+${defenseBonus} Difesa, Durabilità ripristinata)`,
             type: JournalEntryType.XP_GAIN,

@@ -21,7 +21,7 @@ Entrambi i progetti sono già configurati per supportare questa struttura. Il si
 
 ---
 
-## 🎮 The Safe Place Chronicles: The Echo of the Journey (v1.9.9.83)
+## 🎮 The Safe Place Chronicles: The Echo of the Journey (v1.9.9.9)
 
 Il cuore del progetto, un'avventura testuale con elementi GDR sviluppata per il web.
 

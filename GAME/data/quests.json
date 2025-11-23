@@ -56,12 +56,19 @@
         "objective": "Hai imparato le lezioni. Ora raggiungi il Safe Place e confrontati con la verità.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 145, "y": 146 }
+          "value": {
+            "x": 145,
+            "y": 146
+          }
         }
       }
     ],
     "finalReward": {
-      "xp": 1000
+      "xp": 1000,
+      "special": {
+        "effect": "startCutscene",
+        "cutsceneId": "CS_POINT_OF_NO_RETURN"
+      }
     }
   },
   {
@@ -75,7 +82,10 @@
         "objective": "Trova il vecchio mulino a vento menzionato nel messaggio.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 78, "y": 9 }
+          "value": {
+            "x": 78,
+            "y": 9
+          }
         }
       },
       {
@@ -117,8 +127,14 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            { "itemId": "rubber_gasket", "quantity": 1 },
-            { "itemId": "scrap_metal", "quantity": 2 }
+            {
+              "itemId": "rubber_gasket",
+              "quantity": 1
+            },
+            {
+              "itemId": "scrap_metal",
+              "quantity": 2
+            }
           ]
         }
       },
@@ -127,7 +143,10 @@
         "objective": "Torna alla Pompa Rotta per tentare la riparazione",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 45, "y": 85 }
+          "value": {
+            "x": 45,
+            "y": 85
+          }
         }
       }
     ],
@@ -154,7 +173,10 @@
         "objective": "Trova l'accampamento del predone nelle foreste a nord del Crocevia",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 95, "y": 50 }
+          "value": {
+            "x": 95,
+            "y": 50
+          }
         }
       },
       {
@@ -235,7 +257,10 @@
         "objective": "Trova l'avamposto a nord menzionato nell'ordine di consegna.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 41, "y": 39 }
+          "value": {
+            "x": 41,
+            "y": 39
+          }
         }
       },
       {
@@ -287,7 +312,10 @@
         "objective": "Cerca Elara nella scuola in rovina della città.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 70, "y": 95 }
+          "value": {
+            "x": 70,
+            "y": 95
+          }
         }
       },
       {
@@ -295,7 +323,10 @@
         "objective": "Hai trovato Elara. Scortala all'Avamposto 'Il Crocevia'.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 41, "y": 39 }
+          "value": {
+            "x": 41,
+            "y": 39
+          }
         }
       }
     ],
@@ -408,8 +439,14 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            { "itemId": "MED_HEALING_HERBS", "quantity": 3 },
-            { "itemId": "edible_mushrooms", "quantity": 5 }
+            {
+              "itemId": "MED_HEALING_HERBS",
+              "quantity": 3
+            },
+            {
+              "itemId": "edible_mushrooms",
+              "quantity": 5
+            }
           ]
         }
       },
@@ -574,8 +611,14 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            { "itemId": "military_grade_electronics", "quantity": 3 },
-            { "itemId": "portable_generator", "quantity": 1 }
+            {
+              "itemId": "military_grade_electronics",
+              "quantity": 3
+            },
+            {
+              "itemId": "portable_generator",
+              "quantity": 1
+            }
           ]
         }
       },
@@ -618,7 +661,10 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            { "itemId": "industrial_filter", "quantity": 3 }
+            {
+              "itemId": "industrial_filter",
+              "quantity": 3
+            }
           ]
         }
       },
@@ -693,7 +739,10 @@
         "objective": "I registri indicano che il Tubo N.403 era una sezione di massima sicurezza del Manicomio di Sant'Ambrogio, situato nelle colline a est della città. Trova questo luogo.",
         "trigger": {
           "type": "reachLocation",
-          "value": { "x": 120, "y": 85 }
+          "value": {
+            "x": 120,
+            "y": 85
+          }
         }
       },
       {

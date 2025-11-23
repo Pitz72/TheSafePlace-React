@@ -58,11 +58,11 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
 
         const biomeCharToName: Record<string, string> = { '.': 'Pianura', 'F': 'Foresta', 'V': 'Villaggio', 'C': 'Città', '~': 'Acqua' };
         const currentBiomeName = biomeCharToName[currentBiome] || 'Global';
-        
+
         // v1.9.9 - Enhanced logging
         console.log(`[EVENT STORE] ═══ TRIGGER ENCOUNTER ═══`);
         console.log(`[EVENT STORE] Biome: ${currentBiomeName} (${currentBiome}), Forced: ${forceBiomeEvent}`);
-        
+
         if (!forceBiomeEvent) {
             const cooldownMinutes = currentBiome === '.' ? 240 : 90;
             if (lastEncounterTime && (timeToMinutes(gameTime) - timeToMinutes(lastEncounterTime) < cooldownMinutes)) {
@@ -117,16 +117,16 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     return; // Lore event triggered, stop here.
                 }
             }
-            
+
             // 2. If no Lore event, trigger a regular Biome/Global event
-            const allPossibleEvents = forceBiomeEvent 
+            const allPossibleEvents = forceBiomeEvent
                 ? (biomeEvents as GameEvent[]).filter((e: GameEvent) => e.biomes.includes(currentBiomeName))
                 : [...(biomeEvents as GameEvent[]).filter((e: GameEvent) => e.biomes.includes(currentBiomeName)), ...(globalEncounters as GameEvent[])];
-                
+
             const unseenUniqueEvents = allPossibleEvents.filter((e: GameEvent) => e.isUnique && !eventHistory.includes(e.id));
             const repeatableEvents = allPossibleEvents.filter((e: GameEvent) => !e.isUnique);
             let eventToTrigger: GameEvent | null = null;
-            
+
             if (unseenUniqueEvents.length > 0) eventToTrigger = getRandom(unseenUniqueEvents);
             else if (repeatableEvents.length > 0) eventToTrigger = getRandom(repeatableEvents);
 
@@ -149,19 +149,19 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
             useGameStore.getState().setGameState(GameState.IN_GAME);
             return;
         }
-        
+
         // If this was a wandering trader encounter, force trader to move
         if (activeEventId === 'unique_wandering_trader_encounter') {
             import('../services/gameService').then(({ gameService }) => {
                 gameService.updateWanderingTrader();
             });
         }
-        
+
         // Check quest triggers after event completion (v1.8.0: completeEvent trigger)
         import('../services/questService').then(({ questService }) => {
             questService.checkQuestTriggers(undefined, undefined, activeEventId);
         });
-        
+
         // Auto-start and auto-complete lore quests (v1.8.0)
         if (activeEventId === 'unique_ancient_library') {
             import('../services/questService').then(({ questService }) => {
@@ -173,7 +173,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 }, 100);
             });
         }
-        
+
         if (activeEventId === 'unique_scientist_notes') {
             import('../services/questService').then(({ questService }) => {
                 questService.startQuest('lore_quest_laboratory');
@@ -184,7 +184,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                 }, 100);
             });
         }
-        
+
         set(state => ({
             eventHistory: state.activeEvent?.isUnique ? [...state.eventHistory, activeEventId] : state.eventHistory,
             activeEvent: null,
@@ -204,22 +204,22 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         const { advanceTime } = useTimeStore.getState();
         const { addItem, removeItem, addXp, takeDamage, performSkillCheck, changeAlignment, heal, addStatus, boostAttribute } = useCharacterStore.getState();
         const { itemDatabase } = useItemDatabaseStore.getState();
-        
+
         // v1.9.9 - Enhanced logging
         console.log(`[EVENT STORE] ─── RESOLVE CHOICE ───`);
         console.log(`[EVENT STORE] Event: ${activeEvent?.id}, Choice: ${choiceIndex}`);
-        
+
         if (!activeEvent) {
-          console.error(`[EVENT STORE] ❌ No active event`);
-          return;
+            console.error(`[EVENT STORE] ❌ No active event`);
+            return;
         }
 
         const choice = activeEvent.choices[choiceIndex];
         if (!choice) {
-          console.error(`[EVENT STORE] ❌ Choice ${choiceIndex} not found`);
-          return;
+            console.error(`[EVENT STORE] ❌ Choice ${choiceIndex} not found`);
+            return;
         }
-        
+
         console.log(`[EVENT STORE] Choice text: "${choice.text}"`);
         console.log(`[EVENT STORE] Outcomes: ${choice.outcomes.length}`);
 
@@ -270,10 +270,10 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags, v1.9.8.1: learn effects)
                     if (result.value && typeof result.value === 'object') {
                         const { effect, dialogueId, traderId, location, flag } = result.value;
-                        
+
                         // v1.9.9 - Log special effect
                         console.log(`[EVENT STORE] Special effect: ${effect}`, result.value);
-                        
+
                         if (effect === 'learn_disease_symptoms') {
                             // v1.9.8.1: Learn to recognize disease symptoms
                             message = "Studiando gli appunti del dottore, ora sei in grado di riconoscere i primi sintomi delle infezioni più comuni.";
@@ -283,12 +283,12 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 gameFlags: new Set(state.gameFlags).add(flag)
                             }));
                             message = result.text || `Flag ${flag} impostato.`;
-                            
+
                             // Check if this completes any quest triggers
                             import('../services/questService').then(({ questService }) => {
                                 questService.checkQuestTriggers();
                             });
-                        } else if (effect === 'startDialogue' && dialogueId) {
+                        } else if ((effect === 'startDialogue' || effect === 'start_dialogue') && dialogueId) {
                             // Import dialogueService dynamically to avoid circular dependency
                             import('../services/dialogueService').then(({ dialogueService }) => {
                                 dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);

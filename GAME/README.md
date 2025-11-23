@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.83)
+# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.9)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,20 +92,23 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9.83** - Data Restoration & Polish
+**Versione Corrente: v1.9.9.9** - Golden Master Stabilization
 
-**MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (99%)**
+**MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (100%)**
 
-Con la versione 1.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade.
+Con la versione 1.9.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade. Questa è la versione candidata per il rilascio finale.
 
 **Cosa Rimane:**
 - Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO (v1.9.9.7)**
 - Ulteriori omaggi ai donatori rimanenti (~20)
 - Testing finale end-to-end
 
-#### Novità v1.9.9.83 (22 Novembre 2025) - **DATA RESTORATION & POLISH**
-
-Versione definitiva del recupero dati. Ripristinati 42 oggetti mancanti, risolti i crash degli eventi e corrette le proprietà di impilamento (stackable) per una gestione ottimale dell'inventario.
+#### Novità- **v1.9.9.9**: *Critical Logic & Event Fixes* - Fix Trading, Main Quest Finale, Mill Quest RNG, Dialogue Handler, Titanic Event.
+- **v1.9.9.9** (23/11/2025): **Golden Master Stabilization**. Unificazione fix critici (Quest, Commercio, Dati, UI). Versione definitiva per la release.
+- **v1.9.9.82** (23/11/2025): Ripristino massivo database oggetti (42 item mancanti).
+- **v1.9.9.81** (23/11/2025): Hotfix critico per crash EventScreen e InventoryScreen.
+- **v1.9.9.8** (22/11/2025): Fix sistema di importazione moduli e path resolution.
+- **v1.9.9.7** (22/11/2025): Localization Kickoff (IT/EN support structure).
 
 ---
 

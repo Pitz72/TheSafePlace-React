@@ -8,7 +8,7 @@
 
 **The Safe Place Chronicles** è un prototipo concettuale di gioco di ruolo (RPG) che si ispira ai classici testuali degli anni '80. Nato come un esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con l'intelligenza artificiale per creare un'opera strutturata, coerente e dotata di un'anima.
 
-Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 1.9.7, il progetto è sostanzialmente completo: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
+Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 1.9.9.9, il progetto è completo al 100%: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
 
 Questa è la landing page ufficiale del progetto, creata per presentare il concept, la storia dello sviluppo e raccogliere fondi per la fase finale della produzione.
 

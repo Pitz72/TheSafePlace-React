@@ -12,12 +12,12 @@
         "text": "Cerca attentamente alla base del mulino",
         "outcomes": [
           {
-            "type": "skillCheck",
-            "skill": "percezione",
-            "dc": 12,
-            "successText": "Dopo una lunga ricerca tra l'erba alta e le pietre, lo vedi. Un piccolo oggetto di legno scuro, quasi mimetizzato con il terreno. Hai trovato il Talismano di Jonas.",
-            "failureText": "Cerchi per quasi un'ora, ma non trovi nulla. Forse è stato sepolto dal tempo o portato via da qualche animale.",
-            "success": [
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Dopo una lunga ricerca tra l'erba alta e le pietre, lo vedi. Un piccolo oggetto di legno scuro, quasi mimetizzato con il terreno. Hai trovato il Talismano di Jonas."
+              },
               {
                 "type": "addItem",
                 "value": {
@@ -28,16 +28,6 @@
               {
                 "type": "addXp",
                 "value": 50
-              }
-            ],
-            "failure": [
-              {
-                "type": "advanceTime",
-                "value": 60
-              },
-              {
-                "type": "addXp",
-                "value": 10
               }
             ]
           },

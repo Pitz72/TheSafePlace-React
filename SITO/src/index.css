@@ -5,6 +5,18 @@
 body {
   font-family: 'VT323', monospace;
 }
+
 .text-glow {
-  text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #008f25;
+  text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 20px #008f25, 0 0 40px #008f25;
+}
+
+.vignette {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 0.9) 100%);
+  pointer-events: none;
+}
+
+.scanline {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2));
+  background-size: 100% 4px;
+  pointer-events: none;
 }

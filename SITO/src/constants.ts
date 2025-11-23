@@ -52,5 +52,10 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     version: "v1.9.5",
     title: "Echoes of the Donors",
     description: "Il gioco raggiunge la sua forma quasi definitiva con l'aggiunta di quest, eventi e oggetti unici dedicati ai sostenitori del progetto, arricchendo la narrativa."
+  },
+  {
+    version: "v1.9.9.9",
+    title: "Golden Master Stabilization",
+    description: "Versione definitiva per il rilascio. Unificazione di tutti i fix critici (Quest, Commercio, Dati, UI) e stabilizzazione completa del sistema. Il gioco è ora completo al 100%."
   }
 ];
