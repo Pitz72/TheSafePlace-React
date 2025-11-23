@@ -36,7 +36,7 @@ const App: React.FC = () => {
               <strong>The Safe Place Chronicles</strong> è un prototipo concettuale di gioco di ruolo (RPG) che si ispira ai classici testuali degli anni '80. Nato come un esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con l'intelligenza artificiale (Gemini 2.5 Pro) per creare un'opera strutturata, coerente e dotata di un'anima.
             </p>
             <p>
-              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 1.9.9.9, il progetto è completo al 100%: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
+              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.0, il progetto è completo al 100%: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
             </p>
           </div>
         </Section>
@@ -88,7 +88,7 @@ const App: React.FC = () => {
         </Section>
 
         <Section title="[PROIEZIONE_SVILUPPI_FUTURI.EXE]">
-          <p className="mb-6">Il viaggio verso la versione definitiva è quasi concluso. Con la v1.9.9.9, il gioco è stabile e completo. Le prossime tappe sono focalizzate sul polish finale e sull'accessibilità globale:</p>
+          <p className="mb-6">Il viaggio è concluso. Con la v2.0.0, il gioco è nella sua forma definitiva (Golden Master). Le attività rimanenti riguardano esclusivamente l'espansione dell'accessibilità:</p>
           <ul className="list-['>_'] pl-8 space-y-4">
             <li><span className="pl-2"><strong>Traduzioni Multilingua:</strong> Portare l'esperienza di The Safe Place Chronicles a un pubblico internazionale (EN, ES, FR, DE, PT).</span></li>
             <li><span className="pl-2"><strong>Contenuti Aggiuntivi:</strong> Inserimento degli ultimi omaggi creativi dedicati ai donatori che hanno supportato il progetto.</span></li>

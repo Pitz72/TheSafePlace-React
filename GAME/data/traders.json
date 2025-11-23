@@ -34,5 +34,36 @@
                 "price": 5
             }
         ]
+    },
+    {
+        "id": "giona",
+        "name": "Giona (Mercante Errante)",
+        "inventory": [
+            {
+                "itemId": "CONS_001",
+                "quantity": 10,
+                "price": 20
+            },
+            {
+                "itemId": "CONS_002",
+                "quantity": 10,
+                "price": 15
+            },
+            {
+                "itemId": "medkit_basic",
+                "quantity": 2,
+                "price": 50
+            },
+            {
+                "itemId": "ammo_9mm",
+                "quantity": 20,
+                "price": 6
+            },
+            {
+                "itemId": "rare_component",
+                "quantity": 1,
+                "price": 150
+            }
+        ]
     }
 ]

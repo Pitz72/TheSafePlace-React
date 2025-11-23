@@ -1,14 +1,14 @@
 {
   "name": "the-safe-place-chronicles-the-echo-of-the-journey",
   "private": true,
-  "version": "1.9.9.9",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "validate:data": "ts-node scripts/validate-data.ts"
+    "validate:data": "node scripts/validate-data.js"
   },
   "dependencies": {
     "react": "^19.2.0",

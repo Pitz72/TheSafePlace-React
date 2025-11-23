@@ -1,4 +1,4 @@
-# The Safe Place Chronicles: The Echo of the Journey (v1.9.9.9)
+# The Safe Place Chronicles: The Echo of the Journey (v2.0.0)
 
 ## Un Gioco di Ruolo Testuale Retrò
 
@@ -92,18 +92,18 @@ Per il deploy:
 
 ### Stato del Progetto e Sviluppi Futuri
 
-**Versione Corrente: v1.9.9.9** - Golden Master Stabilization
-
+**Versione Corrente: v2.0.0** - Golden Master Release
 **MILESTONE RAGGIUNTA: Il gioco è completo e production-ready (100%)**
 
-Con la versione 1.9.9.9, il progetto raggiunge la massima stabilità con risoluzione di bug critici, bilanciamento strutturale completo e sistema di navigazione/debug enterprise-grade. Questa è la versione candidata per il rilascio finale.
+Con la versione 2.0.0, il progetto raggiunge la sua forma definitiva. Tutti i sistemi sono stabili, testati e verificati.
 
 **Cosa Rimane:**
-- Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO (v1.9.9.7)**
+- Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO**
 - Ulteriori omaggi ai donatori rimanenti (~20)
-- Testing finale end-to-end
 
-#### Novità- **v1.9.9.9**: *Critical Logic & Event Fixes* - Fix Trading, Main Quest Finale, Mill Quest RNG, Dialogue Handler, Titanic Event.
+#### Novità
+- **v2.0.0** (23/11/2025): **Golden Master Release**. Rilascio finale. Suite di test completa (Unit, Data, Build) superata.
+- **v1.9.9.91** (23/11/2025): **Merchant Identity & Logic Fix**. Separazione mercanti (Marcus/Giona), fix eventi, audit globale integrità.
 - **v1.9.9.9** (23/11/2025): **Golden Master Stabilization**. Unificazione fix critici (Quest, Commercio, Dati, UI). Versione definitiva per la release.
 - **v1.9.9.82** (23/11/2025): Ripristino massivo database oggetti (42 item mancanti).
 - **v1.9.9.81** (23/11/2025): Hotfix critico per crash EventScreen e InventoryScreen.

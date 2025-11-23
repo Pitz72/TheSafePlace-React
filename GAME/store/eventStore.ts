@@ -294,7 +294,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
                             });
                             message = result.text || "Inizi una conversazione...";
-                        } else if (effect === 'startTrading' && traderId) {
+                        } else if ((effect === 'startTrading' || effect === 'open_trade_screen') && traderId) {
                             // Import tradingService dynamically to avoid circular dependency
                             import('../services/tradingService').then(({ tradingService }) => {
                                 tradingService.startTradingSession(traderId, GameState.EVENT_SCREEN);

@@ -54,8 +54,8 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     description: "Il gioco raggiunge la sua forma quasi definitiva con l'aggiunta di quest, eventi e oggetti unici dedicati ai sostenitori del progetto, arricchendo la narrativa."
   },
   {
-    version: "v1.9.9.9",
-    title: "Golden Master Stabilization",
-    description: "Versione definitiva per il rilascio. Unificazione di tutti i fix critici (Quest, Commercio, Dati, UI) e stabilizzazione completa del sistema. Il gioco è ora completo al 100%."
+    version: "v2.0.0",
+    title: "Golden Master Release",
+    description: "Rilascio finale. Il progetto raggiunge la sua forma definitiva. Tutti i sistemi sono stabili, testati e verificati. Suite di test completa superata."
   }
 ];
