@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1e2f3g4h5i6"]
+
+[ext_resource type="Script" path="res://scenes/world/World.gd" id="1_world"]
+[ext_resource type="Script" path="res://scripts/MapGenerator.gd" id="2_gen"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_world")
+
+[node name="TileMap" type="TileMap" parent="."]
+format = 2
+
+[node name="MapGenerator" type="Node" parent="."]
+script = ExtResource("2_gen")
+
+[node name="DayNightCycle" type="CanvasModulate" parent="."]
+color = Color(1, 1, 1, 1)

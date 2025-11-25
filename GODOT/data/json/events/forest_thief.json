@@ -1,0 +1,67 @@
+[
+  {
+    "id": "unique_thief_camp",
+    "title": "Accampamento del Predone",
+    "description": "Trovi un accampamento nascosto tra gli alberi. Un uomo armato dorme vicino a un fuoco morente. Vedi l'orologio appeso alla sua cintura.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ruba l'orologio senza farti vedere",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "furtivita",
+          "dc": 14,
+          "successText": "Ti avvicini silenziosamente e sganci l'orologio dalla cintura. Il predone non si sveglia.",
+          "failureText": "Il predone si sveglia di soprassalto e ti attacca!",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "old_watch", "quantity": 1 } },
+            { "type": "addXp", "value": 50 },
+            { "type": "alignmentChange", "value": { "type": "elian", "amount": 1 } }
+          ],
+          "failure": [
+            {
+              "type": "special",
+              "value": { "effect": "triggerCombat", "enemyId": "thief_raider" },
+              "text": "Il predone ti attacca con furia!"
+            }
+          ]
+        }]
+      },
+      {
+        "text": "Affronta il predone direttamente",
+        "outcomes": [{
+          "type": "direct",
+          "results": [
+            {
+              "type": "journalEntry",
+              "text": "Svegli il predone e lo affronti. Dopo un breve combattimento, lo sconfiggi e recuperi l'orologio."
+            },
+            { "type": "takeDamage", "value": 25 },
+            { "type": "addItem", "value": { "itemId": "old_watch", "quantity": 1 } },
+            { "type": "addXp", "value": 60 }
+          ]
+        }]
+      },
+      {
+        "text": "Convinci il predone a restituire l'orologio",
+        "outcomes": [{
+          "type": "skillCheck",
+          "skill": "persuasione",
+          "dc": 16,
+          "successText": "Spieghi che Marcus è un uomo buono e che l'orologio ha valore solo affettivo. Il predone, sorprendentemente, si commuove e te lo restituisce.",
+          "failureText": "Il predone ride della tua ingenuità e ti attacca!",
+          "success": [
+            { "type": "addItem", "value": { "itemId": "old_watch", "quantity": 1 } },
+            { "type": "addXp", "value": 80 },
+            { "type": "alignmentChange", "value": { "type": "lena", "amount": 2 } }
+          ],
+          "failure": [
+            { "type": "takeDamage", "value": 35 },
+            { "type": "addXp", "value": 25 }
+          ]
+        }]
+      }
+    ]
+  }
+]

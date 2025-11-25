@@ -101,6 +101,13 @@ Con la versione 2.0.0, il progetto raggiunge la sua forma definitiva. Tutti i si
 - Traduzioni multilingua (EN, ES, FR, DE, PT) - **IN CORSO**
 - Ulteriori omaggi ai donatori rimanenti (~20)
 
+---
+
+## 🚀 PROGETTO REMASTER (In Sviluppo)
+È iniziata la fase di **Remastering** del gioco (`/REMASTER`).
+Nuovo stack: **Phaser + Ink + React**.
+Obiettivo: Superare i limiti architetturali della versione React-only.
+
 #### Novità
 - **v2.0.0** (23/11/2025): **Golden Master Release**. Rilascio finale. Suite di test completa (Unit, Data, Build) superata.
 - **v1.9.9.91** (23/11/2025): **Merchant Identity & Logic Fix**. Separazione mercanti (Marcus/Giona), fix eventi, audit globale integrità.

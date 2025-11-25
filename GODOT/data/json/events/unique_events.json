@@ -1,0 +1,233 @@
+[
+  {
+    "id": "unique_lost_talisman_location",
+    "title": "Il Vecchio Mulino a Vento",
+    "description": "Sei arrivato al vecchio mulino a vento menzionato nel messaggio di Jonas. Il vento cigola tra le pale arrugginite. È il posto giusto per iniziare a cercare.",
+    "biomes": [
+      "Pianura"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca attentamente alla base del mulino",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Dopo una lunga ricerca tra l'erba alta e le pietre, lo vedi. Un piccolo oggetto di legno scuro, quasi mimetizzato con il terreno. Hai trovato il Talismano di Jonas."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "jonas_talisman",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 50
+              }
+            ]
+          },
+          {
+            "id": "unique_find_elara",
+            "title": "La Bambina Nascosta",
+            "description": "Entri nella scuola in rovina. Il silenzio è rotto solo dal gocciolio dell'acqua. Chiami a bassa voce il nome 'Elara'. Dopo un momento di esitazione, una ragazzina spaurita emerge da dietro una cattedra rovesciata. 'Papà... papà ti ha mandato?' chiede con voce tremante.",
+            "biomes": [
+              "Città"
+            ],
+            "isUnique": true,
+            "choices": [
+              {
+                "text": "Sì, tuo padre è al sicuro. Ti porto da lui.",
+                "outcomes": [
+                  {
+                    "type": "direct",
+                    "results": [
+                      {
+                        "type": "journalEntry",
+                        "text": "Elara ti guarda con occhi pieni di speranza e paura. Annuisce e ti prende la mano. 'Andiamo,' sussurra. Ora devi scortarla al Crocevia."
+                      },
+                      {
+                        "type": "addXp",
+                        "value": 50
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique_ritual_cave",
+    "title": "La Grotta dei Sussurri",
+    "description": "Entri in una grotta nascosta tra le rocce. Le pareti sono coperte dagli stessi simboli astronomici che hai visto nel cerchio rituale. Al centro, un altare di pietra con cenere ancora calda. Qualcuno è stato qui di recente.",
+    "biomes": [
+      "Montagna"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina l'altare e i simboli",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "I simboli formano un pattern complesso. Riconosci alcune costellazioni e calcoli di frequenze sonore. Questo luogo era usato per 'ascoltare' qualcosa. Annoti tutto nel diario che hai trovato.",
+            "failureText": "I simboli sono troppo complessi. Riesci solo a copiarne alcuni nel diario.",
+            "success": [
+              {
+                "type": "special",
+                "value": {
+                  "effect": "setFlag",
+                  "flag": "RITUAL_SITE_CAVE_VISITED"
+                }
+              },
+              {
+                "type": "journalEntry",
+                "text": "[RITUALE] Hai documentato il secondo luogo di potere. Il pattern inizia a prendere forma."
+              },
+              {
+                "type": "addXp",
+                "value": 75
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Questo posto è inquietante. Esci",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "L'aria qui vibra in modo innaturale. Decidi di non restare."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique_ancient_tree_ritual",
+    "title": "L'Albero Segnato",
+    "description": "Ti trovi di fronte a un albero antico e mastodontico. La sua corteccia è coperta di incisioni profonde - gli stessi simboli del cerchio rituale e della grotta. Alla base dell'albero, cenere e cristalli disposti in un pattern preciso.",
+    "biomes": [
+      "Foresta"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Studia le incisioni e il pattern",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 14,
+            "successText": "L'albero è vivo, ma i simboli sono antichi. Qualcuno ha usato questo luogo per anni, forse decenni. I cristalli alla base vibrano leggermente quando ti avvicini. Documenti tutto accuratamente.",
+            "failureText": "Le incisioni sono troppo erose dal tempo. Riesci a copiarne solo alcune.",
+            "success": [
+              {
+                "type": "special",
+                "value": {
+                  "effect": "setFlag",
+                  "flag": "RITUAL_SITE_TREE_VISITED"
+                }
+              },
+              {
+                "type": "journalEntry",
+                "text": "[RITUALE] Hai documentato il terzo luogo di potere. Ora hai tutti i pezzi del puzzle."
+              },
+              {
+                "type": "addXp",
+                "value": 75
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Non toccare nulla. Vai via",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Qualcosa in questo luogo ti mette a disagio. Meglio non interferire."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique_wandering_trader_encounter",
+    "title": "Il Mercante Errante",
+    "description": "Incontri un mercante itinerante che ha allestito un piccolo campo temporaneo. Sembra ben equipaggiato e disposto a commerciare.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Commercia",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ti avvicini per vedere cosa ha da offrire."
+              },
+              {
+                "type": "special",
+                "value": {
+                  "effect": "startTrading",
+                  "traderId": "giona"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Saluta e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Fai un cenno di saluto e continui per la tua strada."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

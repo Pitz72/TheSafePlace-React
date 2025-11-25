@@ -5,8 +5,33 @@ Questo repository contiene il codice sorgente di **The Safe Place Chronicles: Th
 
 ## Struttura del Repository
 
--   `GAME/`: Contiene il codice sorgente del gioco vero e proprio.
+-   `GAME/`: Contiene il codice sorgente del gioco originale (React).
 -   `SITO/`: Contiene il codice sorgente del sito web di presentazione.
+-   `GDD/`: Documentazione completa di Game Design, agnostica e strutturata.
+-   `GODOT/`: Progetto Remaster sviluppato in Godot Engine.
+
+---
+
+## 📚 Game Design Document (GDD)
+
+Una documentazione completa e dettagliata che funge da "Bibbia" del progetto.
+Costruita effettuando il reverse-engineering del codice React originale, questa documentazione è progettata per essere:
+-   **Agnostica**: Indipendente dalla tecnologia utilizzata.
+-   **Completa**: Copre ogni aspetto, dalla narrativa alle meccaniche, dall'UI ai dati.
+-   **Strutturata**: Organizzata in capitoli logici per facile consultazione.
+
+## 🤖 Godot Remaster (Work in Progress)
+
+Un porting/remaster del gioco originale sviluppato con **Godot Engine 4**.
+Questo progetto mira a:
+-   Mantenere l'atmosfera e le meccaniche originali.
+-   Sfruttare la potenza di un engine dedicato per migliorare performance e gestione degli asset.
+-   Implementare un'interfaccia rigorosamente **Keyboard-Only** e **Retro-Minimalist**.
+
+### Stato Attuale (v0.2.2)
+-   **Core Systems**: Implementati (GameManager, TimeSystem, EventBus).
+-   **UI**: Ricostruita fedelmente al design React, con focus su tastiera.
+-   **Gameplay**: Creazione personaggio, movimento, interazione e inventario di base funzionanti.
 
 ---
 

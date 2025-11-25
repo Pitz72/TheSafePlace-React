@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0l1m2n3o4p5"]
+
+[ext_resource type="Script" uid="uid://coreq8sakodyo" path="res://scenes/ui/Journal.gd" id="1_journal"]
+
+[node name="Journal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_journal")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Quests" type="TabBar" parent="TabContainer"]
+layout_mode = 2
+
+[node name="QuestList" type="ItemList" parent="TabContainer/Quests"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Inventory" type="TabBar" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="TabContainer/Inventory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Lore" type="TabBar" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="LoreText" type="RichTextLabel" parent="TabContainer/Lore"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Lore Archive..."

@@ -1,0 +1,5 @@
+[gd_resource type="SystemFont" load_steps=0 format=3 uid="uid://b8q4q4q4q4q4"]
+
+[resource]
+font_names = PackedStringArray("Monospace", "Consolas", "Courier New", "Lucida Console")
+subpixel_positioning = 1

@@ -1,0 +1,85 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8q4q4q4q4q4"]
+
+[ext_resource type="Script" path="res://scenes/ui/HUD.gd" id="1_hud"]
+[ext_resource type="SystemFont" uid="uid://b8q4q4q4q4q4" path="res://assets/TerminalFont.tres" id="2_font"]
+
+[sub_resource type="Theme" id="Theme_terminal"]
+default_font = ExtResource("2_font")
+default_font_size = 16
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_terminal")
+script = ExtResource("1_hud")
+
+[node name="StatusPanel" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 220.0
+
+[node name="LevelLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Level: 1"
+
+[node name="XPLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "XP: 0"
+
+[node name="HealthLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Health"
+
+[node name="HealthBar" type="ProgressBar" parent="StatusPanel"]
+layout_mode = 2
+value = 100.0
+
+[node name="StaminaLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Stamina"
+
+[node name="StaminaBar" type="ProgressBar" parent="StatusPanel"]
+layout_mode = 2
+value = 100.0
+
+[node name="HungerLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Hunger"
+
+[node name="HungerBar" type="ProgressBar" parent="StatusPanel"]
+layout_mode = 2
+value = 100.0
+
+[node name="ThirstLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Thirst"
+
+[node name="ThirstBar" type="ProgressBar" parent="StatusPanel"]
+layout_mode = 2
+value = 100.0
+
+[node name="TimeLabel" type="Label" parent="StatusPanel"]
+layout_mode = 2
+text = "Day 1 - 08:00"
+
+[node name="LogPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="LogText" type="RichTextLabel" parent="LogPanel"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=yellow]Welcome to The Safe Place[/color]"
+scroll_following = true

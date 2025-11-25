@@ -1,0 +1,249 @@
+[gd_scene load_steps=4 format=3 uid="uid://e9q4q4q4q4q4"]
+
+[ext_resource type="Theme" uid="uid://d8q4q4q4q4q4" path="res://assets/terminal.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scenes/ui/MainUI.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://b3x4y5z6a7b8" path="res://scenes/world/World.tscn" id="3_world"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inv_bg"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inv_selected"]
+bg_color = Color(0.254902, 0.941176, 0.176471, 1)
+
+[node name="MainUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+script = ExtResource("2_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/TopBar"]
+layout_mode = 2
+text = "THE SAFE PLACE - TERMINAL LINK v0.1.6"
+horizontal_alignment = 1
+
+[node name="ContentArea" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftColumn" type="VBoxContainer" parent="VBoxContainer/ContentArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="VitalsPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/LeftColumn"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/LeftColumn/VitalsPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/LeftColumn/VitalsPanel/VBox"]
+layout_mode = 2
+text = "SOPRAVVIVENZA"
+horizontal_alignment = 1
+
+[node name="VitalsLabel" type="RichTextLabel" parent="VBoxContainer/ContentArea/LeftColumn/VitalsPanel/VBox"]
+layout_mode = 2
+text = "HP: 100/100
+Sazietà: 100/100
+Idratazione: 100/100
+Stanchezza: 0/100
+Status: Normale"
+fit_content = true
+
+[node name="InventoryPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/LeftColumn/InventoryPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/LeftColumn/InventoryPanel/VBox"]
+layout_mode = 2
+text = "INVENTARIO"
+horizontal_alignment = 1
+
+[node name="WeightLabel" type="Label" parent="VBoxContainer/ContentArea/LeftColumn/InventoryPanel/VBox"]
+layout_mode = 2
+text = "Peso: 0.0 / 50.0 kg"
+
+[node name="InventoryList" type="ItemList" parent="VBoxContainer/ContentArea/LeftColumn/InventoryPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+allow_search = false
+auto_height = false
+theme_override_colors/font_color = Color(0.254902, 0.941176, 0.176471, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_inv_bg")
+theme_override_styles/selected = SubResource("StyleBoxFlat_inv_selected")
+theme_override_styles/selected_focus = SubResource("StyleBoxFlat_inv_selected")
+
+[node name="CommandsPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/LeftColumn"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/LeftColumn/CommandsPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/LeftColumn/CommandsPanel/VBox"]
+layout_mode = 2
+text = "COMANDI"
+horizontal_alignment = 1
+
+[node name="CommandsLabel" type="Label" parent="VBoxContainer/ContentArea/LeftColumn/CommandsPanel/VBox"]
+layout_mode = 2
+text = "[WASD] Movimento
+[I] Inventario
+[F] Cerca
+[ESC] Menu"
+
+[node name="CenterColumn" type="VBoxContainer" parent="VBoxContainer/ContentArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.6
+
+[node name="MapHeader" type="Label" parent="VBoxContainer/ContentArea/CenterColumn"]
+layout_mode = 2
+text = "MAPPA DEL MONDO"
+horizontal_alignment = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/ContentArea/CenterColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/ContentArea/CenterColumn/SubViewportContainer"]
+handle_input_locally = true
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="World" parent="VBoxContainer/ContentArea/CenterColumn/SubViewportContainer/SubViewport" instance=ExtResource("3_world")]
+
+[node name="LogHeader" type="Label" parent="VBoxContainer/ContentArea/CenterColumn"]
+layout_mode = 2
+text = "DIARIO DI VIAGGIO"
+horizontal_alignment = 1
+
+[node name="LogPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/CenterColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="LogText" type="RichTextLabel" parent="VBoxContainer/ContentArea/CenterColumn/LogPanel"]
+layout_mode = 2
+bbcode_enabled = true
+text = "System Initialized..."
+scroll_following = true
+
+[node name="RightColumn" type="VBoxContainer" parent="VBoxContainer/ContentArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="InfoPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/RightColumn"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/RightColumn/InfoPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/RightColumn/InfoPanel/VBox"]
+layout_mode = 2
+text = "INFORMAZIONI"
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="RichTextLabel" parent="VBoxContainer/ContentArea/RightColumn/InfoPanel/VBox"]
+layout_mode = 2
+text = "Posizione: (0, 0)
+Luogo: Unknown
+08:00 - Giorno 1
+Meteo: Sereno
+Effetti: Nessun effetto"
+fit_content = true
+
+[node name="EquipmentPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/RightColumn"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/RightColumn/EquipmentPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/RightColumn/EquipmentPanel/VBox"]
+layout_mode = 2
+text = "EQUIPAGGIAMENTO"
+horizontal_alignment = 1
+
+[node name="EquipLabel" type="RichTextLabel" parent="VBoxContainer/ContentArea/RightColumn/EquipmentPanel/VBox"]
+layout_mode = 2
+text = "ARMA: Nessuna
+TESTA: Nessuna
+TORSO: Nessuna
+GAMBE: Nessuna"
+fit_content = true
+
+[node name="StatsPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/RightColumn/StatsPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/RightColumn/StatsPanel/VBox"]
+layout_mode = 2
+text = "STATISTICHE"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="VBoxContainer/ContentArea/RightColumn/StatsPanel/VBox"]
+layout_mode = 2
+text = "Livello: 1 | XP: 0 / 100"
+
+[node name="AttributesGrid" type="GridContainer" parent="VBoxContainer/ContentArea/RightColumn/StatsPanel/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="AlignmentPanel" type="PanelContainer" parent="VBoxContainer/ContentArea/RightColumn"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel/VBox"]
+layout_mode = 2
+text = "BUSSOLA MORALE"
+horizontal_alignment = 1
+
+[node name="AlignmentBar" type="ProgressBar" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel/VBox"]
+layout_mode = 2
+value = 50.0
+show_percentage = false
+
+[node name="Labels" type="HBoxContainer" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel/VBox"]
+layout_mode = 2
+
+[node name="Lena" type="Label" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel/VBox/Labels"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Lena"
+
+[node name="Elian" type="Label" parent="VBoxContainer/ContentArea/RightColumn/AlignmentPanel/VBox/Labels"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Elian"
+horizontal_alignment = 2
+
+

@@ -1,0 +1,1051 @@
+[
+  {
+    "id": "random_lone_raider",
+    "title": "Occhi nella Desolazione",
+    "description": "Una figura solitaria ti si para davanti. È un predone, magro e disperato, armato con un pezzo di tubo arrugginito. I suoi occhi sono pieni di una fame che non è solo di cibo. \"Dammi tutto quello che hai,\" sibila, la voce roca. \"Oggi non è il tuo giorno fortunato.\"",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Intimidiscilo, mostrandoti più pericoloso di lui.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "intimidire",
+            "dc": 13,
+            "successText": "Lo fissi dritto negli occhi, senza un briciolo di paura. La tua determinazione gelida lo scuote. Vede in te un predatore, non una preda. Borbotta una maledizione e si allontana nell'ombra.",
+            "failureText": "La tua finta spavalderia non lo convince. Vede solo la tua paura. Ringhia e si lancia all'attacco.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 25
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 15
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Attacca per primo, senza esitazione.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 12,
+            "successText": "Agisci prima ancora che possa finire la frase. Il tuo attacco fulmineo lo coglie di sorpresa. Dopo un breve e brutale scontro, giace a terra sconfitto.",
+            "failureText": "Il tuo attacco è goffo. Il predone para facilmente il colpo e contrattacca. Il combattimento ha inizio.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "scrap_metal",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 40
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 15
+              },
+              {
+                "type": "addXp",
+                "value": 15
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_cry_for_help",
+    "title": "Voce Ingannevole",
+    "description": "Senti una voce debole che chiede aiuto da dietro un ammasso di rovine. \"Aiuto... sono ferito... per favore...\" Potrebbe essere un sopravvissuto in difficoltà o un'esca per un'imboscata.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Avvicinati con cautela per aiutare.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 14,
+            "successText": "Ti avvicini e ti rendi conto che è solo un'esca. Noti delle tracce fresche e il modo innaturale in cui la voce echeggia. È una trappola. Ti allontani silenziosamente prima che i banditi nascosti si accorgano di te.",
+            "failureText": "Corri per aiutare e cadi dritto nell'imboscata. Due predoni saltano fuori dalle rovine, le armi spianate.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 30
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 25
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignora la richiesta e prosegui.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Le lezioni di tuo padre sono state chiare: non fidarti mai. Potrebbe essere un innocente, ma il rischio è troppo alto. Prosegui, il cuore pesante."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "traderId": "marcus",
+    "title": "Un Affare nella Polvere",
+    "description": "Incontri un vecchio mercante che spinge un carretto cigolante pieno di cianfrusaglie. Ti saluta con un sorriso sdentato. \"Un viaggiatore! Raro di questi tempi. Vuoi dare un'occhiata alla mia merce? Ho cose che non troveresti da nessun'altra parte.\"",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Commercia con lui.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Passi un po' di tempo a esaminare la sua merce, ma decidi di non comprare nulla per ora."
+              },
+              {
+                "type": "special",
+                "value": {
+                  "effect": "trade_screen_placeholder"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Tenta di derubarlo.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 15,
+            "successText": "Con un movimento fulmineo, riesci ad afferrare un oggetto prezioso dal carretto e a scappare prima che il vecchio possa reagire. Ti senti un verme, ma hai un nuovo oggetto.",
+            "failureText": "Il vecchio è più veloce di quanto sembri. Urla, attirando l'attenzione di una guardia armata che non avevi visto. Ora sei nei guai.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "multitool",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 15
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 30
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_wounded_beast",
+    "title": "Bestia Ferita",
+    "description": "Trovi un grosso lupo mutato, con una zampa intrappolata in una vecchia tagliola. Ringhia debolemnte al tuo avvicinarsi, più spaventato che aggressivo. È un predatore pericoloso, ma al momento è vulnerabile.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Finiscilo per recuperare carne e pelle.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "È la legge crudele di questo mondo. Con un colpo rapido, poni fine alle sue sofferenze. La sua carcassa ti fornirà cibo e una pelle resistente."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_001",
+                  "quantity": 2
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "animal_hide",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Tenta di liberarlo.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 14,
+            "successText": "Usando un lungo ramo per tenere a bada la sua testa, riesci ad aprire la tagliola. Il lupo, sorpreso, ti fissa per un istante, poi si allontana zoppicando, senza attaccarti.",
+            "failureText": "Mentre ti avvicini, il lupo, in un impeto di dolore e paura, si divincola e riesce a morderti prima di liberarsi e fuggire. La ferita è profonda.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 40
+              },
+              {
+                "type": "special",
+                "value": {
+                  "effect": "wolf_gratitude"
+                }
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 15
+              },
+              {
+                "type": "statusChange",
+                "value": "FERITO"
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_sudden_storm",
+    "title": "La Furia del Cielo",
+    "description": "All'improvviso, una tempesta violenta si abbatte su di te, con pioggia sferzante e fulmini che squarciano l'orizzonte. Devi trovare un riparo, e in fretta.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Cerca un riparo immediato (grotta, rovina).",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 11,
+            "successText": "Il tuo istinto da sopravvissuto ha la meglio. Individui una piccola grotta e ti ci infili giusto in tempo per evitare il peggio della tempesta.",
+            "failureText": "Non trovi alcun riparo adeguato. Sei esposto alla furia degli elementi, subendo danni dal freddo e iniziando a sentirti febbricitante.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 10
+              },
+              {
+                "type": "statusChange",
+                "value": "MALATO"
+              },
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Resisti alla tempesta e prosegui.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 15,
+            "successText": "Stringi i denti e affronti la tempesta a testa alta. È una prova durissima, ma la tua resistenza ti permette di superarla. Quando la pioggia cessa, ti senti più forte e temprato.",
+            "failureText": "La tempesta è troppo forte. Il freddo ti entra nelle ossa, sei completamente fradicio e le tue forze ti abbandonano. Ne esci a pezzi.",
+            "success": [
+              {
+                "type": "statBoost",
+                "value": {
+                  "stat": "cos",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 50
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 25
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_traveler_remains",
+    "title": "Compagno di Viaggio Silenzioso",
+    "description": "Trovi i resti di un altro sopravvissuto accasciato contro una roccia, lo zaino ancora in spalla.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Perquisisci lo zaino con rispetto.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Con un cenno silenzioso al viaggiatore caduto, apri il suo zaino. Dentro trovi una manciata di provviste."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_001",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_002",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Seppelliscilo sommariamente.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 10,
+            "successText": "Passi un po' di tempo a coprire il corpo con pietre e terra. È un piccolo gesto di umanità. Ti senti stranamente in pace e più determinato a continuare.",
+            "failureText": "Il terreno è troppo duro e sei troppo stanco. Desisti, lasciando il viandante al suo destino, con un senso di amarezza.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_ground_symbol",
+    "title": "Il Segno sulla Polvere",
+    "description": "Noti uno strano simbolo tracciato nella polvere o nel fango. Non sembra naturale.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Tenta di interpretare il simbolo.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Riconosci il simbolo! È un vecchio codice di viandanti che indica un nascondiglio di scorte. Trovi delle bende e dei proiettili.",
+            "failureText": "Il simbolo è incomprensibile. Potrebbe significare qualsiasi cosa. Decidi di non rischiare.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_003",
+                  "quantity": 2
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "ammo_9mm",
+                  "quantity": 5
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 25
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cancellalo per non lasciare tracce.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Chiunque l'abbia lasciato, non vuoi che sappia che sei passato di qui. Cancelli il simbolo con i piedi e prosegui."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_mutant_insect_swarm",
+    "title": "Ronzo Minaccioso",
+    "description": "Un denso sciame di insetti volanti, grandi come il tuo pollice e dal ronzio aggressivo, ti blocca il cammino.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Cerca di attraversarlo velocemente.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 12,
+            "successText": "Correndo a perdifiato, riesci a passare attraverso lo sciame subendo solo qualche puntura minore.",
+            "failureText": "Lo sciame ti avvolge. Le punture bruciano e ti lasciano disorientato e indebolito.",
+            "success": [
+              {
+                "type": "takeDamage",
+                "value": 3
+              },
+              {
+                "type": "addXp",
+                "value": 15
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 10
+              },
+              {
+                "type": "statusChange",
+                "value": "MALATO"
+              },
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Usa del fumo per scacciarli.",
+        "itemRequirements": [
+          {
+            "itemId": "torch",
+            "quantity": 1
+          }
+        ],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Accendi rapidamente una torcia. Il fumo denso infastidisce gli insetti, che si disperdono abbastanza a lungo da permetterti di passare indenne."
+              },
+              {
+                "type": "removeItem",
+                "value": {
+                  "itemId": "torch",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_laughter_echo",
+    "title": "L'Eco di una Risata",
+    "description": "Per un istante, ti sembra di aver sentito chiaramente l'eco di una risata di bambino, portata dal vento. Dura un attimo, poi svanisce.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Investiga la fonte del suono.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Cerchi per un po', ma non trovi nulla. Probabilmente era solo uno scherzo del vento e della tua mente affaticata. La ricerca ti ha fatto perdere tempo."
+              },
+              {
+                "type": "advanceTime",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignora il suono e stringi più forte la tua arma.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Vero o no, qualsiasi cosa produca suoni in questo mondo è potenzialmente una minaccia. Ignori la distrazione e la tua vigilanza aumenta."
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_acid_rain",
+    "title": "Pioggia Corrosiva",
+    "description": "Nuvole scure si addensano rapidamente sopra di te e iniziano a cadere gocce pesanti e sfriggiolanti. È una pioggia acida. Devi trovare un riparo, subito.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Cerca un riparo di fortuna (grotta, edificio).",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 10,
+            "successText": "Riesci a trovare rapidamente una piccola sporgenza rocciosa che ti offre un riparo sufficiente. Aspetti che la pioggia corrosiva passi.",
+            "failureText": "Non trovi un riparo adeguato in tempo. La pioggia ti inzuppa, corrodendo leggermente la tua armatura e irritandoti la pelle.",
+            "success": [
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 5
+              },
+              {
+                "type": "journalEntry",
+                "text": "La tua armatura è leggermente danneggiata."
+              },
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Usa un telo impermeabile per proteggerti.",
+        "itemRequirements": [
+          {
+            "itemId": "tarp",
+            "quantity": 1
+          }
+        ],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Tiri fuori rapidamente il tuo telo impermeabile e ti crei un riparo improvvisato, rimanendo protetto dalla pioggia acida."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_surveillance_drone",
+    "title": "L'Occhio nel Cielo",
+    "description": "Un ronzio acuto attira la tua attenzione verso il cielo. Un piccolo drone di sorveglianza ti sta sorvolando, un singolo occhio rosso che ti fissa. Non sembra armato, ma sta chiaramente registrando la tua posizione.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Tenta di abbatterlo con un sasso.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 14,
+            "successText": "Colpisci uno dei rotori! Il drone precipita. Recuperi i suoi componenti e un chip di memoria intatto.",
+            "failureText": "Il sasso manca il bersaglio. Il drone emette un segnale acustico, segnalando la tua presenza, prima di allontanarsi a grande velocità.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "tech_components",
+                  "quantity": 3
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "drone_memory_chip",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "startQuest",
+                "value": "decipher_drone_data"
+              },
+              {
+                "type": "addXp",
+                "value": 30
+              }
+            ],
+            "failure": [
+              {
+                "type": "journalEntry",
+                "text": "Il drone segnala la tua posizione. Senti un brivido lungo la schiena, ora sei più esposto."
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Nasconditi e aspetta che se ne vada.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ti butti a terra dietro un riparo e rimani immobile. Dopo alcuni minuti, il drone sembra perderti di vista e si allontana."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_minefield",
+    "title": "Un Passo Falso",
+    "description": "Stai per fare un passo quando noti qualcosa di innaturale nel terreno: la sommità di una vecchia mina antiuomo, quasi completamente sepolta. Guardandoti intorno, ti rendi conto di essere ai margini di un campo minato dimenticato.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Tenta di attraversarlo con estrema cautela.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 15,
+            "successText": "Studi il terreno, cercando i segni delle altre mine. Riesci a tracciare un sentiero sicuro. Dall'altro lato, trovi i resti di qualcuno meno fortunato.",
+            "failureText": "Un clic metallico sotto il tuo stivale. L'esplosione ti scaraventa a terra, lasciandoti gravemente ferito.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "military_backpack",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "medkit_advanced",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 100
+              }
+            ],
+            "failure": [
+              {
+                "type": "takeDamage",
+                "value": 40
+              },
+              {
+                "type": "statusChange",
+                "value": "FERITO"
+              },
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Torna indietro e aggira l'area.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Fai un passo indietro, lentamente, poi giri alla larga. Ci vorrà più tempo, ma la tua vita vale di più."
+              },
+              {
+                "type": "advanceTime",
+                "value": 90
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_hidden_stash",
+    "title": "La X sulla Roccia",
+    "description": "Noti una \"X\" dipinta rozzamente con vernice rossa sbiadita su una grande roccia. Potrebbe non essere nulla, o potrebbe essere il segno di una scorta nascosta.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Scava alla base della roccia.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Dopo aver spostato alcune pietre pesanti, trovi una piccola cassa di metallo. Contiene cibo, acqua e munizioni.",
+            "failureText": "Scavi per un po', ma non trovi nulla. O il segno era uno scherzo, o qualcun altro è già passato.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_001",
+                  "quantity": 2
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "CONS_002",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "ammo_shotgun",
+                  "quantity": 4
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 20
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Usa l'intelligenza: il segno è un indizio.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Studi il segno. Noti che un braccio della 'X' punta verso un albero cavo. All'interno trovi la vera scorta, molto più ricca.",
+            "failureText": "Il segno non ti dice nulla. Non riesci a dedurre alcun significato nascosto.",
+            "success": [
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "medkit_field",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "weapon_repair_kit",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 35
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_radiation_pocket",
+    "title": "Aria Pesante",
+    "description": "Inizi a sentire un sapore metallico in bocca e la tua pelle formicola. L'aria sembra innaturalmente pesante. Sei entrato in una sacca di radiazioni a basso livello, invisibile ma pericolosa.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Attraversa l'area il più velocemente possibile.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Trattieni il respiro e corri. Esci dall'area sentendoti nauseato, ma limitando l'esposizione."
+              },
+              {
+                "type": "takeDamage",
+                "value": 15
+              },
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Usa farmaci anti-radiazioni.",
+        "itemRequirements": [
+          {
+            "itemId": "rad_away_pills",
+            "quantity": 1
+          }
+        ],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ingoi rapidamente una pillola anti-radiazioni. I suoi effetti ti proteggono mentre attraversi l'area. Ne esci indenne."
+              },
+              {
+                "type": "removeItem",
+                "value": {
+                  "itemId": "rad_away_pills",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addXp",
+                "value": 15
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "random_fallen_messenger",
+    "title": "Messaggero Silenzioso",
+    "description": "Trovi il corpo di un uomo in abiti robusti, con una grande borsa di pelle a tracolla. Sembra un messaggero. Non ci sono segni di violenza; forse è morto di stenti.",
+    "biomes": [
+      "Global"
+    ],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Prendi la borsa e il suo contenuto.",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "I vivi hanno bisogno di risorse più dei morti. Prendi la borsa. All'interno, trovi un pacco sigillato e un coltello."
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "sealed_package_quest",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "addItem",
+                "value": {
+                  "itemId": "folding_knife",
+                  "quantity": 1
+                }
+              },
+              {
+                "type": "startQuest",
+                "value": "deliver_last_message"
+              },
+              {
+                "type": "addXp",
+                "value": 25
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca solo indizi sulla sua missione.",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Decidi di non saccheggiarlo, ma trovi un ordine di consegna per un 'avamposto a nord'. La conoscenza di questo luogo potrebbe guidarti.",
+            "failureText": "Non trovi alcun documento o indizio. La sua storia muore con lui.",
+            "success": [
+              {
+                "type": "startQuest",
+                "value": "deliver_last_message"
+              },
+              {
+                "type": "addXp",
+                "value": 35
+              }
+            ],
+            "failure": [
+              {
+                "type": "addXp",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

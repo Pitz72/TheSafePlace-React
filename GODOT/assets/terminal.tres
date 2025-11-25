@@ -1,0 +1,36 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://d8q4q4q4q4q4"]
+
+[ext_resource type="SystemFont" uid="uid://b8q4q4q4q4q4" path="res://assets/TerminalFont.tres" id="1_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.254902, 0.941176, 0.176471, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.1, 0.1, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.254902, 0.941176, 0.176471, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fg"]
+bg_color = Color(0.254902, 0.941176, 0.176471, 1)
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 12
+Label/colors/font_color = Color(0.254902, 0.941176, 0.176471, 1)
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+ProgressBar/colors/font_color = Color(0, 0, 0, 1)
+ProgressBar/styles/background = SubResource("StyleBoxFlat_progress_bg")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_progress_fg")
+RichTextLabel/colors/default_color = Color(0.254902, 0.941176, 0.176471, 1)
+RichTextLabel/colors/font_color = Color(0.254902, 0.941176, 0.176471, 1)
+TooltipLabel/colors/font_color = Color(0.254902, 0.941176, 0.176471, 1)
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_panel")
