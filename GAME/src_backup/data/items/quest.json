@@ -1,0 +1,82 @@
+[
+  {
+    "id": "sealed_package_quest",
+    "name": "Pacco Sigillato",
+    "description": "Un pacco avvolto in tela cerata e sigillato con cura. Non sai cosa contenga, ma sembra importante. È indirizzato a un 'avamposto a nord'.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "sensitive_documents",
+    "name": "Documenti Sensibili",
+    "description": "Una cartella contenente documenti con il sigillo di un'agenzia governativa ormai defunta. Sembrano contenere informazioni riservate.",
+    "type": "quest",
+    "weight": 0.5,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "rugged_laptop_military",
+    "name": "Laptop Militare Corazzato",
+    "description": "Un vecchio computer portatile di tipo militare, pesante e obsoleto. La sua batteria interna ha ancora una carica residua e potrebbe contenere dati preziosi.",
+    "type": "quest",
+    "weight": 5.0,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "local_map",
+    "name": "Mappa della Zona",
+    "description": "Una mappa disegnata a mano dell'area circostante, trovata in un accampamento abbandonato. Potrebbe rivelare punti di interesse sconosciuti.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  },
+  {
+    "id": "silver_medallion",
+    "name": "Medaglione d'Argento",
+    "description": "Un piccolo medaglione d'argento annerito dal tempo, trovato nella cassetta delle offerte di una vecchia chiesa. Potrebbe avere un valore sentimentale o storico.",
+    "type": "quest",
+    "weight": 0.1,
+    "value": 50,
+    "stackable": false,
+    "rarity": "rare"
+  },
+  {
+    "id": "old_coins",
+    "name": "Vecchie Monete",
+    "description": "Una manciata di monete di un'era passata. Non hanno più corso legale, ma potrebbero essere usate come merce di scambio con qualche collezionista.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 5,
+    "stackable": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gold_bar",
+    "name": "Lingotto d'Oro",
+    "description": "Un piccolo ma pesante lingotto d'oro, trovato nel caveau di una banca. Un tesoro di inestimabile valore nel vecchio mondo, e forse anche in questo.",
+    "type": "quest",
+    "weight": 1.0,
+    "value": 1000,
+    "stackable": false,
+    "rarity": "epic"
+  },
+  {
+    "id": "fathers_compass",
+    "name": "Bussola del Padre",
+    "description": "La vecchia bussola di tuo padre. È rovinata ma punta sempre a nord. Un ricordo di un tempo più semplice e delle lezioni che ti ha insegnato.",
+    "type": "quest",
+    "weight": 0.2,
+    "value": 0,
+    "stackable": false,
+    "rarity": "quest"
+  }
+]

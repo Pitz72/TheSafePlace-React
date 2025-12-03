@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import { getSaveSlots, handleSaveGame, handleLoadGame, SaveSlot, NUM_SLOTS, exportSaveToFile, importSaveFromFile, deleteSave } from '../src/services/saveGameService';
+import { getSaveSlots, handleSaveGame, handleLoadGame, SaveSlot, NUM_SLOTS, exportSaveToFile, importSaveFromFile, deleteSave } from '../services/saveGameService';
 
 /**
  * SaveLoadScreen component.
@@ -74,7 +74,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
         try {
             // Trova il primo slot vuoto, o usa lo slot attualmente selezionato se è uno slot valido
             let targetSlot: number;
-            
+
             if (selectedIndex < NUM_SLOTS) {
                 // Slot specifico selezionato
                 targetSlot = selectedIndex + 1;
@@ -90,14 +90,14 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                     await new Promise(resolve => setTimeout(resolve, 2000)); // Pausa 2 secondi per far leggere il messaggio
                 }
             }
-            
+
             await importSaveFromFile(file, targetSlot);
             setFeedbackMessage(`Salvataggio importato nello slot ${targetSlot} con successo!`);
             refreshSlots();
         } catch (error) {
             setFeedbackMessage(`Errore durante l'importazione: ${error instanceof Error ? error.message : 'Errore sconosciuto'}`);
         }
-        
+
         // Reset input
         if (event.target) {
             event.target.value = '';
@@ -117,7 +117,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
 
     const handleConfirm = useCallback(() => {
         setFeedbackMessage(null);
-        
+
         if (exportMode) {
             // In export mode, esporta lo slot selezionato
             const slotNumber = selectedIndex + 1;
@@ -135,7 +135,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
             }
             return;
         }
-        
+
         if (selectedIndex < NUM_SLOTS) { // One of the slots is selected
             const slotNumber = selectedIndex + 1;
             if (mode === 'save') {
@@ -175,10 +175,10 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
 
     const handleActionKey = useCallback((key: string) => {
         if (!showActions || selectedIndex >= NUM_SLOTS) return;
-        
+
         const slot = slots[selectedIndex];
         const slotNumber = slot.slot;
-        
+
         if (key === 'e' || key === 'E') {
             if (!slot.isEmpty) {
                 handleExport(slotNumber);
@@ -217,7 +217,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                 <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ {title} ═══</h1>
 
                 {feedbackMessage && <p className="text-3xl text-center text-[var(--text-accent)] mb-4">{feedbackMessage}</p>}
-                
+
                 <div className="w-full flex-grow text-4xl space-y-3">
                     {slots.map((slot, index) => {
                         const isSelected = index === selectedIndex;
@@ -248,7 +248,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                             </div>
                         );
                     })}
-                    
+
                     {/* Opzione Importa/Esporta da File - nascosta in export mode */}
                     {!exportMode && (
                         <>
@@ -256,7 +256,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                                 {selectedIndex === NUM_SLOTS && '> '}
                                 {mode === 'load' ? 'Importa da File JSON' : 'Esporta Slot in File JSON'}
                             </div>
-                            
+
                             <div className={`pl-4 py-2 ${selectedIndex === NUM_SLOTS + 1 ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''}`}>
                                 {selectedIndex === NUM_SLOTS + 1 && '> '}Torna Indietro
                             </div>
@@ -282,7 +282,7 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
                     )}
                 </div>
             </div>
-            
+
             {/* Hidden file input for import */}
             <input
                 ref={fileInputRef}

@@ -15,14 +15,6 @@ body {
   font-family: 'VT323', monospace;
   background-color: #000;
   overflow: hidden;
-  height: 100vh;
-  /* Ensure full viewport height */
-  width: 100vw;
-}
-
-#root {
-  height: 100%;
-  width: 100%;
 }
 
 /* NOTA: Riduzione globale RIMOSSA - causava problemi a tutte le schermate */
@@ -33,14 +25,10 @@ body {
 /* 1. Standard Theme (Default) */
 .theme-standard {
   --bg-primary: #000;
-  --text-primary: #4ade80;
-  /* green-400 */
-  --text-secondary: #d1d5db;
-  /* gray-300 */
-  --text-accent: #facc15;
-  /* yellow-400 */
-  --text-danger: #ef4444;
-  /* red-500 */
+  --text-primary: #4ade80; /* green-400 */
+  --text-secondary: #d1d5db; /* gray-300 */
+  --text-accent: #facc15; /* yellow-400 */
+  --text-danger: #ef4444; /* red-500 */
   --border-primary: rgba(74, 222, 128, 0.3);
   --border-accent: rgba(250, 204, 21, 0.5);
   --highlight-bg: var(--text-primary);
@@ -55,11 +43,9 @@ body {
 /* 2. Green Phosphor CRT Theme - PREMIUM QUALITY */
 .theme-crt {
   --bg-primary: #050a05;
-  --text-primary: #33ff33;
-  /* Authentic P3 phosphor green */
+  --text-primary: #33ff33; /* Authentic P3 phosphor green */
   --text-secondary: #28cc28;
-  --text-accent: #ccffcc;
-  /* Brighter phosphor for highlights */
+  --text-accent: #ccffcc; /* Brighter phosphor for highlights */
   --text-danger: #ff3333;
   --border-primary: rgba(51, 255, 51, 0.4);
   --border-accent: rgba(204, 255, 204, 0.5);
@@ -74,10 +60,8 @@ body {
     0 0 2px #33ff33,
     0 0 4px rgba(51, 255, 51, 0.8),
     0 0 15px rgba(51, 255, 51, 0.4),
-    2px 0 1px rgba(255, 0, 0, 0.2),
-    /* Red aberration */
-    -2px 0 1px rgba(0, 0, 255, 0.2);
-  /* Blue aberration */
+    2px 0 1px rgba(255, 0, 0, 0.2), /* Red aberration */
+    -2px 0 1px rgba(0, 0, 255, 0.2); /* Blue aberration */
 }
 
 /* 3. High Contrast Theme - FIXED */
@@ -97,7 +81,6 @@ body {
   --vignette-opacity: 0;
   --text-glow: none;
 }
-
 /* Removed problematic !important rules that likely broke the negative hover effect */
 
 /* --- Base Game Styles using Variables --- */
@@ -110,15 +93,15 @@ body {
 
 /* Apply CRT-specific filters and animations - PREMIUM */
 /* Apply CRT-specific filters and animations - PREMIUM */
-.theme-crt #game-container>.w-full.h-full.relative {
+.theme-crt #game-container > .w-full.h-full.relative {
   animation: text-wobble 0.15s linear infinite, phosphor-flicker 0.08s infinite;
   filter: blur(0.4px) contrast(1.2) brightness(1.1);
   /* Realistic Screen Curvature */
   transform: perspective(1000px) scale(0.98);
   transform-style: preserve-3d;
   border-radius: 20px;
-  box-shadow:
-    inset 0 0 40px rgba(0, 0, 0, 0.8),
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.8),
     0 0 20px rgba(51, 255, 51, 0.1);
   overflow: hidden;
 }
@@ -132,11 +115,15 @@ body {
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%,
-      rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg,
-      rgba(255, 0, 0, 0.06),
-      rgba(0, 255, 0, 0.02),
-      rgba(0, 0, 255, 0.06));
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.06), 
+    rgba(0, 255, 0, 0.02), 
+    rgba(0, 0, 255, 0.06)
+  );
   z-index: 2;
   background-size: 100% 2px, 3px 100%;
   pointer-events: none;
@@ -154,11 +141,13 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.2) 50%,
-      rgba(0, 0, 0, 0.2));
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.2) 50%,
+    rgba(0,0,0,0.2)
+  );
   background-size: 100% 4px;
   opacity: var(--scanline-opacity);
   animation: scanline-scroll 8s linear infinite;
@@ -176,12 +165,13 @@ body {
   pointer-events: none;
   background:
     radial-gradient(ellipse at center,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.3) 60%,
-      rgba(0, 0, 0, 0.7) 85%,
-      rgba(0, 0, 0, 0.95) 100%);
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0.3) 60%,
+      rgba(0,0,0,0.7) 85%,
+      rgba(0,0,0,0.95) 100%
+    );
   box-shadow:
-    inset 0 0 200px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 200px 40px rgba(0,0,0,0.8),
     inset 0 0 80px 10px rgba(51, 255, 51, 0.05);
   opacity: var(--vignette-opacity);
   animation: crt-flicker 0.18s infinite;
@@ -193,90 +183,36 @@ body {
 
 /* CRT Horizontal Wobble - Simulates magnetic field instability */
 @keyframes text-wobble {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  20% {
-    transform: translate3d(0.3px, -0.2px, 0);
-  }
-
-  40% {
-    transform: translate3d(-0.3px, 0.2px, 0);
-  }
-
-  60% {
-    transform: translate3d(0.2px, 0.3px, 0);
-  }
-
-  80% {
-    transform: translate3d(-0.2px, -0.3px, 0);
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  0% { transform: translate3d(0, 0, 0); }
+  20% { transform: translate3d(0.3px, -0.2px, 0); }
+  40% { transform: translate3d(-0.3px, 0.2px, 0); }
+  60% { transform: translate3d(0.2px, 0.3px, 0); }
+  80% { transform: translate3d(-0.2px, -0.3px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* Phosphor Persistence Flicker - Simulates phosphor decay */
 @keyframes phosphor-flicker {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.98;
-  }
-
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 1; }
+  50% { opacity: 0.98; }
+  100% { opacity: 1; }
 }
 
 /* Scanline Scroll - Slower for more authentic feel */
 @keyframes scanline-scroll {
-  0% {
-    background-position-y: 0px;
-  }
-
-  100% {
-    background-position-y: -200px;
-  }
+  0% { background-position-y: 0px; }
+  100% { background-position-y: -200px; }
 }
 
 /* CRT Flicker - Simulates power supply fluctuation */
 @keyframes crt-flicker {
-
-  0%,
-  100% {
-    opacity: var(--vignette-opacity);
-  }
-
-  10% {
-    opacity: calc(var(--vignette-opacity) * 0.95);
-  }
-
-  20% {
-    opacity: var(--vignette-opacity);
-  }
-
-  30% {
-    opacity: calc(var(--vignette-opacity) * 0.97);
-  }
-
-  40%,
-  60% {
-    opacity: var(--vignette-opacity);
-  }
-
-  70% {
-    opacity: calc(var(--vignette-opacity) * 0.96);
-  }
-
-  80%,
-  90% {
-    opacity: var(--vignette-opacity);
-  }
+  0%, 100% { opacity: var(--vignette-opacity); }
+  10% { opacity: calc(var(--vignette-opacity) * 0.95); }
+  20% { opacity: var(--vignette-opacity); }
+  30% { opacity: calc(var(--vignette-opacity) * 0.97); }
+  40%, 60% { opacity: var(--vignette-opacity); }
+  70% { opacity: calc(var(--vignette-opacity) * 0.96); }
+  80%, 90% { opacity: var(--vignette-opacity); }
 }
 
 /* Yellow Flash - For UI elements */
@@ -306,62 +242,25 @@ body {
 /* Sovrascrivo le classi Tailwind SOLO per questa schermata */
 .presents-screen-content-box p,
 .presents-screen-content-box {
-  font-size: 1.68rem !important;
-  /* Aumentato +20% per leggibilità ottimale */
+  font-size: 1.68rem !important; /* Aumentato +20% per leggibilità ottimale */
   line-height: 1.5 !important;
 }
-
 .presents-screen-content-box .presents-title {
-  font-size: 2.4rem !important;
-  /* Titolo +20% più grande */
+  font-size: 2.4rem !important; /* Titolo +20% più grande */
 }
-
 .presents-screen-content-box .presents-signature {
-  font-size: 1.44rem !important;
-  /* Firma +20% più leggibile */
+  font-size: 1.44rem !important; /* Firma +20% più leggibile */
 }
 
 /* --- Aumento Font Specifico per GAME_SCREEN (Interfaccia di Gioco) --- */
 /* Sovrascrivo le classi Tailwind SOLO per la schermata di gioco */
 /* Questo aumenta la leggibilità dei pannelli statistiche, inventario, ecc. */
-.game-screen-container .text-xs {
-  font-size: 1.27rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-sm {
-  font-size: 1.45rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-base {
-  font-size: 1.65rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-lg {
-  font-size: 1.90rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-xl {
-  font-size: 2.16rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-2xl {
-  font-size: 2.53rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-3xl {
-  font-size: 3.17rem !important;
-}
-
-/* +10% aggiuntivo */
-.game-screen-container .text-4xl {
-  font-size: 3.80rem !important;
-}
-
-/* +10% aggiuntivo */
+.game-screen-container .text-xs { font-size: 1.27rem !important; }   /* +10% aggiuntivo */
+.game-screen-container .text-sm { font-size: 1.45rem !important; }   /* +10% aggiuntivo */
+.game-screen-container .text-base { font-size: 1.65rem !important; }  /* +10% aggiuntivo */
+.game-screen-container .text-lg { font-size: 1.90rem !important; }   /* +10% aggiuntivo */
+.game-screen-container .text-xl { font-size: 2.16rem !important; }   /* +10% aggiuntivo */
+.game-screen-container .text-2xl { font-size: 2.53rem !important; }   /* +10% aggiuntivo */
+.game-screen-container .text-3xl { font-size: 3.17rem !important; }  /* +10% aggiuntivo */
+.game-screen-container .text-4xl { font-size: 3.80rem !important; }  /* +10% aggiuntivo */
 /* Nota: Aumento finale del ~69% rispetto ai valori standard Tailwind */

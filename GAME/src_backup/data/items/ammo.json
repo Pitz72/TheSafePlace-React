@@ -30,16 +30,6 @@
     "rarity": "uncommon"
   },
   {
-    "id": "ammo_arrow",
-    "name": "Frecce",
-    "description": "Frecce di legno con una punta di metallo improvvisata. Silenziose e potenzialmente recuperabili.",
-    "type": "ammo",
-    "weight": 0.1,
-    "value": 3,
-    "stackable": true,
-    "rarity": "common"
-  },
-  {
     "id": "special_ammo",
     "name": "Munizioni Speciali",
     "description": "Munizioni avanzate con proprietà uniche, come proiettili perforanti o incendiari. Estremamente rare e preziose.",

@@ -109,7 +109,8 @@ Nuovo stack: **Phaser + Ink + React**.
 Obiettivo: Superare i limiti architetturali della versione React-only.
 
 #### Novità
-- **v2.0.0** (23/11/2025): **Golden Master Release**. Rilascio finale. Suite di test completa (Unit, Data, Build) superata.
+- **v2.0.1** (03/12/2025): **Layout Stabilization**. Downgrade a Tailwind v3 per fix layout. Ripristino visibilità mappa.
+- **v2.0.0** (03/12/2025): **Technology Stack Refactor**. Migrazione completa a React 19, Vite, Phaser 3, Zustand e TailwindCSS 4.
 - **v1.9.9.91** (23/11/2025): **Merchant Identity & Logic Fix**. Separazione mercanti (Marcus/Giona), fix eventi, audit globale integrità.
 - **v1.9.9.9** (23/11/2025): **Golden Master Stabilization**. Unificazione fix critici (Quest, Commercio, Dati, UI). Versione definitiva per la release.
 - **v1.9.9.82** (23/11/2025): Ripristino massivo database oggetti (42 item mancanti).

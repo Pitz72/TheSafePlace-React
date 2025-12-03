@@ -1,4 +1,4 @@
-import { useGameStore } from '../store/gameStore';
+import { useGameStore } from '../../store/gameStore';
 
 const SAVE_SLOT_KEY_PREFIX = 'tspc_save_';
 export const NUM_SLOTS = 5; // Aumentato da 3 a 5
@@ -35,15 +35,15 @@ const validateSaveData = (data: any): SaveValidationResult => {
     if (!data || typeof data !== 'object') {
         return { valid: false, error: 'Dati di salvataggio non validi' };
     }
-
+    
     if (!data.saveVersion) {
         return { valid: false, error: 'Versione salvataggio mancante' };
     }
-
+    
     if (!data.metadata || !data.character || !data.game || !data.time) {
         return { valid: false, error: 'Dati di salvataggio incompleti' };
     }
-
+    
     return { valid: true };
 };
 
@@ -60,11 +60,11 @@ export const getSaveSlots = (): SaveSlot[] => {
             try {
                 const saveData = JSON.parse(saveDataJSON);
                 const validation = validateSaveData(saveData);
-
+                
                 if (!validation.valid) {
                     return { slot, isEmpty: true, label: `Slot ${slot} (Corrotto)` };
                 }
-
+                
                 const { level, day, hour, minute } = saveData.metadata;
                 return {
                     slot,
@@ -110,25 +110,25 @@ export const exportSaveToFile = (slot: number): void => {
         if (!saveDataJSON) {
             throw new Error(`Nessun salvataggio trovato nello slot ${slot}`);
         }
-
+        
         const saveData = JSON.parse(saveDataJSON);
         const validation = validateSaveData(saveData);
-
+        
         if (!validation.valid) {
             throw new Error(validation.error);
         }
-
+        
         // Create blob and download
         const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-
+        
         // Generate filename with timestamp
         const { level, day } = saveData.metadata;
         const timestamp = new Date().toISOString().slice(0, 10);
         a.download = `TSP_Save_Slot${slot}_Lv${level}_Day${day}_${timestamp}.json`;
-
+        
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -150,12 +150,12 @@ export const importSaveFromFile = async (file: File, slot: number): Promise<bool
     try {
         const text = await file.text();
         const saveData = JSON.parse(text);
-
+        
         const validation = validateSaveData(saveData);
         if (!validation.valid) {
             throw new Error(validation.error || 'File di salvataggio non valido');
         }
-
+        
         // Save to localStorage
         localStorage.setItem(`${SAVE_SLOT_KEY_PREFIX}${slot}`, JSON.stringify(saveData));
         return true;
