@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ActionMenuState, RefugeMenuState, CraftingMenuState, GameState, JournalEntryType, PlayerStatusCondition, IItem } from '../types';
+import { ActionMenuState, RefugeMenuState, CraftingMenuState, GameState, JournalEntryType, PlayerStatusCondition } from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -54,7 +54,7 @@ interface InteractionStoreState {
     closeActionMenu: () => void;
     navigateActionMenu: (direction: number) => void;
     confirmActionMenuSelection: () => void;
-    
+
     enterRefuge: () => void;
     enterOutpost: () => void;
     leaveRefuge: () => void;
@@ -87,7 +87,7 @@ const initialState = {
 
 export const useInteractionStore = create<InteractionStoreState>((set, get) => ({
     ...initialState,
-    
+
     /**
      * @function toggleInventory
      * @description Toggles the inventory open or closed.
@@ -130,27 +130,27 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         const { inventory, equippedWeapon, equippedArmor } = useCharacterStore.getState();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
         if (!inventory[inventorySelectedIndex]) return;
-        
+
         const selectedItem = inventory[inventorySelectedIndex];
         const itemDetails = itemDatabase[selectedItem.itemId];
         if (!itemDetails) return;
-        
+
         let options: string[] = [];
         const isEquipped = equippedWeapon === inventorySelectedIndex || equippedArmor === inventorySelectedIndex;
         const isBroken = selectedItem.durability && selectedItem.durability.current <= 0;
 
         if (isBroken) {
-             options = ['Recupera Materiali', 'Scarta', 'Annulla'];
+            options = ['Recupera Materiali', 'Scarta', 'Annulla'];
         } else {
-             switch(itemDetails.type) {
+            switch (itemDetails.type) {
                 case 'consumable': options = ['Usa', 'Scarta', 'Annulla']; break;
                 case 'manual': options = ['Leggi', 'Scarta', 'Annulla']; break;
                 case 'weapon': case 'armor':
-                    if (isEquipped) { options = ['Togli', 'Scarta', 'Annulla']; } 
+                    if (isEquipped) { options = ['Togli', 'Scarta', 'Annulla']; }
                     else { options = ['Equipaggia', 'Scarta', 'Annulla']; }
                     break;
                 case 'tool':
-                    if(itemDetails.effects?.some(e => e.type === 'repair')) {
+                    if (itemDetails.effects?.some((e: any) => e.type === 'repair')) {
                         options = ['Ripara Oggetto', 'Scarta', 'Annulla'];
                     } else {
                         options = ['Usa', 'Scarta', 'Annulla'];
@@ -188,7 +188,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         });
         audioManager.playSound('navigate');
     },
-    
+
     /**
      * @function confirmActionMenuSelection
      * @description Confirms the selected action in the action menu.
@@ -198,24 +198,16 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         const charState = useCharacterStore.getState();
         const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
         const selectedAction = actionMenuState.options[actionMenuState.selectedIndex];
-        
+
         if (!charState.inventory[inventorySelectedIndex]) { get().closeActionMenu(); return; }
-        
+
         const itemToActOn = charState.inventory[inventorySelectedIndex];
         const itemDetails = itemDatabase[itemToActOn.itemId];
         if (!itemDetails) { get().closeActionMenu(); return; }
-        
+
         audioManager.playSound('confirm');
 
-        const findItemToRepair = (itemType: 'weapon' | 'armor'): number | null => {
-            const equippedIndex = itemType === 'weapon' ? charState.equippedWeapon : charState.equippedArmor;
-            if (equippedIndex === null) return null;
-            const equippedItem = charState.inventory[equippedIndex];
-            if (equippedItem && equippedItem.durability && equippedItem.durability.current < equippedItem.durability.max) {
-                return equippedIndex;
-            }
-            return null;
-        };
+
 
         switch (selectedAction) {
             case 'Usa':
@@ -223,8 +215,8 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                     let baseMessage = `Hai usato: ${itemDetails.name}.`;
                     let effectMessages: string[] = [];
                     let hasFoodOrDrink = false;
-                    itemDetails.effects.forEach(effect => {
-                        switch(effect.type) {
+                    itemDetails.effects.forEach((effect: any) => {
+                        switch (effect.type) {
                             case 'heal': {
                                 let healAmount = effect.value as number;
                                 const hasFieldMedic = charState.unlockedTalents.includes('field_medic');
@@ -235,14 +227,14 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                                 effectMessages.push(`Recuperi ${healAmount} HP.${hasFieldMedic ? ' [Medico da Campo]' : ''}`);
                                 break;
                             }
-                            case 'satiety': 
-                                charState.restoreSatiety(effect.value as number); 
-                                effectMessages.push(`Recuperi ${effect.value} sazietà.`); 
+                            case 'satiety':
+                                charState.restoreSatiety(effect.value as number);
+                                effectMessages.push(`Recuperi ${effect.value} sazietà.`);
                                 hasFoodOrDrink = true;
                                 break;
-                            case 'hydration': 
-                                charState.restoreHydration(effect.value as number); 
-                                effectMessages.push(`Recuperi ${effect.value} idratazione.`); 
+                            case 'hydration':
+                                charState.restoreHydration(effect.value as number);
+                                effectMessages.push(`Recuperi ${effect.value} idratazione.`);
                                 hasFoodOrDrink = true;
                                 break;
                             case 'cureStatus':
@@ -275,24 +267,24 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             case 'Togli': charState.unequipItem(itemDetails.type === 'weapon' ? 'weapon' : 'armor'); useGameStore.getState().addJournalEntry({ text: `Hai tolto: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE }); break;
             case 'Scarta':
                 charState.discardItem(inventorySelectedIndex, 1);
-                useGameStore.getState().addJournalEntry({ text: `Hai scartato: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE }); 
+                useGameStore.getState().addJournalEntry({ text: `Hai scartato: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE });
                 break;
             case 'Esamina': useGameStore.getState().addJournalEntry({ text: `Esamini: ${itemDetails.name}. ${itemDetails.description}`, type: JournalEntryType.NARRATIVE }); break;
             case 'Recupera Materiali': charState.salvageItem(inventorySelectedIndex); break;
             case 'Ripara Oggetto': {
-                const repairValue = itemDetails.effects?.find(e => e.type === 'repair')?.value as number;
-                if(!repairValue) break;
-                
+                const repairValue = itemDetails.effects?.find((e: any) => e.type === 'repair')?.value as number;
+                if (!repairValue) break;
+
                 let repaired = false;
                 const repairTargets = [
                     ...charState.inventory.filter(i => i.durability && i.durability.current < i.durability.max)
                 ];
 
-                if(repairTargets.length > 0) {
+                if (repairTargets.length > 0) {
                     // For now, let's just repair the first damaged item found for simplicity.
                     // A more complex system could let the user choose.
                     const itemToRepairIndex = charState.inventory.findIndex(i => i.itemId === repairTargets[0].itemId);
-                    if(itemToRepairIndex !== -1) {
+                    if (itemToRepairIndex !== -1) {
                         charState.repairItem(itemToRepairIndex, repairValue);
                         const repairedItemDetails = itemDatabase[repairTargets[0].itemId];
                         useGameStore.getState().addJournalEntry({ text: `Hai usato ${itemDetails.name} per riparare ${repairedItemDetails.name}.`, type: JournalEntryType.NARRATIVE });
@@ -300,14 +292,14 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                         repaired = true;
                     }
                 }
-                
+
                 if (!repaired) {
-                     useGameStore.getState().addJournalEntry({ text: `Non hai oggetti da riparare.`, type: JournalEntryType.ACTION_FAILURE });
+                    useGameStore.getState().addJournalEntry({ text: `Non hai oggetti da riparare.`, type: JournalEntryType.ACTION_FAILURE });
                 }
                 break;
             }
         }
-        
+
         get().closeActionMenu();
         if (useCharacterStore.getState().inventory.length <= inventorySelectedIndex) {
             set({ inventorySelectedIndex: Math.max(0, useCharacterStore.getState().inventory.length - 1) });
@@ -325,7 +317,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * @description Enters a refuge.
      */
     enterRefuge: () => {
-        const { visitedRefuges, mainStoryStage, setGameState, activeMainStoryEvent, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
+        const { visitedRefuges, mainStoryStage, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
         const { gameTime } = useTimeStore.getState();
         const { refugeJustSearched } = get();
 
@@ -346,7 +338,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
         const isLooted = lootedRefuges.some(pos => pos.x === playerPos.x && pos.y === playerPos.y);
 
-        const options = [ isNight ? "Dormi fino all'alba" : "Aspetta un'ora" ];
+        const options = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora"];
         if (!isLooted && !refugeJustSearched) {
             options.push("Cerca nei dintorni");
         }
@@ -384,14 +376,14 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         const { setGameState, addJournalEntry } = useGameStore.getState();
         const { useEventStore } = await import('./eventStore');
         const { useEventDatabaseStore } = await import('../data/eventDatabase');
-        
+
         // Get all events from database (unique events are in biomeEvents and loreEvents)
         const { loreEvents, biomeEvents } = useEventDatabaseStore.getState();
-        
+
         // Search for the event in both lore and biome events
         const allEvents = [...(loreEvents || []), ...(biomeEvents || [])];
         let event = allEvents.find((e: any) => e.id === eventId);
-        
+
         if (!event) {
             console.error(`[startUniqueEvent] Event ${eventId} not found in database`);
             console.log('Available events:', allEvents.map((e: any) => e.id));
@@ -401,7 +393,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             });
             return;
         }
-        
+
         // v1.9.8: Check if event requires an active quest
         if (event.requiresQuest) {
             const { activeQuests } = useCharacterStore.getState();
@@ -409,7 +401,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 // Quest not active - try to find alternative event
                 const alternativeEventId = eventId.replace('unique_find_the_arsonist', 'unique_empty_cell_403');
                 const alternativeEvent = allEvents.find((e: any) => e.id === alternativeEventId);
-                
+
                 if (alternativeEvent) {
                     event = alternativeEvent;
                     console.log(`[startUniqueEvent] Quest ${event.requiresQuest} not active, using alternative event: ${alternativeEventId}`);
@@ -423,19 +415,19 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 }
             }
         }
-        
+
         // Set the event as active in eventStore and switch to event screen
         useEventStore.setState({
             activeEvent: event,
             eventResolutionText: null
         });
-        
+
         setGameState(GameState.EVENT_SCREEN);
         addJournalEntry({
             text: `EVENTO SPECIALE: ${event.title}`,
             type: JournalEntryType.EVENT
         });
-        
+
         audioManager.playSound('confirm');
     },
 
@@ -444,7 +436,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * @description Leaves a refuge.
      */
     leaveRefuge: () => {
-        set(state => {
+        set(() => {
             useGameStore.setState(gs => {
                 const newFlags = new Set(gs.gameFlags);
                 newFlags.delete('LULLABY_CHOICE_OFFERED_THIS_REST');
@@ -484,7 +476,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
      * @description Searches the current refuge for items.
      */
     searchRefuge: () => {
-        const { addJournalEntry, playerPos } = useGameStore.getState();
+        const { addJournalEntry } = useGameStore.getState();
         const { advanceTime } = useTimeStore.getState();
         advanceTime(30, true);
 
@@ -493,7 +485,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
 
         if (skillCheckResult.success) {
             journalText += "SUCCESSO. ";
-            
+
             // v1.9.9: Massively increased manual drop rate (20% → 40%) and added crafting materials
             const hasScavenger = useCharacterStore.getState().unlockedTalents.includes('scavenger');
             const lootTable = [
@@ -501,33 +493,33 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 { id: 'CONS_002', weight: 12, quantity: hasScavenger ? 3 : 2 }, // Clean water
                 { id: 'dirty_water', weight: 8, quantity: hasScavenger ? 4 : 2 }, // Dirty water (common)
                 { id: 'CONS_001', weight: 10, quantity: hasScavenger ? 2 : 1 }, // Food
-                
+
                 // Medical supplies (10%)
                 { id: 'CONS_003', weight: 5, quantity: hasScavenger ? 2 : 1 }, // Bandages
                 { id: 'MED_BANDAGE_BASIC', weight: 3, quantity: hasScavenger ? 3 : 2 },
                 { id: 'MED_ANTISEPTIC', weight: 2, quantity: 1 },
-                
+
                 // Crafting materials (20% - increased)
                 { id: 'scrap_metal', weight: 6, quantity: hasScavenger ? 3 : 2 },
                 { id: 'clean_cloth', weight: 5, quantity: hasScavenger ? 3 : 2 },
                 { id: 'bottle_empty', weight: 4, quantity: hasScavenger ? 3 : 2 },
                 { id: 'firewood', weight: 3, quantity: hasScavenger ? 4 : 2 }, // NEW: For arrows/spears
                 { id: 'durable_cloth', weight: 2, quantity: 1 },
-                
+
                 // Manuals (40% - MASSIVELY INCREASED)
                 { id: 'manual_field_medicine', weight: 10, quantity: 1 },
                 { id: 'manual_survival_basics', weight: 10, quantity: 1 },
                 { id: 'manual_archery_basics', weight: 10, quantity: 1 },
                 { id: 'manual_advanced_repairs', weight: 10, quantity: 1 },
-                
+
                 // Advanced consumables (0% - removed to prioritize manuals)
             ];
-            
+
             const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
             const roll = Math.random() * totalWeight;
             let cumulativeWeight = 0;
             let foundItem = lootTable[0];
-            
+
             for (const item of lootTable) {
                 cumulativeWeight += item.weight;
                 if (roll < cumulativeWeight) {
@@ -535,9 +527,9 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                     break;
                 }
             }
-            
+
             const itemDetails = useItemDatabaseStore.getState().itemDatabase[foundItem.id];
-            if(itemDetails) {
+            if (itemDetails) {
                 useCharacterStore.getState().addItem(foundItem.id, foundItem.quantity);
                 journalText += `Frugando sotto un'asse del pavimento, trovi: ${itemDetails.name} (x${foundItem.quantity}).`;
                 if (hasScavenger) journalText += " [Scavenger]";
@@ -554,7 +546,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         set({ refugeActionMessage: journalText, refugeJustSearched: true });
 
         const isNight = useTimeStore.getState().gameTime.hour >= 20 || useTimeStore.getState().gameTime.hour < 6;
-        const newOptions = [ isNight ? "Dormi fino all'alba" : "Aspetta un'ora", "Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio" ];
+        const newOptions = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora", "Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio"];
         set(state => ({ refugeMenuState: { ...state.refugeMenuState, options: newOptions, selectedIndex: 0 } }));
     },
 
@@ -565,11 +557,11 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
     confirmRefugeMenuSelection: () => {
         get().clearRefugeActionMessage();
         const { refugeMenuState } = get();
-        const { addJournalEntry, setGameState, mainStoryStage, playerPos, gameFlags } = useGameStore.getState();
+        const { addJournalEntry, setGameState, gameFlags } = useGameStore.getState();
         const { gameTime, advanceTime } = useTimeStore.getState();
         const { satiety, hydration } = useCharacterStore.getState();
         const selectedAction = refugeMenuState.options[refugeMenuState.selectedIndex];
-        
+
         if (selectedAction === "Aspetta un'ora" || selectedAction === "Dormi fino all'alba") {
             // CS_ASH_LULLABY trigger: First refuge at night on day 3+
             const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
@@ -580,85 +572,85 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
                 return;
             }
         }
-        
+
         audioManager.playSound('confirm');
 
-        switch(selectedAction) {
-          case "Aspetta un'ora": {
-            addJournalEntry({ text: "Decidi di riposare per un'ora.", type: JournalEntryType.NARRATIVE });
-            advanceTime(60, true);
-            const { fatigue, heal, rest } = useCharacterStore.getState();
-            let healAmount = 5;
-            if (fatigue.current > 75) {
-                healAmount = Math.floor(healAmount / 2);
-            }
-            heal(healAmount);
-            rest(15);
-            set({ refugeActionMessage: `Hai recuperato ${healAmount} HP e ti senti meno stanco.` });
-            break;
-          }
-          case "Dormi fino all'alba": {
-            let hoursToRest = (24 - gameTime.hour) + 6;
-            if (gameTime.hour < 6) hoursToRest = 6 - gameTime.hour;
-            const minutesToRest = (hoursToRest * 60) - gameTime.minute;
-            const { satietyCost, hydrationCost } = useCharacterStore.getState().calculateSurvivalCost(minutesToRest);
-            
-            // FIX v1.2.4: Always allow sleep, but apply penalties if malnourished/dehydrated
-            const hasSufficientResources = satiety.current >= satietyCost && hydration.current >= hydrationCost;
-            
-            if (!hasSufficientResources) {
-                addJournalEntry({ 
-                    text: "Ti addormenti nonostante la fame e la sete...", 
-                    type: JournalEntryType.NARRATIVE 
-                });
-            } else {
-                addJournalEntry({ 
-                    text: "Ti addormenti profondamente...", 
-                    type: JournalEntryType.NARRATIVE 
-                });
-            }
-            
-            advanceTime(minutesToRest, true);
-            const { heal, rest, hp, addStatus } = useCharacterStore.getState();
-            
-            if (hasSufficientResources) {
-                // Full recovery
-                heal(hp.max);
-                rest(50);
-                set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
-            } else {
-                // Penalized recovery
-                const healAmount = Math.floor(hp.max * 0.3); // Only 30% HP recovery
+        switch (selectedAction) {
+            case "Aspetta un'ora": {
+                addJournalEntry({ text: "Decidi di riposare per un'ora.", type: JournalEntryType.NARRATIVE });
+                advanceTime(60, true);
+                const { fatigue, heal, rest } = useCharacterStore.getState();
+                let healAmount = 5;
+                if (fatigue.current > 75) {
+                    healAmount = Math.floor(healAmount / 2);
+                }
                 heal(healAmount);
-                rest(25); // Only 25 fatigue recovery
-                addStatus('MALATO');
-                addJournalEntry({
-                    text: "Il sonno è stato inquieto. La mancanza di cibo e acqua ti ha lasciato debole.",
-                    type: JournalEntryType.SYSTEM_WARNING
-                });
-                set({ refugeActionMessage: "Ti svegli all'alba, ma sei debole e malato." });
+                rest(15);
+                set({ refugeActionMessage: `Hai recuperato ${healAmount} HP e ti senti meno stanco.` });
+                break;
             }
-            break;
-          }
-          case "Cerca nei dintorni":
-              get().searchRefuge();
-              return;
-          case "Banco di Lavoro": get().toggleCrafting(); break;
-          case "Gestisci Inventario": get().toggleInventory(); break;
-          case "Esci dal Rifugio": get().leaveRefuge(); break;
+            case "Dormi fino all'alba": {
+                let hoursToRest = (24 - gameTime.hour) + 6;
+                if (gameTime.hour < 6) hoursToRest = 6 - gameTime.hour;
+                const minutesToRest = (hoursToRest * 60) - gameTime.minute;
+                const { satietyCost, hydrationCost } = useCharacterStore.getState().calculateSurvivalCost(minutesToRest);
+
+                // FIX v1.2.4: Always allow sleep, but apply penalties if malnourished/dehydrated
+                const hasSufficientResources = satiety.current >= satietyCost && hydration.current >= hydrationCost;
+
+                if (!hasSufficientResources) {
+                    addJournalEntry({
+                        text: "Ti addormenti nonostante la fame e la sete...",
+                        type: JournalEntryType.NARRATIVE
+                    });
+                } else {
+                    addJournalEntry({
+                        text: "Ti addormenti profondamente...",
+                        type: JournalEntryType.NARRATIVE
+                    });
+                }
+
+                advanceTime(minutesToRest, true);
+                const { heal, rest, hp, addStatus } = useCharacterStore.getState();
+
+                if (hasSufficientResources) {
+                    // Full recovery
+                    heal(hp.max);
+                    rest(50);
+                    set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
+                } else {
+                    // Penalized recovery
+                    const healAmount = Math.floor(hp.max * 0.3); // Only 30% HP recovery
+                    heal(healAmount);
+                    rest(25); // Only 25 fatigue recovery
+                    addStatus('MALATO');
+                    addJournalEntry({
+                        text: "Il sonno è stato inquieto. La mancanza di cibo e acqua ti ha lasciato debole.",
+                        type: JournalEntryType.SYSTEM_WARNING
+                    });
+                    set({ refugeActionMessage: "Ti svegli all'alba, ma sei debole e malato." });
+                }
+                break;
+            }
+            case "Cerca nei dintorni":
+                get().searchRefuge();
+                return;
+            case "Banco di Lavoro": get().toggleCrafting(); break;
+            case "Gestisci Inventario": get().toggleInventory(); break;
+            case "Esci dal Rifugio": get().leaveRefuge(); break;
         }
-        
+
         if (get().isInRefuge) {
             const { playerPos, lootedRefuges } = useGameStore.getState();
             const { gameTime: newGameTime } = useTimeStore.getState();
             const { refugeJustSearched } = get();
             const isNight = newGameTime.hour >= 20 || newGameTime.hour < 6;
             const isLooted = lootedRefuges.some(pos => pos.x === playerPos.x && pos.y === playerPos.y);
-            const newOptions = [ isNight ? "Dormi fino all'alba" : "Aspetta un'ora" ];
+            const newOptions = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora"];
             if (!isLooted && !refugeJustSearched) newOptions.push("Cerca nei dintorni");
             newOptions.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
             // FIX: Reset selectedIndex a 0 quando il menu cambia per evitare confusione
-            set(state => ({ refugeMenuState: { isOpen: true, options: newOptions, selectedIndex: 0 } }));
+            set({ refugeMenuState: { isOpen: true, options: newOptions, selectedIndex: 0 } });
         }
     },
 
@@ -671,7 +663,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             if (state.isInventoryOpen) return {};
             const isOpening = !state.isCraftingOpen;
             audioManager.playSound(isOpening ? 'confirm' : 'cancel');
-            return { isCraftingOpen: isOpening, craftingMenuState: { selectedIndex: 0 }};
+            return { isCraftingOpen: isOpening, craftingMenuState: { selectedIndex: 0 } };
         });
     },
 
@@ -693,93 +685,28 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
         });
         audioManager.playSound('navigate');
     },
-    
+
     /**
      * @function performCrafting
      * @description Performs the selected crafting recipe.
      */
     performCrafting: () => {
         const { craftingMenuState } = get();
-        const { addJournalEntry } = useGameStore.getState();
-        const { advanceTime } = useTimeStore.getState();
-        const { inventory, knownRecipes, performSkillCheck, removeItem, addItem } = useCharacterStore.getState();
+        const { knownRecipes } = useCharacterStore.getState();
         const { recipes } = useRecipeDatabaseStore.getState();
-        const { itemDatabase } = useItemDatabaseStore.getState();
-        
-        const displayableRecipes = recipes.filter(r => knownRecipes.includes(r.id));
-        const recipe = displayableRecipes[craftingMenuState.selectedIndex];
-        if (!recipe) {
-            console.error('[CRAFTING] Recipe not found at index', craftingMenuState.selectedIndex);
-            return;
-        }
 
-        // FIX: Validate recipe has results
-        if (!recipe.results || recipe.results.length === 0) {
-            console.error('[CRAFTING] Recipe has no results:', recipe.id);
-            addJournalEntry({ text: "Errore: ricetta senza risultato.", type: JournalEntryType.SYSTEM_ERROR });
-            audioManager.playSound('error');
-            return;
-        }
+        // Import craftingService dynamically to avoid circular dependencies if any
+        import('../services/CraftingService').then(({ craftingService }) => {
+            const displayableRecipes = recipes.filter(r => knownRecipes.includes(r.id));
+            const recipe = displayableRecipes[craftingMenuState.selectedIndex];
 
-        if (!recipe.ingredients.every(ing => (inventory.find(i => i.itemId === ing.itemId)?.quantity || 0) >= ing.quantity)) {
-            addJournalEntry({ text: "Ingredienti insufficienti.", type: JournalEntryType.ACTION_FAILURE });
-            audioManager.playSound('error');
-            return;
-        }
-
-        // FIX: Check if itemDatabase is loaded before crafting
-        if (Object.keys(itemDatabase).length === 0) {
-            console.error('[CRAFTING] Item database not loaded yet!');
-            addJournalEntry({ text: "Errore: database oggetti non caricato. Riprova.", type: JournalEntryType.SYSTEM_ERROR });
-            audioManager.playSound('error');
-            return;
-        }
-
-        // Crafting sempre con successo (skillcheck rimosso)
-        advanceTime(recipe.timeCost, true);
-        audioManager.playSound('confirm');
-        
-        // Rimuovi ingredienti PRIMA di aggiungere i risultati
-        recipe.ingredients.forEach(ing => removeItem(ing.itemId, ing.quantity));
-
-        // Crea gli item e costruisci il messaggio
-        const createdItemsText = recipe.results.map(result => {
-            const item = itemDatabase[result.itemId];
-            if (!item) {
-                console.error(`[CRAFTING] Item ${result.itemId} not found in database. Available items:`, Object.keys(itemDatabase).slice(0, 10));
-                addJournalEntry({ text: `ERRORE: Oggetto ${result.itemId} non trovato nel database.`, type: JournalEntryType.SYSTEM_ERROR });
-                return null;
+            if (!recipe) {
+                console.error('[CRAFTING] Recipe not found at index', craftingMenuState.selectedIndex);
+                return;
             }
-            
-            // Add item to inventory
-            addItem(result.itemId, result.quantity);
-            
-            // Return formatted string
-            return `${item.name} x${result.quantity}`;
-        }).filter(text => text !== null).join(', ');
 
-        if (createdItemsText.length > 0) {
-            const journalText = `Hai creato: ${createdItemsText}.`;
-            addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
-            
-            // v1.9.0: Set quest flags for Main Quest "Prove del Padre"
-            recipe.results.forEach(result => {
-                if (result.itemId === 'CONS_002') {
-                    // Player has purified water - set flag for Main Quest
-                    useCharacterStore.getState().setQuestFlag('hasCraftedWater', true);
-                    console.log('[CRAFTING] Quest flag set: hasCraftedWater = true');
-                }
-            });
-            
-            // Check quest triggers for craftItem type
-            import('../services/questService').then(({ questService }) => {
-                recipe.results.forEach(result => {
-                    questService.checkQuestTriggers(result.itemId);
-                });
-            });
-        } else {
-            addJournalEntry({ text: "Crafting fallito: nessun oggetto creato.", type: JournalEntryType.SYSTEM_ERROR });
-        }
+            craftingService.craft(recipe.id);
+        });
     },
 
     /**

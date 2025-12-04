@@ -30,6 +30,7 @@ import { useQuestDatabaseStore } from './data/questDatabase';
 import { useDialogueDatabaseStore } from './data/dialogueDatabase';
 import { useTraderDatabaseStore } from './data/traderDatabase';
 import { useLoreArchiveDatabaseStore } from './data/loreArchiveDatabase';
+import { useInkStoryDatabaseStore } from './data/inkStoryDatabase';
 import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
@@ -72,6 +73,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore();
   const { loadDatabase: loadTraderDatabase, isLoaded: tradersLoaded } = useTraderDatabaseStore();
   const { loadDatabase: loadLoreArchiveDatabase, isLoaded: loreArchiveLoaded } = useLoreArchiveDatabaseStore();
+  const { loadDatabase: loadInkStoryDatabase, storyData: inkStoryData, isLoaded: inkStoryLoaded } = useInkStoryDatabaseStore();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
@@ -100,6 +102,7 @@ const App: React.FC = () => {
         await loadDialogueDatabase();
         await loadTraderDatabase();
         await loadLoreArchiveDatabase();
+        await loadInkStoryDatabase();
 
         console.log('✅ Tutti i database caricati con successo!');
         setIsLoading(false);
@@ -114,7 +117,16 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, loadLoreArchiveDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, loadLoreArchiveDatabase, loadInkStoryDatabase, itemDatabase]);
+
+  // Initialize NarrativeService when ink data is loaded
+  useEffect(() => {
+    if (inkStoryLoaded && inkStoryData) {
+      import('./services/NarrativeService').then(({ narrativeService }) => {
+        narrativeService.initialize(inkStoryData);
+      });
+    }
+  }, [inkStoryLoaded, inkStoryData]);
 
   const renderContent = () => {
     switch (gameState) {
@@ -145,7 +157,7 @@ const App: React.FC = () => {
         return <EventScreen />;
       case GameState.LEVEL_UP_SCREEN:
         return <LevelUpScreen />;
-       case GameState.MAIN_STORY:
+      case GameState.MAIN_STORY:
         return <MainStoryScreen />;
       case GameState.ASH_LULLABY_CHOICE:
         return <AshLullabyChoiceScreen />;
@@ -166,8 +178,8 @@ const App: React.FC = () => {
             <CombatScreen />
           </>
         );
-       case GameState.PAUSE_MENU:
-         return (
+      case GameState.PAUSE_MENU:
+        return (
           <>
             <GameScreen />
             <InGameMenuScreen />
@@ -211,11 +223,11 @@ const App: React.FC = () => {
   return (
     <div className="w-screen h-screen relative bg-black">
       {/* Il Monitor Virtuale */}
-      <div 
-        id="game-container" 
+      <div
+        id="game-container"
         className="bg-[var(--bg-primary)] overflow-hidden"
-        style={{ 
-          width: '1920px', 
+        style={{
+          width: '1920px',
           height: '1080px',
           ...scaleStyle
         }}

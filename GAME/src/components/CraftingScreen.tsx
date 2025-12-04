@@ -56,16 +56,16 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
                     <ul className="ml-6 space-y-1">
                         {recipe.ingredients?.map(ing => {
                             const item = itemDatabase[ing.itemId];
-                            return <li key={ing.itemId} style={{color: item?.color}}>- {item?.name || ing.itemId} x{ing.quantity}</li>
+                            return <li key={ing.itemId} style={{ color: item?.color }}>- {item?.name || ing.itemId} x{ing.quantity}</li>
                         }) || <li className="opacity-50">Nessun ingrediente</li>}
                     </ul>
                 </div>
-                 <div className="pt-2">
+                <div className="pt-2">
                     <span className="w-48 flex-shrink-0 opacity-70">Risultato:</span>
-                     <ul className="ml-6 space-y-1">
+                    <ul className="ml-6 space-y-1">
                         {recipe.results?.map(result => {
                             const item = itemDatabase[result.itemId];
-                            return <li key={result.itemId} style={{color: item?.color}}>- {item?.name || result.itemId} x{result.quantity}</li>
+                            return <li key={result.itemId} style={{ color: item?.color }}>- {item?.name || result.itemId} x{result.quantity}</li>
                         }) || <li className="opacity-50">Nessun risultato</li>}
                     </ul>
                 </div>
@@ -85,18 +85,18 @@ const CraftingScreen: React.FC = () => {
     const { selectedIndex } = craftingMenuState;
     const { inventory, knownRecipes } = useCharacterStore();
     const { recipes: allRecipes } = useRecipeDatabaseStore();
-    
-    const displayableRecipes = useMemo(() => 
+
+    const displayableRecipes = useMemo(() =>
         allRecipes.filter(recipe => knownRecipes.includes(recipe.id))
-    , [allRecipes, knownRecipes]);
+        , [allRecipes, knownRecipes]);
 
     const craftableStatus = useMemo(() => {
-        return displayableRecipes.map(recipe => {
-            return recipe.ingredients.every(ing => {
-                const playerItem = inventory.find(i => i.itemId === ing.itemId);
-                return playerItem && playerItem.quantity >= ing.quantity;
-            });
-        });
+        // Import craftingService dynamically or assume it's available if we import it at top level.
+        // Since we can't easily do async in useMemo, we'll rely on the logic being simple enough to replicate 
+        // OR we should have imported craftingService at the top.
+        // Let's import it at the top level first.
+        const { craftingService } = require('../services/CraftingService');
+        return displayableRecipes.map(recipe => craftingService.canCraft(recipe.id));
     }, [displayableRecipes, inventory]);
 
     const selectedRecipe = displayableRecipes[selectedIndex] || null;
@@ -135,7 +135,7 @@ const CraftingScreen: React.FC = () => {
     return (
         <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
             <div className="w-full h-full border-8 border-double border-green-400/50 flex flex-col p-6">
-                 <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ BANCO DI LAVORO ═══</h1>
+                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ BANCO DI LAVORO ═══</h1>
                 <div className="flex-grow flex space-x-6 overflow-hidden">
                     {/* Recipe List */}
                     <div className="w-2/5 h-full border-2 border-green-400/30 p-2 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
@@ -145,7 +145,7 @@ const CraftingScreen: React.FC = () => {
                                     const isSelected = index === selectedIndex;
                                     const isCraftable = craftableStatus[index];
                                     let color = isCraftable ? '#ffffff' : '#6b7280'; // White for craftable, gray for not
-                                    
+
                                     return (
                                         <li
                                             key={recipe.id}
@@ -161,7 +161,7 @@ const CraftingScreen: React.FC = () => {
                             <div className="text-green-400/50 text-4xl text-center h-full flex items-center justify-center">-- Nessuna Ricetta Conosciuta --</div>
                         )}
                     </div>
-                     {/* Recipe Details */}
+                    {/* Recipe Details */}
                     <div className="w-3/5 h-full border-2 border-green-400/30 p-4">
                         <RecipeDetails recipe={selectedRecipe} />
                     </div>

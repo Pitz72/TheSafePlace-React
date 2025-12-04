@@ -1,4 +1,6 @@
-# The Safe Place Chronicles: The Echo of the Journey (v2.0.0)
+# The Safe Place - Chronicles: The Echo of the Journey
+**Versione:** 2.0.3
+**Stato:** In Sviluppo (Refactoring & Migration)
 
 ## Un Gioco di Ruolo Testuale Retrò
 

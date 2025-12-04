@@ -1,0 +1,22 @@
+{
+    "inkVersion": 21,
+    "root": [
+        [
+            "^Ink story placeholder. Please compile main.ink to main.json.",
+            "\n",
+            [
+                "done",
+                {
+                    "#f": 5,
+                    "#n": "g-0"
+                }
+            ],
+            null
+        ],
+        "done",
+        {
+            "#f": 1
+        }
+    ],
+    "listDefs": {}
+}

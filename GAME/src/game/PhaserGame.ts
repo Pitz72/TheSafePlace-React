@@ -15,6 +15,8 @@ export class PhaserGame {
     }
 }
 
+import { MainScene } from './scenes/MainScene';
+
 export const createGameConfig = (parent: string): Phaser.Types.Core.GameConfig => {
     return {
         type: Phaser.AUTO,
@@ -29,6 +31,10 @@ export const createGameConfig = (parent: string): Phaser.Types.Core.GameConfig =
                 debug: false
             }
         },
-        scene: [] // To be populated with scenes
+        scene: [MainScene],
+        scale: {
+            mode: Phaser.Scale.RESIZE,
+            autoCenter: Phaser.Scale.CENTER_BOTH
+        }
     };
 };
