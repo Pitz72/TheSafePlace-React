@@ -20,6 +20,9 @@ export class MainScene extends Phaser.Scene {
         this.load.image('tileset', TILESET_SRC);
     }
 
+    private interactionKey!: Phaser.Input.Keyboard.Key;
+    private isInputLocked: boolean = false;
+
     create() {
         const mapData = useGameStore.getState().map;
         if (!mapData || mapData.length === 0) return;
@@ -76,6 +79,7 @@ export class MainScene extends Phaser.Scene {
         this.traderSprite.setFrame(9); // 'T' index
         this.traderSprite.setVisible(false);
         this.traderSprite.setDepth(5);
+        this.traderSprite.setName('npc_trader'); // Set name for interaction
         this.updateTrader();
 
         // 6. Add CRT Pipeline
@@ -99,13 +103,71 @@ export class MainScene extends Phaser.Scene {
             this.updateMarkers();
         });
 
+        // 8. Input Handling
+        if (this.input.keyboard) {
+            this.interactionKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        }
+
+        // Subscribe to Narrative Store for Input Locking
+        import('../../store/narrativeStore').then(({ useNarrativeStore }) => {
+            useNarrativeStore.subscribe((state) => {
+                this.isInputLocked = state.isStoryActive;
+            });
+        });
+
         // Cleanup on scene shutdown
         this.events.on('shutdown', this.shutdown, this);
         this.events.on('destroy', this.shutdown, this);
     }
 
-    private convertMapToIndices(mapData: string[]): number[][] {
-        return mapData.map(row => row.split('').map(char => this.getTileIndex(char)));
+    update() {
+        if (this.isInputLocked) return;
+
+        if (Phaser.Input.Keyboard.JustDown(this.interactionKey)) {
+            this.handleInteraction();
+        }
+    }
+
+    private handleInteraction() {
+        // Check for nearby interactables
+        const playerCenter = this.player.getCenter();
+        const interactionRadius = TILE_SIZE * 1.5;
+
+        // Check Trader
+        if (this.traderSprite.visible) {
+            const dist = Phaser.Math.Distance.BetweenPoints(playerCenter, this.traderSprite.getCenter());
+            if (dist <= interactionRadius) {
+                this.triggerInteraction(this.traderSprite.name);
+                return;
+            }
+        }
+
+        // Check Markers (NPCs, POIs)
+        const markers = this.markersGroup.getChildren() as Phaser.GameObjects.Sprite[];
+        for (const marker of markers) {
+            const dist = Phaser.Math.Distance.BetweenPoints(playerCenter, marker.getCenter());
+            if (dist <= interactionRadius) {
+                if (marker.name) {
+                    this.triggerInteraction(marker.name);
+                    return;
+                }
+            }
+        }
+    }
+
+    private triggerInteraction(spriteId: string) {
+        import('../../config/interactionMap').then(({ INTERACTION_MAP }) => {
+            const knot = INTERACTION_MAP[spriteId];
+            if (knot) {
+                import('../../services/NarrativeService').then(({ narrativeService }) => {
+                    narrativeService.jumpTo(knot);
+                });
+            }
+        });
+    }
+
+    private convertMapToIndices(mapData: string[][]): number[][] {
+        return mapData.map(row => row.map(char => this.getTileIndex(char)));
     }
 
     private getTileIndex(char: string): number {
@@ -142,6 +204,10 @@ export class MainScene extends Phaser.Scene {
                     'tileset'
                 );
                 sprite.setFrame(index);
+                // Assign a name or ID to the sprite for interaction
+                if (marker.id) {
+                    sprite.setName(marker.id);
+                }
                 this.markersGroup.add(sprite);
             });
         });

@@ -3,26 +3,27 @@ import { useCharacterStore } from '../store/characterStore';
 import { useGameStore } from '../store/gameStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
 import { useLoreArchiveDatabaseStore } from '../data/loreArchiveDatabase';
+import { useNarrativeStore } from '../store/narrativeStore'; // New Ink store
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { GameState } from '../types';
 
 /**
- * QuestScreen component.
+ * QuestScreen component (v2.0.3).
  * 
  * @description Full-screen modal interface for viewing active and completed quests.
- * Displays main quests and subquests in separate sections with current objectives.
+ * Now integrates with Ink Narrative System for quest tracking.
  * 
  * @remarks
  * - Activated when gameState is QUEST_LOG
  * - Keyboard-only navigation (ESC to close)
- * - Shows active quests with current objective
- * - Shows completed quests in strikethrough gray
- * - Two-column layout: Main Quests | Subquests
+ * - Shows active quests based on Ink variables (via useNarrativeStore)
+ * - Shows completed quests (legacy/mixed mode for now)
  * 
  * @returns {JSX.Element} The rendered QuestScreen component
  */
 const QuestScreen: React.FC = () => {
-    const { activeQuests, completedQuests, loreArchive } = useCharacterStore();
+    const { completedQuests, loreArchive } = useCharacterStore();
+    const { activeQuests: inkActiveQuests } = useNarrativeStore(); // Get active quests from Ink
     const { quests } = useQuestDatabaseStore();
     const { loreEntries } = useLoreArchiveDatabaseStore();
     const { setGameState } = useGameStore();
@@ -46,12 +47,13 @@ const QuestScreen: React.FC = () => {
     useKeyboardInput(handlerMap);
 
     // Separate quests by type
-    const activeMainQuests = Object.keys(activeQuests)
-        .map(questId => ({ questId, quest: quests[questId], currentStage: activeQuests[questId] }))
+    // We map Ink quest IDs to the legacy quest database to get titles/descriptions
+    const activeMainQuests = inkActiveQuests
+        .map(questId => ({ questId, quest: quests[questId] }))
         .filter(q => q.quest && q.quest.type === 'MAIN');
 
-    const activeSubQuests = Object.keys(activeQuests)
-        .map(questId => ({ questId, quest: quests[questId], currentStage: activeQuests[questId] }))
+    const activeSubQuests = inkActiveQuests
+        .map(questId => ({ questId, quest: quests[questId] }))
         .filter(q => q.quest && q.quest.type === 'SUB');
 
     const completedMainQuests = completedQuests
@@ -65,9 +67,11 @@ const QuestScreen: React.FC = () => {
     /**
      * Renders a quest entry with title and current objective.
      */
-    const renderActiveQuest = (questId: string, quest: any, currentStage: number) => {
-        const stageData = quest.stages.find((s: any) => s.stage === currentStage);
-        const objective = stageData ? stageData.objective : 'Obiettivo sconosciuto';
+    const renderActiveQuest = (questId: string, quest: any) => {
+        // For Ink quests, we might not have "stages" in the same way.
+        // We can try to get the current objective from Ink text or just show generic "Active".
+        // For now, we fallback to the first stage description or a generic message.
+        const objective = quest.stages && quest.stages.length > 0 ? quest.stages[0].objective : 'Obiettivo in corso...';
 
         return (
             <div key={questId} className="mb-4 pb-4 border-b border-green-400/20">
@@ -107,11 +111,11 @@ const QuestScreen: React.FC = () => {
                         <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
                             MISSIONI PRINCIPALI
                         </h2>
-                        
+
                         {/* Active Main Quests */}
                         {activeMainQuests.length > 0 ? (
                             <div className="mb-6">
-                                {activeMainQuests.map(q => renderActiveQuest(q.questId, q.quest, q.currentStage))}
+                                {activeMainQuests.map(q => renderActiveQuest(q.questId, q.quest))}
                             </div>
                         ) : (
                             <div className="text-green-400/50 text-3xl mb-6">
@@ -133,11 +137,11 @@ const QuestScreen: React.FC = () => {
                         <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
                             MISSIONI SECONDARIE
                         </h2>
-                        
+
                         {/* Active Subquests */}
                         {activeSubQuests.length > 0 ? (
                             <div className="mb-6">
-                                {activeSubQuests.map(q => renderActiveQuest(q.questId, q.quest, q.currentStage))}
+                                {activeSubQuests.map(q => renderActiveQuest(q.questId, q.quest))}
                             </div>
                         ) : (
                             <div className="text-green-400/50 text-3xl mb-6">
@@ -159,13 +163,13 @@ const QuestScreen: React.FC = () => {
                         <h2 className="text-5xl font-bold mb-4 pb-2 border-b-2 border-green-400/30">
                             ARCHIVIO LORE
                         </h2>
-                        
+
                         {loreArchive.length > 0 ? (
                             <div className="space-y-6">
                                 {loreArchive.map(entryId => {
                                     const entry = loreEntries[entryId];
                                     if (!entry) return null;
-                                    
+
                                     return (
                                         <div key={entryId} className="mb-6 pb-4 border-b border-green-400/20">
                                             <div className="text-4xl font-bold mb-3" style={{ color: '#a78bfa', textShadow: '0 0 8px #a78bfa' }}>

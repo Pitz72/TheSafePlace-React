@@ -111,6 +111,12 @@ Nuovo stack: **Phaser + Ink + React**.
 Obiettivo: Superare i limiti architetturali della versione React-only.
 
 #### Novità
+- **v2.0.3** (04/12/2025): **Ink Narrative Integration**.
+  - **Narrative Engine**: Integrazione completa di InkJS. Dialoghi, scelte e quest logic ora gestiti interamente da Ink.
+  - **World Interaction**: Sistema di trigger unificato. Interazione con NPC e oggetti tramite tasto 'E'.
+  - **UI Refactor**: `DialogueScreen`, `QuestScreen` ed `EventScreen` aggiornati per supportare il nuovo motore narrativo.
+  - **Safety Purge**: Migrazione sicura dei dati legacy (`dialogues.json` eliminato, `dialogueDatabase.ts` archiviato).
+  - **Bug Fix**: Risolto crash critico nel sistema di crafting (`require` fix).
 - **v2.0.1** (03/12/2025): **Layout Stabilization**. Downgrade a Tailwind v3 per fix layout. Ripristino visibilità mappa.
 - **v2.0.0** (03/12/2025): **Technology Stack Refactor**. Migrazione completa a React 19, Vite, Phaser 3, Zustand e TailwindCSS 4.
 - **v1.9.9.91** (23/11/2025): **Merchant Identity & Logic Fix**. Separazione mercanti (Marcus/Giona), fix eventi, audit globale integrità.

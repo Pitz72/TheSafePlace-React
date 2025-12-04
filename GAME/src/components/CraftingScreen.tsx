@@ -5,6 +5,7 @@ import { useRecipeDatabaseStore } from '../data/recipeDatabase';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Recipe } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
+import { craftingService } from '../services/CraftingService';
 
 /**
  * DetailLine component.
@@ -91,11 +92,6 @@ const CraftingScreen: React.FC = () => {
         , [allRecipes, knownRecipes]);
 
     const craftableStatus = useMemo(() => {
-        // Import craftingService dynamically or assume it's available if we import it at top level.
-        // Since we can't easily do async in useMemo, we'll rely on the logic being simple enough to replicate 
-        // OR we should have imported craftingService at the top.
-        // Let's import it at the top level first.
-        const { craftingService } = require('../services/CraftingService');
         return displayableRecipes.map(recipe => craftingService.canCraft(recipe.id));
     }, [displayableRecipes, inventory]);
 

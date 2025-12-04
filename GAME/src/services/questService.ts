@@ -32,7 +32,7 @@ const QUEST_UPDATE_COOLDOWN = 100; // ms
  * @description Returns coordinates and quest types for all active quests
  * with reachLocation triggers. Used by CanvasMap to render quest markers.
  *
- * @returns {Array<{pos: Position, type: QuestType}>} Array of markers with coordinates and quest type
+ * @returns {Array<{pos: Position, type: QuestType, id: string}>} Array of markers with coordinates, quest type, and quest ID
  *
  * @remarks
  * - Only returns markers for reachLocation triggers
@@ -41,12 +41,12 @@ const QUEST_UPDATE_COOLDOWN = 100; // ms
  *
  * @example
  * const markers = questService.getActiveQuestMarkers();
- * // [{pos: {x: 78, y: 9}, type: 'SUB'}]
+ * // [{pos: {x: 78, y: 9}, type: 'SUB', id: 'find_jonas_talisman'}]
  */
-export const getActiveQuestMarkers = (): Array<{pos: Position, type: QuestType}> => {
+export const getActiveQuestMarkers = (): Array<{ pos: Position, type: QuestType, id: string }> => {
   const { quests } = useQuestDatabaseStore.getState();
   const { activeQuests } = useCharacterStore.getState();
-  const markers: Array<{pos: Position, type: QuestType}> = [];
+  const markers: Array<{ pos: Position, type: QuestType, id: string }> = [];
 
   Object.keys(activeQuests).forEach(questId => {
     const quest = quests[questId];
@@ -54,10 +54,10 @@ export const getActiveQuestMarkers = (): Array<{pos: Position, type: QuestType}>
 
     const currentStage = activeQuests[questId];
     const stageData = quest.stages.find(s => s.stage === currentStage);
-    
+
     if (stageData && stageData.trigger.type === 'reachLocation') {
       const pos = stageData.trigger.value as { x: number; y: number };
-      markers.push({ pos, type: quest.type });
+      markers.push({ pos, type: quest.type, id: questId });
     }
   });
 
@@ -176,16 +176,16 @@ export const questService = {
 
     let newStage = activeQuests[questId] + 1;
     let skippedStages = 0;
-    
+
     // Check if next stage is a "Prova" that was already completed
     // If so, skip ahead to the next stage
     while (newStage <= quest.stages.length) {
       const stageData = quest.stages.find(s => s.stage === newStage);
       if (!stageData) break;
-      
+
       const trigger = stageData.trigger;
       let shouldSkip = false;
-      
+
       // Check if this is a "Prova" stage that was already completed
       if (trigger.type === 'craftItem' && trigger.value === 'CONS_002') {
         shouldSkip = getQuestFlag('hasCraftedWater');
@@ -194,7 +194,7 @@ export const questService = {
       } else if (trigger.type === 'tacticRevealed') {
         shouldSkip = getQuestFlag('hasRevealedTactic');
       }
-      
+
       if (shouldSkip) {
         skippedStages++;
         newStage++;
@@ -307,7 +307,7 @@ export const questService = {
         type: JournalEntryType.XP_GAIN
       });
     }
-    
+
     // Special quest completion effects (v1.8.0)
     if (questId === 'crossroads_investigation') {
       // Grant Marcus friendship flag for permanent discount
@@ -320,7 +320,7 @@ export const questService = {
         color: '#22c55e' // green-500
       });
     }
-    
+
     if (questId === 'find_jonas_talisman') {
       // Add Clan of the Raven lore entry
       useCharacterStore.getState().addLoreEntry('lore_clan_of_the_raven');
@@ -350,18 +350,18 @@ export const questService = {
   incrementQuestKillCount: (enemyId: string) => {
     const { activeQuests, questKillCounts } = useCharacterStore.getState();
     const { quests } = useQuestDatabaseStore.getState();
-    
+
     // Check all active quests for enemyDefeated triggers
     Object.keys(activeQuests).forEach(questId => {
       const quest = quests[questId];
       if (!quest) return;
-      
+
       const currentStage = activeQuests[questId];
       const stageData = quest.stages.find(s => s.stage === currentStage);
-      
+
       if (stageData && stageData.trigger.type === 'enemyDefeated') {
         const triggerValue = stageData.trigger.value as { enemyId: string; quantity: number };
-        
+
         if (triggerValue.enemyId === enemyId) {
           // Initialize quest kill counts if needed
           const newKillCounts = { ...questKillCounts };
@@ -371,13 +371,13 @@ export const questService = {
           if (!newKillCounts[questId][enemyId]) {
             newKillCounts[questId][enemyId] = 0;
           }
-          
+
           // Increment count
           newKillCounts[questId][enemyId]++;
           useCharacterStore.setState({ questKillCounts: newKillCounts });
-          
+
           console.log(`[QUEST SERVICE] Kill count for ${questId}: ${enemyId} = ${newKillCounts[questId][enemyId]}/${triggerValue.quantity}`);
-          
+
           // Check if quest should advance
           questService.checkQuestTriggers();
         }
@@ -436,10 +436,10 @@ export const questService = {
 
     // v1.9.9 - Enhanced logging for debugging
     const triggerSource = lastAddedItemId ? `addItem(${lastAddedItemId})` :
-                         lastDialogueNodeId ? `dialogue(${lastDialogueNodeId})` :
-                         lastCompletedEventId ? `event(${lastCompletedEventId})` :
-                         lastDefeatedEnemyId ? `enemyDefeated(${lastDefeatedEnemyId})` :
-                         'movePlayer()';
+      lastDialogueNodeId ? `dialogue(${lastDialogueNodeId})` :
+        lastCompletedEventId ? `event(${lastCompletedEventId})` :
+          lastDefeatedEnemyId ? `enemyDefeated(${lastDefeatedEnemyId})` :
+            'movePlayer()';
     console.log(`[QUEST CHECK] ═══ Triggered by: ${triggerSource} ═══`);
     console.log(`[QUEST CHECK] Active quests: ${Object.keys(activeQuests).length}`, Object.keys(activeQuests));
 
@@ -458,7 +458,7 @@ export const questService = {
 
       const trigger = stageData.trigger;
       let triggerMet = false;
-      
+
       // v1.9.9 - Log each quest check
       console.log(`[QUEST CHECK] Checking '${questId}' Stage ${currentStage}: trigger type '${trigger.type}'`);
 
@@ -468,9 +468,9 @@ export const questService = {
           const targetPos = trigger.value as { x: number; y: number };
           const isAtLocation = playerPos.x === targetPos.x && playerPos.y === targetPos.y;
           console.log(`[QUEST CHECK] '${questId}' reachLocation: player(${playerPos.x},${playerPos.y}) vs target(${targetPos.x},${targetPos.y}) → ${isAtLocation ? '✓ MET' : '✗ FAILED'}`);
-          
+
           if (isAtLocation) {
-            
+
             // SPECIAL ACTION: Trigger unique event instead of advancing quest
             // This allows location-based quests to show contextual events
             if (questId === 'find_jonas_talisman' && currentStage === 1) {
@@ -496,10 +496,10 @@ export const questService = {
               // Quest will advance via getItem trigger (stage 2)
               return;
             }
-            
+
             // For all other quests, normal behavior
             triggerMet = true;
-            
+
             // v1.8.0: Water pump repair quest
             if (questId === 'repair_water_pump' && currentStage === 2) {
               // Trigger the pump repair event
@@ -515,7 +515,7 @@ export const questService = {
                 triggerMet = false; // Override to prevent auto-advance
               }
             }
-            
+
             // v1.8.0: Crossroads investigation quest
             if (questId === 'crossroads_investigation' && currentStage === 2) {
               // Trigger the thief camp event
@@ -531,7 +531,7 @@ export const questService = {
                 triggerMet = false; // Override to prevent auto-advance
               }
             }
-            
+
             // v1.8.0: Find Elara quest
             if (questId === 'find_elara' && currentStage === 1) {
               // Trigger the find Elara event
@@ -555,7 +555,7 @@ export const questService = {
           const targetItemId = trigger.value as string;
           const itemMatches = lastAddedItemId === targetItemId;
           console.log(`[QUEST CHECK] '${questId}' getItem: need '${targetItemId}', got '${lastAddedItemId || 'none'}' → ${itemMatches ? '✓ MET' : '✗ FAILED'}`);
-          
+
           if (itemMatches) {
             triggerMet = true;
           }
@@ -563,7 +563,7 @@ export const questService = {
         }
 
         case 'hasItems': {
-          const requiredItems = trigger.value as Array<{itemId: string, quantity: number}>;
+          const requiredItems = trigger.value as Array<{ itemId: string, quantity: number }>;
           const hasAll = requiredItems.every(req => {
             const playerItem = inventory.find((i: InventoryItem) => i.itemId === req.itemId);
             const has = playerItem && playerItem.quantity >= req.quantity;
@@ -571,7 +571,7 @@ export const questService = {
             return has;
           });
           console.log(`[QUEST CHECK] '${questId}' hasItems: ${hasAll ? '✓ MET' : '✗ FAILED'}`);
-          
+
           if (hasAll) {
             triggerMet = true;
           }
@@ -601,13 +601,13 @@ export const questService = {
           // The interaction ID is passed as lastDialogueNodeId parameter
           // Used for: terminal interactions, object-based quest completion
           const targetInteractionId = trigger.value as string;
-          
+
           // Special case: Multi-flag check for signs_of_ash quest stage 1
           if (targetInteractionId === 'visited_all_ritual_sites') {
             const { gameFlags } = useGameStore.getState();
             const hasCave = gameFlags.has('RITUAL_SITE_CAVE_VISITED');
             const hasTree = gameFlags.has('RITUAL_SITE_TREE_VISITED');
-            
+
             if (hasCave && hasTree) {
               triggerMet = true;
               console.log(`[QUEST SERVICE] All ritual sites visited for ${questId}`);
@@ -622,7 +622,7 @@ export const questService = {
         case 'enemyDefeated': {
           const { enemyId, quantity } = trigger.value as { enemyId: string; quantity: number };
           const killCount = questKillCounts[questId]?.[enemyId] || 0;
-          
+
           if (killCount >= quantity) {
             triggerMet = true;
             console.log(`[QUEST SERVICE] enemyDefeated trigger met for ${questId} (${killCount}/${quantity} ${enemyId})`);
@@ -633,7 +633,7 @@ export const questService = {
         case 'mainStoryComplete': {
           const requiredStage = trigger.value as number;
           const { mainStoryStage } = useGameStore.getState();
-          
+
           if (mainStoryStage >= requiredStage) {
             triggerMet = true;
             console.log(`[QUEST SERVICE] mainStoryComplete trigger met for ${questId} (stage ${mainStoryStage} >= ${requiredStage})`);

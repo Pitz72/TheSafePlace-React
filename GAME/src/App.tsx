@@ -27,7 +27,7 @@ import { useEnemyDatabaseStore } from './data/enemyDatabase';
 import { useMainStoryDatabaseStore } from './data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
 import { useQuestDatabaseStore } from './data/questDatabase';
-import { useDialogueDatabaseStore } from './data/dialogueDatabase';
+// import { useDialogueDatabaseStore } from './data/dialogueDatabase'; // REMOVED
 import { useTraderDatabaseStore } from './data/traderDatabase';
 import { useLoreArchiveDatabaseStore } from './data/loreArchiveDatabase';
 import { useInkStoryDatabaseStore } from './data/inkStoryDatabase';
@@ -70,7 +70,7 @@ const App: React.FC = () => {
   const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
   const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
   const { loadDatabase: loadQuestDatabase, isLoaded: questsLoaded } = useQuestDatabaseStore();
-  const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore();
+  // const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore(); // REMOVED
   const { loadDatabase: loadTraderDatabase, isLoaded: tradersLoaded } = useTraderDatabaseStore();
   const { loadDatabase: loadLoreArchiveDatabase, isLoaded: loreArchiveLoaded } = useLoreArchiveDatabaseStore();
   const { loadDatabase: loadInkStoryDatabase, storyData: inkStoryData, isLoaded: inkStoryLoaded } = useInkStoryDatabaseStore();
@@ -99,7 +99,7 @@ const App: React.FC = () => {
         await loadTalentDatabase();
         await loadTrophyDatabase();
         await loadQuestDatabase();
-        await loadDialogueDatabase();
+        // await loadDialogueDatabase(); // REMOVED: Migrated to Ink
         await loadTraderDatabase();
         await loadLoreArchiveDatabase();
         await loadInkStoryDatabase();
@@ -117,7 +117,7 @@ const App: React.FC = () => {
     };
 
     loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadDialogueDatabase, loadTraderDatabase, loadLoreArchiveDatabase, loadInkStoryDatabase, itemDatabase]);
+  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadTraderDatabase, loadLoreArchiveDatabase, loadInkStoryDatabase, itemDatabase]);
 
   // Initialize NarrativeService when ink data is loaded
   useEffect(() => {
