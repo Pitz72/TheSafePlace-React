@@ -1,7 +1,7 @@
 import { Story } from 'inkjs';
 import { useCharacterStore } from '../store/characterStore';
 import { useNarrativeStore } from '../store/narrativeStore';
-// import { questService } from './questService'; // Uncomment if questService exists
+import { questService } from './questService';
 
 export class NarrativeService {
     private story: Story | null = null;
@@ -29,14 +29,15 @@ export class NarrativeService {
         this.story.BindExternalFunction("startQuest", (questId: string) => {
             console.log(`[Ink] Starting quest: ${questId}`);
             useNarrativeStore.getState().addActiveQuest(questId);
-            // Also sync with legacy character store if needed for persistence/compatibility
-            // useCharacterStore.getState().startQuest(questId); 
+            // Sync with game logic via questService
+            questService.startQuest(questId);
         });
 
         this.story.BindExternalFunction("completeQuest", (questId: string) => {
             console.log(`[Ink] Completing quest: ${questId}`);
             useNarrativeStore.getState().removeActiveQuest(questId);
-            // useCharacterStore.getState().completeQuest(questId);
+            // Sync with game logic via questService
+            questService.completeQuest(questId);
         });
 
         this.story.BindExternalFunction("giveItem", (itemId: string, quantity: number) => {

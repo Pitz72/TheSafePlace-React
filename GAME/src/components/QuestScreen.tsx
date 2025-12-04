@@ -3,7 +3,7 @@ import { useCharacterStore } from '../store/characterStore';
 import { useGameStore } from '../store/gameStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
 import { useLoreArchiveDatabaseStore } from '../data/loreArchiveDatabase';
-import { useNarrativeStore } from '../store/narrativeStore'; // New Ink store
+// import { useNarrativeStore } from '../store/narrativeStore'; // Unused
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { GameState } from '../types';
 
@@ -22,8 +22,8 @@ import { GameState } from '../types';
  * @returns {JSX.Element} The rendered QuestScreen component
  */
 const QuestScreen: React.FC = () => {
-    const { completedQuests, loreArchive } = useCharacterStore();
-    const { activeQuests: inkActiveQuests } = useNarrativeStore(); // Get active quests from Ink
+    const { completedQuests, loreArchive, activeQuests } = useCharacterStore();
+    // const { activeQuests: inkActiveQuests } = useNarrativeStore(); // REMOVED: Use CharacterStore as source of truth
     const { quests } = useQuestDatabaseStore();
     const { loreEntries } = useLoreArchiveDatabaseStore();
     const { setGameState } = useGameStore();
@@ -47,12 +47,14 @@ const QuestScreen: React.FC = () => {
     useKeyboardInput(handlerMap);
 
     // Separate quests by type
-    // We map Ink quest IDs to the legacy quest database to get titles/descriptions
-    const activeMainQuests = inkActiveQuests
+    // We map quest IDs (keys of activeQuests) to the quest database
+    const activeQuestIds = Object.keys(activeQuests);
+
+    const activeMainQuests = activeQuestIds
         .map(questId => ({ questId, quest: quests[questId] }))
         .filter(q => q.quest && q.quest.type === 'MAIN');
 
-    const activeSubQuests = inkActiveQuests
+    const activeSubQuests = activeQuestIds
         .map(questId => ({ questId, quest: quests[questId] }))
         .filter(q => q.quest && q.quest.type === 'SUB');
 

@@ -24,7 +24,7 @@ export class MainScene extends Phaser.Scene {
     private isInputLocked: boolean = false;
 
     create() {
-        const mapData = useGameStore.getState().map;
+        const mapData: string[][] = useGameStore.getState().map;
         if (!mapData || mapData.length === 0) return;
 
         // 1. Create Tilemap
@@ -32,7 +32,7 @@ export class MainScene extends Phaser.Scene {
         const mapWidth = mapData[0].length;
 
         const tilemap = this.make.tilemap({
-            data: this.convertMapToIndices(mapData),
+            data: this.convertMapToIndices(mapData) as number[][],
             tileWidth: TILE_SIZE,
             tileHeight: TILE_SIZE,
             width: mapWidth,

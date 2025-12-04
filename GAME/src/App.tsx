@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
-import { useCharacterStore } from './store/characterStore';
+// import { useCharacterStore } from './store/characterStore'; // Unused
 import { GameState, VisualTheme } from './types';
 import { useGameScale } from './hooks/useGameScale';
 import BootScreen from './components/BootScreen';
@@ -54,25 +54,25 @@ const App: React.FC = () => {
   const isInventoryOpen = useInteractionStore((state) => state.isInventoryOpen);
   const isInRefuge = useInteractionStore((state) => state.isInRefuge);
   const isCraftingOpen = useInteractionStore((state) => state.isCraftingOpen);
-  const setMap = useGameStore((state) => state.setMap);
-  const initCharacter = useCharacterStore((state) => state.initCharacter);
+  // const setMap = useGameStore((state) => state.setMap); // Unused
+  // const initCharacter = useCharacterStore((state) => state.initCharacter); // Unused
   const scaleStyle = useGameScale();
 
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { loadDatabase: loadItemDatabase, isLoaded: itemsLoaded, itemDatabase } = useItemDatabaseStore();
-  const { loadDatabase: loadEventDatabase, isLoaded: eventsLoaded } = useEventDatabaseStore();
-  const { loadDatabase: loadRecipeDatabase, isLoaded: recipesLoaded } = useRecipeDatabaseStore();
-  const { loadDatabase: loadEnemyDatabase, isLoaded: enemiesLoaded } = useEnemyDatabaseStore();
-  const { loadDatabase: loadMainStoryDatabase, isLoaded: mainStoryLoaded } = useMainStoryDatabaseStore();
-  const { loadDatabase: loadCutsceneDatabase, isLoaded: cutscenesLoaded } = useCutsceneDatabaseStore();
-  const { loadDatabase: loadTalentDatabase, isLoaded: talentsLoaded } = useTalentDatabaseStore();
-  const { loadDatabase: loadTrophyDatabase, isLoaded: trophiesLoaded } = useTrophyDatabaseStore();
-  const { loadDatabase: loadQuestDatabase, isLoaded: questsLoaded } = useQuestDatabaseStore();
+  const { loadDatabase: loadItemDatabase, itemDatabase } = useItemDatabaseStore();
+  const { loadDatabase: loadEventDatabase } = useEventDatabaseStore();
+  const { loadDatabase: loadRecipeDatabase } = useRecipeDatabaseStore();
+  const { loadDatabase: loadEnemyDatabase } = useEnemyDatabaseStore();
+  const { loadDatabase: loadMainStoryDatabase } = useMainStoryDatabaseStore();
+  const { loadDatabase: loadCutsceneDatabase } = useCutsceneDatabaseStore();
+  const { loadDatabase: loadTalentDatabase } = useTalentDatabaseStore();
+  const { loadDatabase: loadTrophyDatabase } = useTrophyDatabaseStore();
+  const { loadDatabase: loadQuestDatabase } = useQuestDatabaseStore();
   // const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore(); // REMOVED
-  const { loadDatabase: loadTraderDatabase, isLoaded: tradersLoaded } = useTraderDatabaseStore();
-  const { loadDatabase: loadLoreArchiveDatabase, isLoaded: loreArchiveLoaded } = useLoreArchiveDatabaseStore();
+  const { loadDatabase: loadTraderDatabase } = useTraderDatabaseStore();
+  const { loadDatabase: loadLoreArchiveDatabase } = useLoreArchiveDatabaseStore();
   const { loadDatabase: loadInkStoryDatabase, storyData: inkStoryData, isLoaded: inkStoryLoaded } = useInkStoryDatabaseStore();
 
   useEffect(() => {
