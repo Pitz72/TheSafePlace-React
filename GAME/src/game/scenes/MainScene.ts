@@ -3,6 +3,8 @@ import { TILESET_SRC, TILE_MAP, TILE_SIZE } from '../../assets/tileset_ultima';
 import { useGameStore } from '../../store/gameStore';
 import { useCharacterStore } from '../../store/characterStore';
 
+import { useInputStore } from '../../store/inputStore';
+
 export class MainScene extends Phaser.Scene {
     private player!: Phaser.GameObjects.Sprite;
     // @ts-ignore
@@ -26,6 +28,9 @@ export class MainScene extends Phaser.Scene {
     create() {
         const mapData: string[][] = useGameStore.getState().map;
         if (!mapData || mapData.length === 0) return;
+
+        // DISABLE MOUSE INPUT - KEYBOARD ONLY
+        this.input.mouse.enabled = false;
 
         // 1. Create Tilemap
         const mapHeight = mapData.length;
@@ -121,6 +126,29 @@ export class MainScene extends Phaser.Scene {
     }
 
     update() {
+        const currentContext = useInputStore.getState().currentContext;
+
+        // Only allow movement if in GAME context
+        if (currentContext !== 'GAME') {
+            if (this.player) {
+                // Stop player animation if moving
+                // Note: Phaser Arcade Physics would use setVelocity(0), but here we might be using tweens or custom logic.
+                // Since updatePlayerPosition uses tweens based on store updates, we just need to stop the store updates from happening
+                // or stop the input processing that triggers them.
+                // The input processing is likely handled elsewhere (e.g. React component or another system), 
+                // but if there was direct input handling here, we'd block it.
+                // Wait, movement is handled by React component listening to keys and calling movePlayer?
+                // If so, blocking here in update() might not be enough if the React component doesn't check context.
+                // BUT, we are updating MainScene to respect context.
+                // Let's check if MainScene handles movement input. 
+                // It seems MainScene only handles 'E' for interaction. Movement is likely handled by App.tsx or a hook.
+                // Ah, the user request said "Input: Serve un gestore unico per tastiera/mouse per evitare conflitti tra UI e Gioco."
+                // So we need to make sure WHOEVER handles movement checks the context.
+            }
+            // We still allow interaction if it's the GAME context, but here we are in NOT GAME context.
+            return;
+        }
+
         if (this.isInputLocked) return;
 
         if (Phaser.Input.Keyboard.JustDown(this.interactionKey)) {

@@ -1,18 +1,17 @@
-# The Safe Place - Chronicles: The Echo of the Journey
-**Versione:** 2.0.3
-**Stato:** In Sviluppo (Refactoring & Migration)
+# The Safe Place - React Remaster
 
-## Un Gioco di Ruolo Testuale Retrò
+![Version](https://img.shields.io/badge/version-2.0.5-blue.svg)
+![Status](https://img.shields.io/badge/status-STABLE-green.svg)
+![Tech](https://img.shields.io/badge/tech-React%2019%20%7C%20Phaser%20%7C%20Ink-purple.svg)
 
-**The Safe Place Chronicles** è un prototipo concettuale di gioco di ruolo (RPG) che si ispira ai classici videogiochi testuali e basati su griglia dei primi anni '80. Con il raggiungimento della versione 1.0.3, il prototipo offre un'esperienza narrativa e di gameplay completa, giocabile dall'inizio alla fine, arricchita da segreti nascosti, conseguenze definitive e un sistema di obiettivi a lungo termine.
+> **The Safe Place** è un'avventura narrativa di sopravvivenza ambientata in un mondo post-apocalittico. Questa versione "Remaster" migra il gioco originale da una griglia React statica a un mondo dinamico basato su **Phaser** per l'esplorazione e **Ink** per la narrativa.
 
-### Filosofia del Progetto
-
-Questo progetto nasce come esperimento tecnico e narrativo, con l'obiettivo di mettere alla prova la tecnologia LLM (nello specifico, Gemini 2.5 Pro) come partner creativo nello sviluppo di un'opera strutturata, coerente e dotata di un'anima. Non è un prodotto definitivo, ma un viaggio dentro un'idea in divenire.
-
-Il gioco è costruito con una filosofia "keyboard-only", per replicare il feeling dei giochi per computer di quell'epoca, con un'interfaccia grafica minimale ma funzionale che richiama i vecchi monitor a fosfori verdi.
-
-### Tecnologie Utilizzate
+## 📚 Documentazione
+Tutta la documentazione tecnica e di progetto si trova nella cartella [`docs/`](./docs/).
+- **Roadmap:** [`docs/ROADMAP.md`](./docs/ROADMAP.md)
+- **Log di Sviluppo:** [`docs/logs/`](./docs/logs/)
+- **Ultimo Aggiornamento:** [`v2.0.5 - Safety & Focus`](./docs/logs/v2.0.5.md)
+- **Visione Futura:** [`docs/design/VISION_2025.md`](./docs/design/VISION_2025.md)
 
 *   **Frontend:** React con TypeScript
 *   **Gestione dello Stato:** Zustand (con architettura a "slice")
