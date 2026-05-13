@@ -17,6 +17,9 @@ export class NarrativeService {
     public initialize(storyJson: any) {
         try {
             this.story = new Story(storyJson);
+            // Belt-and-braces: if a future EXTERNAL is added to .ink without a JS binding,
+            // Ink will fall back to the in-source `=== function ===` stub rather than throw.
+            this.story.allowExternalFunctionFallbacks = true;
             this.bindExternalFunctions();
             console.log("NarrativeService initialized with Ink story.");
             this.updateStore(); // Initial sync
@@ -61,6 +64,25 @@ export class NarrativeService {
         this.story.BindExternalFunction("has_item", (itemId: string) => {
             // Mock check or implement inventory check
             return useCharacterStore.getState().inventory.some(i => i.itemId === itemId);
+        });
+
+        this.story.BindExternalFunction("addXp", (amount: number) => {
+            useCharacterStore.getState().addXp(amount);
+        });
+
+        this.story.BindExternalFunction("learnRecipe", (recipeId: string) => {
+            useCharacterStore.getState().learnRecipe(recipeId);
+        });
+
+        // TODO: implement real armor upgrade and POI reveal once the corresponding
+        // character/game actions exist. For now we log so dialogues that reference
+        // these effects don't break.
+        this.story.BindExternalFunction("upgradeArmor", (slot: string, bonus: number) => {
+            console.warn(`[Ink] upgradeArmor stub: slot=${slot} bonus=${bonus} (action not yet implemented)`);
+        });
+
+        this.story.BindExternalFunction("revealMapPOI", (x: number, y: number, name: string) => {
+            console.warn(`[Ink] revealMapPOI stub: (${x},${y}) "${name}" (action not yet implemented)`);
         });
     }
 
