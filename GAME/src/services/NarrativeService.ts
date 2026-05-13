@@ -22,7 +22,7 @@ export class NarrativeService {
             this.story.allowExternalFunctionFallbacks = true;
             this.bindExternalFunctions();
             console.log("NarrativeService initialized with Ink story.");
-            this.updateStore(); // Initial sync
+            this.commitToStore(); // Initial sync
         } catch (error) {
             console.error("Failed to initialize NarrativeService:", error);
         }
@@ -87,12 +87,24 @@ export class NarrativeService {
     }
 
     public continue(): string {
-        if (this.story && this.story.canContinue) {
-            const text = this.story.Continue() || "";
-            this.updateStore();
-            return text;
+        if (!this.story) return "";
+        // Ink emits one paragraph per Continue(). A knot like `=== marcus_main === ... -> hub`
+        // requires two consecutive Continue() calls to surface the choices in `hub`. We drain
+        // the queue until either the story stops or it offers choices, then push the joined
+        // text into the store as a single block. This is the conventional pattern for an Ink
+        // runner that doesn't expose a "press space to continue" affordance per paragraph.
+        let accumulatedText = "";
+        const accumulatedTags: string[] = [];
+        while (this.story.canContinue) {
+            const line = this.story.Continue() || "";
+            accumulatedText += line;
+            const lineTags = this.story.currentTags;
+            if (lineTags && lineTags.length > 0) {
+                accumulatedTags.push(...lineTags);
+            }
         }
-        return "";
+        this.commitToStore(accumulatedText, accumulatedTags);
+        return accumulatedText;
     }
 
     public get currentChoices() {
@@ -125,7 +137,7 @@ export class NarrativeService {
     public setVariable(varName: string, value: any) {
         if (this.story) {
             this.story.variablesState[varName] = value;
-            this.updateStore();
+            this.commitToStore();
         }
     }
 
@@ -146,20 +158,23 @@ export class NarrativeService {
         setReturnState(null);
     }
 
-    private updateStore() {
+    // Push state into the store. If text/tags are passed in, they win (typical case after a
+    // multi-paragraph drain in continue()). Otherwise fall back to whatever Ink has on the
+    // current line (used after initialize() and setVariable()).
+    private commitToStore(text?: string, tags?: string[]) {
         if (!this.story) return;
 
-        const currentText = this.story.currentText || "";
+        const currentText = text ?? this.story.currentText ?? "";
         const currentChoices = this.story.currentChoices.map(c => ({
             index: c.index,
             text: c.text
         }));
-        const currentTags = this.story.currentTags || [];
+        const currentTags = tags ?? this.story.currentTags ?? [];
 
         const store = useNarrativeStore.getState();
         store.setStoryState(currentText, currentChoices, currentTags);
 
-        // Sticky speaker: if this paragraph carries a #speaker:<name> tag, latch it.
+        // Sticky speaker: if any tag in this batch is #speaker:<name>, latch it.
         // Otherwise keep whatever the previous paragraph set.
         const speakerTag = currentTags.find(t => t.trim().toLowerCase().startsWith("speaker:"));
         if (speakerTag) {
