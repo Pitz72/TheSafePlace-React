@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { GameState } from '../types';
 
 interface NarrativeState {
     currentText: string;
@@ -6,6 +7,7 @@ interface NarrativeState {
     currentTags: string[];
     isStoryActive: boolean;
     activeQuests: string[]; // List of active quest IDs (from Ink variables)
+    returnState: GameState | null; // GameState to restore when the dialogue/story ends
 
     // Actions
     setStoryState: (text: string, choices: { index: number; text: string }[], tags: string[]) => void;
@@ -13,6 +15,7 @@ interface NarrativeState {
     setActiveQuests: (quests: string[]) => void;
     addActiveQuest: (questId: string) => void;
     removeActiveQuest: (questId: string) => void;
+    setReturnState: (state: GameState | null) => void;
     reset: () => void;
 }
 
@@ -22,6 +25,7 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
     currentTags: [],
     isStoryActive: false,
     activeQuests: [],
+    returnState: null,
 
     setStoryState: (text, choices, tags) => set({
         currentText: text,
@@ -41,11 +45,14 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
         activeQuests: state.activeQuests.filter(id => id !== questId)
     })),
 
+    setReturnState: (state) => set({ returnState: state }),
+
     reset: () => set({
         currentText: "",
         currentChoices: [],
         currentTags: [],
         isStoryActive: false,
-        activeQuests: []
+        activeQuests: [],
+        returnState: null
     })
 }));

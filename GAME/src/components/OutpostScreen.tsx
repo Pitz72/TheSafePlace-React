@@ -5,7 +5,7 @@ import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { useTimeStore } from '../store/timeStore';
 import { GameState, JournalEntryType } from '../types';
-import { dialogueService } from '../services/dialogueService';
+import { narrativeService } from '../services/NarrativeService';
 import { tradingService } from '../services/tradingService';
 
 /**
@@ -43,21 +43,21 @@ const OutpostScreen: React.FC = () => {
     const confirmSelection = useCallback(() => {
         const selectedOption = options[selectedIndex];
         
-        // Marcus dialogue (v1.7.0: Now functional!)
+        // Marcus dialogue — routes to Ink knot, returns to Outpost on exit
         if (selectedOption.includes('Parla con Marcus')) {
-            dialogueService.startDialogue('marcus_main');
+            narrativeService.startDialogue('marcus_main', GameState.OUTPOST);
             return;
         }
 
-        // Anya dialogue (v1.8.1: NEW!)
+        // Anya dialogue
         if (selectedOption.includes('Parla con Anya')) {
-            dialogueService.startDialogue('anya_main');
+            narrativeService.startDialogue('anya_main', GameState.OUTPOST);
             return;
         }
 
-        // Silas dialogue (v1.8.3: NEW!)
+        // Silas dialogue
         if (selectedOption.includes('Parla con Silas')) {
-            dialogueService.startDialogue('silas_main');
+            narrativeService.startDialogue('silas_main', GameState.OUTPOST);
             return;
         }
 

@@ -1,6 +1,8 @@
 import { Story } from 'inkjs';
 import { useCharacterStore } from '../store/characterStore';
 import { useNarrativeStore } from '../store/narrativeStore';
+import { useGameStore } from '../store/gameStore';
+import { GameState } from '../types';
 import { questService } from './questService';
 
 export class NarrativeService {
@@ -105,8 +107,19 @@ export class NarrativeService {
         }
     }
 
+    public startDialogue(knot: string, returnState?: GameState) {
+        const currentState = useGameStore.getState().gameState;
+        const stateToReturnTo = returnState ?? currentState ?? GameState.IN_GAME;
+        useNarrativeStore.getState().setReturnState(stateToReturnTo);
+        useGameStore.getState().setGameState(GameState.DIALOGUE);
+        this.jumpTo(knot);
+    }
+
     public endDialogue() {
-        useNarrativeStore.getState().setStoryActive(false);
+        const { returnState, setStoryActive, setReturnState } = useNarrativeStore.getState();
+        setStoryActive(false);
+        useGameStore.getState().setGameState(returnState ?? GameState.IN_GAME);
+        setReturnState(null);
     }
 
     private updateStore() {

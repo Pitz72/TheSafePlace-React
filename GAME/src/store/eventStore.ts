@@ -289,9 +289,9 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 questService.checkQuestTriggers();
                             });
                         } else if ((effect === 'startDialogue' || effect === 'start_dialogue') && dialogueId) {
-                            // Import dialogueService dynamically to avoid circular dependency
-                            import('../services/dialogueService').then(({ dialogueService }) => {
-                                dialogueService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
+                            // Route to Inkjs via NarrativeService; dialogueId is an Ink knot name.
+                            import('../services/NarrativeService').then(({ narrativeService }) => {
+                                narrativeService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
                             });
                             message = result.text || "Inizi una conversazione...";
                         } else if ((effect === 'startTrading' || effect === 'open_trade_screen') && traderId) {

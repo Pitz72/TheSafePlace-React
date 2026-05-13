@@ -235,9 +235,9 @@ export const gameService = {
 
       case 'H': // Herbalist Cabin - Direct dialogue trigger (v1.9.9)
         useGameStore.setState({ playerPos: newPos });
-        // Import dialogueService dynamically to avoid circular dependency
-        import('./dialogueService').then(({ dialogueService }) => {
-          dialogueService.startDialogue('olivia_main');
+        // Route to Inkjs via NarrativeService (olivia_main is an Ink knot)
+        import('./NarrativeService').then(({ narrativeService }) => {
+          narrativeService.startDialogue('olivia_main');
         });
         addJournalEntry({
           text: "Sei arrivato alla Capanna dell'Erborista. Un'oasi di vita in un mondo di morte.",
