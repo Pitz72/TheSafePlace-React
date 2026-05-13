@@ -104,6 +104,19 @@ export class NarrativeService {
             }
         }
         this.commitToStore(accumulatedText, accumulatedTags);
+
+        // If Ink has nothing left to emit and no choices to present, the story has reached
+        // a `-> END` or `-> DONE`. Close the dialogue UI automatically — otherwise the
+        // player would be stuck staring at the final line with no way to dismiss it.
+        // Only triggered if a dialogue is actually active (avoids spurious close at boot).
+        if (
+            useNarrativeStore.getState().isStoryActive &&
+            !this.story.canContinue &&
+            this.story.currentChoices.length === 0
+        ) {
+            this.endDialogue();
+        }
+
         return accumulatedText;
     }
 

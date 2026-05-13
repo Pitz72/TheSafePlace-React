@@ -56,10 +56,10 @@ const DialogueScreen: React.FC = () => {
     // Don't allow input while typing
     if (isTyping) return;
 
-    // ESC to exit dialogue (if allowed by story logic, usually handled by choices)
-    // For now, we allow ESC to force close if needed, but Ink should handle flow.
+    // ESC as emergency exit: lets the player escape if Ink ever stalls.
+    // The normal flow (-> END / -> DONE) already auto-closes via NarrativeService.
     if (key === 'Escape') {
-      // narrativeService.endDialogue(); // Optional: allow manual exit
+      narrativeService.endDialogue();
       return;
     }
 
