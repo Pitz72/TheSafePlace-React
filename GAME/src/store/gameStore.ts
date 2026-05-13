@@ -33,6 +33,13 @@ const SAVE_VERSION = "2.0.0";
  */
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
+// Legacy cutscene id -> Ink knot. Add an entry here once a cutscene has been rewritten
+// in `src/assets/story/modules/cutscenes/`. Anything not listed keeps using the legacy
+// page-based player.
+const LEGACY_CUTSCENE_TO_INK_KNOT: Record<string, string> = {
+    'CS_OPENING': 'intro',
+};
+
 /**
  * @function migrateSaveData
  * @description Migrates save data from older versions to the current version.
@@ -808,6 +815,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
    * @param {string} id - The ID of the cutscene to start.
    */
   startCutscene: (id) => {
+    // Selective Ink routing: when an Ink knot is available for this legacy cutscene id,
+    // hand control to NarrativeService and skip the legacy page-based player.
+    // Knots that don't have an Ink rewrite yet keep using the legacy CutsceneScreen pages.
+    const knot = LEGACY_CUTSCENE_TO_INK_KNOT[id];
+    if (knot) {
+        import('../services/NarrativeService').then(({ narrativeService }) => {
+            narrativeService.startCutscene(knot);
+        });
+        return;
+    }
+
     const { cutscenes } = useCutsceneDatabaseStore.getState();
     if (cutscenes[id]) {
         set({ activeCutscene: cutscenes[id], gameState: GameState.CUTSCENE });

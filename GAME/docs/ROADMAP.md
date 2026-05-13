@@ -38,9 +38,12 @@ Migrato a `narrativeStore` + `narrativeService`. Speaker tag sticky funzionante.
 - **Stato Attuale**: Legge solo `useGameStore.activeMainStoryEvent` (sistema legacy).
 - **Da fare**: routing tramite NarrativeService (knot `main_story` o equivalente), rimuovere lo store legacy quando libero.
 
-### 1.4 `CutsceneScreen.tsx` ❌ DA MIGRARE
-- **Stato Attuale**: Legge solo `useGameStore.activeCutscene` (legacy).
-- **Da fare**: idem, instradare a Ink. La cutscene di intro è già scritta in `modules/cutscenes/intro.ink` (138 righe).
+### 1.4 `CutsceneScreen.tsx` ✅ DUAL-MODE
+- Componente refattorizzato in due sotto-componenti: `InkCutscene` e `LegacyCutscene`. Il root sceglie in base a `narrativeStore.isStoryActive`.
+- `NarrativeService.startCutscene(knot, returnState?)` aggiunto (default returnState: `IN_GAME`, perché la cutscene è sempre transizione verso il gameplay).
+- `gameStore.startCutscene(id)` ora controlla `LEGACY_CUTSCENE_TO_INK_KNOT` (mappa in cima al file): se un id legacy ha un knot Ink corrispondente, instrada al NarrativeService; altrimenti percorso legacy invariato.
+- Attualmente mappato: `CS_OPENING → intro` (lettera del padre, 138 righe, già esistenti).
+- **Da fare in futuro**: riscrivere le altre 9 cutscene (`CS_ASH_LULLABY`, `CS_THE_BRINK`, `CS_THE_WEIGHT_OF_CHOICE`, `CS_CITY_OF_GHOSTS`, `CS_BEING_WATCHED`, `CS_RIVER_INTRO`, `CS_HALF_JOURNEY`, `CS_POINT_OF_NO_RETURN`, `CS_STRANGERS_REFLECTION`) in Ink e aggiungerle alla mappa. È lavoro **contenutistico**, non architetturale.
 
 ---
 
@@ -115,11 +118,11 @@ Stato a inizio sessione: 9 file importatori, attivi. Stato attuale: invariato (l
 | 1.1 DialogueScreen | ✅ Completa | — |
 | 1.2 QuestScreen | ❌ | 1 |
 | 1.3 MainStoryScreen | ❌ | 0.5 |
-| 1.4 CutsceneScreen | ❌ | 0.5 |
+| 1.4 CutsceneScreen | ✅ Dual-mode (intro in Ink, altre 9 ancora legacy) | — (fatta architettura; contenuti = lavoro a parte) |
 | 2 Phaser binding | ❌ | 1 |
 | 3 Audit | ❌ | 0.5 |
 | 4 Purge | ❌ | 0.5 |
 | 5 Save/Load | ❌ | 1 |
 | 6 Tauri | ❌ | 1 |
 
-**Prossimo Passo Consigliato**: FASE 1.3 (MainStoryScreen) o FASE 1.4 (CutsceneScreen) — sono brevi e completano la migrazione delle schermate narrative. QuestScreen (1.2) è più articolata, va affrontata con calma.
+**Prossimo Passo Consigliato**: FASE 1.3 (MainStoryScreen, lavoro breve analogo a 1.4) oppure direttamente FASE 1.2 (QuestScreen, articolata) se si preferisce affrontare il pezzo più grosso a mente fresca.

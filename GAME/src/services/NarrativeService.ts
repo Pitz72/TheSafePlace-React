@@ -164,6 +164,18 @@ export class NarrativeService {
         this.jumpTo(knot);
     }
 
+    public startCutscene(knot: string, returnState?: GameState) {
+        // Cutscenes are scene transitions: they default to IN_GAME on exit, not the caller's
+        // state. Otherwise the opening (triggered from MAIN_MENU) would bounce back to the
+        // main menu when the story reaches -> END.
+        const stateToReturnTo = returnState ?? GameState.IN_GAME;
+        const narrative = useNarrativeStore.getState();
+        narrative.setReturnState(stateToReturnTo);
+        narrative.setCurrentSpeaker(""); // cutscenes are narrator-only, no speaker label
+        useGameStore.getState().setGameState(GameState.CUTSCENE);
+        this.jumpTo(knot);
+    }
+
     public endDialogue() {
         const { returnState, setStoryActive, setReturnState } = useNarrativeStore.getState();
         setStoryActive(false);
