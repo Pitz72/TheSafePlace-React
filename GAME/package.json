@@ -9,6 +9,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "validate:data": "node scripts/validate-data.js",
+    "compile:ink": "inkjs-compiler -o src/assets/story/main.json src/assets/story/main.ink",
+    "predev": "npm run compile:ink",
+    "prebuild": "npm run compile:ink",
     "lint": "eslint ."
   },
   "dependencies": {

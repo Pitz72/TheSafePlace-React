@@ -7,16 +7,20 @@ EXTERNAL giveItem(itemId, quantity)
 EXTERNAL takeItem(itemId, quantity)
 EXTERNAL checkSkill(skillName, dc)
 
-// Fallback functions for testing in Inky (will be overridden by game)
-function startQuest(questId)
+// Fallback functions for testing in Inky (overridden at runtime by the game)
+=== function startQuest(questId) ===
     ~ return
-function completeQuest(questId)
+
+=== function completeQuest(questId) ===
     ~ return
-function giveItem(itemId, quantity)
+
+=== function giveItem(itemId, quantity) ===
     ~ return
-function takeItem(itemId, quantity)
+
+=== function takeItem(itemId, quantity) ===
     ~ return
-function checkSkill(skillName, dc)
+
+=== function checkSkill(skillName, dc) ===
     ~ return true
 
 // Global Variables
@@ -39,8 +43,8 @@ VAR ANYA_ECHO_EUROCENTER = false
 VAR ANYA_ECHO_CAPTAINS_BROADCAST = false
 
 // Helper functions
-function has_item(itemId)
-    ~ return false // Placeholder, should be external or tracked
+=== function has_item(itemId) ===
+    ~ return false // Placeholder, overridden by NarrativeService.
 
 // External Functions bound in NarrativeService.ts (Additional)
 EXTERNAL addXp(amount)
@@ -49,15 +53,14 @@ EXTERNAL upgradeArmor(slot, bonus)
 EXTERNAL revealMapPOI(x, y, name)
 
 // Fallback functions
-function addXp(amount)
+=== function addXp(amount) ===
     ~ return
 
-function learnRecipe(recipeId)
+=== function learnRecipe(recipeId) ===
     ~ return
 
-function upgradeArmor(slot, bonus)
+=== function upgradeArmor(slot, bonus) ===
     ~ return
 
-function revealMapPOI(x, y, name)
+=== function revealMapPOI(x, y, name) ===
     ~ return
-

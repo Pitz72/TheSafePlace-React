@@ -5,13 +5,13 @@ Stai lontano dai miei circuiti, viaggiatore. A meno che tu non abbia qualcosa di
 = hub
     + [Cosa cerchi esattamente?] -> what_do_you_seek
     + [Cosa puoi fare con questa tecnologia?] -> what_can_you_do
-    * {has_item("pixeldebh_plate")} [[ECHO] Ho trovato questa strana placca di metallo ('PixelDebh').] -> anya_pixeldebh
-    * {has_item("drone_memory_chip")} [[ECHO] Ho un chip di memoria da un drone di sorveglianza.] -> anya_drone_chip
-    * {has_item("cryptic_recording")} [[ECHO] Ho una registrazione criptica da una vecchia radio.] -> anya_cryptic_recording
-    * {has_item("research_notes_rebirth")} [[ECHO] Ho trovato note sul 'Progetto Rinascita'.] -> anya_project_rebirth
-    * {has_item("eurocenter_business_card")} [[ECHO] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.] -> anya_eurocenter_card
-    * {has_item("captains_last_broadcast")} [[ECHO] Ho l'ultima trasmissione del Capitano Keith Arrow.] -> anya_captains_broadcast
-    * {ANYA_ECHO_PIXELDEBH && ANYA_ECHO_DRONE_CHIP && ANYA_ECHO_CRYPTIC_RECORDING && ANYA_ECHO_PROJECT_REBIRTH && ANYA_ECHO_EUROCENTER && ANYA_ECHO_CAPTAINS_BROADCAST} [[QUEST] Ho trovato tutti gli Echi.] -> anya_all_echoes_delivered
+    * {has_item("pixeldebh_plate")} [\[ECHO\] Ho trovato questa strana placca di metallo ('PixelDebh').] -> anya_pixeldebh
+    * {has_item("drone_memory_chip")} [\[ECHO\] Ho un chip di memoria da un drone di sorveglianza.] -> anya_drone_chip
+    * {has_item("cryptic_recording")} [\[ECHO\] Ho una registrazione criptica da una vecchia radio.] -> anya_cryptic_recording
+    * {has_item("research_notes_rebirth")} [\[ECHO\] Ho trovato note sul 'Progetto Rinascita'.] -> anya_project_rebirth
+    * {has_item("eurocenter_business_card")} [\[ECHO\] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.] -> anya_eurocenter_card
+    * {has_item("captains_last_broadcast")} [\[ECHO\] Ho l'ultima trasmissione del Capitano Keith Arrow.] -> anya_captains_broadcast
+    * {ANYA_ECHO_PIXELDEBH && ANYA_ECHO_DRONE_CHIP && ANYA_ECHO_CRYPTIC_RECORDING && ANYA_ECHO_PROJECT_REBIRTH && ANYA_ECHO_EUROCENTER && ANYA_ECHO_CAPTAINS_BROADCAST} [\[QUEST\] Ho trovato tutti gli Echi.] -> anya_all_echoes_delivered
     + [Ti terrò a mente. Addio.] -> END
 
 = what_do_you_seek

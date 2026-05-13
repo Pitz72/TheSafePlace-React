@@ -2,7 +2,7 @@
 // MQ_THE_ECHO_OF_THE_JOURNEY
 // Title: L'Eco del Viaggio
 
-= start
+= begin
 La lettera di tuo padre è un peso nel tuo cuore e nella tua tasca. La sua ultima istruzione è chiara: sopravvivi e raggiungi il Safe Place, a Est.
 ~ startQuest("MQ_THE_ECHO_OF_THE_JOURNEY")
 -> END
