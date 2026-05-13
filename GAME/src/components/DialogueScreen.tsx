@@ -3,6 +3,8 @@ import { useNarrativeStore } from '../store/narrativeStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { narrativeService } from '../services/NarrativeService';
 
+const FALLBACK_SPEAKER = 'Sconosciuto';
+
 /**
  * DialogueScreen component (v2.0.3).
  * Renders interactive dialogue with NPCs using a typewriter effect.
@@ -16,17 +18,14 @@ import { narrativeService } from '../services/NarrativeService';
  * @returns {JSX.Element} The rendered DialogueScreen component.
  */
 const DialogueScreen: React.FC = () => {
-  const { currentText, currentChoices, currentTags } = useNarrativeStore();
+  const { currentText, currentChoices, currentSpeaker } = useNarrativeStore();
 
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [fullText, setFullText] = useState('');
 
-  // Extract NPC Name from tags (e.g., #speaker:Marcus)
-  const npcName = useMemo(() => {
-    const speakerTag = currentTags.find(tag => tag.startsWith('speaker:'));
-    return speakerTag ? speakerTag.split(':')[1] : 'Sconosciuto';
-  }, [currentTags]);
+  // Sticky speaker maintained by NarrativeService from Ink #speaker: tags.
+  const npcName = currentSpeaker || FALLBACK_SPEAKER;
 
   // Typewriter effect
   useEffect(() => {

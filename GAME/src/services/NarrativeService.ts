@@ -132,7 +132,9 @@ export class NarrativeService {
     public startDialogue(knot: string, returnState?: GameState) {
         const currentState = useGameStore.getState().gameState;
         const stateToReturnTo = returnState ?? currentState ?? GameState.IN_GAME;
-        useNarrativeStore.getState().setReturnState(stateToReturnTo);
+        const narrative = useNarrativeStore.getState();
+        narrative.setReturnState(stateToReturnTo);
+        narrative.setCurrentSpeaker(""); // clear any sticky speaker from a previous conversation
         useGameStore.getState().setGameState(GameState.DIALOGUE);
         this.jumpTo(knot);
     }
@@ -154,7 +156,16 @@ export class NarrativeService {
         }));
         const currentTags = this.story.currentTags || [];
 
-        useNarrativeStore.getState().setStoryState(currentText, currentChoices, currentTags);
+        const store = useNarrativeStore.getState();
+        store.setStoryState(currentText, currentChoices, currentTags);
+
+        // Sticky speaker: if this paragraph carries a #speaker:<name> tag, latch it.
+        // Otherwise keep whatever the previous paragraph set.
+        const speakerTag = currentTags.find(t => t.trim().toLowerCase().startsWith("speaker:"));
+        if (speakerTag) {
+            const name = speakerTag.split(":")[1]?.trim() ?? "";
+            if (name) store.setCurrentSpeaker(name);
+        }
     }
 }
 

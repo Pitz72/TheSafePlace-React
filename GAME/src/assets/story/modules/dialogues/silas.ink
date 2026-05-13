@@ -1,5 +1,5 @@
 === silas_main ===
-Un altro nuovo arrivato. Spero tu sappia come usare quell'arma che porti. Questo mondo non ha pietà per i deboli. Io mi occupo di tenere le bestie e i pazzi lontani da questo posto. A volte ho bisogno di una mano. Se non hai paura di sporcarti le mani, forse possiamo fare affari.
+Un altro nuovo arrivato. Spero tu sappia come usare quell'arma che porti. Questo mondo non ha pietà per i deboli. Io mi occupo di tenere le bestie e i pazzi lontani da questo posto. A volte ho bisogno di una mano. Se non hai paura di sporcarti le mani, forse possiamo fare affari. #speaker:Silas
 -> hub
 
 = hub

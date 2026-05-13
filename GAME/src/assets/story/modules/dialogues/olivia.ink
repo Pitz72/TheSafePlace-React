@@ -1,5 +1,5 @@
 === olivia_main ===
-Un viaggiatore. È raro vedere volti nuovi. Se cerchi riparo, sei il benvenuto, purché tu non porti guai. Se cerchi cure, forse posso aiutarti. Questo piccolo giardino è tutto ciò che mi resta del mondo di prima.
+Un viaggiatore. È raro vedere volti nuovi. Se cerchi riparo, sei il benvenuto, purché tu non porti guai. Se cerchi cure, forse posso aiutarti. Questo piccolo giardino è tutto ciò che mi resta del mondo di prima. #speaker:Olivia
 -> hub
 
 = hub

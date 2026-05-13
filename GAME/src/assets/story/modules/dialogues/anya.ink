@@ -1,5 +1,5 @@
 === anya_main ===
-Stai lontano dai miei circuiti, viaggiatore. A meno che tu non abbia qualcosa di... interessante. Il mondo là fuori è un cimitero di tecnologia che canta ancora, se sai come ascoltare. Io colleziono i suoi echi. Se trovi qualcosa che non capisci, qualcosa che sembra 'fuori posto', portamelo. Potrei renderlo di nuovo utile. Per entrambi.
+Stai lontano dai miei circuiti, viaggiatore. A meno che tu non abbia qualcosa di... interessante. Il mondo là fuori è un cimitero di tecnologia che canta ancora, se sai come ascoltare. Io colleziono i suoi echi. Se trovi qualcosa che non capisci, qualcosa che sembra 'fuori posto', portamelo. Potrei renderlo di nuovo utile. Per entrambi. #speaker:Anya
 -> hub
 
 = hub

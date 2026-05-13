@@ -5,6 +5,7 @@ interface NarrativeState {
     currentText: string;
     currentChoices: { index: number; text: string }[];
     currentTags: string[];
+    currentSpeaker: string; // Sticky NPC name: kept across sub-knots until a new tag overrides it
     isStoryActive: boolean;
     activeQuests: string[]; // List of active quest IDs (from Ink variables)
     returnState: GameState | null; // GameState to restore when the dialogue/story ends
@@ -12,6 +13,7 @@ interface NarrativeState {
     // Actions
     setStoryState: (text: string, choices: { index: number; text: string }[], tags: string[]) => void;
     setStoryActive: (isActive: boolean) => void;
+    setCurrentSpeaker: (speaker: string) => void;
     setActiveQuests: (quests: string[]) => void;
     addActiveQuest: (questId: string) => void;
     removeActiveQuest: (questId: string) => void;
@@ -23,6 +25,7 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
     currentText: "",
     currentChoices: [],
     currentTags: [],
+    currentSpeaker: "",
     isStoryActive: false,
     activeQuests: [],
     returnState: null,
@@ -34,6 +37,8 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
     }),
 
     setStoryActive: (isActive) => set({ isStoryActive: isActive }),
+
+    setCurrentSpeaker: (speaker) => set({ currentSpeaker: speaker }),
 
     setActiveQuests: (quests) => set({ activeQuests: quests }),
 
@@ -51,6 +56,7 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
         currentText: "",
         currentChoices: [],
         currentTags: [],
+        currentSpeaker: "",
         isStoryActive: false,
         activeQuests: [],
         returnState: null

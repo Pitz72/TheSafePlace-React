@@ -1,5 +1,5 @@
 === giona_main ===
-Ah, finalmente qualcuno mi raggiunge. La strada è lunga e solitaria, sai? Cosa posso fare per te, viaggiatore?
+Ah, finalmente qualcuno mi raggiunge. La strada è lunga e solitaria, sai? Cosa posso fare per te, viaggiatore? #speaker:Giona
 -> hub
 
 = hub

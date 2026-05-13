@@ -1,5 +1,5 @@
 === marcus_main ===
-Un altro volto nuovo. Non se ne vedono molti da queste parti. Ti guardi intorno come se avessi visto un fantasma. Posso aiutarti, viaggiatore?
+Un altro volto nuovo. Non se ne vedono molti da queste parti. Ti guardi intorno come se avessi visto un fantasma. Posso aiutarti, viaggiatore? #speaker:Marcus
 -> hub
 
 = hub
