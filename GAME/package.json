@@ -1,7 +1,7 @@
 {
   "name": "the-safe-place-chronicles-the-echo-of-the-journey",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@fontsource/barlow-condensed": "^5.1.1",
+    "@fontsource/caveat": "^5.2.5",
+    "@fontsource/eb-garamond": "^5.2.5",
     "eventemitter3": "^5.0.1",
     "inkjs": "^2.3.2",
     "phaser": "^3.90.0",

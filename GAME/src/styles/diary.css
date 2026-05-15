@@ -1,0 +1,341 @@
+/* ============================================================
+   The Safe Place — "Diario del Sopravvissuto" Design Language
+   Cold-livid palette · paper · handcrafted · melancholic
+   ============================================================ */
+
+:root {
+  /* ---- Palette · Cold Livid ------------------------------- */
+  --tsp-paper:        #d4d6d1;   /* aged paper, cool-toned    */
+  --tsp-paper-warm:   #c8c9c2;   /* shadow side of paper      */
+  --tsp-paper-edge:   #a8a9a2;   /* worn paper edges          */
+  --tsp-ink:          #161a22;   /* near-black blue ink       */
+  --tsp-ink-faded:    #2d3340;
+  --tsp-slate:        #4a5460;   /* mid cold gray-blue        */
+  --tsp-slate-light:  #6b7682;
+  --tsp-ice:          #e8eaed;   /* pale ice highlight        */
+  --tsp-ice-glow:     #b8c5d1;
+  --tsp-rust:         #7d3a2a;   /* dried blood / signal      */
+  --tsp-rust-dim:     #5a2d20;
+  --tsp-mint:         #8aa39a;   /* faded cold mint, hope     */
+  --tsp-bone:         #d8d2c2;
+
+  /* ---- Stitching, thread, tape ---------------------------- */
+  --tsp-tape:         rgba(218, 211, 188, 0.55);
+  --tsp-tape-shadow:  rgba(20, 24, 32, 0.18);
+  --tsp-stain:        rgba(60, 55, 45, 0.22);
+  --tsp-shadow:       rgba(20, 24, 30, 0.55);
+
+  /* ---- Typography ----------------------------------------- */
+  --tsp-serif: 'EB Garamond', 'Crimson Pro', Georgia, serif;
+  --tsp-sans:  'Barlow Condensed', 'Oswald', 'Roboto Condensed', system-ui, sans-serif;
+  --tsp-hand:  'Caveat', 'Kalam', cursive;
+
+  /* ---- Grain intensity (tweakable) ------------------------ */
+  --tsp-grain: 0.35;
+  --tsp-noise: 0.18;
+
+  /* ---- Day/Night mood ------------------------------------- */
+  --tsp-mood-tint: rgba(74, 84, 96, 0.0);
+}
+
+/* ============================================================
+   Paper Texture — used on every page-like surface
+   ============================================================ */
+.paper {
+  position: relative;
+  background-color: var(--tsp-paper);
+  background-image:
+    /* soft mottling */
+    radial-gradient(ellipse 70% 50% at 30% 20%, rgba(255, 255, 255, 0.25), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(0, 0, 0, 0.08), transparent 70%),
+    /* water stain */
+    radial-gradient(ellipse 18% 14% at 78% 22%, rgba(74, 84, 96, 0.12), transparent 80%),
+    radial-gradient(ellipse 12% 10% at 18% 75%, rgba(74, 84, 96, 0.10), transparent 80%);
+  color: var(--tsp-ink);
+  isolation: isolate;
+}
+
+.paper::before {
+  /* fiber grain */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      127deg,
+      rgba(20, 24, 30, 0.02) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      53deg,
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 4px
+    );
+  mix-blend-mode: multiply;
+  opacity: var(--tsp-grain);
+  z-index: 0;
+}
+
+.paper::after {
+  /* fine noise via SVG */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.10 0 0 0 0 0.12 0 0 0 1 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 280px 280px;
+  mix-blend-mode: multiply;
+  opacity: var(--tsp-noise);
+  z-index: 0;
+}
+
+.paper > * { position: relative; z-index: 1; }
+
+/* Worn corners */
+.paper-torn-tl {
+  clip-path: polygon(
+    18px 0, 100% 0, 100% 100%, 0 100%, 0 22px, 6px 14px, 12px 8px
+  );
+}
+.paper-torn-br {
+  clip-path: polygon(
+    0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 14px) calc(100% - 8px),
+    calc(100% - 6px) 100%, 0 100%
+  );
+}
+
+/* ============================================================
+   Mood overlay — sits over a surface for day/night/storm
+   ============================================================ */
+.mood-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: var(--tsp-mood-tint);
+  mix-blend-mode: multiply;
+  transition: background 600ms ease;
+  z-index: 2;
+}
+
+/* ============================================================
+   Type — base
+   ============================================================ */
+.t-serif    { font-family: var(--tsp-serif); }
+.t-sans     { font-family: var(--tsp-sans);  }
+.t-hand     { font-family: var(--tsp-hand);  }
+
+.t-label {
+  font-family: var(--tsp-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--tsp-slate);
+}
+
+.t-label-sm {
+  font-family: var(--tsp-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  font-size: 9px;
+  color: var(--tsp-slate-light);
+}
+
+.t-stamp {
+  font-family: var(--tsp-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  color: var(--tsp-rust);
+  border: 2.5px solid var(--tsp-rust);
+  padding: 4px 10px 3px;
+  display: inline-block;
+  transform: rotate(-3deg);
+  opacity: 0.72;
+}
+
+/* ============================================================
+   Tape / pin / staple primitives
+   ============================================================ */
+.tape {
+  position: absolute;
+  background: var(--tsp-tape);
+  border-left: 1px dashed rgba(0,0,0,0.08);
+  border-right: 1px dashed rgba(0,0,0,0.08);
+  box-shadow: 0 1px 2px var(--tsp-tape-shadow);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.pin {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #8a3a2a, #4a1f15 70%);
+  box-shadow:
+    0 2px 3px rgba(0,0,0,0.45),
+    inset 0 -2px 2px rgba(0,0,0,0.3),
+    inset 1px 1px 1px rgba(255,180,160,0.4);
+  z-index: 5;
+  pointer-events: none;
+}
+.pin.pin-bone { background: radial-gradient(circle at 35% 30%, #d8d2c2, #888377 70%); }
+.pin.pin-ink  { background: radial-gradient(circle at 35% 30%, #4a5460, #161a22 70%); }
+
+.staple {
+  position: absolute;
+  width: 14px; height: 8px;
+  pointer-events: none;
+  z-index: 5;
+}
+.staple::before, .staple::after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, #b8bcc0, #6e7278);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
+}
+.staple::before { left: 0; top: 0; width: 2px; height: 8px; }
+.staple::after  { right: 0; top: 0; width: 2px; height: 8px; }
+
+/* ============================================================
+   Inked lines, hairlines, frames
+   ============================================================ */
+.ink-line   { background: var(--tsp-ink); height: 1px; opacity: 0.7; }
+.ink-line-2 { background: var(--tsp-ink); height: 2px; opacity: 0.8; }
+.ink-rule {
+  border: none;
+  border-top: 1px solid rgba(20,24,30,0.55);
+  margin: 0;
+}
+.ink-rule-dashed {
+  border: none;
+  border-top: 1px dashed rgba(20,24,30,0.4);
+}
+
+/* ============================================================
+   Buttons — pressed-stamp style
+   ============================================================ */
+.tsp-btn {
+  font-family: var(--tsp-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tsp-ink);
+  background: transparent;
+  border: 1.5px solid var(--tsp-ink-faded);
+  padding: 10px 18px 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s ease;
+}
+.tsp-btn:hover {
+  background: var(--tsp-ink);
+  color: var(--tsp-paper);
+  letter-spacing: 0.24em;
+}
+.tsp-btn-rust {
+  border-color: var(--tsp-rust);
+  color: var(--tsp-rust);
+}
+.tsp-btn-rust:hover {
+  background: var(--tsp-rust);
+  color: var(--tsp-paper);
+}
+.tsp-btn-ghost {
+  border-color: transparent;
+  color: var(--tsp-slate);
+}
+.tsp-btn-ghost:hover {
+  background: transparent;
+  color: var(--tsp-ink);
+  letter-spacing: 0.24em;
+}
+
+/* ============================================================
+   Stats bar — meters drawn like hatched lines
+   ============================================================ */
+.tsp-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tsp-meter .bar {
+  flex: 1;
+  height: 8px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(20,24,30,0.18) 0 1.5px,
+      transparent 1.5px 6px
+    );
+  border-top: 1px solid rgba(20,24,30,0.4);
+  border-bottom: 1px solid rgba(20,24,30,0.4);
+  position: relative;
+}
+.tsp-meter .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--tsp-ink) 0 1.5px,
+      transparent 1.5px 6px
+    );
+}
+
+/* ============================================================
+   Photo placeholder — desaturated, vignetted
+   ============================================================ */
+.tsp-photo {
+  background: linear-gradient(135deg, #3a414c 0%, #20242c 50%, #14181f 100%);
+  position: relative;
+  overflow: hidden;
+}
+.tsp-photo::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2'/></filter><rect width='100' height='100' filter='url(%23n)' opacity='0.4'/></svg>");
+  pointer-events: none;
+}
+
+/* ============================================================
+   Hand-drawn map base (paper map)
+   ============================================================ */
+.tsp-map {
+  background-color: #c8c9c0;
+  background-image:
+    /* coffee stain */
+    radial-gradient(ellipse 14% 11% at 82% 18%, rgba(74,52,32,0.18), transparent 80%),
+    /* fold creases */
+    linear-gradient(90deg, transparent 49.5%, rgba(20,24,30,0.12) 50%, transparent 50.5%),
+    linear-gradient(0deg, transparent 33%, rgba(20,24,30,0.08) 33.3%, transparent 33.6%),
+    linear-gradient(0deg, transparent 66%, rgba(20,24,30,0.08) 66.3%, transparent 66.6%),
+    /* paper base */
+    radial-gradient(ellipse at center, #d2d2c8 0%, #b8b8ac 100%);
+  position: relative;
+}
+
+/* contour-like ridges via repeating gradients */
+.tsp-map-contours {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 30% 22% at 25% 35%,
+      transparent 35%, rgba(20,24,30,0.10) 36%, transparent 38%,
+      rgba(20,24,30,0.08) 50%, transparent 52%,
+      rgba(20,24,30,0.06) 64%, transparent 66%
+    ),
+    radial-gradient(ellipse 24% 18% at 70% 65%,
+      transparent 30%, rgba(20,24,30,0.10) 31%, transparent 33%,
+      rgba(20,24,30,0.08) 45%, transparent 47%,
+      rgba(20,24,30,0.06) 60%, transparent 62%
+    );
+  pointer-events: none;
+}
+
+/* Crosshatched scrollbars off */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
