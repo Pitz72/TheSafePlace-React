@@ -339,3 +339,9 @@
 /* Crosshatched scrollbars off */
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Soft entrance for diary paragraphs (cutscene/event reveal) */
+@keyframes tspFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
