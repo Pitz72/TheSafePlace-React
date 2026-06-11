@@ -1,7 +1,7 @@
 {
   "name": "the-safe-place-chronicles-the-echo-of-the-journey",
   "private": true,
-  "version": "3.0.2",
+  "version": "3.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
