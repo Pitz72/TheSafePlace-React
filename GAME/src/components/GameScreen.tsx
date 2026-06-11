@@ -4,10 +4,11 @@
  * Layout variante A del design handoff: mappa full-bleed con overlay
  * di carta flottanti (stato, diario, obiettivo) e action bar inferiore.
  *
- * La PaperMap è un placeholder visivo: la mappa SVG navigabile con
- * pan/zoom e POI cliccabili (GDD v3, Sistema 1) è uno step successivo.
- * Il movimento WASD resta cablato al motore a griglia esistente perché
- * tempo/risorse/eventi dipendono ancora da gameService.movePlayer.
+ * La mappa è la WorldMap SVG navigabile (GDD v3, Sistema 1): POI
+ * cliccabili, viaggio a tappe via worldMapStore, pan/zoom. Il vecchio
+ * movimento WASD a griglia è stato rimosso da questa schermata — il
+ * motore a griglia resta nel codice finché eventi/rifugi non vengono
+ * riscritti sui POI (Sistemi 2-3).
  */
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -16,10 +17,12 @@ import { useCharacterStore } from '../store/characterStore';
 import { useInteractionStore } from '../store/interactionStore';
 import { useTimeStore } from '../store/timeStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
+import { useWorldMapStore } from '../store/worldMapStore';
+import { getPoi } from '../data/worldMap';
 import { GameState, JournalEntryType, PlayerStatusCondition, WeatherType } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import { gameService } from '../services/gameService';
-import { PaperMap, StatMeter, JournalEntry, Tape } from './ui';
+import { StatMeter, JournalEntry, Tape } from './ui';
+import { WorldMap } from './WorldMap';
 import { DebugPanel } from './DebugPanel';
 
 type EntryTone = 'ink' | 'rust' | 'mint' | 'muted';
@@ -71,10 +74,10 @@ function weatherEffectText(type: WeatherType): string | null {
 const TopBar: React.FC = () => {
   const gameTime = useTimeStore((state) => state.gameTime);
   const weather = useTimeStore((state) => state.weather);
-  const playerPos = useGameStore((state) => state.playerPos);
-  const getTileInfo = useGameStore((state) => state.getTileInfo);
+  const currentPoiId = useWorldMapStore((state) => state.currentPoiId);
+  const isTraveling = useWorldMapStore((state) => state.isTraveling);
 
-  const tileInfo = getTileInfo(playerPos.x, playerPos.y);
+  const locationName = getPoi(currentPoiId)?.name ?? 'Terre di nessuno';
   const time = `${String(gameTime.hour).padStart(2, '0')}:${String(gameTime.minute).padStart(2, '0')}`;
   const effect = weatherEffectText(weather.type);
 
@@ -98,7 +101,9 @@ const TopBar: React.FC = () => {
         <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.4em', opacity: 0.55, marginBottom: 4 }}>
           GIORNO {gameTime.day}
         </div>
-        <div className="t-serif" style={{ fontSize: 22, letterSpacing: '0.04em' }}>{tileInfo.name}</div>
+        <div className="t-serif" style={{ fontSize: 22, letterSpacing: '0.04em' }}>
+          {isTraveling ? 'In viaggio…' : locationName}
+        </div>
         <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.3em', color: 'var(--tsp-ice-glow)', marginTop: 2 }}>
           {time} · {dayPhase(gameTime.hour)}
         </div>
@@ -312,12 +317,10 @@ const GameScreen: React.FC = () => {
     return 'day' as const;
   }, [weather.type, gameTime.hour]);
 
-  const canAct = !isInventoryOpen && !isInRefuge;
+  const isTraveling = useWorldMapStore((state) => state.isTraveling);
+  const canAct = !isInventoryOpen && !isInRefuge && !isTraveling;
 
   const handleOpenPauseMenu = useCallback(() => setGameState(GameState.PAUSE_MENU), [setGameState]);
-  const handleMove = useCallback((dx: number, dy: number) => {
-    if (canAct) gameService.movePlayer(dx, dy);
-  }, [canAct]);
   const handleQuickRest = useCallback(() => { if (canAct) performQuickRest(); }, [canAct, performQuickRest]);
   const handleActiveSearch = useCallback(() => { if (canAct) performActiveSearch(); }, [canAct, performActiveSearch]);
   const handleOpenQuestLog = useCallback(() => { if (canAct) setGameState(GameState.QUEST_LOG); }, [canAct, setGameState]);
@@ -333,19 +336,15 @@ const GameScreen: React.FC = () => {
       r: handleQuickRest, R: handleQuickRest,
       f: handleActiveSearch, F: handleActiveSearch,
       l: openLevelUpScreen, L: openLevelUpScreen,
-      ArrowUp: () => handleMove(0, -1),    w: () => handleMove(0, -1),
-      ArrowDown: () => handleMove(0, 1),   s: () => handleMove(0, 1),
-      ArrowLeft: () => handleMove(-1, 0),  a: () => handleMove(-1, 0),
-      ArrowRight: () => handleMove(1, 0),  d: () => handleMove(1, 0),
     };
     if (canAct) map['Escape'] = handleOpenPauseMenu;
     return map;
-  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, handleMove, canAct, handleOpenPauseMenu, openLevelUpScreen]);
+  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, canAct, handleOpenPauseMenu, openLevelUpScreen]);
 
   useKeyboardInput(keyHandlerMap);
 
   const actions = useMemo(() => [
-    { key: 'WASD', label: 'muoviti', onClick: () => {} },
+    { key: 'CLICK', label: 'viaggia', onClick: () => {} },
     { key: 'I', label: 'inventario', onClick: toggleInventory },
     { key: 'J', label: 'quest', onClick: handleOpenQuestLog },
     { key: 'F', label: 'cerca', onClick: handleActiveSearch },
@@ -357,9 +356,9 @@ const GameScreen: React.FC = () => {
     <>
       <DebugPanel />
       <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0e1115', overflow: 'hidden' }}>
-        {/* full-bleed paper map (placeholder — real SVG map is a future step) */}
+        {/* full-bleed navigable world map (Sistema 1) */}
         <div style={{ position: 'absolute', inset: 0 }}>
-          <PaperMap mood={mapMood} showCompass={false} />
+          <WorldMap mood={mapMood} />
         </div>
 
         <TopBar />

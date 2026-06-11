@@ -12,6 +12,7 @@ import { useTimeStore } from './timeStore';
 import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
 import { useCombatStore } from './combatStore';
+import { useWorldMapStore } from './worldMapStore';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SAVE GAME SYSTEM - Version 2.0.0
@@ -316,6 +317,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     useInteractionStore.getState().reset();
     useEventStore.getState().reset();
     useCombatStore.getState().reset();
+    useWorldMapStore.getState().reset();
     
     set({ 
         map: newMap, 
