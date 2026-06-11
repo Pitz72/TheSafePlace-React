@@ -129,7 +129,7 @@
   text-transform: uppercase;
   letter-spacing: 0.22em;
   font-weight: 500;
-  font-size: 11px;
+  font-size: 14px;
   color: var(--tsp-slate);
 }
 
@@ -138,7 +138,7 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-weight: 500;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--tsp-slate-light);
 }
 
@@ -220,7 +220,7 @@
   font-family: var(--tsp-sans);
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--tsp-ink);
   background: transparent;

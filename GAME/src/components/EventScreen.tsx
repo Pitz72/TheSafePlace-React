@@ -216,10 +216,10 @@ const EventScreen: React.FC = () => {
 
       {/* top label */}
       <div style={{ position: 'absolute', top: 32, left: 0, right: 0, textAlign: 'center', color: 'var(--tsp-paper-edge)' }}>
-        <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.5em', marginBottom: 6, opacity: 0.55, color: 'var(--tsp-paper)' }}>
+        <div className="t-sans" style={{ fontSize: 13, letterSpacing: '0.5em', marginBottom: 6, opacity: 0.7, color: 'var(--tsp-paper)', textShadow: '0 1px 3px rgba(10,13,18,0.9)' }}>
           {isResolution ? 'ESITO' : 'EVENTO'} · {tileInfo.name.toUpperCase()}
         </div>
-        <div className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-ice-glow)', opacity: 0.85 }}>
+        <div className="t-hand" style={{ fontSize: 21, color: 'var(--tsp-ice-glow)', opacity: 0.9, textShadow: '0 1px 3px rgba(10,13,18,0.9)' }}>
           ogni scelta lascia un segno
         </div>
       </div>
@@ -238,8 +238,8 @@ const EventScreen: React.FC = () => {
         <Tape top={-10} left={310} w={100} h={22} rot={-2} />
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10, flex: '0 0 auto' }}>
-          <div className="t-label" style={{ fontSize: 10 }}>{title.toUpperCase()}</div>
-          <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.32em', color: 'var(--tsp-slate)' }}>
+          <div className="t-label" style={{ fontSize: 14 }}>{title.toUpperCase()}</div>
+          <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.32em', color: 'var(--tsp-slate)' }}>
             GIORNO {gameTime.day} · {time}
           </div>
         </div>
@@ -249,7 +249,7 @@ const EventScreen: React.FC = () => {
         <div ref={paperRef} style={{ overflowY: 'auto', scrollbarWidth: 'none', flex: '0 1 auto', minHeight: 0 }}>
           {paragraphs.map((p, i) => (
             <p key={i} className="t-serif" style={{
-              fontSize: i === 0 ? 18 : 16,
+              fontSize: i === 0 ? 20 : 18,
               lineHeight: 1.55,
               textWrap: 'pretty',
               marginBottom: 12,
@@ -305,18 +305,18 @@ const EventScreen: React.FC = () => {
                     }}
                   >
                     <div className="t-sans" style={{
-                      fontSize: 12, fontWeight: 600,
-                      width: 22, height: 22, lineHeight: '22px', textAlign: 'center',
+                      fontSize: 14, fontWeight: 600,
+                      width: 25, height: 25, lineHeight: '25px', textAlign: 'center',
                       border: `1px solid ${isSelected && met ? 'var(--tsp-rust)' : 'var(--tsp-ink)'}`,
                       background: isSelected && met ? 'var(--tsp-rust)' : 'transparent',
                       color: isSelected && met ? 'var(--tsp-paper)' : 'var(--tsp-ink)',
                       flex: '0 0 auto',
                     }}>{index + 1}</div>
-                    <div className="t-serif" style={{ flex: 1, fontSize: 15, lineHeight: 1.3 }}>
+                    <div className="t-serif" style={{ flex: 1, fontSize: 17, lineHeight: 1.3 }}>
                       {text}
                     </div>
                     {tag && (
-                      <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.22em', color: TAG_TINTS[tag.color], flex: '0 0 auto' }}>
+                      <div className="t-sans" style={{ fontSize: 11, letterSpacing: '0.22em', color: TAG_TINTS[tag.color], flex: '0 0 auto' }}>
                         {tag.text}
                       </div>
                     )}
@@ -325,10 +325,10 @@ const EventScreen: React.FC = () => {
               })}
             </div>
             <div style={{ marginTop: 14, display: 'flex', justifyContent: 'space-between' }}>
-              <span className="t-sans" style={{ fontSize: 9, letterSpacing: '0.3em', color: 'var(--tsp-slate-light)' }}>
+              <span className="t-sans" style={{ fontSize: 11, letterSpacing: '0.3em', color: 'var(--tsp-slate-light)' }}>
                 {choices.length > 0 ? `1–${Math.min(choices.length, 9)} SCEGLI · INVIO CONFERMA` : 'INVIO CONTINUA'}
               </span>
-              <span className="t-hand" style={{ fontSize: 13, color: 'var(--tsp-slate)', opacity: 0.8 }}>
+              <span className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', opacity: 0.85 }}>
                 — il diario ricorderà —
               </span>
             </div>

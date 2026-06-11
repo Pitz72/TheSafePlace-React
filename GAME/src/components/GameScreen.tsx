@@ -84,35 +84,36 @@ const TopBar: React.FC = () => {
   return (
     <div style={{
       position: 'absolute', top: 0, left: 0, right: 0,
-      padding: '18px 32px',
-      background: 'linear-gradient(180deg, rgba(20,24,32,0.85), rgba(20,24,32,0.0))',
+      padding: '18px 32px 28px',
+      background: 'linear-gradient(180deg, rgba(14,17,21,0.96) 0%, rgba(14,17,21,0.75) 55%, rgba(14,17,21,0.0) 100%)',
       color: 'var(--tsp-paper)',
+      textShadow: '0 1px 4px rgba(10,13,18,0.9)',
       display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
       pointerEvents: 'none', zIndex: 5,
     }}>
       <div>
-        <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.4em', opacity: 0.55, marginBottom: 4 }}>SOPRAVVISSUTO</div>
-        <div className="t-serif" style={{ fontSize: 22, lineHeight: 1, letterSpacing: '0.01em' }}>Ultimo</div>
-        <div className="t-hand" style={{ fontSize: 14, color: 'var(--tsp-mint)', marginTop: 2, opacity: 0.85 }}>
+        <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.4em', opacity: 0.7, marginBottom: 4 }}>SOPRAVVISSUTO</div>
+        <div className="t-serif" style={{ fontSize: 27, lineHeight: 1, letterSpacing: '0.01em' }}>Ultimo</div>
+        <div className="t-hand" style={{ fontSize: 17, color: 'var(--tsp-mint)', marginTop: 2 }}>
           figlio del custode
         </div>
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.4em', opacity: 0.55, marginBottom: 4 }}>
+        <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.4em', opacity: 0.7, marginBottom: 4 }}>
           GIORNO {gameTime.day}
         </div>
-        <div className="t-serif" style={{ fontSize: 22, letterSpacing: '0.04em' }}>
+        <div className="t-serif" style={{ fontSize: 27, letterSpacing: '0.04em' }}>
           {isTraveling ? 'In viaggio…' : locationName}
         </div>
-        <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.3em', color: 'var(--tsp-ice-glow)', marginTop: 2 }}>
+        <div className="t-sans" style={{ fontSize: 13, letterSpacing: '0.3em', color: 'var(--tsp-ice-glow)', marginTop: 2 }}>
           {time} · {dayPhase(gameTime.hour)}
         </div>
       </div>
       <div style={{ textAlign: 'right' }}>
-        <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.4em', opacity: 0.55, marginBottom: 4 }}>METEO</div>
-        <div className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-ice-glow)' }}>{weather.type.toLowerCase()}</div>
+        <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.4em', opacity: 0.7, marginBottom: 4 }}>METEO</div>
+        <div className="t-hand" style={{ fontSize: 21, color: 'var(--tsp-ice-glow)' }}>{weather.type.toLowerCase()}</div>
         {effect && (
-          <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.2em', opacity: 0.65, marginTop: 4 }}>
+          <div className="t-sans" style={{ fontSize: 13, letterSpacing: '0.2em', opacity: 0.8, marginTop: 4 }}>
             {effect}
           </div>
         )}
@@ -140,7 +141,7 @@ const StatusCard: React.FC = () => {
 
   return (
     <div style={{
-      position: 'absolute', left: 24, top: 110, width: 240,
+      position: 'absolute', left: 24, top: 116, width: 280,
       background: 'var(--tsp-paper)',
       padding: '18px 18px 14px',
       boxShadow: '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.3)',
@@ -159,23 +160,23 @@ const StatusCard: React.FC = () => {
       <div className="t-label-sm" style={{ marginBottom: 4 }}>CONDIZIONI</div>
       {conditions.length > 0 ? (
         conditions.map((c) => (
-          <div key={c} className="t-hand" style={{ fontSize: 15, color: 'var(--tsp-rust)' }}>· {c}</div>
+          <div key={c} className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-rust)' }}>· {c}</div>
         ))
       ) : (
-        <div className="t-hand" style={{ fontSize: 15, color: 'var(--tsp-slate)' }}>· nessuna</div>
+        <div className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-slate)' }}>· nessuna</div>
       )}
       <hr className="ink-rule-dashed" style={{ margin: '12px 0' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <span className="t-label-sm">LIVELLO</span>
-        <span className="t-serif" style={{ fontSize: 18 }}>
+        <span className="t-serif" style={{ fontSize: 21 }}>
           {level}{' '}
-          <span className="t-sans" style={{ fontSize: 10, color: 'var(--tsp-slate-light)' }}>· {xp.current}/{xp.next} XP</span>
-          {levelUpPending && <span className="t-sans" style={{ fontSize: 10, color: 'var(--tsp-rust)', marginLeft: 4 }}>[L]</span>}
+          <span className="t-sans" style={{ fontSize: 12, color: 'var(--tsp-slate-light)' }}>· {xp.current}/{xp.next} XP</span>
+          {levelUpPending && <span className="t-sans" style={{ fontSize: 12, color: 'var(--tsp-rust)', marginLeft: 4 }}>[L]</span>}
         </span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 4 }}>
         <span className="t-label-sm">ZAINO</span>
-        <span className="t-sans" style={{ fontSize: 11, color: totalWeight > maxCarryWeight ? 'var(--tsp-rust)' : 'var(--tsp-slate)' }}>
+        <span className="t-sans" style={{ fontSize: 13, color: totalWeight > maxCarryWeight ? 'var(--tsp-rust)' : 'var(--tsp-slate)' }}>
           {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)} kg
         </span>
       </div>
@@ -196,7 +197,7 @@ const JournalCard: React.FC = () => {
 
   return (
     <div style={{
-      position: 'absolute', right: 24, top: 110, width: 320,
+      position: 'absolute', right: 24, top: 116, width: 380,
       background: 'var(--tsp-paper)',
       padding: '18px 20px 14px',
       boxShadow: '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.3)',
@@ -207,7 +208,7 @@ const JournalCard: React.FC = () => {
       <Tape top={-10} right={70} w={80} h={20} rot={-4} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
         <div className="t-label">DIARIO DI VIAGGIO</div>
-        <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.18em', color: 'var(--tsp-slate-light)' }}>
+        <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.18em', color: 'var(--tsp-slate-light)' }}>
           {journal.length} {journal.length === 1 ? 'VOCE' : 'VOCI'}
         </div>
       </div>
@@ -258,11 +259,11 @@ const ObjectiveFlag: React.FC = () => {
       textAlign: 'center', maxWidth: 380,
       zIndex: 4,
     }}>
-      <div className="t-label" style={{ color: 'var(--tsp-rust)', fontSize: 9 }}>OBIETTIVO ATTIVO</div>
-      <div className="t-serif" style={{ fontSize: 16, marginTop: 4, fontStyle: 'italic' }}>
+      <div className="t-label" style={{ color: 'var(--tsp-rust)', fontSize: 12 }}>OBIETTIVO ATTIVO</div>
+      <div className="t-serif" style={{ fontSize: 19, marginTop: 4, fontStyle: 'italic' }}>
         "{stageInfo?.objective ?? active.quest.title}"
       </div>
-      <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.18em', color: 'var(--tsp-slate)', marginTop: 4 }}>
+      <div className="t-sans" style={{ fontSize: 12, letterSpacing: '0.18em', color: 'var(--tsp-slate)', marginTop: 4 }}>
         STAGE {active.stage} / {active.quest.stages.length} · {active.quest.type}
       </div>
     </div>
@@ -273,8 +274,8 @@ const ObjectiveFlag: React.FC = () => {
 const ActionBar: React.FC<{ actions: Array<{ key: string; label: string; onClick: () => void }> }> = ({ actions }) => (
   <div style={{
     position: 'absolute', bottom: 0, left: 0, right: 0,
-    padding: '16px 32px',
-    background: 'linear-gradient(0deg, rgba(20,24,32,0.85), rgba(20,24,32,0.0))',
+    padding: '26px 32px 16px',
+    background: 'linear-gradient(0deg, rgba(14,17,21,0.96) 0%, rgba(14,17,21,0.75) 55%, rgba(14,17,21,0.0) 100%)',
     color: 'var(--tsp-paper)',
     display: 'flex', justifyContent: 'center', gap: 28,
     zIndex: 5,
@@ -289,13 +290,14 @@ const ActionBar: React.FC<{ actions: Array<{ key: string; label: string; onClick
         }}
       >
         <span className="t-sans" style={{
-          fontSize: 11, fontWeight: 600,
-          padding: '3px 8px 1px',
-          border: '1px solid rgba(216,210,194,0.4)',
+          fontSize: 14, fontWeight: 600,
+          padding: '4px 9px 2px',
+          border: '1px solid rgba(216,210,194,0.5)',
           color: 'var(--tsp-paper)',
           letterSpacing: '0.1em',
+          textShadow: '0 1px 3px rgba(10,13,18,0.9)',
         }}>{key}</span>
-        <span className="t-sans" style={{ fontSize: 10, letterSpacing: '0.18em', color: 'rgba(216,210,194,0.6)' }}>
+        <span className="t-sans" style={{ fontSize: 13, letterSpacing: '0.18em', color: 'rgba(216,210,194,0.75)', textShadow: '0 1px 3px rgba(10,13,18,0.9)' }}>
           {label.toUpperCase()}
         </span>
       </button>

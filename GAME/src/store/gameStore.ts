@@ -180,7 +180,9 @@ const BASE_TIME_COST_PER_MOVE = 10;
  */
 export const useGameStore = create<GameStoreState>((set, get) => ({
   // --- State ---
-  gameState: GameState.INITIAL_BLACK_SCREEN,
+  // v3.0.9: boot/presents sequence removed — straight to the menu.
+  // BootScreen and the boot GameStates stay in the codebase, unreachable.
+  gameState: GameState.MAIN_MENU,
   previousGameState: null,
   visualTheme: 'standard',
   map: [],

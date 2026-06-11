@@ -136,7 +136,7 @@ const CharacterCreationScreen: React.FC = () => {
             <div style={{ borderBottom: '1.5px solid var(--tsp-ink)', paddingBottom: 4 }}>
               <span className="t-serif" style={{ fontSize: 26, fontStyle: 'italic' }}>Ultimo</span>
             </div>
-            <div className="t-hand" style={{ fontSize: 13, color: 'var(--tsp-slate)', marginTop: 4 }}>
+            <div className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', marginTop: 4 }}>
               "non è davvero il mio nome, ma lo è diventato"
             </div>
           </div>
@@ -154,7 +154,7 @@ const CharacterCreationScreen: React.FC = () => {
             </div>
             <div style={{ flex: 1 }}>
               <div className="t-label-sm" style={{ marginBottom: 4 }}>ASPETTO</div>
-              <div className="t-hand" style={{ fontSize: 14, color: 'var(--tsp-ink)', lineHeight: 1.4 }}>
+              <div className="t-hand" style={{ fontSize: 17, color: 'var(--tsp-ink)', lineHeight: 1.4 }}>
                 giacca consumata,<br/>
                 cicatrice sul mento,<br/>
                 occhi attenti
@@ -175,9 +175,9 @@ const CharacterCreationScreen: React.FC = () => {
               const isPos = !mod.startsWith('-');
               return (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px dotted rgba(20,24,30,0.3)', paddingBottom: 4 }}>
-                  <span className="t-sans" style={{ fontSize: 10, letterSpacing: '0.2em', color: 'var(--tsp-slate)', minWidth: 28 }}>{label}</span>
-                  <span className="t-serif" style={{ fontSize: 20, fontWeight: 500 }}>{value}</span>
-                  <span className="t-sans" style={{ fontSize: 10, color: isPos ? 'var(--tsp-mint)' : 'var(--tsp-rust)' }}>{mod}</span>
+                  <span className="t-sans" style={{ fontSize: 12, letterSpacing: '0.2em', color: 'var(--tsp-slate)', minWidth: 32 }}>{label}</span>
+                  <span className="t-serif" style={{ fontSize: 22, fontWeight: 500 }}>{value}</span>
+                  <span className="t-sans" style={{ fontSize: 12, color: isPos ? 'var(--tsp-mint)' : 'var(--tsp-rust)' }}>{mod}</span>
                 </div>
               );
             })}
@@ -201,7 +201,7 @@ const CharacterCreationScreen: React.FC = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {QUESTIONS.map((q, qi) => (
               <div key={qi}>
-                <div className="t-serif" style={{ fontSize: 15, lineHeight: 1.45, fontStyle: 'italic', marginBottom: 8, color: 'var(--tsp-ink)' }}>
+                <div className="t-serif" style={{ fontSize: 18, lineHeight: 1.45, fontStyle: 'italic', marginBottom: 8, color: 'var(--tsp-ink)' }}>
                   {qi + 1}. {q.text}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -229,7 +229,7 @@ const CharacterCreationScreen: React.FC = () => {
                         }}>
                           {chosen ? '✓' : ''}
                         </div>
-                        <span className="t-serif" style={{ fontSize: 14, color: chosen ? 'var(--tsp-ink)' : 'var(--tsp-ink-faded)' }}>
+                        <span className="t-serif" style={{ fontSize: 16, color: chosen ? 'var(--tsp-ink)' : 'var(--tsp-ink-faded)' }}>
                           {opt.label}
                         </span>
                       </div>

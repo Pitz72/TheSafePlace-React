@@ -22,7 +22,7 @@ export function StatMeter({ label, value = 80, max = 100, color = 'ink', showVal
     <div style={{ display: 'flex', alignItems: 'center', gap: compact ? 8 : 12, width: '100%' }}>
       <div
         className="t-label"
-        style={{ width: compact ? 56 : 78, fontSize: compact ? 9 : 10, color: 'var(--tsp-slate)', flex: '0 0 auto' }}
+        style={{ width: compact ? 62 : 84, fontSize: compact ? 11 : 12, color: 'var(--tsp-slate)', flex: '0 0 auto' }}
       >
         {label}
       </div>
@@ -41,7 +41,7 @@ export function StatMeter({ label, value = 80, max = 100, color = 'ink', showVal
         }} />
       </div>
       {showVal && (
-        <div className="t-sans" style={{ fontSize: compact ? 11 : 12, color: 'var(--tsp-ink-faded)', width: compact ? 30 : 38, textAlign: 'right', flex: '0 0 auto' }}>
+        <div className="t-sans" style={{ fontSize: compact ? 12 : 14, color: 'var(--tsp-ink-faded)', width: compact ? 34 : 46, textAlign: 'right', flex: '0 0 auto' }}>
           {value}<span style={{ color: 'var(--tsp-slate-light)' }}>/{max}</span>
         </div>
       )}

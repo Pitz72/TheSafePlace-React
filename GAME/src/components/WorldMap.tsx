@@ -19,8 +19,7 @@ import { useWorldMapStore } from '../store/worldMapStore';
 
 const WORLD_W = 1200;
 const WORLD_H = 800;
-const MIN_ZOOM = 0.7;
-const MAX_ZOOM = 2.5;
+const MAX_ZOOM = 3;
 
 type MapMood = 'day' | 'night' | 'storm' | 'dawn';
 
@@ -93,24 +92,53 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
   const travelTo = useWorldMapStore((s) => s.travelTo);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [zoom, setZoom] = useState(1);
+  // Lo zoom minimo è il "cover": la mappa riempie sempre il contenitore,
+  // senza bordi scuri intorno. Calcolato dalla dimensione reale a runtime.
+  const [coverZoom, setCoverZoom] = useState(1);
+  const [zoom, setZoom] = useState<number | null>(null);
   const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const dragRef = useRef<{ startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
   const [followPlayer, setFollowPlayer] = useState(true);
 
   const currentPoi = getPoi(currentPoiId)!;
+  const effectiveZoom = zoom ?? coverZoom;
+
+  // Misura il contenitore (mount + resize) e aggiorna il cover zoom.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const cover = Math.max(el.clientWidth / WORLD_W, el.clientHeight / WORLD_H);
+      setCoverZoom(cover);
+      setZoom((z) => (z === null ? cover * 1.15 : Math.max(z, cover)));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // La mappa non mostra mai i bordi: il pan è vincolato dentro il mondo.
+  const clampPan = useCallback((x: number, y: number, z: number) => {
+    const el = containerRef.current;
+    if (!el) return { x, y };
+    return {
+      x: Math.min(0, Math.max(el.clientWidth - WORLD_W * z, x)),
+      y: Math.min(0, Math.max(el.clientHeight - WORLD_H * z, y)),
+    };
+  }, []);
 
   // Camera: centra il POI corrente finché l'utente non trascina la mappa.
   const centerOn = useCallback((wx: number, wy: number, z: number) => {
     const el = containerRef.current;
     if (!el) return;
     const { clientWidth, clientHeight } = el;
-    setPan({ x: clientWidth / 2 - wx * z, y: clientHeight / 2 - wy * z });
-  }, []);
+    setPan(clampPan(clientWidth / 2 - wx * z, clientHeight / 2 - wy * z, z));
+  }, [clampPan]);
 
   useEffect(() => {
-    if (followPlayer) centerOn(currentPoi.x, currentPoi.y, zoom);
-  }, [currentPoi.x, currentPoi.y, zoom, followPlayer, centerOn]);
+    if (followPlayer) centerOn(currentPoi.x, currentPoi.y, effectiveZoom);
+  }, [currentPoi.x, currentPoi.y, effectiveZoom, followPlayer, centerOn]);
 
   // Durante il viaggio la camera riprende a seguire il marker.
   useEffect(() => {
@@ -118,9 +146,12 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
   }, [isTraveling]);
 
   const handleWheel = useCallback((e: React.WheelEvent) => {
-    const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom * (e.deltaY < 0 ? 1.12 : 0.89)));
+    const next = Math.min(MAX_ZOOM, Math.max(coverZoom, effectiveZoom * (e.deltaY < 0 ? 1.12 : 0.89)));
     setZoom(next);
-  }, [zoom]);
+    if (!followPlayer) {
+      setPan((p) => clampPan(p.x, p.y, next));
+    }
+  }, [effectiveZoom, coverZoom, followPlayer, clampPan]);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     dragRef.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y, moved: false };
@@ -135,9 +166,9 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
     if (Math.abs(dx) + Math.abs(dy) > 4) {
       drag.moved = true;
       setFollowPlayer(false);
-      setPan({ x: drag.panX + dx, y: drag.panY + dy });
+      setPan(clampPan(drag.panX + dx, drag.panY + dy, effectiveZoom));
     }
-  }, []);
+  }, [clampPan, effectiveZoom]);
 
   const handlePointerUp = useCallback(() => {
     dragRef.current = null;
@@ -178,7 +209,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
       <div style={{
         position: 'absolute', left: 0, top: 0,
         width: WORLD_W, height: WORLD_H,
-        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+        transform: `translate(${pan.x}px, ${pan.y}px) scale(${effectiveZoom})`,
         transformOrigin: '0 0',
         transition: dragRef.current ? 'none' : 'transform 0.8s ease',
         filter: moodFilter,
@@ -285,10 +316,10 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
                 <circle r="22" fill="transparent" />
                 <PoiMarker poi={poi} isCurrent={isCurrent} isVisited={isVisited} />
                 <text
-                  x="0" y={poi.type === 'city' ? 28 : 24}
+                  x="0" y={poi.type === 'city' ? 30 : 26}
                   textAnchor="middle"
                   fontFamily="var(--tsp-hand)"
-                  fontSize="15"
+                  fontSize="18"
                   fill="var(--tsp-ink)"
                   opacity={isVisited || isCurrent ? 0.9 : 0.65}
                   transform="rotate(-2)"
@@ -298,10 +329,10 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
                 </text>
                 {poi.note && (isVisited || isCurrent) && (
                   <text
-                    x="0" y={poi.type === 'city' ? 42 : 38}
+                    x="0" y={poi.type === 'city' ? 46 : 42}
                     textAnchor="middle"
                     fontFamily="var(--tsp-hand)"
-                    fontSize="11"
+                    fontSize="13"
                     fill="var(--tsp-rust)"
                     opacity="0.75"
                     transform="rotate(-2)"
@@ -325,9 +356,9 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
               <animate attributeName="opacity" values="0.6;0.15;0.6" dur="2.4s" repeatCount="indefinite" />
             </circle>
             <text
-              x="14" y="-8"
+              x="16" y="-9"
               fontFamily="var(--tsp-hand)"
-              fontSize="12"
+              fontSize="15"
               fill="var(--tsp-rust)"
               style={{ userSelect: 'none' }}
             >
@@ -343,9 +374,10 @@ export const WorldMap: React.FC<WorldMapProps> = ({ mood = 'day' }) => {
 
       {/* hint zoom/pan */}
       <div className="t-sans" style={{
-        position: 'absolute', right: 16, bottom: 90,
-        fontSize: 9, letterSpacing: '0.25em',
-        color: 'rgba(216,210,194,0.45)',
+        position: 'absolute', right: 16, bottom: 96,
+        fontSize: 12, letterSpacing: '0.25em',
+        color: 'rgba(216,210,194,0.8)',
+        textShadow: '0 1px 3px rgba(10,13,18,0.9)',
         pointerEvents: 'none',
       }}>
         ROTELLA ZOOM · TRASCINA PER ESPLORARE

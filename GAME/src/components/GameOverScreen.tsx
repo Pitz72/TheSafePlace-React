@@ -136,7 +136,7 @@ const GameOverScreen: React.FC = () => {
           filter: 'blur(3px)', pointerEvents: 'none',
         }} />
 
-        <div className="t-sans" style={{ fontSize: 10, letterSpacing: '0.5em', color: 'var(--tsp-rust)', marginBottom: 8 }}>
+        <div className="t-sans" style={{ fontSize: 13, letterSpacing: '0.5em', color: 'var(--tsp-rust)', marginBottom: 8 }}>
           ULTIMA VOCE · DIARIO INTERROTTO
         </div>
         <div className="t-serif" style={{ fontSize: 48, lineHeight: 0.95, fontWeight: 500, letterSpacing: '-0.015em', marginBottom: 18 }}>
@@ -144,10 +144,10 @@ const GameOverScreen: React.FC = () => {
         </div>
         <hr className="ink-rule" style={{ marginBottom: 22 }} />
 
-        <p className="t-serif" style={{ fontSize: 17, lineHeight: 1.65, color: 'var(--tsp-ink)', marginBottom: 16, textWrap: 'pretty' }}>
+        <p className="t-serif" style={{ fontSize: 19, lineHeight: 1.65, color: 'var(--tsp-ink)', marginBottom: 16, textWrap: 'pretty' }}>
           {prose.prose}
         </p>
-        <p className="t-serif" style={{ fontSize: 17, lineHeight: 1.65, color: 'var(--tsp-ink-faded)', fontStyle: 'italic', marginBottom: 16, textWrap: 'pretty' }}>
+        <p className="t-serif" style={{ fontSize: 19, lineHeight: 1.65, color: 'var(--tsp-ink-faded)', fontStyle: 'italic', marginBottom: 16, textWrap: 'pretty' }}>
           La pagina rimase aperta dove l'aveva lasciata. E il mondo, come sempre, continuò.
         </p>
 
@@ -156,15 +156,15 @@ const GameOverScreen: React.FC = () => {
         <div style={{ display: 'flex', gap: 24, marginBottom: 18 }}>
           <div style={{ flex: 1 }}>
             <div className="t-label-sm" style={{ marginBottom: 4, color: 'var(--tsp-rust)' }}>CAUSA</div>
-            <div className="t-serif" style={{ fontSize: 16, fontStyle: 'italic' }}>{prose.cause}</div>
-            <div className="t-hand" style={{ fontSize: 14, color: 'var(--tsp-slate)', marginTop: 2 }}>{prose.note}</div>
+            <div className="t-serif" style={{ fontSize: 18, fontStyle: 'italic' }}>{prose.cause}</div>
+            <div className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', marginTop: 2 }}>{prose.note}</div>
           </div>
           <div style={{ flex: 1 }}>
             <div className="t-label-sm" style={{ marginBottom: 4 }}>HA CAMMINATO</div>
-            <div className="t-serif" style={{ fontSize: 16 }}>
+            <div className="t-serif" style={{ fontSize: 18 }}>
               {gameTime.day} {gameTime.day === 1 ? 'giorno' : 'giorni'}
             </div>
-            <div className="t-hand" style={{ fontSize: 14, color: 'var(--tsp-slate)', marginTop: 2 }}>
+            <div className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', marginTop: 2 }}>
               {journal.length} {journal.length === 1 ? 'voce annotata' : 'voci annotate'}
             </div>
           </div>
@@ -173,7 +173,7 @@ const GameOverScreen: React.FC = () => {
         {memories.length > 0 && (
           <>
             <div className="t-label-sm" style={{ marginBottom: 6 }}>LE ULTIME RIGHE</div>
-            <div className="t-hand" style={{ fontSize: 15, color: 'var(--tsp-ink)', lineHeight: 1.5, marginBottom: 8 }}>
+            <div className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-ink)', lineHeight: 1.5, marginBottom: 8 }}>
               {memories.map((m, i) => (
                 <div key={i}>· {m}</div>
               ))}
@@ -182,7 +182,7 @@ const GameOverScreen: React.FC = () => {
         )}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 18 }}>
-          <div className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', fontStyle: 'italic' }}>
+          <div className="t-hand" style={{ fontSize: 18, color: 'var(--tsp-slate)', fontStyle: 'italic' }}>
             — qui finisce il diario di Ultimo, figlio del custode —
           </div>
           <Stamp rotate={-12} color="rust">{stampText}</Stamp>
@@ -208,7 +208,7 @@ const GameOverScreen: React.FC = () => {
       </div>
 
       <div style={{ position: 'absolute', bottom: 14, left: 0, right: 0, textAlign: 'center' }}>
-        <span className="t-sans" style={{ fontSize: 9, letterSpacing: '0.5em', color: 'rgba(216,210,194,0.35)' }}>
+        <span className="t-sans" style={{ fontSize: 12, letterSpacing: '0.5em', color: 'rgba(216,210,194,0.5)' }}>
           IL MONDO CONTINUA SENZA DI TE
         </span>
       </div>

@@ -142,17 +142,17 @@ const DialogueScreen: React.FC = () => {
           <PortraitSketch />
           <div style={{ flex: 1 }}>
             <div className="t-label" style={{ marginBottom: 2 }}>STAI PARLANDO CON</div>
-            <div className="t-serif" style={{ fontSize: 28, lineHeight: 1, fontWeight: 500 }}>{npcName}</div>
+            <div className="t-serif" style={{ fontSize: 32, lineHeight: 1, fontWeight: 500 }}>{npcName}</div>
             <hr className="ink-rule-dashed" style={{ margin: '12px 0 8px' }} />
             {lastPlayerLine && !isTyping && (
               <div style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
-                <span className="t-sans" style={{ fontSize: 10, letterSpacing: '0.2em', color: 'var(--tsp-rust)', paddingTop: 2, flex: '0 0 auto' }}>TU</span>
-                <span className="t-serif" style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--tsp-slate)', lineHeight: 1.4 }}>
+                <span className="t-sans" style={{ fontSize: 12, letterSpacing: '0.2em', color: 'var(--tsp-rust)', paddingTop: 2, flex: '0 0 auto' }}>TU</span>
+                <span className="t-serif" style={{ fontSize: 15, fontStyle: 'italic', color: 'var(--tsp-slate)', lineHeight: 1.4 }}>
                   "{lastPlayerLine}"
                 </span>
               </div>
             )}
-            <p className="t-serif" style={{ fontSize: 16, fontStyle: 'italic', color: 'var(--tsp-ink)', lineHeight: 1.5, textWrap: 'pretty', minHeight: 48 }}>
+            <p className="t-serif" style={{ fontSize: 19, fontStyle: 'italic', color: 'var(--tsp-ink)', lineHeight: 1.5, textWrap: 'pretty', minHeight: 52 }}>
               "{displayedText}"
               {isTyping && <span style={{ opacity: 0.6 }}>▮</span>}
             </p>
@@ -186,11 +186,11 @@ const DialogueScreen: React.FC = () => {
                 onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(20,24,30,0.3)'; }}
               >
                 <div className="t-sans" style={{
-                  fontSize: 11, fontWeight: 600, width: 20, height: 20,
-                  lineHeight: '20px', textAlign: 'center',
+                  fontSize: 13, fontWeight: 600, width: 23, height: 23,
+                  lineHeight: '23px', textAlign: 'center',
                   border: '1px solid var(--tsp-ink)', color: 'var(--tsp-ink)', flex: '0 0 auto',
                 }}>{index + 1}</div>
-                <div className="t-serif" style={{ flex: 1, fontSize: 14, lineHeight: 1.3 }}>
+                <div className="t-serif" style={{ flex: 1, fontSize: 16, lineHeight: 1.3 }}>
                   {option.text}
                 </div>
               </div>
@@ -205,10 +205,10 @@ const DialogueScreen: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
-          <span className="t-sans" style={{ fontSize: 9, letterSpacing: '0.32em', color: 'var(--tsp-slate-light)' }}>
+          <span className="t-sans" style={{ fontSize: 11, letterSpacing: '0.32em', color: 'var(--tsp-slate-light)' }}>
             {isTyping ? 'SPAZIO SALTA' : '1–9 SCEGLI · ESC ESCI'}
           </span>
-          <span className="t-hand" style={{ fontSize: 13, color: 'var(--tsp-slate)', opacity: 0.8 }}>
+          <span className="t-hand" style={{ fontSize: 16, color: 'var(--tsp-slate)', opacity: 0.85 }}>
             ogni parola conta
           </span>
         </div>

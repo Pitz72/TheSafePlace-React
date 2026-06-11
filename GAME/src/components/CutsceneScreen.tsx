@@ -84,12 +84,12 @@ const CutsceneLetter: React.FC<CutsceneLetterProps> = ({
         filter: 'blur(3px)', pointerEvents: 'none',
       }} />
 
-      <div className="t-label" style={{ fontSize: 10, marginBottom: 16 }}>DAL DIARIO DI ULTIMO</div>
+      <div className="t-label" style={{ fontSize: 13, marginBottom: 16 }}>DAL DIARIO DI ULTIMO</div>
       <hr className="ink-rule" style={{ marginBottom: 24 }} />
 
       {paragraphs.slice(0, visibleCount).map((paragraph, index) => (
         <p key={index} className="t-serif" style={{
-          fontSize: 17, lineHeight: 1.65, textWrap: 'pretty',
+          fontSize: 20, lineHeight: 1.65, textWrap: 'pretty',
           color: index % 2 === 0 ? 'var(--tsp-ink)' : 'var(--tsp-ink-faded)',
           fontStyle: index % 2 === 0 ? 'normal' : 'italic',
           marginBottom: 14,
@@ -114,10 +114,10 @@ const CutsceneLetter: React.FC<CutsceneLetterProps> = ({
                   cursor: 'pointer',
                 }}
               >
-                <div className="t-serif" style={{ fontSize: 16, lineHeight: 1.4, fontStyle: 'italic' }}>
+                <div className="t-serif" style={{ fontSize: 18, lineHeight: 1.4, fontStyle: 'italic' }}>
                   "{choice.text}"
                 </div>
-                <div className="t-sans" style={{ fontSize: 9, letterSpacing: '0.32em', color: 'var(--tsp-slate)', marginTop: 6 }}>
+                <div className="t-sans" style={{ fontSize: 11, letterSpacing: '0.32em', color: 'var(--tsp-slate)', marginTop: 6 }}>
                   {index + 1} · SCEGLI
                 </div>
               </div>
@@ -127,10 +127,10 @@ const CutsceneLetter: React.FC<CutsceneLetterProps> = ({
       )}
 
       <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span className="t-hand" style={{ fontSize: 15, color: 'var(--tsp-slate)' }}>
+        <span className="t-hand" style={{ fontSize: 17, color: 'var(--tsp-slate)' }}>
           — la pagina gira da sola —
         </span>
-        <span className="t-sans" style={{ fontSize: 10, letterSpacing: '0.3em', color: 'var(--tsp-slate)' }}>
+        <span className="t-sans" style={{ fontSize: 12, letterSpacing: '0.3em', color: 'var(--tsp-slate)' }}>
           {!allVisible ? 'INVIO MOSTRA TUTTO'
             : choices.length > 0 ? '1–9 SCEGLI'
             : 'INVIO CONTINUA'}
