@@ -1,0 +1,103 @@
+name: Release (Win/Mac/Linux)
+
+# Avvio MANUALE (Actions → Release → Run workflow), oppure:
+#   gh workflow run release.yml -f version=2.0.16
+# Builda gli installer sui tre sistemi operativi e crea una Release nel repo.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versione release, senza la 'v' (es. 2.0.16)"
+        required: true
+        default: "2.0.16"
+      prerelease:
+        description: "Segna come pre-release"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: GAME
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: GAME/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web bundle
+        run: npm run build
+
+      # electron-builder rileva l'OS del runner e builda i target giusti
+      # (win: nsis+portable · mac: dmg+zip · linux: AppImage+deb).
+      # CSC_IDENTITY_AUTO_DISCOVERY=false: niente firma su macOS (nessun certificato).
+      - name: Package installers
+        run: npx electron-builder --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ matrix.os }}
+          path: |
+            GAME/release/*.exe
+            GAME/release/*.dmg
+            GAME/release/*.zip
+            GAME/release/*.AppImage
+            GAME/release/*.deb
+          if-no-files-found: ignore
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all installers
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VER="${{ inputs.version }}"
+          FLAGS=""
+          if [ "${{ inputs.prerelease }}" = "true" ]; then FLAGS="--prerelease"; fi
+          FILES=$(find artifacts -type f | sort)
+          echo "Allego questi file alla release v$VER:"
+          echo "$FILES"
+          gh release create "v$VER" \
+            --repo "${{ github.repository }}" \
+            --title "The Safe Place v$VER" \
+            --notes "Installer desktop di **The Safe Place Chronicles: The Echo of the Journey**.
+
+          | OS | File |
+          |----|------|
+          | Windows | \`.exe\` (installer NSIS) o \`portable\` |
+          | macOS | \`.dmg\` o \`.zip\` — app non firmata: click destro → **Apri** al primo avvio |
+          | Linux | \`.AppImage\` o \`.deb\` |
+
+          I salvataggi sono locali (localStorage per-utente)." \
+            $FLAGS \
+            $FILES

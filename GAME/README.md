@@ -1,22 +1,29 @@
-# The Safe Place - React Remaster
+# The Safe Place - React
 
-![Version](https://img.shields.io/badge/version-2.0.5-blue.svg)
-![Status](https://img.shields.io/badge/status-STABLE-green.svg)
-![Tech](https://img.shields.io/badge/tech-React%2019%20%7C%20Phaser%20%7C%20Ink-purple.svg)
+![Version](https://img.shields.io/badge/version-2.0.16-blue.svg)
+![Status](https://img.shields.io/badge/status-completabile-brightgreen.svg)
+![Tech](https://img.shields.io/badge/tech-React%2019%20%7C%20Ink%20%7C%20Electron-purple.svg)
 
-> **The Safe Place** è un'avventura narrativa di sopravvivenza ambientata in un mondo post-apocalittico. Questa versione "Remaster" migra il gioco originale da una griglia React statica a un mondo dinamico basato su **Phaser** per l'esplorazione e **Ink** per la narrativa.
+> **The Safe Place** è un'avventura narrativa di sopravvivenza ambientata in un mondo post-apocalittico. Il gioco è una SPA React (rendering mappa su HTML Canvas, narrativa gestita da **Ink**) impacchettata come **applicazione desktop** per Windows/macOS/Linux tramite **Electron**.
+
+> ℹ️ **Nota storica**: il repo contiene una migrazione a **Phaser** mai completata (`src/game/`) — è **codice morto** non montato. Il renderer attivo è `CanvasMap` (HTML Canvas). Vedi i log recenti in `docs/logs/`.
 
 ## 📚 Documentazione
 Tutta la documentazione tecnica e di progetto si trova nella cartella [`docs/`](./docs/).
 - **Roadmap:** [`docs/ROADMAP.md`](./docs/ROADMAP.md)
-- **Log di Sviluppo:** [`docs/logs/`](./docs/logs/)
-- **Ultimo Aggiornamento:** [`v2.0.5 - Safety & Focus`](./docs/logs/v2.0.5.md)
-- **Visione Futura:** [`docs/design/VISION_2025.md`](./docs/design/VISION_2025.md)
+- **Log di Sviluppo:** [`docs/logs/`](./docs/logs/) — l'ultimo è la campagna di chiusura v2.0.8 → v2.0.16
+- **Packaging desktop:** [`docs/logs/v2.0.16-electron-packaging.md`](./docs/logs/v2.0.16-electron-packaging.md)
+
+### Distribuzione desktop (Electron)
+- `npm run dist` — installer per il sistema operativo corrente (output in `release/`)
+- `npm run electron` — avvia l'app Electron sulla build già compilata
+- Build multi-OS + release automatica: workflow `.github/workflows/release.yml` nella root del repo
 
 *   **Frontend:** React con TypeScript
 *   **Gestione dello Stato:** Zustand (con architettura a "slice")
 *   **Stile:** TailwindCSS
 *   **Rendering Mappa:** HTML Canvas
+*   **Desktop:** Electron + electron-builder
 
 ### Caratteristiche Principali
 

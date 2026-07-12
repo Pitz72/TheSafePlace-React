@@ -1,125 +1,98 @@
+# The Safe Place Chronicles: The Echo of the Journey
 
-# The Safe Place Chronicles - Progetto React
+![version](https://img.shields.io/badge/gioco-v2.0.16-blue.svg)
+![platform](https://img.shields.io/badge/desktop-Windows%20%7C%20macOS%20%7C%20Linux-informational.svg)
+![status](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 
-Questo repository contiene il codice sorgente di **The Safe Place Chronicles: The Echo of the Journey**, un progetto suddiviso in due parti principali: il gioco e il sito web dedicato. Entrambi sono sviluppati in React e TypeScript, ma gestiti come progetti separati all'interno di questa monorepo.
+Un **GDR testuale di sopravvivenza** post-apocalittico in estetica retrocomputazionale anni '80. Il giocatore — *Ultimo* — attraversa una mappa devastata per raggiungere il **Safe Place**, gestendo risorse, incontri, combattimenti e scelte morali, mentre gli "Echi della Memoria" svelano il suo passato fino al confronto finale.
 
-## Struttura del Repository
+Progetto di **Simone Pizzi** / **Runtime Radio**, nato come esperimento sul portare in fondo un videogioco non banale con l'aiuto di un LLM.
 
--   `GAME/`: Codice sorgente del gioco (React 19 + TypeScript + Zustand + Phaser + Inkjs). Target finale: applicazione desktop Win/Linux via Tauri.
--   `SITO/`: Codice sorgente del sito web di presentazione.
--   `GDD/`: Documentazione completa di Game Design, agnostica dal motore — fonte canonica del design.
-
----
-
-## 📚 Game Design Document (GDD)
-
-Una documentazione completa e dettagliata che funge da "Bibbia" del progetto.
-Costruita effettuando il reverse-engineering del codice React originale, questa documentazione è progettata per essere:
--   **Agnostica**: Indipendente dalla tecnologia utilizzata.
--   **Completa**: Copre ogni aspetto, dalla narrativa alle meccaniche, dall'UI ai dati.
--   **Strutturata**: Organizzata in capitoli logici per facile consultazione.
+> **Stato**: il gioco è **giocabile dall'inizio alla fine** (nuova partita → 12 capitoli di trama → Safe Place → epilogo secondo la bussola morale → THE END). Lo sviluppo del codice è chiuso; il progetto viene distribuito come applicazione desktop.
 
 ---
 
-## 🏛️ Architettura di Deployment
+## 📦 Download
 
-L'architettura di questo progetto è pensata per un deployment su un unico dominio con la seguente struttura:
+Gli installer per Windows, macOS e Linux vengono prodotti dalla GitHub Action **Release** e pubblicati nella pagina **[Releases](../../releases)**:
 
--   **Sito Web (Landing Page):** Il contenuto del progetto `SITO` viene servito dalla **root** del dominio (es. `https://thesafeplace.runtimeradio.it/`).
--   **Gioco:** Il contenuto del progetto `GAME` viene servito da una **sottocartella** (es. `https://thesafeplace.runtimeradio.it/gioco/`).
-
-Entrambi i progetti sono già configurati per supportare questa struttura. Il sito punta a una sottocartella per avviare il gioco, e il gioco è configurato per caricare tutte le sue risorse in modo relativo, garantendo la piena funzionalità.
-
----
-
-## 🎮 The Safe Place Chronicles: The Echo of the Journey (v2.0.0)
-
-Il cuore del progetto, un'avventura testuale con elementi GDR sviluppata per il web.
-
-### Stack Tecnologico
-
--   **Framework**: [React](https://react.dev/) (`v19.2.0`)
--   **Linguaggio**: [TypeScript](https://www.typescriptlang.org/) (`v5.8.2`)
--   **Build Tool**: [Vite](https://vitejs.dev/) (`v6.2.0`)
--   **State Management**: [Zustand](https://github.com/pmndrs/zustand) (`v5.0.8`)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/) (`v4.1.14`) + **Custom CRT Shaders**
--   **Graphics**: **Custom SVG Tileset** (Ultima IV/V Style)
--   **Testing**: [Vitest](https://vitest.dev/) e [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-
-### Struttura del Progetto `GAME/`
-
-Il codice è organizzato in cartelle specifiche per separare le responsabilità:
-
--   `assets/`: Contiene asset grafici e dati relativi (tileset, canvas, ecc.).
--   `components/`: Tutti i componenti React che formano le schermate del gioco (es. `MainMenuScreen`, `InventoryScreen`, `CombatScreen`).
--   `data/`: Gestisce i dati statici del gioco come dialoghi, nemici, oggetti, quest e ricette, spesso tramite file `.json` e moduli TypeScript che li elaborano.
--   `hooks/`: Custom hooks di React per logiche riutilizzabili (es. `useKeyboardInput`).
--   `log/`: Un changelog dettagliato suddiviso per versione, utile per tracciare l'evoluzione del progetto.
--   `services/`: Servizi che incapsulano la logica di business del gioco (es. `gameService`, `questService`).
--   `store/`: Contiene la configurazione dello store globale gestito con Zustand.
--   `scripts/`: Script di utility, come la validazione dei dati di gioco.
-
-### Installazione e Avvio
-
-Per eseguire il gioco in ambiente di sviluppo locale:
-
-1.  **Naviga nella cartella del gioco:**
-    ```bash
-    cd GAME
-    ```
-2.  **Installa le dipendenze:**
-    ```bash
-    npm install
-    ```
-3.  **Avvia il server di sviluppo:**
-    ```bash
-    npm run dev
-    ```
-    Il gioco sarà accessibile all'indirizzo `http://localhost:3000`.
-
-### Script Disponibili
-
--   `npm run dev`: Avvia il server di sviluppo.
--   `npm run build`: Compila il progetto per la produzione.
--   `npm run preview`: Avvia un server locale per testare la build di produzione.
--   `npm run test`: Esegue i test con Vitest.
--   `npm run validate:data`: Lancia lo script di validazione per i dati di gioco.
+| OS | Formati |
+|----|---------|
+| **Windows** | `.exe` (installer NSIS) · versione `portable` |
+| **macOS** | `.dmg` · `.zip` — *app non firmata: al primo avvio click destro → Apri* |
+| **Linux** | `.AppImage` · `.deb` |
 
 ---
 
-## 🌐 The Safe Place - Sito Web
+## 🗂️ Struttura del repository
 
-Il sito web ufficiale del gioco, dove vengono presentate le caratteristiche principali, la storia e gli aggiornamenti.
+| Cartella | Contenuto |
+|----------|-----------|
+| [`GAME/`](./GAME) | Il gioco — React 19 + TypeScript + Zustand + Ink, impacchettato come app desktop con Electron |
+| [`SITO/`](./SITO) | Sito web di presentazione (progetto separato) |
+| [`GDD/`](./GDD) | Game Design Document completo e agnostico dal motore — la "bibbia" del design |
+| [`COVER-UFFICIALE/`](./COVER-UFFICIALE) | Immagini di copertina ufficiali |
 
-### Stack Tecnologico
+---
 
--   **Framework**: [React](https://react.dev/) (`v18.2.0`)
--   **Linguaggio**: [TypeScript](https://www.typescriptlang.org/) (`v5.4.5`)
--   **Build Tool**: [Vite](https://vitejs.dev/) (`v5.3.1`)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/) (`v3.4.4`)
--   **Linting**: [ESLint](https://eslint.org/)
+## 🎮 Il gioco (`GAME/`)
 
-### Installazione e Avvio
+**Stack**: React 19 · TypeScript 5.8 · Vite 6 · Zustand 5 · [Ink](https://www.inklestudios.com/ink/) (narrativa) · Tailwind CSS · rendering mappa su HTML Canvas · packaging [Electron](https://www.electronjs.org/) + electron-builder.
 
-Per eseguire il sito in ambiente di sviluppo locale:
+### Eseguire da sorgente (sviluppo)
 
-1.  **Naviga nella cartella del sito:**
-    ```bash
-    cd SITO
-    ```
-2.  **Installa le dipendenze:**
-    ```bash
-    npm install
-    ```
-3.  **Avvia il server di sviluppo:**
-    ```bash
-    npm run dev
-    ```
-    Il sito sarà accessibile all'indirizzo predefinito da Vite (solitamente `http://localhost:5173`).
+```bash
+cd GAME
+npm install
+npm run dev        # http://localhost:3000
+```
 
-### Script Disponibili
+### Costruire gli installer desktop
 
--   `npm run dev`: Avvia il server di sviluppo.
--   `npm run build`: Compila il progetto per la produzione.
--   `npm run lint`: Esegue l'analisi statica del codice con ESLint.
--   `npm run preview`: Avvia un server locale per testare la build di produzione.
+```bash
+cd GAME
+npm run dist          # installer per il TUO sistema operativo → GAME/release/
+# oppure, per un OS specifico:
+npm run dist:win
+npm run dist:mac
+npm run dist:linux
+```
+
+Per generare **tutti e tre** gli OS in una volta si usa la GitHub Action (vedi sotto): i runner macOS e Linux non sono replicabili da una singola macchina Windows.
+
+### Provare la build desktop senza installare
+
+```bash
+cd GAME
+npm run build         # bundle web
+npm run electron      # apre l'app Electron sul bundle
+```
+
+### Altri script utili
+
+- `npm run test` — suite Vitest
+- `npm run build` — bundle di produzione (`GAME/dist/`)
+- `npm run validate:data` — validazione dei dati di gioco
+
+---
+
+## 🤖 Release automatica (GitHub Actions)
+
+Il workflow [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=2.0.16`):
+
+1. builda il gioco su runner **Windows, macOS e Linux** in parallelo;
+2. impacchetta gli installer con electron-builder;
+3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.
+
+---
+
+## 📚 Game Design Document
+
+La cartella [`GDD/`](./GDD) contiene 10 documenti che coprono ogni aspetto del progetto — panoramica, meccaniche, database contenuti, world design, trama principale, quest & lore, interfaccia, audio, script/testi e mappa. È scritto in modo indipendente dalla tecnologia e resta la fonte canonica del design.
+
+---
+
+## 📜 Crediti & licenza
+
+Progettato e realizzato da **Simone Pizzi**. Produzione **Runtime Radio**.
+© Runtime Radio 2025 — tutti i diritti riservati. Repository pubblico a scopo dimostrativo e di trasparenza sullo sviluppo.
