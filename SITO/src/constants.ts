@@ -3,8 +3,8 @@ import { Feature, TimelineEvent, DownloadTarget } from './types';
 // --- Repository e Release pubblica (open source) ---
 export const REPO_URL = 'https://github.com/Pitz72/TheSafePlace-React';
 export const RELEASES_URL = 'https://github.com/Pitz72/TheSafePlace-React/releases';
-export const RELEASE_VERSION = 'v2.0.16';
-const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/download/v2.0.16/';
+export const RELEASE_VERSION = 'v2.0.17';
+const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/download/v2.0.17/';
 
 export const DOWNLOAD_BASE_URL = RELEASE_BASE;
 
@@ -13,23 +13,23 @@ export const DOWNLOAD_TARGETS: DownloadTarget[] = [
     os: 'Windows',
     icon: '⊞', // ⊞ finestra
     requirement: 'Windows 10/11 - 64 bit (x64)',
-    primary: { label: 'Installer (.exe)', file: 'TheSafePlace-2.0.16-win-x64.exe', size: '~120 MB' },
+    primary: { label: 'Installer (.exe)', file: 'TheSafePlace-2.0.17-win-x64.exe', size: '~115 MB' },
     notice: 'Windows SmartScreen potrebbe mostrare un avviso ("Windows ha protetto il PC") perché l’eseguibile non è firmato con un certificato commerciale. È normale per un progetto open source: clicca su "Ulteriori informazioni" e poi "Esegui comunque".',
   },
   {
     os: 'macOS',
     icon: '⌘', // ⌘
     requirement: 'macOS su Apple Silicon (arm64) - M1 o superiore',
-    primary: { label: 'Disk Image (.dmg)', file: 'TheSafePlace-2.0.16-mac-arm64.dmg', size: '~147 MB' },
-    secondary: { label: 'Archivio (.zip)', file: 'TheSafePlace-2.0.16-mac-arm64.zip', size: '~147 MB' },
+    primary: { label: 'Disk Image (.dmg)', file: 'TheSafePlace-2.0.17-mac-arm64.dmg', size: '~154 MB' },
+    secondary: { label: 'Archivio (.zip)', file: 'TheSafePlace-2.0.17-mac-arm64.zip', size: '~147 MB' },
     notice: 'L’app non è firmata né notarizzata da Apple, quindi Gatekeeper la bloccherà al primo avvio. Fai clic destro sull’app → "Apri", oppure vai in Impostazioni di Sistema → Privacy e sicurezza → "Apri comunque". Disponibile solo per Apple Silicon (arm64).',
   },
   {
     os: 'Linux',
     icon: '⚇', // ⚇
     requirement: 'Distribuzioni 64 bit (x86_64 / amd64)',
-    primary: { label: 'AppImage', file: 'TheSafePlace-2.0.16-linux-x86_64.AppImage', size: '~156 MB' },
-    secondary: { label: 'Pacchetto Debian (.deb)', file: 'TheSafePlace-2.0.16-linux-amd64.deb', size: '~118 MB' },
+    primary: { label: 'AppImage', file: 'TheSafePlace-2.0.17-linux-x86_64.AppImage', size: '~150 MB' },
+    secondary: { label: 'Pacchetto Debian (.deb)', file: 'TheSafePlace-2.0.17-linux-amd64.deb', size: '~114 MB' },
     notice: 'Per l’AppImage: dopo il download rendila eseguibile (chmod +x) e avviala con un doppio clic. In alternativa usa il pacchetto .deb su Debian/Ubuntu e derivate.',
   },
 ];
@@ -101,5 +101,10 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     version: "v2.0.16",
     title: "Rilascio Desktop Open Source",
     description: "Impacchettamento come applicazione desktop con Electron per Windows, macOS e Linux, con build automatiche via CI. Prima release pubblica scaricabile su GitHub."
+  },
+  {
+    version: "v2.0.17",
+    title: "Rifiniture Desktop",
+    description: "Installer NSIS per Windows, avvio a schermo intero, nuova icona ufficiale dell'app e miglioramenti alle cutscene di apertura."
   }
 ];

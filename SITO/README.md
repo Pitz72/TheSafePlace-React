@@ -8,7 +8,7 @@
 
 **The Safe Place Chronicles** è un gioco di ruolo (RPG) narrativo di sopravvivenza che si ispira ai classici testuali degli anni '80. Nato come esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con il supporto di modelli linguistici (LLM) per creare un'opera strutturata, coerente e dotata di un'anima.
 
-Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.16 il progetto è completo e giocabile dall'inizio alla fine, rilasciato come applicazione desktop **open source** per Windows, macOS e Linux (React + Ink + Electron).
+Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.17 il progetto è completo e giocabile dall'inizio alla fine, rilasciato come applicazione desktop **open source** per Windows, macOS e Linux (React + Ink + Electron).
 
 Questa è la landing page ufficiale del progetto, creata per presentare il concept, la storia dello sviluppo e distribuire il gioco.
 
@@ -33,6 +33,7 @@ Questa è la landing page ufficiale del progetto, creata per presentare il conce
 - **v2.0.0 - Golden Master Release:** Il progetto raggiunge la sua forma definitiva; tutti i sistemi stabili e testati.
 - **v2.0.14 - Campagna di Chiusura:** Audit completo e revisione dei sistemi; il gioco è completabile fino al finale.
 - **v2.0.16 - Rilascio Desktop Open Source:** App desktop Electron per Windows, macOS e Linux, con build via CI e release pubblica su GitHub.
+- **v2.0.17 - Rifiniture Desktop:** Installer NSIS per Windows, avvio a schermo intero, nuova icona ufficiale e miglioramenti alle cutscene.
 
 ## Come Eseguire il Progetto
 

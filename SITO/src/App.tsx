@@ -40,7 +40,7 @@ const App: React.FC = () => {
               <strong>The Safe Place Chronicles</strong> è un gioco di ruolo (RPG) narrativo di sopravvivenza che si ispira ai classici testuali degli anni '80. Nato come esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con il supporto di modelli linguistici (LLM) per creare un'opera strutturata, coerente e dotata di un'anima.
             </p>
             <p>
-              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione <strong>2.0.16</strong> il progetto è completo e giocabile dall'inizio alla fine, rilasciato come <strong>applicazione desktop open source</strong> per Windows, macOS e Linux. Costruito in React (mappa su HTML Canvas, narrativa gestita da Ink) e impacchettato con Electron.
+              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione <strong>2.0.17</strong> il progetto è completo e giocabile dall'inizio alla fine, rilasciato come <strong>applicazione desktop open source</strong> per Windows, macOS e Linux. Costruito in React (mappa su HTML Canvas, narrativa gestita da Ink) e impacchettato con Electron.
             </p>
           </div>
         </Section>
@@ -82,7 +82,7 @@ const App: React.FC = () => {
         </Section>
 
         <Section title="[PROIEZIONE_SVILUPPI_FUTURI.EXE]">
-          <p className="mb-6">Il viaggio è concluso. Con la <strong>v2.0.16</strong> il gioco è completo, giocabile dall'inizio alla fine e distribuito come applicazione desktop <strong>open source</strong> per Windows, macOS e Linux. Lo sviluppo prosegue in modo aperto, sul repository pubblico:</p>
+          <p className="mb-6">Il viaggio è concluso. Con la <strong>v2.0.17</strong> il gioco è completo, giocabile dall'inizio alla fine e distribuito come applicazione desktop <strong>open source</strong> per Windows, macOS e Linux. Lo sviluppo prosegue in modo aperto, sul repository pubblico:</p>
           <ul className="list-['>_'] pl-8 space-y-4">
             <li><span className="pl-2"><strong>Progetto Open Source:</strong> Codice sorgente pubblico su GitHub, aperto a contributi, fork e segnalazioni della community.</span></li>
             <li><span className="pl-2"><strong>Traduzioni Multilingua:</strong> Portare l'esperienza di The Safe Place Chronicles a un pubblico internazionale (EN, ES, FR, DE, PT).</span></li>
