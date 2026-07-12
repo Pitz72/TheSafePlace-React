@@ -455,7 +455,7 @@
       "xp": 350,
       "items": [
         {
-          "itemId": "AMMO_12G",
+          "itemId": "ammo_shotgun",
           "quantity": 15
         },
         {
@@ -521,7 +521,7 @@
       "xp": 500,
       "items": [
         {
-          "itemId": "AMMO_9MM",
+          "itemId": "ammo_9mm",
           "quantity": 30
         },
         {

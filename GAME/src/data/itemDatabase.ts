@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IItem } from '../../types';
+import { IItem } from '../types';
 
 type RawItem = Omit<IItem, 'color'>;
 
@@ -12,7 +12,12 @@ async function loadAllItems(): Promise<Record<string, IItem>> {
         './data/items/materials.json',
         './data/items/quest.json',
         './data/items/ammo.json',
-        './data/items/restored_items.json'
+        './data/items/restored_items.json',
+        // v2.0.11: these two files were shipped but never loaded — 8 items
+        // (incl. both repair kits, output of a STARTING recipe) did not exist
+        // at runtime, so crafting/rewards granting them silently no-oped.
+        './data/items/repair_kits.json',
+        './data/items/unique_items.json'
     ];
     try {
         const responses = await Promise.all(files.map(file => fetch(file)));
