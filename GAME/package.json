@@ -4,7 +4,12 @@
   "version": "2.0.16",
   "type": "module",
   "description": "The Safe Place Chronicles: The Echo of the Journey — un GDR testuale post-apocalittico.",
-  "author": "Runtime Radio",
+  "author": "Runtime Radio <noreply@runtimeradio.it>",
+  "homepage": "https://github.com/Pitz72/TheSafePlace-React",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pitz72/TheSafePlace-React.git"
+  },
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
@@ -38,6 +43,13 @@
       "package.json"
     ],
     "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Pitz72",
+        "repo": "TheSafePlace-React"
+      }
+    ],
     "win": {
       "target": [
         "nsis",
@@ -64,6 +76,8 @@
         "deb"
       ],
       "category": "Game",
+      "maintainer": "Runtime Radio <noreply@runtimeradio.it>",
+      "synopsis": "GDR testuale di sopravvivenza post-apocalittico",
       "artifactName": "TheSafePlace-${version}-linux-${arch}.${ext}"
     }
   },
