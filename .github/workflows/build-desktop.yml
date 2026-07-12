@@ -1,0 +1,56 @@
+name: Build Desktop (Win/Mac/Linux)
+
+# Manual trigger, or push a version tag like v2.0.16 to build all platforms.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: GAME
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: GAME/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web bundle
+        run: npm run build
+
+      # electron-builder auto-detects the runner OS and builds the matching
+      # targets (nsis+portable on Windows, dmg+zip on macOS, AppImage+deb on Linux).
+      - name: Package desktop app
+        run: npx electron-builder --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: TheSafePlace-${{ matrix.os }}
+          path: |
+            GAME/release/*.exe
+            GAME/release/*.dmg
+            GAME/release/*.zip
+            GAME/release/*.AppImage
+            GAME/release/*.deb
+          if-no-files-found: ignore
+          retention-days: 30
