@@ -2,12 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'VT323', monospace;
+/* --- Palette allineata al gioco (theme-crt "Green Phosphor" del menu principale) --- */
+:root {
+  --bg-primary: #050a05;
+  --text-primary: #33ff33;   /* fosforo P3 autentico */
+  --text-secondary: #28cc28;
+  --text-accent: #ccffcc;    /* fosforo piu' brillante per i titoli */
+  --text-danger: #ff3333;
+  --border-primary: rgba(51, 255, 51, 0.4);
+  --shadow-primary: rgba(51, 255, 51, 0.6);
 }
 
+body {
+  font-family: 'VT323', monospace;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Glow a fosfori premium identico al menu del gioco:
+   persistenza + aberrazione cromatica (rossa/blu) */
 .text-glow {
-  text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 20px #008f25, 0 0 40px #008f25;
+  text-shadow:
+    0 0 2px #33ff33,
+    0 0 4px rgba(51, 255, 51, 0.8),
+    0 0 15px rgba(51, 255, 51, 0.4),
+    2px 0 1px rgba(255, 0, 0, 0.2),
+    -2px 0 1px rgba(0, 0, 255, 0.2);
 }
 
 .vignette {
@@ -20,3 +40,55 @@ body {
   background-size: 100% 4px;
   pointer-events: none;
 }
+
+/* ============================================================
+   INTRO CRT — animazioni "power-on / boot / title reveal"
+   ============================================================ */
+
+/* Accensione CRT: dal punto/linea centrale si espande a schermo pieno */
+@keyframes crtPowerOn {
+  0%   { transform: scaleX(0.02) scaleY(0.0012); opacity: 0; filter: brightness(8) blur(2px); }
+  35%  { transform: scaleX(1) scaleY(0.004); opacity: 1; filter: brightness(6) blur(1px); }
+  70%  { transform: scaleX(1) scaleY(1); filter: brightness(2.2) blur(0.6px); }
+  100% { transform: scaleX(1) scaleY(1); filter: brightness(1) blur(0); }
+}
+.animate-crt-on { animation: crtPowerOn 0.62s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; transform-origin: center; }
+
+/* Spegnimento CRT: collassa in una linea e sparisce */
+@keyframes crtPowerOff {
+  0%   { transform: scaleX(1) scaleY(1); opacity: 1; filter: brightness(1); }
+  45%  { transform: scaleX(1) scaleY(0.02); opacity: 1; filter: brightness(5); }
+  100% { transform: scaleX(0.28) scaleY(0.0012); opacity: 0; filter: brightness(10); }
+}
+.animate-crt-off { animation: crtPowerOff 0.5s cubic-bezier(0.6, 0, 0.9, 0.2) forwards; transform-origin: center; }
+
+/* Rivelazione del titolo: molla + messa a fuoco (blur→nitido) */
+@keyframes titleReveal {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.94); filter: blur(8px); letter-spacing: 0.5em; }
+  55%  { opacity: 1; filter: blur(0); }
+  75%  { transform: translateY(-2px) scale(1.015); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+.title-reveal { opacity: 0; animation: titleReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Riga di boot che appare con micro-glitch orizzontale */
+@keyframes bootLineIn {
+  0%   { opacity: 0; transform: translateX(-6px); clip-path: inset(0 100% 0 0); }
+  40%  { opacity: 1; transform: translateX(2px); }
+  100% { opacity: 1; transform: translateX(0); clip-path: inset(0 0 0 0); }
+}
+.boot-line-in { animation: bootLineIn 0.28s steps(12, end) forwards; }
+
+/* Sfarfallio "fosforo" leggero e continuo sul blocco titolo */
+@keyframes phosphorPulse {
+  0%, 100% { opacity: 1; }
+  47%      { opacity: 0.94; }
+  49%      { opacity: 1; }
+  51%      { opacity: 0.9; }
+  53%      { opacity: 1; }
+}
+.phosphor-pulse { animation: phosphorPulse 4.2s linear infinite; }
+
+/* Cursore lampeggiante a blocco */
+@keyframes caretBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.caret-blink { animation: caretBlink 1.05s step-end infinite; }

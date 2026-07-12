@@ -8,7 +8,7 @@ interface TimelineProps {
 
 const Timeline: React.FC<TimelineProps> = ({ events }) => {
   return (
-    <div className="relative pl-5 before:content-[''] before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:bg-[#008f25]">
+    <div className="relative pl-5 before:content-[''] before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:bg-[#28cc28]">
       <div className="space-y-12">
         {events.map((event) => (
           <TimelineItem key={event.version} event={event} />

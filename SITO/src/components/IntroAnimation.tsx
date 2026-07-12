@@ -1,174 +1,198 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
+/**
+ * IntroAnimation — sequenza di boot CRT cinematica, allineata al menu
+ * principale del gioco (tema fosfori verdi P3, font VT323).
+ *
+ * Fasi: 'power' (accensione CRT) → 'boot' (log di sistema) →
+ *       'title' (rivelazione titolo) → 'ready' (prompt) → 'exit' (spegnimento).
+ *
+ * Ispirata ai principi di animazione di Remotion: timeline deterministica,
+ * easing "a molla" e messa a fuoco (blur→nitido) per ogni elemento.
+ */
+
+type Phase = 'power' | 'boot' | 'title' | 'ready';
 
 const BOOT_MESSAGES_POOL = [
-  'Initializing memory...',
-  'Calibrating quantum entangler...',
+  'Initializing memory core...',
+  'Calibrating phosphor emitters...',
   'Verifying BIOS checksum...',
   'Decompressing kernel image...',
-  'Loading audio drivers [AUI_83_DRIVER]...',
+  'Loading audio drivers [AUI_83]...',
   'Mounting root filesystem...',
+  'Restoring narrative index...',
   'WARN::Neural interface link unstable...',
   'WARN::Sub-optimal power readings detected...',
   'FAIL::Memory allocation error at 0xDEADBEEF...',
   'FAIL::Corruption detected in SYS_CONFIG...',
   'CORR::Rerouting power flow...',
   'CORR::Bypassing memory integrity check...',
-  'CORR::Loading backup configuration from last known stable state...',
+  'CORR::Loading backup from last known stable state...',
 ];
-
-const LOGO = `
-████████╗██╗  ██╗███████╗     ██████╗ ██╗  ██╗ ██████╗████████╗
-╚══██╔══╝██║  ██║██╔════╝    ██╔═══██╗██║  ██║██╔════╝╚══██╔══╝
-   ██║   ███████║█████╗      ██║   ██║███████║██║        ██║   
-   ██║   ██╔══██║██╔══╝      ██║   ██║██╔══██║██║        ██║   
-   ██║   ██║  ██║███████╗    ╚██████╔╝██║  ██║╚██████╗   ██║   
-   ╚═╝   ╚═╝  ╚═╝╚══════╝     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═╝   
-`;
 
 interface IntroAnimationProps {
   onFinished: () => void;
 }
 
 const IntroAnimation: React.FC<IntroAnimationProps> = ({ onFinished }) => {
+  const [phase, setPhase] = useState<Phase>('power');
+  const [exiting, setExiting] = useState(false);
   const [bootSequence, setBootSequence] = useState<string[]>([]);
-  const [lines, setLines] = useState<string[]>([]);
-  const [showLogo, setShowLogo] = useState(false);
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [fadeOut, setFadeOut] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleLines, setVisibleLines] = useState<string[]>([]);
 
+  // Genera la sequenza di boot (con eventuale glitch FAIL→CORR)
   useEffect(() => {
-    const regularPool = BOOT_MESSAGES_POOL.filter(l => !l.startsWith('FAIL::') && !l.startsWith('CORR::'));
-    const failPool = BOOT_MESSAGES_POOL.filter(l => l.startsWith('FAIL::'));
-    const corrPool = BOOT_MESSAGES_POOL.filter(l => l.startsWith('CORR::'));
-    
-    const generatedSequence: string[] = [];
-    const sequenceLength = 4 + Math.floor(Math.random() * 2); // 4 or 5 lines
-    let hasFailed = false;
+    const regularPool = BOOT_MESSAGES_POOL.filter((l) => !l.startsWith('FAIL::') && !l.startsWith('CORR::'));
+    const failPool = BOOT_MESSAGES_POOL.filter((l) => l.startsWith('FAIL::'));
+    const corrPool = BOOT_MESSAGES_POOL.filter((l) => l.startsWith('CORR::'));
 
-    for (let i = 0; i < sequenceLength; i++) {
-      const shouldFail = Math.random() < 0.25 && !hasFailed && failPool.length > 0 && corrPool.length > 0;
+    const seq: string[] = [];
+    const length = 5 + Math.floor(Math.random() * 2); // 5 o 6
+    let failed = false;
 
+    for (let i = 0; i < length; i++) {
+      const shouldFail = Math.random() < 0.28 && !failed && failPool.length > 0 && corrPool.length > 0;
       if (shouldFail) {
-        hasFailed = true;
-        const failIndex = Math.floor(Math.random() * failPool.length);
-        generatedSequence.push(failPool.splice(failIndex, 1)[0]);
-        const corrIndex = Math.floor(Math.random() * corrPool.length);
-        generatedSequence.push(corrPool.splice(corrIndex, 1)[0]);
+        failed = true;
+        seq.push(failPool.splice(Math.floor(Math.random() * failPool.length), 1)[0]);
+        seq.push(corrPool.splice(Math.floor(Math.random() * corrPool.length), 1)[0]);
         i++;
-      } else {
-        const regularIndex = Math.floor(Math.random() * regularPool.length);
-        if(regularPool.length > 0) {
-            generatedSequence.push(regularPool.splice(regularIndex, 1)[0]);
-        }
+      } else if (regularPool.length > 0) {
+        seq.push(regularPool.splice(Math.floor(Math.random() * regularPool.length), 1)[0]);
       }
     }
-
-    generatedSequence.push('Establishing connection...');
-    generatedSequence.push('Booting TSC-OS v1.0.3...');
-    setBootSequence(generatedSequence);
+    seq.push('Establishing connection...');
+    seq.push('Booting TSPC-OS v2.0.16...');
+    setBootSequence(seq);
   }, []);
 
+  // Fase 'power' → 'boot' dopo l'accensione del CRT
   useEffect(() => {
-    if (bootSequence.length === 0) return;
+    const t = window.setTimeout(() => setPhase('boot'), 680);
+    return () => clearTimeout(t);
+  }, []);
 
-    let lineIndex = 0;
+  // Fase 'boot': rivelazione riga per riga, poi passaggio al titolo
+  useEffect(() => {
+    if (phase !== 'boot' || bootSequence.length === 0) return;
+    let idx = 0;
     let timeoutId: number;
 
-    const showNextLine = () => {
-        if (lineIndex < bootSequence.length) {
-            const currentLineText = bootSequence[lineIndex];
-            setLines(prev => [...prev, currentLineText]);
-
-            const isFail = currentLineText.startsWith('FAIL::');
-            const delay = isFail ? 1200 : (400 + Math.random() * 300);
-            
-            lineIndex++;
-            timeoutId = window.setTimeout(showNextLine, delay);
-        } else {
-            setTimeout(() => setShowLogo(true), 500);
-            setTimeout(() => setShowPrompt(true), 1500);
-        }
+    const showNext = () => {
+      if (idx < bootSequence.length) {
+        const line = bootSequence[idx];
+        setVisibleLines((prev) => [...prev, line]);
+        const isFail = line.startsWith('FAIL::');
+        const delay = isFail ? 1000 : 260 + Math.random() * 220;
+        idx++;
+        timeoutId = window.setTimeout(showNext, delay);
+      } else {
+        timeoutId = window.setTimeout(() => setPhase('title'), 650);
+      }
     };
-    
-    timeoutId = window.setTimeout(showNextLine, 700);
-
+    timeoutId = window.setTimeout(showNext, 350);
     return () => clearTimeout(timeoutId);
-  }, [bootSequence]);
+  }, [phase, bootSequence]);
 
-  const handleSkip = () => {
-    if (showPrompt) {
-      setFadeOut(true);
-      setTimeout(onFinished, 500); 
-    }
-  };
+  // Fase 'title' → 'ready' (abilita lo skip) dopo la rivelazione
+  useEffect(() => {
+    if (phase !== 'title') return;
+    const t = window.setTimeout(() => setPhase('ready'), 2200);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  // Skip: disponibile una volta partito il boot (l'accensione CRT resta intatta).
+  // Mantiene a video il contenuto corrente mentre il CRT si "spegne".
+  const handleSkip = useCallback(() => {
+    if (phase === 'power' || exiting) return;
+    setExiting(true);
+    window.setTimeout(onFinished, 520);
+  }, [phase, exiting, onFinished]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleSkip);
     window.addEventListener('click', handleSkip);
-
     return () => {
       window.removeEventListener('keydown', handleSkip);
       window.removeEventListener('click', handleSkip);
     };
-  }, [showPrompt]);
-  
-  const renderLine = (line: string, index: number) => {
-    let text = line;
-    let status = null;
+  }, [handleSkip]);
 
-    if (line.endsWith('...')) {
-        status = <span className="text-[#aaffbe]">[OK]</span>;
-    }
+  const renderBootLine = (line: string, index: number) => {
+    let text = line;
+    let status: React.ReactNode = null;
 
     if (line.startsWith('WARN::')) {
-        text = line.replace('WARN::', '');
-        status = <span className="text-yellow-400">[WARNING]</span>;
+      text = line.replace('WARN::', '');
+      status = <span className="text-[#facc15]"> [WARNING]</span>;
     } else if (line.startsWith('FAIL::')) {
-        text = line.replace('FAIL::', '');
-        status = <span className="text-red-500">[FAILED]</span>;
+      text = line.replace('FAIL::', '');
+      status = <span className="text-[#ff3333]"> [FAILED]</span>;
     } else if (line.startsWith('CORR::')) {
-        text = line.replace('CORR::', '');
+      text = line.replace('CORR::', '');
+      status = <span className="text-[#ccffcc]"> [RECOVERED]</span>;
+    } else if (line.endsWith('...')) {
+      status = <span className="text-[#ccffcc]"> [OK]</span>;
     }
 
     return (
-        <p key={index} className="text-glow whitespace-pre-wrap">
-            &gt; {text} {status}
-        </p>
+      <p key={index} className="boot-line-in text-glow whitespace-pre-wrap">
+        <span className="text-[#28cc28]">&gt;</span> {text}{status}
+      </p>
     );
   };
 
+  const showTitle = phase === 'title' || phase === 'ready';
 
   return (
-    <div 
-        ref={containerRef}
-        className={`bg-[#050a06] text-[#00ff41] text-xl h-screen w-screen flex flex-col justify-center items-center transition-opacity duration-500 ease-in ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
-    >
-        <div className="fixed top-0 left-0 w-full h-full bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.3),rgba(0,0,0,0.3)_1px,transparent_1px,transparent_3px)] pointer-events-none z-[9999] animate-flicker"></div>
-        <div className="w-full max-w-5xl px-5 text-left">
-            {lines.map((line, index) => renderLine(line, index))}
-            {showLogo && (
-                <pre className="text-sm text-glow animate-text-flicker mt-8 whitespace-pre-wrap text-center">
-                    {LOGO}
-                </pre>
-            )}
-            {showLogo && (
-                <div className="text-center mt-4 text-glow animate-text-flicker">
-                    <h1 className="text-4xl md:text-5xl tracking-widest leading-none">
-                        &gt; THE SAFE PLACE_ CHRONICLES
-                    </h1>
-                    <p className="text-lg text-[#aaffbe] mt-2">
-                        [AN ECHO OF THE JOURNEY]
-                    </p>
-                </div>
-            )}
-        </div>
-        
-        {showPrompt && (
-            <div className="absolute bottom-10 text-2xl text-glow animate-text-flicker">
-                <p>PRESS ANY KEY TO CONTINUE<span className="animate-blink">_</span></p>
+    <div className="fixed inset-0 z-[100] bg-[#050a05] overflow-hidden">
+      {/* Overlay CRT: scanline + vignetta */}
+      <div className="scanline fixed inset-0 z-[120] pointer-events-none opacity-70"></div>
+      <div className="vignette fixed inset-0 z-[121] pointer-events-none"></div>
+
+      {/* Contenuto dentro il "tubo" CRT */}
+      <div className={`w-full h-full ${exiting ? 'animate-crt-off' : 'animate-crt-on'}`}>
+        <div className="w-full h-full flex flex-col justify-center items-center px-5 text-[#33ff33]">
+
+          {/* BOOT LOG */}
+          {phase === 'boot' && (
+            <div className="w-full max-w-4xl text-left text-lg md:text-xl leading-relaxed">
+              {visibleLines.map((line, i) => renderBootLine(line, i))}
+              <span className="text-glow caret-blink">&#9608;</span>
             </div>
-        )}
+          )}
+
+          {/* TITOLO — layout identico al menu principale del gioco */}
+          {showTitle && (
+            <div className="text-center text-glow phosphor-pulse">
+              <h2 className="title-reveal text-2xl sm:text-3xl md:text-5xl tracking-[0.2em]" style={{ animationDelay: '0ms' }}>
+                THE SAFE PLACE CHRONICLES
+              </h2>
+              <h1 className="title-reveal text-6xl sm:text-7xl md:text-9xl leading-none mt-2" style={{ animationDelay: '160ms' }}>
+                THE ECHO
+              </h1>
+              <p className="title-reveal text-xl sm:text-2xl leading-none mt-1" style={{ animationDelay: '340ms' }}>
+                OF THE
+              </p>
+              <h1 className="title-reveal text-6xl sm:text-7xl md:text-9xl leading-none mt-1" style={{ animationDelay: '440ms' }}>
+                JOURNEY
+              </h1>
+              <p className="title-reveal text-2xl md:text-4xl text-[#ccffcc] mt-8" style={{ animationDelay: '720ms' }}>
+                Un GDR di Simone Pizzi
+              </p>
+            </div>
+          )}
+
+          {/* PROMPT */}
+          {phase === 'ready' && (
+            <div className="absolute bottom-12 text-center text-glow">
+              <p className="text-xl md:text-2xl tracking-widest">
+                PREMI UN TASTO PER CONTINUARE<span className="caret-blink">_</span>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

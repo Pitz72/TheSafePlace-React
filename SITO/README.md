@@ -6,11 +6,11 @@
 
 ## Cos'è The Safe Place Chronicles?
 
-**The Safe Place Chronicles** è un prototipo concettuale di gioco di ruolo (RPG) che si ispira ai classici testuali degli anni '80. Nato come un esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con l'intelligenza artificiale per creare un'opera strutturata, coerente e dotata di un'anima.
+**The Safe Place Chronicles** è un gioco di ruolo (RPG) narrativo di sopravvivenza che si ispira ai classici testuali degli anni '80. Nato come esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con il supporto di modelli linguistici (LLM) per creare un'opera strutturata, coerente e dotata di un'anima.
 
-Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.0, il progetto è completo al 100%: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
+Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.16 il progetto è completo e giocabile dall'inizio alla fine, rilasciato come applicazione desktop **open source** per Windows, macOS e Linux (React + Ink + Electron).
 
-Questa è la landing page ufficiale del progetto, creata per presentare il concept, la storia dello sviluppo e raccogliere fondi per la fase finale della produzione.
+Questa è la landing page ufficiale del progetto, creata per presentare il concept, la storia dello sviluppo e distribuire il gioco.
 
 ## Caratteristiche Principali del Gioco
 
@@ -29,7 +29,10 @@ Questa è la landing page ufficiale del progetto, creata per presentare il conce
 - **v1.5.0 - Quest System Framework:** Implementazione di un'infrastruttura completa per missioni.
 - **v1.7.0 - Social Hub & Interactive NPCs:** Il mondo si popola con PNG interattivi e alberi di dialogo.
 - **v1.9.1 - Tactical Combat:** Il combattimento si evolve con azioni ambientali contestuali.
-- **v1.9.5 - Echoes of the Donors:** Aggiunta di quest, eventi e oggetti unici dedicati ai sostenitori.
+- **v1.9.5 - Content Expansion:** Aggiunta di quest, eventi e oggetti unici che arricchiscono la narrativa.
+- **v2.0.0 - Golden Master Release:** Il progetto raggiunge la sua forma definitiva; tutti i sistemi stabili e testati.
+- **v2.0.14 - Campagna di Chiusura:** Audit completo e revisione dei sistemi; il gioco è completabile fino al finale.
+- **v2.0.16 - Rilascio Desktop Open Source:** App desktop Electron per Windows, macOS e Linux, con build via CI e release pubblica su GitHub.
 
 ## Come Eseguire il Progetto
 
@@ -52,10 +55,9 @@ Questo repository contiene il codice sorgente della landing page. Per eseguirla 
     npm run build
     ```
 
-## Sostieni lo Sviluppo
+## Gioca / Scarica
 
-"The Safe Place Chronicles" è più di un gioco: è un omaggio ai classici RPG testuali. Ora abbiamo bisogno del tuo aiuto per il passo finale. Il vostro sostegno ci permetterà di trasformare questo prototipo in un'opera rifinita.
+Il gioco è **open source** e scaricabile gratuitamente per Windows, macOS e Linux dalla release pubblica su GitHub:
 
-<a href="https://www.gofundme.com/f/sostieni-the-safe-place-un-rpg-retro-con-unanima" target="_blank">
-  <strong>SOSTIENI LA CAMPAGNA SU GOFUNDME</strong>
-</a>
+- **Release e download:** [github.com/Pitz72/TheSafePlace-React/releases](https://github.com/Pitz72/TheSafePlace-React/releases)
+- **Codice sorgente:** [github.com/Pitz72/TheSafePlace-React](https://github.com/Pitz72/TheSafePlace-React)

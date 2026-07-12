@@ -6,13 +6,17 @@ import Timeline from './components/Timeline';
 import Button from './components/Button';
 import Footer from './components/Footer';
 import IntroAnimation from './components/IntroAnimation';
+import DownloadSection from './components/DownloadSection';
 import { FEATURES, TIMELINE_EVENTS } from './constants';
 import copertina from '/image/01.png';
 import ragazzoInRovine from '/image/02.png';
 import artworkPrincipale from '/image/03.jpg';
 
 const App: React.FC = () => {
-  const [introFinished, setIntroFinished] = useState(false);
+  // ?skipintro nell'URL salta la sequenza di boot (utile per anteprime/deep-link)
+  const [introFinished, setIntroFinished] = useState(
+    () => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('skipintro')
+  );
 
   const handleIntroFinish = () => {
     setIntroFinished(true);
@@ -23,7 +27,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#050a06] text-[#00ff41] text-xl overflow-x-hidden animate-fade-in relative min-h-screen">
+    <div className="bg-[#050a05] text-[#33ff33] text-xl overflow-x-hidden animate-fade-in relative min-h-screen">
       <div className="fixed top-0 left-0 w-full h-full bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15),rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)] pointer-events-none z-[9998] animate-flicker"></div>
       <div className="fixed top-0 left-0 w-full h-full vignette z-[9999]"></div>
 
@@ -33,10 +37,10 @@ const App: React.FC = () => {
         <Section title="[AVVIO PROTOCOLLO_MANIFESTO.LOG]">
           <div className="text-center max-w-4xl mx-auto">
             <p className="mb-4">
-              <strong>The Safe Place Chronicles</strong> è un prototipo concettuale di gioco di ruolo (RPG) che si ispira ai classici testuali degli anni '80. Nato come un esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con l'intelligenza artificiale (Gemini 2.5 Pro) per creare un'opera strutturata, coerente e dotata di un'anima.
+              <strong>The Safe Place Chronicles</strong> è un gioco di ruolo (RPG) narrativo di sopravvivenza che si ispira ai classici testuali degli anni '80. Nato come esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con il supporto di modelli linguistici (LLM) per creare un'opera strutturata, coerente e dotata di un'anima.
             </p>
             <p>
-              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.0, il progetto è completo al 100%: un'avventura giocabile dall'inizio alla fine, un viaggio dentro un'idea che attende solo di essere vissuta.
+              Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione <strong>2.0.16</strong> il progetto è completo e giocabile dall'inizio alla fine, rilasciato come <strong>applicazione desktop open source</strong> per Windows, macOS e Linux. Costruito in React (mappa su HTML Canvas, narrativa gestita da Ink) e impacchettato con Electron.
             </p>
           </div>
         </Section>
@@ -49,32 +53,18 @@ const App: React.FC = () => {
           </div>
         </Section>
 
-        <Section title="[SOSTIENI_LO_SVILUPPO.CMD]">
-          <div className="text-center max-w-4xl mx-auto">
-            <p className="mb-4">
-              "The Safe Place Chronicles" è più di un gioco: è un omaggio ai classici RPG testuali degli anni '80, nato dalla passione per la narrazione e l'estetica di un'epoca passata. Non partiamo da una semplice idea, ma da un prototipo concettuale completo, con un arco narrativo concluso e meccaniche di gioco solide.
-            </p>
-            <p className="mb-8">
-              Ora abbiamo bisogno del tuo aiuto per il passo finale. Il vostro sostegno ci permetterà di trasformare questo prototipo in un'opera rifinita, espandendo il mondo con nuove quest, eventi e la cura che questo progetto merita. L'obiettivo è raccogliere <strong>500€</strong> per completare lo sviluppo.
-            </p>
-            <Button href="https://www.gofundme.com/f/sostieni-the-safe-place-un-rpg-retro-con-unanima" variant="primary">
-              SOSTIENI LA CAMPAGNA SU GOFUNDME
-            </Button>
-          </div>
-        </Section>
-
         <Section title="[IMAGE ARCHIVE.IMG]">
           <div className="flex flex-col items-center gap-8">
-            <img src={copertina} alt="Copertina ufficiale di The Safe Place Chronicles: The Echo of the Journey." className="w-full md:w-2/3 h-auto border-2 border-[#008f25] hover:border-[#00ff41] transition-colors duration-300" />
-            <img src={ragazzoInRovine} alt="Un ragazzo con uno zaino osserva una città futuristica in rovina, illuminata di verde." className="w-full md:w-2/3 h-auto border-2 border-[#008f25] hover:border-[#00ff41] transition-colors duration-300" />
-            <img src={artworkPrincipale} alt="Artwork principale per il gioco The Safe Place Chronicles." className="w-full md:w-2/3 h-auto border-2 border-[#008f25] hover:border-[#00ff41] transition-colors duration-300" />
+            <img src={copertina} alt="Copertina ufficiale di The Safe Place Chronicles: The Echo of the Journey." className="w-full md:w-2/3 h-auto border-2 border-[#28cc28] hover:border-[#33ff33] transition-colors duration-300" />
+            <img src={ragazzoInRovine} alt="Un ragazzo con uno zaino osserva una città futuristica in rovina, illuminata di verde." className="w-full md:w-2/3 h-auto border-2 border-[#28cc28] hover:border-[#33ff33] transition-colors duration-300" />
+            <img src={artworkPrincipale} alt="Artwork principale per il gioco The Safe Place Chronicles." className="w-full md:w-2/3 h-auto border-2 border-[#28cc28] hover:border-[#33ff33] transition-colors duration-300" />
           </div>
         </Section>
 
         <Section title="[CARICAMENTO_TRASMISSIONE_UFFICIALE.MP4]">
           <div className="relative aspect-video w-full">
             <iframe
-              className="absolute top-0 left-0 w-full h-full border-2 border-[#008f25] hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.3)] transition-all duration-300"
+              className="absolute top-0 left-0 w-full h-full border-2 border-[#28cc28] hover:border-[#33ff33] hover:shadow-[0_0_15px_rgba(51,255,51,0.3)] transition-all duration-300"
               src="https://www.youtube.com/embed/6PJaJECxwhM"
               title="Teaser Trailer Ufficiale - The Safe Place Chronicles"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -83,16 +73,20 @@ const App: React.FC = () => {
           </div>
         </Section>
 
+        <Section title="[SCARICA_IL_GIOCO.EXE]">
+          <DownloadSection />
+        </Section>
+
         <Section title="[LOG_SVILUPPO_PRINCIPALI.TXT]">
           <Timeline events={TIMELINE_EVENTS} />
         </Section>
 
         <Section title="[PROIEZIONE_SVILUPPI_FUTURI.EXE]">
-          <p className="mb-6">Il viaggio è concluso. Con la v2.0.0, il gioco è nella sua forma definitiva (Golden Master). Le attività rimanenti riguardano esclusivamente l'espansione dell'accessibilità:</p>
+          <p className="mb-6">Il viaggio è concluso. Con la <strong>v2.0.16</strong> il gioco è completo, giocabile dall'inizio alla fine e distribuito come applicazione desktop <strong>open source</strong> per Windows, macOS e Linux. Lo sviluppo prosegue in modo aperto, sul repository pubblico:</p>
           <ul className="list-['>_'] pl-8 space-y-4">
+            <li><span className="pl-2"><strong>Progetto Open Source:</strong> Codice sorgente pubblico su GitHub, aperto a contributi, fork e segnalazioni della community.</span></li>
             <li><span className="pl-2"><strong>Traduzioni Multilingua:</strong> Portare l'esperienza di The Safe Place Chronicles a un pubblico internazionale (EN, ES, FR, DE, PT).</span></li>
-            <li><span className="pl-2"><strong>Contenuti Aggiuntivi:</strong> Inserimento degli ultimi omaggi creativi dedicati ai donatori che hanno supportato il progetto.</span></li>
-            <li><span className="pl-2"><strong>Polish Finale:</strong> Un'ultima fase di testing approfondito e bilanciamento per garantire un'esperienza di gioco impeccabile.</span></li>
+            <li><span className="pl-2"><strong>Polish e Playtest:</strong> Testing approfondito e bilanciamento continui per un'esperienza di gioco sempre più solida.</span></li>
           </ul>
         </Section>
 
@@ -100,10 +94,10 @@ const App: React.FC = () => {
           <div className="text-center">
             <p className="max-w-3xl mx-auto">La tua storia ti attende. Il mondo di The Safe Place Chronicles è pronto ad essere esplorato. Ogni feedback è prezioso per il futuro di questo progetto. Gioca, sopravvivi, scopri la verità e condividi la tua esperienza.</p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-5 mt-10">
-              <Button href="gioco/" variant="primary">INIZIA IL TUO VIAGGIO</Button>
-              <Button href="https://www.gofundme.com/f/sostieni-the-safe-place-un-rpg-retro-con-unanima" variant="primary">SUPPORTA SU GOFUNDME</Button>
+              <Button href="#download" variant="primary">SCARICA IL GIOCO</Button>
+              <Button href="https://github.com/Pitz72/TheSafePlace-React" variant="secondary">REPOSITORY OPEN SOURCE</Button>
             </div>
-            <p className="mt-10">Per suggerimenti o segnalazioni, scrivi a: <strong className="text-[#aaffbe]">runtimeradio@gmail.com</strong></p>
+            <p className="mt-10">Per suggerimenti o segnalazioni, scrivi a: <strong className="text-[#ccffcc]">runtimeradio@gmail.com</strong></p>
           </div>
         </Section>
       </main>
