@@ -81,11 +81,11 @@ export class NarrativeService {
             useCharacterStore.getState().learnRecipe(recipeId);
         });
 
-        // TODO: implement real armor upgrade and POI reveal once the corresponding
-        // character/game actions exist. For now we log so dialogues that reference
-        // these effects don't break.
+        // v2.0.13: wire Anya's armor upgrades to the real character action
+        // (was a console.warn stub — the upgrade never happened).
         this.story.BindExternalFunction("upgradeArmor", (slot: string, bonus: number) => {
-            console.warn(`[Ink] upgradeArmor stub: slot=${slot} bonus=${bonus} (action not yet implemented)`);
+            console.log(`[Ink] upgradeArmor: slot=${slot} bonus=${bonus}`);
+            useCharacterStore.getState().upgradeEquippedArmor(slot as 'head' | 'chest' | 'legs', bonus);
         });
 
         this.story.BindExternalFunction("revealMapPOI", (x: number, y: number, name: string) => {

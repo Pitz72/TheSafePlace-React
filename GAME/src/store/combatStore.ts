@@ -31,6 +31,121 @@ interface CombatStoreState {
 
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
+/**
+ * v2.0.13: shared victory rewards — XP, loot, win counter, bounty kill count
+ * and the first-humanoid-kill cutscene. Extracted so that EVERY way of killing
+ * an enemy grants rewards: direct attacks AND death by incendiary burning
+ * (which previously set victory with zero XP/loot).
+ */
+const grantVictoryRewards = (enemy: CombatState['enemy'], addLog: (text: string, color?: string) => void) => {
+    const { addXp, addItem, unlockedTalents } = useCharacterStore.getState();
+
+    addXp(enemy.xp);
+    addLog(`Hai guadagnato ${enemy.xp} XP.`, '#f59e0b');
+
+    // Enemy loot system
+    const hasScavenger = unlockedTalents.includes('scavenger');
+    const lootRolls = hasScavenger ? 2 : 1; // Scavenger gets 2 rolls
+
+    // Calculate loot tier based on enemy power
+    const enemyTier = enemy.xp < 80 ? 'common' : enemy.xp < 120 ? 'uncommon' : 'rare';
+
+    // v1.9.9 - Loot pools by tier with EQUIPMENT from humanoids
+    // v2.0.13: phantom ids replaced with real armor.json ids
+    // (armor_makeshift_helmet/armor_durable_boots/armor_leather_chestpiece/
+    //  tactical_helmet did not exist — those drops were silently lost)
+    const enemyIsHumanoid = enemy.type === 'humanoid';
+
+    const lootTables = {
+        common: [
+            { id: 'scrap_metal', weight: 30, quantity: [1, 3] },
+            { id: 'clean_cloth', weight: 25, quantity: [1, 2] },
+            { id: 'MED_BANDAGE_BASIC', weight: 20, quantity: [1, 2] },
+            { id: 'bottle_empty', weight: 15, quantity: [1, 2] },
+            { id: 'CONS_001', weight: 10, quantity: [1, 1] },
+            // v1.9.9 - Humanoids can drop basic armor
+            ...(enemyIsHumanoid ? [
+                { id: 'armor_rags', weight: 8, quantity: [1, 1] },
+                { id: 'tattered_pants', weight: 8, quantity: [1, 1] }
+            ] : [])
+        ],
+        uncommon: [
+            { id: 'animal_hide', weight: 25, quantity: [1, 2] },
+            { id: 'scrap_metal', weight: 20, quantity: [2, 4] },
+            { id: 'CONS_003', weight: 15, quantity: [1, 2] },
+            { id: 'durable_cloth', weight: 15, quantity: [1, 2] },
+            { id: 'CONS_002', weight: 10, quantity: [1, 1] },
+            { id: 'adhesive_tape', weight: 10, quantity: [1, 1] },
+            { id: 'MED_ANTISEPTIC', weight: 5, quantity: [1, 1] },
+            // v1.9.9 - Humanoids can drop better armor
+            ...(enemyIsHumanoid ? [
+                { id: 'leather_jacket', weight: 12, quantity: [1, 1] },
+                { id: 'leather_leggings', weight: 12, quantity: [1, 1] },
+                { id: 'combat_helmet', weight: 10, quantity: [1, 1] }
+            ] : [])
+        ],
+        rare: [
+            { id: 'scrap_metal_high_quality', weight: 20, quantity: [1, 2] },
+            { id: 'animal_hide', weight: 20, quantity: [2, 3] },
+            { id: 'first_aid_kit', weight: 15, quantity: [1, 1] },
+            { id: 'CONS_003', weight: 15, quantity: [2, 3] },
+            { id: 'MED_ANTISEPTIC', weight: 10, quantity: [1, 2] },
+            { id: 'tech_components', weight: 10, quantity: [1, 1] },
+            { id: 'MED_PAINKILLER', weight: 10, quantity: [1, 1] },
+            // v1.9.9 - Humanoids can drop rare armor
+            ...(enemyIsHumanoid ? [
+                { id: 'kevlar_vest', weight: 15, quantity: [1, 1] },
+                { id: 'reinforced_jeans', weight: 12, quantity: [1, 1] },
+                { id: 'tactical_leg_armor', weight: 12, quantity: [1, 1] }
+            ] : [])
+        ]
+    };
+
+    const lootTable = lootTables[enemyTier];
+    const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+
+    for (let i = 0; i < lootRolls; i++) {
+        const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
+        const roll = Math.random() * totalWeight;
+        let cumulativeWeight = 0;
+
+        for (const lootEntry of lootTable) {
+            cumulativeWeight += lootEntry.weight;
+            if (roll < cumulativeWeight) {
+                const [min, max] = lootEntry.quantity;
+                const quantity = Math.floor(Math.random() * (max - min + 1)) + min;
+                addItem(lootEntry.id, quantity);
+                const itemName = itemDatabase[lootEntry.id]?.name || lootEntry.id;
+                addLog(`Hai recuperato: ${itemName} x${quantity}`, '#60BF77');
+                break;
+            }
+        }
+    }
+
+    audioManager.playSound('victory');
+
+    // Increment total combat wins counter
+    useGameStore.setState(state => ({
+        totalCombatWins: state.totalCombatWins + 1
+    }));
+
+    // Increment quest kill counts for bounty quests (v1.8.3)
+    import('../services/questService').then(({ questService }) => {
+        questService.incrementQuestKillCount(enemy.id);
+    });
+
+    // Trigger CS_FIRST_KILL cutscene only after first HUMANOID kill
+    const { gameFlags } = useGameStore.getState();
+    if (enemyIsHumanoid && !gameFlags.has('FIRST_HUMAN_KILL_PLAYED')) {
+        setTimeout(() => {
+            useGameStore.setState(state => ({
+                gameFlags: new Set(state.gameFlags).add('FIRST_HUMAN_KILL_PLAYED')
+            }));
+            useGameStore.getState().startCutscene('CS_FIRST_KILL');
+        }, 2000); // 2 second delay after combat ends
+    }
+};
+
 const initialState = {
     activeCombat: null,
 };
@@ -59,7 +174,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             // v1.9.8: Thrown weapons use DEX like ranged
             const usesDex = weaponDetails?.weaponType === 'ranged' || weaponDetails?.weaponType === 'thrown';
             const damageBonus = characterState.getAttributeModifier(usesDex ? 'des' : 'for');
-            const damage = baseDamage + damageBonus;
+            const damage = Math.max(1, baseDamage + damageBonus); // v2.0.13: never negative
             initialHp = Math.max(0, initialHp - damage);
             log.push({ text: `[Guerrigliero] Tendi un'imboscata e colpisci per primo! Infliggi ${damage} danni.`, color: '#38bdf8' });
             if(weaponItem) characterState.damageEquippedItem('weapon', 1);
@@ -124,7 +239,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         const combatState = get().activeCombat;
         if (!combatState || !combatState.playerTurn || combatState.victory) return;
 
-        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, addXp, damageEquippedItem, updateFatigue, unlockedTalents, addItem } = useCharacterStore.getState();
+        const { getPlayerAC, performSkillCheck, takeDamage, getAttributeModifier, equippedWeapon, inventory, removeItem, heal, damageEquippedItem, updateFatigue } = useCharacterStore.getState();
         const { itemDatabase } = useItemDatabaseStore.getState();
         
         updateFatigue(1);
@@ -166,7 +281,9 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                         const baseDamage = weaponDetails?.damage || 2;
                         // v1.9.8: Thrown weapons use DEX like ranged
                         const usesDex = weaponDetails?.weaponType === 'ranged' || weaponDetails?.weaponType === 'thrown';
-                        let damage = baseDamage + getAttributeModifier(usesDex ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2;
+                        // v2.0.13: clamp to a minimum of 1 — a weak weapon with a
+                        // negative modifier could deal NEGATIVE damage and heal the enemy.
+                        let damage = Math.max(1, baseDamage + getAttributeModifier(usesDex ? 'des' : 'for') + Math.floor(Math.random() * 4) - 2);
                         
                         // v1.9.1 - Special ammo damage effects
                         if (combatState.specialAmmoActive === 'hollow_point' && combatState.specialAmmoRounds! > 0) {
@@ -278,14 +395,24 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
             case 'use_item': {
                 const item = itemDatabase[action.itemId];
                 if(item) {
-                    addLog(`Usi ${item.name}...`);
-                    removeItem(action.itemId, 1);
-                    item.effects?.forEach(effect => {
-                        if (effect.type === 'heal') {
-                            heal(effect.value as number);
-                            addLog(`Recuperi ${effect.value} HP.`, '#60BF77');
-                        }
-                    });
+                    // v2.0.13: thrown weapons used from the item menu now actually
+                    // hit the enemy (they used to be consumed with zero effect).
+                    if (item.weaponType === 'thrown' && item.damage) {
+                        removeItem(action.itemId, 1);
+                        const throwDamage = Math.max(1, item.damage + getAttributeModifier('des'));
+                        newEnemyHp.current = Math.max(0, newEnemyHp.current - throwDamage);
+                        addLog(`Lanci ${item.name}! Infliggi ${throwDamage} danni.`, '#60BF77');
+                        audioManager.playSound('hit_enemy');
+                    } else {
+                        addLog(`Usi ${item.name}...`);
+                        removeItem(action.itemId, 1);
+                        item.effects?.forEach(effect => {
+                            if (effect.type === 'heal') {
+                                heal(effect.value as number);
+                                addLog(`Recuperi ${effect.value} HP.`, '#60BF77');
+                            }
+                        });
+                    }
                 }
                 break;
             }
@@ -352,6 +479,7 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                 if (!hasAmmo) {
                     addLog(`Non hai munizioni ${action.ammoType} disponibili!`, '#ff8c00');
                     audioManager.playSound('error');
+                    newPlayerTurn = true; // v2.0.13: a failed load no longer wastes the turn
                     break;
                 }
                 
@@ -372,109 +500,8 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
         
         if (newEnemyHp.current <= 0) {
             addLog(getRandom(N.ENEMY_DEATH_DESCRIPTIONS).replace('{enemy}', combatState.enemy.name), '#f59e0b');
-            addXp(combatState.enemy.xp);
-            addLog(`Hai guadagnato ${combatState.enemy.xp} XP.`, '#f59e0b');
-            
-            // Enemy loot system
-            const hasScavenger = unlockedTalents.includes('scavenger');
-            const lootRolls = hasScavenger ? 2 : 1; // Scavenger gets 2 rolls
-            
-            // Calculate loot tier based on enemy power
-            const enemyTier = combatState.enemy.xp < 80 ? 'common' : combatState.enemy.xp < 120 ? 'uncommon' : 'rare';
-            
-            // v1.9.9 - Loot pools by tier with EQUIPMENT from humanoids
-            const enemyIsHumanoid = combatState.enemy.type === 'humanoid';
-            
-            const lootTables = {
-                common: [
-                    { id: 'scrap_metal', weight: 30, quantity: [1, 3] },
-                    { id: 'clean_cloth', weight: 25, quantity: [1, 2] },
-                    { id: 'MED_BANDAGE_BASIC', weight: 20, quantity: [1, 2] },
-                    { id: 'bottle_empty', weight: 15, quantity: [1, 2] },
-                    { id: 'CONS_001', weight: 10, quantity: [1, 1] },
-                    // v1.9.9 - Humanoids can drop basic armor
-                    ...(enemyIsHumanoid ? [
-                        { id: 'armor_makeshift_helmet', weight: 8, quantity: [1, 1] },
-                        { id: 'armor_durable_boots', weight: 8, quantity: [1, 1] }
-                    ] : [])
-                ],
-                uncommon: [
-                    { id: 'animal_hide', weight: 25, quantity: [1, 2] },
-                    { id: 'scrap_metal', weight: 20, quantity: [2, 4] },
-                    { id: 'CONS_003', weight: 15, quantity: [1, 2] },
-                    { id: 'durable_cloth', weight: 15, quantity: [1, 2] },
-                    { id: 'CONS_002', weight: 10, quantity: [1, 1] },
-                    { id: 'adhesive_tape', weight: 10, quantity: [1, 1] },
-                    { id: 'MED_ANTISEPTIC', weight: 5, quantity: [1, 1] },
-                    // v1.9.9 - Humanoids can drop better armor
-                    ...(enemyIsHumanoid ? [
-                        { id: 'armor_leather_chestpiece', weight: 12, quantity: [1, 1] },
-                        { id: 'leather_leggings', weight: 12, quantity: [1, 1] },
-                        { id: 'combat_helmet', weight: 10, quantity: [1, 1] }
-                    ] : [])
-                ],
-                rare: [
-                    { id: 'scrap_metal_high_quality', weight: 20, quantity: [1, 2] },
-                    { id: 'animal_hide', weight: 20, quantity: [2, 3] },
-                    { id: 'first_aid_kit', weight: 15, quantity: [1, 1] },
-                    { id: 'CONS_003', weight: 15, quantity: [2, 3] },
-                    { id: 'MED_ANTISEPTIC', weight: 10, quantity: [1, 2] },
-                    { id: 'tech_components', weight: 10, quantity: [1, 1] },
-                    { id: 'MED_PAINKILLER', weight: 10, quantity: [1, 1] },
-                    // v1.9.9 - Humanoids can drop rare armor
-                    ...(enemyIsHumanoid ? [
-                        { id: 'kevlar_vest', weight: 15, quantity: [1, 1] },
-                        { id: 'reinforced_jeans', weight: 12, quantity: [1, 1] },
-                        { id: 'tactical_helmet', weight: 12, quantity: [1, 1] }
-                    ] : [])
-                ]
-            };
-            
-            const lootTable = lootTables[enemyTier];
-            const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
-            
-            for (let i = 0; i < lootRolls; i++) {
-                const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
-                const roll = Math.random() * totalWeight;
-                let cumulativeWeight = 0;
-                
-                for (const lootEntry of lootTable) {
-                    cumulativeWeight += lootEntry.weight;
-                    if (roll < cumulativeWeight) {
-                        const [min, max] = lootEntry.quantity;
-                        const quantity = Math.floor(Math.random() * (max - min + 1)) + min;
-                        addItem(lootEntry.id, quantity);
-                        const itemName = itemDatabase[lootEntry.id]?.name || lootEntry.id;
-                        addLog(`Hai recuperato: ${itemName} x${quantity}`, '#60BF77');
-                        break;
-                    }
-                }
-            }
-            
+            grantVictoryRewards(combatState.enemy, addLog);
             victory = true;
-            audioManager.playSound('victory');
-            
-            // Increment total combat wins counter
-            useGameStore.setState(state => ({
-                totalCombatWins: state.totalCombatWins + 1
-            }));
-            
-            // Increment quest kill counts for bounty quests (v1.8.3)
-            import('../services/questService').then(({ questService }) => {
-                questService.incrementQuestKillCount(combatState.enemy.id);
-            });
-            
-            // Trigger CS_FIRST_KILL cutscene only after first HUMANOID kill
-            const { gameFlags, startCutscene } = useGameStore.getState();
-            const isHumanoid = combatState.enemy.type === 'humanoid';
-            if (isHumanoid && !gameFlags.has('FIRST_HUMAN_KILL_PLAYED')) {
-                setTimeout(() => {
-                    useGameStore.setState(state => ({
-                        gameFlags: new Set(state.gameFlags).add('FIRST_HUMAN_KILL_PLAYED')
-                    }));
-                    useGameStore.getState().startCutscene('CS_FIRST_KILL');
-                }, 2000); // 2 second delay after combat ends
-            }
         }
 
         set(state => ({ activeCombat: { ...state.activeCombat!, log: newLog, enemyHp: newEnemyHp, playerTurn: newPlayerTurn, victory } }));
@@ -513,7 +540,10 @@ export const useCombatStore = create<CombatStoreState>((set, get) => ({
                     // Check if enemy died from burning
                     if (newEnemyHp.current <= 0) {
                         addEnemyLog(`Il nemico cade, consumato dalle fiamme!`, '#f59e0b');
-                        set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, victory: true } }));
+                        // v2.0.13: burning kills now grant full rewards (XP, loot,
+                        // win counter, bounty kill count) like any other kill.
+                        grantVictoryRewards(enemy, addEnemyLog);
+                        set(state => ({ activeCombat: { ...state.activeCombat!, log: enemyLog, victory: true, playerTurn: true } }));
                         return;
                     }
                 }

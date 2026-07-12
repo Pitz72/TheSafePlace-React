@@ -57,6 +57,12 @@ const initialSkills: Record<SkillName, Skill> = Object.keys(SKILLS).reduce((acc,
  * Initial alignment values (neutral).
  * @constant {Alignment}
  */
+// v2.0.13: fractional survival/status damage accumulator. HP stays integer;
+// the sub-1 remainder carries over between updateSurvivalStats ticks so that
+// hunger/thirst/poison actually hurt during 10-minute exploration steps.
+// Module-level on purpose: losing a <1 HP remainder on save/load is negligible.
+let survivalDamageDebt = 0;
+
 const initialAlignment: Alignment = {
     lena: 0,
     elian: 0,
@@ -160,6 +166,8 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
         // Carica i trofei globali all'inizio di una nuova partita
         const globalTrophies = loadGlobalTrophies();
+
+        survivalDamageDebt = 0; // v2.0.13: fresh run, no leftover damage debt
 
         set({
             level: 1,
@@ -540,7 +548,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
             if (!state.levelUpPending) return {};
 
             const newLevel = state.level + 1;
-            const xpForNextLevel = XP_PER_LEVEL[newLevel + 1] || state.xp.next;
+            // v2.0.13: XP_PER_LEVEL is a CUMULATIVE table but xp.current resets
+            // to the overflow on each level. Using the raw cumulative value as
+            // the next threshold roughly doubled the mid-game grind. The correct
+            // per-level requirement is the DELTA between consecutive entries.
+            const xpForNextLevel = (XP_PER_LEVEL[newLevel + 1] !== undefined && XP_PER_LEVEL[newLevel] !== undefined)
+                ? XP_PER_LEVEL[newLevel + 1] - XP_PER_LEVEL[newLevel]
+                : state.xp.next;
             const remainingXp = state.xp.current - state.xp.next;
 
             const constitutionModifier = get().getAttributeModifier('cos');
@@ -1248,51 +1262,47 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
         let hpLossFromStatus = 0;
         let deathCause: DeathCause | null = null;
+        const statusDamageMessages: string[] = [];
 
         if (currentState.status.has('AVVELENATO')) {
-            const damage = (minutes / 60) * 2;
-            hpLossFromStatus += damage;
+            hpLossFromStatus += (minutes / 60) * 2;
             deathCause = 'POISON';
-            addJournalEntry({
-                text: `Il tuo stato di AVVELENATO ti consuma... (-${Math.ceil(damage)} HP)`,
-                type: JournalEntryType.COMBAT
-            });
+            statusDamageMessages.push(`Il tuo stato di AVVELENATO ti consuma...`);
         }
         if (currentState.status.has('MALATO')) {
-            const damage = (minutes / 60) * 0.5;
-            hpLossFromStatus += damage;
+            hpLossFromStatus += (minutes / 60) * 0.5;
             deathCause = deathCause || 'SICKNESS';
-            addJournalEntry({
-                text: `Il tuo stato di MALATO ti indebolisce col passare del tempo... (-${Math.ceil(damage)} HP)`,
-                type: JournalEntryType.COMBAT
-            });
+            statusDamageMessages.push(`Il tuo stato di MALATO ti indebolisce col passare del tempo...`);
         }
         if (currentState.status.has('IPOTERMIA')) {
-            const damage = (minutes / 60) * 1;
-            hpLossFromStatus += damage;
+            hpLossFromStatus += (minutes / 60) * 1;
             deathCause = deathCause || 'ENVIRONMENT';
-            addJournalEntry({
-                text: `L'IPOTERMIA ti gela le ossa... (-${Math.ceil(damage)} HP)`,
-                type: JournalEntryType.COMBAT
-            });
+            statusDamageMessages.push(`L'IPOTERMIA ti gela le ossa...`);
         }
         if (currentState.status.has('INFEZIONE')) {
-            const damage = (minutes / 60) * 1;
-            hpLossFromStatus += damage;
+            hpLossFromStatus += (minutes / 60) * 1;
             deathCause = deathCause || 'SICKNESS';
-            addJournalEntry({
-                text: `L'INFEZIONE si diffonde nel tuo corpo... (-${Math.ceil(damage)} HP)`,
-                type: JournalEntryType.COMBAT
-            });
+            statusDamageMessages.push(`L'INFEZIONE si diffonde nel tuo corpo...`);
         }
 
         if (hpLossFromSurvival > 0) {
             deathCause = deathCause || (newSatiety === 0 ? 'STARVATION' : 'DEHYDRATION');
         }
 
-        // FIX v1.2.4: Always round HP loss to ensure HP remains integer
-        const totalHpLoss = Math.floor(hpLossFromSurvival + hpLossFromStatus);
+        // v2.0.13: HP stays integer, but the fractional loss is ACCUMULATED
+        // instead of floored away. A 10-minute step at 0 satiety used to lose
+        // floor(0.33) = 0 HP — hunger, thirst and afflictions were harmless
+        // while walking. Now the remainder carries over between ticks.
+        survivalDamageDebt += hpLossFromSurvival + hpLossFromStatus;
+        const totalHpLoss = Math.floor(survivalDamageDebt);
+        survivalDamageDebt -= totalHpLoss;
         const newHp = Math.max(0, currentState.hp.current - totalHpLoss);
+
+        // Journal the affliction reminders only when damage actually lands,
+        // so the log no longer claims "-1 HP" while HP was untouched.
+        if (totalHpLoss > 0) {
+            statusDamageMessages.forEach(text => addJournalEntry({ text: `${text} (-HP)`, type: JournalEntryType.COMBAT }));
+        }
 
         if (newHp <= 0 && currentState.hp.current > 0) {
             setGameOver(deathCause || 'UNKNOWN');
@@ -1697,25 +1707,39 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
 
         let totalArmorBonus = 0;
 
+        // v2.0.13: Anya's upgrades are tracked as ARMOR_UPGRADED_<SLOT>_<BONUS>
+        // gameFlags (itemDatabase is immutable). They were never read before —
+        // the documented "+defense" was silently lost. Bonus applies only while
+        // armor is equipped and intact in that slot.
+        const gameFlags = useGameStore.getState().gameFlags;
+        const upgradeBonusFor = (slot: 'CHEST' | 'HEAD' | 'LEGS'): number => {
+            let bonus = 0;
+            gameFlags.forEach(flag => {
+                const m = new RegExp(`^ARMOR_UPGRADED_${slot}_(\\d+)$`).exec(flag);
+                if (m) bonus += parseInt(m[1], 10);
+            });
+            return bonus;
+        };
+
         // Check chest armor
         const chestItem = equippedArmor !== null ? inventory[equippedArmor] : null;
         if (chestItem && (!chestItem.durability || chestItem.durability.current > 0)) {
             const chestDetails = itemDatabase[chestItem.itemId];
-            totalArmorBonus += chestDetails?.defense || 0;
+            totalArmorBonus += (chestDetails?.defense || 0) + upgradeBonusFor('CHEST');
         }
 
         // Check head armor
         const headItem = equippedHead !== null ? inventory[equippedHead] : null;
         if (headItem && (!headItem.durability || headItem.durability.current > 0)) {
             const headDetails = itemDatabase[headItem.itemId];
-            totalArmorBonus += headDetails?.defense || 0;
+            totalArmorBonus += (headDetails?.defense || 0) + upgradeBonusFor('HEAD');
         }
 
         // Check legs armor
         const legsItem = equippedLegs !== null ? inventory[equippedLegs] : null;
         if (legsItem && (!legsItem.durability || legsItem.durability.current > 0)) {
             const legsDetails = itemDatabase[legsItem.itemId];
-            totalArmorBonus += legsDetails?.defense || 0;
+            totalArmorBonus += (legsDetails?.defense || 0) + upgradeBonusFor('LEGS');
         }
 
         return 10 + dexMod + totalArmorBonus;
