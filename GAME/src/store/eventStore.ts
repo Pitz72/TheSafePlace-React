@@ -360,6 +360,13 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                                 });
                                 message = result.text || "Il combattimento inizia!";
                             }
+                        } else if (effect === 'trade_screen_placeholder') {
+                            // v2.0.10: the random wandering-trader encounter shipped with a
+                            // placeholder effect; route it to the real trading session.
+                            import('../services/tradingService').then(({ tradingService }) => {
+                                tradingService.startTradingSession('wandering_trader', GameState.EVENT_SCREEN);
+                            });
+                            message = result.text || "Inizi a commerciare...";
                         } else if (effect === 'advance_quest_stage') {
                             // v1.9.8: Advance quest from event
                             const { questId } = result.value;

@@ -2,6 +2,7 @@
     {
         "id": "marcus",
         "name": "Mercante Errante",
+        "baseMarkup": 1.3,
         "inventory": [
             {
                 "itemId": "clean_cloth",
@@ -36,33 +37,39 @@
         ]
     },
     {
-        "id": "giona",
-        "name": "Giona (Mercante Errante)",
+        "id": "wandering_trader",
+        "name": "Venditore Ambulante",
+        "baseMarkup": 1.5,
         "inventory": [
             {
                 "itemId": "CONS_001",
-                "quantity": 10,
-                "price": 20
-            },
-            {
-                "itemId": "CONS_002",
-                "quantity": 10,
+                "quantity": 2,
                 "price": 15
             },
             {
-                "itemId": "medkit_basic",
-                "quantity": 2,
-                "price": 50
+                "itemId": "CONS_002",
+                "quantity": 4,
+                "price": 10
+            },
+            {
+                "itemId": "MED_BANDAGE_BASIC",
+                "quantity": 3,
+                "price": 12
+            },
+            {
+                "itemId": "MED_ANTIDOTE",
+                "quantity": 1,
+                "price": 30
+            },
+            {
+                "itemId": "scrap_metal",
+                "quantity": 3,
+                "price": 8
             },
             {
                 "itemId": "ammo_9mm",
-                "quantity": 20,
-                "price": 6
-            },
-            {
-                "itemId": "rare_component",
-                "quantity": 1,
-                "price": 150
+                "quantity": 6,
+                "price": 5
             }
         ]
     }

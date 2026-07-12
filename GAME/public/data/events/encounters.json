@@ -66,7 +66,7 @@
         "text": "Commercia con lui.",
         "outcomes": [{
           "type": "direct",
-          "results": [{ "type": "journalEntry", "text": "Passi un po' di tempo a esaminare la sua merce, ma decidi di non comprare nulla per ora." }, { "type": "special", "value": { "effect": "trade_screen_placeholder" } }]
+          "results": [{ "type": "journalEntry", "text": "Ti avvicini al carretto per esaminare la sua merce." }, { "type": "special", "value": { "effect": "trade_screen_placeholder" } }]
         }]
       },
       {

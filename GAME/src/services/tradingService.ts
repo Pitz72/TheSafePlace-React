@@ -101,8 +101,17 @@ export const tradingService = {
     }
 
     // Calculate effective markup based on Persuasion skill
+    // v2.0.10: guard against missing/invalid baseMarkup in trader data — an
+    // undefined markup propagated NaN through every price and no trade could
+    // ever be finalized (balance >= 0 was always false).
+    const baseMarkup = (typeof trader.baseMarkup === 'number' && Number.isFinite(trader.baseMarkup))
+      ? trader.baseMarkup
+      : 1.3;
+    if (baseMarkup !== trader.baseMarkup) {
+      console.warn(`[TRADING SERVICE] Trader ${traderId} has no valid baseMarkup, defaulting to 1.3`);
+    }
     const persuasionBonus = getSkillBonus('persuasione');
-    let effectiveMarkup = tradingService.calculateEffectiveMarkup(trader.baseMarkup, persuasionBonus);
+    let effectiveMarkup = tradingService.calculateEffectiveMarkup(baseMarkup, persuasionBonus);
     
     // v1.8.0: Marcus friendship discount (10% additional)
     const hasMarcusFriendship = useGameStore.getState().gameFlags.has('MARCUS_FRIENDSHIP');
