@@ -135,6 +135,22 @@ const EventScreen: React.FC = () => {
         }
     }, [eventResolutionText]);
 
+    // v2.0.9: anti-soft-lock hatch — if the event has no selectable choice
+    // (every option gated by unmet item requirements), ESC walks away from it.
+    const noSelectableChoice = !isInkMode && !!activeEvent &&
+        (activeEvent.choices.length === 0 || choiceStatus.every(s => !s.met));
+
+    const handleEscape = useCallback(() => {
+        if (eventResolutionText) {
+            handleConfirm(); // same as Enter: dismiss resolution
+            return;
+        }
+        if (noSelectableChoice) {
+            dismissEventResolution();
+            audioManager.playSound('cancel');
+        }
+    }, [eventResolutionText, noSelectableChoice, handleConfirm, dismissEventResolution]);
+
     const handlerMap = useMemo(() => {
         if (eventResolutionText) {
             // In resolution screen: W/S scroll, Enter confirm
@@ -144,6 +160,7 @@ const EventScreen: React.FC = () => {
                 's': () => handleScrollDescription('down'),
                 'ArrowDown': () => handleScrollDescription('down'),
                 'Enter': handleConfirm,
+                'Escape': handleEscape,
             };
         } else {
             // In choice screen: W/S navigate choices, Enter confirm
@@ -153,9 +170,10 @@ const EventScreen: React.FC = () => {
                 's': () => handleNavigate(1),
                 'ArrowDown': () => handleNavigate(1),
                 'Enter': handleConfirm,
+                'Escape': handleEscape,
             };
         }
-    }, [handleNavigate, handleConfirm, handleScrollDescription, eventResolutionText]);
+    }, [handleNavigate, handleConfirm, handleScrollDescription, handleEscape, eventResolutionText]);
 
     useKeyboardInput(handlerMap);
 
@@ -229,7 +247,9 @@ const EventScreen: React.FC = () => {
                 </div>
 
                 <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">
-                    [W/S / ↑↓] Seleziona | [INVIO] Conferma la Scelta
+                    {noSelectableChoice
+                        ? '[ESC] Vai oltre'
+                        : '[W/S / ↑↓] Seleziona | [INVIO] Conferma la Scelta'}
                 </div>
             </div>
         </div>

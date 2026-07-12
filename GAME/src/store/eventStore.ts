@@ -228,34 +228,53 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
 
         const applyResult = (result: EventResult): string | null => {
             let message: string | null = null;
+            // v2.0.9: tolerant item schema — some data files author addItem/removeItem
+            // as { value: "<itemId>", quantity?, text? } instead of { value: { itemId, quantity } }.
+            const readItemRef = (r: EventResult): { itemId: string; quantity: number } => {
+                if (typeof r.value === 'string') {
+                    return { itemId: r.value, quantity: (r as any).quantity ?? 1 };
+                }
+                return { itemId: r.value?.itemId, quantity: r.value?.quantity ?? 1 };
+            };
             switch (result.type) {
-                case 'addItem':
-                    addItem(result.value.itemId, result.value.quantity);
-                    const addedItem = itemDatabase[result.value.itemId];
+                case 'addItem': {
+                    const { itemId, quantity } = readItemRef(result);
+                    addItem(itemId, quantity);
+                    const addedItem = itemDatabase[itemId];
                     if (!addedItem) {
-                        console.warn(`[EVENT] Item ${result.value.itemId} not found in database`);
+                        console.warn(`[EVENT] Item ${itemId} not found in database`);
                     }
+                    // Authored narrative text goes to the resolution screen only;
+                    // the journal gets the clean single-line item message.
+                    if (result.text) resolutionSummary.push(result.text);
                     message = addedItem
-                        ? `Hai ottenuto: ${addedItem.name} x${result.value.quantity}.`
-                        : `Hai ottenuto un oggetto sconosciuto (${result.value.itemId}).`;
+                        ? `Hai ottenuto: ${addedItem.name} x${quantity}.`
+                        : `Hai ottenuto un oggetto sconosciuto (${itemId}).`;
                     break;
-                case 'removeItem':
-                    removeItem(result.value.itemId, result.value.quantity);
-                    const removedItem = itemDatabase[result.value.itemId];
+                }
+                case 'removeItem': {
+                    const { itemId, quantity } = readItemRef(result);
+                    removeItem(itemId, quantity);
+                    const removedItem = itemDatabase[itemId];
                     if (!removedItem) {
-                        console.warn(`[EVENT] Item ${result.value.itemId} not found in database`);
+                        console.warn(`[EVENT] Item ${itemId} not found in database`);
                     }
+                    if (result.text) resolutionSummary.push(result.text);
                     message = removedItem
-                        ? `Hai perso: ${removedItem.name} x${result.value.quantity}.`
-                        : `Hai perso un oggetto (${result.value.itemId}).`;
+                        ? `Hai perso: ${removedItem.name} x${quantity}.`
+                        : `Hai perso un oggetto (${itemId}).`;
                     break;
+                }
                 case 'addXp': addXp(result.value); message = `Hai guadagnato ${result.value} XP.`; break;
                 case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
                 case 'advanceTime': advanceTime(result.value, true); message = `Passano ${result.value} minuti.`; break;
-                case 'journalEntry': if (result.text) message = result.text; break;
+                // v2.0.9: some data files nest the text under value ({ value: { text, type } })
+                case 'journalEntry': message = result.text ?? result.value?.text ?? null; break;
                 case 'alignmentChange':
                     changeAlignment(result.value.type, result.value.amount);
-                    message = null; // changeAlignment handles its own journal entries
+                    // v2.0.9: surface the authored narrative text (alignment journal
+                    // entries are still handled by changeAlignment itself)
+                    message = result.text ?? null;
                     break;
                 case 'statusChange': addStatus(result.value); message = `Sei ora in stato: ${result.value}.`; break;
                 case 'statBoost': {
@@ -378,6 +397,16 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     const msg = applyResult(result);
                     if (msg) resolutionSummary.push(msg);
                 });
+            } else if ((outcome.type as string) === 'special') {
+                // v2.0.9: some data files (e.g. hermit_location.json) author the special
+                // effect at the OUTCOME level instead of inside results. Route it through
+                // applyResult as if it were a special result, then process any extra results.
+                const msg = applyResult({ type: 'special', value: (outcome as any).value, text: (outcome as any).text });
+                if (msg) resolutionSummary.push(msg);
+                outcome.results?.forEach(result => {
+                    const m = applyResult(result);
+                    if (m) resolutionSummary.push(m);
+                });
             } else if (outcome.type === 'skillCheck' && outcome.skill && outcome.dc !== undefined) {
                 const skillCheck = performSkillCheck(outcome.skill, outcome.dc);
                 let checkText = `Prova di ${skillCheck.skill} (CD ${skillCheck.dc}): ${skillCheck.roll} (d20) + ${skillCheck.bonus} (mod) = ${skillCheck.total}. `;
@@ -393,6 +422,12 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
                     outcome.failure?.forEach(result => { const msg = applyResult(result); if (msg) resolutionSummary.push(msg); });
                 }
             }
+        }
+        // v2.0.9: never leave the resolution empty — an empty string is falsy, the
+        // resolution screen would never appear and the event could not be dismissed
+        // (soft-lock). Any unrecognized outcome now falls back to a generic closure.
+        if (resolutionSummary.length === 0) {
+            resolutionSummary.push('Prosegui per la tua strada.');
         }
         set({ eventResolutionText: resolutionSummary.join('\\n') });
     },
