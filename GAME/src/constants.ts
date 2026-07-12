@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = '2.0.14';
+export const GAME_VERSION = '2.0.15';
 
 export const BOOT_TEXT = [
   'Runtime Radio BIOS v1.02',

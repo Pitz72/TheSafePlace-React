@@ -41,8 +41,8 @@ describe('store integrations', () => {
     useItemDatabaseStore.setState({ itemDatabase: mockItems, isLoaded: true });
   });
 
-  it('should allow crafting when ingredients are available', () => {
-    const { addItem, learnRecipe, performSkillCheck } = useCharacterStore.getState();
+  it('should allow crafting when ingredients are available', async () => {
+    const { addItem, learnRecipe } = useCharacterStore.getState();
     const { performCrafting } = useInteractionStore.getState();
 
     // Force inventory state to be deterministic
@@ -59,11 +59,17 @@ describe('store integrations', () => {
     useInteractionStore.setState({ craftingMenuState: { selectedIndex: 0 } });
 
     // This is a hack to ensure the skill check passes for the test
-    vi.spyOn(Math, 'random').mockReturnValue(0.9); // Guarantees a roll of 19 or 20
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.9); // Guarantees a roll of 19 or 20
 
     performCrafting();
 
-    vi.spyOn(Math, 'random').mockRestore();
+    // v2.0.15: performCrafting resolves CraftingService via dynamic import()
+    // — the craft runs asynchronously. The old sync assertions ran BEFORE the
+    // craft happened (and un-mocked Math.random too early): test bug, not a
+    // game bug.
+    await vi.dynamicImportSettled();
+
+    randomSpy.mockRestore();
 
     // Check that the ingredient was consumed and the result was added
     inventory = useCharacterStore.getState().inventory;
@@ -73,7 +79,7 @@ describe('store integrations', () => {
     expect(inventory.find(i => i.itemId === 'test_item')?.quantity).toBe(1);
   });
 
-  it('should not allow crafting when ingredients are insufficient', () => {
+  it('should not allow crafting when ingredients are insufficient', async () => {
     const { performCrafting } = useInteractionStore.getState();
 
     // Force inventory state
@@ -87,6 +93,7 @@ describe('store integrations', () => {
     useInteractionStore.setState({ craftingMenuState: { selectedIndex: 0 } });
 
     performCrafting();
+    await vi.dynamicImportSettled(); // let the async craft attempt settle
 
     // Check that nothing changed
     const newInventory = useCharacterStore.getState().inventory;
