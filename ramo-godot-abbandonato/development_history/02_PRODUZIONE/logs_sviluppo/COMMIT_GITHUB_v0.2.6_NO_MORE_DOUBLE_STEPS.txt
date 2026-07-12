@@ -1,0 +1,140 @@
+# COMMIT GITHUB v0.2.6 "NO MORE DOUBLE STEPS"
+# =====================================================
+# MILESTONE: v0.2.6 - Risoluzione Bug Critico
+# DATA: 2024-12-19
+# PRIORITÀ: CRITICA (Bug Fix)
+# STATO: ✅ COMPLETATO
+# =====================================================
+
+## 🎯 OBIETTIVO MILESTONE
+Risoluzione definitiva del bug persistente che causava:
+- Doppio avanzamento del tempo (60 minuti invece di 30 per movimento)
+- Messaggi duplicati nel diario di gioco
+- Effetti collaterali duplicati (penalità HP notturna, attraversamento fiumi, ecc.)
+
+## 🔍 DIAGNOSI DEL PROBLEMA
+**ROOT CAUSE IDENTIFICATA:** Presenza di due istanze separate di World.tscn in esecuzione:
+
+1. **Prima istanza:** Istanziata direttamente in MainGame.tscn
+   - Path: scenes/MainGame.tscn → [node name="World"]
+   - Connessa a InputManager.map_move
+   - Chiamava TimeManager.advance_time_by_moves(1)
+
+2. **Seconda istanza:** Istanziata da GameUI.gd nel SubViewport
+   - Path: GameUI.gd → instantiate_world_scene() → world_viewport.add_child()
+   - Anch'essa connessa a InputManager.map_move
+   - Anch'essa chiamava TimeManager.advance_time_by_moves(1)
+
+**EFFETTO:** Ogni input di movimento (WASD/frecce) triggerava due catene identiche.
+
+## 🛠️ SOLUZIONE IMPLEMENTATA
+
+### 1. RIMOZIONE ISTANZA DUPLICATA
+**File:** `scenes/MainGame.tscn`
+- ❌ Rimosso: `[node name="World" parent="." instance=ExtResource("3_world")]`
+- ❌ Rimosso: `[ext_resource type="PackedScene" uid="uid://b2y4xvjsf0ycs" path="res://scenes/World.tscn" id="3_world"]`
+- ✅ Aggiornato: `load_steps=3` (era 4)
+
+### 2. REFACTORING CONNESSIONI SEGNALI
+**File:** `scripts/MainGame.gd`
+- ✅ Rimossa ricerca diretta nodo World locale
+- ✅ Implementata connessione all'istanza World del GameUI SubViewport
+- ✅ Aggiunto metodo `_try_connect_world_signals()` con fallback deferred
+- ✅ Usato `game_ui.get_world_scene()` per ottenere riferimento World corretto
+
+### 3. ARCHITETTURA FINALE
+```
+MainGame.tscn
+├── MainGame.gd (script)
+└── GameUI.tscn
+    └── GameUI.gd (script)
+        └── SubViewport
+            └── World.tscn (UNICA ISTANZA)
+                └── World.gd (script)
+```
+
+## 📋 FILE MODIFICATI
+
+### scenes/MainGame.tscn
+- Rimossa istanza World duplicata
+- Mantenuta solo istanza GameUI
+
+### scripts/MainGame.gd
+- Refactoring metodo `_ready()`
+- Aggiunto `_try_connect_world_signals()`
+- Connessione dinamica a World istanziato da GameUI
+
+## ✅ TESTING & VALIDAZIONE
+
+### Test di Regressione Eseguiti:
+1. **Avanzamento Tempo:**
+   - ✅ 1 movimento = 30 minuti esatti (non più 60)
+   - ✅ 4 movimenti = 2 ore esatte
+
+2. **Log Movimento:**
+   - ✅ 1 movimento = 1 messaggio nel diario (non più 2)
+   - ✅ Messaggi univoci per direzione e terreno
+
+3. **Effetti Collaterali:**
+   - ✅ Penalità HP notturna applicata 1 volta sola
+   - ✅ Attraversamento fiume: 1 penalità, 1 messaggio
+
+4. **Segnali e Connessioni:**
+   - ✅ 1 sola connessione InputManager.map_move → World
+   - ✅ Segnali player_moved emessi 1 volta per movimento
+   - ✅ UI aggiornata correttamente in tempo reale
+
+## 🎉 RISULTATI OTTENUTI
+
+### Risoluzione Completa:
+- ❌ Bug doppio avanzamento tempo: **ELIMINATO**
+- ❌ Bug messaggi duplicati: **ELIMINATO**
+- ❌ Bug effetti duplicati: **ELIMINATO**
+
+### Stabilità Sistema:
+- ✅ Architettura single-World consolidata
+- ✅ Connessioni segnali ottimizzate
+- ✅ Performance migliorate (meno istanze duplicate)
+
+### Backward Compatibility:
+- ✅ Tutte le funzionalità esistenti preservate
+- ✅ API pubbliche inalterate
+- ✅ Salvataggi compatibili
+
+## 🔒 PROTEZIONE ANTI-REGRESSIONE
+
+### Documentazione Aggiornata:
+- ✅ ANTI_REGRESSION_TESTS.md aggiornato
+- ✅ Nuovo test case "Double World Prevention"
+- ✅ Procedure di verifica consolidate
+
+### Validazione Strutturale:
+- ✅ MainGame.tscn deve contenere SOLO GameUI
+- ✅ World.tscn istanziato SOLO da GameUI.gd
+- ✅ Collegamenti segnali via get_world_scene()
+
+## 📊 IMPACT ASSESSMENT
+
+### Tecnico:
+- 🔧 Ridotta complessità architetturale
+- ⚡ Performance migliorate
+- 🛡️ Eliminata fonte di duplicazioni
+
+### Gameplay:
+- 🎮 Esperienza di gioco fluida e consistente
+- ⏰ Sistema temporale funzionante correttamente
+- 📝 Log di gioco pulito e accurato
+
+### Sviluppo:
+- 🧪 Base solida per future features
+- 📋 Test di regressione rafforzati
+- 🔍 Debugging semplificato
+
+## 🚀 VERSIONE CONSOLIDATA: v0.2.6 "NO MORE DOUBLE STEPS"
+
+**Questa milestone rappresenta una correzione critica che risolve definitivamente un bug persistente, consolidando la stabilità del core gameplay di The Safe Place.**
+
+---
+**COMMIT COMPLETATO CON SUCCESSO** ✅
+**DATA CONSOLIDAMENTO:** 2024-12-19
+**STATO:** PRODUZIONE READY

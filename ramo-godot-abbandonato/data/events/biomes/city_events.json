@@ -1,0 +1,723 @@
+{
+  "CITY": [
+    {
+      "id": "city_military_checkpoint",
+      "title": "Posto di Blocco Militare",
+      "description": "Barricate di cemento e filo spinato bloccano una strada. Ci sono segnali di un vecchio checkpoint militare.",
+      "choices": [
+        {
+          "text": "Cerca negli armadietti",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi un kit di primo soccorso e un paio di granate fumogene.",
+          "failureText": "I luoghi saccheggiati a fondo rivelano solo detriti.",
+          "items_gained": [{ "id": "first_aid_kit", "quantity": 1 }, { "id": "smoke_grenade", "quantity": 2 }]
+        },
+        {
+          "text": "Forza un container chiuso",
+          "skillCheck": { "stat": "forza", "difficulty": 14 },
+          "successText": "Riesci ad aprire un container con munizioni e rifornimenti.",
+          "failureText": "Le serrature sono troppo resistenti.",
+          "items_gained": [{ "id": "rifle_ammo", "quantity": 10 }, { "id": "ration_pack", "quantity": 2 }]
+        }
+      ]
+    },
+    {
+      "id": "city_broken_pharmacy",
+      "title": "Farmacia Saccheggiata",
+      "description": "Una farmacia con la vetrina infranta. Gli scaffali sono mezzi vuoti.",
+      "choices": [
+        {
+          "text": "Cerca tra gli scaffali rimasti",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Recuperi antibiotici scaduti e alcune bende sterili.",
+          "failureText": "Niente di utile rimasto.",
+          "items_gained": [{ "id": "antibiotics_expired", "quantity": 1 }, { "id": "bandages_clean", "quantity": 2 }]
+        },
+        {
+          "text": "Controlla il retro",
+          "skillCheck": { "stat": "agilita", "difficulty": 12 },
+          "successText": "Sgattaioli nel retro e trovi uno scomparto segreto con farmaci migliori.",
+          "failureText": "Fai rumore e devi battere in ritirata.",
+          "items_gained": [{ "id": "painkillers", "quantity": 2 }]
+        }
+      ]
+    },
+    {
+      "id": "city_subway_entrance",
+      "title": "Ingresso della Metropolitana",
+      "description": "Una scala porta nel buio di una stazione sotterranea. Si sentono gocce d'acqua e un ronzio lontano.",
+      "choices": [
+        {
+          "text": "Scendi e esplora",
+          "skillCheck": { "stat": "agilita", "difficulty": 13 },
+          "successText": "Trovi rifugi improvvisati, batterie e un vecchio radio portatile.",
+          "failureText": "Ti perdi nei corridoi e devi risalire in fretta.",
+          "items_gained": [{ "id": "batteries_pack", "quantity": 1 }, { "id": "portable_radio", "quantity": 1 }]
+        },
+        {
+          "text": "Evita i sotterranei",
+          "actionKey": "ignore",
+          "resultText": "Meglio non rischiare imboscate nel buio."
+        }
+      ]
+    },
+    {
+      "id": "city_rooftop_access",
+      "title": "Accesso ai Tetti",
+      "description": "Una scala antincendio porta ai tetti. Da lì la visuale potrebbe aiutarti a pianificare il percorso.",
+      "choices": [
+        {
+          "text": "Sali e osserva",
+          "skillCheck": { "stat": "agilita", "difficulty": 12 },
+          "successText": "Dall'alto individui aree pericolose e punti di interesse.",
+          "failureText": "La scala cede in parte; scendi in fretta grattandoti.",
+          "reward": { "type": "special", "effect": "reveal_city_pois" },
+          "penalty": { "type": "damage", "amount": 6 }
+        },
+        {
+          "text": "Controlla il locale tecnico",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Trovi attrezzi, fusibili e una lampadina di ricambio.",
+          "failureText": "È stato svuotato da tempo.",
+          "items_gained": [{ "id": "tool_screwdriver", "quantity": 1 }, { "id": "fuse", "quantity": 2 }, { "id": "light_bulb", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_bookstore",
+      "title": "Libreria Abbandonata",
+      "description": "Una piccola libreria con scaffali impolverati. Alcuni libri sono caduti a terra.",
+      "choices": [
+        {
+          "text": "Cerca guide utili",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Trovi manuali di meccanica e pronto soccorso.",
+          "failureText": "La maggior parte dei libri è inutile per la sopravvivenza.",
+          "items_gained": [{ "id": "mechanic_manual", "quantity": 1 }, { "id": "first_aid_book", "quantity": 1 }]
+        },
+        {
+          "text": "Fruga nella sezione tecnica",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Nascosto dietro altri libri, trovi un manuale di primo soccorso ancora in buone condizioni!",
+          "failureText": "Solo libri di narrativa e guide turistiche inutili.",
+          "items_gained": [{ "id": "MANUAL_MEDICAL_BASIC", "quantity": 1 }]
+        },
+        {
+          "text": "Recupera carta per accendere fuochi",
+          "resultText": "Raccogli carta asciutta e di facile combustione.",
+          "items_gained": [{ "id": "dry_paper", "quantity": 5 }]
+        }
+      ]
+    },
+    {
+      "id": "city_department_store",
+      "title": "Grande Magazzino",
+      "description": "Un grande magazzino con diversi reparti. Molti scaffali sono rovesciati ma potrebbero esserci scorte dimenticate.",
+      "choices": [
+        {
+          "text": "Ispeziona il reparto campeggio",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi tende, corde e kit multiuso.",
+          "failureText": "Gli scaffali sono vuoti o danneggiati.",
+          "items_gained": [{ "id": "tent_small", "quantity": 1 }, { "id": "CRAFT_ROPE", "quantity": 2 }, { "id": "CRAFT_CLOTH", "quantity": 3 }, { "id": "multitool", "quantity": 1 }]
+        },
+        {
+          "text": "Controlla il magazzino",
+          "skillCheck": { "stat": "forza", "difficulty": 13 },
+          "successText": "Apri una porta bloccata e trovi scatoloni con conserve e acqua.",
+          "failureText": "La porta non si apre.",
+          "items_gained": [{ "id": "canned_food", "quantity": 3 }, { "id": "water_purified", "quantity": 3 }]
+        }
+      ]
+    },
+    {
+      "id": "city_police_station",
+      "title": "Stazione di Polizia",
+      "description": "Una stazione di polizia parzialmente crollata. Le celle e l'armamentario potrebbero contenere qualcosa.",
+      "choices": [
+        {
+          "text": "Cerca nell'armeria",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Trovi munizioni e un giubbotto protettivo.",
+          "failureText": "L'armeria è stata svuotata.",
+          "items_gained": [{ "id": "pistol_ammo", "quantity": 10 }, { "id": "kevlar_vest", "quantity": 1 }]
+        },
+        {
+          "text": "Controlla gli uffici",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Recuperi walkie-talkie e documenti con codici utili.",
+          "failureText": "Documenti bagnati e inutilizzabili.",
+          "items_gained": [{ "id": "walkie_talkie", "quantity": 1 }, { "id": "code_list", "quantity": 1 }]
+        },
+        {
+          "text": "Ispeziona l'ufficio del comandante",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+          "successText": "In una cassaforte aperta trovi un manuale tattico delle forze speciali!",
+          "failureText": "L'ufficio è stato completamente saccheggiato.",
+          "items_gained": [{ "id": "MANUAL_WEAPONS_BASIC", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_gas_station",
+      "title": "Stazione di Servizio",
+      "description": "Una stazione di servizio con pompe all'asciutto. Il magazzino potrebbe ancora contenere qualcosa.",
+      "choices": [
+        {
+          "text": "Controlla il magazzino",
+          "skillCheck": { "stat": "forza", "difficulty": 12 },
+          "successText": "Spingi via una scaffalatura e trovi scorte nascoste.",
+          "failureText": "Nulla di interessante.",
+          "items_gained": [{ "id": "fuel_canister_small", "quantity": 1 }, { "id": "CRAFT_METAL_SCRAP", "quantity": 3 }, { "id": "CRAFT_RUBBER", "quantity": 2 }]
+        },
+        {
+          "text": "Smonta le pompe",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Recuperi componenti metallici e guarnizioni.",
+          "failureText": "Tutto troppo usurato.",
+          "items_gained": [{ "id": "CRAFT_METAL_SCRAP", "quantity": 4 }, { "id": "CRAFT_RUBBER", "quantity": 2 }, { "id": "CRAFT_WIRE", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_hospital_ruins",
+      "title": "Rovine dell'Ospedale",
+      "description": "Un vecchio ospedale in rovina. Alcune stanze sono ancora accessibili.",
+      "choices": [
+        {
+          "text": "Esplora il reparto farmacia",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi farmaci generici e materiale sterile.",
+          "failureText": "Armadi svuotati e locali danneggiati.",
+          "items_gained": [{ "id": "generic_meds", "quantity": 2 }, { "id": "sterile_gauze", "quantity": 3 }]
+        },
+        {
+          "text": "Controlla l'officina tecnica",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Recuperi strumenti di precisione e batterie speciali.",
+          "failureText": "Molto è stato portato via.",
+          "items_gained": [{ "id": "precision_tools", "quantity": 1 }, { "id": "medical_battery", "quantity": 2 }]
+        },
+        {
+          "text": "Cerca nella biblioteca medica",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 15 },
+          "successText": "Tra i libri di medicina trovi un manuale chirurgico avanzato ancora utilizzabile!",
+          "failureText": "I libri sono troppo danneggiati dall'umidità.",
+          "items_gained": [{ "id": "MANUAL_MEDICAL_ADVANCED", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_electronics_store",
+      "title": "Negozio di Elettronica",
+      "description": "Vetrine spaccate e scaffali rovesciati. Componenti elettronici ovunque.",
+      "choices": [
+        {
+          "text": "Recupera componenti utili",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi microchip, cavi e moduli funzionanti.",
+          "failureText": "Tutto troppo danneggiato.",
+          "items_gained": [{ "id": "CRAFT_ELECTRONICS", "quantity": 2 }, { "id": "CRAFT_WIRE", "quantity": 3 }, { "id": "CRAFT_PLASTIC", "quantity": 2 }]
+        },
+        {
+          "text": "Cerca un generatore portatile",
+          "skillCheck": { "stat": "forza", "difficulty": 14 },
+          "successText": "Sollevi una casseratura pesante e trovi un piccolo generatore.",
+          "failureText": "Troppo pesante o rotto.",
+          "items_gained": [{ "id": "portable_generator", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_military_bunker",
+      "title": "Bunker Militare Nascosto",
+      "description": "Dietro una porta mimetizzata scopri l'ingresso di un piccolo bunker militare. L'accesso sembra ancora sicuro.",
+      "choices": [
+        {
+          "text": "Esplora con cautela",
+          "skillCheck": { "stat": "agilita", "difficulty": 13 },
+          "successText": "Eviti le trappole e accedi a un deposito con equipaggiamento militare.",
+          "failureText": "Attivi un allarme e devi fuggire rapidamente.",
+          "items_gained": [{ "id": "CRAFT_STEEL", "quantity": 2 }, { "id": "CRAFT_ELECTRONICS", "quantity": 1 }]
+        },
+        {
+          "text": "Cerca documenti classificati",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 16 },
+          "successText": "In una cassaforte aperta trovi manuali tattici di livello militare!",
+          "failureText": "I documenti sono stati distrutti o portati via.",
+          "items_gained": [{ "id": "MANUAL_WEAPONS_ADVANCED", "quantity": 1 }]
+        },
+        {
+          "text": "Controlla l'armamentario",
+          "skillCheck": { "stat": "forza", "difficulty": 14 },
+          "successText": "Forzi un armadietto e trovi munizioni speciali e granate.",
+          "failureText": "Gli armadietti sono sigillati elettronicamente.",
+          "items_gained": [{ "id": "special_ammo", "quantity": 5 }, { "id": "frag_grenade", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "city_unique_webradio",
+      "title": "Antenna Radio Cittadina",
+      "description": "Sul tetto di un palazzo trovi un'antenna ancora in piedi. Forse puoi ricevere un messaggio unico.",
+      "choices": [
+        {
+          "text": "Sintonizza la radio",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Ricevi un messaggio da una webradio clandestina che indica rifugi sicuri.",
+          "failureText": "Solo interferenze.",
+          "reward": { "type": "special", "effect": "reveal_safe_routes" }
+        },
+        {
+          "id": "city_abandoned_hospital",
+          "title": "Ospedale Abbandonato",
+          "description": "Un ospedale fatiscente si erge tra gli edifici in rovina. Le porte sono socchiuse e all'interno si sente un ronzio di generatori di emergenza ancora funzionanti.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Entra nell'area medica",
+              "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Trovi una farmacia intatta con medicinali ancora utilizzabili e kit di primo soccorso.",
+                "items_gained": [{ "id": "first_aid_kit", "quantity": 2 }, { "id": "painkillers", "quantity": 5 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Mentre frughi tra i medicinali scaduti, fai rumore e attrai l'attenzione di qualcosa che si muove nei corridoi bui.",
+                "hp_change": -10
+              }
+            },
+            {
+              "text": "Cerca nell'ufficio del dottore",
+              "skill_check": { "stat": "carisma", "difficulty": 10 },
+              "consequences_success": {
+                "narrative_text": "Trovi un diario medico con informazioni preziose e alcuni strumenti chirurgici ancora utilizzabili.",
+                "items_gained": [{ "id": "first_aid_book", "quantity": 1 }, { "id": "precision_tools", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'ufficio è stato già saccheggiato, ma trovi alcune bende abbandonate in un cassetto."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_mutant_rats",
+          "title": "Ratti Mutanti",
+          "description": "Un branco di ratti enormi e deformi blocca la strada. I loro occhi rossi brillano nell'oscurità e sembrano affamati.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Usa una granata fumogena",
+              "skill_check": { "stat": "agilita", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Lanci la granata con precisione. Il fumo confonde i ratti che fuggono in tutte le direzioni.",
+                "items_lost": [{ "id": "smoke_grenade", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "La granata finisce troppo vicino a te. Il fumo ti acceca temporaneamente e i ratti ne approfittano.",
+                "hp_change": -8,
+                "items_lost": [{ "id": "smoke_grenade", "quantity": 1 }]
+              }
+            },
+            {
+              "text": "Cerca di aggirarli silenziosamente",
+              "skill_check": { "stat": "agilita", "difficulty": 13 },
+              "consequences_success": {
+                "narrative_text": "Ti muovi come un'ombra tra i vicoli, evitando completamente l'incontro con i ratti mutanti."
+              },
+              "consequences_failure": {
+                "narrative_text": "Fai rumore spostando una lattina. I ratti si lanciano su di te, mordendoti ferocemente.",
+                "hp_change": -15,
+                "status_effects": ["WOUNDED"]
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_looter_gang",
+          "title": "Banda di Sciacalli",
+          "description": "Una banda di sopravvissuti armati sta saccheggiando un negozio. Non ti hanno ancora notato, ma se ti avvicini potrebbero diventare aggressivi.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Avvicinati con le mani alzate",
+              "skill_check": { "stat": "carisma", "difficulty": 14 },
+              "consequences_success": {
+                "narrative_text": "Parli con calma e convincentemente. La banda decide di condividere alcune delle loro scoperte invece di attaccarti.",
+                "items_gained": [{ "id": "canned_food", "quantity": 3 }, { "id": "ammo", "quantity": 10 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Le tue parole suonano false. La banda diventa sospettosa e ti attacca.",
+                "hp_change": -20
+              }
+            },
+            {
+              "text": "Aspetta che se ne vadano",
+              "resultText": "Decidi di essere paziente. Dopo un'ora la banda se ne va, lasciandoti accedere ai resti del negozio.",
+              "items_gained": [{ "id": "ration_pack", "quantity": 2 }],
+              "penalty": { "type": "time", "minutes": 60 }
+            }
+          ]
+        },
+        {
+          "id": "city_radioactive_barrel",
+          "title": "Barile Radioattivo",
+          "description": "Vedi un barile giallo con simboli di radiazioni abbandonato in mezzo alla strada. Sembra contenere rifiuti nucleari.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Controlla se è sigillato",
+              "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Il barile è ben sigillato e non rappresenta un pericolo immediato. Lo lasci stare."
+              },
+              "consequences_failure": {
+                "narrative_text": "Mentre tocchi il barile, noti una piccola perdita. Le radiazioni ti colpiscono immediatamente.",
+                "hp_change": -25,
+                "status_effects": ["SICK"]
+              }
+            },
+            {
+              "text": "Mantieni le distanze",
+              "resultText": "Meglio non rischiare. Girai alla larga dal barile pericoloso."
+            }
+          ]
+        },
+        {
+          "id": "city_survivor_trader",
+          "title": "Commerciante Sopravvissuto",
+          "description": "Un sopravvissuto con un carretto pieno di merci ti avvicina. Sembra amichevole e offre uno scambio.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Scambia informazioni",
+              "skill_check": { "stat": "carisma", "difficulty": 10 },
+              "consequences_success": {
+                "narrative_text": "Il commerciante ti dà informazioni preziose su zone sicure e ti offre uno sconto sui suoi beni.",
+                "items_gained": [{ "id": "local_map", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Il commerciante diventa sospettoso e rifiuta di trattare con te."
+              }
+            },
+            {
+              "text": "Compra medicinali",
+              "resultText": "Acquisti alcuni medicinali dal commerciante con le tue razioni.",
+              "items_gained": [{ "id": "generic_meds", "quantity": 3 }],
+              "items_lost": [{ "id": "ration_pack", "quantity": 2 }]
+            }
+          ]
+        },
+        {
+          "id": "city_electronics_store",
+          "title": "Negozio di Elettronica",
+          "description": "Un negozio di elettronica abbandonato. Le vetrine sono rotte e all'interno vedi scaffali ribaltati.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca componenti elettronici",
+              "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Trovi diversi componenti elettronici ancora funzionanti e batterie cariche.",
+                "items_gained": [{ "id": "electronic_parts", "quantity": 8 }, { "id": "batteries_pack", "quantity": 2 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Mentre frughi tra i detriti, tocchi un filo scoperto e prendi la scossa.",
+                "hp_change": -5
+              }
+            },
+            {
+              "text": "Cerca dispositivi funzionanti",
+              "skill_check": { "stat": "fortuna", "difficulty": 13 },
+              "consequences_success": {
+                "narrative_text": "Incredibilmente, trovi una radio portatile ancora funzionante!",
+                "items_gained": [{ "id": "portable_radio", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Non trovi nulla di funzionante, solo rottami inutili."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_military_checkpoint",
+          "title": "Posto di Controllo Militare",
+          "description": "Raggiungi un vecchio posto di controllo militare. Le barricate sono ancora in piedi e vedi alcune casse abbandonate.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Ispeziona le casse",
+              "skill_check": { "stat": "forza", "difficulty": 13 },
+              "consequences_success": {
+                "narrative_text": "Con uno sforzo enorme, apri una cassa militare e trovi munizioni e razioni dell'esercito.",
+                "items_gained": [{ "id": "rifle_ammo", "quantity": 20 }, { "id": "canned_food", "quantity": 4 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "La cassa è troppo pesante e ti fai male alla schiena tentando di aprirla.",
+                "status_effects": ["WOUNDED"]
+              }
+            },
+            {
+              "text": "Cerca documenti militari",
+              "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Trovi alcune mappe militari e documenti classificati che potrebbero essere utili.",
+                "items_gained": [{ "id": "old_military_map", "quantity": 1 }, { "id": "sensitive_documents", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "I documenti sono illeggibili o troppo deteriorati."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_subway_entrance",
+          "title": "Entrata Metropolitana",
+          "description": "Una scala scende nelle profondità della metropolitana. L'aria che ne esce è stantia ma non letale.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Scendi con cautela",
+              "skill_check": { "stat": "vigore", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Scendi nelle gallerie buie. Trovi alcuni sopravvissuti che condividono le loro scorte.",
+                "items_gained": [{ "id": "ration_pack", "quantity": 3 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'aria viziata ti fa sentire debole. Devi tornare in superficie velocemente.",
+                "hp_change": -8
+              }
+            },
+            {
+              "text": "Lancia una luce dentro",
+              "skill_check": { "stat": "intelligenza", "difficulty": 9 },
+              "consequences_success": {
+                "narrative_text": "Vedi alcune casse abbandonate nelle vicinanze dell'entrata. Riesci a recuperarle senza scendere.",
+                "items_gained": [{ "id": "tool_box", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "La luce attira l'attenzione di qualcosa nelle profondità. Meglio andarsene."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_water_treatment",
+          "title": "Impianto di Depurazione Acqua",
+          "description": "Un impianto di depurazione dell'acqua abbandonato. I macchinari ronzano ancora debolmente.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca acqua potabile",
+              "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+              "consequences_success": {
+                "narrative_text": "Trovi un rubinetto ancora funzionante con acqua depurata. Riempi tutte le tue borracce.",
+                "items_gained": [{ "id": "water_bottle", "quantity": 5 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'acqua che esce è contaminata. Bere un sorso ti fa stare male.",
+                "hp_change": -10,
+                "status_effects": ["SICK"]
+              }
+            },
+            {
+              "text": "Cerca componenti utili",
+              "skill_check": { "stat": "fortuna", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Trovi alcuni filtri per acqua e componenti elettronici di ricambio.",
+                "items_gained": [{ "id": "electronic_parts", "quantity": 5 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'impianto è troppo deteriorato. Non trovi nulla di utile."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_library_ruins",
+          "title": "Biblioteca in Rovine",
+          "description": "Una biblioteca pubblica distrutta dal fuoco. Alcuni libri sono sopravvissuti e potrebbero contenere conoscenze utili.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca manuali tecnici",
+              "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+              "consequences_success": {
+                "narrative_text": "Trovi alcuni manuali tecnici sopravvissuti alle fiamme, ancora leggibili.",
+                "items_gained": [{ "id": "mechanic_manual", "quantity": 1 }, { "id": "first_aid_book", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "I libri sono troppo danneggiati dal fuoco e dall'umidità."
+              }
+            },
+            {
+              "text": "Cerca cibo nascosto",
+              "skill_check": { "stat": "fortuna", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Incredibilmente, trovi alcune razioni d'emergenza nascoste in un cassetto.",
+                "items_gained": [{ "id": "ration_pack", "quantity": 2 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Non trovi cibo, ma almeno puoi riposare al riparo per un po'."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_army_surplus",
+          "title": "Magazzino Surplus Militare",
+          "description": "Un magazzino militare abbandonato con le porte sfondate. All'interno vedi casse e attrezzature militari.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca equipaggiamento",
+              "skill_check": { "stat": "forza", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Trovi un giubbotto antiproiettile e alcune granate ancora funzionanti.",
+                "items_gained": [{ "id": "kevlar_vest", "quantity": 1 }, { "id": "frag_grenade", "quantity": 2 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Le casse sono troppo pesanti. Ti fai male tentando di spostarle.",
+                "hp_change": -6
+              }
+            },
+            {
+              "text": "Cerca medicinali militari",
+              "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Trovi una cassetta di medicinali militari avanzati e bende sterili.",
+                "items_gained": [{ "id": "sterile_gauze", "quantity": 10 }, { "id": "painkillers", "quantity": 8 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "I medicinali sono stati già presi o sono scaduti."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_radio_station",
+          "title": "Stazione Radio",
+          "description": "Una stazione radio locale con l'antenna ancora in piedi. Potrebbe esserci un generatore funzionante.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca il generatore",
+              "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+              "consequences_success": {
+                "narrative_text": "Trovi un generatore portatile funzionante e carburante di riserva.",
+                "items_gained": [{ "id": "portable_generator", "quantity": 1 }, { "id": "fuel_canister_small", "quantity": 3 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Il generatore è troppo complesso da capire senza l'addestramento adeguato."
+              }
+            },
+            {
+              "text": "Cerca trasmettitori",
+              "skill_check": { "stat": "fortuna", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Trovi un walkie-talkie funzionante e alcune batterie di ricambio.",
+                "items_gained": [{ "id": "walkie_talkie", "quantity": 1 }, { "id": "batteries_pack", "quantity": 2 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'attrezzatura è troppo danneggiata per essere utile."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_bank_vault",
+          "title": "Caveau Bancario",
+          "description": "La porta blindata di una banca è socchiusa. All'interno potrebbe esserci qualcosa di valore.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Entra nel caveau",
+              "skill_check": { "stat": "agilita", "difficulty": 14 },
+              "consequences_success": {
+                "narrative_text": "Muovendoti silenziosamente, trovi alcune monete d'oro e gioielli sopravvissuti all'apocalisse.",
+                "items_gained": [{ "id": "gold_coin", "quantity": 5 }, { "id": "precious_stone", "quantity": 2 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Fai scattare una trappola antica. Dardi avvelenati ti feriscono.",
+                "hp_change": -18,
+                "status_effects": ["POISONED"]
+              }
+            },
+            {
+              "text": "Controlla l'ufficio del direttore",
+              "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+              "consequences_success": {
+                "narrative_text": "Trovi una cassaforte personale con documenti importanti e contanti pre-bellici.",
+                "items_gained": [{ "id": "sensitive_documents", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "L'ufficio è vuoto, saccheggiato da tempo."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_mutant_lair",
+          "title": "Tana di Mutanti",
+          "description": "Scopri l'ingresso di quello che sembra essere un rifugio sotterraneo. Potrebbe essere abitato da mutanti.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Entra con cautela",
+              "skill_check": { "stat": "agilita", "difficulty": 15 },
+              "consequences_success": {
+                "narrative_text": "Ti muovi come un fantasma. Trovi alcune scorte abbandonate ma nessun mutante.",
+                "items_gained": [{ "id": "ration_pack", "quantity": 4 }, { "id": "ammo", "quantity": 15 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Vieni scoperto da mutanti feroci. Riesci a fuggire ma non illeso.",
+                "hp_change": -25
+              }
+            },
+            {
+              "text": "Blocca l'ingresso",
+              "skill_check": { "stat": "forza", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Usi detriti per bloccare l'ingresso, impedendo ai mutanti di uscire.",
+                "narrative_text": "Hai reso quest'area più sicura per altri viaggiatori."
+              },
+              "consequences_failure": {
+                "narrative_text": "I detriti sono troppo pesanti. Ti fai male nel tentativo."
+              }
+            }
+          ]
+        },
+        {
+          "id": "city_pharmacy_ruins",
+          "title": "Farmacia in Rovine",
+          "description": "Una farmacia distrutta. Gli scaffali sono ribaltati e il pavimento è cosparso di vetri rotti.",
+          "biome": "citta",
+          "choices": [
+            {
+              "text": "Cerca medicinali sopravvissuti",
+              "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+              "consequences_success": {
+                "narrative_text": "Con attenzione, trovi alcune medicine ancora utilizzabili nascoste dietro gli scaffali.",
+                "items_gained": [{ "id": "painkillers", "quantity": 6 }, { "id": "bandages_clean", "quantity": 8 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Mentre frughi, ti tagli con i vetri rotti sparsi ovunque.",
+                "hp_change": -5
+              }
+            },
+            {
+              "text": "Cerca attrezzature mediche",
+              "skill_check": { "stat": "fortuna", "difficulty": 12 },
+              "consequences_success": {
+                "narrative_text": "Trovi un kit di primo soccorso completo abbandonato in un angolo.",
+                "items_gained": [{ "id": "first_aid_kit", "quantity": 1 }]
+              },
+              "consequences_failure": {
+                "narrative_text": "Tutto è stato distrutto o preso. Non rimane nulla di utile."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

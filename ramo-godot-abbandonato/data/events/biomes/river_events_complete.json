@@ -1,0 +1,275 @@
+{
+  "fiumi": [
+    {
+      "id": "river_fresh_water",
+      "title": "Acqua Fresca del Fiume",
+      "description": "Il fiume scorre limpido e invitante. L'acqua sembra potabile ma potrebbe nascondere pericoli.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Riempi le borracce",
+          "skill_check": { "stat": "intelligenza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "L'acqua sembra pulita e la bevi senza problemi.",
+            "items_gained": [{ "id": "water_bottle", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "L'acqua ha un sapore strano. Ti senti male dopo averla bevuta.",
+            "hp_change": -5,
+            "status_effects": ["SICK"]
+          }
+        },
+        {
+          "text": "Pesca con le mani",
+          "skill_check": { "stat": "agilita", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Riesci a catturare alcuni pesci con le mani nude.",
+            "items_gained": [{ "id": "fresh_fish", "quantity": 2 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Scivoli sulla riva fangosa e cadi in acqua.",
+            "hp_change": -3
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_old_bridge",
+      "title": "Vecchio Ponte",
+      "description": "Un ponte di pietra attraversa il fiume. Sembra antico ma solido. Potrebbe esserci qualcosa sotto.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Attraversa il ponte",
+          "resultText": "Il ponte regge il tuo peso. Attraversi senza problemi."
+        },
+        {
+          "text": "Guarda sotto il ponte",
+          "skill_check": { "stat": "fortuna", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Sotto il ponte trovi una piccola grotta con alcune scorte abbandonate.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 2 }, { "id": "ammo", "quantity": 8 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Sotto il ponte c'è solo acqua e fango."
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_abandoned_boat",
+      "title": "Barca Abbandonata",
+      "description": "Una barca a remi è incagliata sulla riva. Potrebbe essere riparabile o contenere qualcosa di utile.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Controlla la barca",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcuni remi utilizzabili e una cassetta di sopravvivenza.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 3 }, { "id": "first_aid_kit", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La barca è troppo danneggiata per essere utile."
+          }
+        },
+        {
+          "text": "Cerca attorno alla barca",
+          "skill_check": { "stat": "fortuna", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcuni rottami metallici trasportati dalla corrente.",
+            "items_gained": [{ "id": "scrap_metal", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Non trovi nulla di interessante."
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_fisherman_hut",
+      "title": "Capanna del Pescatore",
+      "description": "Una piccola capanna da pesca sulla riva del fiume. La porta è aperta e senti odore di pesce.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Entra nella capanna",
+          "skill_check": { "stat": "carisma", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Il pescatore sopravvissuto ti offre alcuni pesci in cambio di protezione.",
+            "items_gained": [{ "id": "fresh_fish", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il pescatore è morto da tempo. Trovi solo resti."
+          }
+        },
+        {
+          "text": "Prendi l'attrezzatura da pesca",
+          "skill_check": { "stat": "forza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Trovi ami da pesca e lenze ancora utilizzabili.",
+            "items_gained": [{ "id": "fishing_gear", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "L'attrezzatura è troppo deteriorata."
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_rapids",
+      "title": "Rapide Pericolose",
+      "description": "Il fiume forma delle rapide impetuose. Potresti provare ad attraversarle a nuoto o cercare un guado.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Cerca un guado sicuro",
+          "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi un punto dove il fiume è più calmo e attraversi senza problemi."
+          },
+          "consequences_failure": {
+            "narrative_text": "Il guado che trovi è ingannevole. Finisci in acqua.",
+            "hp_change": -8
+          }
+        },
+        {
+          "text": "Nuota attraverso le rapide",
+          "skill_check": { "stat": "vigore", "difficulty": 14 },
+          "consequences_success": {
+            "narrative_text": "Con forza e abilità, superi le rapide indenne."
+          },
+          "consequences_failure": {
+            "narrative_text": "Le rapide sono troppo forti. Vieni sbattuto contro le rocce.",
+            "hp_change": -15,
+            "status_effects": ["WOUNDED"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_waterfall",
+      "title": "Cascata",
+      "description": "Una cascata spettacolare blocca il cammino. L'acqua cade da un'altezza considerevole.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Cerca un sentiero alternativo",
+          "skill_check": { "stat": "agilita", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Trovi un sentiero nascosto che aggira la cascata.",
+            "penalty": { "type": "time", "minutes": 45 }
+          },
+          "consequences_failure": {
+            "narrative_text": "Il sentiero è troppo ripido e scivoloso. Rinunci e torni indietro.",
+            "penalty": { "type": "time", "minutes": 30 }
+          }
+        },
+        {
+          "text": "Scala la parete rocciosa",
+          "skill_check": { "stat": "forza", "difficulty": 15 },
+          "consequences_success": {
+            "narrative_text": "Con grande sforzo, superi la cascata scalando la parete.",
+            "hp_change": -5
+          },
+          "consequences_failure": {
+            "narrative_text": "La parete è troppo liscia. Scivoli e cadi.",
+            "hp_change": -12
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_beaver_dam",
+      "title": "Diga di Castori",
+      "description": "Una grande diga di castori blocca parzialmente il fiume. Potrebbe esserci un modo per superarla.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Distruggi la diga",
+          "skill_check": { "stat": "forza", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Con forza bruta, apri un varco nella diga e passi.",
+            "items_gained": [{ "id": "animal_hide", "quantity": 2 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La diga è troppo robusta. Ti fai male tentando di distruggerla.",
+            "hp_change": -7
+          }
+        },
+        {
+          "text": "Cerca di aggirarla",
+          "skill_check": { "stat": "agilita", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi un modo per aggirare la diga attraverso la foresta."
+          },
+          "consequences_failure": {
+            "narrative_text": "Ti perdi nella foresta cercando di aggirare la diga.",
+            "penalty": { "type": "time", "minutes": 60 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_flooded_area",
+      "title": "Zona Allagata",
+      "description": "Il fiume ha inondato una zona circostante. L'acqua è profonda e la corrente è forte.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Attraversa a nuoto",
+          "skill_check": { "stat": "vigore", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Nuoti con forza e superi la zona allagata."
+          },
+          "consequences_failure": {
+            "narrative_text": "La corrente è troppo forte. Vieni trascinato via.",
+            "hp_change": -10
+          }
+        },
+        {
+          "text": "Trova un albero caduto",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Usi un albero caduto come ponte improvvisato.",
+            "narrative_text": "Attraversi senza bagnarti i piedi."
+          },
+          "consequences_failure": {
+            "narrative_text": "L'albero cede sotto il tuo peso. Cadi in acqua.",
+            "hp_change": -6
+          }
+        }
+      ]
+    },
+    {
+      "id": "river_trading_post",
+      "title": "Posto di Commercio Fluviale",
+      "description": "Un vecchio posto di commercio fluviale abbandonato. Potrebbero esserci merci preziose.",
+      "biome": "fiumi",
+      "choices": [
+        {
+          "text": "Cerca nelle casse",
+          "skill_check": { "stat": "fortuna", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi merci preziose sopravvissute all'abbandono.",
+            "items_gained": [{ "id": "gold_coin", "quantity": 3 }, { "id": "precious_stone", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Le casse sono vuote o contenengono solo spazzatura."
+          }
+        },
+        {
+          "text": "Controlla gli ormeggi",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi una barca ben conservata che potresti riparare.",
+            "items_gained": [{ "id": "boat_repair_kit", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Gli ormeggi sono vuoti e pericolanti."
+          }
+        }
+      ]
+    }
+  ]
+}

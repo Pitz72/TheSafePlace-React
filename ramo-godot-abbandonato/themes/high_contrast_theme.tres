@@ -1,0 +1,87 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bh8lal2m3n4o5"]
+
+[ext_resource type="FontFile" uid="uid://dfw4ij5rfurac" path="res://themes/Perfect DOS VGA 437 Win.ttf" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scrollbar"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[resource]
+default_font = ExtResource("1")
+default_font_size = 16
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("1")
+Button/styles/disabled = SubResource("StyleBoxFlat_button_normal")
+Button/styles/hover = SubResource("StyleBoxFlat_button_hover")
+Button/styles/normal = SubResource("StyleBoxFlat_button_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_button_hover")
+CheckBox/colors/font_color = Color(1, 1, 1, 1)
+CheckBox/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
+CheckBox/colors/font_hover_color = Color(1, 1, 1, 1)
+CheckBox/colors/font_pressed_color = Color(1, 1, 1, 1)
+CheckBox/font_sizes/font_size = 16
+CheckBox/fonts/font = ExtResource("1")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_scrollbar")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_scrollbar")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_scrollbar")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_scrollbar")
+HScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_scrollbar")
+HSlider/colors/grabber_highlight = Color(0, 0, 0, 1)
+HSlider/colors/grabber_pressed = Color(0, 0, 0, 1)
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_scrollbar")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_button_hover")
+HSlider/styles/slider = SubResource("StyleBoxFlat_scrollbar")
+HSeparator/colors/separator = Color(1, 1, 1, 1)
+HSeparator/constants/separation = 4
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 1)
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 2
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1")
+OptionButton/colors/font_color = Color(1, 1, 1, 1)
+OptionButton/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
+OptionButton/colors/font_hover_color = Color(0, 0, 0, 1)
+OptionButton/colors/font_pressed_color = Color(0, 0, 0, 1)
+OptionButton/font_sizes/font_size = 16
+OptionButton/fonts/font = ExtResource("1")
+OptionButton/styles/disabled = SubResource("StyleBoxFlat_button_normal")
+OptionButton/styles/hover = SubResource("StyleBoxFlat_button_hover")
+OptionButton/styles/normal = SubResource("StyleBoxFlat_button_normal")
+OptionButton/styles/pressed = SubResource("StyleBoxFlat_button_hover")
+RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
+RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+RichTextLabel/constants/shadow_offset_x = 1
+RichTextLabel/constants/shadow_offset_y = 1
+RichTextLabel/font_sizes/normal_font_size = 16
+RichTextLabel/fonts/normal_font = ExtResource("1")
+ScrollContainer/styles/panel = SubResource("StyleBoxFlat_scrollbar")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_scrollbar")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_scrollbar")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_scrollbar")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scrollbar")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_scrollbar")

@@ -1,0 +1,331 @@
+{
+  "repair_metal": {
+    "id": "repair_metal",
+    "name": "Ripara Metallo",
+    "description": "Ripara un pezzo di metallo danneggiato",
+    "category": "crafting",
+    "materials": [
+      {"id": "scrap_metal", "quantity": 2}
+    ],
+    "tools": [],
+    "output": {
+      "id": "metal_piece",
+      "quantity": 1
+    },
+    "required_skill": 0,
+    "requires_workbench": false,
+    "crafting_time": 30,
+    "exp_reward": 5,
+    "unlocks": []
+  },
+  "sharpen_knife": {
+    "id": "sharpen_knife",
+    "name": "Affila Coltello",
+    "description": "Affila un coltello usando metallo di scarto",
+    "category": "weapon_maintenance",
+    "materials": [
+      {"id": "weapon_knife_rusty", "quantity": 1},
+      {"id": "scrap_metal", "quantity": 1}
+    ],
+    "tools": [],
+    "output": {
+      "id": "weapon_knife_sharp",
+      "quantity": 1
+    },
+    "required_skill": 5,
+    "requires_workbench": false,
+    "crafting_time": 60,
+    "exp_reward": 10,
+    "unlocks": ["craft_machete"]
+  },
+  "make_food": {
+    "id": "make_food",
+    "name": "Prepara Cibo",
+    "description": "Prepara una barretta energetica da cibo in scatola",
+    "category": "food",
+    "materials": [
+      {"id": "canned_food", "quantity": 2}
+    ],
+    "tools": [],
+    "output": {
+      "id": "energy_bar",
+      "quantity": 1
+    },
+    "required_skill": 3,
+    "requires_workbench": true,
+    "crafting_time": 45,
+    "exp_reward": 8,
+    "unlocks": ["cook_meat"]
+  },
+  "craft_bandages": {
+    "id": "craft_bandages",
+    "name": "Crea Bende",
+    "description": "Crea bende mediche da tessuto pulito",
+    "category": "medical",
+    "materials": [
+      {"id": "cloth_clean", "quantity": 3},
+      {"id": "water_clean", "quantity": 1}
+    ],
+    "tools": [],
+    "output": {
+      "id": "bandages_clean",
+      "quantity": 2
+    },
+    "required_skill": 0,
+    "requires_workbench": false,
+    "crafting_time": 20,
+    "exp_reward": 5,
+    "unlocks": ["craft_medkit"]
+  },
+  "craft_machete": {
+    "id": "craft_machete",
+    "name": "Forgia Machete",
+    "description": "Forgia un machete da rottami metallici",
+    "category": "weapon",
+    "materials": [
+      {"id": "scrap_metal", "quantity": 4},
+      {"id": "wood_plank", "quantity": 1},
+      {"id": "animal_hide", "quantity": 1}
+    ],
+    "tools": ["hammer", "anvil"],
+    "output": {
+      "id": "weapon_machete",
+      "quantity": 1
+    },
+    "required_skill": 15,
+    "requires_workbench": true,
+    "crafting_time": 120,
+    "exp_reward": 25,
+    "unlocks": ["craft_sword"]
+  },
+  "craft_leather_armor": {
+    "id": "craft_leather_armor",
+    "name": "Crea Armatura di Cuoio",
+    "description": "Crea un'armatura leggera da pelli di animale",
+    "category": "armor",
+    "materials": [
+      {"id": "animal_hide", "quantity": 5},
+      {"id": "spider_silk", "quantity": 10},
+      {"id": "scrap_metal", "quantity": 2}
+    ],
+    "tools": ["needle", "awl"],
+    "output": {
+      "id": "armor_leather_basic",
+      "quantity": 1
+    },
+    "required_skill": 20,
+    "requires_workbench": true,
+    "crafting_time": 180,
+    "exp_reward": 30,
+    "unlocks": ["craft_reinforced_armor"]
+  },
+  "craft_medkit": {
+    "id": "craft_medkit",
+    "name": "Assembla Kit Medico",
+    "description": "Assembla un kit medico da campo",
+    "category": "medical",
+    "materials": [
+      {"id": "bandages_clean", "quantity": 3},
+      {"id": "antiseptic", "quantity": 2},
+      {"id": "painkillers", "quantity": 2},
+      {"id": "medical_supplies", "quantity": 1}
+    ],
+    "tools": [],
+    "output": {
+      "id": "medkit_field",
+      "quantity": 1
+    },
+    "required_skill": 25,
+    "requires_workbench": true,
+    "crafting_time": 90,
+    "exp_reward": 35,
+    "unlocks": ["craft_advanced_medkit"]
+  },
+  "cook_meat": {
+    "id": "cook_meat",
+    "name": "Cucina Carne",
+    "description": "Cucina carne cruda per renderla sicura da mangiare",
+    "category": "food",
+    "materials": [
+      {"id": "meat_raw", "quantity": 2},
+      {"id": "matches", "quantity": 1}
+    ],
+    "tools": ["cooking_pot"],
+    "output": {
+      "id": "meat_cooked",
+      "quantity": 2
+    },
+    "required_skill": 5,
+    "requires_workbench": false,
+    "crafting_time": 30,
+    "exp_reward": 8,
+    "unlocks": ["craft_stew"]
+  },
+  "craft_stew": {
+    "id": "craft_stew",
+    "name": "Prepara Stufato",
+    "description": "Prepara uno stufato nutriente con carne e verdure",
+    "category": "food",
+    "materials": [
+      {"id": "meat_cooked", "quantity": 1},
+      {"id": "vegetables", "quantity": 2},
+      {"id": "water_clean", "quantity": 1},
+      {"id": "salt", "quantity": 1}
+    ],
+    "tools": ["cooking_pot"],
+    "output": {
+      "id": "stew_nutritious",
+      "quantity": 1
+    },
+    "required_skill": 15,
+    "requires_workbench": false,
+    "crafting_time": 60,
+    "exp_reward": 20,
+    "unlocks": ["craft_preserved_food"]
+  },
+  "craft_molotov": {
+    "id": "craft_molotov",
+    "name": "Crea Molotov",
+    "description": "Crea una bomba molotov improvvisata",
+    "category": "explosive",
+    "materials": [
+      {"id": "water_bottle", "quantity": 1},
+      {"id": "fuel_canister_small", "quantity": 1},
+      {"id": "cloth_clean", "quantity": 1}
+    ],
+    "tools": [],
+    "output": {
+      "id": "molotov_cocktail",
+      "quantity": 1
+    },
+    "required_skill": 10,
+    "requires_workbench": false,
+    "crafting_time": 45,
+    "exp_reward": 15,
+    "unlocks": ["craft_pipe_bomb"]
+  },
+  "craft_lockpicks": {
+    "id": "craft_lockpicks",
+    "name": "Crea Grimaldelli",
+    "description": "Crea un set di grimaldelli da rottami metallici",
+    "category": "tool",
+    "materials": [
+      {"id": "scrap_metal", "quantity": 2},
+      {"id": "electronic_parts", "quantity": 1}
+    ],
+    "tools": ["file", "pliers"],
+    "output": {
+      "id": "lockpick_set_crude",
+      "quantity": 1
+    },
+    "required_skill": 12,
+    "requires_workbench": true,
+    "crafting_time": 75,
+    "exp_reward": 18,
+    "unlocks": ["craft_advanced_lockpicks"]
+  },
+  "craft_reinforced_armor": {
+    "id": "craft_reinforced_armor",
+    "name": "Rinforza Armatura",
+    "description": "Rinforza un'armatura di cuoio con placche metalliche",
+    "category": "armor",
+    "materials": [
+      {"id": "armor_leather_basic", "quantity": 1},
+      {"id": "scrap_metal", "quantity": 6},
+      {"id": "spider_silk", "quantity": 5}
+    ],
+    "tools": ["hammer", "rivets"],
+    "output": {
+      "id": "armor_leather_reinforced",
+      "quantity": 1
+    },
+    "required_skill": 35,
+    "requires_workbench": true,
+    "crafting_time": 240,
+    "exp_reward": 50,
+    "unlocks": ["craft_combat_armor"]
+  },
+  "craft_energy_cell": {
+    "id": "craft_energy_cell",
+    "name": "Assembla Cella Energetica",
+    "description": "Assembla una cella energetica da componenti elettronici",
+    "category": "electronic",
+    "materials": [
+      {"id": "electronic_parts", "quantity": 4},
+      {"id": "battery_cell", "quantity": 2},
+      {"id": "military_grade_electronics", "quantity": 1}
+    ],
+    "tools": ["soldering_iron", "multimeter"],
+    "output": {
+      "id": "energy_cell",
+      "quantity": 1
+    },
+    "required_skill": 40,
+    "requires_workbench": true,
+    "crafting_time": 180,
+    "exp_reward": 60,
+    "unlocks": ["craft_fusion_battery"]
+  },
+  "craft_advanced_medkit": {
+    "id": "craft_advanced_medkit",
+    "name": "Kit Medico Avanzato",
+    "description": "Assembla un kit medico avanzato con farmaci pre-guerra",
+    "category": "medical",
+    "materials": [
+      {"id": "medkit_field", "quantity": 1},
+      {"id": "prewar_medical_kit", "quantity": 1},
+      {"id": "stimpak_crude", "quantity": 2}
+    ],
+    "tools": ["surgical_tools"],
+    "output": {
+      "id": "medkit_advanced",
+      "quantity": 1
+    },
+    "required_skill": 50,
+    "requires_workbench": true,
+    "crafting_time": 300,
+    "exp_reward": 80,
+    "unlocks": []
+  },
+  "purify_water": {
+    "id": "purify_water",
+    "name": "Purifica Acqua",
+    "description": "Purifica acqua sporca per renderla potabile",
+    "category": "survival",
+    "materials": [
+      {"id": "water_dirty", "quantity": 2},
+      {"id": "water_purification_tablet", "quantity": 1}
+    ],
+    "tools": [],
+    "output": {
+      "id": "water_clean",
+      "quantity": 2
+    },
+    "required_skill": 0,
+    "requires_workbench": false,
+    "crafting_time": 15,
+    "exp_reward": 3,
+    "unlocks": []
+  },
+  "craft_trap": {
+    "id": "craft_trap",
+    "name": "Crea Trappola",
+    "description": "Crea una trappola per piccoli animali",
+    "category": "survival",
+    "materials": [
+      {"id": "scrap_metal", "quantity": 3},
+      {"id": "spider_silk", "quantity": 5},
+      {"id": "wood_plank", "quantity": 1}
+    ],
+    "tools": ["pliers"],
+    "output": {
+      "id": "animal_trap",
+      "quantity": 1
+    },
+    "required_skill": 18,
+    "requires_workbench": false,
+    "crafting_time": 90,
+    "exp_reward": 25,
+    "unlocks": ["craft_advanced_trap"]
+  }
+}

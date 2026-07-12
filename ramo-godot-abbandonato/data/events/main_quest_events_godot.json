@@ -1,0 +1,88 @@
+{
+  "MAIN_QUEST": [
+    {
+      "stage": 1,
+      "id": "mq_01_silence",
+      "trigger": { "type": "progress", "value": 10 },
+      "title": "Ricordo: Il Silenzio",
+      "description": "Mentre cammini, un silenzio innaturale ti avvolge, identico a quello di tanti anni fa. Ti torna in mente il giorno in cui tutto finì. Non con un boato, ma con un respiro trattenuto. Il rombo costante all'orizzonte cessò. Gli uccelli smisero di cantare. Persino il vento sembrò aver paura di muoversi. Tuo padre, Elian, ti strinse la mano, troppo forte. Nei suoi occhi non c'era solo paura, ma il riconoscimento di una fine. La 'Guerra Inespressa' era terminata, e il mondo aveva smesso di respirare."
+    },
+    {
+      "stage": 2,
+      "id": "mq_02_water",
+      "trigger": { "type": "progress", "value": 15 },
+      "title": "Ricordo: La Lezione dell'Acqua",
+      "description": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di metallo e di morte. Stavi per bere, un bambino guidato solo dall'istinto. La mano di Elian ti afferrò, ferma, quasi violenta. 'No!', fu un ordine perentorio. Poi, con gesti lenti e metodici, prese uno straccio sudicio, sabbia, ciottoli, e costruì un filtro rudimentale. 'Il mondo non è più amico,' ti disse, porgendoti l'acqua torbida. 'Ogni sorso, ogni boccone, te lo devi conquistare. E devi capire cosa puoi prendere, e cosa ti ucciderà'."
+    },
+    {
+      "stage": 3,
+      "id": "mq_03_blood",
+      "trigger": { "type": "progress", "value": 30 },
+      "title": "Ricordo: Il Sapore del Sangue",
+      "description": "L'adrenalina dello scontro ti riporta alla vecchia stazione ferroviaria. I predoni. Il lampo di un coltello. Tuo padre che combatteva, una furia disperata. L'ordine che ti squarciò l'anima: 'CORRI! NON VOLTARTI!'. Ricordi la tua fuga, il cuore che martellava, il sapore amaro della polvere e della paura in bocca. Ore dopo, Elian ti raggiunse, zoppicando, una maschera di sudore e sangue rappreso. Non disse nulla, ma quella notte capisti una lezione terribile: a volte, sopravvivere significa lasciare qualcuno indietro."
+    },
+    {
+      "stage": 4,
+      "id": "mq_04_darkness",
+      "trigger": { "type": "survival_days", "value": 2 },
+      "title": "Ricordo: Imparare il Buio",
+      "description": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'."
+    },
+    {
+      "stage": 5,
+      "id": "mq_05_question",
+      "trigger": { "type": "enter_biome", "biome": "R" },
+      "title": "Ricordo: La Domanda Senza Risposta",
+      "description": "Questo fragile barlume di sicurezza ti ricorda la vecchia fattoria. E la fattoria ti ricorda le domande. Quelle che ponevi a tuo padre nelle notti fredde. 'E mamma? Cosa le è successo?'. Elian non rispondeva mai veramente. La sua voce si incrinava, i suoi occhi si perdevano in un abisso di sofferenza. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. 'Questo è quello che devi sapere.' Ma tu iniziavi a leggere tra le righe. C'era un segreto, un peso che tuo padre portava da solo. Un segreto che lo stava consumando da dentro."
+    },
+    {
+      "stage": 6,
+      "id": "mq_06_angels",
+      "trigger": { "type": "progress", "value": 80 },
+      "title": "Ricordo: Gli Angeli della Cenere",
+      "description": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame."
+    },
+    {
+      "stage": 7,
+      "id": "mq_07_burden",
+      "trigger": { "type": "progress", "value": 120 },
+      "title": "Ricordo: Il Fardello",
+      "description": "La nuova forza che senti nelle tue membra ti riporta a un confronto con tuo padre. 'Perché non mi dici mai niente?', gli avevi urlato. E per la prima volta avevi visto un dolore nudo nei suoi occhi. 'Ci sono cose che un figlio non dovrebbe mai sapere,' ti aveva risposto. 'Sapere non cambierebbe nulla, ragazzo. Anzi, forse renderebbe tutto più difficile da sopportare. La verità, a volte, è un fardello troppo pesante'."
+    },
+    {
+      "stage": 8,
+      "id": "mq_08_map",
+      "trigger": { "type": "progress", "value": 160 },
+      "title": "Ricordo: L'Ultima Lezione",
+      "description": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi quella mattina gelida, quando ti svegliasti e lui non c'era. E la lettera. 'Nel tuo sacco... troverai una mappa... Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile... ma è l'unica possibilità che ti resta.' Quella mappa non era solo un pezzo di carta. Era un testamento. L'inizio del tuo vero, solitario viaggio."
+    },
+    {
+      "stage": 9,
+      "id": "mq_09_name",
+      "trigger": { "type": "survival_days", "value": 7 },
+      "title": "Ricordo: Il Significato di un Nome",
+      "description": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco."
+    },
+    {
+      "stage": 10,
+      "id": "mq_10_choice",
+      "trigger": { "type": "progress", "value": 200 },
+      "title": "L'Eco di una Scelta",
+      "description": "Qualunque cosa tu abbia scelto, un pensiero ti gela il sangue. La scelta tra il pragmatismo brutale e la compassione rischiosa. All'improvviso, capisci. Questo è l'abisso in cui tuo padre ha guardato. Questa è la scelta che ha dovuto fare. La sua durezza, i suoi silenzi... forse non erano crudeltà. Forse erano solo le cicatrici lasciate da una scelta impossibile."
+    },
+    {
+      "stage": 11,
+      "id": "mq_11_confession",
+      "trigger": { "type": "reach_location", "x": 140, "y": 140 },
+      "title": "Frammento: La Confessione",
+      "description": "In un vecchio terminale dati ancora funzionante, trovi un file audio corrotto. È la voce di tuo padre. '...Lena... intrappolata... il palazzo crollava... fumo... mi disse: \"Porta via il bambino. Salvalo. E torna\"...' La voce si spezza. '...Io ti ho preso. E sono corso. E non sono tornato. Non potevo. Tornare indietro significava sacrificare anche te. Ho scelto. Ho sacrificato lei per salvare te...'. Il file finisce. Ora sai. La tua sopravvivenza non è stata un dono. È stata una scelta. E il prezzo è stato tua madre."
+    },
+    {
+      "stage": 12,
+      "id": "mq_12_truth",
+      "trigger": { "type": "reach_end" },
+      "title": "La Verità",
+      "description": "Sei arrivato a 'The Safe Place'. È un piccolo bunker, sicuro. E dentro, ad aspettarti, c'è Elian. Ti guarda, e nei suoi occhi vedi un'attesa lunga una vita. Ma tu ora vedi tutto con una chiarezza terribile. Ogni lezione, ogni spinta a sopravvivere... non era per te. Era per lui. Per giustificare la sua scelta. Per dare un senso alla morte di Lena. Tu non sei suo figlio. Sei il suo alibi vivente. Il tuo viaggio non è finito. È appena iniziato. Ora devi decidere cosa fare con questa verità."
+    }
+  ]
+}

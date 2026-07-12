@@ -1,0 +1,21 @@
+
+{
+  "WEAP_001": {
+    "id": "WEAP_001",
+    "name": "Coltello da combattimento",
+    "description": "Un coltello affidabile per il combattimento ravvicinato.",
+    "type": "weapon",
+    "weight": 1,
+    "value": 10,
+    "damage": "1d4"
+  },
+  "WEAP_002": {
+    "id": "WEAP_002",
+    "name": "Pistola 9mm",
+    "description": "Una pistola semiautomatica comune.",
+    "type": "weapon",
+    "weight": 3,
+    "value": 50,
+    "damage": "1d6"
+  }
+}

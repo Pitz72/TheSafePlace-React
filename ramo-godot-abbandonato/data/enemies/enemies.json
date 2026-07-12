@@ -1,0 +1,597 @@
+{
+  "enemy_types": {
+    "BEAST": {
+      "weak": {
+        "id": "beast_rat_giant",
+        "name": "Ratto Gigante",
+        "description": "Un ratto mutato dalle radiazioni, grande quanto un cane",
+        "category": "BEAST",
+        "tier": "weak",
+        "stats": {
+          "hp": 12,
+          "max_hp": 12,
+          "attack_bonus": 2,
+          "defense_class": 11,
+          "damage": { "min": 1, "max": 4, "bonus": 0 },
+          "resistance": 0,
+          "speed": 3
+        },
+        "abilities": ["bite", "disease_chance"],
+        "exp_value": 15,
+        "encounter_text": "Un ratto delle dimensioni di un cane emerge dalle macerie, mostrando denti affilati e occhi rossi.",
+        "loot_table": {
+          "meat_raw": 0.6,
+          "rat_tail": 0.4,
+          "small_bones": 0.3
+        },
+        "biome_modifiers": {
+          "CITY": 1.5,
+          "RUINS": 1.3,
+          "FOREST": 0.8
+        }
+      },
+      "standard": {
+        "id": "beast_wolf_feral",
+        "name": "Lupo Selvaggio",
+        "description": "Un lupo affamato e aggressivo, reso feroce dalla fame",
+        "category": "BEAST",
+        "tier": "standard",
+        "stats": {
+          "hp": 25,
+          "max_hp": 25,
+          "attack_bonus": 4,
+          "defense_class": 13,
+          "damage": { "min": 1, "max": 6, "bonus": 2 },
+          "resistance": 1,
+          "speed": 4
+        },
+        "abilities": ["pack_tactics", "howl"],
+        "exp_value": 35,
+        "encounter_text": "Un lupo emaciato ti fissa con occhi gialli, ringhiando minacciosamente mentre si prepara ad attaccare.",
+        "loot_table": {
+          "meat_raw": 0.8,
+          "wolf_pelt": 0.6,
+          "sharp_teeth": 0.4,
+          "animal_hide": 0.5
+        },
+        "biome_modifiers": {
+          "FOREST": 1.4,
+          "PLAINS": 1.2,
+          "CITY": 0.6
+        }
+      },
+      "dangerous": {
+        "id": "beast_bear_mutant",
+        "name": "Orso Mutante",
+        "description": "Una montagna di muscoli e furia, deformato dalle radiazioni",
+        "category": "BEAST",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 45,
+          "max_hp": 45,
+          "attack_bonus": 7,
+          "defense_class": 16,
+          "damage": { "min": 2, "max": 10, "bonus": 3 },
+          "resistance": 4,
+          "speed": 2
+        },
+        "abilities": ["rage", "thick_hide", "intimidate"],
+        "exp_value": 80,
+        "encounter_text": "Il terreno trema sotto i passi di una creatura massiccia. Un orso deforme, con arti extra e occhi multipli, ti fissa.",
+        "loot_table": {
+          "meat_raw": 0.9,
+          "animal_hide": 0.7,
+          "bear_claw": 0.5,
+          "thick_fur": 0.8,
+          "mutant_gland": 0.3
+        },
+        "biome_modifiers": {
+          "FOREST": 1.3,
+          "MOUNTAINS": 1.5,
+          "CITY": 0.7
+        }
+      }
+    },
+    "SCAVENGER": {
+      "weak": {
+        "id": "scavenger_desperate",
+        "name": "Cercatore Affamato",
+        "description": "Un sopravvissuto disperato che cerca cibo",
+        "category": "SCAVENGER",
+        "tier": "weak",
+        "stats": {
+          "hp": 15,
+          "max_hp": 15,
+          "attack_bonus": 2,
+          "defense_class": 12,
+          "damage": { "min": 1, "max": 6, "bonus": 0 },
+          "resistance": 1,
+          "speed": 3
+        },
+        "abilities": ["desperate_strike", "flee_attempt"],
+        "exp_value": 20,
+        "encounter_text": "Una figura emaciata emerge dalle rovine, stringendo un coltello arrugginito. 'Il tuo cibo... dammelo...'",
+        "loot_table": {
+          "bandages_dirty": 0.4,
+          "water_dirty": 0.3,
+          "berries": 0.3,
+          "scrap_metal": 0.2,
+          "weapon_knife_rusty": 0.1
+        },
+        "biome_modifiers": {
+          "RUINS": 1.4,
+          "CITY": 1.2,
+          "FOREST": 0.8
+        }
+      },
+      "standard": {
+        "id": "scavenger_ruins",
+        "name": "Sciacallo delle Rovine",
+        "description": "Un saccheggiatore esperto che conosce ogni trucco",
+        "category": "SCAVENGER",
+        "tier": "standard",
+        "stats": {
+          "hp": 22,
+          "max_hp": 22,
+          "attack_bonus": 4,
+          "defense_class": 14,
+          "damage": { "min": 1, "max": 8, "bonus": 1 },
+          "resistance": 2,
+          "speed": 3
+        },
+        "abilities": ["dirty_fighting", "scavenge", "trap_knowledge"],
+        "exp_value": 35,
+        "encounter_text": "Un sopravvissuto in equipaggiamento improvvisato ti studia. 'Hai qualcosa di valore, vedo. Possiamo fare questo nel modo facile...'",
+        "loot_table": {
+          "ration_pack": 0.5,
+          "lockpick_set_crude": 0.2,
+          "repair_kit": 0.1,
+          "ammo_9mm": 0.3,
+          "scrap_metal": 0.4
+        },
+        "biome_modifiers": {
+          "RUINS": 1.5,
+          "CITY": 1.3,
+          "VILLAGE": 1.1
+        }
+      },
+      "dangerous": {
+        "id": "scavenger_veteran",
+        "name": "Veterano delle Terre Desolate",
+        "description": "Un sopravvissuto indurito da anni di saccheggi",
+        "category": "SCAVENGER",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 30,
+          "max_hp": 30,
+          "attack_bonus": 6,
+          "defense_class": 16,
+          "damage": { "min": 1, "max": 10, "bonus": 2 },
+          "resistance": 3,
+          "speed": 3
+        },
+        "abilities": ["veteran_tactics", "survival_instinct", "equipment_mastery"],
+        "exp_value": 60,
+        "encounter_text": "Un uomo coperto di cicatrici e trofei di battaglia ti blocca la strada. 'Ho visto di tutto, ragazzo. Tu non mi fai paura.'",
+        "loot_table": {
+          "weapon_pistol_old": 0.2,
+          "armor_kevlar_damaged": 0.1,
+          "medkit_field": 0.2,
+          "map_fragment_local": 0.3,
+          "ammo_9mm": 0.4
+        },
+        "biome_modifiers": {
+          "RUINS": 1.2,
+          "PLAINS": 1.3,
+          "CITY": 1.1
+        }
+      }
+    },
+    "BANDIT": {
+      "weak": {
+        "id": "bandit_novice",
+        "name": "Bandito Novizio",
+        "description": "Un membro giovane di una banda, ancora inesperto",
+        "category": "BANDIT",
+        "tier": "weak",
+        "stats": {
+          "hp": 18,
+          "max_hp": 18,
+          "attack_bonus": 3,
+          "defense_class": 13,
+          "damage": { "min": 1, "max": 6, "bonus": 1 },
+          "resistance": 1,
+          "speed": 3
+        },
+        "abilities": ["gang_tactics", "intimidate"],
+        "exp_value": 25,
+        "encounter_text": "Un giovane con una fascia rossa al braccio salta fuori. 'Alt! Questa è territorio dei Teschi Rossi!'",
+        "loot_table": {
+          "bandages_clean": 0.4,
+          "water_bottle": 0.3,
+          "ammo_9mm": 0.3,
+          "gang_insignia": 0.5,
+          "weapon_knife_rusty": 0.2
+        },
+        "biome_modifiers": {
+          "PLAINS": 1.3,
+          "ROADS": 1.4,
+          "FOREST": 0.9
+        }
+      },
+      "standard": {
+        "id": "bandit_raider",
+        "name": "Razziatore dei Teschi",
+        "description": "Un bandito veterano con tatuaggi tribali",
+        "category": "BANDIT",
+        "tier": "standard",
+        "stats": {
+          "hp": 28,
+          "max_hp": 28,
+          "attack_bonus": 5,
+          "defense_class": 15,
+          "damage": { "min": 1, "max": 8, "bonus": 2 },
+          "resistance": 2,
+          "speed": 3
+        },
+        "abilities": ["gang_tactics", "brutal_strike", "rally"],
+        "exp_value": 45,
+        "encounter_text": "Un bandito coperto di tatuaggi di teschi ghigna. 'Un altro agnello per il macello. I Teschi Rossi ringraziano.'",
+        "loot_table": {
+          "weapon_machete": 0.3,
+          "leather_jacket_worn": 0.4,
+          "stimpak_crude": 0.2,
+          "trophy_ears": 0.2,
+          "ammo_9mm": 0.5
+        },
+        "biome_modifiers": {
+          "PLAINS": 1.4,
+          "ROADS": 1.5,
+          "VILLAGE": 1.2
+        }
+      },
+      "dangerous": {
+        "id": "bandit_captain",
+        "name": "Capitano dei Teschi Rossi",
+        "description": "Un leader spietato decorato con ossa umane",
+        "category": "BANDIT",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 40,
+          "max_hp": 40,
+          "attack_bonus": 7,
+          "defense_class": 17,
+          "damage": { "min": 2, "max": 8, "bonus": 3 },
+          "resistance": 3,
+          "speed": 3
+        },
+        "abilities": ["leadership", "brutal_strike", "intimidating_presence", "tactical_mind"],
+        "exp_value": 70,
+        "encounter_text": "Un bandito coperto di ossa e trofei umani emerge. 'Sei nel territorio sbagliato, straniero. Preparati a diventare un trofeo.'",
+        "loot_table": {
+          "weapon_shotgun_sawed": 0.3,
+          "armor_leather_reinforced": 0.4,
+          "ammo_shell": 0.5,
+          "gang_leader_badge": 0.6,
+          "medkit_field": 0.3
+        },
+        "biome_modifiers": {
+          "PLAINS": 1.3,
+          "ROADS": 1.4,
+          "VILLAGE": 1.5
+        }
+      }
+    },
+    "RAIDER": {
+      "weak": {
+        "id": "raider_scout",
+        "name": "Esploratore Raider",
+        "description": "Un raider veloce su un veicolo leggero",
+        "category": "RAIDER",
+        "tier": "weak",
+        "stats": {
+          "hp": 20,
+          "max_hp": 20,
+          "attack_bonus": 4,
+          "defense_class": 14,
+          "damage": { "min": 1, "max": 6, "bonus": 2 },
+          "resistance": 2,
+          "speed": 4
+        },
+        "abilities": ["hit_and_run", "vehicle_combat", "speed_boost"],
+        "exp_value": 30,
+        "encounter_text": "Il rombo di un motore si avvicina. Un raider su una moto modificata ti punta addosso.",
+        "loot_table": {
+          "gasoline": 0.6,
+          "vehicle_parts": 0.4,
+          "ammo_9mm": 0.4,
+          "leather_jacket": 0.3,
+          "road_flare": 0.2
+        },
+        "biome_modifiers": {
+          "ROADS": 1.6,
+          "PLAINS": 1.3,
+          "CITY": 0.8
+        }
+      },
+      "standard": {
+        "id": "raider_warrior",
+        "name": "Guerriero della Strada",
+        "description": "Un guerriero raider con armatura improvvisata",
+        "category": "RAIDER",
+        "tier": "standard",
+        "stats": {
+          "hp": 32,
+          "max_hp": 32,
+          "attack_bonus": 6,
+          "defense_class": 16,
+          "damage": { "min": 1, "max": 10, "bonus": 2 },
+          "resistance": 3,
+          "speed": 3
+        },
+        "abilities": ["road_warrior", "ramming_attack", "vehicle_mastery"],
+        "exp_value": 50,
+        "encounter_text": "Un guerriero in armatura di pneumatici e metallo scende dal suo veicolo blindato. 'La strada richiede un pedaggio di sangue.'",
+        "loot_table": {
+          "weapon_shotgun_sawed": 0.2,
+          "armor_tire": 0.4,
+          "ammo_shell": 0.5,
+          "road_warrior_mask": 0.3,
+          "vehicle_parts": 0.6
+        },
+        "biome_modifiers": {
+          "ROADS": 1.5,
+          "PLAINS": 1.2,
+          "RUINS": 1.1
+        }
+      },
+      "dangerous": {
+        "id": "raider_warlord",
+        "name": "Signore della Guerra Mobile",
+        "description": "Un comandante raider su un veicolo da guerra",
+        "category": "RAIDER",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 50,
+          "max_hp": 50,
+          "attack_bonus": 8,
+          "defense_class": 18,
+          "damage": { "min": 2, "max": 10, "bonus": 4 },
+          "resistance": 5,
+          "speed": 3
+        },
+        "abilities": ["warlord_presence", "vehicle_weapons", "tactical_superiority", "inspire_fear"],
+        "exp_value": 100,
+        "encounter_text": "Un veicolo corazzato coperto di teschi e spuntoni si ferma. Ne emerge un gigante in armatura completa.",
+        "loot_table": {
+          "weapon_flamethrower": 0.2,
+          "armor_raider_elite": 0.3,
+          "war_rig_key": 0.1,
+          "raider_warmap": 0.4,
+          "vehicle_parts": 0.8
+        },
+        "biome_modifiers": {
+          "ROADS": 1.4,
+          "PLAINS": 1.3,
+          "RUINS": 1.2
+        }
+      }
+    },
+    "MUTANT": {
+      "weak": {
+        "id": "mutant_ghoul",
+        "name": "Ghoul Errante",
+        "description": "Un umano deformato dalle radiazioni, ancora parzialmente senziente",
+        "category": "MUTANT",
+        "tier": "weak",
+        "stats": {
+          "hp": 16,
+          "max_hp": 16,
+          "attack_bonus": 3,
+          "defense_class": 12,
+          "damage": { "min": 1, "max": 6, "bonus": 1 },
+          "resistance": 2,
+          "speed": 2
+        },
+        "abilities": ["radiation_aura", "undead_resilience", "infectious_bite"],
+        "exp_value": 30,
+        "encounter_text": "Una figura umanoide deformata si trascina verso di te, la pelle bruciata dalle radiazioni.",
+        "loot_table": {
+          "rad_medicine": 0.3,
+          "mutant_tissue": 0.4,
+          "radioactive_material": 0.2,
+          "old_clothes": 0.3
+        },
+        "biome_modifiers": {
+          "CITY": 1.4,
+          "RUINS": 1.6,
+          "FOREST": 0.7
+        }
+      },
+      "standard": {
+        "id": "mutant_super",
+        "name": "Super Mutante",
+        "description": "Un umano trasformato in una creatura gigantesca e muscolosa",
+        "category": "MUTANT",
+        "tier": "standard",
+        "stats": {
+          "hp": 35,
+          "max_hp": 35,
+          "attack_bonus": 6,
+          "defense_class": 15,
+          "damage": { "min": 2, "max": 8, "bonus": 3 },
+          "resistance": 4,
+          "speed": 2
+        },
+        "abilities": ["super_strength", "radiation_immunity", "berserker_rage"],
+        "exp_value": 55,
+        "encounter_text": "Un gigante verde con muscoli sproporzionati ti blocca la strada, brandendo un'arma improvvisata.",
+        "loot_table": {
+          "super_mutant_blood": 0.4,
+          "heavy_weapon_parts": 0.3,
+          "rad_medicine": 0.5,
+          "mutant_meat": 0.6
+        },
+        "biome_modifiers": {
+          "CITY": 1.5,
+          "RUINS": 1.4,
+          "LABORATORY": 1.8
+        }
+      },
+      "dangerous": {
+        "id": "mutant_behemoth",
+        "name": "Behemoth Radioattivo",
+        "description": "Una massa informe di carne mutata e radiazioni",
+        "category": "MUTANT",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 60,
+          "max_hp": 60,
+          "attack_bonus": 8,
+          "defense_class": 17,
+          "damage": { "min": 3, "max": 12, "bonus": 4 },
+          "resistance": 6,
+          "speed": 1
+        },
+        "abilities": ["radiation_burst", "regeneration", "toxic_cloud", "massive_size"],
+        "exp_value": 120,
+        "encounter_text": "Una massa pulsante di carne radioattiva emerge dal terreno, emettendo un bagliore verdastro mortale.",
+        "loot_table": {
+          "pure_radiation_sample": 0.3,
+          "mutant_core": 0.2,
+          "rad_medicine": 0.7,
+          "rare_mutant_organ": 0.4
+        },
+        "biome_modifiers": {
+          "RUINS": 1.6,
+          "LABORATORY": 2.0,
+          "CITY": 1.3
+        }
+      }
+    },
+    "DRONE": {
+      "weak": {
+        "id": "drone_scout",
+        "name": "Drone da Ricognizione",
+        "description": "Un piccolo drone militare ancora funzionante",
+        "category": "DRONE",
+        "tier": "weak",
+        "stats": {
+          "hp": 10,
+          "max_hp": 10,
+          "attack_bonus": 4,
+          "defense_class": 15,
+          "damage": { "min": 1, "max": 4, "bonus": 1 },
+          "resistance": 3,
+          "speed": 5
+        },
+        "abilities": ["flight", "electronic_warfare", "self_destruct"],
+        "exp_value": 25,
+        "encounter_text": "Un ronzio metallico riempie l'aria. Un piccolo drone militare ti ha individuato.",
+        "loot_table": {
+          "electronic_components": 0.6,
+          "battery_cell": 0.4,
+          "scrap_metal": 0.5,
+          "targeting_chip": 0.2
+        },
+        "biome_modifiers": {
+          "CITY": 1.3,
+          "LABORATORY": 1.5,
+          "FOREST": 0.6
+        }
+      },
+      "standard": {
+        "id": "drone_combat",
+        "name": "Drone da Combattimento",
+        "description": "Un drone militare armato con sistemi d'arma integrati",
+        "category": "DRONE",
+        "tier": "standard",
+        "stats": {
+          "hp": 25,
+          "max_hp": 25,
+          "attack_bonus": 6,
+          "defense_class": 17,
+          "damage": { "min": 2, "max": 6, "bonus": 2 },
+          "resistance": 4,
+          "speed": 4
+        },
+        "abilities": ["automated_targeting", "armor_plating", "emp_resistance"],
+        "exp_value": 45,
+        "encounter_text": "Un drone da combattimento scende dal cielo, i suoi sistemi d'arma si attivano con un suono minaccioso.",
+        "loot_table": {
+          "military_electronics": 0.5,
+          "weapon_parts": 0.4,
+          "armor_plating": 0.4,
+          "targeting_module": 0.3,
+          "energy_cell": 0.5
+        },
+        "biome_modifiers": {
+          "CITY": 1.4,
+          "LABORATORY": 1.6,
+          "MILITARY_BASE": 1.8
+        }
+      },
+      "dangerous": {
+        "id": "drone_mech",
+        "name": "Mech da Guerra Autonomo",
+        "description": "Un'unità da combattimento pesante dell'esercito pre-guerra",
+        "category": "DRONE",
+        "tier": "dangerous",
+        "stats": {
+          "hp": 80,
+          "max_hp": 80,
+          "attack_bonus": 10,
+          "defense_class": 20,
+          "damage": { "min": 3, "max": 10, "bonus": 5 },
+          "resistance": 8,
+          "speed": 2
+        },
+        "abilities": ["heavy_armor", "weapon_systems", "tactical_ai", "self_repair"],
+        "exp_value": 150,
+        "encounter_text": "Un mech bipede alto tre metri emerge dalle rovine. 'PROTOCOLLO DIFESA ATTIVO. ELIMINAZIONE TARGET IN CORSO.'",
+        "loot_table": {
+          "fusion_battery": 0.3,
+          "military_cpu": 0.2,
+          "plasma_coil": 0.1,
+          "mech_armor_piece": 0.4,
+          "advanced_electronics": 0.6
+        },
+        "biome_modifiers": {
+          "LABORATORY": 1.8,
+          "MILITARY_BASE": 2.0,
+          "CITY": 1.2
+        }
+      }
+    }
+  },
+  "encounter_weights": {
+    "BEAST": 20,
+    "SCAVENGER": 15,
+    "BANDIT": 15,
+    "RAIDER": 12,
+    "MUTANT": 10,
+    "DRONE": 8
+  },
+  "tier_progression": {
+    "days_0_5": ["weak"],
+    "days_6_15": ["weak", "standard"],
+    "days_16_plus": ["weak", "standard", "dangerous"]
+  },
+  "difficulty_scaling": {
+    "tier_1": {
+      "hp_multiplier": 1.0,
+      "damage_multiplier": 1.0,
+      "exp_multiplier": 1.0
+    },
+    "tier_2": {
+      "hp_multiplier": 1.2,
+      "damage_multiplier": 1.1,
+      "exp_multiplier": 1.3
+    },
+    "tier_3": {
+      "hp_multiplier": 1.5,
+      "damage_multiplier": 1.3,
+      "exp_multiplier": 1.6
+    }
+  }
+}

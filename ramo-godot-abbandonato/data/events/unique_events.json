@@ -1,0 +1,111 @@
+{
+  "UNIQUE": [
+    {
+      "id": "city_unique_webradio",
+      "isUnique": true,
+      "title": "Segnale Radio Fantasma",
+      "description": "Da un vecchio ricevitore radio in un negozio di elettronica in rovina, senti una voce metallica che ripete un messaggio in loop: '...safe...place...coordinate...tre-uno-quattro...uno-cinque-nove...'.",
+      "choices": [
+        {
+          "text": "Ascolta attentamente e annota",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+          "successText": "Annoti le coordinate. Sembrano puntare a una zona remota delle montagne. Che sia il 'Safe Place' di cui parlava tuo padre?",
+          "failureText": "La trasmissione si interrompe con una scarica di statica prima che tu possa capire tutte le cifre. Un'occasione persa.",
+          "reward": { "type": "quest_update", "questId": "main_quest", "data": { "coordinates_found": true } }
+        }
+      ]
+    },
+    {
+      "id": "unique_eurocenter",
+      "isUnique": true,
+      "title": "Resti di un'Epoca Lontana",
+      "description": "Ti imbatti nelle rovine di quello che sembra un vecchio ufficio. Un'insegna di metallo contorto, caduta a terra, recita '...mobiliare Eurocenter'. All'interno, tra le carte fradice, noti lo scheletro di un uomo in un abito elegante, ormai a brandelli. Al collo porta ancora un cartellino identificativo: 'Marco G.'.",
+      "choices": [
+        {
+          "text": "Fruga tra i resti",
+          "resultText": "Tra le macerie e i ricordi di un mondo perduto, trovi alcuni oggetti utili che il povero Marco non avrà più bisogno di usare.",
+          "reward": { "type": "items", "items": [{ "id": "canned_food", "quantity": 1 }, { "id": "medical_supplies", "quantity": 1 }] }
+        }
+      ]
+    },
+    {
+      "id": "unique_magnetar",
+      "isUnique": true,
+      "title": "Una Scatola Misteriosa",
+      "description": "Appoggiato a un muro crollato, vedi il corpo mummificato di un uomo. Stringe al petto una piccola scatola di metallo nero, come se fosse la cosa più preziosa al mondo. Sulla scatola, un'etichetta quasi completamente corrosa dal tempo lascia intravedere una scritta: '...gnetar...cosa...'.",
+      "choices": [
+        {
+          "text": "Apri la scatola",
+          "resultText": "Con rispetto per il defunto, liberi delicatamente la scatola dalle sue mani. All'interno trovi provviste ben conservate, come se qualcuno avesse saputo che un giorno sarebbero servite a un altro sopravvissuto.",
+          "reward": { "type": "items", "items": [{ "id": "water_bottle", "quantity": 1 }, { "id": "pain_killers", "quantity": 1 }] }
+        }
+      ]
+    },
+    {
+      "id": "unique_bunker_discovery",
+      "isUnique": true,
+      "title": "Bunker Abbandonato",
+      "description": "Scopri l'ingresso nascosto di un bunker pre-guerra. La porta d'acciaio è socchiusa e un debole bagliore filtra dall'interno.",
+      "choices": [
+        {
+          "text": "Entra nel bunker",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "All'interno trovi un laboratorio intatto con equipaggiamento medico avanzato e scorte di cibo in scatola.",
+          "failureText": "Attivi accidentalmente un sistema di sicurezza. Riesci a fuggire ma il bunker si sigilla per sempre.",
+          "reward": { "type": "items", "items": [{ "id": "medkit_advanced", "quantity": 2 }, { "id": "canned_food", "quantity": 5 }] }
+        },
+        {
+          "text": "Esplora con cautela",
+          "skillCheck": { "stat": "agilita", "difficulty": 10 },
+          "successText": "Muovendoti silenziosamente, eviti le trappole e recuperi alcuni componenti tecnologici preziosi.",
+          "failureText": "Fai cadere qualcosa che attiva un allarme. Devi fuggire rapidamente a mani vuote.",
+          "reward": { "type": "items", "items": [{ "id": "tech_components", "quantity": 3 }, { "id": "battery", "quantity": 2 }] }
+        }
+      ]
+    },
+    {
+      "id": "unique_trader_caravan",
+      "isUnique": true,
+      "title": "Carovana di Mercanti",
+      "description": "Incontri una rara carovana di mercanti nomadi. Il loro leader ti osserva con interesse, valutando se sei degno di commerciare con loro.",
+      "choices": [
+        {
+          "text": "Negozia con carisma",
+          "skillCheck": { "stat": "carisma", "difficulty": 14 },
+          "successText": "Il tuo fascino convince i mercanti. Ti offrono accesso alle loro merci rare a prezzi scontati.",
+          "failureText": "I mercanti non si fidano di te. Ti permettono solo di comprare beni comuni a prezzi maggiorati.",
+          "reward": { "type": "special", "effect": "unlock_rare_trader" }
+        },
+        {
+          "text": "Dimostra la tua forza",
+          "skillCheck": { "stat": "forza", "difficulty": 15 },
+          "successText": "Impressioni i mercanti con la tua prestanza fisica. Ti offrono di unirti alla loro scorta armata.",
+          "failureText": "Non riesci a impressionare nessuno. I mercanti ti ignorano e proseguono il loro viaggio.",
+          "reward": { "type": "special", "effect": "caravan_guard_offer" }
+        }
+      ]
+    },
+    {
+      "id": "unique_ancient_library",
+      "isUnique": true,
+      "title": "Biblioteca Antica",
+      "description": "Tra le rovine di una città, trovi una biblioteca miracolosamente intatta. I libri potrebbero contenere conoscenze perdute del mondo di prima.",
+      "choices": [
+        {
+          "text": "Studia i testi scientifici",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 16 },
+          "successText": "Apprendi formule chimiche avanzate e tecniche di purificazione. La tua conoscenza si espande notevolmente.",
+          "failureText": "I testi sono troppo complessi. Riesci solo a comprendere alcune nozioni di base.",
+          "reward": { "type": "permanent", "effect": "intelligence_boost", "value": 2 }
+        },
+        {
+          "text": "Cerca mappe e guide",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi mappe dettagliate della regione e guide di sopravvivenza. Ora conosci meglio il territorio.",
+          "failureText": "Le mappe sono troppo danneggiate per essere utili. Recuperi solo qualche informazione frammentaria.",
+          "reward": { "type": "special", "effect": "reveal_all_pois" }
+        }
+      ]
+    }
+  ]
+}

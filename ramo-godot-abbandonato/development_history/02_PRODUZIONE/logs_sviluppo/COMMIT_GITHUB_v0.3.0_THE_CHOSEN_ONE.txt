@@ -1,0 +1,19 @@
+The Safe Place - v0.3.0 "THE CHOSEN ONE"
+Data: 2025-01-28
+Branch: godot-port
+
+Highlights:
+- Character Creation Popup (CanvasLayer) with progressive stat reveal and HP
+- Hotkeys: R to reroll, Enter/Space to accept, Esc to close
+- GameUI integration: instantiate, connect signals, manage input state
+- PlayerManager integration: apply rolled stats, compute HP, reset inventory
+- Post-accept: add starting items and full UI refresh
+
+Files Touched:
+- scripts/ui/GameUI.gd
+- scripts/ui/popups/CharacterCreationPopup.gd
+- scenes/ui/popups/CharacterCreationPopup.tscn
+
+Notes:
+- No breaking changes. Popup shown on first launch automatically via call_deferred.
+- Input guarded to prevent interactions outside popup during generation.

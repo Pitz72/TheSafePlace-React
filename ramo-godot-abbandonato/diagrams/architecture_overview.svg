@@ -1,0 +1,187 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .manager-box { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+      .core-box { fill: #1a365d; stroke: #2b6cb0; stroke-width: 2; }
+      .ui-box { fill: #2d5016; stroke: #38a169; stroke-width: 2; }
+      .data-box { fill: #744210; stroke: #d69e2e; stroke-width: 2; }
+      .text { fill: white; font-family: 'Courier New', monospace; font-size: 12px; text-anchor: middle; }
+      .title { fill: white; font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; text-anchor: middle; }
+      .connection { stroke: #a0aec0; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .signal-connection { stroke: #f56565; stroke-width: 1.5; fill: none; stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a0aec0" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="30" class="title" font-size="18">THE SAFE PLACE - ARCHITETTURA SISTEMA</text>
+  <text x="600" y="50" class="text">Singleton Managers + Core Systems + UI Layer</text>
+  
+  <!-- Core Engine Layer -->
+  <rect x="50" y="80" width="1100" height="60" class="core-box" rx="5"/>
+  <text x="600" y="105" class="title">GODOT ENGINE 4.x</text>
+  <text x="600" y="125" class="text">Autoload System • Scene Tree • Signal System • Resource Management</text>
+  
+  <!-- Singleton Managers Layer -->
+  <g id="managers-layer">
+    <!-- PlayerManager -->
+    <rect x="80" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="150" y="205" class="title">PlayerManager</text>
+    <text x="150" y="220" class="text">• Stats & HP</text>
+    <text x="150" y="235" class="text">• Inventory</text>
+    <text x="150" y="250" class="text">• Progression</text>
+    
+    <!-- DataManager -->
+    <rect x="240" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="310" y="205" class="title">DataManager</text>
+    <text x="310" y="220" class="text">• Items DB</text>
+    <text x="310" y="235" class="text">• Events DB</text>
+    <text x="310" y="250" class="text">• JSON Loader</text>
+    
+    <!-- EventManager -->
+    <rect x="400" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="470" y="205" class="title">EventManager</text>
+    <text x="470" y="220" class="text">• Random Events</text>
+    <text x="470" y="235" class="text">• Skill Checks</text>
+    <text x="470" y="250" class="text">• Consequences</text>
+    
+    <!-- InputManager -->
+    <rect x="560" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="630" y="205" class="title">InputManager</text>
+    <text x="630" y="220" class="text">• State Machine</text>
+    <text x="630" y="235" class="text">• Key Mapping</text>
+    <text x="630" y="250" class="text">• Signal Routing</text>
+    
+    <!-- CraftingManager -->
+    <rect x="720" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="790" y="205" class="title">CraftingManager</text>
+    <text x="790" y="220" class="text">• Recipes</text>
+    <text x="790" y="235" class="text">• Workbench</text>
+    <text x="790" y="250" class="text">• Skills</text>
+    
+    <!-- TimeManager -->
+    <rect x="880" y="180" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="950" y="205" class="title">TimeManager</text>
+    <text x="950" y="220" class="text">• Day/Night</text>
+    <text x="950" y="235" class="text">• Survival</text>
+    <text x="950" y="250" class="text">• Events</text>
+    
+    <!-- Second Row Managers -->
+    <!-- QuestManager -->
+    <rect x="160" y="290" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="230" y="315" class="title">QuestManager</text>
+    <text x="230" y="330" class="text">• Main Quest</text>
+    <text x="230" y="345" class="text">• Side Quests</text>
+    <text x="230" y="360" class="text">• Progress</text>
+    
+    <!-- CombatManager -->
+    <rect x="320" y="290" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="390" y="315" class="title">CombatManager</text>
+    <text x="390" y="330" class="text">• Turn System</text>
+    <text x="390" y="345" class="text">• Actions</text>
+    <text x="390" y="360" class="text">• AI Logic</text>
+    
+    <!-- NarrativeManager -->
+    <rect x="480" y="290" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="550" y="315" class="title">NarrativeManager</text>
+    <text x="550" y="330" class="text">• Emotions</text>
+    <text x="550" y="345" class="text">• Memory</text>
+    <text x="550" y="360" class="text">• Empathy</text>
+    
+    <!-- SaveLoadManager -->
+    <rect x="640" y="290" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="710" y="315" class="title">SaveLoadManager</text>
+    <text x="710" y="330" class="text">• Serialization</text>
+    <text x="710" y="345" class="text">• File I/O</text>
+    <text x="710" y="360" class="text">• Validation</text>
+    
+    <!-- ThemeManager -->
+    <rect x="800" y="290" width="140" height="80" class="manager-box" rx="5"/>
+    <text x="870" y="315" class="title">ThemeManager</text>
+    <text x="870" y="330" class="text">• CRT Shader</text>
+    <text x="870" y="345" class="text">• UI Themes</text>
+    <text x="870" y="360" class="text">• Fonts</text>
+  </g>
+  
+  <!-- Data Layer -->
+  <g id="data-layer">
+    <rect x="80" y="420" width="200" height="100" class="data-box" rx="5"/>
+    <text x="180" y="445" class="title">DATA LAYER</text>
+    <text x="180" y="465" class="text">• items/*.json</text>
+    <text x="180" y="480" class="text">• events/*.json</text>
+    <text x="180" y="495" class="text">• quests/*.json</text>
+    <text x="180" y="510" class="text">• system/*.json</text>
+    
+    <!-- World System -->
+    <rect x="320" y="420" width="200" height="100" class="core-box" rx="5"/>
+    <text x="420" y="445" class="title">WORLD SYSTEM</text>
+    <text x="420" y="465" class="text">• Map Navigation</text>
+    <text x="420" y="480" class="text">• Biome Logic</text>
+    <text x="420" y="495" class="text">• Location Events</text>
+    <text x="420" y="510" class="text">• Shelter System</text>
+  </g>
+  
+  <!-- UI Layer -->
+  <g id="ui-layer">
+    <rect x="580" y="420" width="540" height="100" class="ui-box" rx="5"/>
+    <text x="850" y="445" class="title">UI LAYER</text>
+    <text x="700" y="465" class="text">• GameUI.gd</text>
+    <text x="700" y="480" class="text">• Panels System</text>
+    <text x="700" y="495" class="text">• Popups</text>
+    <text x="1000" y="465" class="text">• MainMenu.gd</text>
+    <text x="1000" y="480" class="text">• Boot Sequence</text>
+    <text x="1000" y="495" class="text">• CRT Effects</text>
+  </g>
+  
+  <!-- Game Loop -->
+  <rect x="200" y="580" width="800" height="80" class="core-box" rx="5"/>
+  <text x="600" y="605" class="title">GAME LOOP</text>
+  <text x="350" y="625" class="text">Input → Event Processing → State Update → UI Refresh</text>
+  <text x="850" y="625" class="text">Auto-Save → Time Advance → Survival Check</text>
+  <text x="600" y="645" class="text">Signal-Based Communication • Decoupled Architecture • Performance Optimized</text>
+  
+  <!-- Connections -->
+  <!-- Manager to Data connections -->
+  <line x1="310" y1="260" x2="180" y2="420" class="connection"/>
+  <line x1="470" y1="260" x2="180" y2="420" class="connection"/>
+  <line x1="230" y1="370" x2="180" y2="420" class="connection"/>
+  
+  <!-- Manager to World connections -->
+  <line x1="470" y1="260" x2="420" y2="420" class="connection"/>
+  <line x1="150" y1="260" x2="420" y2="420" class="connection"/>
+  
+  <!-- Manager to UI connections -->
+  <line x1="630" y1="260" x2="850" y2="420" class="connection"/>
+  <line x1="870" y1="370" x2="850" y2="420" class="connection"/>
+  
+  <!-- Signal connections (dashed red lines) -->
+  <line x1="150" y1="180" x2="470" y2="180" class="signal-connection"/>
+  <line x1="630" y1="180" x2="850" y2="420" class="signal-connection"/>
+  <line x1="390" y1="290" x2="150" y2="180" class="signal-connection"/>
+  
+  <!-- Legend -->
+  <g id="legend">
+    <rect x="50" y="700" width="300" height="80" fill="#1a202c" stroke="#4a5568" stroke-width="1" rx="5"/>
+    <text x="200" y="720" class="title">LEGENDA</text>
+    <line x1="70" y1="735" x2="100" y2="735" class="connection"/>
+    <text x="110" y="740" class="text">Dipendenza Diretta</text>
+    <line x1="70" y1="750" x2="100" y2="750" class="signal-connection"/>
+    <text x="110" y="755" class="text">Comunicazione Signal</text>
+    <rect x="70" y="760" width="20" height="15" class="manager-box"/>
+    <text x="100" y="772" class="text">Singleton Manager</text>
+  </g>
+  
+  <!-- Performance Metrics -->
+  <g id="metrics">
+    <rect x="850" y="700" width="300" height="80" fill="#1a202c" stroke="#4a5568" stroke-width="1" rx="5"/>
+    <text x="1000" y="720" class="title">PERFORMANCE</text>
+    <text x="870" y="740" class="text">• 60+ FPS Target</text>
+    <text x="870" y="755" class="text">• <100MB RAM Usage</text>
+    <text x="870" y="770" class="text">• <1ms Manager Calls</text>
+    <text x="1050" y="740" class="text">• Zero Memory Leaks</text>
+    <text x="1050" y="755" class="text">• Signal-Based Decoupling</text>
+    <text x="1050" y="770" class="text">• Lazy Loading Data</text>
+  </g>
+</svg>

@@ -1,0 +1,197 @@
+{
+  "items": [
+    {
+      "id": "canned_food",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 10,
+      "properties": {
+        "energy_value": 60,
+        "satiation": 50,
+        "shelf_life": "indefinite"
+      }
+    },
+    {
+      "id": "energy_bar",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 15,
+      "properties": {
+        "energy_value": 40,
+        "quick_energy": true
+      }
+    },
+    {
+      "id": "flashlight",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 5,
+      "properties": {
+        "uses_batteries": true,
+        "brightness": "medium"
+      }
+    },
+    {
+      "id": "tool_hammer",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 3,
+      "properties": {
+        "durability": 100,
+        "weight": 0.8
+      }
+    },
+    {
+      "id": "nails_box",
+      "category": "MATERIAL",
+      "subcategory": "BUILDING",
+      "max_stack": 20,
+      "properties": {
+        "quantity_per_box": 50
+      }
+    },
+    {
+      "id": "carrot",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 10,
+        "nutritional_value": "high"
+      }
+    },
+    {
+      "id": "potato",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 25,
+        "cookable": true
+      }
+    },
+    {
+      "id": "garden_tools",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 3,
+      "properties": {
+        "farming_bonus": 15
+      }
+    },
+    {
+      "id": "metal_scrap",
+      "category": "MATERIAL",
+      "subcategory": "SCRAP",
+      "max_stack": 50,
+      "properties": {
+        "recyclable": true
+      }
+    },
+    {
+      "id": "rubber_gasket",
+      "category": "MATERIAL",
+      "subcategory": "MECHANICAL",
+      "max_stack": 30,
+      "properties": {
+        "sealing_quality": "waterproof"
+      }
+    },
+    {
+      "id": "rubber_ball",
+      "category": "MISC",
+      "subcategory": "TOY",
+      "max_stack": 10,
+      "properties": {
+        "bounce_factor": 0.8
+      }
+    },
+    {
+      "id": "folding_knife",
+      "category": "WEAPON",
+      "subcategory": "MELEE",
+      "max_stack": 5,
+      "properties": {
+        "damage": 15,
+        "durability": 80,
+        "concealed": true
+      }
+    },
+    {
+      "id": "batteries_pack",
+      "category": "MISC",
+      "subcategory": "ELECTRONICS",
+      "max_stack": 20,
+      "properties": {
+        "power_units": 100
+      }
+    },
+    {
+      "id": "resistant_wire",
+      "category": "MATERIAL",
+      "subcategory": "ELECTRONICS",
+      "max_stack": 30,
+      "properties": {
+        "conductivity": "high",
+        "resistance": "extreme_temp"
+      }
+    },
+    {
+      "id": "metal_piece",
+      "category": "MATERIAL",
+      "subcategory": "SCRAP",
+      "max_stack": 40,
+      "properties": {
+        "malleable": true
+      }
+    },
+    {
+      "id": "MANUAL_MEDICAL_BASIC",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "first_aid"
+      }
+    },
+    {
+      "id": "MANUAL_MEDICAL_ADVANCED",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "surgery"
+      }
+    },
+    {
+      "id": "MANUAL_WEAPONS_BASIC",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "marksmanship"
+      }
+    },
+    {
+      "id": "MANUAL_WEAPONS_ADVANCED",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "tactics"
+      }
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+================================================================================
+THE SAFE PLACE - CRITICAL TECHNICAL ANALYSIS REPORT
+================================================================================
+Date: 2025-10-03
+Analyzed Version: v0.9.7.5 "Core Systems Integration"
+Analyst: AI Technical Director
+Severity: 🔴 CRITICAL - ACTION REQUIRED
+
+EXECUTIVE SUMMARY:
+------------------
+Project Health Score: 50% (NEEDS ATTENTION)
+
+CRITICAL ISSUES FOUND:
+1. ❌ 20 Autoload (7 managers + 12 legacy aliases + 1 tool) vs 7 documented
+2. ❌ 223 Legacy manager references in codebase preventing cleanup
+3. ⚠️  Documentation-code misalignment at ~40%
+
+IMPACT: +270% singleton overhead, fragile architecture, high maintenance cost
+
+RECOMMENDATION: Execute Option B Refactoring (160 hours over 4 weeks)
+ALTERNATIVE: Option A Rollback to legacy (80 hours over 2 weeks)
+
+DOCUMENTS CREATED FOR YOUR REVIEW:
+-----------------------------------
+1. START_HERE.md                    ← READ THIS FIRST (5 min)
+2. EXECUTIVE_SUMMARY.md             ← Full analysis (15 min)
+3. REFACTORING_DECISION.md          ← Decision framework (10 min)
+4. RECOVERY_PLAN_OPTION_B.md        ← 160h implementation plan
+5. This file (audit_report.txt)     ← Detailed 223 references
+
+QUICK HEALTH CHECK: python scripts/tools/quick_health_check.py
+
+================================================================================
+MANAGER REFERENCE AUDIT REPORT
+================================================================================
+
+📊 SUMMARY
+   Total files with legacy references: 14
+   Total references to replace: 205
+
+================================================================================
+
+📋 REFERENCES BY LEGACY MANAGER:
+================================================================================
+
+❌ PlayerManager → ✅ PlayerSystemManager
+   Total occurrences: 139
+
+   📄 scripts\MainGame.gd (17 occurrences)
+      Line 378: PlayerManager.modify_hp(10)...
+      Line 382: PlayerManager.narrative_log_generated.emit("[color=#ffdd00]Ti concedi ...
+      Line 383: PlayerManager.narrative_log_generated.emit("[color=#888888]Tempo trasc...
+      Line 399: PlayerManager.add_item(item.id, item.quantity)...
+      Line 401: PlayerManager.narrative_log_generated.emit("[color=#00ff00]Frugando co...
+      ... and 12 more
+
+   📄 scripts\debug\TestProgressionSystem.gd (32 occurrences)
+      Line 65: var progression_data = PlayerManager.get_progression_data()...
+      Line 74: print("     %s: %d" % [stat_name.capitalize(), PlayerManager.get_stat(...
+      Line 81: var initial_exp = PlayerManager.experience...
+      Line 84: PlayerManager.add_experience(exp_to_gain, "Test guadagno esperienza")...
+      Line 86: var final_exp = PlayerManager.experience...
+      ... and 27 more
+
+   📄 scripts\debug\TestTimeSystem.gd (32 occurrences)
+      Line 129: print("  HP: %d/%d" % [PlayerManager.hp, PlayerManager.max_hp])...
+      Line 130: print("  Food: %d/%d" % [PlayerManager.food, PlayerManager.max_food])...
+      Line 131: print("  Water: %d/%d" % [PlayerManager.water, PlayerManager.max_water...
+      Line 135: PlayerManager.apply_survival_penalties()...
+      Line 138: print("  HP: %d/%d" % [PlayerManager.hp, PlayerManager.max_hp])...
+      ... and 27 more
+
+   📄 scripts\tools\GameplayFlowTests.gd (1 occurrences)
+      Line 32: player_manager = PlayerManager.new()...
+
+   📄 scripts\tools\IntegrationTests.gd (1 occurrences)
+      Line 16: player_manager = PlayerManager.new()...
+
+   📄 scripts\tools\PlayerManagerTests.gd (38 occurrences)
+      Line 13: var char_data = PlayerManager.prepare_new_character_data()...
+      Line 47: PlayerManager.inventory.clear()...
+      Line 50: var success = PlayerManager.add_item("water_purified", 2)...
+      Line 52: assert_equal(1, PlayerManager.inventory.size(), "Inventory should have...
+      Line 55: var count = PlayerManager.get_item_count("water_purified")...
+      ... and 33 more
+
+   📄 scripts\tools\TestShelterSystem.gd (1 occurrences)
+      Line 58: if PlayerManager.has_method("modify_food") and PlayerManager.has_metho...
+
+   📄 scripts\ui\popups\LevelUpPopup.gd (13 occurrences)
+      Line 189: if not PlayerManager.has_available_stat_points():...
+      Line 195: if PlayerManager.improve_stat(stat_name):...
+      Line 204: if not PlayerManager.has_available_stat_points():...
+      Line 222: var available_points = PlayerManager.available_stat_points...
+      Line 226: forza_label.text = "Forza: %d" % PlayerManager.get_stat("forza")...
+      ... and 8 more
+
+   📄 scripts\ui\popups\RestNightPopup.gd (4 occurrences)
+      Line 67: for item_slot in PlayerManager.inventory:...
+      Line 78: PlayerManager.use_item(item_id_to_use)...
+      Line 80: PlayerManager.narrative_log_generated.emit("[color=yellow]Non hai null...
+      Line 89: for item_slot in PlayerManager.inventory:...
+
+❌ TimeManager → ✅ WorldSystemManager
+   Total occurrences: 47
+
+   📄 scripts\MainGame.gd (11 occurrences)
+      Line 207: var exp_gained = randi_range(5, 15) if TimeManager.is_night() else ran...
+      Line 222: if is_in_shelter and not TimeManager.is_night():...
+      Line 226: if is_in_shelter and TimeManager.is_night():...
+      Line 379: TimeManager.advance_time_by_moves(4)  # 4 mosse = 2 ore...
+      Line 393: TimeManager.advance_time_by_moves(1)  # 1 mossa = 30 minuti...
+      ... and 6 more
+
+   📄 scripts\debug\TestTimeSystem.gd (21 occurrences)
+      Line 79: print("⏰ Tempo iniziale: %s %s" % [TimeManager.get_formatted_time(), T...
+      Line 83: TimeManager.advance_time_by_moves(5)...
+      Line 85: print("⏰ Tempo finale: %s %s" % [TimeManager.get_formatted_time(), Tim...
+      Line 98: var moves_to_evening = ((18 * 60) - (TimeManager.current_hour * 60 + T...
+      Line 100: TimeManager.advance_time_by_moves(int(moves_to_evening))...
+      ... and 16 more
+
+   📄 scripts\managers\PlayerSystemManager.gd (2 occurrences)
+      Line 152: if not TimeManager.time_advanced.is_connected(_on_time_advanced):...
+      Line 153: TimeManager.time_advanced.connect(_on_time_advanced)...
+
+   📄 scripts\tools\ShelterSystemTest.gd (4 occurrences)
+      Line 33: print("✅ TimeManager.advance_time_until_hour() esiste")...
+      Line 35: print("❌ TimeManager.advance_time_until_hour() mancante")...
+      Line 38: print("✅ TimeManager.is_night() esiste")...
+      Line 40: print("❌ TimeManager.is_night() mancante")...
+
+   📄 scripts\tools\TestShelterSystem.gd (7 occurrences)
+      Line 34: if TimeManager.has_method("advance_time_until_hour"):...
+      Line 35: print("✅ TimeManager.advance_time_until_hour() available")...
+      Line 38: var initial_hour = TimeManager.current_hour...
+      Line 42: TimeManager.advance_time_until_hour(target_hour)...
+      Line 44: if TimeManager.current_hour == target_hour:...
+      ... and 2 more
+
+   📄 scripts\ui\panels\CommandsPanel.gd (2 occurrences)
+      Line 21: TimeManager.time_changed.connect(_on_time_changed)...
+      Line 68: return TimeManager and TimeManager.is_night()...
+
+❌ CraftingManager → ✅ WorldSystemManager
+   Total occurrences: 14
+
+   📄 scripts\MainGame.gd (4 occurrences)
+      Line 410: if CraftingManager and CraftingManager.has_workbench():...
+      Line 486: CraftingManager.set_workbench_access(has_access)...
+      Line 493: var recipes = CraftingManager.get_craftable_recipes()...
+      Line 496: var recipe = CraftingManager.get_recipe_data(recipe_id)...
+
+   📄 scripts\ui\panels\CommandsPanel.gd (1 occurrences)
+      Line 57: var workbench_status = "Disponibile" if (CraftingManager and CraftingM...
+
+   📄 scripts\ui\popups\CraftingPopup.gd (8 occurrences)
+      Line 62: var has_access = CraftingManager.has_workbench()...
+      Line 64: var skill = CraftingManager.get_crafting_skill()...
+      Line 188: var skill = CraftingManager.get_crafting_skill()...
+      Line 274: CraftingManager.CraftingResult.INSUFFICIENT_MATERIALS:...
+      Line 276: CraftingManager.CraftingResult.MISSING_TOOLS:...
+      ... and 3 more
+
+   📄 scripts\ui\popups\ShelterPopup.gd (1 occurrences)
+      Line 75: if CraftingManager and CraftingManager.has_workbench():...
+
+❌ InputManager → ✅ InterfaceSystemManager
+   Total occurrences: 4
+
+   📄 scripts\tools\ShelterSystemTest.gd (2 occurrences)
+      Line 45: print("✅ InputManager.shelter_action_requested signal esiste")...
+      Line 47: print("❌ InputManager.shelter_action_requested signal mancante")...
+
+   📄 scripts\tools\TestShelterSystem.gd (1 occurrences)
+      Line 52: if InputManager.has_signal("shelter_action_requested"):...
+
+   📄 scripts\ui\popups\LevelUpPopup.gd (1 occurrences)
+      Line 126: InputManager.set_state(InputManager.InputState.MAP)...
+
+❌ EventManager → ✅ NarrativeSystemManager
+   Total occurrences: 1
+
+   📄 scripts\MainGame.gd (1 occurrences)
+      Line 320: EventManager.trigger_random_event(biome)...
+
+================================================================================
+
+📝 REFACTORING CHECKLIST:
+================================================================================
+
+[ ] scripts\MainGame.gd
+    - Replace TimeManager → WorldSystemManager (11 times)
+    - Replace EventManager → NarrativeSystemManager (1 times)
+    - Replace PlayerManager → PlayerSystemManager (17 times)
+    - Replace CraftingManager → WorldSystemManager (4 times)
+
+[ ] scripts\debug\TestProgressionSystem.gd
+    - Replace PlayerManager → PlayerSystemManager (32 times)
+
+[ ] scripts\debug\TestTimeSystem.gd
+    - Replace TimeManager → WorldSystemManager (21 times)
+    - Replace PlayerManager → PlayerSystemManager (32 times)
+
+[ ] scripts\managers\PlayerSystemManager.gd
+    - Replace TimeManager → WorldSystemManager (2 times)
+
+[ ] scripts\tools\GameplayFlowTests.gd
+    - Replace PlayerManager → PlayerSystemManager (1 times)
+
+[ ] scripts\tools\IntegrationTests.gd
+    - Replace PlayerManager → PlayerSystemManager (1 times)
+
+[ ] scripts\tools\PlayerManagerTests.gd
+    - Replace PlayerManager → PlayerSystemManager (38 times)
+
+[ ] scripts\tools\ShelterSystemTest.gd
+    - Replace TimeManager → WorldSystemManager (4 times)
+    - Replace InputManager → InterfaceSystemManager (2 times)
+
+[ ] scripts\tools\TestShelterSystem.gd
+    - Replace TimeManager → WorldSystemManager (7 times)
+    - Replace InputManager → InterfaceSystemManager (1 times)
+    - Replace PlayerManager → PlayerSystemManager (1 times)
+
+[ ] scripts\ui\panels\CommandsPanel.gd
+    - Replace TimeManager → WorldSystemManager (2 times)
+    - Replace CraftingManager → WorldSystemManager (1 times)
+
+[ ] scripts\ui\popups\CraftingPopup.gd
+    - Replace CraftingManager → WorldSystemManager (8 times)
+
+[ ] scripts\ui\popups\LevelUpPopup.gd
+    - Replace InputManager → InterfaceSystemManager (1 times)
+    - Replace PlayerManager → PlayerSystemManager (13 times)
+
+[ ] scripts\ui\popups\RestNightPopup.gd
+    - Replace PlayerManager → PlayerSystemManager (4 times)
+
+[ ] scripts\ui\popups\ShelterPopup.gd
+    - Replace CraftingManager → WorldSystemManager (1 times)
+
+================================================================================
+
+🔧 SUGGESTED COMMANDS:
+================================================================================
+
+# Use with caution! Review changes before committing.
+# sed -i 's/\bCombatManager\b/CombatSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bCraftingManager\b/WorldSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bDataManager\b/CoreDataManager/g' scripts/**/*.gd
+# sed -i 's/\bEventManager\b/NarrativeSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bInputManager\b/InterfaceSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bNarrativeManager\b/NarrativeSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bPlayerManager\b/PlayerSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bQuestManager\b/NarrativeSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bSaveLoadManager\b/PersistenceSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bSkillCheckManager\b/PlayerSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bThemeManager\b/InterfaceSystemManager/g' scripts/**/*.gd
+# sed -i 's/\bTimeManager\b/WorldSystemManager/g' scripts/**/*.gd
+
+================================================================================
+✅ Audit completed. 205 references found in 14 files.
+================================================================================

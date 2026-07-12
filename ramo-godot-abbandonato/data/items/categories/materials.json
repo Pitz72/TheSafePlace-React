@@ -1,0 +1,235 @@
+{
+  "materials": {
+    "nails_box": {
+      "id": "nails_box",
+      "name": "Scatola di Chiodi",
+      "nameShort": "Chiodi",
+      "description": "Una scatola contenente numerosi chiodi per costruzioni.",
+      "category": "MATERIAL",
+      "subcategory": "building",
+      "rarity": "COMMON",
+      "weight": 1.0,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "quantity_per_box": 50,
+        "crafting_material": true
+      }
+    },
+    "metal_scrap": {
+      "id": "metal_scrap",
+      "name": "Rottami Metallici",
+      "nameShort": "Rottami",
+      "description": "Pezzi di metallo recuperati da strutture abbandonate.",
+      "category": "MATERIAL",
+      "subcategory": "scrap",
+      "rarity": "COMMON",
+      "weight": 2.0,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 50,
+      "properties": {
+        "recyclable": true,
+        "crafting_material": true
+      }
+    },
+    "rubber_gasket": {
+      "id": "rubber_gasket",
+      "name": "Guarnizione di Gomma",
+      "nameShort": "Guarnizione",
+      "description": "Guarnizioni di gomma per sigillare connessioni.",
+      "category": "MATERIAL",
+      "subcategory": "mechanical",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 30,
+      "properties": {
+        "sealing_quality": "waterproof",
+        "crafting_material": true
+      }
+    },
+    "resistant_wire": {
+      "id": "resistant_wire",
+      "name": "Filo Resistente",
+      "nameShort": "Filo Resistente",
+      "description": "Filo elettrico resistente alle alte temperature.",
+      "category": "MATERIAL",
+      "subcategory": "electronics",
+      "rarity": "UNCOMMON",
+      "weight": 0.5,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 30,
+      "properties": {
+        "conductivity": "high",
+        "resistance": "extreme_temp",
+        "crafting_material": true
+      }
+    },
+    "metal_piece": {
+      "id": "metal_piece",
+      "name": "Pezzo di Metallo",
+      "nameShort": "Metallo",
+      "description": "Un pezzo di metallo malleabile utilizzabile per crafting.",
+      "category": "MATERIAL",
+      "subcategory": "scrap",
+      "rarity": "COMMON",
+      "weight": 1.5,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 40,
+      "properties": {
+        "malleable": true,
+        "crafting_material": true
+      }
+    },
+    "MANUAL_MEDICAL_BASIC": {
+      "id": "MANUAL_MEDICAL_BASIC",
+      "name": "Manuale Medico Base",
+      "nameShort": "Manuale Medico",
+      "description": "Un libro che insegna le basi della medicina.",
+      "category": "MATERIAL",
+      "subcategory": "books",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "first_aid"
+      }
+    },
+    "MANUAL_MEDICAL_ADVANCED": {
+      "id": "MANUAL_MEDICAL_ADVANCED",
+      "name": "Manuale Medico Avanzato",
+      "nameShort": "Manuale Medico Avanzato",
+      "description": "Un libro avanzato di medicina e chirurgia.",
+      "category": "MATERIAL",
+      "subcategory": "books",
+      "rarity": "RARE",
+      "weight": 1.0,
+      "value": 50,
+      "stackable": true,
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "surgery"
+      }
+    },
+    "MANUAL_WEAPONS_BASIC": {
+      "id": "MANUAL_WEAPONS_BASIC",
+      "name": "Manuale Armi Base",
+      "nameShort": "Manuale Armi",
+      "description": "Un libro che insegna le basi dell'uso delle armi.",
+      "category": "MATERIAL",
+      "subcategory": "books",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "marksmanship"
+      }
+    },
+    "MANUAL_WEAPONS_ADVANCED": {
+      "id": "MANUAL_WEAPONS_ADVANCED",
+      "name": "Manuale Armi Avanzato",
+      "nameShort": "Manuale Armi Avanzato",
+      "description": "Un libro avanzato di tattiche e strategia militare.",
+      "category": "MATERIAL",
+      "subcategory": "books",
+      "rarity": "RARE",
+      "weight": 1.0,
+      "value": 50,
+      "stackable": true,
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "tactics"
+      }
+    },
+    "carrot": {
+      "id": "carrot",
+      "name": "Carota",
+      "nameShort": "Carota",
+      "description": "Una carota fresca raccolta dal terreno.",
+      "category": "MATERIAL",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 10,
+        "nutritional_value": "high",
+        "perishable": true
+      }
+    },
+    "potato": {
+      "id": "potato",
+      "name": "Patata",
+      "nameShort": "Patata",
+      "description": "Una patata che può essere cotta o mangiata cruda.",
+      "category": "MATERIAL",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 25,
+        "cookable": true,
+        "perishable": true
+      }
+    },
+    "rubber_ball": {
+      "id": "rubber_ball",
+      "name": "Palla di Gomma",
+      "nameShort": "Palla",
+      "description": "Una palla di gomma che rimbalza bene.",
+      "category": "MATERIAL",
+      "subcategory": "toy",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 1,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "bounce_factor": 0.8
+      }
+    },
+    "batteries_pack": {
+      "id": "batteries_pack",
+      "name": "Pacco Batterie",
+      "nameShort": "Batterie",
+      "description": "Un pacco di batterie ricaricabili.",
+      "category": "MATERIAL",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "power_units": 100,
+        "reusable": true
+      }
+    }
+  }
+}

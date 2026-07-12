@@ -1,0 +1,562 @@
+{
+  "consumables": {
+    "water_dirty": {
+      "id": "water_dirty",
+      "name": "Acqua Sporca",
+      "nameShort": "Acqua Sporca",
+      "description": "Acqua raccolta da una pozzanghera. Potrebbe dissetare, ma anche far ammalare. Un rischio da correre solo se disperati.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "COMMON",
+      "weight": 1.0,
+      "value": 1,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 20 },
+          { "effect_type": "infection_chance", "chance": 0.4 }
+        ]
+      }
+    },
+    "water_purified": {
+      "id": "water_purified",
+      "name": "Acqua Purificata",
+      "nameShort": "Acqua Purificata",
+      "description": "Acqua potabile e sicura. Un lusso raro in queste terre desolate.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "UNCOMMON",
+      "weight": 1.0,
+      "value": 10,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "max_portions": 3,
+        "effects": [
+          { "effect_type": "hydrate", "amount": 40 }
+        ]
+      }
+    },
+    "purified_water_bottle_large": {
+      "id": "purified_water_bottle_large",
+      "name": "Bottiglia d'Acqua Purificata Grande",
+      "nameShort": "Acqua Grande",
+      "description": "Una grande borraccia di acqua purificata, in grado di saziare anche la sete più intensa e di durare a lungo.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "UNCOMMON",
+      "weight": 1.5,
+      "value": 50,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 80 }
+        ]
+      }
+    },
+    "ration_pack": {
+      "id": "ration_pack",
+      "name": "Pacco di Razioni",
+      "nameShort": "Razioni",
+      "description": "Cibo in scatola pre-guerra, dal sapore indefinito ma nutriente. Meglio di niente.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.5,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 30 }
+        ]
+      }
+    },
+    "MRE_pack_military": {
+      "id": "MRE_pack_military",
+      "name": "Pacco Razione MRE Militare",
+      "nameShort": "Razione MRE",
+      "description": "Meal, Ready-to-Eat. Una razione da combattimento completa, sigillata e perfettamente conservata. Ricca di calorie e nutrienti essenziali.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "RARE",
+      "weight": 1.0,
+      "value": 100,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 100 },
+          { "effect_type": "well_fed_bonus", "duration": 180 }
+        ]
+      }
+    },
+    "meat_raw": {
+      "id": "meat_raw",
+      "name": "Carne Cruda",
+      "nameShort": "Carne Cruda",
+      "description": "Un pezzo di carne cruda strappata da una carcassa. Mangiarla così è pericoloso.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.7,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 },
+          { "effect_type": "infection_chance", "chance": 0.6 }
+        ]
+      }
+    },
+    "meat_cooked": {
+      "id": "meat_cooked",
+      "name": "Carne Cotta",
+      "nameShort": "Carne Cotta",
+      "description": "Carne arrostita su un fuoco improvvisato. Sicura da mangiare e molto nutriente.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "UNCOMMON",
+      "weight": 0.6,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 40 }
+        ]
+      }
+    },
+    "berries": {
+      "id": "berries",
+      "name": "Bacche Sconosciute",
+      "nameShort": "Bacche",
+      "description": "Un pugno di bacche trovate su un cespuglio. Potrebbero essere nutrienti o velenose.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 10 },
+          { "effect_type": "poison_chance", "chance": 0.15 }
+        ]
+      }
+    },
+
+    "bandages_dirty": {
+      "id": "bandages_dirty",
+      "name": "Bende Sporche",
+      "nameShort": "Bende Sporche",
+      "description": "Pezzi di stoffa strappati e non proprio puliti. Meglio di niente per fermare un'emorragia.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 10 },
+          { "effect_type": "infection_chance", "chance": 0.2 }
+        ]
+      }
+    },
+    "bandages_clean": {
+      "id": "bandages_clean",
+      "name": "Bende Pulite",
+      "nameShort": "Bende Pulite",
+      "description": "Bende sterili. Fermano l'emorragia e prevengono infezioni.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 25 }
+        ]
+      }
+    },
+    "medkit_field": {
+      "id": "medkit_field",
+      "name": "Kit Medico da Campo",
+      "nameShort": "Kit Medico",
+      "description": "Un kit medico di base con disinfettante, bende e qualche antidolorifico.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 1.2,
+      "value": 40,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 50 },
+          { "effect_type": "cure", "status": "infection" }
+        ]
+      }
+    },
+    "stimpak_military": {
+      "id": "stimpak_military",
+      "name": "Stimpak Militare",
+      "nameShort": "Stimpak Militare",
+      "description": "Un iniettore automatico di grado militare. Ripristina una grande quantità di salute istantaneamente e purifica il corpo da alcune tossine.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "RARE",
+      "weight": 0.2,
+      "value": 150,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 100 },
+          { "effect_type": "cure", "status": "poison" },
+          { "effect_type": "adrenaline_rush", "duration": 30 }
+        ]
+      }
+    },
+    "antidote": {
+      "id": "antidote",
+      "name": "Antidoto",
+      "nameShort": "Antidoto",
+      "description": "Una siringa contenente un siero universale contro i veleni più comuni.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.2,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "cure", "status": "poison" }
+        ]
+      }
+    },
+
+    "rad_away_crude": {
+      "id": "rad_away_crude",
+      "name": "Rad-Away Rudimentale",
+      "nameShort": "Rad-Away",
+      "description": "Un intruglio chimico che aiuta a espellere le radiazioni. Gli effetti collaterali sono... spiacevoli.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.3,
+      "value": 30,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "remove_radiation", "amount": 150 },
+          { "effect_type": "debuff", "stat": "strength", "amount": -1, "duration": 60 }
+        ]
+      }
+    },
+
+
+    "military_stimpak": {
+      "id": "military_stimpak",
+      "name": "Stimpak Militare",
+      "nameShort": "Stimpak Mil.",
+      "description": "Una versione militare dello Stimpak standard. Guarisce più velocemente e fornisce resistenza temporanea al dolore.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "RARE",
+      "weight": 0.3,
+      "value": 200,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 60 },
+          { "effect_type": "pain_resistance", "amount": 0.3, "duration": 300 },
+          { "effect_type": "bleeding_stop", "chance": 1.0 }
+        ]
+      }
+    },
+    "radaway_advanced": {
+      "id": "radaway_advanced",
+      "name": "RadAway Avanzato",
+      "nameShort": "RadAway Adv.",
+      "description": "Una versione potenziata del RadAway che rimuove le radiazioni più efficacemente e fornisce resistenza temporanea.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "RARE",
+      "weight": 0.2,
+      "value": 180,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "radiation_heal", "amount": 80 },
+          { "effect_type": "radiation_resistance", "amount": 0.5, "duration": 600 }
+        ]
+      }
+    },
+    "combat_enhancer_v2": {
+      "id": "combat_enhancer_v2",
+      "name": "Potenziatore da Combattimento V2",
+      "nameShort": "Enhancer V2",
+      "description": "Un cocktail chimico avanzato che migliora drasticamente le capacità di combattimento. Effetti collaterali garantiti.",
+      "category": "CONSUMABLE",
+      "subcategory": "enhancement",
+      "rarity": "EPIC",
+      "weight": 0.1,
+      "value": 400,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "effects": [
+          { "effect_type": "stat_boost", "stats": ["strength", "agility", "perception"], "amount": 5, "duration": 180 },
+          { "effect_type": "damage_boost", "amount": 0.3, "duration": 180 },
+          { "effect_type": "addiction_risk", "chance": 0.25 },
+          { "effect_type": "crash_effect", "delay": 180, "duration": 60 }
+        ]
+      }
+    },
+    "purified_water_large": {
+      "id": "purified_water_large",
+      "name": "Bottiglia d'Acqua Purificata Grande",
+      "nameShort": "Acqua Pura L",
+      "description": "Una grande bottiglia di acqua completamente purificata. Disseta completamente e fornisce un leggero bonus alla salute.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "UNCOMMON",
+      "weight": 1.0,
+      "value": 80,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "thirst_heal", "amount": 100 },
+          { "effect_type": "health_regen", "amount": 2, "duration": 300 },
+          { "effect_type": "radiation_heal", "amount": 5 }
+        ]
+      }
+    },
+    "mre_military_pack": {
+      "id": "mre_military_pack",
+      "name": "Pacco Razione MRE Militare",
+      "nameShort": "MRE Pack",
+      "description": "Un pacco razione militare completo. Nutriente e sostanzioso, fornisce energia a lungo termine.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 120,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "hunger_heal", "amount": 90 },
+          { "effect_type": "stamina_boost", "amount": 20, "duration": 600 },
+          { "effect_type": "morale_boost", "amount": 10, "duration": 300 }
+        ]
+      }
+    },
+    "herbal_antidote_strong": {
+      "id": "herbal_antidote_strong",
+      "name": "Antidoto Erbale Forte",
+      "nameShort": "Antidoto Forte",
+      "description": "Un antidoto preparato con erbe rare della Wasteland. Cura avvelenamenti gravi e fornisce immunità temporanea.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "RARE",
+      "weight": 0.2,
+      "value": 250,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "poison_cure", "amount": 100 },
+          { "effect_type": "poison_immunity", "duration": 900 },
+          { "effect_type": "health_regen", "amount": 1, "duration": 600 }
+        ]
+      }
+    },
+    "energy_drink_nuclear": {
+      "id": "energy_drink_nuclear",
+      "name": "Energy Drink 'Nuclear'",
+      "nameShort": "Nuclear Drink",
+      "description": "Una bevanda energetica pre-guerra con un gusto esplosivo. Fornisce energia istantanea ma con un prezzo radioattivo.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "UNCOMMON",
+      "weight": 0.3,
+      "value": 90,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "stamina_restore", "amount": 100 },
+          { "effect_type": "speed_boost", "amount": 0.2, "duration": 300 },
+          { "effect_type": "radiation_exposure", "amount": 10 },
+          { "effect_type": "jittery_effect", "duration": 180 }
+        ]
+      }
+    },
+
+    "canned_food": {
+      "id": "canned_food",
+      "name": "Cibo in Scatola",
+      "nameShort": "Scatoletta",
+      "description": "Cibo in scatola pre-guerra. Nutriente ma dal sapore metallico.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.4,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 25 }
+        ]
+      }
+    },
+
+    "painkillers": {
+      "id": "painkillers",
+      "name": "Antidolorifici",
+      "nameShort": "Antidolorifici",
+      "description": "Pillole per alleviare il dolore. Riduce temporaneamente la percezione del dolore.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "pain_reduction", "amount": 0.5, "duration": 180 }
+        ]
+      }
+    },
+
+    "generic_meds": {
+      "id": "generic_meds",
+      "name": "Medicinali Generici",
+      "nameShort": "Medicinali",
+      "description": "Medicinali generici scaduti ma ancora utilizzabili per cure minori.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 15 }
+        ]
+      }
+    },
+
+    "sterile_gauze": {
+      "id": "sterile_gauze",
+      "name": "Garza Sterile",
+      "nameShort": "Garza",
+      "description": "Garza sterile per medicazioni. Previene infezioni quando applicata correttamente.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 20 },
+          { "effect_type": "infection_resistance", "amount": 0.8, "duration": 300 }
+        ]
+      }
+    },
+
+    "medical_battery": {
+      "id": "medical_battery",
+      "name": "Batteria Medica",
+      "nameShort": "Batt. Medica",
+      "description": "Batteria speciale per dispositivi medici. Alta capacità e lunga durata.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "UNCOMMON",
+      "weight": 0.3,
+      "value": 35,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {}
+    },
+
+    "fresh_fish": {
+      "id": "fresh_fish",
+      "name": "Pesce Fresco",
+      "nameShort": "Pesce",
+      "description": "Pesce appena pescato. Fresco e nutriente, ma deve essere cotto.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.5,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 20 },
+          { "effect_type": "parasite_risk", "chance": 0.3 }
+        ]
+      }
+    },
+
+    "wild_berries": {
+      "id": "wild_berries",
+      "name": "Bacche Selvatiche",
+      "nameShort": "Bacche",
+      "description": "Bacche raccolte in natura. Dolci e nutrienti, ma alcune potrebbero essere velenose.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 4,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 12 },
+          { "effect_type": "poison_chance", "chance": 0.2 }
+        ]
+      }
+    },
+
+    "edible_mushrooms": {
+      "id": "edible_mushrooms",
+      "name": "Funghi Commestibili",
+      "nameShort": "Funghi",
+      "description": "Funghi sicuri da mangiare. Nutrienti e facili da raccogliere.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 18 }
+        ]
+      }
+    }
+  }
+}

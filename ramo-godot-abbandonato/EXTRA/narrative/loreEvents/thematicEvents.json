@@ -1,0 +1,239 @@
+{
+  "thematicEvents": [
+    {
+      "id": "due_stranieri",
+      "title": "Due Stranieri nel Bisogno",
+      "category": "thematic",
+      "questStageRequirement": [1, 2, 3],
+      "emotionalPrerequisites": {
+        "compassionLevel": 20
+      },
+      "locationRequirement": ["plains", "forest", "city"],
+      "description": "Incontri due viaggiatori: uno ferito gravemente, l'altro che chiede aiuto disperatamente.",
+      "narrativeText": "La strada si apre davanti a me quando sento delle voci disperate. Due figure si stagliano contro il cielo plumbeo: un uomo anziano che sorregge una donna più giovane, chiaramente ferita. Il sangue macchia i suoi vestiti strappati.\n\n'Per favore!' grida l'uomo. 'Mia figlia ha bisogno di aiuto! Abbiamo delle medicine, ma non bastano. Hai qualcosa che possa aiutarla?'\n\nLo sguardo della donna mi ricorda qualcosa... forse il modo in cui mamma guardava papà quando era malato. C'è fiducia, speranza, amore. Ma le mie risorse sono limitate, e il viaggio verso The Safe Place è ancora lungo.",
+      "tone": "malinconico",
+      "choices": [
+        {
+          "id": "aiuta_stranieri",
+          "text": "Condividi le tue medicine e cibo, anche se ti lascia vulnerabile",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 15,
+            "lenaMemoryStrength": 20,
+            "wisdomGained": 10,
+            "innocenceLost": -5
+          },
+          "reflectionText": "Mentre guardo i due stranieri allontanarsi, sento una voce dentro di me che sussurra 'bene fatto'. È la voce di mamma? Non lo so, ma so che lei avrebbe fatto la stessa cosa. Forse aiutare gli altri è un modo per tenerla viva nel mio cuore.",
+          "unlockEvents": ["lena_memory_compassion"],
+          "questProgression": {
+            "unlockFragments": ["lena_compassion_fragment"]
+          }
+        },
+        {
+          "id": "rifiuta_aiuto",
+          "text": "Scuoti la testa e prosegui. Non puoi permetterti di sprecare risorse",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 20,
+            "elianEmpathy": 15,
+            "innocenceLost": 10,
+            "wisdomGained": 5
+          },
+          "reflectionText": "I loro sguardi mi seguono mentre mi allontano. Papà mi ha insegnato che la sopravvivenza viene prima di tutto, che non posso salvare tutti. Ma perché allora mi sento così vuoto? Forse alcune lezioni sono più difficili da accettare di altre.",
+          "unlockEvents": ["elian_legacy_pragmatism"],
+          "questProgression": {
+            "unlockFragments": ["elian_pragmatism_fragment"]
+          }
+        },
+        {
+          "id": "compromesso",
+          "text": "Offri quello che puoi senza compromettere troppo il tuo viaggio",
+          "alignment": "neutral",
+          "emotionalImpact": {
+            "compassionLevel": 8,
+            "pragmatismLevel": 8,
+            "understandingLevel": 12,
+            "wisdomGained": 15
+          },
+          "reflectionText": "Forse la saggezza sta nel trovare un equilibrio. Mamma e papà erano diversi, ma entrambi avevano ragione a modo loro. Posso essere compassionevole senza essere ingenuo, pragmatico senza essere crudele.",
+          "unlockEvents": ["balance_wisdom_event"],
+          "questProgression": {
+            "unlockFragments": ["balance_fragment"]
+          }
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 8
+    },
+    {
+      "id": "bambino_perduto",
+      "title": "Il Bambino nel Bosco",
+      "category": "thematic",
+      "questStageRequirement": [2, 3],
+      "emotionalPrerequisites": {
+        "lenaMemoryStrength": 30
+      },
+      "locationRequirement": ["forest"],
+      "description": "Un bambino piange nascosto tra gli alberi, terrorizzato e solo.",
+      "narrativeText": "Il pianto è sottile, quasi impercettibile tra il fruscio delle foglie. Lo seguo fino a trovare un bambino, non più di sei anni, rannicchiato contro un albero. I suoi occhi sono rossi di lacrime e paura.\n\n'Mamma...' singhiozza. 'Non trovo più la mamma...'\n\nIl mio cuore si stringe. Anch'io ho perso la mamma, anche se in modo diverso. Vedo in lui la mia stessa solitudine, la stessa disperazione che ho provato quando papà è morto. Ma il bosco è pericoloso di notte, e io ho una missione da compiere.",
+      "tone": "doloroso",
+      "choices": [
+        {
+          "id": "cerca_madre",
+          "text": "Aiuta il bambino a cercare sua madre, anche se significa perdere tempo prezioso",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 20,
+            "lenaMemoryStrength": 25,
+            "innocenceLost": -10,
+            "wisdomGained": 15
+          },
+          "reflectionText": "Quando finalmente il bambino si ricongiunge con sua madre, il loro abbraccio mi spezza e mi guarisce allo stesso tempo. Mamma, se mi stai guardando, spero che tu sia fiera di me. Ho fatto quello che avresti fatto tu.",
+          "unlockEvents": ["maternal_love_memory"]
+        },
+        {
+          "id": "indica_direzione",
+          "text": "Indica al bambino la direzione del villaggio più vicino e prosegui",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 15,
+            "innocenceLost": 15,
+            "elianEmpathy": 10
+          },
+          "reflectionText": "Il bambino si allontana nella direzione che gli ho indicato. Ho fatto quello che potevo senza compromettere la mia missione. Papà direbbe che è stata la scelta giusta. Allora perché mi sento così?",
+          "unlockEvents": ["pragmatic_choice_reflection"]
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 7
+    },
+    {
+      "id": "rifugio_condiviso",
+      "title": "Il Rifugio Conteso",
+      "category": "thematic",
+      "questStageRequirement": [2, 3, 4],
+      "locationRequirement": ["shelter"],
+      "description": "Arrivi a un rifugio già occupato da una famiglia in difficoltà.",
+      "narrativeText": "La pioggia batte violenta quando finalmente raggiungo il rifugio. Ma non sono solo: una famiglia si è già sistemata all'interno. Padre, madre e due bambini piccoli, tutti infreddoliti e spaventati.\n\n'Scusate,' dice l'uomo alzandosi nervoso. 'Non sapevamo che qualcuno...'\n\nLa donna lo zittisce con un gesto, stringendo i bambini a sé. Nei suoi occhi vedo la stessa determinazione protettiva che vedevo in papà quando ero piccolo. Il rifugio è piccolo, le risorse scarse. Ma fuori la tempesta infuria.",
+      "tone": "introspettivo",
+      "choices": [
+        {
+          "id": "condividi_rifugio",
+          "text": "Invita la famiglia a condividere il rifugio e le tue risorse",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 18,
+            "lenaMemoryStrength": 15,
+            "understandingLevel": 10
+          },
+          "reflectionText": "Quella notte, ascoltando le storie della famiglia, capisco qualcosa di importante. Mamma non era solo compassionevole per bontà: credeva che condividere il dolore lo rendesse più sopportabile. Forse aveva ragione."
+        },
+        {
+          "id": "rivendica_rifugio",
+          "text": "Chiedi alla famiglia di andarsene. Hai bisogno del rifugio per te",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 20,
+            "innocenceLost": 12,
+            "elianEmpathy": 8
+          },
+          "reflectionText": "Li guardo allontanarsi nella tempesta e sento il peso delle parole di papà: 'Il mondo è crudele, figlio. Se non pensi a te stesso, nessun altro lo farà.' Ma questa lezione ha un sapore amaro."
+        },
+        {
+          "id": "cerca_alternativa",
+          "text": "Proponi di cercare insieme un rifugio alternativo o una soluzione",
+          "alignment": "neutral",
+          "emotionalImpact": {
+            "understandingLevel": 15,
+            "wisdomGained": 20,
+            "compassionLevel": 10,
+            "pragmatismLevel": 5
+          },
+          "reflectionText": "Insieme troviamo una grotta poco distante. Lavorando insieme, riusciamo a renderla abitabile per tutti. Forse la vera forza non sta nello scegliere tra compassione e pragmatismo, ma nel trovare soluzioni creative."
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 6
+    },
+    {
+      "id": "mercante_disonesto",
+      "title": "Il Mercante e l'Inganno",
+      "category": "elian_legacy",
+      "questStageRequirement": [2, 3],
+      "emotionalPrerequisites": {
+        "pragmatismLevel": 25
+      },
+      "locationRequirement": ["city"],
+      "description": "Un mercante cerca di truffarti, ma tu te ne accorgi in tempo.",
+      "narrativeText": "Il mercante sorride troppo mentre mi mostra la sua merce. 'Prezzi speciali per un giovane viaggiatore come te!' dice, ma i suoi occhi non sorridono. Ho visto quello sguardo prima: papà me lo aveva descritto quando mi parlava di come sopravvivere nel mondo.\n\n'Queste medicine sono rare,' continua, 'ma per te... solo 50 monete d'oro.'\n\nConosco quelle medicine. Valgono al massimo 10 monete. Papà mi ha insegnato a riconoscere gli inganni, ma mi ha anche insegnato che a volte è meglio fingere di non accorgersene.",
+      "tone": "pragmatico",
+      "choices": [
+        {
+          "id": "smaschera_truffa",
+          "text": "Smaschera pubblicamente il mercante e avverti gli altri clienti",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 15,
+            "innocenceLost": 5,
+            "wisdomGained": 10
+          },
+          "reflectionText": "Il mercante se ne va furioso, ma una donna anziana mi ringrazia. 'Tua madre ti ha cresciuto bene,' dice. Non sa quanto quelle parole significhino per me."
+        },
+        {
+          "id": "negozia_astutamente",
+          "text": "Usa la tua conoscenza per negoziare un prezzo giusto senza creare scene",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 18,
+            "elianEmpathy": 12,
+            "wisdomGained": 15
+          },
+          "reflectionText": "Ottengo le medicine al prezzo giusto senza umiliare il mercante. Papà sarebbe fiero: 'L'astuzia non è crudeltà, figlio. È sopravvivenza intelligente.'"
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 5
+    },
+    {
+      "id": "animale_ferito",
+      "title": "La Creatura Sofferente",
+      "category": "lena_memory",
+      "questStageRequirement": [1, 2, 3],
+      "emotionalPrerequisites": {
+        "lenaMemoryStrength": 20
+      },
+      "locationRequirement": ["forest", "plains"],
+      "description": "Trovi un animale ferito che potrebbe rallentare il tuo viaggio se decidi di aiutarlo.",
+      "narrativeText": "Il cerbiatto giace immobile tra i cespugli, una zampa chiaramente spezzata. I suoi occhi grandi mi guardano con una fiducia che mi spezza il cuore. Papà mi raccontava che mamma si fermava sempre per aiutare gli animali feriti, anche quando erano in viaggio.\n\n'Gli animali capiscono l'amore puro,' diceva sempre. 'Non giudicano, non tradiscono. Meritano la nostra compassione.'\n\nMa curare il cerbiatto significherebbe fermarmi qui per giorni, e le mie provviste sono limitate.",
+      "tone": "nostalgico",
+      "choices": [
+        {
+          "id": "cura_animale",
+          "text": "Resta per curare il cerbiatto, anche se ti costerà tempo e risorse",
+          "alignment": "lena",
+          "emotionalImpact": {
+            "compassionLevel": 25,
+            "lenaMemoryStrength": 30,
+            "innocenceLost": -15,
+            "wisdomGained": 10
+          },
+          "reflectionText": "Quando il cerbiatto finalmente si alza e corre via, sento mamma sorridere dentro di me. Forse questo è il suo modo di dirmi che sono sulla strada giusta.",
+          "unlockEvents": ["lena_animal_love_memory"]
+        },
+        {
+          "id": "lascia_animale",
+          "text": "Prosegui il viaggio. La natura deve fare il suo corso",
+          "alignment": "elian",
+          "emotionalImpact": {
+            "pragmatismLevel": 12,
+            "innocenceLost": 8,
+            "elianEmpathy": 5
+          },
+          "reflectionText": "Mi allontano cercando di non guardare indietro. Papà diceva che la natura è crudele ma giusta. Allora perché mi sento come se avessi tradito qualcosa di importante?"
+        }
+      ],
+      "isRepeatable": false,
+      "priority": 4
+    }
+  ]
+}

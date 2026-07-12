@@ -1,0 +1,250 @@
+{
+  "main_quest": {
+    "id": "main_quest_ultimate_surviver",
+    "title": "L'Ultimo Sopravvissuto",
+    "description": "Il viaggio dell'ultimo sopravvissuto attraverso i ricordi del passato, verso la verità sul proprio destino.",
+    "stages": [
+      {
+        "id": "mq_01_silence",
+        "title": "Ricordo: Il Silenzio",
+        "description": "Mentre cammini, un silenzio innaturale ti avvolge, identico a quello di tanti anni fa. Ti torna in mente il giorno in cui tutto finì. Non con un boato, ma con un respiro trattenuto. Il rombo costante all'orizzonte cessò. Gli uccelli smisero di cantare. Persino il vento sembrò aver paura di muoversi. Tuo padre, Elian, ti strinse la mano, troppo forte. Nei suoi occhi non c'era solo paura, ma il riconoscimento di una fine. La 'Guerra Inespressa' era terminata, e il mondo aveva smesso di respirare.",
+        "trigger_condition": "exploration_time > 30",
+        "choices": [
+          {
+            "text": "Rifletti sul silenzio",
+            "skill_check": { "stat": "intelligenza", "difficulty": 8 },
+            "consequences_success": {
+              "narrative_text": "Il silenzio ti ricorda che il mondo non è morto con un'esplosione, ma con un sussurro. Questa consapevolezza rafforza la tua determinazione.",
+              "quest_progress": "silence_memory_unlocked"
+            },
+            "consequences_failure": {
+              "narrative_text": "Il silenzio ti opprime, ricordandoti la tua solitudine. Ma questo ricordo ti rende più cauto."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_02_water",
+        "title": "Ricordo: La Lezione dell'Acqua",
+        "description": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di metallo e di morte. Stavi per bere, un bambino guidato solo dall'istinto. La mano di Elian ti afferrò, ferma, quasi violenta. 'No!', fu un ordine perentorio. Poi, con gesti lenti e metodici, prese uno straccio sudicio, sabbia, ciottoli, e costruì un filtro rudimentale. 'Il mondo non è più amico,' ti disse, porgendoti l'acqua torbida. 'Ogni sorso, ogni boccone, te lo devi conquistare. E devi capire cosa puoi prendere, e cosa ti ucciderà'.",
+        "trigger_condition": "thirst_level > 70",
+        "choices": [
+          {
+            "text": "Ricorda la lezione di sopravvivenza",
+            "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+            "consequences_success": {
+              "narrative_text": "Ricordi perfettamente come costruire un filtro per l'acqua. Questa conoscenza potrebbe salvarti la vita.",
+              "items_gained": [{ "id": "water_filter_knowledge", "quantity": 1 }],
+              "quest_progress": "water_lesson_learned"
+            },
+            "consequences_failure": {
+              "narrative_text": "I dettagli della lezione ti sfuggono, ma il messaggio principale rimane: il mondo è pericoloso."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_03_blood",
+        "title": "Ricordo: Il Sapore del Sangue",
+        "description": "Un taglio superficiale alla mano ti riporta a un ricordo doloroso. Eri piccolo, e cadesti su pietre taglienti. Il sangue usciva copioso, e tuo padre... tuo padre ti costrinse a guardare. 'Il sangue è vita,' ti disse, 'ma anche debolezza. Devi imparare a fermarlo, o morirai dissanguato.' Con gesti bruschi, ti insegnò a fasciare la ferita, a pulirla con acqua bollita, a riconoscere i segni dell'infezione.",
+        "trigger_condition": "hp < max_hp * 0.8",
+        "choices": [
+          {
+            "text": "Applica le lezioni mediche",
+            "skill_check": { "stat": "vigore", "difficulty": 9 },
+            "consequences_success": {
+              "narrative_text": "Ricordi perfettamente come trattare le ferite. La tua guarigione accelera.",
+              "hp_change": 10,
+              "quest_progress": "blood_lesson_mastered"
+            },
+            "consequences_failure": {
+              "narrative_text": "I ricordi sono confusi, ma sai che devi prenderti cura delle ferite."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_04_darkness",
+        "title": "Ricordo: Imparare il Buio",
+        "description": "L'oscurità della notte ti avvolge, e ti torna in mente quella notte terribile. Eri solo, in una cantina buia, e tuo padre ti aveva lasciato lì. 'La paura del buio uccide più persone della fame,' ti aveva detto. 'Devi imparare a vedere senza occhi.' Passasti ore nell'oscurità totale, imparando a fidarti degli altri sensi: l'udito, l'olfatto, il tatto. Quando finalmente uscisti, il buio non ti faceva più paura.",
+        "trigger_condition": "time_of_day == night",
+        "choices": [
+          {
+            "text": "Abbraccia l'oscurità",
+            "skill_check": { "stat": "fortuna", "difficulty": 11 },
+            "consequences_success": {
+              "narrative_text": "L'oscurità diventa tua alleata. I tuoi sensi si acuiscono, rivelandoti dettagli nascosti.",
+              "quest_progress": "darkness_conquered"
+            },
+            "consequences_failure": {
+              "narrative_text": "L'oscurità ti opprime, ma ricordi che è solo un'illusione."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_05_question",
+        "title": "Ricordo: La Domanda Senza Risposta",
+        "description": "Mentre riposi, una domanda ti tormenta. Perché tuo padre ti ha cresciuto con tanta durezza? Perché ogni lezione sembrava un addestramento per la fine del mondo? Una notte, anni fa, trovasti tua madre che piangeva in silenzio. Quando le chiedesti perché, lei ti strinse forte e disse: 'Perché il mondo ha bisogno di guerrieri, non di bambini.' Ma nei suoi occhi c'era una tristezza infinita.",
+        "trigger_condition": "resting == true",
+        "choices": [
+          {
+            "text": "Rifletti sulla domanda",
+            "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+            "consequences_success": {
+              "narrative_text": "Intuisci che c'è qualcosa di più profondo nella tua storia. Questa rivelazione ti rende più determinato.",
+              "quest_progress": "question_awakened"
+            },
+            "consequences_failure": {
+              "narrative_text": "La domanda rimane senza risposta, ma alimenta la tua curiosità."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_06_angels",
+        "title": "Ricordo: Gli Angeli della Cenere",
+        "description": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame.",
+        "trigger_condition": "near_radiation_zone",
+        "choices": [
+          {
+            "text": "Ricorda gli Angeli della Cenere",
+            "skill_check": { "stat": "carisma", "difficulty": 13 },
+            "consequences_success": {
+              "narrative_text": "Il ricordo degli Angeli rafforza la tua cautela. Sai che alcune minacce vanno evitate, non combattute.",
+              "quest_progress": "angels_memory"
+            },
+            "consequences_failure": {
+              "narrative_text": "Il ricordo ti terrorizza, ma ti rende più vigile."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_07_burden",
+        "title": "Ricordo: Il Fardello",
+        "description": "La fatica del viaggio ti opprime. Ti torna in mente quando tuo padre ti costrinse a portare pesi sempre più grandi. 'Il mondo ti chiederà tutto,' ti diceva. 'Devi essere pronto a dare tutto.' Ma una volta, mentre riposavi, lo sentisti parlare da solo: 'Perdonami, Lena. Perdonami per quello che devo fare.' Quelle parole, sussurrate nel buio, ti hanno perseguitato per anni.",
+        "trigger_condition": "inventory_weight > 80%",
+        "choices": [
+          {
+            "text": "Accetta il fardello",
+            "skill_check": { "stat": "vigore", "difficulty": 12 },
+            "consequences_success": {
+              "narrative_text": "Il ricordo ti fortifica. Riesci a portare il peso con maggiore facilità.",
+              "inventory_bonus": 2,
+              "quest_progress": "burden_accepted"
+            },
+            "consequences_failure": {
+              "narrative_text": "Il peso ti opprime, ma ricordi che ogni fardello ha uno scopo."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_08_map",
+        "title": "Ricordo: L'Ultima Lezione",
+        "description": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi quella mattina gelida, quando ti svegliasti e lui non c'era. E la lettera. 'Nel tuo sacco... troverai una mappa... Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile... ma è l'unica possibilità che ti resta.' Quella mappa non era solo un pezzo di carta. Era un testamento. L'inizio del tuo vero, solitario viaggio.",
+        "trigger_condition": "found_old_map",
+        "choices": [
+          {
+            "text": "Studia la mappa",
+            "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+            "consequences_success": {
+              "narrative_text": "La mappa ti rivela indizi sul tuo passato. Il viaggio acquista un nuovo significato.",
+              "items_gained": [{ "id": "map_knowledge", "quantity": 1 }],
+              "quest_progress": "map_understanding"
+            },
+            "consequences_failure": {
+              "narrative_text": "La mappa è confusa, ma rappresenta speranza."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_09_name",
+        "title": "Ricordo: Il Significato di un Nome",
+        "description": "'Ultimo'. È così che tuo padre ti ha sempre chiamato. Non con il tuo vero nome, ma con questo titolo. Una notte, mentre dormivi, lo sentisti sussurrare: 'L'ultimo sopravvissuto. L'ultimo testimone.' Quelle parole ti hanno sempre fatto sentire speciale, ma anche solo. Come se fossi l'ultimo capitolo di una storia finita.",
+        "trigger_condition": "deep_reflection",
+        "choices": [
+          {
+            "text": "Abbraccia il tuo nome",
+            "skill_check": { "stat": "carisma", "difficulty": 10 },
+            "consequences_success": {
+              "narrative_text": "Accetti il significato del tuo nome. Sei l'ultimo testimone, e questo ti dà forza.",
+              "quest_progress": "name_accepted"
+            },
+            "consequences_failure": {
+              "narrative_text": "Il nome ti pesa, ma sai che ha un significato profondo."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_10_choice",
+        "title": "L'Eco di una Scelta",
+        "description": "Mentre cammini, senti l'eco di una scelta che non hai mai fatto. Anni fa, tuo padre ti chiese di scegliere tra due strade: una sicura ma monotona, l'altra pericolosa ma piena di vita. Scelesti la seconda. 'Bene,' ti disse. 'Il mondo ha bisogno di esploratori, non di prigionieri.' Ma ora ti chiedi se quella scelta abbia condannato entrambi.",
+        "trigger_condition": "crossroads_decision",
+        "choices": [
+          {
+            "text": "Rifletti sulla scelta passata",
+            "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+            "consequences_success": {
+              "narrative_text": "Comprendi che ogni scelta ha formato chi sei oggi. Questo ti dà chiarezza.",
+              "quest_progress": "choice_understood"
+            },
+            "consequences_failure": {
+              "narrative_text": "La scelta rimane un mistero, ma ti rende più riflessivo."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_11_confession",
+        "title": "Frammento: La Confessione",
+        "description": "Sei vicino a 'The Safe Place'. L'aria sembra diversa, più... viva. Ma un pensiero ti tormenta: e se tuo padre non fosse il guerriero che hai sempre creduto? E se fosse solo un uomo spaventato, che ha trasformato suo figlio in un'arma per giustificare le sue scelte? La lettera che ti lasciò... era davvero un addio, o una confessione?",
+        "trigger_condition": "near_safe_place",
+        "choices": [
+          {
+            "text": "Prepara la tua confessione",
+            "skill_check": { "stat": "carisma", "difficulty": 14 },
+            "consequences_success": {
+              "narrative_text": "Trovi le parole giuste per affrontare la verità. Qualunque essa sia.",
+              "quest_progress": "confession_prepared"
+            },
+            "consequences_failure": {
+              "narrative_text": "Le parole ti sfuggono, ma sai che la verità deve emergere."
+            }
+          }
+        ]
+      },
+      {
+        "id": "mq_12_truth",
+        "title": "La Verità",
+        "description": "Sei arrivato a 'The Safe Place'. È un piccolo bunker, sicuro. E dentro, ad aspettarti, c'è Elian. Ti guarda, e nei suoi occhi vedi un'attesa lunga una vita. Ma tu ora vedi tutto con una chiarezza terribile. Ogni lezione, ogni spinta a sopravvivere... non era per te. Era per lui. Per giustificare la sua scelta. Per dare un senso alla morte di Lena. Tu non sei suo figlio. Sei il suo alibi vivente. Il tuo viaggio non è finito. È appena iniziato. Ora devi decidere cosa fare con questa verità.",
+        "trigger_condition": "reached_safe_place",
+        "choices": [
+          {
+            "text": "Affronta la verità",
+            "skill_check": { "stat": "carisma", "difficulty": 15 },
+            "consequences_success": {
+              "narrative_text": "Affronti Elian con la verità che hai scoperto. La tua forza interiore cambia tutto.",
+              "quest_progress": "truth_confronted",
+              "quest_complete": true
+            },
+            "consequences_failure": {
+              "narrative_text": "La verità è troppo dolorosa. Ma ora sai chi sei veramente.",
+              "quest_progress": "truth_avoided",
+              "quest_complete": true
+            }
+          },
+          {
+            "text": "Mantieni l'illusione",
+            "resultText": "Scegli di mantenere l'illusione familiare. Forse alcune verità sono troppo pesanti da portare.",
+            "quest_progress": "illusion_maintained",
+            "quest_complete": true
+          }
+        ]
+      }
+    ]
+  }
+}

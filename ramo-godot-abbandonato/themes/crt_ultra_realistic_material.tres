@@ -1,0 +1,38 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://crt_ultra_realistic_material"]
+
+[ext_resource type="Shader" path="res://themes/crt_ultra_realistic.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/power_on_time = 0.0
+shader_parameter/power_on_duration = 2.0
+shader_parameter/enable_power_on_effect = true
+shader_parameter/phosphor_persistence = 0.85
+shader_parameter/phosphor_decay = 0.3
+shader_parameter/phosphor_color = Color(0.0, 0.95, 0.15, 1.0)
+shader_parameter/background_glow = Color(0.02, 0.08, 0.02, 1.0)
+shader_parameter/barrel_distortion = 0.008
+shader_parameter/pincushion_effect = 0.003
+shader_parameter/corner_softness = 0.15
+shader_parameter/scanline_strength = 0.25
+shader_parameter/scanline_frequency = 312.0
+shader_parameter/scanline_speed = 0.0
+shader_parameter/scanline_thickness = 1.2
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/chromatic_offset = Vector2(0.001, 0.0005)
+shader_parameter/noise_strength = 0.08
+shader_parameter/interference_strength = 0.05
+shader_parameter/static_noise = 0.02
+shader_parameter/bloom_strength = 0.4
+shader_parameter/glow_radius = 2.5
+shader_parameter/phosphor_glow = 0.3
+shader_parameter/vignette_strength = 0.35
+shader_parameter/border_fade = 0.08
+shader_parameter/border_color = Color(0.0, 0.0, 0.0, 1.0)
+shader_parameter/brightness = 1.15
+shader_parameter/contrast = 1.25
+shader_parameter/saturation = 1.1
+shader_parameter/gamma = 1.1
+shader_parameter/mura_pattern = 0.1
+shader_parameter/moire_strength = 0.05
+shader_parameter/rolling_lines = 0.02

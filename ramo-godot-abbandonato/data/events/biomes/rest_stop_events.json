@@ -1,0 +1,36 @@
+{
+  "REST_STOP": [
+    {
+      "id": "rest_stop_day_interaction",
+      "title": "Area di Sosta",
+      "description": "Ti trovi in una piccola area di sosta lungo la strada principale. Le strutture sono danneggiate ma utilizzabili. Puoi decidere come sfruttare questo momento di relativa sicurezza.",
+      "biome": "rest_stop",
+      "choices": [
+        {
+          "id": "rest_choice",
+          "text": "Riposati e recupera energie",
+          "consequences": {
+            "hp": 10,
+            "stamina": 20
+          }
+        },
+        {
+          "id": "scavenge_choice", 
+          "text": "Cerca materiali utili nei dintorni",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Frugando tra i detriti, trovi alcuni oggetti ancora utilizzabili: una torcia e delle batterie.",
+          "failureText": "Cerchi per un po' ma non trovi nulla di utile. Hai solo perso tempo prezioso.",
+          "items_gained": [{ "id": "flashlight", "quantity": 1 }, { "id": "battery", "quantity": 2 }],
+          "penalty": { "type": "time", "minutes": 30 }
+        },
+        {
+          "id": "ignore_choice",
+          "text": "Ignora l'area e prosegui il viaggio",
+          "consequences": {
+            "narrative_text": "Decidi di non perdere tempo e prosegui il tuo cammino verso la destinazione."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+[gd_scene load_steps=4 format=3 uid="uid://bf4f6g7j2qw8m"]
+
+[ext_resource type="Theme" path="res://themes/main_theme.tres" id="1_5j8k9"]
+[ext_resource type="Script" path="res://scripts/ui/popups/ItemInteractionPopup.gd" id="2_k8m4n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.00392157, 0.0196078, 0.0117647, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.25, 1)
+
+[node name="ItemInteractionPopup" type="CanvasLayer"]
+script = ExtResource("2_k8m4n")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -125.0
+offset_right = 200.0
+offset_bottom = 125.0
+custom_minimum_size = Vector2(400, 250)
+theme = ExtResource("1_5j8k9")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Layout" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="ItemNameLabel" type="Label" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+text = "Nome Oggetto Placeholder"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+fit_content = true
+text = "Questa è una descrizione lunga e dettagliata dell'oggetto che può andare a capo automaticamente, fornendo al giocatore tutte le informazioni necessarie."
+
+[node name="StatsGrid" type="GridContainer" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+columns = 2
+
+[node name="Separator2" type="HSeparator" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="ActionsContainer" type="VBoxContainer" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="ActionLabel1" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ActionsContainer"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Equipaggia"
+
+[node name="ActionLabel2" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ActionsContainer"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Ripara"
+
+[node name="ActionLabel3" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ActionsContainer"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Scarta"
+
+[node name="ActionLabel4" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ActionsContainer"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Chiudi"

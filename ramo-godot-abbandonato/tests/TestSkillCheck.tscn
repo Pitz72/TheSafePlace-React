@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8lam2n5p7q1r"]
+
+[ext_resource type="Script" uid="uid://dekgs2pd1niai" path="res://tests/test_skill_check_live.gd" id="1_8x7qy"]
+
+[node name="TestSkillCheck" type="Node"]
+script = ExtResource("1_8x7qy")

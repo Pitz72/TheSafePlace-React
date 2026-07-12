@@ -1,0 +1,75 @@
+{
+  "ammo": {
+    "pistol_ammo": {
+      "id": "pistol_ammo",
+      "name": "Munizioni per Pistola",
+      "nameShort": "Munizioni Pistola",
+      "description": "Munizioni calibro 9mm per pistole. Comuni ma sempre utili.",
+      "category": "AMMO",
+      "subcategory": "pistol",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 50,
+      "properties": {
+        "damage_bonus": 2,
+        "caliber": "9mm"
+      }
+    },
+    "rifle_ammo": {
+      "id": "rifle_ammo",
+      "name": "Munizioni per Fucile d'Assalto",
+      "nameShort": "Munizioni Fucile",
+      "description": "Munizioni 5.56mm per fucili d'assalto militari.",
+      "category": "AMMO",
+      "subcategory": "rifle",
+      "rarity": "UNCOMMON",
+      "weight": 0.4,
+      "value": 35,
+      "stackable": true,
+      "max_stack": 40,
+      "properties": {
+        "damage_bonus": 4,
+        "caliber": "5.56mm",
+        "penetration": 2
+      }
+    },
+    "shotgun_shells": {
+      "id": "shotgun_shells",
+      "name": "Cartucce per Fucile a Pompa",
+      "nameShort": "Cartucce Pompa",
+      "description": "Cartucce calibro 12 per fucili a pompa. Devastanti a corto raggio.",
+      "category": "AMMO",
+      "subcategory": "shotgun",
+      "rarity": "UNCOMMON",
+      "weight": 0.6,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "damage_bonus": 6,
+        "caliber": "12ga",
+        "spread_damage": true
+      }
+    },
+    "special_ammo": {
+      "id": "special_ammo",
+      "name": "Munizioni Speciali",
+      "nameShort": "Munizioni Speciali",
+      "description": "Munizioni militari speciali con punte perforanti.",
+      "category": "AMMO",
+      "subcategory": "special",
+      "rarity": "RARE",
+      "weight": 0.4,
+      "value": 80,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "damage_bonus": 5,
+        "armor_piercing": 0.5,
+        "caliber": "special"
+      }
+    }
+  }
+}

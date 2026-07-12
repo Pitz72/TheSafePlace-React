@@ -1,0 +1,176 @@
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .manager { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+      .core-manager { fill: #1a365d; stroke: #2b6cb0; stroke-width: 3; }
+      .text { fill: white; font-family: 'Courier New', monospace; font-size: 11px; text-anchor: middle; }
+      .title { fill: white; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; text-anchor: middle; }
+      .dependency { stroke: #68d391; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .signal { stroke: #f56565; stroke-width: 1.5; fill: none; stroke-dasharray: 4,4; marker-end: url(#signal-arrow); }
+      .weak-dependency { stroke: #a0aec0; stroke-width: 1; fill: none; stroke-dasharray: 2,2; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#68d391" />
+    </marker>
+    <marker id="signal-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f56565" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="25" class="title" font-size="16">MANAGER DEPENDENCIES DIAGRAM</text>
+  <text x="500" y="45" class="text">Singleton Managers Interaction Map</text>
+  
+  <!-- Core Managers (Center) -->
+  <!-- PlayerManager (Core) -->
+  <rect x="200" y="150" width="120" height="70" class="core-manager" rx="5"/>
+  <text x="260" y="175" class="title">PlayerManager</text>
+  <text x="260" y="190" class="text">Stats • Inventory</text>
+  <text x="260" y="205" class="text">Progression</text>
+  
+  <!-- DataManager (Core) -->
+  <rect x="400" y="150" width="120" height="70" class="core-manager" rx="5"/>
+  <text x="460" y="175" class="title">DataManager</text>
+  <text x="460" y="190" class="text">JSON • Items</text>
+  <text x="460" y="205" class="text">Events • System</text>
+  
+  <!-- InputManager (Core) -->
+  <rect x="600" y="150" width="120" height="70" class="core-manager" rx="5"/>
+  <text x="660" y="175" class="title">InputManager</text>
+  <text x="660" y="190" class="text">States • Keys</text>
+  <text x="660" y="205" class="text">Signal Routing</text>
+  
+  <!-- Secondary Managers (Top Row) -->
+  <!-- EventManager -->
+  <rect x="100" y="50" width="120" height="70" class="manager" rx="5"/>
+  <text x="160" y="75" class="title">EventManager</text>
+  <text x="160" y="90" class="text">Random Events</text>
+  <text x="160" y="105" class="text">Skill Checks</text>
+  
+  <!-- CraftingManager -->
+  <rect x="300" y="50" width="120" height="70" class="manager" rx="5"/>
+  <text x="360" y="75" class="title">CraftingManager</text>
+  <text x="360" y="90" class="text">Recipes</text>
+  <text x="360" y="105" class="text">Workbench</text>
+  
+  <!-- QuestManager -->
+  <rect x="500" y="50" width="120" height="70" class="manager" rx="5"/>
+  <text x="560" y="75" class="title">QuestManager</text>
+  <text x="560" y="90" class="text">Main Quest</text>
+  <text x="560" y="105" class="text">Side Quests</text>
+  
+  <!-- CombatManager -->
+  <rect x="700" y="50" width="120" height="70" class="manager" rx="5"/>
+  <text x="760" y="75" class="title">CombatManager</text>
+  <text x="760" y="90" class="text">Turn System</text>
+  <text x="760" y="105" class="text">Actions</text>
+  
+  <!-- Support Managers (Bottom Row) -->
+  <!-- TimeManager -->
+  <rect x="150" y="300" width="120" height="70" class="manager" rx="5"/>
+  <text x="210" y="325" class="title">TimeManager</text>
+  <text x="210" y="340" class="text">Day/Night</text>
+  <text x="210" y="355" class="text">Survival</text>
+  
+  <!-- NarrativeManager -->
+  <rect x="300" y="300" width="120" height="70" class="manager" rx="5"/>
+  <text x="360" y="325" class="title">NarrativeManager</text>
+  <text x="360" y="340" class="text">Emotions</text>
+  <text x="360" y="355" class="text">Memory</text>
+  
+  <!-- SaveLoadManager -->
+  <rect x="450" y="300" width="120" height="70" class="manager" rx="5"/>
+  <text x="510" y="325" class="title">SaveLoadManager</text>
+  <text x="510" y="340" class="text">Serialization</text>
+  <text x="510" y="355" class="text">File I/O</text>
+  
+  <!-- ThemeManager -->
+  <rect x="600" y="300" width="120" height="70" class="manager" rx="5"/>
+  <text x="660" y="325" class="title">ThemeManager</text>
+  <text x="660" y="340" class="text">CRT Shader</text>
+  <text x="660" y="355" class="text">UI Themes</text>
+  
+  <!-- Dependencies (Green Arrows) -->
+  <!-- EventManager → PlayerManager, DataManager -->
+  <path d="M 160 120 Q 200 135 240 150" class="dependency"/>
+  <path d="M 180 120 Q 300 135 400 150" class="dependency"/>
+  
+  <!-- CraftingManager → PlayerManager, DataManager -->
+  <path d="M 340 120 Q 300 135 280 150" class="dependency"/>
+  <path d="M 380 120 Q 420 135 440 150" class="dependency"/>
+  
+  <!-- QuestManager → PlayerManager, DataManager -->
+  <path d="M 540 120 Q 400 135 320 150" class="dependency"/>
+  <path d="M 560 120 Q 520 135 480 150" class="dependency"/>
+  
+  <!-- CombatManager → PlayerManager -->
+  <path d="M 740 120 Q 500 135 320 150" class="dependency"/>
+  
+  <!-- TimeManager → PlayerManager -->
+  <path d="M 230 300 Q 245 225 250 220" class="dependency"/>
+  
+  <!-- NarrativeManager → PlayerManager -->
+  <path d="M 340 300 Q 300 225 280 220" class="dependency"/>
+  
+  <!-- SaveLoadManager → All Core Managers -->
+  <path d="M 490 300 Q 400 225 320 220" class="dependency"/>
+  <path d="M 510 300 Q 480 225 480 220" class="dependency"/>
+  <path d="M 530 300 Q 600 225 640 220" class="dependency"/>
+  
+  <!-- Signal Communications (Red Dashed) -->
+  <!-- InputManager signals to various managers -->
+  <path d="M 660 150 Q 500 100 220 120" class="signal"/>
+  <path d="M 660 150 Q 600 100 420 120" class="signal"/>
+  <path d="M 660 150 Q 700 100 760 120" class="signal"/>
+  
+  <!-- EventManager signals -->
+  <path d="M 160 120 Q 400 80 560 120" class="signal"/>
+  <path d="M 160 120 Q 250 200 360 300" class="signal"/>
+  
+  <!-- Weak Dependencies (Gray Dashed) -->
+  <!-- Cross-manager weak references -->
+  <path d="M 360 120 Q 460 100 560 120" class="weak-dependency"/>
+  <path d="M 760 120 Q 680 200 360 300" class="weak-dependency"/>
+  
+  <!-- Legend -->
+  <g id="legend">
+    <rect x="50" y="450" width="400" height="120" fill="#1a202c" stroke="#4a5568" stroke-width="1" rx="5"/>
+    <text x="250" y="470" class="title">LEGENDA DIPENDENZE</text>
+    
+    <!-- Strong Dependency -->
+    <line x1="70" y1="485" x2="110" y2="485" class="dependency"/>
+    <text x="120" y="490" class="text">Dipendenza Forte (get_node, chiamate dirette)</text>
+    
+    <!-- Signal Communication -->
+    <line x1="70" y1="505" x2="110" y2="505" class="signal"/>
+    <text x="120" y="510" class="text">Comunicazione Signal (eventi, notifiche)</text>
+    
+    <!-- Weak Dependency -->
+    <line x1="70" y1="525" x2="110" y2="525" class="weak-dependency"/>
+    <text x="120" y="530" class="text">Dipendenza Debole (opzionale, fallback)</text>
+    
+    <!-- Core Manager -->
+    <rect x="70" y="540" width="40" height="20" class="core-manager"/>
+    <text x="120" y="555" class="text">Core Manager (essenziale)</text>
+  </g>
+  
+  <!-- Dependency Analysis -->
+  <g id="analysis">
+    <rect x="500" y="450" width="450" height="120" fill="#1a202c" stroke="#4a5568" stroke-width="1" rx="5"/>
+    <text x="725" y="470" class="title">ANALISI DIPENDENZE</text>
+    
+    <text x="520" y="490" class="text">• PlayerManager: Hub centrale per stato giocatore</text>
+    <text x="520" y="505" class="text">• DataManager: Fonte unica di verità per dati</text>
+    <text x="520" y="520" class="text">• InputManager: Orchestratore input globale</text>
+    <text x="520" y="535" class="text">• Signal System: Disaccoppiamento architetturale</text>
+    <text x="520" y="550" class="text">• Lazy Loading: Inizializzazione on-demand</text>
+  </g>
+  
+  <!-- Initialization Order -->
+  <g id="init-order">
+    <rect x="50" y="590" width="900" height="80" fill="#2d1b69" stroke="#553c9a" stroke-width="1" rx="5"/>
+    <text x="500" y="610" class="title">ORDINE INIZIALIZZAZIONE AUTOLOAD</text>
+    <text x="500" y="630" class="text">1. DataManager → 2. PlayerManager → 3. InputManager → 4. TimeManager → 5. Altri Manager</text>
+    <text x="500" y="650" class="text">Inizializzazione esplicita tramite initialize() per evitare dipendenze circolari</text>
+  </g>
+</svg>

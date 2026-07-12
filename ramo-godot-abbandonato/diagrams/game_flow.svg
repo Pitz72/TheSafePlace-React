@@ -1,0 +1,235 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .state { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
+      .start-state { fill: #1a365d; stroke: #2b6cb0; stroke-width: 3; }
+      .end-state { fill: #742a2a; stroke: #c53030; stroke-width: 3; }
+      .decision { fill: #553c9a; stroke: #805ad5; stroke-width: 2; }
+      .text { fill: white; font-family: 'Courier New', monospace; font-size: 10px; text-anchor: middle; }
+      .title { fill: white; font-family: 'Courier New', monospace; font-size: 12px; font-weight: bold; text-anchor: middle; }
+      .flow { stroke: #68d391; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .condition { stroke: #f56565; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .loop { stroke: #fbb6ce; stroke-width: 2; fill: none; stroke-dasharray: 4,4; marker-end: url(#arrow); }
+      .label { fill: #e2e8f0; font-family: 'Courier New', monospace; font-size: 9px; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#68d391" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="25" class="title" font-size="16">GAME FLOW DIAGRAM</text>
+  <text x="600" y="45" class="text">The Safe Place - Gameplay State Machine</text>
+  
+  <!-- Start State -->
+  <rect x="50" y="100" width="100" height="60" class="start-state" rx="10"/>
+  <text x="100" y="125" class="title">GAME START</text>
+  <text x="100" y="140" class="text">Initialize</text>
+  <text x="100" y="155" class="text">Managers</text>
+  
+  <!-- Main Menu -->
+  <rect x="200" y="100" width="100" height="60" class="state" rx="5"/>
+  <text x="250" y="125" class="title">MAIN MENU</text>
+  <text x="250" y="140" class="text">New Game</text>
+  <text x="250" y="155" class="text">Load Game</text>
+  
+  <!-- Game Setup Decision -->
+  <polygon points="400,100 450,130 400,160 350,130" class="decision"/>
+  <text x="400" y="125" class="title">Game</text>
+  <text x="400" y="140" class="title">Setup?</text>
+  
+  <!-- New Game Setup -->
+  <rect x="500" y="50" width="100" height="60" class="state" rx="5"/>
+  <text x="550" y="75" class="title">NEW GAME</text>
+  <text x="550" y="90" class="text">Character</text>
+  <text x="550" y="105" class="text">Creation</text>
+  
+  <!-- Load Game -->
+  <rect x="500" y="150" width="100" height="60" class="state" rx="5"/>
+  <text x="550" y="175" class="title">LOAD GAME</text>
+  <text x="550" y="190" class="text">Restore</text>
+  <text x="550" y="205" class="text">State</text>
+  
+  <!-- Game World -->
+  <rect x="700" y="100" width="120" height="60" class="state" rx="5"/>
+  <text x="760" y="125" class="title">GAME WORLD</text>
+  <text x="760" y="140" class="text">Exploration</text>
+  <text x="760" y="155" class="text">Interaction</text>
+  
+  <!-- Gameplay States (Middle Section) -->
+  <!-- Exploration -->
+  <rect x="100" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="150" y="275" class="title">EXPLORATION</text>
+  <text x="150" y="290" class="text">Movement</text>
+  <text x="150" y="305" class="text">Discovery</text>
+  
+  <!-- Interaction -->
+  <rect x="250" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="300" y="275" class="title">INTERACTION</text>
+  <text x="300" y="290" class="text">NPCs</text>
+  <text x="300" y="305" class="text">Objects</text>
+  
+  <!-- Inventory -->
+  <rect x="400" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="450" y="275" class="title">INVENTORY</text>
+  <text x="450" y="290" class="text">Items</text>
+  <text x="450" y="305" class="text">Equipment</text>
+  
+  <!-- Crafting -->
+  <rect x="550" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="600" y="275" class="title">CRAFTING</text>
+  <text x="600" y="290" class="text">Workbench</text>
+  <text x="600" y="305" class="text">Recipes</text>
+  
+  <!-- Combat -->
+  <rect x="700" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="750" y="275" class="title">COMBAT</text>
+  <text x="750" y="290" class="text">Turn-based</text>
+  <text x="750" y="305" class="text">Actions</text>
+  
+  <!-- Events -->
+  <rect x="850" y="250" width="100" height="60" class="state" rx="5"/>
+  <text x="900" y="275" class="title">EVENTS</text>
+  <text x="900" y="290" class="text">Random</text>
+  <text x="900" y="305" class="text">Narrative</text>
+  
+  <!-- Special States (Bottom Section) -->
+  <!-- Quest System -->
+  <rect x="200" y="400" width="100" height="60" class="state" rx="5"/>
+  <text x="250" y="425" class="title">QUEST</text>
+  <text x="250" y="440" class="text">Main Story</text>
+  <text x="250" y="455" class="text">Side Quests</text>
+  
+  <!-- Narrative -->
+  <rect x="350" y="400" width="100" height="60" class="state" rx="5"/>
+  <text x="400" y="425" class="title">NARRATIVE</text>
+  <text x="400" y="440" class="text">Emotions</text>
+  <text x="400" y="455" class="text">Memory</text>
+  
+  <!-- Save/Load -->
+  <rect x="500" y="400" width="100" height="60" class="state" rx="5"/>
+  <text x="550" y="425" class="title">SAVE/LOAD</text>
+  <text x="550" y="440" class="text">Persistence</text>
+  <text x="550" y="455" class="text">Checkpoints</text>
+  
+  <!-- Settings -->
+  <rect x="650" y="400" width="100" height="60" class="state" rx="5"/>
+  <text x="700" y="425" class="title">SETTINGS</text>
+  <text x="700" y="440" class="text">Options</text>
+  <text x="700" y="455" class="text">Themes</text>
+  
+  <!-- End States -->
+  <!-- Game Over -->
+  <rect x="900" y="400" width="100" height="60" class="end-state" rx="10"/>
+  <text x="950" y="425" class="title">GAME OVER</text>
+  <text x="950" y="440" class="text">Death</text>
+  <text x="950" y="455" class="text">Failure</text>
+  
+  <!-- Victory -->
+  <rect x="1050" y="400" width="100" height="60" class="end-state" rx="10"/>
+  <text x="1100" y="425" class="title">VICTORY</text>
+  <text x="1100" y="440" class="text">Escape</text>
+  <text x="1100" y="455" class="text">Success</text>
+  
+  <!-- Flow Arrows -->
+  <!-- Initial Flow -->
+  <path d="M 150 130 L 200 130" class="flow"/>
+  <path d="M 300 130 L 350 130" class="flow"/>
+  
+  <!-- Setup Branches -->
+  <path d="M 425 115 L 500 80" class="condition"/>
+  <path d="M 425 145 L 500 180" class="condition"/>
+  
+  <!-- To Game World -->
+  <path d="M 600 80 Q 650 90 700 120" class="flow"/>
+  <path d="M 600 180 Q 650 150 700 130" class="flow"/>
+  
+  <!-- Game World to Gameplay States -->
+  <path d="M 760 160 Q 500 200 150 250" class="flow"/>
+  <path d="M 760 160 Q 600 200 300 250" class="flow"/>
+  <path d="M 760 160 Q 650 200 450 250" class="flow"/>
+  <path d="M 760 160 Q 700 200 600 250" class="flow"/>
+  <path d="M 760 160 L 750 250" class="flow"/>
+  <path d="M 780 160 L 900 250" class="flow"/>
+  
+  <!-- Gameplay State Interconnections -->
+  <path d="M 200 280 L 250 280" class="flow"/>
+  <path d="M 350 280 L 400 280" class="flow"/>
+  <path d="M 500 280 L 550 280" class="flow"/>
+  <path d="M 650 280 L 700 280" class="flow"/>
+  <path d="M 800 280 L 850 280" class="flow"/>
+  
+  <!-- To Special States -->
+  <path d="M 300 310 Q 275 350 250 400" class="flow"/>
+  <path d="M 450 310 Q 425 350 400 400" class="flow"/>
+  <path d="M 600 310 Q 575 350 550 400" class="flow"/>
+  <path d="M 750 310 Q 725 350 700 400" class="flow"/>
+  
+  <!-- To End States -->
+  <path d="M 900 310 Q 925 350 950 400" class="condition"/>
+  <path d="M 900 310 Q 975 350 1100 400" class="condition"/>
+  
+  <!-- Loop Back to Game World -->
+  <path d="M 150 250 Q 50 200 50 130 Q 50 50 760 50 Q 900 50 900 100" class="loop"/>
+  
+  <!-- Labels for Conditions -->
+  <text x="475" y="95" class="label">New</text>
+  <text x="475" y="165" class="label">Load</text>
+  <text x="925" y="350" class="label">Death</text>
+  <text x="1025" y="350" class="label">Win</text>
+  
+  <!-- Game Loop Indicator -->
+  <g id="game-loop">
+    <rect x="50" y="550" width="1100" height="100" fill="#1a202c" stroke="#4a5568" stroke-width="1" rx="5"/>
+    <text x="600" y="575" class="title" font-size="14">GAME LOOP CYCLE</text>
+    
+    <rect x="100" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="140" y="615" class="text">Input</text>
+    
+    <rect x="220" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="260" y="615" class="text">Update</text>
+    
+    <rect x="340" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="380" y="615" class="text">Process</text>
+    
+    <rect x="460" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="500" y="615" class="text">Events</text>
+    
+    <rect x="580" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="620" y="615" class="text">Render</text>
+    
+    <rect x="700" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="740" y="615" class="text">UI</text>
+    
+    <rect x="820" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="860" y="615" class="text">Save</text>
+    
+    <rect x="940" y="590" width="80" height="40" class="state" rx="3"/>
+    <text x="980" y="615" class="text">Sleep</text>
+    
+    <!-- Loop arrows -->
+    <path d="M 180 610 L 220 610" class="flow"/>
+    <path d="M 300 610 L 340 610" class="flow"/>
+    <path d="M 420 610 L 460 610" class="flow"/>
+    <path d="M 540 610 L 580 610" class="flow"/>
+    <path d="M 660 610 L 700 610" class="flow"/>
+    <path d="M 780 610 L 820 610" class="flow"/>
+    <path d="M 900 610 L 940 610" class="flow"/>
+    <path d="M 1020 610 Q 1050 610 1050 650 Q 1050 680 50 680 Q 50 650 50 610 Q 50 590 100 590" class="loop"/>
+  </g>
+  
+  <!-- Performance Metrics -->
+  <g id="metrics">
+    <rect x="50" y="680" width="500" height="80" fill="#2d1b69" stroke="#553c9a" stroke-width="1" rx="5"/>
+    <text x="300" y="700" class="title">PERFORMANCE TARGETS</text>
+    <text x="70" y="720" class="text">• 60 FPS target (16.67ms per frame)</text>
+    <text x="70" y="735" class="text">• State transitions: &lt;100ms</text>
+    <text x="70" y="750" class="text">• Save/Load operations: &lt;2s</text>
+    
+    <rect x="600" y="680" width="550" height="80" fill="#2d1b69" stroke="#553c9a" stroke-width="1" rx="5"/>
+    <text x="875" y="700" class="title">STATE MANAGEMENT</text>
+    <text x="620" y="720" class="text">• Singleton pattern per manager</text>
+    <text x="620" y="735" class="text">• Signal-based communication</text>
+    <text x="620" y="750" class="text">• Lazy initialization per necessità</text>
+  </g>
+</svg>

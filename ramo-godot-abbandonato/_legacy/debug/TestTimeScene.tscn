@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx1p5dfhf7d6k"]
+
+[ext_resource type="Script" path="res://scripts/debug/TestTimeSystem.gd" id="1_v4qxy"]
+
+[node name="TestTimeScene" type="Node"]
+script = ExtResource("1_v4qxy")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 800.0
+offset_bottom = 600.0
+text = "TEST SISTEMA TEMPORALE M3.T2
+
+Premere F5-F9 per eseguire test:
+
+[F5] - Test avanzamento tempo rapido
+[F6] - Test ciclo giorno/notte completo  
+[F7] - Test penalità sopravvivenza
+[F8] - Test save/load sistema temporale
+[F9] - Status completo sistema
+
+Consulta la console per i risultati dei test."
+vertical_alignment = 1 

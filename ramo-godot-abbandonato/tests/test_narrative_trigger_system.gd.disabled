@@ -1,0 +1,225 @@
+extends Node
+
+## Test specifico per il sistema di trigger delle quest
+## Verifica le modifiche implementate nel task
+## NOTA: Questo test richiede GUT (Godot Unit Test) per funzionare correttamente
+## Per ora è disabilitato - installare GUT per abilitarlo
+
+var narrative_manager: NarrativeSystemManager
+var player_manager: PlayerSystemManager
+var world_manager: WorldSystemManager
+
+func before_each():
+	"""Setup per ogni test"""
+	# Inizializza i manager
+	narrative_manager = NarrativeSystemManager.new()
+	player_manager = PlayerSystemManager.new()
+	world_manager = WorldSystemManager.new()
+	
+	# Inizializza il sistema quest
+	narrative_manager.initialize_quests()
+
+func after_each():
+	"""Cleanup dopo ogni test"""
+	if narrative_manager:
+		narrative_manager.queue_free()
+	if player_manager:
+		player_manager.queue_free()
+	if world_manager:
+		world_manager.queue_free()
+
+# ========================================
+# TEST CORREZIONI VARIABILI
+# ========================================
+
+func test_corrected_variable_names():
+	"""Test che le variabili corrette siano utilizzate in _get_condition_value"""
+	# Test hp invece di current_hp
+	var hp_value = narrative_manager._get_condition_value("hp")
+	assert_not_null(hp_value, "hp deve restituire un valore")
+	
+	# Test water invece di current_water
+	var water_value = narrative_manager._get_condition_value("water")
+	assert_not_null(water_value, "water deve restituire un valore")
+	
+	# Test food invece di current_food
+	var food_value = narrative_manager._get_condition_value("food")
+	assert_not_null(food_value, "food deve restituire un valore")
+
+func test_inventory_weight_calculation():
+	"""Test calcolo peso inventario corretto"""
+	var weight_value = narrative_manager._get_condition_value("inventory_weight")
+	assert_not_null(weight_value, "inventory_weight deve restituire un valore")
+	assert_typeof(weight_value, TYPE_FLOAT, "inventory_weight deve essere un float")
+
+func test_new_condition_values():
+	"""Test nuove condizioni implementate"""
+	# Test thirst_level
+	var thirst_value = narrative_manager._get_condition_value("thirst_level")
+	assert_not_null(thirst_value, "thirst_level deve restituire un valore")
+	
+	# Test time_of_day
+	var time_value = narrative_manager._get_condition_value("time_of_day")
+	assert_not_null(time_value, "time_of_day deve restituire un valore")
+	
+	# Test current_biome
+	var biome_value = narrative_manager._get_condition_value("current_biome")
+	assert_not_null(biome_value, "current_biome deve restituire un valore")
+
+# ========================================
+# TEST SISTEMA BIOMA
+# ========================================
+
+func test_player_biome_system():
+	"""Test sistema bioma del giocatore"""
+	# Test variabile current_player_biome
+	assert_true(narrative_manager.has_method("get_current_player_biome"), 
+		"Deve esistere il metodo get_current_player_biome")
+	
+	# Test metodo update_player_biome
+	assert_true(narrative_manager.has_method("update_player_biome"), 
+		"Deve esistere il metodo update_player_biome")
+	
+	# Test aggiornamento bioma
+	narrative_manager.update_player_biome("foreste")
+	var current_biome = narrative_manager.get_current_player_biome()
+	assert_eq(current_biome, "foreste", "Il bioma deve essere aggiornato correttamente")
+
+# ========================================
+# TEST CONDIZIONI BOOLEANE
+# ========================================
+
+func test_boolean_conditions():
+	"""Test condizioni booleane implementate"""
+	# Test resting
+	var resting_result = narrative_manager._evaluate_boolean_condition("resting")
+	assert_typeof(resting_result, TYPE_BOOL, "resting deve restituire un booleano")
+	
+	# Test deep_reflection
+	var reflection_result = narrative_manager._evaluate_boolean_condition("deep_reflection")
+	assert_typeof(reflection_result, TYPE_BOOL, "deep_reflection deve restituire un booleano")
+	
+	# Test crossroads_decision
+	var crossroads_result = narrative_manager._evaluate_boolean_condition("crossroads_decision")
+	assert_typeof(crossroads_result, TYPE_BOOL, "crossroads_decision deve restituire un booleano")
+	
+	# Test near_safe_place
+	var near_safe_result = narrative_manager._evaluate_boolean_condition("near_safe_place")
+	assert_typeof(near_safe_result, TYPE_BOOL, "near_safe_place deve restituire un booleano")
+	
+	# Test reached_safe_place
+	var reached_safe_result = narrative_manager._evaluate_boolean_condition("reached_safe_place")
+	assert_typeof(reached_safe_result, TYPE_BOOL, "reached_safe_place deve restituire un booleano")
+	
+	# Test near_radiation_zone
+	var near_radiation_result = narrative_manager._evaluate_boolean_condition("near_radiation_zone")
+	assert_typeof(near_radiation_result, TYPE_BOOL, "near_radiation_zone deve restituire un booleano")
+
+# ========================================
+# TEST TRIGGER SYSTEM
+# ========================================
+
+func test_trigger_evaluation():
+	"""Test valutazione trigger conditions"""
+	# Test condizione numerica semplice
+	var numeric_result = narrative_manager._evaluate_trigger_condition("hp > 50")
+	assert_typeof(numeric_result, TYPE_BOOL, "Condizione numerica deve restituire booleano")
+	
+	# Test condizione booleana
+	var boolean_result = narrative_manager._evaluate_trigger_condition("resting")
+	assert_typeof(boolean_result, TYPE_BOOL, "Condizione booleana deve restituire booleano")
+
+func test_check_all_triggers():
+	"""Test metodo check_all_triggers"""
+	# Verifica che il metodo esista
+	assert_true(narrative_manager.has_method("check_all_triggers"), 
+		"Deve esistere il metodo check_all_triggers")
+	
+	# Test che possa essere chiamato senza errori
+	narrative_manager.check_all_triggers()
+	# Se arriviamo qui senza crash, il test passa
+
+# ========================================
+# TEST INTEGRAZIONE MAINGAME
+# ========================================
+
+func test_maingame_integration():
+	"""Test integrazione con MainGame per aggiornamento bioma"""
+	# Simula il comportamento di MainGame._on_player_moved
+	var initial_biome = narrative_manager.get_current_player_biome()
+	
+	# Simula cambio bioma
+	narrative_manager.update_player_biome("pianure")
+	var new_biome = narrative_manager.get_current_player_biome()
+	
+	assert_ne(initial_biome, new_biome, "Il bioma deve cambiare")
+	assert_eq(new_biome, "pianure", "Il nuovo bioma deve essere impostato correttamente")
+
+# ========================================
+# TEST PERFORMANCE
+# ========================================
+
+func test_performance_trigger_evaluation():
+	"""Test performance valutazione trigger"""
+	var start_time = Time.get_ticks_msec()
+	
+	# Esegui 100 valutazioni di trigger
+	for i in range(100):
+		narrative_manager._evaluate_trigger_condition("hp > 50")
+		narrative_manager._evaluate_trigger_condition("water < 30")
+		narrative_manager._evaluate_trigger_condition("resting")
+	
+	var end_time = Time.get_ticks_msec()
+	var elapsed = end_time - start_time
+	
+	# Deve completare in meno di 100ms
+	assert_lt(elapsed, 100, "Valutazione trigger deve essere performante (< 100ms per 300 valutazioni)")
+
+# ========================================
+# TEST EDGE CASES
+# ========================================
+
+func test_edge_cases():
+	"""Test casi limite"""
+	# Test condizione vuota
+	var empty_result = narrative_manager._evaluate_trigger_condition("")
+	assert_false(empty_result, "Condizione vuota deve restituire false")
+	
+	# Test condizione malformata
+	var malformed_result = narrative_manager._evaluate_trigger_condition("invalid condition")
+	assert_typeof(malformed_result, TYPE_BOOL, "Condizione malformata deve restituire booleano")
+	
+	# Test bioma inesistente
+	narrative_manager.update_player_biome("bioma_inesistente")
+	var biome_result = narrative_manager.get_current_player_biome()
+	assert_eq(biome_result, "bioma_inesistente", "Deve accettare qualsiasi stringa come bioma")
+
+# ========================================
+# TEST LOGGING
+# ========================================
+
+func test_logging_integration():
+	"""Test integrazione con TSPLogger"""
+	# Test che i metodi chiamino TSPLogger senza errori
+	narrative_manager.update_player_biome("test_biome")
+	narrative_manager.check_all_triggers()
+	# Se arriviamo qui senza crash, il logging funziona
+
+func test_complete_workflow():
+	"""Test workflow completo del sistema"""
+	print("🧪 Test workflow completo sistema trigger quest")
+	
+	# 1. Inizializza quest
+	narrative_manager.initialize_quests()
+	
+	# 2. Aggiorna bioma
+	narrative_manager.update_player_biome("foreste")
+	
+	# 3. Controlla trigger
+	narrative_manager.check_all_triggers()
+	
+	# 4. Verifica stato
+	var biome = narrative_manager.get_current_player_biome()
+	assert_eq(biome, "foreste", "Bioma deve essere aggiornato")
+	
+	print("✅ Workflow completo testato con successo")

@@ -1,0 +1,32 @@
+{
+  "CONS_001": {
+    "id": "CONS_001",
+    "name": "Razione di cibo",
+    "description": "Cibo in scatola per un giorno. Ripristina una piccola quantità di sazietà.",
+    "type": "consumable",
+    "weight": 0.5,
+    "value": 5,
+    "effect": "satiety",
+    "effectValue": 25
+  },
+  "CONS_002": {
+    "id": "CONS_002",
+    "name": "Bottiglia d'acqua",
+    "description": "Acqua potabile. Essenziale per la sopravvivenza.",
+    "type": "consumable",
+    "weight": 1,
+    "value": 3,
+    "effect": "hydration",
+    "effectValue": 25
+  },
+  "CONS_003": {
+    "id": "CONS_003",
+    "name": "Bende",
+    "description": "Bende pulite per medicare ferite leggere.",
+    "type": "consumable",
+    "weight": 0.1,
+    "value": 10,
+    "effect": "heal",
+    "effectValue": 10
+  }
+}

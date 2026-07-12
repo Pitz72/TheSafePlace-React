@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxvqj8k7n8ywg"]
+
+[ext_resource type="Script" path="res://scripts/tools/TestExecutor.gd" id="1_0k8xm"]
+
+[node name="TestExecutorScene" type="Node"]
+script = ExtResource("1_0k8xm")
+
+[node name="MemoryManager" type="Node" parent="."]
+script = ExtResource("res://scripts/MemoryManager.gd")
+
+[node name="WorldOptimized" type="Node2D" parent="."]
+script = ExtResource("res://scripts/WorldOptimized.gd")
+
+[node name="PerformanceValidator" type="Node" parent="."]
+script = ExtResource("res://scripts/tools/PerformanceValidator.gd")

@@ -1,0 +1,392 @@
+{
+  "MAIN_QUEST": [
+    {
+      "stage": 1,
+      "id": "mq_01_silence",
+      "trigger": { "type": "progress", "value": 10 },
+      "title": "Ricordo: Il Silenzio",
+      "description": "Mentre cammini, un silenzio innaturale ti avvolge, identico a quello di tanti anni fa. Ti torna in mente il giorno in cui tutto finì. Non con un boato, ma con un respiro trattenuto. Il rombo costante all'orizzonte cessò. Gli uccelli smisero di cantare. Persino il vento sembrò aver paura di muoversi. Tuo padre, Elian, ti strinse la mano, troppo forte. Nei suoi occhi non c'era solo paura, ma il riconoscimento di una fine. La 'Guerra Inespressa' era terminata, e il mondo aveva smesso di respirare.",
+      "fragments": [
+        {
+          "id": "testamento_lettera",
+          "title": "La Lettera di Papà",
+          "activationConditions": {
+            "questStage": 1,
+            "actionContext": "game_start"
+          },
+          "narrativeText": "Mio caro Ultimo,\n\nSe stai leggendo questa lettera, significa che non sono più con te. Il mio cuore si spezza al pensiero di lasciarti solo, ma so che sei forte. Tua madre Lena ti ha trasmesso quella forza, anche se non l'hai mai conosciuta.\n\nC'è un posto, figlio mio. Un posto che tua madre chiamava 'The Safe Place'. Non so dove sia esattamente, ma so che esiste. Lena ne parlava sempre, con gli occhi che brillavano di una luce che non ho mai più visto dopo la sua morte.\n\nTrova quel posto, Ultimo. Troverai le risposte che cerchi, e forse... forse troverai la pace che io non sono mai riuscito a darti.\n\nRicorda: la compassione di tua madre e la determinazione che ti ho insegnato ti guideranno. Non dimenticare mai chi sei.\n\nCon tutto il mio amore,\nPapà",
+          "emotionalImpact": {
+            "understandingLevel": 15,
+            "elianEmpathy": 20,
+            "lenaMemoryStrength": 10,
+            "wisdomGained": 5
+          }
+        }
+      ],
+      "reflections": {
+        "testamento_reflection_1": {
+          "text": "Papà ha sempre avuto difficoltà a esprimere i suoi sentimenti. Ma in questa lettera... c'è qualcosa di diverso. Un dolore profondo, ma anche una speranza che non gli avevo mai visto prima.",
+          "tone": "nostalgico",
+          "trigger": "post_letter_reading"
+        }
+      },
+      "stageCompletion": {
+        "requiredFragments": ["testamento_lettera"],
+        "emotionalThreshold": {
+          "understandingLevel": 20
+        },
+        "nextStage": 2,
+        "completionReward": {
+          "emotionalImpact": {
+            "wisdomGained": 10,
+            "elianEmpathy": 15
+          }
+        }
+      }
+    },
+    {
+      "stage": 2,
+      "id": "mq_02_water",
+      "trigger": { "type": "progress", "value": 15 },
+      "title": "Ricordo: La Lezione dell'Acqua",
+      "description": "La gola ti brucia. La sete ti riporta a un altro momento, vicino a un corso d'acqua che puzzava di metallo e di morte. Stavi per bere, un bambino guidato solo dall'istinto. La mano di Elian ti afferrò, ferma, quasi violenta. 'No!', fu un ordine perentorio. Poi, con gesti lenti e metodici, prese uno straccio sudicio, sabbia, ciottoli, e costruì un filtro rudimentale. 'Il mondo non è più amico,' ti disse, porgendoti l'acqua torbida. 'Ogni sorso, ogni boccone, te lo devi conquistare. E devi capire cosa puoi prendere, e cosa ti ucciderà'.",
+      "fragments": [
+        {
+          "id": "water_lesson_fragment",
+          "title": "La Lezione dell'Acqua",
+          "activationConditions": {
+            "questStage": 2,
+            "actionContext": "thirst_critical"
+          },
+          "narrativeText": "La lezione dell'acqua... papà mi insegnò che nulla è sicuro in questo mondo. Ogni sorso deve essere conquistato, ogni goccia filtrata attraverso la conoscenza e la cautela.",
+          "emotionalImpact": {
+            "understandingLevel": 10,
+            "memoryStrength": { "water_lesson": 15 },
+            "wisdomGained": 8
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["water_lesson_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 25
+        },
+        "nextStage": 3
+      }
+    },
+    {
+      "stage": 3,
+      "id": "mq_03_blood",
+      "trigger": { "type": "progress", "value": 30 },
+      "title": "Ricordo: Il Sapore del Sangue",
+      "description": "L'adrenalina dello scontro ti riporta alla vecchia stazione ferroviaria. I predoni. Il lampo di un coltello. Tuo padre che combatteva, una furia disperata. L'ordine che ti squarciò l'anima: 'CORRI! NON VOLTARTI!'. Ricordi la tua fuga, il cuore che martellava, il sapore amaro della polvere e della paura in bocca. Ore dopo, Elian ti raggiunse, zoppicando, una maschera di sudore e sangue rappreso. Non disse nulla, ma quella notte capisti una lezione terribile: a volte, sopravvivere significa lasciare qualcuno indietro.",
+      "fragments": [
+        {
+          "id": "blood_memory_fragment",
+          "title": "Il Sapore del Sangue",
+          "activationConditions": {
+            "questStage": 3,
+            "actionContext": "combat_experience"
+          },
+          "narrativeText": "Il sangue di papà sulla sua camicia... il modo in cui zoppicava ma continuava a camminare. Mi disse di non voltarmi indietro, ma io lo feci. Una volta. Solo una volta. E vidi cosa significa davvero proteggere qualcuno che ami.",
+          "emotionalImpact": {
+            "understandingLevel": 15,
+            "elianEmpathy": 25,
+            "memoryStrength": { "blood_taste": 20 },
+            "wisdomGained": 12
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["blood_memory_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 40
+        },
+        "nextStage": 4
+      }
+    },
+    {
+      "stage": 4,
+      "id": "mq_04_darkness",
+      "trigger": { "type": "survival_days", "value": 2 },
+      "title": "Ricordo: Imparare il Buio",
+      "description": "La ferita di tuo padre guarì lentamente, lasciando una cicatrice che era un memento costante. Fu allora che iniziò a insegnarti a combattere. Non per vincere, ma per sopravvivere. 'Non siamo eroi di nessuna storia,' ti disse, mostrandoti come parare un colpo. 'Sopravvivere significa colpire per primo e colpire duro. O, a volte, significa sapere quando non colpire affatto, e sparire nell'ombra. La scelta più difficile, spesso, è capire la differenza'.",
+      "fragments": [
+        {
+          "id": "darkness_training_fragment",
+          "title": "Lezioni nel Buio",
+          "activationConditions": {
+            "questStage": 4,
+            "actionContext": "night_time"
+          },
+          "narrativeText": "Papà mi insegnò che il buio non è solo assenza di luce. È uno strumento. Un alleato. 'Quando gli altri dormono, tu osservi. Quando gli altri parlano, tu ascolti. Quando gli altri combattono, tu scegli il momento.'",
+          "emotionalImpact": {
+            "understandingLevel": 12,
+            "memoryStrength": { "darkness_lesson": 18 },
+            "wisdomGained": 10
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["darkness_training_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 50
+        },
+        "nextStage": 5
+      }
+    },
+    {
+      "stage": 5,
+      "id": "mq_05_question",
+      "trigger": { "type": "enter_biome", "biome": "R" },
+      "title": "Ricordo: La Domanda Senza Risposta",
+      "description": "Questo fragile barlume di sicurezza ti ricorda la vecchia fattoria. E la fattoria ti ricorda le domande. Quelle che ponevi a tuo padre nelle notti fredde. 'E mamma? Cosa le è successo?'. Elian non rispondeva mai veramente. La sua voce si incrinava, i suoi occhi si perdevano in un abisso di sofferenza. 'Lena... lei avrebbe voluto che tu fossi forte,' diceva. 'Questo è quello che devi sapere.' Ma tu iniziavi a leggere tra le righe. C'era un segreto, un peso che tuo padre portava da solo. Un segreto che lo stava consumando da dentro.",
+      "fragments": [
+        {
+          "id": "mothers_secret_fragment",
+          "title": "Il Segreto di Mamma",
+          "activationConditions": {
+            "questStage": 5,
+            "actionContext": "safe_place_discovery"
+          },
+          "narrativeText": "Mamma... papà non ne parlava mai davvero. Solo frammenti. 'Lei avrebbe voluto che tu fossi forte.' Ma perché? Cosa nasconde? Ogni volta che chiedevo, i suoi occhi diventavano vuoti, come se guardasse un fantasma.",
+          "emotionalImpact": {
+            "understandingLevel": 18,
+            "lenaMemoryStrength": 25,
+            "elianEmpathy": 20,
+            "wisdomGained": 15
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["mothers_secret_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 65
+        },
+        "nextStage": 6
+      }
+    },
+    {
+      "stage": 6,
+      "id": "mq_06_angels",
+      "trigger": { "type": "progress", "value": 80 },
+      "title": "Ricordo: Gli Angeli della Cenere",
+      "description": "Un odore acre, chimico, ti pizzica le narici. È l'odore della cenere, ma di una cenere diversa. Ti torna in mente la radura, le sagome umanoidi contorte. E le figure incappucciate. 'Non sono \"chi\", Ultimo. Sono \"cosa\",' ti aveva sussurrato tuo padre, il terrore nella sua voce. 'Un sintomo della malattia di questo mondo. Portano solo morte. Morte e cenere.' Quel giorno hai capito che là fuori c'erano orrori peggiori dei predoni e della fame.",
+      "fragments": [
+        {
+          "id": "ash_angels_fragment",
+          "title": "Gli Angeli della Cenere",
+          "activationConditions": {
+            "questStage": 6,
+            "actionContext": "radiation_encounter"
+          },
+          "narrativeText": "'Non sono \"chi\", Ultimo. Sono \"cosa\".' Le parole di papà riecheggiano mentre guardo quelle figure contorte. Angeli? No. Sintomi. Sintomi di una malattia che ha infettato il mondo stesso.",
+          "emotionalImpact": {
+            "understandingLevel": 20,
+            "memoryStrength": { "angels": 22 },
+            "wisdomGained": 18
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["ash_angels_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 80
+        },
+        "nextStage": 7
+      }
+    },
+    {
+      "stage": 7,
+      "id": "mq_07_burden",
+      "trigger": { "type": "progress", "value": 120 },
+      "title": "Ricordo: Il Fardello",
+      "description": "La nuova forza che senti nelle tue membra ti riporta a un confronto con tuo padre. 'Perché non mi dici mai niente?', gli avevi urlato. E per la prima volta avevi visto un dolore nudo nei suoi occhi. 'Ci sono cose che un figlio non dovrebbe mai sapere,' ti aveva risposto. 'Sapere non cambierebbe nulla, ragazzo. Anzi, forse renderebbe tutto più difficile da sopportare. La verità, a volte, è un fardello troppo pesante'.",
+      "fragments": [
+        {
+          "id": "fathers_burden_fragment",
+          "title": "Il Fardello del Padre",
+          "activationConditions": {
+            "questStage": 7,
+            "actionContext": "character_growth"
+          },
+          "narrativeText": "'Ci sono cose che un figlio non dovrebbe mai sapere.' Quelle parole... il modo in cui papà si rifiutava di incontrare il mio sguardo. Cosa nascondeva? Cosa lo stava divorando da dentro?",
+          "emotionalImpact": {
+            "understandingLevel": 25,
+            "elianEmpathy": 35,
+            "memoryStrength": { "burden": 25 },
+            "wisdomGained": 20
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["fathers_burden_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 100
+        },
+        "nextStage": 8
+      }
+    },
+    {
+      "stage": 8,
+      "id": "mq_08_map",
+      "trigger": { "type": "progress", "value": 160 },
+      "title": "Ricordo: L'Ultima Lezione",
+      "description": "Questa vecchia mappa... ti ricorda quella che tuo padre ti ha lasciato. Ricordi quella mattina gelida, quando ti svegliasti e lui non c'era. E la lettera. 'Nel tuo sacco... troverai una mappa... Ti condurrà a Est, verso un luogo chiamato \"The Safe Place\". È una speranza flebile... ma è l'unica possibilità che ti resta.' Quella mappa non era solo un pezzo di carta. Era un testamento. L'inizio del tuo vero, solitario viaggio.",
+      "fragments": [
+        {
+          "id": "final_map_fragment",
+          "title": "La Mappa del Testamento",
+          "activationConditions": {
+            "questStage": 8,
+            "actionContext": "map_discovery"
+          },
+          "narrativeText": "La mappa... l'ultima cosa che papà mi lasciò. 'È una speranza flebile... ma è l'unica possibilità che ti resta.' Quelle parole mi hanno guidato fin qui. Ma ora mi chiedo: era davvero una speranza, o solo un modo per papà di alleggerire la sua coscienza?",
+          "emotionalImpact": {
+            "understandingLevel": 30,
+            "elianEmpathy": 40,
+            "wisdomGained": 25
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["final_map_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 120
+        },
+        "nextStage": 9
+      }
+    },
+    {
+      "stage": 9,
+      "id": "mq_09_name",
+      "trigger": { "type": "survival_days", "value": 7 },
+      "title": "Ricordo: Il Significato di un Nome",
+      "description": "La solitudine ti fa pensare al tuo nome. Ultimo. Te l'aveva dato tua madre. Ma perché? Ora, in questo silenzio assoluto, quel nome assume un significato terribile, quasi profetico. Sei davvero l'ultimo? L'ultimo della tua famiglia? L'ultimo a portare un fardello di speranze infrante? La parola ti risuona nella testa, un'eco beffarda. Solo tu, e la promessa strappata a un padre fuggiasco.",
+      "fragments": [
+        {
+          "id": "name_meaning_fragment",
+          "title": "Il Significato di Ultimo",
+          "activationConditions": {
+            "questStage": 9,
+            "actionContext": "loneliness_moment"
+          },
+          "narrativeText": "Ultimo... mamma mi chiamò così. Ma ora capisco. Non era solo un nome. Era una profezia. Sono davvero l'ultimo? L'ultimo testimone di una famiglia distrutta? L'ultimo custode di segreti troppo pesanti da portare?",
+          "emotionalImpact": {
+            "understandingLevel": 20,
+            "ultimoEmpathy": 30,
+            "lenaMemoryStrength": 20,
+            "wisdomGained": 15
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["name_meaning_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 130
+        },
+        "nextStage": 10
+      }
+    },
+    {
+      "stage": 10,
+      "id": "mq_10_choice",
+      "trigger": { "type": "progress", "value": 200 },
+      "title": "L'Eco di una Scelta",
+      "description": "Qualunque cosa tu abbia scelto, un pensiero ti gela il sangue. La scelta tra il pragmatismo brutale e la compassione rischiosa. All'improvviso, capisci. Questo è l'abisso in cui tuo padre ha guardato. Questa è la scelta che ha dovuto fare. La sua durezza, i suoi silenzi... forse non erano crudeltà. Forse erano solo le cicatrici lasciate da una scelta impossibile.",
+      "fragments": [
+        {
+          "id": "choice_echo_fragment",
+          "title": "L'Eco della Scelta",
+          "activationConditions": {
+            "questStage": 10,
+            "actionContext": "moral_choice"
+          },
+          "narrativeText": "Questa scelta... mi ricorda papà. La sua durezza, i suoi silenzi. Forse non erano crudeltà. Forse erano solo le cicatrici di scelte impossibili fatte per proteggermi.",
+          "emotionalImpact": {
+            "understandingLevel": 25,
+            "elianEmpathy": 45,
+            "wisdomGained": 30
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["choice_echo_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 150
+        },
+        "nextStage": 11
+      }
+    },
+    {
+      "stage": 11,
+      "id": "mq_11_confession",
+      "trigger": { "type": "reach_location", "x": 140, "y": 140 },
+      "title": "Frammento: La Confessione",
+      "description": "In un vecchio terminale dati ancora funzionante, trovi un file audio corrotto. È la voce di tuo padre. '...Lena... intrappolata... il palazzo crollava... fumo... mi disse: \"Porta via il bambino. Salvalo\"...' La voce si spezza. '...Io ti ho preso. E sono corso. E non sono tornato. Non potevo. Tornare indietro significava sacrificare anche te. Ho scelto. Ho sacrificato lei per salvare te...'. Il file finisce. Ora sai. La tua sopravvivenza non è stata un dono. È stata una scelta. E il prezzo è stato tua madre.",
+      "fragments": [
+        {
+          "id": "terminal_confession_fragment",
+          "title": "La Confessione del Terminale",
+          "activationConditions": {
+            "questStage": 11,
+            "actionContext": "terminal_discovery"
+          },
+          "narrativeText": "La voce di papà dal terminale... '...Ho scelto. Ho sacrificato lei per salvare te...' Ora so. La mia sopravvivenza non è stata un dono. È stata una scelta. E il prezzo è stato la vita di mamma.",
+          "emotionalImpact": {
+            "understandingLevel": 40,
+            "elianEmpathy": 50,
+            "lenaMemoryStrength": 35,
+            "memoryStrength": { "confession": 30 },
+            "wisdomGained": 35
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["terminal_confession_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 180
+        },
+        "nextStage": 12
+      }
+    },
+    {
+      "stage": 12,
+      "id": "mq_12_truth",
+      "trigger": { "type": "reach_end" },
+      "title": "La Verità",
+      "description": "Sei arrivato a 'The Safe Place'. È un piccolo bunker, sicuro. E dentro, ad aspettarti, c'è Elian. Ti guarda, e nei suoi occhi vedi un'attesa lunga una vita. Ma tu ora vedi tutto con una chiarezza terribile. Ogni lezione, ogni spinta a sopravvivere... non era per te. Era per lui. Per giustificare la sua scelta. Per dare un senso alla morte di Lena. Tu non sei suo figlio. Sei il suo alibi vivente. Il tuo viaggio non è finito. È appena iniziato. Ora devi decidere cosa fare con questa verità.",
+      "fragments": [
+        {
+          "id": "final_truth_fragment",
+          "title": "La Verità Finale",
+          "activationConditions": {
+            "questStage": 12,
+            "actionContext": "safe_place_arrival"
+          },
+          "narrativeText": "Papà... mi aspetta al Safe Place. Ma ora vedo tutto chiaramente. Ogni lezione, ogni parola dura... non erano per me. Erano per lui. Per giustificare il sacrificio di mamma. Io non sono suo figlio. Sono il suo alibi vivente.",
+          "emotionalImpact": {
+            "understandingLevel": 50,
+            "elianEmpathy": 60,
+            "lenaMemoryStrength": 40,
+            "memoryStrength": { "truth": 35 },
+            "wisdomGained": 40
+          }
+        }
+      ],
+      "stageCompletion": {
+        "requiredFragments": ["final_truth_fragment"],
+        "emotionalThreshold": {
+          "understandingLevel": 200
+        },
+        "completionReward": {
+          "emotionalImpact": {
+            "wisdomGained": 50,
+            "understandingLevel": 50
+          },
+          "gameCompletion": true
+        }
+      }
+    }
+  ]
+}

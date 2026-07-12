@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=3 uid="uid://boot_production_scene"]
+
+[ext_resource type="Script" path="res://scripts/BootProduction.gd" id="1_boot_production"]
+[ext_resource type="FontFile" path="res://themes/Perfect DOS VGA 437 Win.ttf" id="2_dos_font"]
+[ext_resource type="Texture2D" path="res://textures/ui/production_logo.png" id="3_production_logo"]
+
+[node name="BootProduction" type="Node"]
+script = ExtResource("1_boot_production")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ProductionContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ProductionContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LogoTexture" type="TextureRect" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(400, 200)
+texture = ExtResource("3_production_logo")
+expand_mode = 2
+stretch_mode = 4
+modulate = Color(1, 1, 1, 1)
+
+[node name="HSeparator" type="HSeparator" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+
+[node name="GameTitle" type="Label" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_dos_font")
+theme_override_font_sizes/font_size = 28
+text = "THE SAFE PLACE CHRONICLES"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_fonts/font = ExtResource("2_dos_font")
+theme_override_font_sizes/font_size = 18
+text = "The Echo of the Journey"
+horizontal_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_fonts/font = ExtResource("2_dos_font")
+theme_override_font_sizes/font_size = 14
+text = "v0.9.7.1 - Is it a Game or a Library?"
+horizontal_alignment = 1
+
+[node name="TaglineLabel" type="Label" parent="ProductionContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("2_dos_font")
+theme_override_font_sizes/font_size = 12
+text = "A Text-Based RPG Experience"
+horizontal_alignment = 1

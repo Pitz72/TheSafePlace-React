@@ -1,0 +1,315 @@
+{
+  "villaggi": [
+    {
+      "id": "village_farm_abandoned",
+      "title": "Fattoria Abbandonata",
+      "description": "Una fattoria isolata con il granaio ancora intatto. Potrebbe contenere cibo o animali sopravvissuti.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Controlla il granaio",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi sacchi di grano sopravvissuti e alcuni attrezzi agricoli ancora utilizzabili.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 6 }, { "id": "garden_tools", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il granaio è infestato da parassiti. Vieni morso mentre frughi.",
+            "hp_change": -4
+          }
+        },
+        {
+          "text": "Cerca nel fienile",
+          "skill_check": { "stat": "fortuna", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi un vecchio trattore con carburante residuo e alcuni rottami metallici.",
+            "items_gained": [{ "id": "fuel_canister_small", "quantity": 2 }, { "id": "scrap_metal", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il fienile è vuoto, solo polvere e ragnatele."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_church_bell",
+      "title": "Campanile della Chiesa",
+      "description": "La chiesa del villaggio ha il campanile ancora in piedi. Potresti arrampicarti per avere una visuale migliore.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Sali sul campanile",
+          "skill_check": { "stat": "forza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Con fatica, raggiungi la cima. Da quassù vedi altri villaggi e zone sicure.",
+            "items_gained": [{ "id": "local_map", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Una scala cede sotto il tuo peso. Cadi e ti fai male a una gamba.",
+            "hp_change": -10,
+            "status_effects": ["WOUNDED"]
+          }
+        },
+        {
+          "text": "Cerca nella chiesa",
+          "skill_check": { "stat": "carisma", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcuni oggetti sacri e cibo conservato destinato ai bisognosi.",
+            "items_gained": [{ "id": "canned_food", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La chiesa è stata profanata e saccheggiata. Non rimane nulla."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_survivor_family",
+      "title": "Famiglia di Sopravvissuti",
+      "description": "Incontri una famiglia di sopravvissuti nascosta in una cantina. Sembrano spaventati ma amichevoli.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Offri aiuto",
+          "skill_check": { "stat": "carisma", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "La famiglia apprezza il tuo aiuto e condivide le loro scorte con te.",
+            "items_gained": [{ "id": "fresh_fish", "quantity": 2 }, { "id": "water_bottle", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La famiglia è troppo spaventata e rifiuta il tuo aiuto."
+          }
+        },
+        {
+          "text": "Chiedi informazioni",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Ottieni informazioni preziose su zone sicure e risorse nascoste nei dintorni.",
+            "narrative_text": "La tua conoscenza del territorio migliora."
+          },
+          "consequences_failure": {
+            "narrative_text": "La famiglia non si fida abbastanza da condividere informazioni."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_old_well",
+      "title": "Vecchio Pozzo del Villaggio",
+      "description": "Il pozzo comunitario del villaggio. L'acqua potrebbe essere ancora buona o contaminata.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Abbassa il secchio",
+          "skill_check": { "stat": "forza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Tiri su acqua fresca e pulita. È un miracolo che sia ancora potabile.",
+            "items_gained": [{ "id": "water_bottle", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il secchio si impiglia sul fondo. Mentre tiri, la corda si rompe.",
+            "penalty": { "type": "time", "minutes": 30 }
+          }
+        },
+        {
+          "text": "Testa l'acqua prima",
+          "skill_check": { "stat": "intelligenza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Usando un metodo semplice, verifichi che l'acqua è sicura da bere.",
+            "items_gained": [{ "id": "water_bottle", "quantity": 2 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "L'acqua sembra buona ma ha un sapore strano. Bevendola ti senti male.",
+            "hp_change": -6,
+            "status_effects": ["SICK"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_abandoned_school",
+      "title": "Scuola Abbandonata",
+      "description": "Una scuola elementare abbandonata. I banchi sono ribaltati e i muri sono coperti di graffiti.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Cerca nella biblioteca",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcuni libri di sopravvivenza e manuali tecnici sopravvissuti.",
+            "items_gained": [{ "id": "first_aid_book", "quantity": 1 }, { "id": "mechanic_manual", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "I libri sono stati bruciati o sono illeggibili."
+          }
+        },
+        {
+          "text": "Cerca nella cucina",
+          "skill_check": { "stat": "fortuna", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi cibo conservato destinato ai bambini, ancora commestibile.",
+            "items_gained": [{ "id": "canned_food", "quantity": 5 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La cucina è stata completamente saccheggiata."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_hunter_cabin",
+      "title": "Capanna del Cacciatore",
+      "description": "Una piccola capanna da caccia isolata. La porta è aperta e all'interno vedi pelli di animali appese.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Cerca armi o trappole",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi un fucile da caccia nascosto e alcune munizioni.",
+            "items_gained": [{ "id": "hunting_knife", "quantity": 1 }, { "id": "shotgun_shells", "quantity": 12 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre frughi, fai scattare una trappola per animali.",
+            "hp_change": -8
+          }
+        },
+        {
+          "text": "Prendi le pelli",
+          "skill_check": { "stat": "forza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Raccogli alcune pelli di animale utilizzabili per crafting.",
+            "items_gained": [{ "id": "animal_hide", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Le pelli sono troppo pesanti e alcune si strappano mentre le raccogli."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_windmill",
+      "title": "Mulino a Vento",
+      "description": "Un vecchio mulino a vento ancora funzionante. Le pale girano lentamente nel vento.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Controlla il meccanismo",
+          "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Il mulino funziona ancora! Trovi farina e grano macinato.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il meccanismo è troppo complesso. Non riesci a capire come funziona."
+          }
+        },
+        {
+          "text": "Sali sulla torre",
+          "skill_check": { "stat": "agilita", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Dalla cima, hai una visuale eccellente della zona circostante.",
+            "narrative_text": "Vedi risorse e possibili pericoli in lontananza."
+          },
+          "consequences_failure": {
+            "narrative_text": "Una pala ti colpisce mentre sali. Cadi dolorosamente.",
+            "hp_change": -12
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_herbalist_hut",
+      "title": "Capanna dell'Erborista",
+      "description": "Una capanna coperta di piante rampicanti. Sembra essere stata la casa di un erborista.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Cerca erbe medicinali",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi diverse erbe curative e un libro di medicina naturale.",
+            "items_gained": [{ "id": "wild_berries", "quantity": 6 }, { "id": "first_aid_book", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Alcune piante sono velenose. Ti avveleni accidentalmente.",
+            "status_effects": ["POISONED"]
+          }
+        },
+        {
+          "text": "Cerca attrezzature",
+          "skill_check": { "stat": "fortuna", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi un mortaio e pestello per preparare medicine.",
+            "items_gained": [{ "id": "precision_tools", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "L'attrezzatura è troppo deteriorata per essere utile."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_burned_house",
+      "title": "Casa Bruciata",
+      "description": "Una casa carbonizzata dal fuoco. Tra le ceneri potrebbero esserci oggetti sopravvissuti.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Fruga tra le ceneri",
+          "skill_check": { "stat": "vigore", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Con attenzione, trovi oggetti metallici sopravvissuti al fuoco.",
+            "items_gained": [{ "id": "metal_piece", "quantity": 5 }, { "id": "tool_hammer", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Le ceneri calde ti bruciano le mani mentre frughi.",
+            "hp_change": -7
+          }
+        },
+        {
+          "text": "Controlla il giardino",
+          "skill_check": { "stat": "fortuna", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Il giardino è sopravvissuto. Trovi verdure fresche.",
+            "items_gained": [{ "id": "carrot", "quantity": 4 }, { "id": "potato", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il giardino è stato distrutto dal fuoco."
+          }
+        }
+      ]
+    },
+    {
+      "id": "village_animal_shelter",
+      "title": "Rifugio Animali",
+      "description": "Un rifugio per animali abbandonato. Alcuni animali potrebbero essere sopravvissuti.",
+      "biome": "villaggi",
+      "choices": [
+        {
+          "text": "Cerca cibo per animali",
+          "skill_check": { "stat": "carisma", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi cibo per animali ancora buono e lo prendi per te.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Gli animali sopravvissuti ti attaccano quando entri.",
+            "hp_change": -6
+          }
+        },
+        {
+          "text": "Cerca attrezzature veterinarie",
+          "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi medicinali veterinari che possono essere usati sugli umani.",
+            "items_gained": [{ "id": "generic_meds", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "L'attrezzatura è troppo specializzata per i tuoi bisogni."
+          }
+        }
+      ]
+    }
+  ]
+}

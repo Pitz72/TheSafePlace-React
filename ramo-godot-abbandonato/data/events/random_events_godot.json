@@ -1,0 +1,392 @@
+{
+  "random_events": [
+    {
+      "id": "random_lone_raider",
+      "title": "Predone Solitario",
+      "description": "Un predone solitario ti blocca la strada. Sembra affamato e disperato, ma armato.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Intimidirlo con la forza",
+          "skill_check": { "stat": "carisma", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Lo fissi dritto negli occhi mostrandoti più pericoloso di lui. Il predone si convince che non ne valga la pena e se ne va.",
+            "narrative_text": "Hai evitato uno scontro inutile."
+          },
+          "consequences_failure": {
+            "narrative_text": "Il predone non si lascia intimidire e attacca! Devi difenderti.",
+            "hp_change": -15
+          }
+        },
+        {
+          "text": "Offrirgli del cibo",
+          "skill_check": { "stat": "carisma", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Il predone accetta il cibo e ti ringrazia. In cambio, ti dà alcune munizioni.",
+            "items_gained": [{ "id": "ammo", "quantity": 8 }],
+            "items_lost": [{ "id": "ration_pack", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il predone prende il cibo ma non è soddisfatto. Ti deruba di alcune munizioni.",
+            "items_lost": [{ "id": "ammo", "quantity": 5 }]
+          }
+        },
+        {
+          "text": "Combattere",
+          "skill_check": { "stat": "forza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Sconfiggi il predone in uno scontro breve ma intenso. Trovi alcune munizioni sul suo corpo.",
+            "items_gained": [{ "id": "ammo", "quantity": 12 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il predone è più forte di quanto pensassi. Riesci a fuggire ma sei ferito.",
+            "hp_change": -20,
+            "status_effects": ["WOUNDED"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "random_cry_for_help",
+      "title": "Grido d'Aiuto",
+      "description": "Senti un grido disperato provenire da un edificio vicino. Qualcuno sta chiamando aiuto.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Investigare con cautela",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi una donna intrappolata sotto delle macerie. La liberi e ti ringrazia con alcune medicine.",
+            "items_gained": [{ "id": "generic_meds", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "È una trappola! Dei predoni ti tendono un agguato mentre ti avvicini.",
+            "hp_change": -18
+          }
+        },
+        {
+          "text": "Ignorare e continuare",
+          "resultText": "Il mondo è pieno di pericoli. Meglio non rischiare la vita per uno sconosciuto."
+        }
+      ]
+    },
+    {
+      "id": "random_wandering_trader",
+      "title": "Mercante Ambulante",
+      "description": "Incontri un mercante con un carretto pieno di merci. Sembra amichevole ma cauto.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Fare trading",
+          "skill_check": { "stat": "carisma", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Il mercante ti offre un buon prezzo. Puoi scegliere tra diversi oggetti utili.",
+            "items_gained": [{ "id": "random_item", "rarity": "rare" }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il mercante non si fida di te e rifiuta di fare affari."
+          }
+        },
+        {
+          "text": "Chiedere informazioni",
+          "skill_check": { "stat": "carisma", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Il mercante ti dà informazioni preziose su zone sicure e risorse disponibili.",
+            "narrative_text": "La tua conoscenza del territorio migliora."
+          },
+          "consequences_failure": {
+            "narrative_text": "Il mercante è evasivo e non condivide informazioni utili."
+          }
+        }
+      ]
+    },
+    {
+      "id": "random_wounded_beast",
+      "title": "Bestia Ferita",
+      "description": "Trovi una grossa bestia mutante ferita sul ciglio della strada. Sta soffrendo ma potrebbe essere pericolosa.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Porre fine alle sue sofferenze",
+          "skill_check": { "stat": "vigore", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Con un colpo rapido poni fine alle sofferenze della bestia. La sua carcassa ti fornisce cibo e materiali.",
+            "items_gained": [{ "id": "mutant_wolf_meat", "quantity": 3 }, { "id": "mutant_wolf_pelt", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La bestia reagisce al tuo tentativo e ti ferisce prima di morire.",
+            "hp_change": -12
+          }
+        },
+        {
+          "text": "Lasciarla morire in pace",
+          "resultText": "Non hai il cuore di ucciderla. Ti allontani lasciando che la natura faccia il suo corso."
+        }
+      ]
+    },
+    {
+      "id": "random_sudden_storm",
+      "title": "Tempesta Improvvisa",
+      "description": "Il cielo si oscura rapidamente e inizia una tempesta violenta. Devi trovare riparo immediatamente.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Cercare riparo",
+          "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi rapidamente una piccola grotta e ti rifugi al suo interno. Aspetti che la tempesta passi.",
+            "penalty": { "type": "time", "minutes": 60 }
+          },
+          "consequences_failure": {
+            "narrative_text": "La tempesta ti sorprende all'aperto. Vieni inzuppato e rischi di ammalarti.",
+            "hp_change": -8,
+            "status_effects": ["SICK"]
+          }
+        },
+        {
+          "text": "Continuare nonostante la pioggia",
+          "skill_check": { "stat": "vigore", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Resisti alla tempesta e continui il cammino, anche se più lentamente.",
+            "penalty": { "type": "time", "minutes": 30 }
+          },
+          "consequences_failure": {
+            "narrative_text": "La tempesta è troppo violenta. Devi fermarti e aspettare che passi.",
+            "penalty": { "type": "time", "minutes": 90 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "random_traveler_remains",
+      "title": "Resti di un Viaggiatore",
+      "description": "Trovi i resti di un altro viaggiatore sul ciglio della strada. È morto da diversi giorni.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Perquisire i resti",
+          "skill_check": { "stat": "intelligenza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcune razioni ancora utilizzabili e una borraccia d'acqua.",
+            "items_gained": [{ "id": "canned_food", "quantity": 1 }, { "id": "water_bottle", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre frughi, fai rumore e attrai l'attenzione di animali selvatici.",
+            "hp_change": -6
+          }
+        },
+        {
+          "text": "Seppellirlo con rispetto",
+          "resultText": "Dedichi del tempo a seppellire dignitosamente i resti. Un gesto di umanità in questo mondo crudele."
+        }
+      ]
+    },
+    {
+      "id": "random_ground_symbol",
+      "title": "Simbolo Misterioso",
+      "description": "Noti un simbolo strano inciso nella terra. Potrebbe essere un segnale lasciato da altri sopravvissuti.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Decifrare il simbolo",
+          "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Riconosci il simbolo come un segnale di sopravvissuti! Trovi un nascondiglio vicino con scorte.",
+            "items_gained": [{ "id": "bandages_clean", "quantity": 2 }, { "id": "ammo_pistol", "quantity": 5 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il simbolo è incomprensibile. Potrebbe significare pericolo o essere solo un graffito senza senso."
+          }
+        },
+        {
+          "text": "Ignorarlo",
+          "resultText": "Meglio non fidarsi di segni misteriosi in questo mondo."
+        }
+      ]
+    },
+    {
+      "id": "random_mutant_insect_swarm",
+      "title": "Sciame di Insetti Mutanti",
+      "description": "Uno sciame di insetti mutanti grossi come pugni ti circonda ronzando minaccioso.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Usare una torcia per allontanarli",
+          "itemRequirement": [{ "id": "torch", "quantity": 1 }],
+          "resultText": "Accendi rapidamente la torcia. Il fumo e il fuoco allontanano gli insetti, permettendoti di passare.",
+          "items_lost": [{ "id": "torch", "quantity": 1 }]
+        },
+        {
+          "text": "Correre attraverso lo sciame",
+          "skill_check": { "stat": "agilita", "difficulty": 14 },
+          "consequences_success": {
+            "narrative_text": "Corri velocemente attraverso lo sciame. Alcuni insetti ti pungono ma riesci a passare.",
+            "hp_change": -8
+          },
+          "consequences_failure": {
+            "narrative_text": "Gli insetti ti circondano completamente. Le punture sono dolorose e rischi di avvelenamento.",
+            "hp_change": -15,
+            "status_effects": ["POISONED"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "random_acid_rain",
+      "title": "Pioggia Acida",
+      "description": "Grosse gocce sfrigolanti iniziano a cadere dal cielo. È una pioggia acida tossica!",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Cercare riparo immediato",
+          "skill_check": { "stat": "intelligenza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Trovi rapidamente una sporgenza rocciosa e ti rifugi sotto di essa. La pioggia acida passa senza toccarti.",
+            "penalty": { "type": "time", "minutes": 45 }
+          },
+          "consequences_failure": {
+            "narrative_text": "La pioggia ti sorprende prima che possa trovare riparo. La pelle brucia dove le gocce ti colpiscono.",
+            "hp_change": -12
+          }
+        },
+        {
+          "text": "Usare un telo impermeabile",
+          "itemRequirement": [{ "id": "tarp", "quantity": 1 }],
+          "resultText": "Tiri fuori rapidamente il telo e ti crei un riparo improvvisato. Rimani completamente protetto dalla pioggia corrosiva.",
+          "penalty": { "type": "time", "minutes": 30 }
+        }
+      ]
+    },
+    {
+      "id": "random_surveillance_drone",
+      "title": "Drone di Sorveglianza",
+      "description": "Un drone di sorveglianza abbandonato giace a terra. I suoi circuiti potrebbero ancora funzionare.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Smantellarlo per componenti",
+          "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Con attenzione smantelli il drone e recuperi componenti elettronici preziosi.",
+            "items_gained": [{ "id": "tech_components", "quantity": 2 }, { "id": "camera_lens", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre smantelli il drone, attivi accidentalmente un meccanismo di autodistruzione.",
+            "hp_change": -10
+          }
+        },
+        {
+          "text": "Lasciarlo stare",
+          "resultText": "Meglio non rischiare. I dispositivi elettronici possono essere pericolosi."
+        }
+      ]
+    },
+    {
+      "id": "random_minefield",
+      "title": "Campo Minato",
+      "description": "Ti avvicini a quella che sembra una zona sicura, ma noti fili metallici e cartelli di pericolo mezzo sepolti.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Cercare un percorso sicuro",
+          "skill_check": { "stat": "intelligenza", "difficulty": 14 },
+          "consequences_success": {
+            "narrative_text": "Con grande attenzione identifichi un percorso sicuro attraverso il campo minato.",
+            "narrative_text": "Trovi anche un vecchio zaino militare abbandonato."
+          },
+          "consequences_failure": {
+            "narrative_text": "Fai un passo falso e attivi una mina. L'esplosione ti ferisce gravemente.",
+            "hp_change": -25
+          }
+        },
+        {
+          "text": "Fare dietrofront",
+          "resultText": "Il rischio è troppo alto. Fai dietrofront e cerchi un'altra strada.",
+          "penalty": { "type": "time", "minutes": 60 }
+        }
+      ]
+    },
+    {
+      "id": "random_hidden_stash",
+      "title": "Nascondiglio Nascosto",
+      "description": "Noti una piccola montagnola di terra che sembra artificiale. Potrebbe essere un nascondiglio.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Scavare con cautela",
+          "skill_check": { "stat": "forza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi un nascondiglio ben conservato con cibo e acqua!",
+            "items_gained": [{ "id": "canned_food", "quantity": 2 }, { "id": "water_purified", "quantity": 1 }, { "id": "ammo_shotgun", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre scavi fai crollare il nascondiglio. Gran parte del contenuto va perso.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 1 }]
+          }
+        },
+        {
+          "text": "Ignorarlo",
+          "resultText": "Meglio non disturbare quello che potrebbe essere una trappola."
+        }
+      ]
+    },
+    {
+      "id": "random_radiation_pocket",
+      "title": "Zona Radioattiva",
+      "description": "Senti un ronzio strano nell'aria e noti che i tuoi capelli si rizzano. Sei entrato in una zona radioattiva!",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Uscire immediatamente",
+          "skill_check": { "stat": "agilita", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Corri velocemente fuori dalla zona contaminata. Subisci solo una leggera esposizione.",
+            "hp_change": -5
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre fuggi, fai un passo falso e cadi. L'esposizione prolungata ti danneggia.",
+            "hp_change": -15,
+            "status_effects": ["SICK"]
+          }
+        },
+        {
+          "text": "Usare pillole anti-radiazioni",
+          "itemRequirement": [{ "id": "rad_away_pills", "quantity": 1 }],
+          "resultText": "Ingoi rapidamente una pillola anti-radiazioni. La protezione chimica ti permette di attraversare la zona indenne.",
+          "items_lost": [{ "id": "rad_away_pills", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "random_fallen_messenger",
+      "title": "Messaggero Caduto",
+      "description": "Trovi il corpo di un uomo con una grossa borsa di pelle. Sembra essere morto di stenti, non di violenza.",
+      "biome": "random",
+      "choices": [
+        {
+          "text": "Perquisire la borsa",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Nella borsa trovi razioni, acqua e un pacco sigillato destinato a qualcuno.",
+            "items_gained": [{ "id": "ration_pack", "quantity": 1 }, { "id": "water_bottle", "quantity": 1 }, { "id": "sealed_package_quest", "quantity": 1 }, { "id": "folding_knife", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre frughi nella borsa fai rumore e attrai animali selvatici.",
+            "hp_change": -7
+          }
+        },
+        {
+          "text": "Cercare documenti di identità",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi documenti che parlano di un 'avamposto a nord' e comunità di sopravvissuti. Potrebbe guidarti verso un luogo sicuro.",
+            "narrative_text": "La tua conoscenza del mondo post-apocalittico aumenta."
+          },
+          "consequences_failure": {
+            "narrative_text": "I documenti sono illeggibili o troppo deteriorati."
+          }
+        }
+      ]
+    }
+  ]
+}

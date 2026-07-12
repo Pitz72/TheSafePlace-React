@@ -1,0 +1,98 @@
+{
+  "weapons": {
+    "folding_knife": {
+      "id": "folding_knife",
+      "name": "Coltello a Serramanico",
+      "nameShort": "Coltello",
+      "description": "Un coltello pieghevole affidabile per difesa personale.",
+      "category": "WEAPON",
+      "subcategory": "melee",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "slot": "main_hand",
+        "durability": 80,
+        "damage": { "min": 8, "max": 15, "bonus": 2 },
+        "concealed": true
+      }
+    },
+    "bear_trap": {
+      "id": "bear_trap",
+      "name": "Trappola per Orsi",
+      "nameShort": "Trappola",
+      "description": "Una trappola pesante per catturare animali di grossa taglia.",
+      "category": "WEAPON",
+      "subcategory": "trap",
+      "rarity": "UNCOMMON",
+      "weight": 5.0,
+      "value": 45,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "damage": { "min": 25, "max": 40, "bonus": 5 },
+        "reusable": true,
+        "durability": 60
+      }
+    },
+    "hunting_knife": {
+      "id": "hunting_knife",
+      "name": "Coltello da Caccia",
+      "nameShort": "Coltello Caccia",
+      "description": "Un coltello robusto progettato per la caccia e la sopravvivenza.",
+      "category": "WEAPON",
+      "subcategory": "melee",
+      "rarity": "UNCOMMON",
+      "weight": 0.4,
+      "value": 35,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "slot": "main_hand",
+        "durability": 100,
+        "damage": { "min": 10, "max": 18, "bonus": 3 },
+        "hunting_bonus": 15
+      }
+    },
+    "sniper_rifle_disassembled": {
+      "id": "sniper_rifle_disassembled",
+      "name": "Fucile di Precisione Smontato",
+      "nameShort": "Fucile Smontato",
+      "description": "Un fucile di precisione smontato. Richiede assemblaggio.",
+      "category": "WEAPON",
+      "subcategory": "ranged",
+      "rarity": "EPIC",
+      "weight": 4.0,
+      "value": 250,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "needs_assembly": true,
+        "damage": { "min": 20, "max": 35, "bonus": 8 },
+        "range": "long",
+        "durability": 120
+      }
+    },
+    "giant_bone_club": {
+      "id": "giant_bone_club",
+      "name": "Clava di Osso Gigante",
+      "nameShort": "Clava Osso",
+      "description": "Un'arma improvvisata fatta da ossa di creature gigantesche.",
+      "category": "WEAPON",
+      "subcategory": "melee",
+      "rarity": "RARE",
+      "weight": 3.5,
+      "value": 60,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "slot": "main_hand",
+        "durability": 70,
+        "damage": { "min": 12, "max": 22, "bonus": 4 },
+        "intimidation": 10
+      }
+    }
+  }
+}

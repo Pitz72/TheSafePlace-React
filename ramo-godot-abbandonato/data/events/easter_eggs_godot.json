@@ -1,0 +1,89 @@
+{
+  "easter_eggs": [
+    {
+      "id": "easter_egg_runtime_radio",
+      "title": "📻 Runtime Radio - EASTER EGG",
+      "description": "Mentre cammini, senti una musica familiare provenire da un vecchio furgone arrugginito abbandonato sul ciglio della strada. Un cartello sbiadito recita 'Runtime Radio - La Voce del Popolo'. La portiera è socchiusa e all'interno vedi una radio ancora accesa!",
+      "biome": "easter_egg",
+      "choices": [
+        {
+          "text": "Entra nel furgone",
+          "skill_check": { "stat": "fortuna", "difficulty": 15 },
+          "consequences_success": {
+            "narrative_text": "La radio trasmette una canzone pre-bellica che riconosci! È 'Take On Me' degli a-ha. Mentre ascolti, trovi un messaggio inciso sul muro: 'Se stai ascoltando questo, il mondo non è finito... o forse sì? - Runtime'. Trovi anche una collezione di musicassette rare!",
+            "items_gained": [{ "id": "rare_music_cassettes", "quantity": 1 }, { "id": "working_radio", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre ti avvicini, fai rumore e spaventi qualcosa che si nascondeva nel furgone. Fugge via, ma fai in tempo a sentire l'eco di una canzone familiare prima che la radio si spenga definitivamente."
+          }
+        },
+        {
+          "text": "Ascolta dalla porta",
+          "resultText": "Rimani fuori e ascolti la trasmissione. È una stazione pirata che trasmette vecchi successi. Il segnale è debole ma chiaro. Questo ricordo della civiltà perduta ti riempie di una strana malinconia."
+        }
+      ]
+    },
+    {
+      "id": "easter_egg_pixel_debh",
+      "title": "👾 Pixel Debh - EASTER EGG",
+      "description": "In una zona industriale abbandonata, noti un vecchio edificio con un'insegna al neon mezza rotta che lampeggia 'Pixel Debh - Gaming Paradise'. L'edificio sembra essere stato un internet café o sala giochi pre-bellica. La porta è bloccata ma una finestra è rotta.",
+      "biome": "easter_egg",
+      "choices": [
+        {
+          "text": "Entra dalla finestra",
+          "skill_check": { "stat": "agilita", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Riesci a intrufolarti senza tagliarti. All'interno trovi computer vintage ancora funzionanti con giochi classici! Su uno schermo vedi un messaggio: 'GAME OVER - Ma il giocatore continua...'. Trovi anche componenti elettronici rari e un vecchio joystick funzionante!",
+            "items_gained": [{ "id": "vintage_joystick", "quantity": 1 }, { "id": "rare_tech_components", "quantity": 3 }, { "id": "pixel_debh_token", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre entri dalla finestra, ti tagli con un vetro rotto. Il dolore ti distrae e attivi accidentalmente una trappola antica. Riesci a fuggire ma sei ferito.",
+            "hp_change": -10,
+            "status_effects": ["WOUNDED"]
+          }
+        },
+        {
+          "text": "Cerca un'altra entrata",
+          "skill_check": { "stat": "intelligenza", "difficulty": 14 },
+          "consequences_success": {
+            "narrative_text": "Trovi una porta sul retro meno danneggiata. All'interno vedi cabine con computer vintage e poster di giochi classici. È come un museo del gaming pre-bellico. Trovi alcuni componenti elettronici utili.",
+            "items_gained": [{ "id": "tech_components", "quantity": 4 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Tutte le entrate sono bloccate o troppo pericolose. L'edificio rimane un mistero."
+          }
+        }
+      ]
+    },
+    {
+      "id": "easter_egg_immobiliare_eurocenter",
+      "title": "🏢 Immobiliare Eurocenter - EASTER EGG",
+      "description": "Ti imbatti nelle rovine di quello che sembra un vecchio ufficio. Un'insegna di metallo contorto recita '...mobiliare Eurocenter'. All'interno, tra le carte fradice, noti lo scheletro di un uomo in abito elegante. Al collo porta ancora un cartellino identificativo: 'Marco G.'.",
+      "biome": "easter_egg",
+      "choices": [
+        {
+          "text": "Esamina il cartellino",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Il cartellino identifica Marco G. come agente immobiliare. In una tasca trovi un mazzo di chiavi e un biglietto da visita spiegazzato. Sembra che stesse mostrando una proprietà quando è successo l'apocalisse. Trovi anche alcuni documenti immobiliari antichi.",
+            "items_gained": [{ "id": "old_keys", "quantity": 1 }, { "id": "real_estate_documents", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il cartellino è troppo deteriorato per essere leggibile. L'acqua e il tempo hanno cancellato ogni informazione."
+          }
+        },
+        {
+          "text": "Cerca nella scrivania",
+          "skill_check": { "stat": "fortuna", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Nella scrivania trovi un vecchio computer portatile ancora funzionante! Lo schermo mostra l'ultima email di Marco: 'L'appuntamento di domani sembra promettente. Il cliente vuole vedere la villa sul lago...'. Trovi anche alcune monete pre-belliche.",
+            "items_gained": [{ "id": "working_laptop", "quantity": 1 }, { "id": "pre_war_coins", "quantity": 5 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La scrivania è vuota, saccheggiata da tempo. Solo polvere e ragnatele."
+          }
+        }
+      ]
+    }
+  ]
+}

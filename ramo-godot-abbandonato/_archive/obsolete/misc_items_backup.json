@@ -1,0 +1,1369 @@
+{
+  "items": [
+    {
+      "id": "canned_food",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 10,
+      "properties": {
+        "energy_value": 60,
+        "satiation": 50,
+        "shelf_life": "indefinite"
+      }
+    },
+    {
+      "id": "energy_bar",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD",
+      "max_stack": 15,
+      "properties": {
+        "energy_value": 40,
+        "quick_energy": true
+      }
+    },
+    {
+      "id": "flashlight",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 5,
+      "properties": {
+        "uses_batteries": true,
+        "brightness": "medium"
+      }
+    },
+    {
+      "id": "tool_hammer",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 3,
+      "properties": {
+        "durability": 100,
+        "weight": 0.8
+      }
+    },
+    {
+      "id": "nails_box",
+      "category": "MATERIAL",
+      "subcategory": "BUILDING",
+      "max_stack": 20,
+      "properties": {
+        "quantity_per_box": 50
+      }
+    },
+    {
+      "id": "carrot",
+      "category": "CONSUMABLE", 
+      "subcategory": "FOOD",
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 10,
+        "nutritional_value": "high"
+      }
+    },
+    {
+      "id": "potato",
+      "category": "CONSUMABLE",
+      "subcategory": "FOOD", 
+      "max_stack": 20,
+      "properties": {
+        "energy_value": 25,
+        "cookable": true
+      }
+    },
+    {
+      "id": "garden_tools",
+      "category": "MISC",
+      "subcategory": "TOOLS",
+      "max_stack": 3,
+      "properties": {
+        "farming_bonus": 15
+      }
+    },
+    {
+      "id": "metal_scrap",
+      "category": "MATERIAL",
+      "subcategory": "SCRAP",
+      "max_stack": 50,
+      "properties": {
+        "recyclable": true
+      }
+    },
+    {
+      "id": "rubber_gasket",
+      "category": "MATERIAL",
+      "subcategory": "MECHANICAL",
+      "max_stack": 30,
+      "properties": {
+        "sealing_quality": "waterproof"
+      }
+    },
+    {
+      "id": "rubber_ball",
+      "category": "MISC",
+      "subcategory": "TOY",
+      "max_stack": 10,
+      "properties": {
+        "bounce_factor": 0.8
+      }
+    },
+    {
+      "id": "folding_knife",
+      "category": "WEAPON",
+      "subcategory": "MELEE",
+      "max_stack": 5,
+      "properties": {
+        "damage": 15,
+        "durability": 80,
+        "concealed": true
+      }
+    },
+    {
+      "id": "batteries_pack",
+      "category": "MISC",
+      "subcategory": "ELECTRONICS",
+      "max_stack": 20,
+      "properties": {
+        "power_units": 100
+      }
+    },
+    {
+      "id": "resistant_wire",
+      "category": "MATERIAL",
+      "subcategory": "ELECTRONICS",
+      "max_stack": 30,
+      "properties": {
+        "conductivity": "high",
+        "resistance": "extreme_temp"
+      }
+    },
+    {
+      "id": "metal_piece",
+      "category": "MATERIAL",
+      "subcategory": "SCRAP",
+      "max_stack": 40,
+      "properties": {
+        "malleable": true
+      }
+    },
+    {
+      "id": "MANUAL_MEDICAL_BASIC",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "first_aid"
+      }
+    },
+    {
+      "id": "MANUAL_MEDICAL_ADVANCED",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "surgery"
+      }
+    },
+    {
+      "id": "MANUAL_WEAPONS_BASIC",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 3,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "marksmanship"
+      }
+    },
+    {
+      "id": "MANUAL_WEAPONS_ADVANCED",
+      "category": "BOOK",
+      "subcategory": "MANUAL",
+      "max_stack": 2,
+      "properties": {
+        "skill_type": "weapons",
+        "skill_level": "advanced",
+        "readable": true,
+        "teaches_skill": "tactics"
+      }
+    },
+
+    "first_aid_kit": {
+      "id": "first_aid_kit",
+      "name": "Kit di Primo Soccorso",
+      "nameShort": "Kit Primo Soccorso",
+      "description": "Un kit medico di base con bende, disinfettante e antidolorifici.",
+      "category": "MISC",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 1.0,
+      "value": 50,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 30 },
+          { "effect_type": "cure", "status": "bleeding" }
+        ]
+      }
+    },
+
+    "smoke_grenade": {
+      "id": "smoke_grenade",
+      "name": "Granata Fumogena",
+      "nameShort": "Granata Fumo",
+      "description": "Una granata che produce una nube di fumo denso per coprire la ritirata.",
+      "category": "MISC",
+      "subcategory": "explosive",
+      "rarity": "UNCOMMON",
+      "weight": 0.5,
+      "value": 40,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "smoke_screen", "duration": 60 }
+        ]
+      }
+    },
+
+    "frag_grenade": {
+      "id": "frag_grenade",
+      "name": "Granata a Frammentazione",
+      "nameShort": "Granata",
+      "description": "Una granata esplosiva che rilascia frammenti letali in un'area ampia.",
+      "category": "MISC",
+      "subcategory": "explosive",
+      "rarity": "RARE",
+      "weight": 0.8,
+      "value": 120,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "explosion", "damage": 50, "radius": 5 }
+        ]
+      }
+    },
+
+    "batteries_pack": {
+      "id": "batteries_pack",
+      "name": "Pacco Batterie",
+      "nameShort": "Batterie",
+      "description": "Un pacco di batterie ricaricabili per dispositivi elettronici.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {}
+    },
+
+    "portable_radio": {
+      "id": "portable_radio",
+      "name": "Radio Portatile",
+      "nameShort": "Radio",
+      "description": "Una piccola radio portatile che può captare segnali radio.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "UNCOMMON",
+      "weight": 0.5,
+      "value": 60,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "effects": [
+          { "effect_type": "radio_reception", "range": 10 }
+        ]
+      }
+    },
+
+    "tool_screwdriver": {
+      "id": "tool_screwdriver",
+      "name": "Cacciavite",
+      "nameShort": "Cacciavite",
+      "description": "Uno strumento essenziale per riparazioni meccaniche ed elettroniche.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {}
+    },
+
+    "fuse": {
+      "id": "fuse",
+      "name": "Fusibile",
+      "nameShort": "Fusibile",
+      "description": "Un fusibile di ricambio per circuiti elettrici.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "light_bulb": {
+      "id": "light_bulb",
+      "name": "Lampadina",
+      "nameShort": "Lampadina",
+      "description": "Una lampadina funzionante per illuminare ambienti bui.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {}
+    },
+
+    "mechanic_manual": {
+      "id": "mechanic_manual",
+      "name": "Manuale di Meccanica",
+      "nameShort": "Manuale Meccanica",
+      "description": "Un libro che insegna le basi della meccanica e delle riparazioni.",
+      "category": "BOOK",
+      "subcategory": "manual",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "skill_type": "crafting",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "mechanics"
+      }
+    },
+
+    "first_aid_book": {
+      "id": "first_aid_book",
+      "name": "Libro di Primo Soccorso",
+      "nameShort": "Libro Primo Soccorso",
+      "description": "Un manuale che spiega le tecniche di primo soccorso.",
+      "category": "BOOK",
+      "subcategory": "manual",
+      "rarity": "UNCOMMON",
+      "weight": 0.6,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "skill_type": "medical",
+        "skill_level": "basic",
+        "readable": true,
+        "teaches_skill": "first_aid"
+      }
+    },
+
+    "dry_paper": {
+      "id": "dry_paper",
+      "name": "Carta Secca",
+      "nameShort": "Carta",
+      "description": "Fogli di carta asciutta utili per accendere fuochi o scrivere.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 1,
+      "stackable": true,
+      "max_stack": 50,
+      "properties": {}
+    },
+
+    "tent_small": {
+      "id": "tent_small",
+      "name": "Tenda Piccola",
+      "nameShort": "Tenda",
+      "description": "Una piccola tenda portatile per ripararsi dagli elementi.",
+      "category": "MISC",
+      "subcategory": "shelter",
+      "rarity": "COMMON",
+      "weight": 2.0,
+      "value": 30,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "shelter_capacity": 1,
+        "durability": 100
+      }
+    },
+
+    "multitool": {
+      "id": "multitool",
+      "name": "Multistrumento",
+      "nameShort": "Multistrumento",
+      "description": "Uno strumento multiuso con cacciavite, pinze e altre funzioni.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "UNCOMMON",
+      "weight": 0.4,
+      "value": 45,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "durability": 80
+      }
+    },
+
+    "kevlar_vest": {
+      "id": "kevlar_vest",
+      "name": "Giubbotto Antiproiettile",
+      "nameShort": "Giubbotto Kevlar",
+      "description": "Un giubbotto protettivo che riduce i danni da armi da fuoco.",
+      "category": "ARMOR",
+      "subcategory": "body",
+      "rarity": "RARE",
+      "weight": 3.0,
+      "value": 150,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "slot": "body",
+        "durability": 200,
+        "damage_reduction": 0.4,
+        "bullet_resistance": 0.6
+      }
+    },
+
+    "walkie_talkie": {
+      "id": "walkie_talkie",
+      "name": "Walkie-Talkie",
+      "nameShort": "Walkie-Talkie",
+      "description": "Un dispositivo di comunicazione wireless a corto raggio.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 70,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "communication_range": 5
+      }
+    },
+
+    "code_list": {
+      "id": "code_list",
+      "name": "Lista Codici",
+      "nameShort": "Codici",
+      "description": "Una lista di codici e password per accedere a strutture protette.",
+      "category": "MISC",
+      "subcategory": "documents",
+      "rarity": "RARE",
+      "weight": 0.1,
+      "value": 100,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {}
+    },
+
+    "fuel_canister_small": {
+      "id": "fuel_canister_small",
+      "name": "Tanica Carburante Piccola",
+      "nameShort": "Tanica Piccola",
+      "description": "Una piccola tanica di carburante per veicoli o generatori.",
+      "category": "MISC",
+      "subcategory": "fuel",
+      "rarity": "UNCOMMON",
+      "weight": 2.0,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {}
+    },
+
+    "precision_tools": {
+      "id": "precision_tools",
+      "name": "Strumenti di Precisione",
+      "nameShort": "Strumenti Precisione",
+      "description": "Strumenti specializzati per riparazioni delicate e assemblaggi elettronici.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "RARE",
+      "weight": 1.5,
+      "value": 90,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "durability": 100
+      }
+    },
+
+    "portable_generator": {
+      "id": "portable_generator",
+      "name": "Generatore Portatile",
+      "nameShort": "Generatore",
+      "description": "Un piccolo generatore elettrico alimentato a carburante.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "RARE",
+      "weight": 15.0,
+      "value": 200,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "power_output": 1000,
+        "fuel_capacity": 10
+      }
+    },
+
+    "binoculars": {
+      "id": "binoculars",
+      "name": "Binocolo",
+      "nameShort": "Binocolo",
+      "description": "Un binocolo per osservare da lontano.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 40,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "zoom_level": 8
+      }
+    },
+
+    "local_map": {
+      "id": "local_map",
+      "name": "Mappa Locale",
+      "nameShort": "Mappa",
+      "description": "Una mappa della zona locale con punti di interesse segnati.",
+      "category": "MISC",
+      "subcategory": "documents",
+      "rarity": "UNCOMMON",
+      "weight": 0.2,
+      "value": 30,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {}
+    },
+
+    "gold_coin": {
+      "id": "gold_coin",
+      "name": "Moneta d'Oro",
+      "nameShort": "Moneta Oro",
+      "description": "Una moneta d'oro antica, un pezzo da collezione di valore.",
+      "category": "MISC",
+      "subcategory": "valuables",
+      "rarity": "RARE",
+      "weight": 0.01,
+      "value": 200,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "precious_stone": {
+      "id": "precious_stone",
+      "name": "Pietra Preziosa",
+      "nameShort": "Gemma",
+      "description": "Una pietra preziosa scintillante, molto rara e di alto valore.",
+      "category": "MISC",
+      "subcategory": "valuables",
+      "rarity": "EPIC",
+      "weight": 0.02,
+      "value": 500,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {}
+    },
+
+    "survival_backpack": {
+      "id": "survival_backpack",
+      "name": "Zaino di Sopravvivenza",
+      "nameShort": "Zaino Sopravvivenza",
+      "description": "Uno zaino contenente equipaggiamento essenziale per la sopravvivenza.",
+      "category": "MISC",
+      "subcategory": "containers",
+      "rarity": "RARE",
+      "weight": 1.5,
+      "value": 120,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "capacity": 20
+      }
+    },
+
+    "hiking_backpack": {
+      "id": "hiking_backpack",
+      "name": "Zaino Escursionistico",
+      "nameShort": "Zaino Escursione",
+      "description": "Uno zaino robusto per trasportare equipaggiamento durante i viaggi.",
+      "category": "MISC",
+      "subcategory": "containers",
+      "rarity": "COMMON",
+      "weight": 1.0,
+      "value": 25,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "capacity": 15
+      }
+    },
+
+    "portable_tent": {
+      "id": "portable_tent",
+      "name": "Tenda Portatile",
+      "nameShort": "Tenda Portatile",
+      "description": "Una tenda leggera e facile da montare per riparo temporaneo.",
+      "category": "MISC",
+      "subcategory": "shelter",
+      "rarity": "UNCOMMON",
+      "weight": 1.5,
+      "value": 40,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "shelter_capacity": 2,
+        "durability": 80
+      }
+    },
+
+    "tool_box": {
+      "id": "tool_box",
+      "name": "Cassetta degli Attrezzi",
+      "nameShort": "Cassetta Attrezzi",
+      "description": "Una cassetta contenente vari attrezzi per riparazioni e costruzioni.",
+      "category": "MISC",
+      "subcategory": "containers",
+      "rarity": "UNCOMMON",
+      "weight": 3.0,
+      "value": 60,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "contains_tools": ["hammer", "screwdriver", "pliers", "wrench"]
+      }
+    },
+
+    "lighter": {
+      "id": "lighter",
+      "name": "Accendino",
+      "nameShort": "Accendino",
+      "description": "Un accendino funzionante per accendere fuochi o sigarette.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {}
+    },
+
+    "fathers_compass": {
+      "id": "fathers_compass",
+      "name": "Bussola del Padre",
+      "nameShort": "Bussola",
+      "description": "Una bussola antica appartenuta al padre del protagonista. Ha valore sentimentale.",
+      "category": "MISC",
+      "subcategory": "valuables",
+      "rarity": "LEGENDARY",
+      "weight": 0.2,
+      "value": 1000,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "quest_item": true,
+        "emotional_value": "high"
+      }
+    },
+
+    "old_military_map": {
+      "id": "old_military_map",
+      "name": "Vecchia Mappa Militare",
+      "nameShort": "Mappa Militare",
+      "description": "Una mappa militare dettagliata che mostra posizioni strategiche e rifugi nascosti.",
+      "category": "MISC",
+      "subcategory": "documents",
+      "rarity": "EPIC",
+      "weight": 0.1,
+      "value": 300,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "reveals_locations": true
+      }
+    },
+
+    "meat_raw": {
+      "id": "meat_raw",
+      "name": "Carne Cruda",
+      "nameShort": "Carne Cruda",
+      "description": "Pezzi di carne cruda strappati da carcasse animali.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.7,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 },
+          { "effect_type": "infection_chance", "chance": 0.6 }
+        ]
+      }
+    },
+
+    "animal_hide": {
+      "id": "animal_hide",
+      "name": "Pelle di Animale",
+      "nameShort": "Pelle Animale",
+      "description": "Pelle scuoiata da animali, utile per creare armature o riparare abiti.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 1.5,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "spider_silk": {
+      "id": "spider_silk",
+      "name": "Seta di Ragno",
+      "nameShort": "Seta Ragno",
+      "description": "Fili di seta prodotti da grossi ragni mutanti. Molto resistente e utile.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 30,
+      "properties": {
+        "durability": "high",
+        "flexibility": "high"
+      }
+    },
+
+    "matches": {
+      "id": "matches",
+      "name": "Scatola di Fiammiferi",
+      "nameShort": "Fiammiferi",
+      "description": "Una scatola di fiammiferi asciutti. Essenziali per accendere fuochi.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "COMMON",
+      "weight": 0.05,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "expired_medicine": {
+      "id": "expired_medicine",
+      "name": "Medicina Scaduta",
+      "nameShort": "Medicina Scaduta",
+      "description": "Medicina scaduta ma ancora parzialmente efficace. Meglio di niente.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 8 }
+        ]
+      }
+    },
+
+    "water_bottle": {
+      "id": "water_bottle",
+      "name": "Borraccia d'Acqua",
+      "nameShort": "Borraccia",
+      "description": "Una borraccia piena di acqua fresca. Salvavita nel deserto.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "COMMON",
+      "weight": 0.8,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 30 }
+        ]
+      }
+    },
+
+    "rope_strong": {
+      "id": "rope_strong",
+      "name": "Corda Robusta",
+      "nameShort": "Corda",
+      "description": "Una corda resistente per arrampicate o costruzioni.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "COMMON",
+      "weight": 1.5,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {}
+    },
+
+    "car_toolkit": {
+      "id": "car_toolkit",
+      "name": "Kit Attrezzi Auto",
+      "nameShort": "Kit Auto",
+      "description": "Attrezzi essenziali per riparazioni meccaniche e veicoli.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "UNCOMMON",
+      "weight": 2.0,
+      "value": 40,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "repair_bonus": 15
+      }
+    },
+
+    "electronic_parts": {
+      "id": "electronic_parts",
+      "name": "Componenti Elettronici",
+      "nameShort": "Componenti Elettronici",
+      "description": "Vari componenti elettronici recuperati da dispositivi rotti.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {}
+    },
+
+    "copper_wire": {
+      "id": "copper_wire",
+      "name": "Filo di Rame",
+      "nameShort": "Filo Rame",
+      "description": "Filo di rame isolato, utile per riparazioni elettriche.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 30,
+      "properties": {}
+    },
+
+    "repair_kit": {
+      "id": "repair_kit",
+      "name": "Kit di Riparazione",
+      "nameShort": "Kit Riparazione",
+      "description": "Strumenti e materiali per riparazioni di emergenza.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "UNCOMMON",
+      "weight": 1.0,
+      "value": 25,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "repair_efficiency": 20
+      }
+    },
+
+    "sensitive_documents": {
+      "id": "sensitive_documents",
+      "name": "Documenti Sensibili",
+      "nameShort": "Documenti",
+      "description": "Documenti classificati che potrebbero contenere informazioni importanti.",
+      "category": "MISC",
+      "subcategory": "documents",
+      "rarity": "RARE",
+      "weight": 0.1,
+      "value": 150,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {}
+    },
+
+    "meteorite_fragment": {
+      "id": "meteorite_fragment",
+      "name": "Frammento di Meteorite",
+      "nameShort": "Meteorite",
+      "description": "Un pezzo di meteorite con proprietà misteriose.",
+      "category": "MISC",
+      "subcategory": "valuables",
+      "rarity": "EPIC",
+      "weight": 2.0,
+      "value": 300,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "radiation": "low"
+      }
+    },
+
+    "ash_petals": {
+      "id": "ash_petals",
+      "name": "Petali di Cenere",
+      "nameShort": "Petali Cenere",
+      "description": "Petali di fiori che crescono nelle zone contaminate. Proprietà medicinali.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 15 },
+          { "effect_type": "calming", "duration": 120 }
+        ]
+      }
+    },
+
+    "sewing_kit_professional": {
+      "id": "sewing_kit_professional",
+      "name": "Kit da Cucito Professionale",
+      "nameShort": "Kit Cucito Pro",
+      "description": "Attrezzi da cucito di alta qualità per riparazioni tessili.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 35,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "repair_quality": "high"
+      }
+    },
+
+    "chemicals_makeup": {
+      "id": "chemicals_makeup",
+      "name": "Sostanze Chimiche per Trucco",
+      "nameShort": "Chimici Trucco",
+      "description": "Sostanze chimiche da prodotti cosmetici, riutilizzabili per altri scopi.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 10,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {}
+    },
+
+    "sniper_rifle_disassembled": {
+      "id": "sniper_rifle_disassembled",
+      "name": "Fucile di Precisione Smontato",
+      "nameShort": "Fucile Smontato",
+      "description": "Un fucile di precisione smontato. Richiede assemblaggio.",
+      "category": "WEAPON",
+      "subcategory": "ranged",
+      "rarity": "EPIC",
+      "weight": 4.0,
+      "value": 250,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "needs_assembly": true,
+        "damage": { "min": 20, "max": 35, "bonus": 8 }
+      }
+    },
+
+    "crowbar": {
+      "id": "crowbar",
+      "name": "Piede di Porco",
+      "nameShort": "Piede di Porco",
+      "description": "Uno strumento versatile per forzare porte e leve pesanti.",
+      "category": "MISC",
+      "subcategory": "tools",
+      "rarity": "COMMON",
+      "weight": 1.2,
+      "value": 12,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "leverage_bonus": 15
+      }
+    },
+
+    "rugged_laptop_military": {
+      "id": "rugged_laptop_military",
+      "name": "Computer Portatile Militare Rinforzato",
+      "nameShort": "Laptop Militare",
+      "description": "Un computer militare resistente con batteria funzionante e dati preziosi.",
+      "category": "MISC",
+      "subcategory": "electronics",
+      "rarity": "LEGENDARY",
+      "weight": 3.0,
+      "value": 800,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "has_data": true,
+        "power_remaining": 40
+      }
+    },
+
+    "gourmet_canned_food": {
+      "id": "gourmet_canned_food",
+      "name": "Cibo Gourmet in Scatola",
+      "nameShort": "Cibo Gourmet",
+      "description": "Cibo di lusso pre-guerra perfettamente conservato.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "RARE",
+      "weight": 0.6,
+      "value": 80,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 60 },
+          { "effect_type": "morale_boost", "amount": 15, "duration": 180 }
+        ]
+      }
+    },
+
+    "wine_bottle_aged": {
+      "id": "wine_bottle_aged",
+      "name": "Bottiglia di Vino Invecchiato",
+      "nameShort": "Vino Invecchiato",
+      "description": "Una pregiata bottiglia di vino sopravvissuta all'apocalisse.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "EPIC",
+      "weight": 1.2,
+      "value": 200,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "effects": [
+          { "effect_type": "morale_boost", "amount": 25, "duration": 240 },
+          { "effect_type": "intoxication", "chance": 0.3 }
+        ]
+      }
+    },
+
+    "alcohol_pure": {
+      "id": "alcohol_pure",
+      "name": "Alcol Puro",
+      "nameShort": "Alcol Puro",
+      "description": "Alcol puro per uso medico o come disinfettante.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 30,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "disinfect", "amount": 20 },
+          { "effect_type": "pain_reduction", "amount": 0.4, "duration": 90 }
+        ]
+      }
+    },
+
+    "fulgurite_shard": {
+      "id": "fulgurite_shard",
+      "name": "Frammento di Fulgurite",
+      "nameShort": "Fulgurite",
+      "description": "Un pezzo di fulgurite creato da un fulmine. Ha proprietà elettriche.",
+      "category": "MISC",
+      "subcategory": "valuables",
+      "rarity": "RARE",
+      "weight": 0.5,
+      "value": 120,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "electrical_charge": "low"
+      }
+    },
+
+    "obsidian_shard": {
+      "id": "obsidian_shard",
+      "name": "Frammento di Ossidiana",
+      "nameShort": "Ossidiana",
+      "description": "Pezzi di ossidiana affilati come rasoi.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "UNCOMMON",
+      "weight": 0.3,
+      "value": 18,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "sharpness": "very_high"
+      }
+    },
+
+    "crude_oil_canister": {
+      "id": "crude_oil_canister",
+      "name": "Tanica di Petrolio Grezzo",
+      "nameShort": "Petrolio Grezzo",
+      "description": "Petrolio grezzo altamente infiammabile.",
+      "category": "MISC",
+      "subcategory": "fuel",
+      "rarity": "UNCOMMON",
+      "weight": 3.0,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "flammable": true,
+        "explosive_potential": "high"
+      }
+    },
+
+    "empty_canister": {
+      "id": "empty_canister",
+      "name": "Tanica Vuota",
+      "nameShort": "Tanica Vuota",
+      "description": "Una tanica vuota che può essere riempita con liquidi.",
+      "category": "MISC",
+      "subcategory": "containers",
+      "rarity": "COMMON",
+      "weight": 0.5,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "capacity": 10
+      }
+    },
+
+    "gloves_work": {
+      "id": "gloves_work",
+      "name": "Guanti da Lavoro",
+      "nameShort": "Guanti Lavoro",
+      "description": "Guanti resistenti per proteggere le mani durante il lavoro.",
+      "category": "MISC",
+      "subcategory": "clothing",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "protection": "hands"
+      }
+    },
+
+    "barbed_wire_roll": {
+      "id": "barbed_wire_roll",
+      "name": "Rotolo di Filo Spinato",
+      "nameShort": "Filo Spinato",
+      "description": "Filo spinato per creare barriere difensive.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "UNCOMMON",
+      "weight": 2.0,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "defensive": true
+      }
+    },
+
+    "antlers": {
+      "id": "antlers",
+      "name": "Corna di Cervo",
+      "nameShort": "Corna Cervo",
+      "description": "Corna di cervo utilizzabili come armi o attrezzi.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "UNCOMMON",
+      "weight": 1.0,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "durability": "medium"
+      }
+    },
+
+    "giant_bone_club": {
+      "id": "giant_bone_club",
+      "name": "Clava di Osso Gigante",
+      "nameShort": "Clava Osso",
+      "description": "Un'arma improvvisata fatta da ossa di creature gigantesche.",
+      "category": "WEAPON",
+      "subcategory": "melee",
+      "rarity": "RARE",
+      "weight": 3.5,
+      "value": 60,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "slot": "main_hand",
+        "durability": 70,
+        "damage": { "min": 12, "max": 22, "bonus": 4 }
+      }
+    },
+
+    "nylon_wire": {
+      "id": "nylon_wire",
+      "name": "Filo di Nylon",
+      "nameShort": "Filo Nylon",
+      "description": "Filo resistente di nylon per varie utilizzazioni.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 4,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "strength": "high"
+      }
+    },
+
+    "durable_cloth": {
+      "id": "durable_cloth",
+      "name": "Stoffa Resistente",
+      "nameShort": "Stoffa Resistente",
+      "description": "Stoffa robusta utilizzabile per riparazioni o abiti.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.4,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "combat_helmet": {
+      "id": "combat_helmet",
+      "name": "Elmetto da Combattimento",
+      "nameShort": "Elmetto",
+      "description": "Un elmetto protettivo che riduce i danni alla testa.",
+      "category": "ARMOR",
+      "subcategory": "head",
+      "rarity": "UNCOMMON",
+      "weight": 1.5,
+      "value": 80,
+      "stackable": false,
+      "max_stack": 1,
+      "properties": {
+        "slot": "head",
+        "durability": 150,
+        "damage_reduction": 0.3,
+        "head_protection": 0.8
+      }
+    },
+
+    "water_contaminated": {
+      "id": "water_contaminated",
+      "name": "Acqua Contaminata",
+      "nameShort": "Acqua Contaminata",
+      "description": "Acqua contaminata da sostanze chimiche. Può essere purificata.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "COMMON",
+      "weight": 1.0,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 15 },
+          { "effect_type": "poison_chance", "chance": 0.5 }
+        ]
+      }
+    },
+
+    "glowing_mushrooms": {
+      "id": "glowing_mushrooms",
+      "name": "Funghi Luminosi",
+      "nameShort": "Funghi Luminosi",
+      "description": "Funghi bioluminescenti con proprietà curative ma rischiose.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "RARE",
+      "weight": 0.2,
+      "value": 40,
+      "stackable": true,
+      "max_stack": 12,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 25 },
+          { "effect_type": "hallucination_chance", "chance": 0.3 }
+        ]
+      }
+    },
+
+    "wild_nuts": {
+      "id": "wild_nuts",
+      "name": "Noci Selvatiche",
+      "nameShort": "Noci Selvatiche",
+      "description": "Noci raccolte in natura, nutrienti e facili da trasportare.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 }
+        ]
+      }
+    },
+
+    "metal_wire": {
+      "id": "metal_wire",
+      "name": "Filo Metallico",
+      "nameShort": "Filo Metallo",
+      "description": "Filo di metallo flessibile per varie riparazioni.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.4,
+      "value": 7,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "scrap_metal_small": {
+      "id": "scrap_metal_small",
+      "name": "Piccoli Rottami Metallici",
+      "nameShort": "Rottami Piccoli",
+      "description": "Piccoli pezzi di metallo recuperabili.",
+      "category": "MISC",
+      "subcategory": "materials",
+      "rarity": "COMMON",
+      "weight": 0.8,
+      "value": 4,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {}
+    }
+  ]
+}

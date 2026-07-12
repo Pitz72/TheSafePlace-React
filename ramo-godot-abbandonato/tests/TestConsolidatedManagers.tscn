@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqxvhqxqxqxqx"]
+
+[ext_resource type="Script" path="res://tests/test_consolidated_managers.gd" id="1"]
+
+[node name="TestConsolidatedManagers" type="Node"]
+script = ExtResource("1")

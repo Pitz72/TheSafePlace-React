@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://boot_sequence_scene"]
+
+[ext_resource type="Script" path="res://scripts/BootSequence.gd" id="1_boot_sequence"]
+[ext_resource type="Material" path="res://themes/crt_ultra_realistic_material.tres" id="2_crt_material"]
+[ext_resource type="FontFile" path="res://themes/Perfect DOS VGA 437 Win.ttf" id="3_dos_font"]
+
+[node name="BootSequence" type="Node"]
+script = ExtResource("1_boot_sequence")
+
+[node name="CRTDisplay" type="ColorRect" parent="."]
+material = ExtResource("2_crt_material")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BootContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="BootText" type="RichTextLabel" parent="BootContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_dos_font")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "[color=#00FF41]THE SAFE PLACE v0.9.6 - SYSTEM BOOT SEQUENCE[/color]
+
+[color=#66FF66]Initializing core systems...[/color]"
+scroll_following = true

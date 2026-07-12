@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://boot_system_scene"]
+
+[ext_resource type="Script" path="res://scripts/BootSystem.gd" id="1_boot_system"]
+[ext_resource type="FontFile" path="res://themes/Perfect DOS VGA 437 Win.ttf" id="2_dos_font"]
+
+[node name="BootSystem" type="Node"]
+script = ExtResource("1_boot_system")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BootContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="BootText" type="RichTextLabel" parent="BootContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("2_dos_font")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "[color=#00FF00]THE SAFE PLACE CHRONICLES v0.9.6 - SYSTEM BOOT SEQUENCE[/color]
+
+[color=#FFFF00]Initializing core systems...[/color]"
+scroll_following = true
+
+[node name="EscLabel" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_fonts/font = ExtResource("2_dos_font")
+theme_override_font_sizes/font_size = 14
+text = "ESC per continuare"
+horizontal_alignment = 1

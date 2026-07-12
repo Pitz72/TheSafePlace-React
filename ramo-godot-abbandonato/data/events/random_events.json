@@ -1,0 +1,307 @@
+{
+  "RANDOM": [
+    {
+      "id": "random_lone_raider",
+      "title": "Occhi nella Desolazione",
+      "description": "Una figura solitaria ti si para davanti. È un predone, magro e disperato, armato con un pezzo di tubo arrugginito. I suoi occhi sono pieni di una fame che non è solo di cibo. \"Dammi tutto quello che hai,\" sibila, la voce roca. \"Oggi non è il tuo giorno fortunato.\"",
+      "choices": [
+        {
+          "text": "Intimidiscilo, mostrandoti più pericoloso di lui.",
+          "skillCheck": { "stat": "carisma", "difficulty": 13 },
+          "successText": "Lo fissi dritto negli occhi, senza un briciolo di paura. La tua determinazione gelida lo scuote. Vede in te un predatore, non una preda. Borbotta una maledizione e si allontana nell'ombra.",
+          "failureText": "La tua finta spavalderia non lo convince. Vede solo la tua paura. Ringhia e si lancia all'attacco.",
+          "reward": { "type": "xp_gain", "amount": 25 },
+          "penalty": { "type": "trigger_combat", "enemyId": "raider_weak" }
+        },
+        {
+          "text": "Attacca per primo, senza esitazione.",
+          "skillCheck": { "stat": "agilita", "difficulty": 12 },
+          "successText": "Agisci prima ancora che possa finire la frase. Il tuo attacco fulmineo lo coglie di sorpresa. Dopo un breve e brutale scontro, giace a terra sconfitto.",
+          "failureText": "Il tuo attacco è goffo. Il predone para facilmente il colpo e contrattacca. Il combattimento ha inizio.",
+          "reward": { "type": "trigger_combat", "enemyId": "raider_weak", "player_advantage": true },
+          "penalty": { "type": "trigger_combat", "enemyId": "raider_weak" }
+        }
+      ]
+    },
+    {
+      "id": "random_cry_for_help",
+      "title": "Voce Ingannevole",
+      "description": "Senti una voce debole che chiede aiuto da dietro un ammasso di rovine. \"Aiuto... sono ferito... per favore...\" Potrebbe essere un sopravvissuto in difficoltà o un'esca per un'imboscata.",
+      "choices": [
+        {
+          "text": "Avvicinati con cautela per aiutare.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+          "successText": "Ti avvicini e ti rendi conto che è solo un'esca. Noti delle tracce fresche e il modo innaturale in cui la voce echeggia. È una trappola. Ti allontani silenziosamente prima che i banditi nascosti si accorgano di te.",
+          "failureText": "Corri per aiutare e cadi dritto nell'imboscata. Due predoni saltano fuori dalle rovine, le armi spianate.",
+          "reward": { "type": "xp_gain", "amount": 30 },
+          "penalty": { "type": "trigger_combat", "enemyId": "raider_duo" }
+        },
+        {
+          "text": "Ignora la richiesta e prosegui.",
+          "actionKey": "ignore",
+          "resultText": "Le lezioni di tuo padre sono state chiare: non fidarti mai. Potrebbe essere un innocente, ma il rischio è troppo alto. Prosegui, il cuore pesante, cercando di ignorare la voce che si spegne alle tue spalle."
+        }
+      ]
+    },
+    {
+      "id": "random_wandering_trader",
+      "title": "Un Affare nella Polvere",
+      "description": "Incontri un vecchio mercante che spinge un carretto cigolante pieno di cianfrusaglie. Ti saluta con un sorriso sdentato. \"Un viaggiatore! Raro di questi tempi. Vuoi dare un'occhiata alla mia merce? Ho cose che non troveresti da nessun'altra parte.\"",
+      "choices": [
+        {
+          "text": "Commercia con lui.",
+          "resultText": "Passi un po' di tempo a esaminare la sua merce. Potrebbe essere un'opportunità per scambiare oggetti che non ti servono con qualcosa di più utile.",
+          "reward": { "type": "special", "effect": "open_trade_screen" }
+        },
+        {
+          "text": "Tenta di derubarlo.",
+          "skillCheck": { "stat": "agilita", "difficulty": 15 },
+          "successText": "Con un movimento fulmineo, riesci ad afferrare un oggetto prezioso dal carretto e a scappare prima che il vecchio possa reagire. Ti senti un verme, ma hai un nuovo oggetto.",
+          "failureText": "Il vecchio è più veloce di quanto sembri. Urla, attirando l'attenzione di una guardia armata che non avevi visto. Ora sei nei guai.",
+          "items_gained": [{ "id": "random_item", "rarity": "rare" }],
+          "penalty": { "type": "trigger_combat", "enemyId": "trader_guard" }
+        }
+      ]
+    },
+    {
+      "id": "random_wounded_beast",
+      "title": "Bestia Ferita",
+      "description": "Trovi un grosso lupo mutato, con una zampa intrappolata in una vecchia tagliola. Ringhia debolmente al tuo avvicinarsi, più spaventato che aggressivo. È un predatore pericoloso, ma al momento è vulnerabile.",
+      "choices": [
+        {
+          "text": "Finiscilo per recuperare carne e pelle.",
+          "resultText": "È la legge crudele di questo mondo. Con un colpo rapido, poni fine alle sue sofferenze. La sua carcassa ti fornirà cibo per giorni e una pelle resistente.",
+          "items_gained": [{ "id": "mutant_wolf_meat", "quantity": 3 }, { "id": "mutant_wolf_pelt", "quantity": 1 }]
+        },
+        {
+          "text": "Tenta di liberarlo.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 14 },
+          "successText": "Usando un lungo ramo per tenere a bada la sua testa, riesci ad aprire la tagliola. Il lupo, sorpreso, ti fissa per un istante, poi si allontana zoppicando nella boscaglia, senza attaccarti. Forse, per oggi, hai creato un alleato invece di un nemico.",
+          "failureText": "Mentre ti avvicini, il lupo, in un impeto di dolore e paura, si divincola e riesce a morderti prima di liberarsi e fuggire. La tua compassione ti è costata cara.",
+          "reward": { "type": "special", "effect": "wolf_gratitude" },
+          "penalty": { "type": "damage", "amount": 15 },
+          "status": { "status": "WOUNDED" }
+        }
+      ]
+    },
+    {
+      "id": "random_sudden_storm",
+      "title": "La Furia del Cielo",
+      "description": "All'improvviso, una tempesta violenta si abbatte su di te, con pioggia sferzante e fulmini che squarciano l'orizzonte. Devi trovare un riparo, e in fretta.",
+      "choices": [
+        {
+          "text": "Cerca un riparo immediato (grotta, rovina).",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Il tuo istinto da sopravvissuto ha la meglio. Individui una piccola grotta e ti ci infili giusto in tempo per evitare il peggio della tempesta.",
+          "failureText": "Non trovi alcun riparo adeguato. Sei esposto alla furia degli elementi, subendo danni dal freddo e rischiando di ammalarti.",
+          "penalty": { "type": "damage", "amount": 10 },
+          "status": { "status": "SICK" }
+        },
+        {
+          "text": "Resisti alla tempesta e prosegui.",
+          "skillCheck": { "stat": "vigore", "difficulty": 15 },
+          "successText": "Stringi i denti e affronti la tempesta a testa alta. È una prova durissima, ma la tua resistenza ti permette di superarla. Quando la pioggia cessa, ti senti più forte e temprato.",
+          "failureText": "La tempesta è troppo forte. Il freddo ti entra nelle ossa, sei completamente fradicio e le tue forze ti abbandonano. Ne esci a pezzi.",
+          "reward": { "type": "permanent_stat_boost", "stat": "vigore", "amount": 1 },
+          "penalty": { "type": "damage", "amount": 25 }
+        }
+      ]
+    },
+    {
+      "id": "random_traveler_remains",
+      "title": "Compagno di Viaggio Silenzioso",
+      "description": "Trovi i resti di un altro sopravvissuto accasciato contro una roccia, lo zaino ancora in spalla.",
+      "choices": [
+        {
+          "text": "Perquisisci lo zaino con rispetto.",
+          "resultText": "Con un cenno silenzioso al viaggiatore caduto, apri il suo zaino. Dentro trovi una manciata di provviste che a lui non servono più. Prendi solo lo stretto necessario.",
+          "items_gained": [{ "id": "canned_food", "quantity": 1 }, { "id": "water_bottle", "quantity": 1 }]
+        },
+        {
+          "text": "Seppelliscilo sommariamente.",
+          "skillCheck": { "stat": "forza", "difficulty": 10 },
+          "successText": "Passi un po' di tempo a coprire il corpo con pietre e terra. È un piccolo gesto di umanità. Ti senti stranamente in pace e più determinato a continuare.",
+          "failureText": "Il terreno è troppo duro e sei troppo stanco. Desisti, lasciando il viandante al suo destino, con un senso di amarezza.",
+          "reward": { "type": "status_boost", "status": "FOCUSED", "duration": "temporary" }
+        }
+      ]
+    },
+    {
+      "id": "random_ground_symbol",
+      "title": "Il Segno sulla Polvere",
+      "description": "Noti uno strano simbolo tracciato nella polvere o nel fango. Non sembra naturale.",
+      "choices": [
+        {
+          "text": "Tenta di interpretare il simbolo.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Riconosci il simbolo! È un vecchio codice di viandanti che indica la direzione di un nascondiglio di scorte nelle vicinanze. Seguendo le indicazioni implicite nel segno, trovi delle bende e dei proiettili sepolti.",
+          "failureText": "Il simbolo è incomprensibile. Potrebbe significare qualsiasi cosa, da 'pericolo' a 'acqua potabile'. Decidi di non rischiare.",
+          "items_gained": [{ "id": "bandages_clean", "quantity": 2 }, { "id": "ammo_pistol", "quantity": 5 }]
+        },
+        {
+          "text": "Cancellalo per non lasciare tracce.",
+          "actionKey": "ignore",
+          "resultText": "Chiunque l'abbia lasciato, non vuoi che sappia che sei passato di qui. Cancelli il simbolo con i piedi e prosegui, aumentando il tuo anonimato."
+        }
+      ]
+    },
+    {
+      "id": "random_mutant_insect_swarm",
+      "title": "Ronzo Minaccioso",
+      "description": "Un denso sciame di insetti volanti, grandi come il tuo pollice e dal ronzio aggressivo, ti blocca il cammino.",
+      "choices": [
+        {
+          "text": "Cerca di attraversarlo velocemente.",
+          "skillCheck": { "stat": "agilita", "difficulty": 12 },
+          "successText": "Correndo a perdifiato e agitando le braccia, riesci a passare attraverso lo sciame subendo solo qualche puntura minore.",
+          "failureText": "Lo sciame ti avvolge. Le punture bruciano e ti lasciano disorientato e indebolito.",
+          "penalty": { "type": "damage", "amount": 3 },
+          "status": { "status": "SICK" }
+        },
+        {
+          "text": "Usa del fumo per scacciarli (richiede torcia/fiammiferi).",
+          "itemRequirement": [{ "id": "torch", "quantity": 1 }],
+          "resultText": "Accendi rapidamente una torcia improvvisata. Il fumo denso infastidisce gli insetti, che si disperdono abbastanza a lungo da permetterti di passare indenne.",
+          "items_lost": [{ "id": "torch", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "random_laughter_echo",
+      "title": "L'Eco di una Risata",
+      "description": "Per un istante, ti sembra di aver sentito chiaramente l'eco di una risata di bambino, portata dal vento. Dura un attimo, poi svanisce.",
+      "choices": [
+        {
+          "text": "Investiga la fonte del suono.",
+          "resultText": "Cerchi per un po', ma non trovi nulla. Probabilmente era solo uno scherzo del vento e della tua mente affaticata. La ricerca ti ha fatto perdere tempo.",
+          "penalty": { "type": "time", "minutes": 30 }
+        },
+        {
+          "text": "Ignora il suono e stringi più forte la tua arma.",
+          "resultText": "Vero o no, qualsiasi cosa produca suoni in questo mondo è potenzialmente una minaccia. Ignori la distrazione e la tua vigilanza aumenta.",
+          "reward": { "type": "status_boost", "status": "ALERT", "duration": "temporary" }
+        }
+      ]
+    },
+    {
+      "id": "random_acid_rain",
+      "title": "Pioggia Corrosiva",
+      "description": "Nuvole scure si addensano rapidamente sopra di te e iniziano a cadere gocce pesanti e sfrigolanti. È una pioggia acida. Devi trovare un riparo, subito.",
+      "choices": [
+        {
+          "text": "Cerca un riparo di fortuna (grotta, edificio).",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+          "successText": "Riesci a trovare rapidamente una piccola sporgenza rocciosa che ti offre un riparo sufficiente. Aspetti che la pioggia corrosiva passi, rimanendo all'asciutto.",
+          "failureText": "Non trovi un riparo adeguato in tempo. La pioggia ti inzuppa i vestiti, corrodendo leggermente la tua armatura e irritandoti la pelle.",
+          "penalty": { "type": "damage", "amount": 5 },
+          "item_damage": { "item_slot": "armor", "amount": 10 }
+        },
+        {
+          "text": "Usa un telo impermeabile per proteggerti.",
+          "itemRequirement": [{ "id": "tarp", "quantity": 1 }],
+          "resultText": "Tiri fuori rapidamente il tuo telo impermeabile e ti crei un riparo improvvisato, rimanendo completamente protetto dalla pioggia acida."
+        }
+      ]
+    },
+    {
+      "id": "random_surveillance_drone",
+      "title": "L'Occhio nel Cielo",
+      "description": "Un ronzio acuto attira la tua attenzione verso il cielo. Un piccolo drone di sorveglianza ti sta sorvolando, un singolo occhio rosso che ti fissa. Non sembra armato, ma sta chiaramente registrando la tua posizione.",
+      "choices": [
+        {
+          "text": "Tenta di abbatterlo con un sasso.",
+          "skillCheck": { "stat": "agilita", "difficulty": 14 },
+          "successText": "Prendi la mira e scagli una pietra con precisione. Colpisci uno dei rotori. Il drone precipita a terra con un rumore sordo. Ora puoi recuperare i suoi componenti tecnologici.",
+          "failureText": "Il sasso manca il bersaglio di molto. Il drone emette un segnale acustico, probabilmente segnalando la tua presenza a qualcuno, prima di allontanarsi a grande velocità.",
+          "items_gained": [{ "id": "tech_components", "quantity": 2 }, { "id": "camera_lens", "quantity": 1 }],
+          "penalty": { "type": "special", "effect": "increase_encounter_rate", "duration": "1_hour" }
+        },
+        {
+          "text": "Nasconditi e aspetta che se ne vada.",
+          "actionKey": "ignore",
+          "resultText": "Ti butti a terra dietro un riparo e rimani immobile. Dopo alcuni minuti, che ti sembrano un'eternità, il drone sembra perderti di vista e si allontana. Per ora, sei di nuovo invisibile."
+        }
+      ]
+    },
+    {
+      "id": "random_minefield",
+      "title": "Un Passo Falso",
+      "description": "Stai per fare un passo quando noti qualcosa di innaturale nel terreno: la sommità di una vecchia mina antiuomo, quasi completamente sepolta. Guardandoti intorno, ti rendi conto di essere ai margini di un campo minato dimenticato.",
+      "choices": [
+        {
+          "text": "Tenta di attraversarlo con estrema cautela.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 15 },
+          "successText": "Trattieni il respiro. Studi il terreno, cercando i segni quasi invisibili delle altre mine. Con una concentrazione assoluta, riesci a tracciare un sentiero sicuro e ad attraversare il campo. Dall'altro lato, trovi i resti di qualcuno meno fortunato, ma con un equipaggiamento di valore.",
+          "failureText": "Un clic metallico sotto il tuo stivale. L'esplosione ti scaraventa a terra, lasciandoti gravemente ferito e sanguinante.",
+          "items_gained": [{ "id": "military_backpack", "quantity": 1 }, { "id": "medkit_advanced", "quantity": 1 }],
+          "penalty": { "type": "damage", "amount": 40 },
+          "status": { "status": "WOUNDED" }
+        },
+        {
+          "text": "Torna indietro e aggira l'area.",
+          "actionKey": "ignore",
+          "resultText": "Fai un passo indietro, lentamente e con attenzione, poi giri alla larga. Ci vorrà più tempo, ma la tua vita vale più di qualsiasi scorciatoia.",
+          "penalty": { "type": "time", "minutes": 90 }
+        }
+      ]
+    },
+    {
+      "id": "random_hidden_stash",
+      "title": "La X sulla Roccia",
+      "description": "Noti una \"X\" dipinta rozzamente con vernice rossa sbiadita su una grande roccia. Potrebbe non essere nulla, o potrebbe essere il segno di una scorta nascosta da qualche sopravvissuto.",
+      "choices": [
+        {
+          "text": "Scava alla base della roccia.",
+          "skillCheck": { "stat": "forza", "difficulty": 11 },
+          "successText": "Dopo aver spostato alcune pietre pesanti, il tuo sforzo viene premiato. Trovi una piccola cassa di metallo impermeabile. Contiene cibo, acqua e delle munizioni.",
+          "failureText": "Scavi per un po', ma non trovi nulla. O il segno era uno scherzo, o qualcun altro è già passato a ritirare la scorta.",
+          "items_gained": [{ "id": "canned_food", "quantity": 2 }, { "id": "water_purified", "quantity": 1 }, { "id": "ammo_shotgun", "quantity": 4 }]
+        },
+        {
+          "text": "Usa l'intelligenza: il segno è un indizio.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 13 },
+          "successText": "Invece di scavare, studi il segno. Noti che uno dei bracci della 'X' è leggermente più lungo e punta verso un albero cavo a una decina di metri di distanza. All'interno dell'albero, trovi la vera scorta, molto più ricca.",
+          "failureText": "Il segno non ti dice nulla. Sembra solo una 'X'. Non riesci a dedurre alcun significato nascosto.",
+          "items_gained": [{ "id": "medkit_field", "quantity": 1 }, { "id": "weapon_repair_kit", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "random_radiation_pocket",
+      "title": "Aria Pesante",
+      "description": "Inizi a sentire un sapore metallico in bocca e la tua pelle formicola. L'aria sembra innaturalmente pesante. Sei entrato in una sacca di radiazioni a basso livello, invisibile ma pericolosa.",
+      "choices": [
+        {
+          "text": "Attraversa l'area il più velocemente possibile.",
+          "resultText": "Trattieni il respiro e corri. Esci dall'area sentendoti nauseato, ma limitando l'esposizione. Subisci un danno moderato.",
+          "penalty": { "type": "damage", "amount": 15 }
+        },
+        {
+          "text": "Usa farmaci anti-radiazioni (se li hai).",
+          "itemRequirement": [{ "id": "rad_away_pills", "quantity": 1 }],
+          "resultText": "Ingoi rapidamente una delle pillole anti-radiazioni. Senti i suoi effetti quasi subito, proteggendoti mentre attraversi l'area contaminata. Ne esci completamente indenne.",
+          "items_lost": [{ "id": "rad_away_pills", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "random_fallen_messenger",
+      "title": "Messaggero Silenzioso",
+      "description": "Trovi il corpo di un uomo in abiti robusti, con una grande borsa di pelle a tracolla. Sembra un messaggero o un corriere. Non ci sono segni evidenti di violenza; forse è morto di stenti.",
+      "choices": [
+        {
+          "text": "Prendi la borsa e il suo contenuto.",
+          "resultText": "I vivi hanno bisogno di risorse più dei morti. Prendi la borsa. All'interno, oltre a un po' di cibo, trovi un pacco sigillato che non apri e un piccolo coltello.",
+          "items_gained": [{ "id": "ration_pack", "quantity": 1 }, { "id": "sealed_package_quest", "quantity": 1 }, { "id": "folding_knife", "quantity": 1 }]
+        },
+        {
+          "text": "Cerca solo indizi sulla sua identità o missione.",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Decidi di non saccheggiarlo. Cerchi solo dei documenti. Trovi un ordine di consegna per un 'avamposto a nord' e una lettera personale. Le informazioni potrebbero guidarti verso una comunità di sopravvissuti.",
+          "failureText": "Non trovi alcun documento o indizio. La sua storia muore con lui.",
+          "reward": { "type": "lore_clue", "clueId": "outpost_north" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8mx2ny4qr3ld"]
+
+[ext_resource type="Script" path="res://scripts/ui/popups/RestNightPopup.gd" id="1_0k8vx"]
+[ext_resource type="Theme" path="res://themes/main_theme.tres" id="2_1h9kw"]
+
+[node name="RestNightPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_1h9kw")
+script = ExtResource("1_0k8vx")
+
+[node name="BackgroundPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -200.0
+offset_right = 350.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BackgroundPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShelterTitle" type="Label" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🌙 Rifugio Notturno"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ShelterDescription" type="RichTextLabel" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=lightblue]La notte è calata e ti trovi al sicuro nel rifugio. Le pareti ti proteggono dai pericoli esterni. Puoi consumare le tue razioni e riposare fino all'alba.[/color]
+
+[color=yellow]Cosa vuoi fare prima di dormire?[/color]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 3
+
+[node name="HSeparator2" type="HSeparator" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Choice1" type="Button" parent="BackgroundPanel/VBoxContainer/ChoicesContainer"]
+layout_mode = 2
+text = "[1] Mangia e Bevi (Consuma cibo e acqua)"
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+
+[node name="Choice2" type="Button" parent="BackgroundPanel/VBoxContainer/ChoicesContainer"]
+layout_mode = 2
+text = "[2] Mangia (Consuma solo cibo)"
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+
+[node name="Choice3" type="Button" parent="BackgroundPanel/VBoxContainer/ChoicesContainer"]
+layout_mode = 2
+text = "[3] Bevi (Consuma solo acqua)"
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+
+[node name="Choice4" type="Button" parent="BackgroundPanel/VBoxContainer/ChoicesContainer"]
+layout_mode = 2
+text = "[4] Non consumare nulla (Riposa direttamente)"
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+
+[node name="HSeparator3" type="HSeparator" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="BackgroundPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Naviga [↑↓] | Seleziona [ENTER] | Scelta rapida [1-4] | Chiudi [ESC]"
+horizontal_alignment = 1
+modulate = Color(0.8, 0.8, 1, 1)

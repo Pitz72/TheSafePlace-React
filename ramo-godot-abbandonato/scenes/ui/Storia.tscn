@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvxm8y2qkn8ys"]
+
+[ext_resource type="Script" path="res://scripts/ui/Storia.gd" id="1_storia"]
+[ext_resource type="PackedScene" uid="uid://bxqvw8r7n5xkm" path="res://scenes/DocumentReader.tscn" id="2_document_reader"]
+
+[node name="Storia" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_storia")
+
+[node name="DocumentReader" parent="." instance=ExtResource("2_document_reader")]
+layout_mode = 1

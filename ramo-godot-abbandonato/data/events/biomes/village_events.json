@@ -1,0 +1,208 @@
+{
+  "VILLAGE": [
+    {
+      "id": "village_locked_house",
+      "title": "Casa con Porta Chiusa",
+      "description": "Una casetta di campagna con la porta chiusa a chiave. Le finestre sono barricate dall'interno.",
+      "choices": [
+        {
+          "text": "Forza la porta",
+          "skillCheck": { "stat": "forza", "difficulty": 12 },
+          "successText": "La porta cede con un colpo deciso. Dentro trovi una dispensa con qualche riserva.",
+          "failureText": "La serratura regge e ti affatichi inutilmente.",
+          "items_gained": [{ "id": "canned_food", "quantity": 2 }, { "id": "water_bottle", "quantity": 2 }]
+        },
+        {
+          "text": "Cerca un ingresso secondario",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Trovi una finestrella sul retro mal chiusa. Riesci a entrare senza fare troppo rumore.",
+          "failureText": "Le entrate sono tutte ben chiuse o barricate.",
+          "penalty": { "type": "time", "minutes": 20 }
+        }
+      ]
+    },
+    {
+      "id": "village_playground",
+      "title": "Parco Giochi Abbandonato",
+      "description": "Altalene arrugginite e uno scivolo rotto scricchiolano al vento. C'è una panchina con qualcosa sotto.",
+      "choices": [
+        {
+          "text": "Controlla sotto la panchina",
+          "skillCheck": { "stat": "agilita", "difficulty": 10 },
+          "successText": "Trovi un piccolo zaino con dentro snack energetici e una torcia.",
+          "failureText": "Non trovi nulla di utile, solo spazzatura.",
+          "items_gained": [{ "id": "energy_bar", "quantity": 2 }, { "id": "flashlight", "quantity": 1 }]
+        },
+        {
+          "text": "Ispeziona il capanno degli attrezzi",
+          "skillCheck": { "stat": "forza", "difficulty": 11 },
+          "successText": "Rompi il lucchetto arrugginito e trovi strumenti e materiali utili.",
+          "failureText": "Il lucchetto non cede e fai rumore inutile.",
+          "items_gained": [{ "id": "tool_hammer", "quantity": 1 }, { "id": "nails_box", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "village_community_board",
+      "title": "Bacheca della Comunità",
+      "description": "Una bacheca con vecchi avvisi. Alcuni fogli sono ancora leggibili.",
+      "choices": [
+        {
+          "text": "Leggi gli avvisi",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+          "successText": "Tra gli avvisi c'è una mappa disegnata a mano con segnati alcuni rifugi e posti pericolosi.",
+          "failureText": "Gli avvisi sono troppo deteriorati per essere utili.",
+          "reward": { "type": "special", "effect": "reveal_local_pois" }
+        },
+        {
+          "text": "Cerca dietro la bacheca",
+          "skillCheck": { "stat": "agilita", "difficulty": 11 },
+          "successText": "Trovi una cassetta di pronto soccorso nascosta.",
+          "failureText": "Non c'è nulla oltre a ragnatele e polvere.",
+          "items_gained": [{ "id": "first_aid_kit", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "village_vegetable_garden",
+      "title": "Orto Dimenticato",
+      "description": "Dietro una casa abbandonata c'è un piccolo orto. Qualcosa ancora cresce tra le erbacce.",
+      "choices": [
+        {
+          "text": "Raccogli quello che puoi",
+          "resultText": "Raccogli alcune verdure ancora commestibili.",
+          "items_gained": [{ "id": "carrot", "quantity": 2 }, { "id": "potato", "quantity": 2 }]
+        },
+        {
+          "text": "Cerca attrezzi da giardinaggio",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Trovi un piccolo set di attrezzi utili.",
+          "failureText": "Il capanno degli attrezzi è vuoto.",
+          "items_gained": [{ "id": "garden_tools", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "village_water_pump",
+      "title": "Pompa dell'Acqua",
+      "description": "Una vecchia pompa a mano in una piazzetta. Forse funziona ancora.",
+      "choices": [
+        {
+          "text": "Aziona la pompa",
+          "skillCheck": { "stat": "forza", "difficulty": 10 },
+          "successText": "Dopo alcuni tentativi, l'acqua inizia a scorrere limpida.",
+          "failureText": "La pompa è bloccata e non si muove.",
+          "items_gained": [{ "id": "water_purified", "quantity": 3 }]
+        },
+        {
+          "text": "Smonta la pompa per ricambi",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Recuperi alcune parti metalliche e guarnizioni utili.",
+          "failureText": "Niente di recuperabile senza strumenti migliori.",
+          "items_gained": [{ "id": "metal_scrap", "quantity": 3 }, { "id": "rubber_gasket", "quantity": 2 }]
+        }
+      ]
+    },
+    {
+      "id": "village_doghouse",
+      "title": "Cuccia Abbandonata",
+      "description": "Nel giardino di una casa trovi una piccola cuccia di legno. C'è qualcosa dentro.",
+      "choices": [
+        {
+          "text": "Metti la mano dentro",
+          "skillCheck": { "stat": "agilita", "difficulty": 10 },
+          "successText": "Tiri fuori una palla di gomma e un osso di plastica. Niente di speciale, ma la palla può essere utile come distrazione.",
+          "failureText": "Qualcosa ti morde. Era un animale nascosto!",
+          "items_gained": [{ "id": "rubber_ball", "quantity": 1 }],
+          "penalty": { "type": "damage", "amount": 4 }
+        },
+        {
+          "text": "Solleva la cuccia",
+          "skillCheck": { "stat": "forza", "difficulty": 11 },
+          "successText": "Sotto la cuccia trovi un piccolo tesoro: monete, un coltello pieghevole e batterie.",
+          "failureText": "Non trovi nulla se non insetti.",
+          "items_gained": [{ "id": "folding_knife", "quantity": 1 }, { "id": "batteries_pack", "quantity": 1 }]
+        }
+      ]
+    },
+    {
+      "id": "village_canned_food_cache",
+      "title": "Nascondiglio di Scatolette",
+      "description": "Dietro un cassonetto rovesciato, noti una cavità con alcune scatolette conservate al fresco.",
+      "choices": [
+        {
+          "text": "Recupera le scatolette",
+          "resultText": "Prendi tutte le scatolette rimaste, sono ancora buone.",
+          "items_gained": [{ "id": "canned_food", "quantity": 3 }]
+        },
+        {
+          "text": "Controlla se ci sono trappole",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+          "successText": "Nessuna trappola. Sembra proprio una scorta dimenticata.",
+          "failureText": "Smuovi qualcosa e fai rumore, attirando attenzioni indesiderate.",
+          "penalty": { "type": "special", "effect": "attract_raiders" }
+        }
+      ]
+    },
+    {
+      "id": "village_wind_chimes",
+      "title": "Campanelli a Vento",
+      "description": "Una casa ha ancora appesi dei campanelli a vento. Suonano a ogni soffio.",
+      "choices": [
+        {
+          "text": "Smontali con cura",
+          "skillCheck": { "stat": "agilita", "difficulty": 10 },
+          "successText": "Recuperi fili resistenti e piccoli componenti metallici.",
+          "failureText": "Cadono a terra e si rompono.",
+          "items_gained": [{ "id": "resistant_wire", "quantity": 2 }, { "id": "metal_piece", "quantity": 2 }]
+        },
+        {
+          "text": "Ignora e prosegui",
+          "actionKey": "ignore",
+          "resultText": "Non hai tempo da perdere con queste sciocchezze."
+        }
+      ]
+    },
+    {
+      "id": "village_family_album",
+      "title": "Album di Famiglia",
+      "description": "In una casa abbandonata trovi un album fotografico pieno di ricordi sbiaditi.",
+      "choices": [
+        {
+          "text": "Sfoglia l'album",
+          "skillCheck": { "stat": "carisma", "difficulty": 10 },
+          "successText": "Ti senti rinvigorito dai ricordi di una vita normale. Una spinta emotiva ti fortifica.",
+          "failureText": "La nostalgia ti ferisce. Ti senti più vulnerabile per un po'.",
+          "reward": { "type": "stat_boost", "stat": "carisma", "amount": 1, "duration": "temporary" },
+          "penalty": { "type": "status", "status": "SAD" }
+        },
+        {
+          "text": "Cerca tasche o scomparti nascosti",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Trovi una lettera con indizi su un rifugio poco distante.",
+          "failureText": "Niente di utile nascosto qui.",
+          "reward": { "type": "special", "effect": "reveal_refuge" }
+        }
+      ]
+    },
+    {
+      "id": "village_scrawled_warning",
+      "title": "Avviso Scarabocchiato",
+      "description": "Un graffito su un muro avverte: 'Non andare verso nord. Pericolo'.",
+      "choices": [
+        {
+          "text": "Ignora l'avviso",
+          "actionKey": "ignore",
+          "resultText": "Prosegui per la tua strada, deciso a non farti intimorire."
+        },
+        {
+          "text": "Indaga sul perché",
+          "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+          "successText": "Scopri segni di una banda che pattuglia quella zona. Meglio evitarla.",
+          "failureText": "Non trovi indizi sufficienti.",
+          "reward": { "type": "special", "effect": "mark_danger_zone" }
+        }
+      ]
+    }
+  ]
+}

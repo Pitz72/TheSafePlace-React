@@ -1,0 +1,199 @@
+[
+  {
+    "id": "plains_old_scarecrow",
+    "title": "Vecchio Spaventapasseri",
+    "description": "In mezzo a un campo arido, noti uno spaventapasseri solitario. La sua figura contorta sembra quasi umana. Potrebbe nascondere qualcosa di utile o essere una trappola.",
+    "choices": [
+      {
+        "text": "Ispeziona con cautela",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 11 },
+        "successText": "Analizzando la struttura, noti un piccolo scomparto nascosto alla base. Dentro, trovi delle bende pulite e un pacchetto di fiammiferi.",
+        "failureText": "È solo un ammasso di stracci e paglia fradicia. Mentre frughi, un nido di insetti mutati ti assale, lasciandoti con qualche fastidiosa puntura.",
+        "reward": { "type": "items", "items": [{ "id": "bandages_clean", "quantity": 1 }, { "id": "matches", "quantity": 1 }] },
+        "penalty": { "type": "damage", "amount": 3 }
+      },
+      {
+        "text": "Ignoralo e prosegui",
+        "actionKey": "ignore",
+        "resultText": "Decidi che non vale la pena rischiare. Prosegui il tuo cammino, lasciandoti alle spalle la figura solitaria nel vento."
+      }
+    ]
+  },
+  {
+    "id": "plains_abandoned_vehicle",
+    "title": "Veicolo Abbandonato",
+    "description": "La carcassa arrugginita di un'auto è ferma sul ciglio di quella che un tempo era una strada. Il bagagliaio sembra chiuso ermeticamente.",
+    "choices": [
+      {
+        "text": "Forza il bagagliaio",
+        "skillCheck": { "stat": "forza", "difficulty": 13 },
+        "successText": "Con uno sforzo immane, riesci a scardinare il bagagliaio. Dentro, trovi dei rottami metallici e una tanica con un po' di carburante.",
+        "failureText": "Il meccanismo è saldato dalla ruggine. Non riesci ad aprirlo e lo sforzo ti lascia senza fiato e con una fitta alla schiena.",
+        "reward": { "type": "items", "items": [{ "id": "scrap_metal", "quantity": 3 }, { "id": "fuel_canister_small", "quantity": 1 }] },
+        "penalty": { "type": "status", "status": "WOUNDED" }
+      },
+      {
+        "text": "Controlla l'abitacolo",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+        "successText": "Nel vano portaoggetti, dietro a carte ammuffite, trovi una vecchia mappa stradale della regione. Potrebbe rivelarsi preziosa.",
+        "failureText": "L'interno è stato completamente saccheggiato e vandalizzato. Non c'è rimasto assolutamente nulla di valore.",
+        "reward": { "type": "item", "item": { "id": "old_military_map", "quantity": 1 } }
+      }
+    ]
+  },
+  {
+    "id": "plains_strange_carcass",
+    "title": "Carcassa Misteriosa",
+    "description": "Vedi una carcassa di una creatura che non riconosci. È enorme, non assomiglia a nessun animale che tu abbia mai visto. Potrebbe essere una fonte di cibo o un nido di malattie.",
+    "choices": [
+      {
+        "text": "Recupera carne con cautela",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+        "successText": "Analizzando la carcassa, noti che la carne vicino alle ossa è ancora buona e non sembra contaminata. Recuperi un bel pezzo.",
+        "failureText": "Mentre tagli la carne, liberi una sacca di gas putridi. L'odore nauseabondo ti investe e ti senti subito male.",
+        "reward": { "type": "item", "item": { "id": "meat_raw", "quantity": 3 } },
+        "penalty": { "type": "status", "status": "SICK" }
+      },
+      {
+        "text": "Mantieni le distanze",
+        "actionKey": "ignore",
+        "resultText": "L'istinto ti dice che il rischio è troppo alto. Prosegui, lasciando che la natura faccia il suo corso."
+      }
+    ]
+  },
+  {
+    "id": "plains_memorial_forgotten",
+    "title": "Monumento Dimenticato",
+    "description": "Trovi una piccola lapide di pietra grezza, incisa rozzamente. Dice: 'Hanno combattuto per un domani che non hanno mai visto'. Alla base, qualcuno ha lasciato un piccolo oggetto avvolto in un panno.",
+    "choices": [
+      {
+        "text": "Prendi l'oggetto",
+        "resultText": "Con rispetto, prendi l'offerta. È una bussola funzionante. Chiunque l'abbia lasciata voleva che aiutasse un altro viaggiatore.",
+        "reward": { "type": "item", "item": { "id": "fathers_compass", "quantity": 1 } }
+      },
+      {
+        "text": "Lascia una tua razione in segno di rispetto",
+        "skillCheck": { "stat": "carisma", "difficulty": 8 },
+        "successText": "Decidi di onorare il loro sacrificio. Lasci una delle tue razioni. Questo semplice gesto ti riempie di una strana determinazione.",
+        "failureText": "Vorresti onorarli, ma la tua fame è più forte. Tieni le tue scorte per te, sentendoti un po' in colpa.",
+        "penalty": { "type": "remove_item", "item_id": "ration_pack", "quantity": 1 },
+        "reward": { "type": "stat_boost", "stat": "carisma", "amount": 1, "duration": "permanent" }
+      }
+    ]
+  },
+  {
+    "id": "plains_dust_devil",
+    "title": "Diavolo di Polvere",
+    "description": "All'improvviso, un piccolo ma violento tornado di polvere si forma davanti a te, sollevando detriti e terra. Puoi tentare di attraversarlo o cercare di aggirarlo, perdendo tempo prezioso.",
+    "choices": [
+      {
+        "text": "Attraversalo di corsa",
+        "skillCheck": { "stat": "agilita", "difficulty": 13 },
+        "successText": "Con uno scatto fulmineo e i muscoli tesi, passi attraverso il vortice quasi indenne, sentendo solo il vento sferzarti il viso.",
+        "failureText": "Vieni investito in pieno. La polvere ti acceca e i detriti ti colpiscono, lasciandoti ammaccato, disorientato e con qualche graffio.",
+        "penalty": { "type": "damage", "amount": 10 }
+      },
+      {
+        "text": "Aggiralo perdendo tempo",
+        "actionKey": "ignore",
+        "resultText": "Non ne vale la pena. Fai un lungo giro, perdendo quasi un'ora di luce.",
+        "penalty": { "type": "time", "minutes": 60 }
+      }
+    ]
+  },
+  {
+    "id": "plains_radio_tower",
+    "title": "Torre Radio Solitaria",
+    "description": "Una torre di trasmissione arrugginita si erge solitaria contro il cielo. Alla sua base c'è un piccolo capanno di manutenzione con la porta socchiusa. Potrebbe contenere componenti utili.",
+    "choices": [
+      {
+        "text": "Esplora il capanno",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+        "successText": "All'interno, trovi una cassetta degli attrezzi. Contiene delle parti elettroniche e un kit di riparazione di base.",
+        "failureText": "Il capanno è vuoto e pieno di polvere. Qualcuno è già passato di qui molto tempo fa.",
+        "reward": { "type": "items", "items": [{ "id": "electronic_parts", "quantity": 4 }, { "id": "repair_kit", "quantity": 1 }] }
+      },
+      {
+        "text": "Tenta di arrampicarti sulla torre",
+        "skillCheck": { "stat": "forza", "difficulty": 14 },
+        "successText": "Con fatica, riesci a salire abbastanza in alto da avere una visuale migliore. Noti un'anomalia sulla mappa in lontananza.",
+        "failureText": "Un piolo arrugginito cede sotto il tuo peso. Cadi da un paio di metri, facendoti male a una caviglia.",
+        "reward": { "type": "reveal_map_poi" },
+        "penalty": { "type": "status", "status": "WOUNDED" }
+      }
+    ]
+  },
+  {
+    "id": "plains_old_well",
+    "title": "Vecchio Pozzo",
+    "description": "Ti imbatti in un vecchio pozzo di pietra. Una corda logora pende al suo interno. Potrebbe esserci ancora dell'acqua sul fondo, ma sembra profondo e buio.",
+    "choices": [
+      {
+        "text": "Tira su il secchio",
+        "skillCheck": { "stat": "forza", "difficulty": 11 },
+        "successText": "La corda regge! Tiri su un secchio pieno di acqua fresca e pulita, filtrata dal terreno. Una vera fortuna.",
+        "failureText": "Mentre tiri, la corda si spezza. Il secchio precipita nel buio con un tonfo sordo. L'occasione è persa.",
+        "reward": { "type": "item", "item": { "id": "water_purified", "quantity": 3 } }
+      },
+      {
+        "text": "Lascia perdere",
+        "actionKey": "ignore",
+        "resultText": "Non ti fidi della vecchia corda. Meglio non rischiare di perdere tempo o di cadere dentro."
+      }
+    ]
+  },
+  {
+    "id": "plains_mirage",
+    "title": "Miraggio",
+    "description": "In lontananza, sotto il sole cocente, vedi quella che sembra un'oasi con acqua e palme. Potrebbe essere la tua salvezza, o solo un inganno della mente affaticata.",
+    "choices": [
+      {
+        "text": "Dirigiti verso l'oasi",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 12 },
+        "successText": "Ti avvicini e ti rendi conto che è solo un miraggio. Deluso, stai per andartene quando noti qualcosa di semi-sepolto nella sabbia dove avrebbe dovuto esserci l'acqua: una borraccia quasi piena!",
+        "failureText": "Cammini per quasi un'ora verso l'oasi, solo per vederla svanire nel nulla. Hai sprecato tempo ed energie preziose per un'illusione.",
+        "reward": { "type": "item", "item": { "id": "purified_water_bottle_large", "quantity": 1 } },
+        "penalty": { "type": "time", "minutes": 60 }
+      }
+    ]
+  },
+  {
+    "id": "plains_fissure",
+    "title": "Fenditura nel Terreno",
+    "description": "Una profonda crepa si apre nel terreno arido. È troppo larga per essere saltata facilmente. Puoi cercare un punto più stretto o provare a calarti al suo interno.",
+    "choices": [
+      {
+        "text": "Cerca un passaggio",
+        "skillCheck": { "stat": "intelligenza", "difficulty": 10 },
+        "successText": "Dopo una breve ricerca, trovi un punto in cui le due sponde quasi si toccano, permettendoti di attraversare senza problemi.",
+        "failureText": "Giri a vuoto per un po', non trovando un passaggio sicuro. Perdi tempo e decidi di tornare indietro.",
+        "penalty": { "type": "time", "minutes": 30 }
+      },
+      {
+        "text": "Calati nella fenditura",
+        "skillCheck": { "stat": "agilita", "difficulty": 14 },
+        "successText": "Scendendo con attenzione, scopri che la fenditura porta a una piccola grotta nascosta. All'interno trovi i resti di un accampamento e un kit medico.",
+        "failureText": "Perdi la presa durante la discesa e scivoli, graffiandoti contro le rocce taglienti. Risali a fatica, ferito e senza aver trovato nulla.",
+        "reward": { "type": "item", "item": { "id": "medkit_field", "quantity": 1 } },
+        "penalty": { "type": "damage", "amount": 15 }
+      }
+    ]
+  },
+  {
+    "id": "plains_vulture_circle",
+    "title": "Cerchio di Avvoltoi",
+    "description": "Vedi un gruppo di avvoltoi mutati che volteggiano in cerchio nel cielo. Stanno chiaramente girando sopra a qualcosa. Potrebbe essere una preda recente o un altro sopravvissuto in difficoltà.",
+    "choices": [
+      {
+        "text": "Avvicinati per investigare",
+        "resultText": "Spaventando gli avvoltoi, scopri che stavano banchettando con la carcassa di un grosso animale. Recuperi della carne e una pelle robusta.",
+        "reward": { "type": "items", "items": [{ "id": "meat_raw", "quantity": 2 }, { "id": "animal_hide", "quantity": 1 }] }
+      },
+      {
+        "text": "Evita la zona",
+        "actionKey": "ignore",
+        "resultText": "Dove ci sono avvoltoi, spesso ci sono anche predatori più grandi. Decidi di non rischiare e cambi strada."
+      }
+    ]
+  }
+]

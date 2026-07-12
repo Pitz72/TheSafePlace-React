@@ -1,0 +1,324 @@
+{
+  "consumables": {
+    "canned_food": {
+      "id": "canned_food",
+      "name": "Cibo in Scatola",
+      "nameShort": "Scatoletta",
+      "description": "Cibo conservato in scatola, dura per sempre ma ha un sapore metallico.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.5,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 60 },
+          { "effect_type": "hydrate", "amount": 10 }
+        ]
+      }
+    },
+    "energy_bar": {
+      "id": "energy_bar",
+      "name": "Barretta Energetica",
+      "nameShort": "Barretta",
+      "description": "Barretta energetica concentrata, perfetta per un boost rapido.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 40 },
+          { "effect_type": "energy_boost", "duration": 60 }
+        ]
+      }
+    },
+    "painkillers": {
+      "id": "painkillers",
+      "name": "Antidolorifici",
+      "nameShort": "Antidolorifici",
+      "description": "Pillole per alleviare il dolore e ridurre l'infiammazione.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "pain_reduction", "amount": 0.5, "duration": 180 },
+          { "effect_type": "heal", "amount": 5 }
+        ]
+      }
+    },
+    "generic_meds": {
+      "id": "generic_meds",
+      "name": "Medicinali Generici",
+      "nameShort": "Medicinali",
+      "description": "Medicinali generici per trattare infezioni e malattie comuni.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.1,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "cure", "status": "SICK" },
+          { "effect_type": "heal", "amount": 10 }
+        ]
+      }
+    },
+    "sterile_gauze": {
+      "id": "sterile_gauze",
+      "name": "Garza Sterile",
+      "nameShort": "Garza",
+      "description": "Garza sterile per medicare ferite e prevenire infezioni.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 3,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "effects": [
+          { "effect_type": "bandage", "amount": 15 },
+          { "effect_type": "infection_prevention", "chance": 0.8 }
+        ]
+      }
+    },
+    "fresh_fish": {
+      "id": "fresh_fish",
+      "name": "Pesce Fresco",
+      "nameShort": "Pesce",
+      "description": "Pesce appena pescato, ricco di proteine e omega-3.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.8,
+      "value": 6,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 45 },
+          { "effect_type": "health_boost", "amount": 5 }
+        ]
+      }
+    },
+    "wild_berries": {
+      "id": "wild_berries",
+      "name": "Bacche Selvatiche",
+      "nameShort": "Bacche",
+      "description": "Bacche raccolte in natura, dolci e ricche di antiossidanti.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.2,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 },
+          { "effect_type": "health_boost", "amount": 3 }
+        ]
+      }
+    },
+    "edible_mushrooms": {
+      "id": "edible_mushrooms",
+      "name": "Funghi Commestibili",
+      "nameShort": "Funghi",
+      "description": "Funghi sicuri da mangiare, ricchi di nutrienti.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 4,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 20 },
+          { "effect_type": "foraging_boost", "amount": 2 }
+        ]
+      }
+    },
+    "expired_medicine": {
+      "id": "expired_medicine",
+      "name": "Medicina Scaduta",
+      "nameShort": "Medicina Scaduta",
+      "description": "Medicina scaduta ma ancora parzialmente efficace. Meglio di niente.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "COMMON",
+      "weight": 0.1,
+      "value": 8,
+      "stackable": true,
+      "max_stack": 15,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 8 }
+        ]
+      }
+    },
+    "water_bottle": {
+      "id": "water_bottle",
+      "name": "Borraccia d'Acqua",
+      "nameShort": "Borraccia",
+      "description": "Una borraccia piena di acqua fresca. Salvavita nel deserto.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "COMMON",
+      "weight": 0.8,
+      "value": 12,
+      "stackable": true,
+      "max_stack": 5,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 80 }
+        ]
+      }
+    },
+    "gourmet_canned_food": {
+      "id": "gourmet_canned_food",
+      "name": "Cibo Gourmet in Scatola",
+      "nameShort": "Cibo Gourmet",
+      "description": "Cibo di lusso pre-guerra perfettamente conservato.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "RARE",
+      "weight": 0.6,
+      "value": 80,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 60 },
+          { "effect_type": "morale_boost", "amount": 15, "duration": 180 }
+        ]
+      }
+    },
+    "wine_bottle_aged": {
+      "id": "wine_bottle_aged",
+      "name": "Bottiglia di Vino Invecchiato",
+      "nameShort": "Vino Invecchiato",
+      "description": "Una pregiata bottiglia di vino sopravvissuta all'apocalisse.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "EPIC",
+      "weight": 1.2,
+      "value": 200,
+      "stackable": true,
+      "max_stack": 3,
+      "properties": {
+        "effects": [
+          { "effect_type": "morale_boost", "amount": 25, "duration": 240 },
+          { "effect_type": "intoxication", "chance": 0.3 }
+        ]
+      }
+    },
+    "alcohol_pure": {
+      "id": "alcohol_pure",
+      "name": "Alcol Puro",
+      "nameShort": "Alcol Puro",
+      "description": "Alcol puro per uso medico o come disinfettante.",
+      "category": "CONSUMABLE",
+      "subcategory": "medical",
+      "rarity": "UNCOMMON",
+      "weight": 0.8,
+      "value": 30,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "disinfect", "amount": 20 },
+          { "effect_type": "pain_reduction", "amount": 0.4, "duration": 90 }
+        ]
+      }
+    },
+    "water_contaminated": {
+      "id": "water_contaminated",
+      "name": "Acqua Contaminata",
+      "nameShort": "Acqua Contaminata",
+      "description": "Acqua contaminata da sostanze chimiche. Può essere purificata.",
+      "category": "CONSUMABLE",
+      "subcategory": "drink",
+      "rarity": "COMMON",
+      "weight": 1.0,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 8,
+      "properties": {
+        "effects": [
+          { "effect_type": "hydrate", "amount": 15 },
+          { "effect_type": "poison_chance", "chance": 0.5 }
+        ]
+      }
+    },
+    "glowing_mushrooms": {
+      "id": "glowing_mushrooms",
+      "name": "Funghi Luminosi",
+      "nameShort": "Funghi Luminosi",
+      "description": "Funghi bioluminescenti con proprietà curative ma rischiose.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "RARE",
+      "weight": 0.2,
+      "value": 40,
+      "stackable": true,
+      "max_stack": 12,
+      "properties": {
+        "effects": [
+          { "effect_type": "heal", "amount": 25 },
+          { "effect_type": "hallucination_chance", "chance": 0.3 }
+        ]
+      }
+    },
+    "wild_nuts": {
+      "id": "wild_nuts",
+      "name": "Noci Selvatiche",
+      "nameShort": "Noci Selvatiche",
+      "description": "Noci raccolte in natura, nutrienti e facili da trasportare.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 5,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 }
+        ]
+      }
+    },
+    "meat_raw": {
+      "id": "meat_raw",
+      "name": "Carne Cruda",
+      "nameShort": "Carne Cruda",
+      "description": "Pezzi di carne cruda strappati da carcasse animali.",
+      "category": "CONSUMABLE",
+      "subcategory": "food",
+      "rarity": "COMMON",
+      "weight": 0.7,
+      "value": 2,
+      "stackable": true,
+      "max_stack": 10,
+      "properties": {
+        "effects": [
+          { "effect_type": "nourish", "amount": 15 },
+          { "effect_type": "infection_chance", "chance": 0.6 }
+        ]
+      }
+    }
+  }
+}

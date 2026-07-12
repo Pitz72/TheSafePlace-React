@@ -1,0 +1,108 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxqm8y7n4qr2k"]
+
+[ext_resource type="Script" path="res://scripts/tools/AutoTestScene.gd" id="1_8k9m2"]
+
+[node name="AutoTestScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_8k9m2")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="MainContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="TitleLabel" type="Label" parent="MainContainer"]
+layout_mode = 2
+text = "🧪 TheSafePlace - Automated Testing Suite"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="MainContainer"]
+layout_mode = 2
+text = "Pronto per eseguire test"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer"]
+layout_mode = 2
+max_value = 100.0
+step = 1.0
+show_percentage = true
+
+[node name="VSeparator" type="VSeparator" parent="MainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="RunAllButton" type="Button" parent="MainContainer/ButtonsContainer"]
+layout_mode = 2
+text = "🚀 Esegui Tutti i Test"
+
+[node name="RunPerformanceButton" type="Button" parent="MainContainer/ButtonsContainer"]
+layout_mode = 2
+text = "⚡ Test Performance"
+
+[node name="RunQuickButton" type="Button" parent="MainContainer/ButtonsContainer"]
+layout_mode = 2
+text = "⏱️ Validazione Rapida"
+
+[node name="ClearButton" type="Button" parent="MainContainer/ButtonsContainer"]
+layout_mode = 2
+text = "🗑️ Pulisci"
+
+[node name="VSeparator2" type="VSeparator" parent="MainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="ResultsContainer" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ResultsLabel" type="Label" parent="MainContainer/ResultsContainer"]
+layout_mode = 2
+text = "📋 Risultati Test:"
+
+[node name="ResultsText" type="TextEdit" parent="MainContainer/ResultsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "I risultati dei test appariranno qui..."
+editable = false
+wrap_mode = 1
+
+[node name="VSeparator3" type="VSeparator" parent="MainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="InfoContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="MainContainer/InfoContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "💡 Shortcuts: F5=All Tests | F6=Performance | F7=Quick | F8=Clear"
+horizontal_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="MainContainer/InfoContainer"]
+layout_mode = 2
+text = "v1.0"
+horizontal_alignment = 2

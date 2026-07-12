@@ -1,0 +1,96 @@
+{
+  "ammo": {
+    "ammo_9mm": {
+      "id": "ammo_9mm",
+      "name": "Munizioni 9mm",
+      "nameShort": "9mm",
+      "description": "Una scatola di proiettili calibro 9mm. Comuni, ma sempre preziose.",
+      "category": "AMMO",
+      "subcategory": "pistol",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 20,
+      "stackable": true,
+      "max_stack": 50,
+      "properties": {}
+    },
+    "ammo_rifle": {
+      "id": "ammo_rifle",
+      "name": "Munizioni per Fucile",
+      "nameShort": "Munizioni Fucile",
+      "description": "Proiettili di grosso calibro per fucili da caccia o di precisione. Più rari e potenti.",
+      "category": "AMMO",
+      "subcategory": "rifle",
+      "rarity": "UNCOMMON",
+      "weight": 0.5,
+      "value": 40,
+      "stackable": true,
+      "max_stack": 30,
+      "properties": {}
+    },
+
+    "pistol_ammo": {
+      "id": "pistol_ammo",
+      "name": "Munizioni per Pistola",
+      "nameShort": "Munizioni Pistola",
+      "description": "Munizioni calibro 9mm per pistole. Comuni ma sempre utili.",
+      "category": "AMMO",
+      "subcategory": "pistol",
+      "rarity": "COMMON",
+      "weight": 0.3,
+      "value": 15,
+      "stackable": true,
+      "max_stack": 50,
+      "properties": {}
+    },
+
+    "rifle_ammo": {
+      "id": "rifle_ammo",
+      "name": "Munizioni per Fucile d'Assalto",
+      "nameShort": "Munizioni Fucile",
+      "description": "Munizioni 5.56mm per fucili d'assalto militari.",
+      "category": "AMMO",
+      "subcategory": "rifle",
+      "rarity": "UNCOMMON",
+      "weight": 0.4,
+      "value": 35,
+      "stackable": true,
+      "max_stack": 40,
+      "properties": {}
+    },
+
+    "shotgun_shells": {
+      "id": "shotgun_shells",
+      "name": "Cartucce per Fucile a Pompa",
+      "nameShort": "Cartucce Pompa",
+      "description": "Cartucce calibro 12 per fucili a pompa. Devastanti a corto raggio.",
+      "category": "AMMO",
+      "subcategory": "shotgun",
+      "rarity": "UNCOMMON",
+      "weight": 0.6,
+      "value": 25,
+      "stackable": true,
+      "max_stack": 20,
+      "properties": {}
+    },
+
+    "special_ammo": {
+      "id": "special_ammo",
+      "name": "Munizioni Speciali",
+      "nameShort": "Munizioni Speciali",
+      "description": "Munizioni militari speciali con punte perforanti.",
+      "category": "AMMO",
+      "subcategory": "special",
+      "rarity": "RARE",
+      "weight": 0.4,
+      "value": 80,
+      "stackable": true,
+      "max_stack": 25,
+      "properties": {
+        "effects": [
+          { "effect_type": "armor_piercing", "amount": 0.5 }
+        ]
+      }
+    }
+  }
+}

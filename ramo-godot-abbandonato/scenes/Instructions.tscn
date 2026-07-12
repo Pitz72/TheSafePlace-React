@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxqvw8r7n5xkl"]
+
+[ext_resource type="Script" path="res://scripts/Instructions.gd" id="1_0x8vw"]
+[ext_resource type="Theme" uid="uid://bqxvw8r7n5xkl" path="res://themes/main_theme.tres" id="2_1x8vw"]
+
+[node name="Instructions" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2_1x8vw")
+script = ExtResource("1_0x8vw")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="MainContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.15
+anchor_top = 0.1
+anchor_right = 0.85
+anchor_bottom = 0.9
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="Title" type="Label" parent="MainContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.9, 0.6, 1)
+theme_override_font_sizes/font_size = 24
+text = "ISTRUZIONI DI GIOCO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer1" type="Control" parent="MainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="TextContainer" type="Panel" parent="MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/TextContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="InstructionsText" type="RichTextLabel" parent="MainContainer/TextContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Caricamento istruzioni..."
+fit_content = true
+scroll_active = false
+
+[node name="Spacer2" type="Control" parent="MainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="ControlsInfo" type="Label" parent="MainContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = "Usa ↑↓ o WASD per scorrere il testo • ESC per tornare al menu"
+horizontal_alignment = 1
+vertical_alignment = 1

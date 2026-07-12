@@ -1,0 +1,10 @@
+{
+  "CRAFT_001": {
+    "id": "CRAFT_001",
+    "name": "Pezzi di metallo",
+    "description": "Utili per riparare e creare oggetti.",
+    "type": "crafting",
+    "weight": 0.2,
+    "value": 1
+  }
+}

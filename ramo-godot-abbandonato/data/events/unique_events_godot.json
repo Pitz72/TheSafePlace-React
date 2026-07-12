@@ -1,0 +1,195 @@
+{
+  "unique_events": [
+    {
+      "id": "city_unique_webradio",
+      "title": "Stazione Radio WebRadio",
+      "description": "Scopri una vecchia stazione radio cittadina. L'antenna è ancora in piedi e senti un debole segnale provenire dagli altoparlanti.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Investigare la stazione",
+          "skill_check": { "stat": "intelligenza", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Trovi un vecchio computer ancora funzionante con registrazioni audio pre-belliche. Potrebbe contenere informazioni utili.",
+            "items_gained": [{ "id": "old_radio_logs", "quantity": 1 }, { "id": "tech_components", "quantity": 3 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il sistema elettrico è instabile. Ricevi una scossa mentre tocchi i comandi.",
+            "hp_change": -8
+          }
+        },
+        {
+          "text": "Cercare componenti elettronici",
+          "skill_check": { "stat": "fortuna", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Trovi diversi componenti elettronici ancora utilizzabili tra i rottami.",
+            "items_gained": [{ "id": "electronic_parts", "quantity": 5 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre frughi fai rumore e attrai l'attenzione di mutanti vicini.",
+            "hp_change": -6
+          }
+        }
+      ]
+    },
+    {
+      "id": "unique_eurocenter",
+      "title": "Rovine Eurocenter",
+      "description": "Ti imbatti nelle rovine di quello che sembra un vecchio ufficio. Un'insegna di metallo contorto recita '...mobiliare Eurocenter'. All'interno, tra le carte fradice, noti lo scheletro di un uomo in abito elegante.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Perquisire l'ufficio",
+          "skill_check": { "stat": "intelligenza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Tra le carte fradice trovi alcuni documenti sopravvissuti e un vecchio diario aziendale.",
+            "items_gained": [{ "id": "canned_food", "quantity": 1 }, { "id": "medical_supplies", "quantity": 1 }, { "id": "old_documents", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Mentre frughi tra le carte, fai crollare una pila di documenti che solleva una nube di polvere tossica.",
+            "hp_change": -5,
+            "status_effects": ["SICK"]
+          }
+        },
+        {
+          "text": "Cercare il cartellino identificativo",
+          "skill_check": { "stat": "fortuna", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi il cartellino di 'Marco G.' e alcuni effetti personali. Una storia triste di un uomo comune sorpreso dall'apocalisse.",
+            "narrative_text": "Questo ritrovamento ti ricorda la fragilità della vita umana."
+          },
+          "consequences_failure": {
+            "narrative_text": "Il cartellino è troppo deteriorato per essere leggibile."
+          }
+        }
+      ]
+    },
+    {
+      "id": "unique_magnetar",
+      "title": "Dispositivo Magnetar",
+      "description": "Trovi un dispositivo strano con luci lampeggianti e un forte campo magnetico. Sembra essere un qualche tipo di generatore di energia.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Analizzare il dispositivo",
+          "skill_check": { "stat": "intelligenza", "difficulty": 15 },
+          "consequences_success": {
+            "narrative_text": "Riconosci questo come un generatore magnetico sperimentale. Potrebbe essere utile per crafting avanzato.",
+            "items_gained": [{ "id": "magnetar_core", "quantity": 1 }, { "id": "rare_tech_components", "quantity": 2 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il dispositivo è troppo complesso. Mentre lo tocchi, ricevi una forte scossa magnetica.",
+            "hp_change": -12
+          }
+        },
+        {
+          "text": "Prendere solo componenti sicuri",
+          "skill_check": { "stat": "fortuna", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Con cautela rimuovi alcuni componenti esterni meno pericolosi.",
+            "items_gained": [{ "id": "water_bottle", "quantity": 1 }, { "id": "pain_killers", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il dispositivo si attiva improvvisamente, creando un campo magnetico che ti respinge.",
+            "hp_change": -7
+          }
+        }
+      ]
+    },
+    {
+      "id": "unique_bunker_discovery",
+      "title": "Scoperta Bunker",
+      "description": "Mentre esplori, noti una botola ben nascosta nel terreno. Potrebbe portare a un bunker sotterraneo.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Aprire la botola con cautela",
+          "skill_check": { "stat": "forza", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "La botola si apre rivelando un bunker ben conservato. Trovi razioni militari e un kit medico avanzato!",
+            "items_gained": [{ "id": "military_rations", "quantity": 2 }, { "id": "first_aid_kit", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "La botola è bloccata da ruggine. Mentre tiri, ti fai male alla schiena.",
+            "hp_change": -8,
+            "status_effects": ["WOUNDED"]
+          }
+        },
+        {
+          "text": "Controllare prima i dintorni",
+          "skill_check": { "stat": "intelligenza", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Noti segni di attività recente attorno alla botola. Qualcuno è stato qui di recente.",
+            "narrative_text": "Decidi di non rischiare e ti allontani."
+          },
+          "consequences_failure": {
+            "narrative_text": "Non noti nulla di particolare e procedi ad aprire la botola.",
+            "narrative_text": "Fortunatamente il bunker è abbandonato e ben fornito."
+          }
+        }
+      ]
+    },
+    {
+      "id": "unique_scientist_notes",
+      "title": "Appunti dello Scienziato",
+      "description": "In un laboratorio abbandonato trovi un quaderno pieno di appunti scientifici. Le scritte sono frenetiche e piene di formule matematiche.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Studiare gli appunti",
+          "skill_check": { "stat": "intelligenza", "difficulty": 14 },
+          "consequences_success": {
+            "narrative_text": "Gli appunti parlano di esperimenti genetici e radiazioni. Contengono conoscenze preziose sulla mutazione.",
+            "items_gained": [{ "id": "scientist_notes", "quantity": 1 }, { "id": "rad_away_pills", "quantity": 2 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Le formule sono troppo complesse. Ti confondi e perdi tempo prezioso.",
+            "penalty": { "type": "time", "minutes": 45 }
+          }
+        },
+        {
+          "text": "Cercare attrezzature scientifiche",
+          "skill_check": { "stat": "fortuna", "difficulty": 13 },
+          "consequences_success": {
+            "narrative_text": "Trovi alcuni strumenti scientifici sopravvissuti e componenti elettronici avanzati.",
+            "items_gained": [{ "id": "precision_tools", "quantity": 2 }, { "id": "rare_tech_components", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il laboratorio è stato completamente saccheggiato."
+          }
+        }
+      ]
+    },
+    {
+      "id": "unique_time_capsule",
+      "title": "Capsula del Tempo",
+      "description": "Scopri una capsula del tempo sepolta, forse lasciata da bambini prima dell'apocalisse. Il coperchio è sigillato ermeticamente.",
+      "biome": "unique",
+      "choices": [
+        {
+          "text": "Aprire la capsula",
+          "skill_check": { "stat": "forza", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Con uno sforzo apri la capsula. Dentro trovi caramelle, giocattoli e lettere di bambini. Un ricordo toccante di innocenza perduta.",
+            "items_gained": [{ "id": "candy", "quantity": 3 }, { "id": "toy", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il coperchio è troppo arrugginito. Mentre tiri, ti fai male alle mani.",
+            "hp_change": -6
+          }
+        },
+        {
+          "text": "Leggere l'iscrizione esterna",
+          "skill_check": { "stat": "intelligenza", "difficulty": 9 },
+          "consequences_success": {
+            "narrative_text": "L'iscrizione dice 'Scuola Elementare di Milano - Classe 3A - Maggio 2025'. Questi bambini non hanno mai visto il futuro che immaginavano.",
+            "narrative_text": "Questo ritrovamento ti riempie di una strana malinconia."
+          },
+          "consequences_failure": {
+            "narrative_text": "L'iscrizione è troppo deteriorata per essere leggibile."
+          }
+        }
+      ]
+    }
+  ]
+}

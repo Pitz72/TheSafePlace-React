@@ -1,0 +1,132 @@
+📋 ROADMAP - The Safe Place (GDR Testuale Anni 80)
+
+🎯 VERSIONE CORRENTE: v0.3.2 "The Importance of Choices"
+📅 ULTIMO AGGIORNAMENTO: 2025-01-28
+🎮 TARGET: Godot 4.4.1 Engine
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 STATO GENERALE: 
+🏆 MILESTONE 0: ✅ COMPLETATA
+🏆 MILESTONE 1: ✅ COMPLETATA
+🏆 MILESTONE 2: ✅ COMPLETATA
+🔄 MILESTONE 3: ⚡ IN CORSO - The Living World & Rules of Survival
+⏳ MILESTONE 4: ⏸️ IN ATTESA - Sistema Combattimento
+⏳ MILESTONE 5: ⏸️ IN ATTESA - Narrativa e Lore
+⏳ MILESTONE 6: ⏸️ IN ATTESA - Polish e Release
+
+PROGRESSO COMPLESSIVO: 70% (3/6 milestone + M3 quasi completa)
+
+🎉 ACHIEVEMENT UNLOCKED: "When things happen" - Sistema eventi dinamico implementato con successo.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🏁 MILESTONE 0: FONDAMENTA TECNICHE ✅ COMPLETATA
+══════════════════════════════════════════════════════════════════════════════
+✅ M0.T1: Font Perfect DOS VGA + ThemeManager (v0.0.1)
+✅ M0.T2: Sistema CRT Autentico (v0.0.2b)
+✅ M0.T3: Database Oggetti Modulare e DataManager (v0.0.4)
+
+RISULTATO M0: Base tecnica solida e scalabile.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌍 MILESTONE 1: MONDO DI GIOCO ✅ COMPLETATA
+══════════════════════════════════════════════════════════════════════════════
+✅ M1.T1: Visualizzazione Mappa e Migrazione TileMap (v0.1.0)
+✅ M1.T2: World System v2.0 Avanzato (v0.1.1)
+✅ M1.T3: Refactoring Player System (v0.1.2)
+
+RISULTATO M1: Mondo di gioco 250x250 navigabile, ottimizzato e interattivo.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎮 MILESTONE 2: PERFECT ENGINE & UI ✅ COMPLETATA
+══════════════════════════════════════════════════════════════════════════════
+✅ M2.T1: PlayerManager Singleton (v0.1.2)
+✅ M2.T2: UI Sistema Giocatore (v0.1.3)
+✅ M2.T3: Inventario Master System (v0.1.4)
+✅ M2.T4: MainGame Architecture (v0.1.5)
+✅ M2.T5: InputManager Centralizzato (v0.1.6)
+✅ M2.T6: Perfect Engine (Camera & Log Fix) (v0.1.7)
+✅ M2.T7: The Balanced World (Mappa con Rifugi) (v0.2.0)
+✅ M2.T8: Inventario e Oggetti Iniziali (Survivor's Pack)
+✅ M2.T9: Popup Interazione Oggetti (The Item Inspector)
+✅ M2.T10: Rework Grafico e Strutturale del Popup
+✅ M2.T11: Localizzazione e Formattazione Dati UI (v0.2.1)
+
+RISULTATO M2: 🏆 PERFECT GAMEPLAY ENGINE COMPLETATO. UI reattiva, engine stabile, inventario interattivo e polish completo.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🧬 MILESTONE 3: THE LIVING WORLD & RULES OF SURVIVAL ⚡ IN CORSO
+══════════════════════════════════════════════════════════════════════════════
+✅ M3.T1: La Nascita del Sopravvissuto (Character Generation) (v0.2.2)
+   STATUS: ✅ COMPLETATA AL 100%
+   COMPLETATO:
+   ✅ Aggiunta statistica "Vigore".
+   ✅ Generazione casuale statistiche "4d6 drop lowest" con vincoli tematici.
+   ✅ Calcolo HP dinamico basato sul Vigore.
+   ✅ Rigiocabilità infinita grazie a personaggi unici a ogni partita.
+
+✅ M3.T2: Il Passaggio del Tempo (The Ticking Clock)
+   STATUS: ✅ COMPLETATA AL 100%
+   COMPLETATO:
+   ✅ TimeManager Singleton per gestire il tempo (1 mossa = 30 min).
+   ✅ Ciclo giorno/notte con feedback UI (colore blu notturno).
+   ✅ Penalità di sopravvivenza automatiche (fame/sete a fine giornata).
+   ✅ Danno passivo per movimento notturno e per fame/sete a zero.
+
+⏳ M3.T3: Gli Stati del Personaggio (Conditions & Afflictions)
+   STATUS: ⏸️ IN ATTESA
+   OBIETTIVO: Implementare e visualizzare gli stati Ferito, Malato, Avvelenato.
+
+✅ M3.T4: Il Mondo Reagisce (The Event System) (v0.2.5)
+   STATUS: ✅ COMPLETATA AL 100%
+   COMPLETATO:
+   ✅ EventManager Singleton implementato e funzionante.
+   ✅ Sistema eventi dinamico con cooldown intelligente.
+   ✅ Probabilità eventi specifiche per bioma (Forest 15%, Plains 10%, Village 20%, City 25%, River 12%).
+   ✅ UI popup eventi integrata nel GameUI.
+   ✅ Architettura signal-based per comunicazione eventi.
+   ✅ Funzione debug force_trigger_event() per testing.
+   ✅ Integrazione completa con World.gd e MainGame.gd.
+   ✅ Sistema cooldown: 30 secondi O 5 passi (il primo che arriva).
+   ✅ Database eventi JSON funzionante e espandibile.
+
+
+⏳ M3.T5: Il Valore del Riposo (The Shelter System)
+   STATUS: ⏸️ IN ATTESA
+   OBIETTIVO: Dare una funzione ai rifugi e al comando "Riposa".
+
+⏳ M3.T6: Conseguenze degli Stati (The Price of Survival)
+   STATUS: ⏸️ IN ATTESA
+   OBIETTIVO: Implementare gli effetti di gameplay passivi degli stati alterati.
+
+RISULTATO ATTESO M3: Un mondo di gioco dinamico, regolamentato e pericoloso che reagisce alle azioni del giocatore e al passare del tempo.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⚔️ MILESTONE 4: SISTEMA COMBATTIMENTO ⏳ IN ATTESA
+══════════════════════════════════════════════════════════════════════════════
+⏳ M4.T1: Combat Engine (Turni, Danno, AI Base)
+⏳ M4.T2: Integrazione Contenuti (Nemici, Abilità, Effetti di Stato)
+⏳ M4.T3: Combat UI (Popup di combattimento testuale)
+⏳ M4.T4: Loot System
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📖 MILESTONE 5: NARRATIVA E LORE ⏳ IN ATTESA
+══════════════════════════════════════════════════════════════════════════════
+⏳ M5.T1: Sistema Eventi Narrativi Fissi
+⏳ M5.T2: Sistema Dialoghi
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎨 MILESTONE 6: POLISH E RELEASE ⏳ IN ATTESA
+══════════════════════════════════════════════════════════════════════════════
+⏳ M6.T1: Audio System
+⏳ M6.T2: Save/Load System Finale
+⏳ M6.T3: Bug Fixing e Bilanciamento Finale
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,50 @@
+{
+  "lore_events": [
+    {
+      "id": "lore_ash_lullaby",
+      "title": "🎵 Ninnananna delle Ceneri",
+      "description": "La stanchezza ti pesa sulle ossa come un macigno. Qui, nel silenzio di questo rifugio, il mondo là fuori sembra lontano. Dalla tasca interna, le tue dita sfiorano il metallo gelido del carillon. Ricordi le parole di tuo padre, quasi un ringhio di terrore represso: 'Non aprirlo mai. Il suo suono attira i ricordi sbagliati.' Ma la solitudine, stanotte, è un nemico più vicino di qualsiasi ricordo.",
+      "biome": "lore",
+      "choices": [
+        {
+          "text": "Aprire il carillon musicale",
+          "skill_check": { "stat": "carisma", "difficulty": 12 },
+          "consequences_success": {
+            "narrative_text": "Le tue dita, tremanti, sollevano il coperchio. Il meccanismo scatta con un clic secco. Una melodia si leva nell'aria immobile. È flebile, incrinata, piena di note mancanti, come un ricordo che zoppica. Eppure, sotto la sua tristezza, c'è una dolcezza antica, quasi dimenticata. Una ninnananna.\n\nNon sai perché, ma senti le palpebre farsi pesanti. Il freddo sembra attenuarsi... Ti appoggi contro la parete fredda, e per la prima volta da quando tuo padre se n'è andato, il sonno non è una caduta nell'oscurità, ma un abbandono.",
+            "narrative_text": "...Ti svegli di soprassalto.\n\nNon per un rumore. Ma per la sua assenza.\n\nLa musica è finita.\n\nL'aria è immobile, pesante, e gelida. Molto più gelida di prima. E c'è un odore. Non di umidità o di rovina. È un odore pulito, chimico, sterile. L'odore di cenere fredda.\n\nI tuoi occhi si aprono nel buio. Non sei solo.",
+            "narrative_text": "Una figura è in piedi dall'altra parte della stanza, immobile come una statua, stagliata contro la luce malata che filtra dall'esterno. È alta, avvolta in un mantello scuro e pesante, il cappuccio calato sul volto. Un Angelo della Cenere.\n\nIl panico ti gela il sangue nelle vene. Le lezioni di tuo padre ti urlano nella testa: Non farti vedere. Corri. Non combattere.\n\nMa sei paralizzato. Puoi solo guardare.",
+            "narrative_text": "La creatura non si muove verso di te. Lentamente, con un movimento fluido e innaturale, si china. Non verso di te. Verso il carillon, che giace a terra accanto a te.\n\nUna mano pallida, quasi traslucida, emerge dal mantello. Le dita sono lunghe e sottili. Non c'è aggressività nel gesto. Solo una sorta di... curiosità meccanica. La mano si ferma a un soffio dal piccolo oggetto, come se temesse di romperlo.",
+            "narrative_text": "In quel momento, il cappuccio si sposta leggermente all'indietro. Non vedi un volto. Vedi solo un frammento: la curva di una guancia, pallida come marmo, e qualcosa che riflette la luce. Una lente scura, rotonda. Ma sotto la lente, o forse al posto dell'altro occhio, vedi un bagliore debole e azzurrognolo.\n\nLa creatura emette un suono. Non è una voce. È un sibilo basso e ritmico, come l'aria che passa attraverso circuiti rovinati. E mescolato al sibilo, un sussurro distorto, elettronico, quasi inudibile. Parole spezzate. Frammenti di un'eco:\n\n«... mio... sole... devi... dormire...»\n\nÈ una voce di macchina che cerca di cantare una ninnananna. La *tua* ninnananna.",
+            "narrative_text": "Il terrore si trasforma in un orrore così profondo da farti male al petto. Quella cosa... quella cosa ti conosce.\n\nLa figura ritrae la mano. Si rialza lentamente. Per un istante terribile, la lente scura sembra fissarti. Non c'è minaccia nel suo sguardo. Né pietà. C'è solo un vuoto vasto e incomprensibile. Un abisso.\n\nPoi, con la stessa rapidità silenziosa con cui è apparsa, si volta e si dissolve nell'ombra più profonda della stanza. Svanita.",
+            "narrative_text": "Rimani solo, tremante, nel freddo pungente. L'odore di cenere svanisce lentamente. Accanto a te, il carillon giace chiuso. Non è stato un sogno.\n\nTua madre.\n\nQuello era ciò che restava di tua madre.\n\nNon ti ha attaccato. Ti ha trovato. E ti ha lasciato andare.\n\nLa domanda che ora ti brucia dentro è peggiore di qualsiasi ferita.\n\nPerché?",
+            "items_gained": [{ "id": "ash_angel_memories", "quantity": 1 }],
+            "status_effects": ["ASH_LULLABY_TRAUMA"]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il meccanismo è arrugginito dal tempo e dalla cenere. Mentre tiri, il carillon si rompe con un suono discordante. I ricordi che evoca sono frammentati e dolorosi - urla, fuoco, perdita. Non riesci a richiuderlo abbastanza in fretta. Il sonno quella notte è tormentato da incubi.",
+            "hp_change": -5,
+            "status_effects": ["SICK"]
+          }
+        },
+        {
+          "text": "Resistere alla tentazione e dormire",
+          "resultText": "L'avvertimento di tuo padre risuona nella tua mente. Decidi di non sfidare il destino stanotte. Ti rannicchi nel sonno, ma è un riposo inquieto, popolato da sogni indistinti di ciò che avrebbe potuto essere."
+        },
+        {
+          "text": "Restare sveglio di guardia",
+          "skill_check": { "stat": "vigore", "difficulty": 11 },
+          "consequences_success": {
+            "narrative_text": "Passi le ore a vegliare, il monito di tuo padre troppo forte per essere ignorato. La notte trascorre lentamente, ma la tua determinazione rimane salda. Quando l'alba arriva, ti senti esausto ma in controllo.",
+            "penalty": { "type": "time", "minutes": 120 },
+            "narrative_text": "Hai scelto la vigilanza invece dei ricordi. Forse è stata la decisione giusta."
+          },
+          "consequences_failure": {
+            "narrative_text": "Cerchi di rimanere sveglio, ma la stanchezza ha la meglio. Ti addormenti contro la tua volontà, e i sogni vengono comunque, portandoti frammenti di ricordi che avresti preferito dimenticare.",
+            "hp_change": -3,
+            "narrative_text": "Anche la vigilanza ha i suoi limiti contro la marea dei ricordi."
+          }
+        }
+      ]
+    }
+  ]
+}

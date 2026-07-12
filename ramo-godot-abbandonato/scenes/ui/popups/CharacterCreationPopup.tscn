@@ -1,0 +1,197 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://themes/main_theme.tres" id="1_charcreate"]
+[ext_resource type="Script" path="res://scripts/ui/popups/CharacterCreationPopup.gd" id="2_charcreate"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_charcreate"]
+bg_color = Color(0.00392157, 0.0196078, 0.0117647, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.25, 1)
+
+[node name="CharacterCreationPopup" type="CanvasLayer"]
+script = ExtResource("2_charcreate")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+custom_minimum_size = Vector2(600, 400)
+theme = ExtResource("1_charcreate")
+theme_override_styles/panel = SubResource("StyleBoxFlat_charcreate")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Layout" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+text = "═══ CREAZIONE PERSONAGGIO ═══"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+text = "Generazione casuale delle statistiche..."
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="StatsContainer" type="VBoxContainer" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatForza" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="ForzaLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatForza"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Forza:"
+
+[node name="ForzaValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatForza"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="StatAgilita" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="AgilitaLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatAgilita"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Agilità:"
+
+[node name="AgilitaValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatAgilita"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="StatIntelligenza" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="IntelligenzaLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatIntelligenza"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Intelligenza:"
+
+[node name="IntelligenzaValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatIntelligenza"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="StatCarisma" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="CarismaLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatCarisma"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Carisma:"
+
+[node name="CarismaValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatCarisma"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="StatFortuna" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="FortunaLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatFortuna"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fortuna:"
+
+[node name="FortunaValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatFortuna"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="StatVigore" type="HBoxContainer" parent="Panel/MarginContainer/Layout/StatsContainer"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="VigoreLabel" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatVigore"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vigore:"
+
+[node name="VigoreValue" type="Label" parent="Panel/MarginContainer/Layout/StatsContainer/StatVigore"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="Separator2" type="HSeparator" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="HPContainer" type="HBoxContainer" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="HPLabel" type="Label" parent="Panel/MarginContainer/Layout/HPContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Punti Vita:"
+
+[node name="HPValue" type="Label" parent="Panel/MarginContainer/Layout/HPContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "???"
+horizontal_alignment = 2
+
+[node name="Separator3" type="HSeparator" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/MarginContainer/Layout"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0)
+
+[node name="AcceptButton" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "[center][color=#00FF40]Accetta Personaggio[/color][/center]"
+
+[node name="RerollButton" type="RichTextLabel" parent="Panel/MarginContainer/Layout/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "[center][color=#FFFF00]Rigenera Stats[/color][/center]"

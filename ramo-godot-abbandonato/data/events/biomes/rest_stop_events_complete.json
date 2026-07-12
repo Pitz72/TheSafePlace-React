@@ -1,0 +1,34 @@
+{
+  "rest_stop": [
+    {
+      "id": "rest_stop_highway_sign",
+      "title": "Cartello autostradale",
+      "description": "Un cartello stradale abbandonato indica direzioni per città lontane. Potrebbe avere informazioni utili.",
+      "biome": "rest_stop",
+      "choices": [
+        {
+          "text": "Studia il cartello",
+          "skill_check": { "stat": "intelligenza", "difficulty": 8 },
+          "consequences_success": {
+            "narrative_text": "Il cartello ti dà indicazioni utili per navigare nella zona.",
+            "items_gained": [{ "id": "local_map", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Il cartello è troppo deteriorato per essere leggibile."
+          }
+        },
+        {
+          "text": "Cerca attorno al cartello",
+          "skill_check": { "stat": "fortuna", "difficulty": 10 },
+          "consequences_success": {
+            "narrative_text": "Trovi una borraccia abbandonata ai piedi del cartello.",
+            "items_gained": [{ "id": "water_bottle", "quantity": 1 }]
+          },
+          "consequences_failure": {
+            "narrative_text": "Non trovi nulla di interessante."
+          }
+        }
+      ]
+    }
+  ]
+}
