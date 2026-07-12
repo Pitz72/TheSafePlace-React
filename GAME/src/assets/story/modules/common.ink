@@ -3,6 +3,7 @@
 // External Functions bound in NarrativeService.ts
 EXTERNAL startQuest(questId)
 EXTERNAL completeQuest(questId)
+EXTERNAL advanceQuest(questId)
 EXTERNAL giveItem(itemId, quantity)
 EXTERNAL takeItem(itemId, quantity)
 EXTERNAL checkSkill(skillName, dc)
@@ -12,6 +13,9 @@ EXTERNAL checkSkill(skillName, dc)
     ~ return
 
 === function completeQuest(questId) ===
+    ~ return
+
+=== function advanceQuest(questId) ===
     ~ return
 
 === function giveItem(itemId, quantity) ===
@@ -29,10 +33,13 @@ VAR player_health = 100
 VAR player_sanity = 100
 VAR FATHERS_LETTER_DESTROYED = false
 
-// Quest Flags (mocking for now, usually handled by external system or variables)
+// Quest Flags — kept in sync with the game's active quests by
+// NarrativeService.syncQuestVarsToInk() before each dialogue/cutscene.
+// The VAR name must match the quest id in quests.json.
 VAR crossroads_investigation = false
 VAR find_jonas_talisman = false
 VAR deliver_last_message = false
+VAR signs_of_ash = false
 
 // Anya Echo Flags
 VAR ANYA_ECHO_PIXELDEBH = false

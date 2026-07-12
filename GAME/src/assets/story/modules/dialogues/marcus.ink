@@ -47,21 +47,22 @@ Ah, hai visto l'avviso! Sì, quell'orologio... apparteneva a mio padre. Un predo
 L'hai recuperato! Non posso crederci... Questo orologio è tutto ciò che mi resta di mio padre. Grazie, davvero. Scegli un'arma dal mio deposito come ricompensa. E d'ora in poi, avrai sempre uno sconto nei miei scambi.
     * [Scelgo il Pugnale Affilato.]
         ~ completeQuest("crossroads_investigation")
-        ~ giveItem("weapon_dagger_sharp", 1)
+        ~ giveItem("weapon_sharp_dagger", 1)
         -> hub
     * [Scelgo l'Arco Improvvisato.]
         ~ completeQuest("crossroads_investigation")
-        ~ giveItem("weapon_bow_improvised", 1)
+        ~ giveItem("weapon_makeshift_bow", 1)
         -> hub
 
 = marcus_talisman_knowledge
 Questo simbolo... è il marchio del Clan del Corvo! Jonas era il loro fondatore, un grande esploratore. Questo talismano era il loro simbolo di appartenenza. Che tu l'abbia trovato significa molto. Lascia che ti insegni una vecchia tecnica di sopravvivenza del clan.
     * [Grazie per le informazioni.]
+    ~ completeQuest("find_jonas_talisman")
     -> hub
 
 = quest_delivery
 Un pacco? Fammi vedere... Oh. Questo sigillo... è del Vecchio Jonas. Pensavamo fosse disperso da mesi. Grazie per aver onorato il suo ultimo viaggio. Non abbiamo molto, ma prendi questa. Una buona bussola è più preziosa dell'oro, da queste parti.
     * [È stato un dovere.]
         ~ completeQuest("deliver_last_message")
-        ~ giveItem("item_compass", 1)
+        ~ giveItem("compass", 1)
         -> hub

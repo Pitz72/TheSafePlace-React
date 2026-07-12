@@ -70,10 +70,13 @@ const QuestScreen: React.FC = () => {
      * Renders a quest entry with title and current objective.
      */
     const renderActiveQuest = (questId: string, quest: any) => {
-        // For Ink quests, we might not have "stages" in the same way.
-        // We can try to get the current objective from Ink text or just show generic "Active".
-        // For now, we fallback to the first stage description or a generic message.
-        const objective = quest.stages && quest.stages.length > 0 ? quest.stages[0].objective : 'Obiettivo in corso...';
+        // v2.0.12: show the CURRENT stage objective (activeQuests[questId] holds
+        // the stage number) — the log used to always show the stage-1 objective.
+        const currentStage = activeQuests[questId];
+        const objective =
+            quest.stages?.find((s: any) => s.stage === currentStage)?.objective
+            ?? quest.stages?.[0]?.objective
+            ?? 'Obiettivo in corso...';
 
         return (
             <div key={questId} className="mb-4 pb-4 border-b border-green-400/20">

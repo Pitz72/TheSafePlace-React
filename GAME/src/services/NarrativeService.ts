@@ -36,6 +36,8 @@ export class NarrativeService {
             useNarrativeStore.getState().addActiveQuest(questId);
             // Sync with game logic via questService
             questService.startQuest(questId);
+            // Keep the same-named Ink VAR (if declared) in sync immediately
+            this.setQuestVar(questId, true);
         });
 
         this.story.BindExternalFunction("completeQuest", (questId: string) => {
@@ -43,6 +45,11 @@ export class NarrativeService {
             useNarrativeStore.getState().removeActiveQuest(questId);
             // Sync with game logic via questService
             questService.completeQuest(questId);
+        });
+
+        this.story.BindExternalFunction("advanceQuest", (questId: string) => {
+            console.log(`[Ink] Advancing quest: ${questId}`);
+            questService.advanceQuest(questId);
         });
 
         this.story.BindExternalFunction("giveItem", (itemId: string, quantity: number) => {
@@ -138,12 +145,41 @@ export class NarrativeService {
     public jumpTo(knotName: string) {
         if (this.story) {
             try {
+                this.syncQuestVarsToInk();
                 this.story.ChoosePathString(knotName);
                 this.continue(); // Start the knot
                 useNarrativeStore.getState().setStoryActive(true);
             } catch (e) {
                 console.error(`Failed to jump to knot: ${knotName}`, e);
+                // v2.0.12: never leave the player on a dead narrative screen —
+                // if the knot doesn't exist, return to the caller's state.
+                this.endDialogue();
             }
+        }
+    }
+
+    /**
+     * v2.0.12: JS→Ink quest flag sync. common.ink declares a VAR named after
+     * each quest id used to gate dialogue choices (e.g. Marcus). Quests can be
+     * started from the JS side (events, triggers) long before any dialogue, so
+     * before entering a knot we mirror every active quest id onto the matching
+     * Ink global (when declared). Without this, quest-gated choices never appear.
+     */
+    private setQuestVar(questId: string, value: boolean) {
+        if (!this.story) return;
+        try {
+            if (this.story.variablesState.GlobalVariableExistsWithName(questId)) {
+                this.story.variablesState[questId] = value;
+            }
+        } catch (e) {
+            console.warn(`[Ink] Could not sync quest var ${questId}:`, e);
+        }
+    }
+
+    private syncQuestVarsToInk() {
+        const activeQuests = useCharacterStore.getState().activeQuests;
+        for (const questId of Object.keys(activeQuests)) {
+            this.setQuestVar(questId, true);
         }
     }
 
