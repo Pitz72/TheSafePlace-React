@@ -39,6 +39,7 @@ import SaveLoadScreen from './components/SaveLoadScreen';
 import { useInteractionStore } from './store/interactionStore';
 import { useTalentDatabaseStore } from './data/talentDatabase';
 import GameOverScreen from './components/GameOverScreen';
+import VictoryScreen from './components/VictoryScreen';
 import TrophyScreen from './components/TrophyScreen';
 import { useTrophyDatabaseStore } from './data/trophyDatabase';
 import ErrorScreen from './components/ErrorScreen';
@@ -163,6 +164,8 @@ const App: React.FC = () => {
         return <AshLullabyChoiceScreen />;
       case GameState.GAME_OVER:
         return <GameOverScreen />;
+      case GameState.VICTORY:
+        return <VictoryScreen />;
       case GameState.QUEST_LOG:
         return <QuestScreen />;
       case GameState.OUTPOST:

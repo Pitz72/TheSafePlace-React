@@ -797,12 +797,29 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const completedStage = get().mainStoryStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
     const newStage = completedStage + 1;
-    set(state => ({
+
+    // v2.0.8: The final chapter ("La Verità", reachEnd) leads to the ending
+    // instead of dropping the player back into free-roam forever.
+    const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
+    const hasNextChapter = mainStoryChapters.some(c => c.stage === newStage);
+    const isFinalStage = !hasNextChapter && mainStoryChapters.length > 0;
+
+    if (isFinalStage) {
+        audioManager.playSound('victory');
+        set({
+            mainStoryStage: newStage,
+            activeMainStoryEvent: null,
+            gameState: GameState.VICTORY,
+        });
+        return;
+    }
+
+    set({
         mainStoryStage: newStage,
         activeMainStoryEvent: null,
         gameState: GameState.IN_GAME,
-    }));
-    
+    });
+
     // v1.9.0: Check quest triggers for mainStoryComplete
     import('../services/questService').then(({ questService }) => {
         questService.checkQuestTriggers();

@@ -27,6 +27,7 @@ export enum GameState {
   DIALOGUE,
   TRADING,
   GAME_OVER,
+  VICTORY,
 }
 
 export enum JournalEntryType {

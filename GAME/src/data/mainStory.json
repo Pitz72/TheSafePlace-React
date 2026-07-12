@@ -66,14 +66,16 @@
   {
     "stage": 11,
     "trigger": { "type": "nearEnd", "distance": 15 },
+    "allowNightTrigger": true,
     "title": "Il Ricordo Completo",
     "text": "Ti fermi, senza fiato. Non è la stanchezza a bloccarti. È un'ondata di gelo che ti parte dal petto. Il mondo intorno a te si dissolve.\n\nIl fumo. Denso, soffocante. L'odore di ozono e cenere.\n\nSei di nuovo lì. Piccolo. Impotente.\n\nMamma è a terra. Una trave di metallo le schiaccia una gamba. Ti sta guardando, un sorriso tirato dal dolore. 'Salva il bambino, Elian,' la senti sussurrare, la voce un filo spezzato. 'Corri. Promettimelo.'\n\nE poi vedi lo sguardo di tuo padre. Non guarda lei. Guarda te.\n\nNei suoi occhi, un universo di agonia si consuma in una frazione di secondo. La scelta.\n\nTi afferra. Ti solleva. Il mondo si capovolge.\n\nNon ti volti. Lui non si volta. Correte.\n\nAlle vostre spalle, solo il silenzio.\n\nOra ricordi. Non sei stato salvato da una tragedia. Sei stato la causa di una scelta."
   },
   {
     "stage": 12,
     "trigger": { "type": "reachEnd" },
+    "allowNightTrigger": true,
     "title": "La Verità",
-    "text": "Sei arrivato. Il 'Safe Place' è un piccolo bunker, pulito e sicuro.\n\nElian è lì, seduto su una branda, più vecchio, più fragile. Alza lo sguardo e un sorriso stanco ma genuino gli illumina il volto.\n\n'Ce l'hai fatta, Ultimo. Sapevo che ce l'hai fatta.'\n\nOra devi decidere cosa fare con questa verità. Il peso del tuo ricordo. E la terribile conoscenza del destino di tua madre.\n\n[Qui inizia il confronto finale con Elian, dove le tue scelte morali lungo il viaggio determineranno le opzioni di dialogo disponibili e la conclusione della storia.]"
+    "text": "Sei arrivato. Il 'Safe Place' è un piccolo bunker, pulito e sicuro.\n\nElian è lì, seduto su una branda, più vecchio, più fragile. Alza lo sguardo e un sorriso stanco ma genuino gli illumina il volto.\n\n'Ce l'hai fatta, Ultimo. Sapevo che ce l'hai fatta.'\n\nOra devi decidere cosa fare con questa verità. Il peso del tuo ricordo. E la terribile conoscenza del destino di tua madre.\n\nTi siedi sulla branda, accanto a lui. Le parole ti sono costate tutto il viaggio. È il momento di posarle."
   }
 ]
 
