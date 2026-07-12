@@ -1,0 +1,54 @@
+name: Deploy sito (thesafeplace.runtimeradio.it)
+
+# Deploy della landing page (SITO/) su DreamHost via SFTP.
+# Credenziali lette dai GitHub Secrets: SFTP_HOST, SFTP_USER, SFTP_PASSWORD.
+# La cartella remota è fissa (non è un segreto).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'SITO/**'
+      - '.github/workflows/deploy-site.yml'
+  workflow_dispatch: {}   # avvio manuale dalla tab Actions
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      REMOTE_DIR: /home/dh_tsfadmin/thesafeplace.runtimeradio.it
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build sito
+        working-directory: SITO
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Deploy via SFTP (mirror + delete)
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          lftp -c "
+            set sftp:auto-confirm yes;
+            set net:max-retries 2;
+            set net:timeout 20;
+            open -u '$SFTP_USER','$SFTP_PASSWORD' sftp://$SFTP_HOST;
+            mirror -R --delete --verbose --exclude-glob .dh-diag ./SITO/dist '$REMOTE_DIR';
+          "
