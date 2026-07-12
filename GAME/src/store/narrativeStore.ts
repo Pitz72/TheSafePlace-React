@@ -9,6 +9,7 @@ interface NarrativeState {
     isStoryActive: boolean;
     activeQuests: string[]; // List of active quest IDs (from Ink variables)
     returnState: GameState | null; // GameState to restore when the dialogue/story ends
+    inkStateJson: string | null; // v2.0.14: serialized Ink state, cached by NarrativeService for the save system
 
     // Actions
     setStoryState: (text: string, choices: { index: number; text: string }[], tags: string[]) => void;
@@ -29,6 +30,7 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
     isStoryActive: false,
     activeQuests: [],
     returnState: null,
+    inkStateJson: null,
 
     setStoryState: (text, choices, tags) => set({
         currentText: text,
@@ -60,5 +62,8 @@ export const useNarrativeStore = create<NarrativeState>((set) => ({
         isStoryActive: false,
         activeQuests: [],
         returnState: null
+        // NOTE: inkStateJson is intentionally NOT cleared here — it is managed
+        // by NarrativeService (resetNarrative/cacheInkState) which re-caches
+        // the fresh state right after calling reset().
     })
 }));

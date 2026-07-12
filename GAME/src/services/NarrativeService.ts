@@ -23,6 +23,7 @@ export class NarrativeService {
             this.bindExternalFunctions();
             console.log("NarrativeService initialized with Ink story.");
             this.commitToStore(); // Initial sync
+            this.cacheInkState(); // v2.0.14: baseline Ink state for the save system
         } catch (error) {
             console.error("Failed to initialize NarrativeService:", error);
         }
@@ -217,6 +218,52 @@ export class NarrativeService {
         setStoryActive(false);
         useGameStore.getState().setGameState(returnState ?? GameState.IN_GAME);
         setReturnState(null);
+        // v2.0.14: cache the serialized Ink state for the save system. Saves can
+        // only happen from the pause menu (never mid-dialogue), so the state at
+        // the end of the last interaction is exactly what a save must capture.
+        this.cacheInkState();
+    }
+
+    /**
+     * v2.0.14: full narrative reset for "Nuova Partita" — Ink globals back to
+     * their declared defaults and the narrative store cleared. Without this, a
+     * second run in the same session inherited the previous run's variables.
+     */
+    public resetNarrative() {
+        if (this.story) {
+            try {
+                this.story.ResetState();
+            } catch (e) {
+                console.error('[NarrativeService] Failed to reset Ink state:', e);
+            }
+        }
+        useNarrativeStore.getState().reset();
+        this.cacheInkState();
+    }
+
+    /** v2.0.14: restore Ink state from a save file. */
+    public loadInkStateJson(json: string | null | undefined) {
+        if (!this.story) return;
+        if (!json) {
+            // Old save without Ink state: start from clean narrative state.
+            this.resetNarrative();
+            return;
+        }
+        try {
+            this.story.state.LoadJson(json);
+            this.cacheInkState();
+        } catch (e) {
+            console.error('[NarrativeService] Failed to load Ink state from save:', e);
+        }
+    }
+
+    private cacheInkState() {
+        try {
+            const json = this.story ? this.story.state.toJson() : null;
+            useNarrativeStore.setState({ inkStateJson: json });
+        } catch (e) {
+            console.warn('[NarrativeService] Could not serialize Ink state:', e);
+        }
     }
 
     // Push state into the store. If text/tags are passed in, they win (typical case after a

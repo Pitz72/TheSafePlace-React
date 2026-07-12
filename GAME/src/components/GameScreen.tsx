@@ -627,16 +627,6 @@ const GameScreen: React.FC = () => {
     }
 
     const map: { [key: string]: () => void } = {
-      i: toggleInventory,
-      I: toggleInventory,
-      j: handleOpenQuestLog,
-      J: handleOpenQuestLog,
-      r: handleQuickRest,
-      R: handleQuickRest,
-      f: handleActiveSearch,
-      F: handleActiveSearch,
-      l: openLevelUpScreen,
-      L: openLevelUpScreen,
       ArrowUp: () => handleMove(0, -1),
       w: () => handleMove(0, -1),
       ArrowDown: () => handleMove(0, 1),
@@ -647,7 +637,21 @@ const GameScreen: React.FC = () => {
       d: () => handleMove(1, 0),
     };
 
+    // v2.0.14: action keys are registered ONLY when no overlay is open.
+    // With the inventory open, both GameScreen and InventoryScreen used to
+    // handle 'I' on the same keydown: toggleInventory ran twice and the
+    // inventory could never be closed with I (and L opened LevelUp from it).
     if (!isInventoryOpen && !isInRefuge) {
+      map['i'] = toggleInventory;
+      map['I'] = toggleInventory;
+      map['j'] = handleOpenQuestLog;
+      map['J'] = handleOpenQuestLog;
+      map['r'] = handleQuickRest;
+      map['R'] = handleQuickRest;
+      map['f'] = handleActiveSearch;
+      map['F'] = handleActiveSearch;
+      map['l'] = openLevelUpScreen;
+      map['L'] = openLevelUpScreen;
       map['Escape'] = handleOpenPauseMenu;
     }
     return map;

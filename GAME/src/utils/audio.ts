@@ -217,6 +217,17 @@ class AudioManager {
      */
 
     public playSound(sound: string) {
+        // v2.0.14: several call sites use sound names that were never added to
+        // the switch (silent no-op). Alias them to the closest existing SFX.
+        const SOUND_ALIASES: Record<string, string> = {
+            'enter_refuge': 'confirm',
+            'item_pickup': 'item_get',
+            'back': 'cancel',
+            'craft_fail': 'error',
+            'craft_success': 'confirm',
+        };
+        sound = SOUND_ALIASES[sound] ?? sound;
+
         // This is now a fire-and-forget wrapper around the new async methods
         switch(sound) {
             case 'navigate':

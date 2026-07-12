@@ -12,6 +12,7 @@ import { useTimeStore } from './timeStore';
 import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
 import { useCombatStore } from './combatStore';
+import { useNarrativeStore } from './narrativeStore';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SAVE GAME SYSTEM - Version 2.0.0
@@ -316,7 +317,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     useInteractionStore.getState().reset();
     useEventStore.getState().reset();
     useCombatStore.getState().reset();
-    
+    // v2.0.14: a second "Nuova Partita" in the same session used to inherit the
+    // previous run's Ink variables and narrativeStore state (dirty quests/flags).
+    import('../services/NarrativeService').then(({ narrativeService }) => {
+        narrativeService.resetNarrative();
+    });
+
     set({ 
         map: newMap, 
         playerPos: startPos,
@@ -460,7 +466,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       // Biome-specific loot tables
       let lootPool: Array<{ id: string; weight: number; quantity: number }> = [];
       
+      // v2.0.14: currentBiome holds the TILE CHARACTER ('.', 'F', 'C', 'V'…),
+      // not the biome name — the old name-based cases never matched and every
+      // search fell through to the generic default pool.
       switch (currentBiome) {
+        case '.':
+        case 'S':
         case 'Pianura':
           lootPool = [
             { id: 'dirty_water', weight: 30, quantity: hasScavenger ? 3 : 2 },
@@ -472,6 +483,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
           ];
           break;
           
+        case 'F':
         case 'Foresta':
           lootPool = [
             { id: 'firewood', weight: 35, quantity: hasScavenger ? 4 : 3 },
@@ -483,6 +495,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
           ];
           break;
           
+        case 'C':
         case 'Città':
           lootPool = [
             { id: 'scrap_metal', weight: 30, quantity: hasScavenger ? 4 : 2 },
@@ -495,6 +508,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
           ];
           break;
           
+        case 'V':
         case 'Villaggio':
           lootPool = [
             { id: 'clean_cloth', weight: 25, quantity: hasScavenger ? 3 : 2 },
@@ -519,7 +533,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       }
       
       // Water sources give bonus clean water
-      if (tileType === 'R') { // River tile
+      // v2.0.14: the water tile is '~' — 'R' is a REFUGE; the bonus used to
+      // trigger while standing on refuges and never near actual water.
+      if (tileType === '~') {
         addItem('dirty_water', hasScavenger ? 4 : 3);
         restoreHydration(10); // Drink some directly
         addJournalEntry({ 
@@ -837,8 +853,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     // Knots that don't have an Ink rewrite yet keep using the legacy CutsceneScreen pages.
     const knot = LEGACY_CUTSCENE_TO_INK_KNOT[id];
     if (knot) {
+        // v2.0.14: the opening must land on CHARACTER_CREATION like the legacy
+        // path did (endCutscene). Defaulting to IN_GAME skipped the stat roll
+        // entirely — the creation screen was unreachable, every run started
+        // with flat attributes.
+        const returnState = id === 'CS_OPENING' ? GameState.CHARACTER_CREATION : undefined;
         import('../services/NarrativeService').then(({ narrativeService }) => {
-            narrativeService.startCutscene(knot);
+            narrativeService.startCutscene(knot, returnState);
         });
         return;
     }
@@ -927,6 +948,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         interaction: useInteractionStore.getState().toJSON(),
         event: useEventStore.getState().toJSON(),
         combat: useCombatStore.getState().toJSON(),
+        // v2.0.14: serialized Ink state (variables, one-shot choices, flags).
+        // Cached by NarrativeService at the end of every dialogue — saves were
+        // silently dropping all narrative progression before this.
+        narrative: { inkState: useNarrativeStore.getState().inkStateJson },
       };
 
       // Validate save data before saving
@@ -1027,6 +1052,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         console.log('[LOAD GAME] Wandering Trader not in save, initializing...');
         get().initializeWanderingTrader();
       }
+
+      // v2.0.14: restore the Ink narrative state (or reset it for old saves
+      // that never captured it — better a clean narrative than a stale one
+      // leaking from the current session).
+      const inkState = savedData.narrative?.inkState ?? null;
+      import('../services/NarrativeService').then(({ narrativeService }) => {
+        narrativeService.loadInkStateJson(inkState);
+      });
 
       localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
       get().addJournalEntry({ text: `Partita caricata dallo slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });

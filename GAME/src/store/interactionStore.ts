@@ -440,7 +440,15 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
             useGameStore.setState(gs => {
                 const newFlags = new Set(gs.gameFlags);
                 newFlags.delete('LULLABY_CHOICE_OFFERED_THIS_REST');
-                return { gameFlags: newFlags };
+                // v2.0.14: mark this refuge as used. visitedRefuges was NEVER
+                // populated: the "already used" gate in gameService was dead code
+                // (refuges reusable forever) and isFirstRefuge was always true.
+                // Marked on exit so the whole first stay works normally.
+                const alreadyVisited = gs.visitedRefuges.some(pos => pos.x === gs.playerPos.x && pos.y === gs.playerPos.y);
+                return {
+                    gameFlags: newFlags,
+                    visitedRefuges: alreadyVisited ? gs.visitedRefuges : [...gs.visitedRefuges, { ...gs.playerPos }],
+                };
             });
             return {
                 isInRefuge: false,

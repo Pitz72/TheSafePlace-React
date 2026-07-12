@@ -138,6 +138,11 @@ const grantVictoryRewards = (enemy: CombatState['enemy'], addLog: (text: string,
     const { gameFlags } = useGameStore.getState();
     if (enemyIsHumanoid && !gameFlags.has('FIRST_HUMAN_KILL_PLAYED')) {
         setTimeout(() => {
+            // v2.0.14: the unguarded timeout could fire while the player was
+            // already in a new combat/event/refuge and stomp that state. Play
+            // only from free-roam; otherwise skip WITHOUT setting the flag so
+            // the cutscene retriggers on the next humanoid kill.
+            if (useGameStore.getState().gameState !== GameState.IN_GAME) return;
             useGameStore.setState(state => ({
                 gameFlags: new Set(state.gameFlags).add('FIRST_HUMAN_KILL_PLAYED')
             }));
