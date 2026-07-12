@@ -83,8 +83,14 @@ const InkCutscene: React.FC = () => {
         if (currentChoices.length === 0) {
             audioManager.playSound('confirm');
             narrativeService.continue();
+        } else if (currentChoices.length === 1) {
+            // Una sola scelta ("Continua", "Leggi la lettera"...) è di fatto un pulsante di
+            // avanzamento: INVIO la seleziona, così l'utente non deve premere il tasto numerico.
+            // (Con più scelte reali INVIO non fa nulla: la decisione richiede il tasto numerico.)
+            audioManager.playSound('confirm');
+            narrativeService.chooseChoiceIndex(currentChoices[0].index);
         }
-    }, [allParagraphsVisible, showAll, currentChoices.length]);
+    }, [allParagraphsVisible, showAll, currentChoices]);
 
     const handleChoice = useCallback((zeroBasedIndex: number) => {
         if (!allParagraphsVisible) return;
@@ -139,7 +145,7 @@ const InkCutscene: React.FC = () => {
                     {!allParagraphsVisible && (
                         <span className="text-[var(--text-accent)]">[INVIO per mostrare tutto]</span>
                     )}
-                    {allParagraphsVisible && currentChoices.length === 0 && (
+                    {allParagraphsVisible && currentChoices.length <= 1 && (
                         <span className="text-[var(--text-accent)]">[INVIO per continuare]</span>
                     )}
                 </div>

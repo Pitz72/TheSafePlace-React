@@ -1,7 +1,7 @@
 {
   "name": "the-safe-place-chronicles-the-echo-of-the-journey",
   "private": true,
-  "version": "2.0.16",
+  "version": "2.0.17",
   "type": "module",
   "description": "The Safe Place Chronicles: The Echo of the Journey — un GDR testuale post-apocalittico.",
   "author": "Runtime Radio <noreply@runtimeradio.it>",
@@ -52,8 +52,7 @@
     ],
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "artifactName": "TheSafePlace-${version}-win-${arch}.${ext}"
     },

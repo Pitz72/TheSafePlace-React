@@ -94,7 +94,7 @@ jobs:
 
           | OS | File |
           |----|------|
-          | Windows | \`.exe\` (installer NSIS) o \`portable\` |
+          | Windows | \`.exe\` (installer NSIS) |
           | macOS | \`.dmg\` o \`.zip\` — app non firmata: click destro → **Apri** al primo avvio |
           | Linux | \`.AppImage\` o \`.deb\` |
 

@@ -91,6 +91,7 @@ function createWindow() {
     height: 800,
     minWidth: 1024,
     minHeight: 640,
+    fullscreen: true,        // avvio in fullscreen totale
     backgroundColor: '#000000',
     autoHideMenuBar: true,
     title: 'The Safe Place',
@@ -102,7 +103,11 @@ function createWindow() {
     },
   });
 
-  win.once('ready-to-show', () => win.show());
+  // Garantisce il fullscreen anche se la piattaforma ignora l'opzione iniziale.
+  win.once('ready-to-show', () => {
+    win.setFullScreen(true);
+    win.show();
+  });
 
   // External http(s) links open in the system browser, never inside the app.
   win.webContents.setWindowOpenHandler(({ url }) => {
