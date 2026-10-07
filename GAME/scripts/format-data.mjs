@@ -47,7 +47,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     for (const file of jsonFiles(ROOT)) {
         const raw = fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
         const formatted = formatJson(JSON.parse(raw)) + '\n';
-        if (formatted !== raw) {
+        // Line endings don't count: Git on Windows may check files out with CRLF.
+        if (formatted !== raw.replace(/\r\n/g, '\n')) {
             dirty++;
             if (check) console.error(`non formattato: ${path.relative(process.cwd(), file)}`);
             else fs.writeFileSync(file, formatted);
