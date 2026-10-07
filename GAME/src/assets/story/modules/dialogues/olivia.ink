@@ -1,3 +1,5 @@
+VAR olivia_last_care_day = 0
+
 === olivia_main ===
 Un viaggiatore. È raro vedere volti nuovi. Se cerchi riparo, sei il benvenuto, purché tu non porti guai. Se cerchi cure, forse posso aiutarti. Questo piccolo giardino è tutto ciò che mi resta del mondo di prima. #speaker:Olivia
 -> hub
@@ -5,8 +7,9 @@ Un viaggiatore. È raro vedere volti nuovi. Se cerchi riparo, sei il benvenuto, 
 = hub
     + [Chi sei?] -> who_are_you
     + [Come fai a sopravvivere qui da sola?] -> how_survive
-    + [Hai bisogno di aiuto?] -> need_help
-    * {has_item("ice_flower")} [\[QUEST\] Ho trovato il Fiore di Ghiaccio che cercavi.] -> olivia_quest_complete
+    + [Puoi medicarmi?] -> care
+    + {not quest_active("the_waiting_woman") && not quest_done("the_waiting_woman")} [Hai bisogno di aiuto?] -> need_help
+    * {quest_active("the_waiting_woman") && has_item("ice_flower")} [\[QUEST\] Ho trovato il Fiore di Ghiaccio che cercavi.] -> olivia_quest_complete
     + [Devo andare. Addio.] -> END
 
 = who_are_you
@@ -16,21 +19,35 @@ Mi chiamo Olivia. Ero una botanica, prima del Silenzio. Studiavo piante medicina
 
 = how_survive
 Conoscenza. E pazienza. Queste piante... sono più forti di quanto pensiamo. Crescono anche in questo mondo morente, si adattano, sopravvivono. Io le studio, le coltivo, le uso per curare me stessa e i rari viaggiatori che passano di qui. Ma ce n'è una che non riesco più a trovare...
-    + [Quale pianta cerchi?] -> need_help
+    + {not quest_active("the_waiting_woman") && not quest_done("the_waiting_woman")} [Quale pianta cerchi?] -> need_help
     + [Capisco. Ho altre domande.] -> hub
 
+= care
+{current_day() > olivia_last_care_day:
+    Siediti. (Olivia ti pulisce le ferite con un infuso amaro e ti fa masticare una radice che sa di terra) Ecco. Non è un miracolo, ma domani ti sentirai meglio.
+    ~ olivia_last_care_day = current_day()
+    ~ heal(30)
+    ~ cureStatus("INFEZIONE")
+    ~ cureStatus("MALATO")
+- else:
+    Ti ho già curato oggi. Le erbe hanno bisogno di tempo per agire, e io di tempo per raccoglierne altre. Torna domani.
+}
+    -> hub
+
 = need_help
-Una pianta che cresceva solo in luoghi freddi e alti, dove l'aria è sottile. La chiamavano 'Fiore di Ghiaccio' per la sua resistenza. I suoi petali sono quasi trasparenti, di un blu pallido, e sono freddi al tatto. Mi serve per un decotto importante, un elisir che rinforza il corpo contro le avversità. Se mai ti trovassi sulle montagne a nord, e ne vedessi uno... ti ricompenserei generosamente.
+Una pianta che cresceva solo in luoghi freddi e alti, dove l'aria è sottile. La chiamavano 'Fiore di Ghiaccio' per la sua resistenza. I suoi petali sono quasi trasparenti, di un blu pallido, e sono freddi al tatto. Mi serve per un decotto importante, un elisir che rinforza il corpo contro le avversità. L'ultima volta l'ho visto su un passo innevato a nord, tra le montagne oltre la foresta grande. Te lo segno sulla mappa. Se ne trovi uno... ti ricompenserei generosamente.
     ~ startQuest("the_waiting_woman")
+    ~ revealPOI("ice_flower_pass")
     + [Cercherò questo fiore per te.] -> hub
     + [Non posso prometterti nulla, ma terrò gli occhi aperti.] -> hub
 
 = olivia_quest_complete
 Non posso crederci... Dopo tutti questi anni. Hai rischiato molto per questo. Il Fiore di Ghiaccio è incredibilmente raro e fragile. Grazie, davvero. La tua gentilezza non sarà dimenticata. Lascia che ti mostri come usarlo. Questa è una vecchia ricetta di famiglia, un elisir che rinforza il corpo contro le avversità. Impara bene, viaggiatore. Potrebbe salvarti la vita.
-    ~ learnRecipe("recipe_elixir_of_fortitude")
     ~ takeItem("ice_flower", 1)
+    ~ learnRecipe("recipe_elixir_of_fortitude")
+    ~ questTrigger("olivia_quest_complete")
     -> after_quest_complete
 
 = after_quest_complete
 Grazie ancora per il Fiore di Ghiaccio. Se hai bisogno di erbe o cure, sono sempre qui.
-    + [Grazie, Olivia.] -> END
+    + [Grazie, Olivia.] -> hub

@@ -1,4 +1,3 @@
-
 [
   {
     "id": "city_easter_egg_pixeldebh_v2",
@@ -17,13 +16,11 @@
             "successText": "Pulendo la placca, scopri che è un pannello di accesso. Dietro di essa, incastonato in un pezzo di macchinario, c'è un piccolo kit di componenti elettronici di alta qualità e una bevanda energetica, probabilmente la scorta di un tecnico.",
             "failureText": "La placca è solo un pezzo di decorazione. Non c'è nulla di interessante o utile al di sotto. Hai solo perso tempo.",
             "success": [
-              { "type": "addItem", "value": { "itemId": "military_grade_electronics", "quantity": 1 } },
-              { "type": "addItem", "value": { "itemId": "energy_drink_nuclear", "quantity": 1 } },
-              { "type": "addXp", "value": 50 }
+              {"type": "addItem", "value": {"itemId": "military_grade_electronics", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "energy_drink_nuclear", "quantity": 1}},
+              {"type": "addXp", "value": 50}
             ],
-            "failure": [
-              { "type": "addXp", "value": 10 }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -33,9 +30,12 @@
           {
             "type": "direct",
             "results": [
-              { "type": "journalEntry", "text": "Decidi di tenere la strana placca. È un pezzo di un mondo che non capisci, ma ha un'aria... fortunata. La metti nello zaino." },
-              { "type": "addItem", "value": { "itemId": "pixeldebh_plate", "quantity": 1 } },
-              { "type": "addXp", "value": 20 }
+              {
+                "type": "journalEntry",
+                "text": "Decidi di tenere la strana placca. È un pezzo di un mondo che non capisci, ma ha un'aria... fortunata. La metti nello zaino."
+              },
+              {"type": "addItem", "value": {"itemId": "pixeldebh_plate", "quantity": 1}},
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -55,11 +55,14 @@
           {
             "type": "direct",
             "results": [
-              { "type": "journalEntry", "text": "Con un certo rispetto, controlli le sue tasche. Trovi un pacchetto di sigarette ancora sigillato, un flacone di antidolorifici e un biglietto da visita professionale. Povero Marco G., qualunque sia stata la sua storia." },
-              { "type": "addItem", "value": { "itemId": "MED_PAINKILLER", "quantity": 1 } },
-              { "type": "addItem", "value": { "itemId": "cigarettes_pack", "quantity": 1 } },
-              { "type": "addItem", "value": { "itemId": "eurocenter_business_card", "quantity": 1 } },
-              { "type": "addXp", "value": 25 }
+              {
+                "type": "journalEntry",
+                "text": "Con un certo rispetto, controlli le sue tasche. Trovi un pacchetto di sigarette ancora sigillato, un flacone di antidolorifici e un biglietto da visita professionale. Povero Marco G., qualunque sia stata la sua storia."
+              },
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "cigarettes_pack", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "eurocenter_business_card", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ]
           }
         ]
@@ -79,10 +82,13 @@
           {
             "type": "direct",
             "results": [
-              { "type": "journalEntry", "text": "Ti fermi per qualche minuto, ipnotizzato da quel frammento del mondo perduto. La musica e la voce speranzosa ti danno una carica inaspettata. Prima che il segnale svanisca di nuovo nella statica, riesci a registrare un pezzo della canzone su una vecchia cassetta." },
-              { "type": "heal", "value": 10 },
-              { "type": "addXp", "value": 50 },
-              { "type": "addItem", "value": { "itemId": "rare_music_cassettes", "quantity": 1 } }
+              {
+                "type": "journalEntry",
+                "text": "Ti fermi per qualche minuto, ipnotizzato da quel frammento del mondo perduto. La musica e la voce speranzosa ti danno una carica inaspettata. Prima che il segnale svanisca di nuovo nella statica, riesci a registrare un pezzo della canzone su una vecchia cassetta."
+              },
+              {"type": "heal", "value": 10},
+              {"type": "addXp", "value": 50},
+              {"type": "addItem", "value": {"itemId": "rare_music_cassettes", "quantity": 1}}
             ]
           }
         ]
@@ -97,12 +103,13 @@
             "successText": "Manipolando l'antenna, riesci a farti un'idea approssimativa della direzione del segnale. Sembra provenire da molto, molto lontano, verso est. È un'informazione vaga, ma è più di niente.",
             "failureText": "Provi a sintonizzare meglio, ma il segnale è instabile. Con un ultimo crepitio, svanisce, lasciandoti con più domande che risposte.",
             "success": [
-              { "type": "revealMapPOI", "text": "Hai triangolato il segnale! Sembra provenire da una zona remota verso est." },
-              { "type": "addXp", "value": 75 }
+              {
+                "type": "revealMapPOI",
+                "text": "Hai triangolato il segnale! Sembra provenire da una zona remota verso est."
+              },
+              {"type": "addXp", "value": 75}
             ],
-            "failure": [
-              { "type": "addXp", "value": 15 }
-            ]
+            "failure": [{"type": "addXp", "value": 15}]
           }
         ]
       }
@@ -121,10 +128,13 @@
           {
             "type": "direct",
             "results": [
-              { "type": "journalEntry", "text": "Riesci ad aprire la scatola con un po' di sforzo. All'interno, protetto da uno strato di schiuma isolante, c'è un iniettore medico di tipo militare e una barretta energetica ad alto contenuto calorico. Un vero tesoro, lasciato qui da uno sfortunato viaggiatore." },
-              { "type": "addItem", "value": { "itemId": "stimpak_military", "quantity": 1 } },
-              { "type": "addItem", "value": { "itemId": "high_energy_bar", "quantity": 1 } },
-              { "type": "addXp", "value": 40 }
+              {
+                "type": "journalEntry",
+                "text": "Riesci ad aprire la scatola con un po' di sforzo. All'interno, protetto da uno strato di schiuma isolante, c'è un iniettore medico di tipo militare e una barretta energetica ad alto contenuto calorico. Un vero tesoro, lasciato qui da uno sfortunato viaggiatore."
+              },
+              {"type": "addItem", "value": {"itemId": "stimpak_military", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "high_energy_bar", "quantity": 1}},
+              {"type": "addXp", "value": 40}
             ]
           }
         ]

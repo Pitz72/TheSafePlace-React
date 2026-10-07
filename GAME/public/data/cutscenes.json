@@ -1,4 +1,3 @@
-
 [
   {
     "id": "CS_OPENING",
@@ -23,18 +22,18 @@
       {
         "text": "La carta trema tra le tue dita, le ultime parole incise a fuoco nella tua mente: \"Con tutto l'amore che un padre distrutto può dare, Papà.\"\n\nL'amore. Una parola che suona strana, quasi estranea, dopo anni di addestramento spietato. E ora, quel silenzio. Un silenzio assordante che urla una sola, terribile verità: sei solo.\n\nLa rabbia e la paura si mescolano nel tuo petto, un groviglio soffocante. La lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto.\n\nCosa ne fai?",
         "choices": [
-          { "text": "[1] Strappi la lettera in un impeto di rabbia.", "targetPage": 5 },
-          { "text": "[2] Pieghi la lettera con cura e la metti in tasca.", "targetPage": 6 }
+          {"text": "[1] Strappi la lettera in un impeto di rabbia.", "targetPage": 5},
+          {"text": "[2] Pieghi la lettera con cura e la metti in tasca.", "targetPage": 6}
         ]
       },
       {
         "text": "Il suono della carta che si strappa è un urlo nel silenzio del rifugio. Un pezzo, poi un altro, finché le sue parole non sono che frammenti inutili sul pavimento polveroso.\n\nUn addestramento spietato per un abbandono altrettanto spietato. Questa è stata la sua ultima lezione. Non ci sarà più un'altra parola, un altro ordine. Solo questo.\n\nI frammenti bianchi ai tuoi piedi sembrano neve su un terreno morto.",
-        "consequences": [{ "type": "setFlag", "payload": "FATHERS_LETTER_DESTROYED" }],
+        "consequences": [{"type": "setFlag", "payload": "FATHERS_LETTER_DESTROYED"}],
         "nextPage": 7
       },
       {
         "text": "Le sue parole sono tutto ciò che ti resta di lui. Un testamento, una condanna, una speranza. Qualunque cosa siano, sono tue.\n\nCon una cura che non sapevi di possedere, pieghi il foglio lungo le sue pieghe consumate e lo infili nella tasca più interna degli stracci che indossi, vicino al cuore. Un peso piccolo, ma immenso.\n\nÈ un fardello che hai deciso di portare.",
-        "consequences": [{ "type": "addItem", "payload": { "itemId": "fathers_letter", "quantity": 1 } }],
+        "consequences": [{"type": "addItem", "payload": {"itemId": "fathers_letter", "quantity": 1}}],
         "nextPage": 7
       },
       {
@@ -52,13 +51,13 @@
       {
         "text": "Lo apri. La sua calligrafia è più frettolosa, quasi un appunto.\n\n\"Ultimo,\nSe stai leggendo questo, hai superato la prima prova: scegliere di vivere. Dentro troverai il necessario per i primi giorni: due borracce d'acqua già purificata, tre razioni di cibo a lunga conservazione, delle bende pulite. Non è molto, ma tu sai come trovare il resto.\n\nIl coltello che porti alla cintura è arrugginito, ma affilato. Gli stracci che indossi non ti proteggeranno, ma ti terranno al caldo. Spera di trovare di meglio.\n\nLa strada la conosci. Te l'ho insegnata. Ci rivedremo. Forse al Safe Place.\"",
         "consequences": [
-          { "type": "addItem", "payload": { "itemId": "CONS_002", "quantity": 2 } },
-          { "type": "addItem", "payload": { "itemId": "CONS_001", "quantity": 3 } },
-          { "type": "addItem", "payload": { "itemId": "CONS_003", "quantity": 2 } },
-          { "type": "addItem", "payload": { "itemId": "weapon_knife_rusty", "quantity": 1 } },
-          { "type": "addItem", "payload": { "itemId": "armor_rags", "quantity": 1 } },
-          { "type": "equipItem", "payload": "weapon_knife_rusty" },
-          { "type": "equipItem", "payload": "armor_rags" }
+          {"type": "addItem", "payload": {"itemId": "CONS_002", "quantity": 2}},
+          {"type": "addItem", "payload": {"itemId": "CONS_001", "quantity": 3}},
+          {"type": "addItem", "payload": {"itemId": "CONS_003", "quantity": 2}},
+          {"type": "addItem", "payload": {"itemId": "weapon_knife_rusty", "quantity": 1}},
+          {"type": "addItem", "payload": {"itemId": "armor_rags", "quantity": 1}},
+          {"type": "equipItem", "payload": "weapon_knife_rusty"},
+          {"type": "equipItem", "payload": "armor_rags"}
         ],
         "nextPage": 11
       },
@@ -96,12 +95,12 @@
       },
       {
         "text": "Rimani immobile per un tempo che sembra infinito, il cuore che batte all'impazzata, ogni respiro un rischio. Ma non accade nulla. Il silenzio torna ad essere solo silenzio.\n\nForse è solo la tua mente, logorata dalla solitudine e dalla tensione. Una paranoia da sopravvissuto.\n\nDecidi di riposare comunque, ma è un sonno leggero, da preda. Un occhio sempre socchiuso, un orecchio sempre teso.\n\nQuando finalmente ti rimetti in cammino, una figura alta e sottile, indistinguibile dalle ombre allungate delle rovine, si stacca silenziosamente da un muro e inizia a seguirti, i suoi passi che non lasciano impronte e non fanno alcun rumore.",
-        "consequences": [{ "type": "performModifiedRest" }],
+        "consequences": [{"type": "performModifiedRest"}],
         "nextPage": null
       }
     ]
   },
-    {
+  {
     "id": "CS_ASH_LULLABY",
     "title": "La Ninnananna della Cenere",
     "pages": [
@@ -209,7 +208,7 @@
       },
       {
         "text": "Mentre cammini, una figura solitaria ti osserva da lontano, immobile come una statua di pietra.\n\nUn Angelo della Cenere.\n\nNon si muove. Non ti segue. Resta solo lì, un'ombra contro l'orizzonte grigio. Ma sotto il cappuccio, due occhi — uno umano, uno meccanico — ti seguono.\n\nE se potessi vederli da vicino, forse riconosceresti qualcosa in quello sguardo. Non minaccia. Non fame.\n\nQualcosa che assomiglia, pericolosamente, a un ricordo.\n\nA un dolore.",
-        "consequences": [{ "type": "addItem", "payload": { "itemId": "lena_cloth_fragment", "quantity": 1 } }],
+        "consequences": [{"type": "addItem", "payload": {"itemId": "lena_cloth_fragment", "quantity": 1}}],
         "nextPage": null
       }
     ]
@@ -229,20 +228,26 @@
       {
         "text": "Pensi al viaggio. Ogni passo, ogni lotta, ogni scelta. Non sei più la persona che eri quando hai lasciato il rifugio. Quella persona era spaventata, indifesa, persa.\n\nTu ora sei... diverso. Più forte, forse. Più cinico, sicuramente. Hai ucciso. Hai rubato. Hai fatto cose che quella persona non avrebbe mai immaginato di dover fare.\n\nMa sei anche sopravvissuto. Hai trovato un nome per tua madre. Hai resistito alla solitudine, alla fame, alla disperazione. Hai attraversato la desolazione e sei ancora in piedi.\n\nForse non hai bisogno del Safe Place. Forse non hai bisogno di tuo padre.",
         "choices": [
-          { "text": "[1] No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.", "targetPage": 3 },
-          { "text": "[2] Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.", "targetPage": 4 }
+          {
+            "text": "[1] No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.",
+            "targetPage": 3
+          },
+          {
+            "text": "[2] Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.",
+            "targetPage": 4
+          }
         ]
       },
       {
         "text": "Ti alzi. Le gambe protestano, ma obbediscono. Inizi a scendere dalla collina, verso la \"E\", verso le risposte.\n\nNon per tuo padre. Non più. Lo fai per te stesso. Perché devi sapere. Perché questa incertezza ti divorerebbe dall'interno.\n\nSe è una trappola, la affronterai. Se è un inganno, lo smaschererai. Se tuo padre è lì, gli chiederai conto di ogni bugia, di ogni verità nascosta.\n\nE se non c'è niente... almeno saprai.\n\nLa paura non scompare. Ma la sostituisci con qualcosa di più forte: determinazione.",
-        "consequences": [{ "type": "setFlag", "payload": "CHOSE_TRUTH" }],
+        "consequences": [{"type": "setFlag", "payload": "CHOSE_TRUTH"}],
         "nextPage": 5
       },
       {
         "text": "Ti alzi e guardi la \"E\" un'ultima volta. Poi ti volti.\n\nNo. Non così. Non correndo verso un'altra delle illusioni di tuo padre. Non vivendo per le sue aspettative, per i suoi piani.\n\nHai sopravvissuto. Hai camminato. Hai imparato. Ma la vera domanda non è \"dov'è il Safe Place?\". È \"cosa vuoi tu?\"\n\nE forse, in questo mondo morto, l'unica sicurezza vera è quella che ti costruisci da solo. Con le tue mani. Con le tue scelte.\n\nScendi dalla collina, ma non verso la \"E\". Verso un altro sentiero. Verso l'ignoto.\n\nForse è follia. Forse è libertà.\n\nMa è tua.",
         "consequences": [
-          { "type": "setFlag", "payload": "CHOSE_FREEDOM" },
-          { "type": "alignmentChange", "value": {"type": "elian", "amount": 3} }
+          {"type": "setFlag", "payload": "CHOSE_FREEDOM"},
+          {"type": "alignmentChange", "value": {"type": "elian", "amount": 3}}
         ],
         "nextPage": 5
       },
@@ -304,7 +309,7 @@
       },
       {
         "text": "E poi, nel silenzio che precede la fine, la senti.\n\n\"Sopravvivi.\"\n\nLa voce di tuo padre. Non è un incoraggiamento. Non è conforto. È un ordine. Secco. Implacabile. Come sempre.\n\n\"Sopravvivi, Ultimo. Non per me. Non per lei. Per te. Perché questa è l'unica cosa che conta. L'unica cosa che hai sempre avuto.\"\n\nQualcosa si accende dentro di te. Non è speranza. Non è coraggio.\n\nÈ rabbia.\n\nPura, ostinata, feroce rabbia.\n\nCon uno sforzo che ti lacera i muscoli e ti strappa un urlo silenzioso dalla gola, ti rimetti in piedi. Barcollando. Sanguinante. Ma in piedi.\n\nNon morirai qui. Non gliela darai vinta. Non a questo mondo spietato. Non a lui. Non a te stesso.\n\nSei Ultimo. E finché respiri, combatti.",
-        "consequences": [{ "type": "setFlag", "payload": "THE_BRINK_SURVIVED" }],
+        "consequences": [{"type": "setFlag", "payload": "THE_BRINK_SURVIVED"}],
         "nextPage": null
       }
     ]

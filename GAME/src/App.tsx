@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
-// import { useCharacterStore } from './store/characterStore'; // Unused
 import { GameState, VisualTheme } from './types';
 import { useGameScale } from './hooks/useGameScale';
 import BootScreen from './components/BootScreen';
@@ -20,114 +19,61 @@ import CombatScreen from './components/CombatScreen';
 import QuestScreen from './components/QuestScreen';
 import DialogueScreen from './components/DialogueScreen';
 import TradeScreen from './components/TradeScreen';
-import { useItemDatabaseStore } from './data/itemDatabase';
-import { useEventDatabaseStore } from './data/eventDatabase';
-import { useRecipeDatabaseStore } from './data/recipeDatabase';
-import { useEnemyDatabaseStore } from './data/enemyDatabase';
-import { useMainStoryDatabaseStore } from './data/mainStoryDatabase';
-import { useCutsceneDatabaseStore } from './data/cutsceneDatabase';
-import { useQuestDatabaseStore } from './data/questDatabase';
-// import { useDialogueDatabaseStore } from './data/dialogueDatabase'; // REMOVED
-import { useTraderDatabaseStore } from './data/traderDatabase';
-import { useLoreArchiveDatabaseStore } from './data/loreArchiveDatabase';
-import { useInkStoryDatabaseStore } from './data/inkStoryDatabase';
 import MainStoryScreen from './components/MainStoryScreen';
 import CutsceneScreen from './components/CutsceneScreen';
 import AshLullabyChoiceScreen from './components/AshLullabyChoiceScreen';
 import InGameMenuScreen from './components/InGameMenuScreen';
 import SaveLoadScreen from './components/SaveLoadScreen';
-import { useInteractionStore } from './store/interactionStore';
-import { useTalentDatabaseStore } from './data/talentDatabase';
 import GameOverScreen from './components/GameOverScreen';
 import VictoryScreen from './components/VictoryScreen';
 import TrophyScreen from './components/TrophyScreen';
-import { useTrophyDatabaseStore } from './data/trophyDatabase';
 import ErrorScreen from './components/ErrorScreen';
+import { useInteractionStore } from './store/interactionStore';
+import { loadAllGameData } from './data/loadAllGameData';
+import { inkStoryData } from './data/inkStoryDatabase';
+import { narrativeService } from './services/NarrativeService';
 
-/**
- * App component.
- * This is the main component of the application.
- * @returns {JSX.Element} The rendered App component.
- */
+const THEMES: VisualTheme[] = ['standard', 'crt', 'high_contrast'];
+
 const App: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
   const setVisualTheme = useGameStore((state) => state.setVisualTheme);
   const isInventoryOpen = useInteractionStore((state) => state.isInventoryOpen);
   const isInRefuge = useInteractionStore((state) => state.isInRefuge);
   const isCraftingOpen = useInteractionStore((state) => state.isCraftingOpen);
-  // const setMap = useGameStore((state) => state.setMap); // Unused
-  // const initCharacter = useCharacterStore((state) => state.initCharacter); // Unused
   const scaleStyle = useGameScale();
 
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { loadDatabase: loadItemDatabase, itemDatabase } = useItemDatabaseStore();
-  const { loadDatabase: loadEventDatabase } = useEventDatabaseStore();
-  const { loadDatabase: loadRecipeDatabase } = useRecipeDatabaseStore();
-  const { loadDatabase: loadEnemyDatabase } = useEnemyDatabaseStore();
-  const { loadDatabase: loadMainStoryDatabase } = useMainStoryDatabaseStore();
-  const { loadDatabase: loadCutsceneDatabase } = useCutsceneDatabaseStore();
-  const { loadDatabase: loadTalentDatabase } = useTalentDatabaseStore();
-  const { loadDatabase: loadTrophyDatabase } = useTrophyDatabaseStore();
-  const { loadDatabase: loadQuestDatabase } = useQuestDatabaseStore();
-  // const { loadDatabase: loadDialogueDatabase, isLoaded: dialoguesLoaded } = useDialogueDatabaseStore(); // REMOVED
-  const { loadDatabase: loadTraderDatabase } = useTraderDatabaseStore();
-  const { loadDatabase: loadLoreArchiveDatabase } = useLoreArchiveDatabaseStore();
-  const { loadDatabase: loadInkStoryDatabase, storyData: inkStoryData, isLoaded: inkStoryLoaded } = useInkStoryDatabaseStore();
-
   useEffect(() => {
-    const savedTheme = localStorage.getItem('tspc_visual_theme') as VisualTheme | null;
-    if (savedTheme) {
-      setVisualTheme(savedTheme);
-    } else {
-      setVisualTheme('standard'); // Imposta il tema di default se non ce n'è uno salvato
+    let savedTheme: string | null = null;
+    try {
+      savedTheme = localStorage.getItem('tspc_visual_theme');
+    } catch {
+      savedTheme = null;
     }
+    setVisualTheme(THEMES.includes(savedTheme as VisualTheme) ? savedTheme as VisualTheme : 'standard');
   }, [setVisualTheme]);
 
   useEffect(() => {
-    const loadAllDatabases = async () => {
-      try {
-        setIsLoading(true);
-        setLoadingError(null);
-
-        await loadItemDatabase();
-        await loadEventDatabase();
-        await loadRecipeDatabase();
-        await loadEnemyDatabase();
-        await loadMainStoryDatabase();
-        await loadCutsceneDatabase();
-        await loadTalentDatabase();
-        await loadTrophyDatabase();
-        await loadQuestDatabase();
-        // await loadDialogueDatabase(); // REMOVED: Migrated to Ink
-        await loadTraderDatabase();
-        await loadLoreArchiveDatabase();
-        await loadInkStoryDatabase();
-
-        console.log('✅ Tutti i database caricati con successo!');
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Errore caricamento database:", error);
+    let cancelled = false;
+    loadAllGameData()
+      .then(() => {
+        narrativeService.initialize(inkStoryData);
+        if (!cancelled) setIsLoading(false);
+      })
+      .catch((error: unknown) => {
+        console.error('Errore caricamento database:', error);
+        if (cancelled) return;
         setLoadingError(
-          "Impossibile caricare i dati di gioco. " +
-          "Verifica la tua connessione internet e riprova."
+          'Impossibile caricare i dati di gioco.\n' +
+          (error instanceof Error ? error.message : String(error))
         );
         setIsLoading(false);
-      }
-    };
-
-    loadAllDatabases();
-  }, [loadItemDatabase, loadEventDatabase, loadRecipeDatabase, loadEnemyDatabase, loadMainStoryDatabase, loadCutsceneDatabase, loadTalentDatabase, loadTrophyDatabase, loadQuestDatabase, loadTraderDatabase, loadLoreArchiveDatabase, loadInkStoryDatabase, itemDatabase]);
-
-  // Initialize NarrativeService when ink data is loaded
-  useEffect(() => {
-    if (inkStoryLoaded && inkStoryData) {
-      import('./services/NarrativeService').then(({ narrativeService }) => {
-        narrativeService.initialize(inkStoryData);
       });
-    }
-  }, [inkStoryLoaded, inkStoryData]);
+    return () => { cancelled = true; };
+  }, []);
 
   const renderContent = () => {
     switch (gameState) {
@@ -202,12 +148,10 @@ const App: React.FC = () => {
     }
   };
 
-  // Mostra schermata di errore se il caricamento fallisce
   if (loadingError) {
     return <ErrorScreen message={loadingError} onRetry={() => window.location.reload()} />;
   }
 
-  // Mostra schermata di caricamento durante il caricamento iniziale
   if (isLoading) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-black">
@@ -225,7 +169,6 @@ const App: React.FC = () => {
 
   return (
     <div className="w-screen h-screen relative bg-black">
-      {/* Il Monitor Virtuale */}
       <div
         id="game-container"
         className="bg-[var(--bg-primary)] overflow-hidden"

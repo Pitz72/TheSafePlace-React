@@ -8,12 +8,7 @@
     "value": 5,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 25}]
   },
   {
     "id": "CONS_002",
@@ -24,12 +19,7 @@
     "value": 3,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "hydration",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "hydration", "value": 25}]
   },
   {
     "id": "CONS_003",
@@ -40,12 +30,7 @@
     "value": 10,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 10
-      }
-    ]
+    "effects": [{"type": "heal", "value": 10}]
   },
   {
     "id": "MED_BANDAGE_BASIC",
@@ -56,12 +41,7 @@
     "value": 3,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "heal", "value": 5}]
   },
   {
     "id": "MED_BANDAGE_ADVANCED",
@@ -72,12 +52,7 @@
     "value": 25,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "heal", "value": 25}]
   },
   {
     "id": "FOOD_SOUP",
@@ -88,16 +63,7 @@
     "value": 15,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 30
-      },
-      {
-        "type": "hydration",
-        "value": 20
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 30}, {"type": "hydration", "value": 20}]
   },
   {
     "id": "MED_ANTISEPTIC",
@@ -108,16 +74,7 @@
     "value": 15,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 8
-      },
-      {
-        "type": "cureStatus",
-        "value": "INFEZIONE"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 8}, {"type": "cureStatus", "value": "INFEZIONE"}]
   },
   {
     "id": "MED_PAINKILLER",
@@ -128,16 +85,7 @@
     "value": 12,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 5
-      },
-      {
-        "type": "cureStatus",
-        "value": "FERITO"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 5}, {"type": "cureStatus", "value": "FERITO"}]
   },
   {
     "id": "MED_ANTIDOTE",
@@ -148,12 +96,7 @@
     "value": 50,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "cureStatus",
-        "value": "AVVELENATO"
-      }
-    ]
+    "effects": [{"type": "cureStatus", "value": "AVVELENATO"}]
   },
   {
     "id": "MED_SUTURE_KIT",
@@ -164,12 +107,7 @@
     "value": 35,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "heal", "value": 25}]
   },
   {
     "id": "TOOL_TORCH_BASIC",
@@ -180,12 +118,7 @@
     "value": 4,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "light",
-        "value": 60
-      }
-    ]
+    "effects": [{"type": "light", "value": 60}]
   },
   {
     "id": "TRAP_SIMPLE",
@@ -196,12 +129,7 @@
     "value": 8,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "trap",
-        "value": 1
-      }
-    ]
+    "effects": [{"type": "trap", "value": 1}]
   },
   {
     "id": "bear_trap",
@@ -212,12 +140,7 @@
     "value": 25,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "trap",
-        "value": 3
-      }
-    ]
+    "effects": [{"type": "trap", "value": 3}]
   },
   {
     "id": "advanced_bear_trap",
@@ -228,12 +151,7 @@
     "value": 60,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "trap",
-        "value": 5
-      }
-    ],
+    "effects": [{"type": "trap", "value": 5}],
     "color": "#a855f7"
   },
   {
@@ -245,12 +163,7 @@
     "value": 5,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 8
-      }
-    ]
+    "effects": [{"type": "heal", "value": 8}]
   },
   {
     "id": "survival_backpack",
@@ -261,12 +174,7 @@
     "value": 50,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "container",
-        "value": 20
-      }
-    ]
+    "effects": [{"type": "container", "value": 20}]
   },
   {
     "id": "fresh_fish",
@@ -277,12 +185,7 @@
     "value": 8,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 20
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 20}]
   },
   {
     "id": "binoculars",
@@ -293,12 +196,7 @@
     "value": 30,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "vision",
-        "value": 2
-      }
-    ]
+    "effects": [{"type": "vision", "value": 2}]
   },
   {
     "id": "tool_box",
@@ -309,12 +207,7 @@
     "value": 40,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "repair", "value": 15}]
   },
   {
     "id": "hiking_backpack",
@@ -325,12 +218,7 @@
     "value": 35,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "container",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "container", "value": 15}]
   },
   {
     "id": "edible_mushrooms",
@@ -341,12 +229,7 @@
     "value": 6,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 15}]
   },
   {
     "id": "portable_tent",
@@ -357,12 +240,7 @@
     "value": 45,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "shelter",
-        "value": 8
-      }
-    ]
+    "effects": [{"type": "shelter", "value": 8}]
   },
   {
     "id": "glowing_mushrooms",
@@ -373,12 +251,7 @@
     "value": 25,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 12
-      }
-    ]
+    "effects": [{"type": "heal", "value": 12}]
   },
   {
     "id": "random_item",
@@ -389,12 +262,7 @@
     "value": 20,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "random",
-        "value": 1
-      }
-    ]
+    "effects": [{"type": "random", "value": 1}]
   },
   {
     "id": "military_backpack",
@@ -405,12 +273,7 @@
     "value": 60,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "container",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "container", "value": 25}]
   },
   {
     "id": "medkit_advanced",
@@ -422,18 +285,9 @@
     "stackable": false,
     "rarity": "epic",
     "effects": [
-      {
-        "type": "heal",
-        "value": 35
-      },
-      {
-        "type": "cureStatus",
-        "value": "FERITO"
-      },
-      {
-        "type": "cureStatus",
-        "value": "MALATO"
-      }
+      {"type": "heal", "value": 35},
+      {"type": "cureStatus", "value": "FERITO"},
+      {"type": "cureStatus", "value": "MALATO"}
     ]
   },
   {
@@ -445,16 +299,7 @@
     "value": 40,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 20
-      },
-      {
-        "type": "cureStatus",
-        "value": "FERITO"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 20}, {"type": "cureStatus", "value": "FERITO"}]
   },
   {
     "id": "weapon_repair_kit",
@@ -465,12 +310,7 @@
     "value": 35,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 20
-      }
-    ]
+    "effects": [{"type": "repair", "value": 20}]
   },
   {
     "id": "rad_away_pills",
@@ -481,12 +321,7 @@
     "value": 50,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "antirad",
-        "value": 100
-      }
-    ]
+    "effects": [{"type": "antirad", "value": 100}]
   },
   {
     "id": "batteries_pack",
@@ -497,12 +332,7 @@
     "value": 15,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "power",
-        "value": 50
-      }
-    ]
+    "effects": [{"type": "power", "value": 50}]
   },
   {
     "id": "fishing_kit",
@@ -513,12 +343,7 @@
     "value": 25,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "fishing",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "fishing", "value": 15}]
   },
   {
     "id": "hook_set",
@@ -529,12 +354,7 @@
     "value": 8,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "fishing",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "fishing", "value": 5}]
   },
   {
     "id": "waterproof_case",
@@ -545,12 +365,7 @@
     "value": 18,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "container",
-        "value": 8
-      }
-    ]
+    "effects": [{"type": "container", "value": 8}]
   },
   {
     "id": "smoke_grenade",
@@ -561,12 +376,7 @@
     "value": 20,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "smoke",
-        "value": 30
-      }
-    ]
+    "effects": [{"type": "smoke", "value": 30}]
   },
   {
     "id": "walkie_talkie",
@@ -577,12 +387,7 @@
     "value": 35,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "communication",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "communication", "value": 5}]
   },
   {
     "id": "torch",
@@ -593,12 +398,7 @@
     "value": 8,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "light",
-        "value": 45
-      }
-    ]
+    "effects": [{"type": "light", "value": 45}]
   },
   {
     "id": "tarp",
@@ -609,12 +409,7 @@
     "value": 12,
     "stackable": false,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "shelter",
-        "value": 6
-      }
-    ]
+    "effects": [{"type": "shelter", "value": 6}]
   },
   {
     "id": "lighter",
@@ -625,12 +420,7 @@
     "value": 15,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "fire",
-        "value": 100
-      }
-    ]
+    "effects": [{"type": "fire", "value": 100}]
   },
   {
     "id": "energy_bar",
@@ -641,12 +431,7 @@
     "value": 10,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 40
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 40}]
   },
   {
     "id": "flashlight",
@@ -657,12 +442,7 @@
     "value": 20,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "light",
-        "value": 120
-      }
-    ]
+    "effects": [{"type": "light", "value": 120}]
   },
   {
     "id": "first_aid_kit",
@@ -673,16 +453,7 @@
     "value": 30,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 30
-      },
-      {
-        "type": "cureStatus",
-        "value": "FERITO"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 30}, {"type": "cureStatus", "value": "FERITO"}]
   },
   {
     "id": "carrot",
@@ -693,12 +464,7 @@
     "value": 4,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 10
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 10}]
   },
   {
     "id": "potato",
@@ -709,12 +475,7 @@
     "value": 5,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 15}]
   },
   {
     "id": "mechanic_toolkit",
@@ -725,12 +486,7 @@
     "value": 60,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 25
-      }
-    ]
+    "effects": [{"type": "repair", "value": 25}]
   },
   {
     "id": "antibiotics_expired",
@@ -741,16 +497,7 @@
     "value": 5,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 5
-      },
-      {
-        "type": "cureStatus",
-        "value": "MALATO"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 5}, {"type": "cureStatus", "value": "MALATO"}]
   },
   {
     "id": "strong_liquor",
@@ -761,16 +508,7 @@
     "value": 20,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 2
-      },
-      {
-        "type": "hydration",
-        "value": -10
-      }
-    ]
+    "effects": [{"type": "heal", "value": 2}, {"type": "hydration", "value": -10}]
   },
   {
     "id": "cigars_box",
@@ -792,16 +530,7 @@
     "value": 3,
     "stackable": true,
     "rarity": "common",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 10
-      },
-      {
-        "type": "hydration",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 10}, {"type": "hydration", "value": 5}]
   },
   {
     "id": "multitool",
@@ -812,12 +541,7 @@
     "value": 80,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 10
-      }
-    ]
+    "effects": [{"type": "repair", "value": 10}]
   },
   {
     "id": "precision_tools",
@@ -828,12 +552,7 @@
     "value": 70,
     "stackable": false,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 15
-      }
-    ]
+    "effects": [{"type": "repair", "value": 15}]
   },
   {
     "id": "sewing_kit_professional",
@@ -844,12 +563,7 @@
     "value": 45,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 12
-      }
-    ]
+    "effects": [{"type": "repair", "value": 12}]
   },
   {
     "id": "gourmet_canned_food",
@@ -860,16 +574,7 @@
     "value": 50,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 60
-      },
-      {
-        "type": "heal",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 60}, {"type": "heal", "value": 5}]
   },
   {
     "id": "energy_drink_nuclear",
@@ -881,18 +586,9 @@
     "stackable": true,
     "rarity": "uncommon",
     "effects": [
-      {
-        "type": "satiety",
-        "value": 10
-      },
-      {
-        "type": "hydration",
-        "value": 20
-      },
-      {
-        "type": "heal",
-        "value": 5
-      }
+      {"type": "satiety", "value": 10},
+      {"type": "hydration", "value": 20},
+      {"type": "heal", "value": 5}
     ]
   },
   {
@@ -915,16 +611,7 @@
     "value": 150,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 75
-      },
-      {
-        "type": "cureStatus",
-        "value": "FERITO"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 75}, {"type": "cureStatus", "value": "FERITO"}]
   },
   {
     "id": "high_energy_bar",
@@ -935,16 +622,7 @@
     "value": 60,
     "stackable": true,
     "rarity": "rare",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 80
-      },
-      {
-        "type": "heal",
-        "value": 10
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 80}, {"type": "heal", "value": 10}]
   },
   {
     "id": "food_honey",
@@ -955,16 +633,7 @@
     "value": 35,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "satiety",
-        "value": 30
-      },
-      {
-        "type": "heal",
-        "value": 10
-      }
-    ]
+    "effects": [{"type": "satiety", "value": 30}, {"type": "heal", "value": 10}]
   },
   {
     "id": "sonic_dissuader",
@@ -975,12 +644,7 @@
     "value": 300,
     "stackable": true,
     "rarity": "epic",
-    "effects": [
-      {
-        "type": "special",
-        "value": "ash_angel_protection_6h"
-      }
-    ],
+    "effects": [{"type": "special", "value": "ash_angel_protection_6h"}],
     "color": "#8b5cf6"
   },
   {
@@ -992,16 +656,7 @@
     "value": 40,
     "stackable": true,
     "rarity": "uncommon",
-    "effects": [
-      {
-        "type": "heal",
-        "value": 20
-      },
-      {
-        "type": "cureStatus",
-        "value": "INFEZIONE"
-      }
-    ]
+    "effects": [{"type": "heal", "value": 20}, {"type": "cureStatus", "value": "INFEZIONE"}]
   },
   {
     "id": "elixir_of_fortitude",
@@ -1013,18 +668,9 @@
     "stackable": true,
     "rarity": "epic",
     "effects": [
-      {
-        "type": "heal",
-        "value": 30
-      },
-      {
-        "type": "cureStatus",
-        "value": "IPOTERMIA"
-      },
-      {
-        "type": "special",
-        "value": "fortitude_buff_12h"
-      }
+      {"type": "heal", "value": 30},
+      {"type": "cureStatus", "value": "IPOTERMIA"},
+      {"type": "special", "value": "fortitude_buff_12h"}
     ],
     "color": "#60a5fa"
   },
@@ -1037,12 +683,7 @@
     "value": 500,
     "stackable": false,
     "rarity": "epic",
-    "effects": [
-      {
-        "type": "fire",
-        "value": 999999
-      }
-    ],
+    "effects": [{"type": "fire", "value": 999999}],
     "color": "#ef4444"
   }
 ]

@@ -5,17 +5,17 @@ Stai lontano dai miei circuiti, viaggiatore. A meno che tu non abbia qualcosa di
 = hub
     + [Cosa cerchi esattamente?] -> what_do_you_seek
     + [Cosa puoi fare con questa tecnologia?] -> what_can_you_do
-    * {has_item("pixeldebh_plate")} [\[ECHO\] Ho trovato questa strana placca di metallo ('PixelDebh').] -> anya_pixeldebh
-    * {has_item("drone_memory_chip")} [\[ECHO\] Ho un chip di memoria da un drone di sorveglianza.] -> anya_drone_chip
-    * {has_item("cryptic_recording")} [\[ECHO\] Ho una registrazione criptica da una vecchia radio.] -> anya_cryptic_recording
-    * {has_item("research_notes_rebirth")} [\[ECHO\] Ho trovato note sul 'Progetto Rinascita'.] -> anya_project_rebirth
-    * {has_item("eurocenter_business_card")} [\[ECHO\] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.] -> anya_eurocenter_card
-    * {has_item("captains_last_broadcast")} [\[ECHO\] Ho l'ultima trasmissione del Capitano Keith Arrow.] -> anya_captains_broadcast
-    * {ANYA_ECHO_PIXELDEBH && ANYA_ECHO_DRONE_CHIP && ANYA_ECHO_CRYPTIC_RECORDING && ANYA_ECHO_PROJECT_REBIRTH && ANYA_ECHO_EUROCENTER && ANYA_ECHO_CAPTAINS_BROADCAST} [\[QUEST\] Ho trovato tutti gli Echi.] -> anya_all_echoes_delivered
+    + {has_item("pixeldebh_plate") && not ANYA_ECHO_PIXELDEBH} [\[ECHO\] Ho trovato questa strana placca di metallo ('PixelDebh').] -> anya_pixeldebh
+    + {has_item("drone_memory_chip") && not ANYA_ECHO_DRONE_CHIP} [\[ECHO\] Ho un chip di memoria da un drone di sorveglianza.] -> anya_drone_chip
+    + {has_item("cryptic_recording") && not ANYA_ECHO_CRYPTIC_RECORDING} [\[ECHO\] Ho una registrazione criptica da una vecchia radio.] -> anya_cryptic_recording
+    + {has_item("research_notes_rebirth") && not ANYA_ECHO_PROJECT_REBIRTH} [\[ECHO\] Ho trovato note sul 'Progetto Rinascita'.] -> anya_project_rebirth
+    + {has_item("eurocenter_business_card") && not ANYA_ECHO_EUROCENTER} [\[ECHO\] Ho un biglietto da visita di 'Marco G., Immobiliare Eurocenter'.] -> anya_eurocenter_card
+    + {has_item("captains_last_broadcast") && not ANYA_ECHO_CAPTAINS_BROADCAST} [\[ECHO\] Ho l'ultima trasmissione del Capitano Keith Arrow.] -> anya_captains_broadcast
+    * {quest_active("collect_world_echoes") && ANYA_ECHO_PIXELDEBH && ANYA_ECHO_DRONE_CHIP && ANYA_ECHO_CRYPTIC_RECORDING && ANYA_ECHO_PROJECT_REBIRTH && ANYA_ECHO_EUROCENTER && ANYA_ECHO_CAPTAINS_BROADCAST} [\[QUEST\] Ho trovato tutti gli Echi.] -> anya_all_echoes_delivered
     + [Ti terrò a mente. Addio.] -> END
 
 = what_do_you_seek
-Cerco frammenti. Pezzi di un mondo che non esiste più. Chip di memoria, placche identificative, registrazioni audio... ogni pezzo racconta una storia. E ogni storia può essere trasformata in qualcosa di utile. Potere, conoscenza, sopravvivenza. Tutto è connesso.
+Cerco frammenti. Pezzi di un mondo che non esiste più. Chip di memoria, placche identificative, registrazioni audio... ogni pezzo racconta una storia. E ogni storia può essere trasformata in qualcosa di utile. Potere, conoscenza, sopravvivenza. Tutto è connesso. Portamene sei, e ti darò qualcosa che vale il viaggio.
     ~ startQuest("collect_world_echoes")
     -> hub
 
@@ -30,21 +30,31 @@ Incredibile... un pannello di accesso di una sala giochi 'Paradise'. Si diceva c
     -> hub
 
 = anya_drone_chip
-Un chip di un drone di sorveglianza... La maggior parte dei dati è corrotta, ma la matrice energetica è interessante. Posso usarla per rinforzare qualcosa. (Anya esamina la tua armatura) Dammi il tuo pettorale. Ti restituirò qualcosa di meglio.
+Un chip di un drone di sorveglianza... La maggior parte dei dati è corrotta, ma la matrice energetica è interessante. Posso usarla per rinforzare qualcosa.
+{has_equipped("chest"):
+    (Anya esamina la tua armatura) Dammi il tuo pettorale. Ti restituirò qualcosa di meglio. Il chip lo tengo io per un'ora, poi te lo ridò: i dati non mi servono.
     ~ upgradeArmor("chest", 2)
     ~ ANYA_ECHO_DRONE_CHIP = true
+- else:
+    Ma non indossi niente sul petto. Torna quando avrai un pettorale da rinforzare.
+}
     -> hub
 
 = anya_cryptic_recording
-Una trasmissione numerica... l'ho già sentita. È un vecchio protocollo militare. Dammi tempo per decifrarla. (Anya lavora per alcuni minuti su un vecchio terminale) Ecco. È un codice di emergenza. Indica la posizione di un deposito medico nascosto. Coordinate: 62, 73. Buona fortuna.
-    ~ revealMapPOI(62, 73, "Deposito Medico Nascosto")
+Una trasmissione numerica... l'ho già sentita. È un vecchio protocollo militare. Dammi tempo per decifrarla. (Anya lavora per alcuni minuti su un vecchio terminale) Ecco. È un codice di emergenza. Indica la posizione di un deposito medico nascosto, poco a sud delle rovine di città al centro della valle. Te l'ho segnato sulla mappa. Buona fortuna.
+    ~ revealPOI("hidden_medical_cache")
     ~ ANYA_ECHO_CRYPTIC_RECORDING = true
     -> hub
 
 = anya_project_rebirth
-(Il suo tono diventa serio, quasi spaventato) Progetto Rinascita... pensavo fossero solo leggende. Storie del terrore per spaventare i sopravvissuti. Se questo è vero... allora il Grande Silenzio non è stato un incidente. È stato un atto deliberato. (Pausa) Se le cose stanno così, hai bisogno di una protezione migliore. Dammi i tuoi stivali.
-    ~ upgradeArmor("legs", 1) // statusResistance: MALATO logic handled in engine
+(Il suo tono diventa serio, quasi spaventato) Progetto Rinascita... pensavo fossero solo leggende. Storie del terrore per spaventare i sopravvissuti. Se questo è vero... allora il Grande Silenzio non è stato un incidente. È stato un atto deliberato.
+{has_equipped("legs"):
+    (Pausa) Se le cose stanno così, hai bisogno di una protezione migliore. Dammi i tuoi gambali.
+    ~ upgradeArmor("legs", 1)
     ~ ANYA_ECHO_PROJECT_REBIRTH = true
+- else:
+    (Pausa) Hai bisogno di una protezione migliore, ma non indossi niente alle gambe. Torna quando avrai dei gambali: li rinforzerò.
+}
     -> hub
 
 = anya_eurocenter_card
@@ -53,21 +63,27 @@ Una trasmissione numerica... l'ho già sentita. È un vecchio protocollo militar
 
 = anya_after_eurocenter
 Ecco il tuo multitool. Usalo bene.
+    ~ giveItem("tool_multitool", 1)
     ~ ANYA_ECHO_EUROCENTER = true
     -> hub
 
 = anya_captains_broadcast
-(Gli occhi di Anya si illuminano) The Elder Radio... Il Capitano Keith Arrow. Pensavo fosse solo una leggenda urbana, una storia che i sopravvissuti si raccontavano per sentirsi meno soli. Ma questa... questa è la sua voce. (Ascolta in silenzio la registrazione, con le lacrime agli occhi) Grazie. Grazie per avermi portato questo. Non è solo un 'Eco'. È la prova che qualcuno ha cercato di combattere il Silenzio con la musica e la speranza. Prendi questo. È tutto ciò che posso offrirti in cambio di un dono così prezioso.
-    ~ takeItem("captains_last_broadcast", 1)
+(Gli occhi di Anya si illuminano) The Elder Radio... Il Capitano Keith Arrow. Pensavo fosse solo una leggenda urbana, una storia che i sopravvissuti si raccontavano per sentirsi meno soli. Ma questa... questa è la sua voce. (Ascolta in silenzio la registrazione, con le lacrime agli occhi) Grazie. Non è solo un 'Eco'. È la prova che qualcuno ha cercato di combattere il Silenzio con la musica e la speranza.
+{has_equipped("head"):
     -> anya_after_broadcast
+- else:
+    Vorrei ricambiarti rinforzando il tuo elmo, ma non ne porti uno. Torna quando ne avrai uno: la cassetta resta tua fino ad allora.
+    -> hub
+}
 
 = anya_after_broadcast
-Ecco la tua ricompensa. Un potenziamento per il tuo elmo. Il Capitano avrebbe voluto che tu fossi protetto.
+Prendi questo in cambio. Un potenziamento per il tuo elmo. Il Capitano avrebbe voluto che tu fossi protetto.
+    ~ takeItem("captains_last_broadcast", 1)
     ~ upgradeArmor("head", 2)
     ~ ANYA_ECHO_CAPTAINS_BROADCAST = true
     -> hub
 
 = anya_all_echoes_delivered
 Hai... hai trovato tutto? (Anya guarda la collezione completa di artefatti, visibilmente commossa). Non pensavo fosse possibile. Questi frammenti... insieme raccontano la storia di come il mondo è finito, ma anche di come ha cercato di salvarsi. Grazie, viaggiatore. La tua dedizione merita una ricompensa speciale. Ho modificato i miei schemi basandomi su questi dati. Ora sei più forte, più saggio.
-    ~ completeQuest("collect_world_echoes")
+    ~ questTrigger("anya_all_echoes_delivered")
     -> hub

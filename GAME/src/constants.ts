@@ -1,6 +1,6 @@
 import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./types";
 
-export const GAME_VERSION = '2.0.16';
+export const GAME_VERSION: string = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
 
 export const BOOT_TEXT = [
   'Runtime Radio BIOS v1.02',
@@ -365,7 +365,22 @@ export const BIOME_MESSAGES: Record<string, string> = {
   'N': "Un'oscura caverna si apre davanti a te. L'aria è densa e innaturale.",
   'T': "Un commerciante ambulante ti saluta con cautela.",
   'L': "Le porte blindate di un laboratorio abbandonato sono socchiuse.",
-  'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute."
+  'B': "Una vasta biblioteca si erge davanti a te, custode di conoscenze perdute.",
+  'H': "Un giardino curato spunta tra le rovine: la capanna dell'erborista."
+};
+
+/** Display names of map tiles. */
+export const TILE_NAMES: Record<string, string> = {
+  '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
+  'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
+  'S': 'Punto di Partenza', 'E': 'Destinazione',
+  'A': 'Avamposto', 'N': 'Nido della Cenere',
+  'L': 'Laboratorio', 'B': 'Biblioteca', 'H': 'Capanna Erborista',
+};
+
+/** Biome names used by event and enemy data, keyed by map tile. */
+export const BIOME_NAMES: Record<string, string> = {
+  '.': 'Pianura', 'F': 'Foresta', 'V': 'Villaggio', 'C': 'Città', '~': 'Acqua',
 };
 
 export const BIOME_COLORS: Record<string, string> = {
@@ -383,6 +398,7 @@ export const BIOME_COLORS: Record<string, string> = {
   'T': '#f59e0b', // amber-500 (Commerciante)
   'L': '#0891b2', // cyan-600 (Laboratorio)
   'B': '#9f1239', // rose-800 (Biblioteca)
+  'H': '#16a34a', // green-600 (Erborista)
 };
 
 export const ATMOSPHERIC_MESSAGES: Record<string, { day: string[], night: string[], rain?: string[] }> = {
@@ -425,6 +441,26 @@ export const ATTRIBUTE_LABELS: Record<AttributeName, string> = {
   car: 'Carisma',
 };
 
+export const SKILL_LABELS: Record<SkillName, string> = {
+  atletica: 'Atletica',
+  acrobazia: 'Acrobazia',
+  furtivita: 'Furtività',
+  rapiditaDiMano: 'Rapidità di Mano',
+  arcanismo: 'Arcanismo',
+  storia: 'Storia',
+  investigare: 'Investigare',
+  natura: 'Natura',
+  religione: 'Religione',
+  addestrareAnimali: 'Addestrare Animali',
+  intuizione: 'Intuizione',
+  medicina: 'Medicina',
+  percezione: 'Percezione',
+  sopravvivenza: 'Sopravvivenza',
+  inganno: 'Inganno',
+  intimidire: 'Intimidire',
+  persuasione: 'Persuasione',
+  spettacolo: 'Spettacolo',
+};
 
 export const SKILLS: Record<SkillName, SkillDefinition> = {
   // FOR

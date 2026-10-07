@@ -1,4 +1,3 @@
-
 [
   {
     "id": "olivia_herbalist_cabin",
@@ -9,38 +8,36 @@
     "choices": [
       {
         "text": "Avvicinati alla capanna",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            {
-              "type": "journalEntry",
-              "text": "Una voce calma ti saluta dall'interno: 'Un viaggiatore. È raro vedere volti nuovi. Entra, se vieni in pace.'"
-            },
-            {
-              "type": "special",
-              "value": {
-                "effect": "start_dialogue",
-                "dialogueId": "olivia_main"
-              }
-            },
-            {
-              "type": "addXp",
-              "value": 50
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Una voce calma ti saluta dall'interno: 'Un viaggiatore. È raro vedere volti nuovi. Entra, se vieni in pace.'"
+              },
+              {
+                "type": "special",
+                "value": {"effect": "start_dialogue", "dialogueId": "olivia_main"}
+              },
+              {"type": "addXp", "value": 50}
+            ]
+          }
+        ]
       },
       {
         "text": "Osserva da lontano e vai via",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            {
-              "type": "journalEntry",
-              "text": "Decidi di non disturbare. Forse tornerai un'altra volta."
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare. Forse tornerai un'altra volta."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -53,52 +50,44 @@
     "choices": [
       {
         "text": "Raccogli il fiore con delicatezza",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "natura",
-          "dc": 12,
-          "successText": "Con mani delicate, raccogli il fiore senza danneggiarlo. È freddo al tatto e sembra pulsare di una luce tenue. Un tesoro botanico raro.",
-          "failureText": "Il fiore è troppo fragile. Mentre cerchi di raccoglierlo, i petali si sbriciolano tra le tue dita. È perduto per sempre.",
-          "success": [
-            {
-              "type": "addItem",
-              "value": {
-                "itemId": "ice_flower",
-                "quantity": 1
-              }
-            },
-            {
-              "type": "journalEntry",
-              "text": "Hai raccolto il Fiore di Ghiaccio! Olivia sarà felice di vederlo."
-            },
-            {
-              "type": "addXp",
-              "value": 100
-            }
-          ],
-          "failure": [
-            {
-              "type": "journalEntry",
-              "text": "Il fiore si è disintegrato. Non potrai mai più trovarne un altro in questo luogo."
-            },
-            {
-              "type": "addXp",
-              "value": 20
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 12,
+            "successText": "Con mani delicate, raccogli il fiore senza danneggiarlo. È freddo al tatto e sembra pulsare di una luce tenue. Un tesoro botanico raro.",
+            "failureText": "Il fiore è troppo fragile. Mentre cerchi di raccoglierlo, i petali si sbriciolano tra le tue dita. È perduto per sempre.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "ice_flower", "quantity": 1}},
+              {
+                "type": "journalEntry",
+                "text": "Hai raccolto il Fiore di Ghiaccio! Olivia sarà felice di vederlo."
+              },
+              {"type": "addXp", "value": 100}
+            ],
+            "failure": [
+              {
+                "type": "journalEntry",
+                "text": "Il fiore si è disintegrato. Non potrai mai più trovarne un altro in questo luogo."
+              },
+              {"type": "addXp", "value": 20}
+            ]
+          }
+        ]
       },
       {
         "text": "Lascia il fiore dov'è",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            {
-              "type": "journalEntry",
-              "text": "Decidi di non disturbare questa meraviglia naturale. Forse tornerai un'altra volta."
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare questa meraviglia naturale. Forse tornerai un'altra volta."
+              }
+            ]
+          }
+        ]
       }
     ]
   }

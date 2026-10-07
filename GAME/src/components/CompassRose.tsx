@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { getActiveQuestMarkers } from '../services/questService';
+import { useQuestDatabaseStore } from '../data/questDatabase';
 import { Position } from '../types';
 
 /**
@@ -39,7 +40,9 @@ export const CompassRose: React.FC = () => {
   const playerPos = useGameStore(state => state.playerPos);
   const map = useGameStore(state => state.map);
   const wanderingTrader = useGameStore(state => state.wanderingTrader);
+  const knownPois = useGameStore(state => state.pois);
   const activeQuests = useCharacterStore(state => state.activeQuests);
+  const quests = useQuestDatabaseStore(state => state.quests);
 
   const allPOIs = useMemo(() => {
     const pois: POI[] = [];
@@ -48,7 +51,7 @@ export const CompassRose: React.FC = () => {
     const questMarkers = getActiveQuestMarkers();
     questMarkers.forEach(marker => {
       pois.push({
-        name: marker.type === 'MAIN' ? 'QUEST PRINCIPALE' : 'Quest',
+        name: quests[marker.id]?.title ?? (marker.type === 'MAIN' ? 'Missione principale' : 'Missione'),
         position: marker.pos,
         color: marker.type === 'MAIN' ? '#ef4444' : '#facc15',
         priority: marker.type === 'MAIN' ? 100 : 80,
@@ -82,6 +85,12 @@ export const CompassRose: React.FC = () => {
       }
     }
 
+    // Places discovered or marked on the map.
+    knownPois.forEach(poi => {
+      if (!poi.revealed || poi.marker === false || poi.consumed) return;
+      pois.push({ name: poi.name, position: { x: poi.x, y: poi.y }, color: '#c084fc', priority: 55, icon: '◆' });
+    });
+
     // Wandering Trader (if active)
     if (wanderingTrader) {
       pois.push({
@@ -94,7 +103,8 @@ export const CompassRose: React.FC = () => {
     }
 
     return pois;
-  }, [map, wanderingTrader, activeQuests]);
+    // getActiveQuestMarkers reads activeQuests and the POI positions.
+  }, [map, wanderingTrader, activeQuests, knownPois, quests]);
 
   // Calculate direction and distance for each POI
   const getDirection = (poi: POI): 'north' | 'south' | 'east' | 'west' | null => {

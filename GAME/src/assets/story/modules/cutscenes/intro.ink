@@ -58,8 +58,8 @@ L'amore. Una parola che suona strana, quasi estranea, dopo anni di addestramento
 La rabbia e la paura si mescolano nel tuo petto, un groviglio soffocante. La lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto.
 
 Cosa ne fai?
-    * [Strappi la lettera in un impeto di rabbia.] -> page_5
     * [Pieghi la lettera con cura e la metti in tasca.] -> page_6
+    * [Strappi la lettera in un impeto di rabbia.] -> page_5
 
 = page_5
 Il suono della carta che si strappa è un urlo nel silenzio del rifugio. Un pezzo, poi un altro, finché le sue parole non sono che frammenti inutili sul pavimento polveroso.
@@ -67,7 +67,7 @@ Il suono della carta che si strappa è un urlo nel silenzio del rifugio. Un pezz
 Un addestramento spietato per un abbandono altrettanto spietato. Questa è stata la sua ultima lezione. Non ci sarà più un'altra parola, un altro ordine. Solo questo.
 
 I frammenti bianchi ai tuoi piedi sembrano neve su un terreno morto.
-~ FATHERS_LETTER_DESTROYED = true
+~ setGameFlag("FATHERS_LETTER_DESTROYED")
     * [Continua] -> page_7
 
 = page_6
@@ -77,6 +77,7 @@ Con una cura che non sapevi di possedere, pieghi il foglio lungo le sue pieghe c
 
 È un fardello che hai deciso di portare.
 ~ giveItem("fathers_letter", 1)
+~ setGameFlag("FATHERS_LETTER_KEPT")
     * [Continua] -> page_7
 
 = page_7
@@ -122,9 +123,8 @@ La strada la conosci. Te l'ho insegnata. Ci rivedremo. Forse al Safe Place."
 ~ giveItem("CONS_003", 2)
 ~ giveItem("weapon_knife_rusty", 1)
 ~ giveItem("armor_rags", 1)
-// Equip items logic might need a dedicated function or be handled by inventory UI, but for now we just give them.
-// ~ equipItem("weapon_knife_rusty") 
-// ~ equipItem("armor_rags")
+~ equipItem("weapon_knife_rusty")
+~ equipItem("armor_rags")
     * [Raccogli il fagotto] -> page_11
 
 = page_11

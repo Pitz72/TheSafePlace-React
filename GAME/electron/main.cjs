@@ -7,7 +7,7 @@
 // under app://bundle/. A privileged+secure scheme also gives the renderer a
 // stable origin so localStorage (the save system) persists across launches.
 
-const { app, BrowserWindow, protocol, shell, Menu } = require('electron');
+const { app, BrowserWindow, protocol, shell, Menu, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 
@@ -57,8 +57,9 @@ function registerAppProtocol() {
     if (rel === '/' || rel === '') rel = '/index.html';
 
     const filePath = path.normalize(path.join(DIST, rel));
-    // Never serve anything outside the bundled dist directory.
-    if (!filePath.startsWith(DIST)) {
+    // Never serve anything outside the bundled dist directory (a plain prefix
+    // check would also accept a sibling such as "dist-evil").
+    if (filePath !== DIST && !filePath.startsWith(DIST + path.sep)) {
       return new Response('Forbidden', { status: 403 });
     }
 
@@ -100,6 +101,8 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
   });
 
@@ -109,13 +112,19 @@ function createWindow() {
     win.show();
   });
 
-  // External http(s) links open in the system browser, never inside the app.
+  // External http(s) links open in the system browser; the app never opens
+  // windows of its own.
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:/i.test(url)) {
-      shell.openExternal(url);
-      return { action: 'deny' };
+    if (/^https?:/i.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  // The page never navigates away from the bundled game.
+  win.webContents.on('will-navigate', (event, url) => {
+    const allowed = isDev ? url.startsWith(DEV_URL) : url.startsWith('app://bundle/');
+    if (!allowed) {
+      event.preventDefault();
+      if (/^https?:/i.test(url)) shell.openExternal(url);
     }
-    return { action: 'allow' };
   });
 
   if (isDev) {
@@ -126,8 +135,23 @@ function createWindow() {
   }
 }
 
+ipcMain.on('tsp:quit', () => app.quit());
+ipcMain.handle('tsp:is-fullscreen', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  return win ? win.isFullScreen() : false;
+});
+ipcMain.handle('tsp:set-fullscreen', (event, value) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return false;
+  win.setFullScreen(Boolean(value));
+  return win.isFullScreen();
+});
+
 app.whenReady().then(() => {
-  Menu.setApplicationMenu(null); // no default menu bar
+  // No menu bar; on macOS keep the app menu so Cmd+Q / Cmd+H keep working.
+  Menu.setApplicationMenu(process.platform === 'darwin'
+    ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }])
+    : null);
   if (!isDev) registerAppProtocol();
   createWindow();
 

@@ -6,16 +6,17 @@ interface NarrativeState {
     currentChoices: { index: number; text: string }[];
     currentTags: string[];
     currentSpeaker: string; // Sticky NPC name: kept across sub-knots until a new tag overrides it
+    /** Increases on every new block of text (the same text twice still re-renders). */
+    revision: number;
     isStoryActive: boolean;
-    activeQuests: string[]; // List of active quest IDs (from Ink variables)
+    /** Quests started from Ink in this session (informational). */
+    activeQuests: string[];
     returnState: GameState | null; // GameState to restore when the dialogue/story ends
-    inkStateJson: string | null; // v2.0.14: serialized Ink state, cached by NarrativeService for the save system
+    inkStateJson: string | null; // Serialized Ink state, cached by NarrativeService for the save system
 
-    // Actions
     setStoryState: (text: string, choices: { index: number; text: string }[], tags: string[]) => void;
     setStoryActive: (isActive: boolean) => void;
     setCurrentSpeaker: (speaker: string) => void;
-    setActiveQuests: (quests: string[]) => void;
     addActiveQuest: (questId: string) => void;
     removeActiveQuest: (questId: string) => void;
     setReturnState: (state: GameState | null) => void;
@@ -23,47 +24,32 @@ interface NarrativeState {
 }
 
 export const useNarrativeStore = create<NarrativeState>((set) => ({
-    currentText: "",
+    currentText: '',
     currentChoices: [],
     currentTags: [],
-    currentSpeaker: "",
+    currentSpeaker: '',
+    revision: 0,
     isStoryActive: false,
     activeQuests: [],
     returnState: null,
     inkStateJson: null,
 
-    setStoryState: (text, choices, tags) => set({
-        currentText: text,
-        currentChoices: choices,
-        currentTags: tags
-    }),
-
+    setStoryState: (text, choices, tags) => set(state => ({ currentText: text, currentChoices: choices, currentTags: tags, revision: state.revision + 1 })),
     setStoryActive: (isActive) => set({ isStoryActive: isActive }),
-
     setCurrentSpeaker: (speaker) => set({ currentSpeaker: speaker }),
-
-    setActiveQuests: (quests) => set({ activeQuests: quests }),
-
-    addActiveQuest: (questId: string) => set((state) => ({
-        activeQuests: state.activeQuests.includes(questId) ? state.activeQuests : [...state.activeQuests, questId]
+    addActiveQuest: (questId) => set(state => ({
+        activeQuests: state.activeQuests.includes(questId) ? state.activeQuests : [...state.activeQuests, questId],
     })),
-
-    removeActiveQuest: (questId: string) => set((state) => ({
-        activeQuests: state.activeQuests.filter(id => id !== questId)
-    })),
-
+    removeActiveQuest: (questId) => set(state => ({ activeQuests: state.activeQuests.filter(id => id !== questId) })),
     setReturnState: (state) => set({ returnState: state }),
-
+    // inkStateJson is managed by NarrativeService (it re-caches right after a reset).
     reset: () => set({
-        currentText: "",
+        currentText: '',
         currentChoices: [],
         currentTags: [],
-        currentSpeaker: "",
+        currentSpeaker: '',
         isStoryActive: false,
         activeQuests: [],
-        returnState: null
-        // NOTE: inkStateJson is intentionally NOT cleared here — it is managed
-        // by NarrativeService (resetNarrative/cacheInkState) which re-caches
-        // the fresh state right after calling reset().
-    })
+        returnState: null,
+    }),
 }));

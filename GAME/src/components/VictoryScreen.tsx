@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { useTimeStore } from '../store/timeStore';
@@ -66,6 +66,12 @@ Il viaggio è finito. Quello che hai portato fin qui, adesso, ha una casa.`,
     },
 };
 
+/** Closing line for the choice made on the hill (CS_POINT_OF_NO_RETURN). */
+const HILL_CHOICE_LINES: Record<string, string> = {
+    CHOSE_TRUTH: 'Sei sceso da quella collina per sapere. Adesso sai, e il sapere non ti ha spezzato.',
+    CHOSE_FREEDOM: 'Su quella collina avevi deciso che il viaggio era tuo, non di tuo padre. Lo è stato fino all\'ultimo passo.',
+};
+
 const ALIGNMENT_LABELS: Record<EndingKey, string> = {
     lena: 'COMPASSIONEVOLE (LENA)',
     elian: 'PRAGMATICO (ELIAN)',
@@ -78,9 +84,10 @@ const ALIGNMENT_LABELS: Record<EndingKey, string> = {
  * Phase 1: moral-compass epilogue. Phase 2: journey stats + THE END.
  */
 const VictoryScreen: React.FC = () => {
-    const { setGameState, totalSteps, totalCombatWins } = useGameStore();
-    const { alignment, level } = useCharacterStore();
+    const { setGameState, totalSteps, totalCombatWins, gameFlags } = useGameStore();
+    const { alignment, level, completedQuests } = useCharacterStore();
     const gameTime = useTimeStore((state) => state.gameTime);
+    const textRef = useRef<HTMLDivElement>(null);
 
     const [phase, setPhase] = useState<'epilogue' | 'end'>('epilogue');
 
@@ -99,14 +106,18 @@ const VictoryScreen: React.FC = () => {
         }
     }, [phase, setGameState]);
 
+    const scroll = useCallback((delta: number) => textRef.current?.scrollBy({ top: delta, behavior: 'smooth' }), []);
     const handlerMap = useMemo(() => ({
-        'Enter': handleConfirm,
-        'Escape': handleConfirm,
-    }), [handleConfirm]);
+        Enter: handleConfirm,
+        Escape: handleConfirm,
+        w: () => scroll(-120), ArrowUp: () => scroll(-120),
+        s: () => scroll(120), ArrowDown: () => scroll(120),
+    }), [handleConfirm, scroll]);
 
     useKeyboardInput(handlerMap);
 
     const epilogue = EPILOGUES[endingKey];
+    const hillLine = Object.keys(HILL_CHOICE_LINES).find(flag => gameFlags.has(flag));
 
     if (phase === 'epilogue') {
         return (
@@ -116,13 +127,15 @@ const VictoryScreen: React.FC = () => {
                         ═══ Epilogo: {epilogue.title} ═══
                     </h1>
                     <div
+                        ref={textRef}
                         className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
                         style={{ scrollbarWidth: 'none' }}
                     >
-                        <pre className="whitespace-pre-wrap leading-relaxed">{epilogue.text}</pre>
+                        <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{epilogue.text}</pre>
+                        {hillLine && <p className="mt-6 italic text-yellow-200">{HILL_CHOICE_LINES[hillLine]}</p>}
                     </div>
                     <div className="flex-shrink-0 text-center text-3xl mt-4 border-t-4 border-double border-green-400/50 pt-4 animate-pulse">
-                        [INVIO] Continua...
+                        [W/S] Scorri | [INVIO] Continua...
                     </div>
                 </div>
             </div>
@@ -143,6 +156,7 @@ const VictoryScreen: React.FC = () => {
                 <p>Passi compiuti: <span className="text-green-400 font-bold">{totalSteps}</span></p>
                 <p>Combattimenti vinti: <span className="text-green-400 font-bold">{totalCombatWins}</span></p>
                 <p>Livello raggiunto: <span className="text-green-400 font-bold">{level}</span></p>
+                <p>Missioni completate: <span className="text-green-400 font-bold">{completedQuests.length}</span></p>
                 <p>Bussola morale: <span className="text-yellow-300 font-bold">{ALIGNMENT_LABELS[endingKey]}</span></p>
             </div>
 

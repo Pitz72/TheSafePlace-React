@@ -8,23 +8,27 @@
     "choices": [
       {
         "text": "Saluta l'eremita",
-        "outcomes": [{
-          "type": "special",
-          "value": {
-            "effect": "startDialogue",
-            "dialogueId": "hermit_main"
-          },
-          "results": []
-        }]
+        "outcomes": [
+          {
+            "type": "special",
+            "value": {"effect": "startDialogue", "dialogueId": "hermit_main"},
+            "results": []
+          }
+        ]
       },
       {
         "text": "Vai via senza disturbare",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Decidi di non disturbare il vecchio. Forse tornerai un'altra volta." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare il vecchio. Forse tornerai un'altra volta."
+              }
+            ]
+          }
+        ]
       }
     ]
   }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 
@@ -16,10 +16,11 @@ import { useCharacterStore } from '../store/characterStore';
  * - Quest kill counts
  * - Wandering trader position
  *
- * @version 1.9.9
+ * Development builds only (see GameScreen).
  * @secret Activation: Ctrl+Shift+D (toggle on/off)
  */
 export const DebugPanel: React.FC = () => {
+  const [visible, setVisible] = useState(false);
   const gameState = useGameStore(state => state.gameState);
   const playerPos = useGameStore(state => state.playerPos);
   const currentBiome = useGameStore(state => state.currentBiome);
@@ -36,20 +37,9 @@ export const DebugPanel: React.FC = () => {
   // Secret key combination: Ctrl+Shift+D to toggle
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
         e.preventDefault();
-        const currentFlags = useGameStore.getState().gameFlags;
-        const newFlags = new Set(currentFlags);
-        
-        if (newFlags.has('SHOW_DEBUG_PANEL')) {
-          newFlags.delete('SHOW_DEBUG_PANEL');
-          console.log('[DEBUG] Panel hidden');
-        } else {
-          newFlags.add('SHOW_DEBUG_PANEL');
-          console.log('[DEBUG] Panel visible');
-        }
-        
-        useGameStore.setState({ gameFlags: newFlags });
+        setVisible(prev => !prev);
       }
     };
 
@@ -57,13 +47,11 @@ export const DebugPanel: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Hidden by default, show only if flag is set
-  const showDebug = gameFlags.has('SHOW_DEBUG_PANEL');
-  if (!showDebug) return null;
+  if (!visible) return null;
 
   return (
     <div className="fixed top-2 right-2 bg-black/90 border-2 border-green-500 p-4 text-green-500 font-mono text-xs max-w-md max-h-[90vh] overflow-y-auto z-50">
-      <div className="text-yellow-400 font-bold mb-2 text-sm">🔬 DEBUG PANEL v1.9.9</div>
+      <div className="text-yellow-400 font-bold mb-2 text-sm">DEBUG PANEL</div>
       
       {/* Game State */}
       <div className="mb-3">

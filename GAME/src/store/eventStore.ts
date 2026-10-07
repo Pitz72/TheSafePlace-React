@@ -1,5 +1,8 @@
 import { create } from 'zustand';
-import { GameEvent, EventResult, AttributeName, JournalEntryType, GameState, Enemy, DeathCause } from '../types';
+import {
+  GameEvent, EventChoice, EventResult, AttributeName, JournalEntryType, GameState, Enemy,
+  PlayerStatusCondition, Position,
+} from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
 import { useEventDatabaseStore } from '../data/eventDatabase';
@@ -8,459 +11,425 @@ import { useEnemyDatabaseStore } from '../data/enemyDatabase';
 import { useCombatStore } from './combatStore';
 import { useTimeStore } from './timeStore';
 import { questService } from '../services/questService';
+import { narrativeService } from '../services/NarrativeService';
+import { tradingService } from '../services/tradingService';
+import { BIOME_NAMES, SKILL_LABELS } from '../constants';
+import { toAbsoluteMinutes } from '../utils/time';
 
-/**
- * @interface EventStoreState
- * @description Represents the state of the event store.
- * @property {GameEvent | null} activeEvent - The currently active event, or null if no event is active.
- * @property {string[]} eventHistory - A list of IDs of events that have already occurred.
- * @property {string | null} eventResolutionText - The text to display after an event has been resolved.
- * @property {(forceBiomeEvent?: boolean) => void} triggerEncounter - Function to trigger a new encounter.
- * @property {(choiceIndex: number) => void} resolveEventChoice - Function to resolve a choice made during an event.
- * @property {() => void} dismissEventResolution - Function to dismiss the event resolution text.
- * @property {() => void} reset - Function to reset the event store to its initial state.
- */
+const VALID_STATUSES: ReadonlySet<string> = new Set([
+  'FERITO', 'MALATO', 'AVVELENATO', 'IPOTERMIA', 'ESAUSTO', 'AFFAMATO', 'DISIDRATATO', 'INFEZIONE',
+]);
+const ECHO_ITEMS = ['pixeldebh_plate', 'eurocenter_business_card'];
+const WOLF_IDS = new Set(['mutated_wolf', 'alpha_wolf_pack_leader']);
+
 interface EventStoreState {
-    activeEvent: GameEvent | null;
-    eventHistory: string[];
-    eventResolutionText: string | null;
-    triggerEncounter: (forceBiomeEvent?: boolean) => void;
-    resolveEventChoice: (choiceIndex: number) => void;
-    dismissEventResolution: () => void;
-    reset: () => void;
-    toJSON: () => object;
-    fromJSON: (json: any) => void;
+  activeEvent: GameEvent | null;
+  eventHistory: string[];
+  eventResolutionText: string | null;
+  /** Combat started by the resolved event, begins when the player dismisses it. */
+  pendingCombatEnemyId: string | null;
+  triggerEncounter: (forceBiomeEvent?: boolean) => void;
+  openEvent: (eventId: string) => boolean;
+  isChoiceVisible: (choice: EventChoice) => boolean;
+  resolveEventChoice: (choiceIndex: number) => void;
+  dismissEventResolution: () => void;
+  reset: () => void;
+  toJSON: () => object;
+  fromJSON: (json: any) => void;
 }
 
-const timeToMinutes = (time: any) => (time.day - 1) * 1440 + time.hour * 60 + time.minute;
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-const initialState = {
-    activeEvent: null,
-    eventHistory: [],
-    eventResolutionText: null,
+const questKnown = (questId: string) => {
+  const { activeQuests, completedQuests, failedQuests } = useCharacterStore.getState();
+  return Boolean(activeQuests[questId]) || completedQuests.includes(questId) || failedQuests.includes(questId);
+};
+
+/** Event-level gating for random encounters. */
+const isEventEligible = (event: GameEvent, history: string[]) => {
+  if (event.questOnly) return false;
+  if (event.isUnique && history.includes(event.id)) return false;
+  const { activeQuests } = useCharacterStore.getState();
+  const { gameFlags } = useGameStore.getState();
+  if (event.requiresQuest && !activeQuests[event.requiresQuest]) return false;
+  if (event.excludesQuest && questKnown(event.excludesQuest)) return false;
+  if (event.requiresFlag && !gameFlags.has(event.requiresFlag)) return false;
+  if (event.excludesFlag && gameFlags.has(event.excludesFlag)) return false;
+  return true;
+};
+
+const showEvent = (event: GameEvent) => {
+  useEventStore.setState({ activeEvent: event, eventResolutionText: null, pendingCombatEnemyId: null });
+  useGameStore.getState().setGameState(GameState.EVENT_SCREEN);
+  useGameStore.getState().addJournalEntry({ text: `EVENTO: ${event.title}`, type: JournalEntryType.EVENT });
+};
+
+/** Random enemies scale with the player: no bears for a level 1 wanderer. */
+const pickEnemy = (biomeName: string): Enemy | null => {
+  const enemies = (Object.values(useEnemyDatabaseStore.getState().enemyDatabase) as Enemy[])
+    .filter(e => e.randomEncounter !== false && (e.biomes.includes('Global') || e.biomes.includes(biomeName)));
+  if (enemies.length === 0) return null;
+  const level = useCharacterStore.getState().level;
+  const maxXp = 70 + level * 30;
+  const fitting = enemies.filter(e => e.xp <= maxXp);
+  if (fitting.length > 0) return getRandom(fitting);
+  return enemies.reduce((weakest, e) => (e.xp < weakest.xp ? e : weakest));
+};
+
+/**
+ * Enemy that attacks the player where they stand, or null when nothing comes
+ * (dissuader active, friendly wolves, no enemy for the biome).
+ */
+export const pickAmbushEnemy = (): string | null => {
+  const game = useGameStore.getState();
+  if (game.repelUntil > toAbsoluteMinutes(useTimeStore.getState().gameTime)) return null;
+  const enemy = pickEnemy(BIOME_NAMES[game.currentBiome] || 'Global');
+  if (!enemy) return null;
+  if (WOLF_IDS.has(enemy.id) && game.hasFlag('WOLF_FRIEND')) return null;
+  return enemy.id;
 };
 
 export const useEventStore = create<EventStoreState>((set, get) => ({
-    ...initialState,
+  activeEvent: null,
+  eventHistory: [],
+  eventResolutionText: null,
+  pendingCombatEnemyId: null,
 
-    /**
-     * @function triggerEncounter
-     * @description Triggers a new encounter, which can be either a combat or a narrative event.
-     * @param {boolean} [forceBiomeEvent=false] - Whether to force a biome-specific event.
-     */
-    triggerEncounter: (forceBiomeEvent = false) => {
-        const { lastEncounterTime, currentBiome, lastLoreEventDay, addJournalEntry, setGameState } = useGameStore.getState();
-        const { gameTime } = useTimeStore.getState();
-        const { startCombat } = useCombatStore.getState();
-        const { eventHistory } = get();
-        const { loreEvents, biomeEvents, globalEncounters, easterEggEvents } = useEventDatabaseStore.getState();
+  triggerEncounter: (forceBiomeEvent = false) => {
+    const game = useGameStore.getState();
+    const { gameTime } = useTimeStore.getState();
+    const { eventHistory } = get();
+    const { loreEvents, biomeEvents, globalEncounters, easterEggEvents } = useEventDatabaseStore.getState();
+    const { currentBiome, lastEncounterTime, lastLoreEventDay } = game;
+    const biomeName = BIOME_NAMES[currentBiome] || 'Global';
+    const now = toAbsoluteMinutes(gameTime);
 
-        const biomeCharToName: Record<string, string> = { '.': 'Pianura', 'F': 'Foresta', 'V': 'Villaggio', 'C': 'Città', '~': 'Acqua' };
-        const currentBiomeName = biomeCharToName[currentBiome] || 'Global';
+    if (!forceBiomeEvent) {
+      const cooldown = currentBiome === '.' ? 240 : 90;
+      if (lastEncounterTime && now - toAbsoluteMinutes(lastEncounterTime) < cooldown) return;
 
-        // v1.9.9 - Enhanced logging
-        console.log(`[EVENT STORE] ═══ TRIGGER ENCOUNTER ═══`);
-        console.log(`[EVENT STORE] Biome: ${currentBiomeName} (${currentBiome}), Forced: ${forceBiomeEvent}`);
-
-        if (!forceBiomeEvent) {
-            const cooldownMinutes = currentBiome === '.' ? 240 : 90;
-            if (lastEncounterTime && (timeToMinutes(gameTime) - timeToMinutes(lastEncounterTime) < cooldownMinutes)) {
-                return;
-            }
-
-            const EASTER_EGG_PROBABILITY = 0.07; // 7% chance (v1.2.0: increased from 2%)
-            if (Math.random() < EASTER_EGG_PROBABILITY) {
-                const possibleEasterEggs = (easterEggEvents as GameEvent[]).filter(event =>
-                    event.biomes.includes(currentBiomeName) && !eventHistory.includes(event.id)
-                );
-                if (possibleEasterEggs.length > 0) {
-                    const eventToTrigger = getRandom(possibleEasterEggs);
-                    useGameStore.setState({ lastEncounterTime: gameTime });
-                    set({ activeEvent: eventToTrigger, eventResolutionText: null });
-                    setGameState(GameState.EVENT_SCREEN);
-                    addJournalEntry({ text: `EVENTO: ${eventToTrigger.title}`, type: JournalEntryType.EVENT });
-                    return;
-                }
-            }
-
-            const ENCOUNTER_PROBABILITY = 0.20;
-            if (Math.random() > ENCOUNTER_PROBABILITY) {
-                return;
-            }
-        }
-
+      // Easter eggs are rare; much less so while Anya is collecting echoes.
+      const hunting = Boolean(useCharacterStore.getState().activeQuests['collect_world_echoes']);
+      const eggs = easterEggEvents.filter(e => e.biomes.includes(biomeName) && isEventEligible(e, eventHistory));
+      const echoEggs = eggs.filter(e => ECHO_ITEMS.some(id => JSON.stringify(e.choices).includes(`"${id}"`)));
+      const eggChance = hunting && echoEggs.length > 0 ? 0.25 : 0.07;
+      if (eggs.length > 0 && Math.random() < eggChance) {
         useGameStore.setState({ lastEncounterTime: gameTime });
-
-        // --- NEW LOGIC: Decide Combat vs. Narrative upfront ---
-        const isCombatEncounter = !forceBiomeEvent && Math.random() < 0.35;
-
-        if (isCombatEncounter) {
-            // --- COMBAT ENCOUNTER ---
-            if (currentBiome === 'R' || currentBiome === 'S') return;
-            const enemyDb = useEnemyDatabaseStore.getState().enemyDatabase;
-            const possibleEnemies = (Object.values(enemyDb) as Enemy[]).filter(enemy => enemy.biomes.includes("Global") || (currentBiomeName && enemy.biomes.includes(currentBiomeName)));
-            if (possibleEnemies.length > 0) {
-                startCombat(getRandom(possibleEnemies).id);
-            }
-        } else {
-            // --- NARRATIVE EVENT ENCOUNTER ---
-            // 1. Prioritize Lore Events if one is due for the day (and not a forced biome event)
-            if (!forceBiomeEvent && gameTime.day > (lastLoreEventDay || 0)) {
-                const possibleLoreEvents = (loreEvents as GameEvent[]).filter((event: GameEvent) => (event.biomes.includes(currentBiomeName) || event.biomes.includes("Global")) && !eventHistory.includes(event.id));
-                if (possibleLoreEvents.length > 0) {
-                    const eventToTrigger = getRandom(possibleLoreEvents);
-                    useGameStore.setState({ lastLoreEventDay: gameTime.day });
-                    set({ activeEvent: eventToTrigger, eventResolutionText: null });
-                    setGameState(GameState.EVENT_SCREEN);
-                    addJournalEntry({ text: `EVENTO: ${eventToTrigger.title}`, type: JournalEntryType.EVENT });
-                    return; // Lore event triggered, stop here.
-                }
-            }
-
-            // 2. If no Lore event, trigger a regular Biome/Global event
-            const allPossibleEvents = forceBiomeEvent
-                ? (biomeEvents as GameEvent[]).filter((e: GameEvent) => e.biomes.includes(currentBiomeName))
-                : [...(biomeEvents as GameEvent[]).filter((e: GameEvent) => e.biomes.includes(currentBiomeName)), ...(globalEncounters as GameEvent[])];
-
-            const unseenUniqueEvents = allPossibleEvents.filter((e: GameEvent) => e.isUnique && !eventHistory.includes(e.id));
-            const repeatableEvents = allPossibleEvents.filter((e: GameEvent) => !e.isUnique);
-            let eventToTrigger: GameEvent | null = null;
-
-            if (unseenUniqueEvents.length > 0) eventToTrigger = getRandom(unseenUniqueEvents);
-            else if (repeatableEvents.length > 0) eventToTrigger = getRandom(repeatableEvents);
-
-            if (eventToTrigger) {
-                set({ activeEvent: eventToTrigger, eventResolutionText: null });
-                setGameState(GameState.EVENT_SCREEN);
-                addJournalEntry({ text: `EVENTO: ${eventToTrigger.title}`, type: JournalEntryType.EVENT });
-            }
-        }
-    },
-
-    /**
-     * @function dismissEventResolution
-     * @description Dismisses the event resolution text and returns to the game.
-     */
-    dismissEventResolution: () => {
-        const activeEventId = get().activeEvent?.id;
-        if (!activeEventId) {
-            set({ activeEvent: null, eventResolutionText: null });
-            useGameStore.getState().setGameState(GameState.IN_GAME);
-            return;
-        }
-
-        // If this was a wandering trader encounter, force trader to move
-        if (activeEventId === 'unique_wandering_trader_encounter') {
-            import('../services/gameService').then(({ gameService }) => {
-                gameService.updateWanderingTrader();
-            });
-        }
-
-        // Check quest triggers after event completion (v1.8.0: completeEvent trigger)
-        import('../services/questService').then(({ questService }) => {
-            questService.checkQuestTriggers(undefined, undefined, activeEventId);
-        });
-
-        // Auto-start and auto-complete lore quests (v1.8.0)
-        if (activeEventId === 'unique_ancient_library') {
-            import('../services/questService').then(({ questService }) => {
-                questService.startQuest('lore_quest_library');
-                // Small delay to ensure quest is started before completing
-                setTimeout(() => {
-                    questService.completeQuest('lore_quest_library');
-                    useCharacterStore.getState().addLoreEntry('lore_project_echo');
-                }, 100);
-            });
-        }
-
-        if (activeEventId === 'unique_scientist_notes') {
-            import('../services/questService').then(({ questService }) => {
-                questService.startQuest('lore_quest_laboratory');
-                // Small delay to ensure quest is started before completing
-                setTimeout(() => {
-                    questService.completeQuest('lore_quest_laboratory');
-                    useCharacterStore.getState().addLoreEntry('lore_project_rebirth');
-                }, 100);
-            });
-        }
-
-        set(state => ({
-            eventHistory: state.activeEvent?.isUnique ? [...state.eventHistory, activeEventId] : state.eventHistory,
-            activeEvent: null,
-            eventResolutionText: null,
-        }));
-        useGameStore.getState().setGameState(GameState.IN_GAME);
-    },
-
-    /**
-     * @function resolveEventChoice
-     * @description Resolves a choice made during an event.
-     * @param {number} choiceIndex - The index of the choice made.
-     */
-    resolveEventChoice: (choiceIndex: number) => {
-        const { activeEvent } = get();
-        const { addJournalEntry } = useGameStore.getState();
-        const { advanceTime } = useTimeStore.getState();
-        const { addItem, removeItem, addXp, takeDamage, performSkillCheck, changeAlignment, heal, addStatus, boostAttribute } = useCharacterStore.getState();
-        const { itemDatabase } = useItemDatabaseStore.getState();
-
-        // v1.9.9 - Enhanced logging
-        console.log(`[EVENT STORE] ─── RESOLVE CHOICE ───`);
-        console.log(`[EVENT STORE] Event: ${activeEvent?.id}, Choice: ${choiceIndex}`);
-
-        if (!activeEvent) {
-            console.error(`[EVENT STORE] ❌ No active event`);
-            return;
-        }
-
-        const choice = activeEvent.choices[choiceIndex];
-        if (!choice) {
-            console.error(`[EVENT STORE] ❌ Choice ${choiceIndex} not found`);
-            return;
-        }
-
-        console.log(`[EVENT STORE] Choice text: "${choice.text}"`);
-        console.log(`[EVENT STORE] Outcomes: ${choice.outcomes.length}`);
-
-        addJournalEntry({ text: `Hai scelto: "${choice.text}"`, type: JournalEntryType.NARRATIVE });
-        let resolutionSummary: string[] = [];
-
-        const applyResult = (result: EventResult): string | null => {
-            let message: string | null = null;
-            // v2.0.9: tolerant item schema — some data files author addItem/removeItem
-            // as { value: "<itemId>", quantity?, text? } instead of { value: { itemId, quantity } }.
-            const readItemRef = (r: EventResult): { itemId: string; quantity: number } => {
-                if (typeof r.value === 'string') {
-                    return { itemId: r.value, quantity: (r as any).quantity ?? 1 };
-                }
-                return { itemId: r.value?.itemId, quantity: r.value?.quantity ?? 1 };
-            };
-            switch (result.type) {
-                case 'addItem': {
-                    const { itemId, quantity } = readItemRef(result);
-                    addItem(itemId, quantity);
-                    const addedItem = itemDatabase[itemId];
-                    if (!addedItem) {
-                        console.warn(`[EVENT] Item ${itemId} not found in database`);
-                    }
-                    // Authored narrative text goes to the resolution screen only;
-                    // the journal gets the clean single-line item message.
-                    if (result.text) resolutionSummary.push(result.text);
-                    message = addedItem
-                        ? `Hai ottenuto: ${addedItem.name} x${quantity}.`
-                        : `Hai ottenuto un oggetto sconosciuto (${itemId}).`;
-                    break;
-                }
-                case 'removeItem': {
-                    const { itemId, quantity } = readItemRef(result);
-                    removeItem(itemId, quantity);
-                    const removedItem = itemDatabase[itemId];
-                    if (!removedItem) {
-                        console.warn(`[EVENT] Item ${itemId} not found in database`);
-                    }
-                    if (result.text) resolutionSummary.push(result.text);
-                    message = removedItem
-                        ? `Hai perso: ${removedItem.name} x${quantity}.`
-                        : `Hai perso un oggetto (${itemId}).`;
-                    break;
-                }
-                case 'addXp': addXp(result.value); message = `Hai guadagnato ${result.value} XP.`; break;
-                case 'takeDamage': takeDamage(result.value, 'ENVIRONMENT'); message = `Subisci ${result.value} danni.`; break;
-                case 'advanceTime': advanceTime(result.value, true); message = `Passano ${result.value} minuti.`; break;
-                // v2.0.9: some data files nest the text under value ({ value: { text, type } })
-                case 'journalEntry': message = result.text ?? result.value?.text ?? null; break;
-                case 'alignmentChange':
-                    changeAlignment(result.value.type, result.value.amount);
-                    // v2.0.9: surface the authored narrative text (alignment journal
-                    // entries are still handled by changeAlignment itself)
-                    message = result.text ?? null;
-                    break;
-                case 'statusChange': addStatus(result.value); message = `Sei ora in stato: ${result.value}.`; break;
-                case 'statBoost': {
-                    const { stat, amount } = result.value as { stat: AttributeName; amount: number };
-                    boostAttribute(stat, amount);
-                    message = `La tua statistica ${stat.toUpperCase()} è aumentata permanentemente di ${amount}!`;
-                    break;
-                }
-                case 'revealMapPOI': message = result.text || "Hai scoperto un nuovo punto di interesse sulla mappa!"; break;
-                case 'heal': heal(result.value); message = `Recuperi ${result.value} HP.`; break;
-                case 'special': {
-                    // Handle special effects (v1.7.0: dialogue and trading, v1.8.0: world state, v1.8.2: flags, v1.9.8.1: learn effects)
-                    if (result.value && typeof result.value === 'object') {
-                        const { effect, dialogueId, traderId, location, flag } = result.value;
-
-                        // v1.9.9 - Log special effect
-                        console.log(`[EVENT STORE] Special effect: ${effect}`, result.value);
-
-                        if (effect === 'learn_disease_symptoms') {
-                            // v1.9.8.1: Learn to recognize disease symptoms
-                            message = "Studiando gli appunti del dottore, ora sei in grado di riconoscere i primi sintomi delle infezioni più comuni.";
-                        } else if (effect === 'setFlag' && flag) {
-                            // v1.8.2: Set game flag for quest tracking
-                            useGameStore.setState(state => ({
-                                gameFlags: new Set(state.gameFlags).add(flag)
-                            }));
-                            message = result.text || `Flag ${flag} impostato.`;
-
-                            // Check if this completes any quest triggers
-                            import('../services/questService').then(({ questService }) => {
-                                questService.checkQuestTriggers();
-                            });
-                        } else if ((effect === 'startDialogue' || effect === 'start_dialogue') && dialogueId) {
-                            // Route to Inkjs via NarrativeService; dialogueId is an Ink knot name.
-                            import('../services/NarrativeService').then(({ narrativeService }) => {
-                                narrativeService.startDialogue(dialogueId, GameState.EVENT_SCREEN);
-                            });
-                            message = result.text || "Inizi una conversazione...";
-                        } else if ((effect === 'startTrading' || effect === 'open_trade_screen') && traderId) {
-                            // Import tradingService dynamically to avoid circular dependency
-                            import('../services/tradingService').then(({ tradingService }) => {
-                                tradingService.startTradingSession(traderId, GameState.EVENT_SCREEN);
-                            });
-                            message = result.text || "Inizi a commerciare...";
-                        } else if (effect === 'activateWaterPump' && location) {
-                            // v1.8.0: Activate water pump
-                            useGameStore.getState().activateWaterPump(location);
-                            message = result.text || "La pompa è ora funzionante!";
-                        } else if (effect === 'destroyWaterPump' && location) {
-                            // v1.8.0: Destroy water pump
-                            useGameStore.getState().destroyWaterPump(location);
-                            message = result.text || "La pompa è stata distrutta.";
-                        } else if (effect === 'activateWaterPlant' && location) {
-                            // v1.8.4: Activate water treatment plant
-                            useGameStore.getState().activateWaterPlant(location);
-                            message = result.text || "L'impianto di depurazione è attivo!";
-                        } else if (effect === 'completeQuestFromEvent') {
-                            // v1.8.0: Complete quest from event
-                            const { questId } = result.value;
-                            import('../services/questService').then(({ questService }) => {
-                                questService.completeQuest(questId);
-                            });
-                            message = result.text || "Quest completata!";
-                        } else if (effect === 'failQuestFromEvent') {
-                            // v1.8.0: Fail quest from event
-                            const { questId } = result.value;
-                            const { activeQuests } = useCharacterStore.getState();
-                            const newActiveQuests = { ...activeQuests };
-                            delete newActiveQuests[questId];
-                            useCharacterStore.setState({ activeQuests: newActiveQuests });
-                            addJournalEntry({
-                                text: `[MISSIONE FALLITA] La quest è stata abbandonata.`,
-                                type: JournalEntryType.SYSTEM_WARNING,
-                                color: '#ef4444'
-                            });
-                            message = result.text || "Quest fallita.";
-                        } else if (effect === 'triggerCombat' || effect === 'start_combat') {
-                            // v1.9.8: Trigger combat from event
-                            const { enemyId } = result.value;
-                            if (enemyId) {
-                                import('./combatStore').then(({ useCombatStore }) => {
-                                    useCombatStore.getState().startCombat(enemyId);
-                                });
-                                message = result.text || "Il combattimento inizia!";
-                            }
-                        } else if (effect === 'trade_screen_placeholder') {
-                            // v2.0.10: the random wandering-trader encounter shipped with a
-                            // placeholder effect; route it to the real trading session.
-                            import('../services/tradingService').then(({ tradingService }) => {
-                                tradingService.startTradingSession('wandering_trader', GameState.EVENT_SCREEN);
-                            });
-                            message = result.text || "Inizi a commerciare...";
-                        } else if (effect === 'advance_quest_stage') {
-                            // v1.9.8: Advance quest from event
-                            const { questId } = result.value;
-                            import('../services/questService').then(({ questService }) => {
-                                questService.advanceQuest(questId);
-                            });
-                            message = result.text || "Quest avanzata!";
-                        } else if (effect === 'complete_quest') {
-                            // v1.9.8: Complete quest from event
-                            const { questId } = result.value;
-                            import('../services/questService').then(({ questService }) => {
-                                questService.completeQuest(questId);
-                            });
-                            message = result.text || "Quest completata!";
-                        } else {
-                            message = result.text || `Si è verificato un evento speciale.`;
-                        }
-                    } else {
-                        message = result.text || `Si è verificato un evento speciale.`;
-                    }
-                    break;
-                }
-                case 'startQuest':
-                    questService.startQuest(result.value as string);
-                    message = null; // Quest service handles journal entries
-                    break;
-            }
-            if (result.type !== 'journalEntry' && message) addJournalEntry({ text: message, type: JournalEntryType.NARRATIVE });
-            return message;
-        };
-
-        for (const outcome of choice.outcomes) {
-            if (outcome.type === 'direct' && outcome.results) {
-                outcome.results.forEach(result => {
-                    const msg = applyResult(result);
-                    if (msg) resolutionSummary.push(msg);
-                });
-            } else if ((outcome.type as string) === 'special') {
-                // v2.0.9: some data files (e.g. hermit_location.json) author the special
-                // effect at the OUTCOME level instead of inside results. Route it through
-                // applyResult as if it were a special result, then process any extra results.
-                const msg = applyResult({ type: 'special', value: (outcome as any).value, text: (outcome as any).text });
-                if (msg) resolutionSummary.push(msg);
-                outcome.results?.forEach(result => {
-                    const m = applyResult(result);
-                    if (m) resolutionSummary.push(m);
-                });
-            } else if (outcome.type === 'skillCheck' && outcome.skill && outcome.dc !== undefined) {
-                const skillCheck = performSkillCheck(outcome.skill, outcome.dc);
-                let checkText = `Prova di ${skillCheck.skill} (CD ${skillCheck.dc}): ${skillCheck.roll} (d20) + ${skillCheck.bonus} (mod) = ${skillCheck.total}. `;
-                if (skillCheck.success) {
-                    checkText += "SUCCESSO.";
-                    addJournalEntry({ text: checkText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
-                    if (outcome.successText) resolutionSummary.push(outcome.successText);
-                    outcome.success?.forEach(result => { const msg = applyResult(result); if (msg) resolutionSummary.push(msg); });
-                } else {
-                    checkText += "FALLIMENTO.";
-                    addJournalEntry({ text: checkText, type: JournalEntryType.SKILL_CHECK_FAILURE });
-                    if (outcome.failureText) resolutionSummary.push(outcome.failureText);
-                    outcome.failure?.forEach(result => { const msg = applyResult(result); if (msg) resolutionSummary.push(msg); });
-                }
-            }
-        }
-        // v2.0.9: never leave the resolution empty — an empty string is falsy, the
-        // resolution screen would never appear and the event could not be dismissed
-        // (soft-lock). Any unrecognized outcome now falls back to a generic closure.
-        if (resolutionSummary.length === 0) {
-            resolutionSummary.push('Prosegui per la tua strada.');
-        }
-        set({ eventResolutionText: resolutionSummary.join('\\n') });
-    },
-    /**
-     * @function reset
-     * @description Resets the event store to its initial state.
-     */
-    reset: () => {
-        set(initialState);
-    },
-
-    /**
-     * @function toJSON
-     * @description Serializes the store's state to a JSON object.
-     * @returns {object} The serialized state.
-     */
-    toJSON: () => {
-        return get();
-    },
-
-    /**
-     * @function fromJSON
-     * @description Deserializes the store's state from a JSON object.
-     * @param {object} json - The JSON object to deserialize.
-     */
-    fromJSON: (json) => {
-        set(json);
+        showEvent(getRandom(hunting && echoEggs.length > 0 ? echoEggs : eggs));
+        return;
+      }
+      if (Math.random() > 0.20) return;
     }
+
+    useGameStore.setState({ lastEncounterTime: gameTime });
+
+    // --- Combat ---
+    if (!forceBiomeEvent && Math.random() < 0.35) {
+      if (currentBiome === 'R' || currentBiome === 'S') return;
+      if (game.repelUntil > now) {
+        game.addJournalEntry({ text: "Qualcosa si muove tra le ombre, ma il ronzio del dissuasore lo tiene lontano.", type: JournalEntryType.NARRATIVE });
+        return;
+      }
+      const enemy = pickEnemy(biomeName);
+      if (!enemy) return;
+      if (WOLF_IDS.has(enemy.id) && game.hasFlag('WOLF_FRIEND')) {
+        game.addJournalEntry({ text: "Un lupo ti osserva dal limitare degli alberi. Ti riconosce, e se ne va senza attaccare.", type: JournalEntryType.NARRATIVE });
+        return;
+      }
+      useCombatStore.getState().startCombat(enemy.id);
+      return;
+    }
+
+    // --- Narrative events: one lore event per day first ---
+    if (!forceBiomeEvent && gameTime.day > (lastLoreEventDay || 0)) {
+      const lore = loreEvents.filter(e => (e.biomes.includes(biomeName) || e.biomes.includes('Global')) && isEventEligible(e, eventHistory));
+      if (lore.length > 0) {
+        useGameStore.setState({ lastLoreEventDay: gameTime.day });
+        showEvent(getRandom(lore));
+        return;
+      }
+    }
+
+    const candidates = (forceBiomeEvent
+      ? biomeEvents.filter(e => e.biomes.includes(biomeName))
+      : [...biomeEvents.filter(e => e.biomes.includes(biomeName)), ...globalEncounters]
+    ).filter(e => isEventEligible(e, eventHistory));
+
+    const unseenUnique = candidates.filter(e => e.isUnique);
+    const repeatable = candidates.filter(e => !e.isUnique);
+    const event = unseenUnique.length > 0 ? getRandom(unseenUnique) : repeatable.length > 0 ? getRandom(repeatable) : null;
+    if (event) showEvent(event);
+  },
+
+  openEvent: (eventId) => {
+    const event = useEventDatabaseStore.getState().getEvent(eventId);
+    if (!event) {
+      console.error(`[EVENT] Event ${eventId} not found`);
+      return false;
+    }
+    showEvent(event);
+    return true;
+  },
+
+  isChoiceVisible: (choice) => {
+    const { activeQuests } = useCharacterStore.getState();
+    const { gameFlags } = useGameStore.getState();
+    if (choice.requiresQuest && !activeQuests[choice.requiresQuest]) return false;
+    if (choice.hideIfQuestKnown && questKnown(choice.hideIfQuestKnown)) return false;
+    if (choice.requiresFlag && !gameFlags.has(choice.requiresFlag)) return false;
+    if (choice.hideIfFlag && gameFlags.has(choice.hideIfFlag)) return false;
+    return true;
+  },
+
+  dismissEventResolution: () => {
+    const { activeEvent, pendingCombatEnemyId } = get();
+    set(state => ({
+      eventHistory: activeEvent?.isUnique && !state.eventHistory.includes(activeEvent.id)
+        ? [...state.eventHistory, activeEvent.id]
+        : state.eventHistory,
+      activeEvent: null,
+      eventResolutionText: null,
+      pendingCombatEnemyId: null,
+    }));
+
+    if (activeEvent) {
+      questService.checkQuestTriggers({ source: 'event', eventId: activeEvent.id });
+      const { easterEggEvents } = useEventDatabaseStore.getState();
+      const history = get().eventHistory;
+      if (easterEggEvents.length > 0 && easterEggEvents.every(e => history.includes(e.id))) {
+        useCharacterStore.getState().unlockTrophy('trophy_secret_all_easter_eggs');
+      }
+    }
+
+    if (pendingCombatEnemyId && useGameStore.getState().gameState !== GameState.GAME_OVER) {
+      useCombatStore.getState().startCombat(pendingCombatEnemyId);
+      return;
+    }
+    if (useGameStore.getState().gameState === GameState.EVENT_SCREEN) {
+      useGameStore.getState().setGameState(GameState.IN_GAME);
+    }
+  },
+
+  resolveEventChoice: (choiceIndex: number) => {
+    const { activeEvent } = get();
+    if (!activeEvent) return;
+    const choice = activeEvent.choices[choiceIndex];
+    if (!choice || !get().isChoiceVisible(choice)) return;
+
+    const game = useGameStore.getState();
+    const { addJournalEntry } = game;
+    const character = useCharacterStore.getState();
+    const { itemDatabase } = useItemDatabaseStore.getState();
+    const playerPos: Position = { ...game.playerPos };
+
+    addJournalEntry({ text: `Hai scelto: "${choice.text}"`, type: JournalEntryType.NARRATIVE });
+    // Lines shown on the resolution screen; each one is also written to the
+    // journal with the given type (null = screen only).
+    const summary: string[] = [];
+    const say = (text: string | null | undefined, type: JournalEntryType | null = JournalEntryType.NARRATIVE) => {
+      if (!text) return;
+      summary.push(text);
+      if (type !== null) addJournalEntry({ text, type });
+    };
+
+    const itemRef = (r: EventResult): { itemId: string; quantity: number } => {
+      if (typeof r.value === 'string') return { itemId: r.value, quantity: r.quantity ?? 1 };
+      return { itemId: r.value?.itemId, quantity: r.value?.quantity ?? 1 };
+    };
+
+    const applySpecial = (value: any, text?: string) => {
+      const effect = value?.effect;
+      switch (effect) {
+        case 'startDialogue':
+          say(text ?? 'Inizi una conversazione...');
+          narrativeService.startDialogue(value.dialogueId, GameState.EVENT_SCREEN);
+          break;
+        case 'startTrading':
+          say(text ?? 'Inizi a commerciare...');
+          tradingService.startTradingSession(value.traderId, GameState.EVENT_SCREEN);
+          break;
+        case 'startCombat':
+          say(text ?? 'Il combattimento è inevitabile!');
+          set({ pendingCombatEnemyId: value.enemyId });
+          break;
+        case 'startCutscene':
+          say(text);
+          game.queueCutscene(value.cutsceneId);
+          break;
+        case 'setFlag':
+          game.setFlag(value.flag);
+          say(text);
+          questService.checkQuestTriggers({ source: 'flag' });
+          break;
+        case 'completeQuest':
+          questService.completeQuest(value.questId);
+          say(text);
+          break;
+        case 'failQuest':
+          questService.failQuest(value.questId);
+          say(text);
+          break;
+        case 'advanceQuest':
+          questService.advanceQuest(value.questId, value.fromStage);
+          say(text);
+          break;
+        case 'activateWaterPump':
+          game.activateWaterPump(value.location ?? playerPos);
+          say(text);
+          break;
+        case 'destroyWaterPump':
+          game.destroyWaterPump(value.location ?? playerPos);
+          say(text);
+          break;
+        case 'activateWaterPlant':
+          game.activateWaterPlant(value.location ?? playerPos);
+          say(text);
+          break;
+        case 'revealPOI':
+          game.revealPOI(value.poiId);
+          say(text);
+          break;
+        case 'registerPOI':
+          game.addPOI({ id: value.poiId, name: value.name, x: playerPos.x, y: playerPos.y, eventId: value.eventId, revealed: true });
+          say(text);
+          break;
+        default:
+          console.warn(`[EVENT] Unknown special effect in ${activeEvent.id}:`, value);
+          say(text);
+      }
+    };
+
+    const applyResult = (result: EventResult) => {
+      switch (result.type) {
+        case 'addItem': {
+          const { itemId, quantity } = itemRef(result);
+          character.addItem(itemId, quantity);
+          say(result.text);
+          say(`Hai ottenuto: ${itemDatabase[itemId]?.name ?? itemId} x${quantity}.`, JournalEntryType.ITEM_ACQUIRED);
+          break;
+        }
+        case 'removeItem': {
+          const { itemId, quantity } = itemRef(result);
+          const owned = useCharacterStore.getState().getItemCount(itemId);
+          if (owned <= 0) break;
+          character.removeItem(itemId, quantity);
+          say(result.text);
+          say(`Hai perso: ${itemDatabase[itemId]?.name ?? itemId} x${Math.min(quantity, owned)}.`);
+          break;
+        }
+        case 'addXp':
+          character.addXp(result.value);
+          say(`Hai guadagnato ${result.value} XP.`, JournalEntryType.XP_GAIN);
+          break;
+        case 'takeDamage':
+          character.takeDamage(result.value, 'ENVIRONMENT');
+          say(`Subisci ${result.value} danni.`, JournalEntryType.COMBAT);
+          break;
+        case 'heal':
+          character.heal(result.value);
+          say(`Recuperi ${result.value} HP.`);
+          break;
+        case 'advanceTime':
+          useTimeStore.getState().advanceTime(result.value, true);
+          say(`Passano ${result.value} minuti.`);
+          break;
+        case 'journalEntry':
+          say(result.text ?? result.value?.text);
+          break;
+        case 'alignmentChange':
+          character.changeAlignment(result.value.type, result.value.amount);
+          say(result.text);
+          break;
+        case 'statusChange':
+          if (VALID_STATUSES.has(result.value)) {
+            character.addStatus(result.value as PlayerStatusCondition);
+            say(`Sei ora in stato: ${result.value}.`);
+          }
+          break;
+        case 'removeStatus':
+          if (useCharacterStore.getState().status.has(result.value)) {
+            character.removeStatus(result.value as PlayerStatusCondition);
+            say(`Lo stato ${result.value} è svanito.`);
+          }
+          break;
+        case 'statBoost': {
+          const { stat, amount } = result.value as { stat: AttributeName; amount: number };
+          character.boostAttribute(stat, amount);
+          say(`Il tuo attributo ${stat.toUpperCase()} aumenta permanentemente di ${amount}!`);
+          break;
+        }
+        case 'revealMapPOI': {
+          const { x, y, name } = result.value;
+          game.addPOI({ id: `poi_${x}_${y}`, name, x, y, revealed: true });
+          say(result.text ?? `Hai segnato sulla mappa: ${name}.`);
+          break;
+        }
+        case 'startQuest':
+          questService.startQuest(result.value);
+          break;
+        case 'setFlag':
+          game.setFlag(result.value);
+          say(result.text);
+          questService.checkQuestTriggers({ source: 'flag' });
+          break;
+        case 'unlockTrophy':
+          character.unlockTrophy(result.value);
+          break;
+        case 'learnRecipe':
+          character.learnRecipe(result.value);
+          say(result.text);
+          break;
+        case 'addLore':
+          character.addLoreEntry(result.value);
+          say(result.text);
+          break;
+        case 'questTrigger':
+          questService.checkQuestTriggers({ source: 'event', nodeId: result.value });
+          say(result.text);
+          break;
+        case 'special':
+          applySpecial(result.value, result.text);
+          break;
+      }
+    };
+
+    for (const outcome of choice.outcomes) {
+      if (outcome.type === 'direct') {
+        outcome.results?.forEach(applyResult);
+      } else if (outcome.type === 'special') {
+        applySpecial(outcome.value, outcome.text);
+        outcome.results?.forEach(applyResult);
+      } else if (outcome.type === 'skillCheck' && outcome.skill && outcome.dc !== undefined) {
+        const check = useCharacterStore.getState().performSkillCheck(outcome.skill, outcome.dc);
+        const line = `Prova di ${SKILL_LABELS[check.skill] ?? check.skill} (CD ${check.dc}): ${check.roll} (d20) + ${check.bonus} (mod) = ${check.total}. ${check.success ? 'SUCCESSO.' : 'FALLIMENTO.'}`;
+        say(line, check.success ? JournalEntryType.SKILL_CHECK_SUCCESS : JournalEntryType.SKILL_CHECK_FAILURE);
+        if (check.success) {
+          say(outcome.successText);
+          outcome.success?.forEach(applyResult);
+        } else {
+          say(outcome.failureText);
+          outcome.failure?.forEach(applyResult);
+        }
+      }
+    }
+
+    // Never leave the resolution empty: an empty text would hide the resolution screen.
+    if (summary.length === 0) summary.push('Prosegui per la tua strada.');
+    // Death during the event: the game over screen takes over.
+    if (useGameStore.getState().gameState === GameState.GAME_OVER) return;
+    set({ eventResolutionText: summary.join('\n') });
+  },
+
+  reset: () => set({ activeEvent: null, eventHistory: [], eventResolutionText: null, pendingCombatEnemyId: null }),
+
+  toJSON: () => ({ eventHistory: get().eventHistory }),
+
+  fromJSON: (json) => {
+    set({
+      activeEvent: null,
+      eventResolutionText: null,
+      pendingCombatEnemyId: null,
+      eventHistory: Array.isArray(json?.eventHistory) ? json.eventHistory : [],
+    });
+  },
 }));

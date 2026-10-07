@@ -8,64 +8,40 @@
       {
         "stage": 1,
         "objective": "Segui la mappa di tuo padre verso Est, fino al luogo segnato come 'The Safe Place'.",
-        "trigger": {
-          "type": "mainStoryComplete",
-          "value": 2
-        }
+        "trigger": {"type": "mainStoryComplete", "value": 2}
       },
       {
         "stage": 2,
         "objective": "PROVA: Dimostra di aver imparato la lezione sull'acqua. Purifica dell'acqua per sopravvivere.",
-        "trigger": {
-          "type": "craftItem",
-          "value": "CONS_002"
-        }
+        "trigger": {"type": "craftItem", "value": "CONS_002"}
       },
       {
         "stage": 3,
         "objective": "Continua il tuo viaggio verso Est.",
-        "trigger": {
-          "type": "mainStoryComplete",
-          "value": 3
-        }
+        "trigger": {"type": "mainStoryComplete", "value": 3}
       },
       {
         "stage": 4,
         "objective": "PROVA: Dimostra di saper quando non combattere. Fuggi con successo da un combattimento.",
-        "trigger": {
-          "type": "successfulFlee"
-        }
+        "trigger": {"type": "successfulFlee"}
       },
       {
         "stage": 5,
         "objective": "La strada è ancora lunga. Prosegui verso il Safe Place.",
-        "trigger": {
-          "type": "mainStoryComplete",
-          "value": 6
-        }
+        "trigger": {"type": "mainStoryComplete", "value": 6}
       },
       {
         "stage": 6,
         "objective": "PROVA: Studia il tuo nemico. Scopri la debolezza tattica di un avversario.",
-        "trigger": {
-          "type": "tacticRevealed"
-        }
+        "trigger": {"type": "tacticRevealed"}
       },
       {
         "stage": 7,
         "objective": "Hai imparato le lezioni. Ora raggiungi il Safe Place e confrontati con la verità.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 145,
-            "y": 146
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 145, "y": 146}}
       }
     ],
-    "finalReward": {
-      "xp": 1000
-    }
+    "finalReward": {"xp": 1000}
   },
   {
     "id": "find_jonas_talisman",
@@ -76,40 +52,20 @@
       {
         "stage": 1,
         "objective": "Trova il vecchio mulino a vento menzionato nel messaggio.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 78,
-            "y": 9
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 78, "y": 9}}
       },
       {
         "stage": 2,
         "objective": "Cerca il talismano di Jonas vicino al mulino.",
-        "trigger": {
-          "type": "getItem",
-          "value": "jonas_talisman"
-        }
+        "trigger": {"type": "getItem", "value": "jonas_talisman"}
       },
       {
         "stage": 3,
         "objective": "Il talismano ha strane incisioni. Forse qualcuno al Crocevia sa cosa significano.",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "marcus_talisman_knowledge"
-        }
+        "trigger": {"type": "talkToNPC", "value": "marcus_talisman_knowledge"}
       }
     ],
-    "finalReward": {
-      "xp": 250,
-      "items": [
-        {
-          "itemId": "manual_advanced_trap",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 250, "items": [{"itemId": "manual_advanced_trap", "quantity": 1}]}
   },
   {
     "id": "repair_water_pump",
@@ -122,33 +78,16 @@
         "objective": "Raccogli i materiali: 1× Guarnizione di Gomma, 2× Rottame Metallico",
         "trigger": {
           "type": "hasItems",
-          "value": [
-            {
-              "itemId": "rubber_gasket",
-              "quantity": 1
-            },
-            {
-              "itemId": "scrap_metal",
-              "quantity": 2
-            }
-          ]
+          "value": [{"itemId": "rubber_gasket", "quantity": 1}, {"itemId": "scrap_metal", "quantity": 2}]
         }
       },
       {
         "stage": 2,
         "objective": "Torna alla Pompa Rotta per tentare la riparazione",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 45,
-            "y": 85
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 45, "y": 85}}
       }
     ],
-    "finalReward": {
-      "xp": 200
-    }
+    "finalReward": {"xp": 200}
   },
   {
     "id": "crossroads_investigation",
@@ -159,42 +98,25 @@
       {
         "stage": 1,
         "objective": "Parla con Marcus all'Avamposto 'Il Crocevia' per maggiori dettagli",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "marcus_investigation_start"
-        }
+        "trigger": {"type": "talkToNPC", "value": "marcus_investigation_start"}
       },
       {
         "stage": 2,
         "objective": "Trova l'accampamento del predone nelle foreste a nord del Crocevia",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 95,
-            "y": 50
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 95, "y": 50}}
       },
       {
         "stage": 3,
         "objective": "Recupera l'orologio da tasca",
-        "trigger": {
-          "type": "getItem",
-          "value": "old_watch"
-        }
+        "trigger": {"type": "getItem", "value": "old_watch"}
       },
       {
         "stage": 4,
         "objective": "Riporta l'orologio a Marcus al Crocevia",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "marcus_investigation_complete"
-        }
+        "trigger": {"type": "talkToNPC", "value": "marcus_investigation_complete"}
       }
     ],
-    "finalReward": {
-      "xp": 300
-    }
+    "finalReward": {"xp": 300}
   },
   {
     "id": "lore_quest_library",
@@ -205,19 +127,10 @@
       {
         "stage": 1,
         "objective": "Esplora la Biblioteca e scopri il Progetto Eco",
-        "trigger": {
-          "type": "completeEvent",
-          "value": "unique_ancient_library"
-        }
+        "trigger": {"type": "completeEvent", "value": "unique_ancient_library"}
       }
     ],
-    "finalReward": {
-      "xp": 150,
-      "statBoost": {
-        "stat": "int",
-        "amount": 1
-      }
-    }
+    "finalReward": {"xp": 150, "statBoost": {"stat": "int", "amount": 1}}
   },
   {
     "id": "lore_quest_laboratory",
@@ -228,19 +141,10 @@
       {
         "stage": 1,
         "objective": "Esplora il Laboratorio e scopri il Progetto Rinascita",
-        "trigger": {
-          "type": "completeEvent",
-          "value": "unique_scientist_notes"
-        }
+        "trigger": {"type": "completeEvent", "value": "unique_scientist_notes"}
       }
     ],
-    "finalReward": {
-      "xp": 150,
-      "statBoost": {
-        "stat": "int",
-        "amount": 1
-      }
-    }
+    "finalReward": {"xp": 150, "statBoost": {"stat": "int", "amount": 1}}
   },
   {
     "id": "deliver_last_message",
@@ -251,32 +155,15 @@
       {
         "stage": 1,
         "objective": "Trova l'avamposto a nord menzionato nell'ordine di consegna.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 41,
-            "y": 39
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 41, "y": 39}}
       },
       {
         "stage": 2,
         "objective": "Parla con Marcus al Crocevia e consegnagli il pacco.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "marcus_dialogue_delivery"
-        }
+        "trigger": {"type": "interactWithObject", "value": "marcus_dialogue_delivery"}
       }
     ],
-    "finalReward": {
-      "xp": 250,
-      "items": [
-        {
-          "itemId": "compass",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 250, "items": [{"itemId": "compass", "quantity": 1}]}
   },
   {
     "id": "decipher_drone_data",
@@ -287,15 +174,10 @@
       {
         "stage": 1,
         "objective": "Trova una stazione di polizia con un terminale funzionante.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "police_terminal_interaction"
-        }
+        "trigger": {"type": "interactWithObject", "value": "police_terminal_interaction"}
       }
     ],
-    "finalReward": {
-      "xp": 300
-    }
+    "finalReward": {"xp": 300}
   },
   {
     "id": "find_elara",
@@ -306,35 +188,15 @@
       {
         "stage": 1,
         "objective": "Cerca Elara nella scuola in rovina della città.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 70,
-            "y": 95
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 70, "y": 95}}
       },
       {
         "stage": 2,
         "objective": "Hai trovato Elara. Scortala all'Avamposto 'Il Crocevia'.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 41,
-            "y": 39
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 41, "y": 39}}
       }
     ],
-    "finalReward": {
-      "xp": 400,
-      "items": [
-        {
-          "itemId": "tool_repair_kit_advanced",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 400, "items": [{"itemId": "tool_repair_kit_advanced", "quantity": 1}]}
   },
   {
     "id": "find_family_treasure",
@@ -345,24 +207,12 @@
       {
         "stage": 1,
         "objective": "Trova e investiga la Torre Radio.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "radio_tower_search_treasure"
-        }
+        "trigger": {"type": "interactWithObject", "value": "radio_tower_search_treasure"}
       }
     ],
     "finalReward": {
       "xp": 200,
-      "items": [
-        {
-          "itemId": "silver_locket",
-          "quantity": 1
-        },
-        {
-          "itemId": "first_aid_kit",
-          "quantity": 1
-        }
-      ]
+      "items": [{"itemId": "silver_locket", "quantity": 1}, {"itemId": "first_aid_kit", "quantity": 1}]
     }
   },
   {
@@ -374,15 +224,10 @@
       {
         "stage": 1,
         "objective": "Chiedi di loro a Marcus, al Crocevia.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "marcus_dialogue_alenkos"
-        }
+        "trigger": {"type": "interactWithObject", "value": "marcus_dialogue_alenkos"}
       }
     ],
-    "finalReward": {
-      "xp": 100
-    }
+    "finalReward": {"xp": 100}
   },
   {
     "id": "collect_world_echoes",
@@ -393,19 +238,10 @@
       {
         "stage": 1,
         "objective": "Trova Echi del mondo perduto e portali ad Anya al Crocevia. (Progresso tracciato tramite dialoghi)",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "anya_all_echoes_delivered"
-        }
+        "trigger": {"type": "talkToNPC", "value": "anya_all_echoes_delivered"}
       }
     ],
-    "finalReward": {
-      "xp": 500,
-      "statBoost": {
-        "stat": "int",
-        "amount": 2
-      }
-    }
+    "finalReward": {"xp": 500, "statBoost": {"stat": "int", "amount": 2}}
   },
   {
     "id": "signs_of_ash",
@@ -416,18 +252,12 @@
       {
         "stage": 1,
         "objective": "Trova gli altri due luoghi rituali menzionati nel diario. (0/2 trovati)",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "visited_all_ritual_sites"
-        }
+        "trigger": {"type": "interactWithObject", "value": "visited_all_ritual_sites"}
       },
       {
         "stage": 2,
         "objective": "Hai raccolto tutti gli indizi, ma il diario è ancora incomprensibile. Forse qualcuno di più saggio può aiutarti.",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "hermit_deciphers_journal"
-        }
+        "trigger": {"type": "talkToNPC", "value": "hermit_deciphers_journal"}
       },
       {
         "stage": 3,
@@ -435,35 +265,18 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            {
-              "itemId": "MED_HEALING_HERBS",
-              "quantity": 3
-            },
-            {
-              "itemId": "edible_mushrooms",
-              "quantity": 5
-            }
+            {"itemId": "MED_HEALING_HERBS", "quantity": 3},
+            {"itemId": "edible_mushrooms", "quantity": 5}
           ]
         }
       },
       {
         "stage": 4,
         "objective": "Porta le erbe all'eremita per la decifrazione finale.",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "hermit_receives_herbs"
-        }
+        "trigger": {"type": "talkToNPC", "value": "hermit_receives_herbs"}
       }
     ],
-    "finalReward": {
-      "xp": 500,
-      "items": [
-        {
-          "itemId": "manual_sonic_dissuader",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 500, "items": [{"itemId": "manual_sonic_dissuader", "quantity": 1}]}
   },
   {
     "id": "bounty_kill_boars",
@@ -475,27 +288,12 @@
       {
         "stage": 1,
         "objective": "Uccidi 3 Cinghiali Aggressivi. (Progresso tracciato automaticamente)",
-        "trigger": {
-          "type": "enemyDefeated",
-          "value": {
-            "enemyId": "aggressive_boar",
-            "quantity": 3
-          }
-        }
+        "trigger": {"type": "enemyDefeated", "value": {"enemyId": "aggressive_boar", "quantity": 3}}
       }
     ],
     "finalReward": {
       "xp": 350,
-      "items": [
-        {
-          "itemId": "ammo_shotgun",
-          "quantity": 15
-        },
-        {
-          "itemId": "animal_hide",
-          "quantity": 5
-        }
-      ]
+      "items": [{"itemId": "ammo_shotgun", "quantity": 15}, {"itemId": "animal_hide", "quantity": 5}]
     }
   },
   {
@@ -508,27 +306,12 @@
       {
         "stage": 1,
         "objective": "Uccidi 4 Lupi Mutati. (Progresso tracciato automaticamente)",
-        "trigger": {
-          "type": "enemyDefeated",
-          "value": {
-            "enemyId": "mutated_wolf",
-            "quantity": 4
-          }
-        }
+        "trigger": {"type": "enemyDefeated", "value": {"enemyId": "mutated_wolf", "quantity": 4}}
       }
     ],
     "finalReward": {
       "xp": 400,
-      "items": [
-        {
-          "itemId": "ammo_arrow",
-          "quantity": 20
-        },
-        {
-          "itemId": "animal_hide",
-          "quantity": 6
-        }
-      ]
+      "items": [{"itemId": "ammo_arrow", "quantity": 20}, {"itemId": "animal_hide", "quantity": 6}]
     }
   },
   {
@@ -541,27 +324,12 @@
       {
         "stage": 1,
         "objective": "Uccidi 5 Predoni Armati. (Progresso tracciato automaticamente)",
-        "trigger": {
-          "type": "enemyDefeated",
-          "value": {
-            "enemyId": "armed_raider",
-            "quantity": 5
-          }
-        }
+        "trigger": {"type": "enemyDefeated", "value": {"enemyId": "armed_raider", "quantity": 5}}
       }
     ],
     "finalReward": {
       "xp": 500,
-      "items": [
-        {
-          "itemId": "ammo_9mm",
-          "quantity": 30
-        },
-        {
-          "itemId": "first_aid_kit",
-          "quantity": 2
-        }
-      ]
+      "items": [{"itemId": "ammo_9mm", "quantity": 30}, {"itemId": "first_aid_kit", "quantity": 2}]
     }
   },
   {
@@ -573,27 +341,15 @@
       {
         "stage": 1,
         "objective": "Trova Strumenti di Precisione per accordare il pianoforte.",
-        "trigger": {
-          "type": "getItem",
-          "value": "precision_tools"
-        }
+        "trigger": {"type": "getItem", "value": "precision_tools"}
       },
       {
         "stage": 2,
         "objective": "Torna al Teatro in Rovina e accorda il pianoforte.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "piano_tuning_complete"
-        }
+        "trigger": {"type": "interactWithObject", "value": "piano_tuning_complete"}
       }
     ],
-    "finalReward": {
-      "xp": 200,
-      "statBoost": {
-        "stat": "car",
-        "amount": 1
-      }
-    }
+    "finalReward": {"xp": 200, "statBoost": {"stat": "car", "amount": 1}}
   },
   {
     "id": "tower_of_light",
@@ -607,35 +363,18 @@
         "trigger": {
           "type": "hasItems",
           "value": [
-            {
-              "itemId": "military_grade_electronics",
-              "quantity": 3
-            },
-            {
-              "itemId": "portable_generator",
-              "quantity": 1
-            }
+            {"itemId": "military_grade_electronics", "quantity": 3},
+            {"itemId": "portable_generator", "quantity": 1}
           ]
         }
       },
       {
         "stage": 2,
         "objective": "Torna a una torre radio per installare i componenti.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "radio_tower_repair_complete"
-        }
+        "trigger": {"type": "interactWithObject", "value": "radio_tower_repair_complete"}
       }
     ],
-    "finalReward": {
-      "xp": 600,
-      "items": [
-        {
-          "itemId": "walkie_talkie",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 600, "items": [{"itemId": "walkie_talkie", "quantity": 1}]}
   },
   {
     "id": "water_of_life",
@@ -646,44 +385,25 @@
       {
         "stage": 1,
         "objective": "Trova un Manuale di Manutenzione per impianti idraulici.",
-        "trigger": {
-          "type": "getItem",
-          "value": "hydraulic_manual"
-        }
+        "trigger": {"type": "getItem", "value": "hydraulic_manual"}
       },
       {
         "stage": 2,
         "objective": "Recupera 3 Filtri Industriali.",
-        "trigger": {
-          "type": "hasItems",
-          "value": [
-            {
-              "itemId": "industrial_filter",
-              "quantity": 3
-            }
-          ]
-        }
+        "trigger": {"type": "hasItems", "value": [{"itemId": "industrial_filter", "quantity": 3}]}
       },
       {
         "stage": 3,
         "objective": "Trova una Batteria per veicoli pesanti per riavviare il generatore.",
-        "trigger": {
-          "type": "getItem",
-          "value": "vehicle_battery"
-        }
+        "trigger": {"type": "getItem", "value": "vehicle_battery"}
       },
       {
         "stage": 4,
         "objective": "Torna all'impianto di depurazione per completare la riparazione.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "water_plant_repair_complete"
-        }
+        "trigger": {"type": "interactWithObject", "value": "water_plant_repair_complete"}
       }
     ],
-    "finalReward": {
-      "xp": 800
-    }
+    "finalReward": {"xp": 800}
   },
   {
     "id": "the_waiting_woman",
@@ -694,27 +414,15 @@
       {
         "stage": 1,
         "objective": "Trova il 'Fiore di Ghiaccio' sulle montagne a nord.",
-        "trigger": {
-          "type": "getItem",
-          "value": "ice_flower"
-        }
+        "trigger": {"type": "getItem", "value": "ice_flower"}
       },
       {
         "stage": 2,
         "objective": "Porta il 'Fiore di Ghiaccio' a Olivia nella sua capanna.",
-        "trigger": {
-          "type": "talkToNPC",
-          "value": "olivia_quest_complete"
-        }
+        "trigger": {"type": "talkToNPC", "value": "olivia_quest_complete"}
       }
     ],
-    "finalReward": {
-      "xp": 500,
-      "statBoost": {
-        "stat": "sag",
-        "amount": 1
-      }
-    }
+    "finalReward": {"xp": 500, "statBoost": {"stat": "sag", "amount": 1}}
   },
   {
     "id": "the_arsonist_and_the_tube",
@@ -725,39 +433,19 @@
       {
         "stage": 1,
         "objective": "Scopri cos'è o dov'è il 'Tubo N.403'. Forse i registri di una prigione o di un ospedale psichiatrico possono aiutare.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "asylum_records_found"
-        }
+        "trigger": {"type": "interactWithObject", "value": "asylum_records_found"}
       },
       {
         "stage": 2,
         "objective": "I registri indicano che il Tubo N.403 era una sezione di massima sicurezza del Manicomio di Sant'Ambrogio, situato nelle colline a est della città. Trova questo luogo.",
-        "trigger": {
-          "type": "reachLocation",
-          "value": {
-            "x": 120,
-            "y": 85
-          }
-        }
+        "trigger": {"type": "reachLocation", "value": {"x": 120, "y": 85}}
       },
       {
         "stage": 3,
         "objective": "Sei arrivato al manicomio in rovina. Trova la sezione 'Tubo N.403' e scopri cosa ne è stato del Piromane.",
-        "trigger": {
-          "type": "interactWithObject",
-          "value": "found_the_arsonist"
-        }
+        "trigger": {"type": "interactWithObject", "value": "found_the_arsonist"}
       }
     ],
-    "finalReward": {
-      "xp": 700,
-      "items": [
-        {
-          "itemId": "pyromaniacs_lighter",
-          "quantity": 1
-        }
-      ]
-    }
+    "finalReward": {"xp": 700, "items": [{"itemId": "pyromaniacs_lighter", "quantity": 1}]}
   }
 ]

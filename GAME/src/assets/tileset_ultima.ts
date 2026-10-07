@@ -215,6 +215,23 @@ const svgContent = `
     <circle cx="16" cy="16" r="6" fill="${C64_COLORS.BLACK}" />
   </g>
 
+  <!-- ROW 3: MAP STATE -->
+
+  <!-- 0,3: USED SHELTER (ruins) -->
+  <g transform="translate(0, 96)">
+    <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
+    <path d="M4 28 L4 18 L10 14 L12 20 L16 16 L20 22 L24 15 L28 20 L28 28 Z" fill="${C64_COLORS.DARKGREY}" />
+    <path d="M8 28 L8 22 M20 28 L20 24" stroke="${C64_COLORS.GREY}" stroke-width="2" />
+  </g>
+
+  <!-- 1,3: POINT OF INTEREST -->
+  <g transform="translate(32, 96)">
+    <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
+    <path d="M16 3 L27 16 L16 29 L5 16 Z" fill="${C64_COLORS.PURPLE}" stroke="${C64_COLORS.WHITE}" stroke-width="2" />
+    <rect x="14" y="9" width="4" height="9" fill="${C64_COLORS.WHITE}" />
+    <rect x="14" y="20" width="4" height="4" fill="${C64_COLORS.WHITE}" />
+  </g>
+
   <!-- 7,2: DESTINATION (E) -->
   <g transform="translate(224, 64)">
     <rect width="32" height="32" fill="${C64_COLORS.BLACK}" />
@@ -253,4 +270,7 @@ export const TILE_MAP: Record<string, { x: number; y: number }> = {
   'L': { x: 160, y: 64 },  // Lab
   'N': { x: 192, y: 64 },  // Nest
   'E': { x: 224, y: 64 },  // Destination
+
+  'R_USED': { x: 0, y: 96 }, // Shelter already used (ruins)
+  'POI': { x: 32, y: 96 },   // Point of interest
 };

@@ -1,189 +1,111 @@
 import { create } from 'zustand';
-import { GameState, GameStoreState, TileInfo, JournalEntryType, GameTime, MainStoryChapter, Cutscene, CutsceneConsequence, CharacterState, PlayerStatusCondition, DeathCause, Position, WorldState } from '../types';
+import {
+  GameState, GameStoreState, JournalEntryType, DeathCause, Position, PointOfInterest,
+  CutsceneConsequence, MainStoryChapter,
+} from '../types';
 import { MAP_DATA } from '../data/mapData';
 import { useCharacterStore } from './characterStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
 import { useCutsceneDatabaseStore } from '../data/cutsceneDatabase';
-import { MOUNTAIN_MESSAGES, BIOME_MESSAGES, ATMOSPHERIC_MESSAGES, BIOME_COLORS } from '../constants';
+import { usePoiDatabaseStore } from '../data/poiDatabase';
+import { useLootTableStore, rollLoot } from '../data/lootTableDatabase';
+import { BIOME_MESSAGES, BIOME_COLORS, TILE_NAMES } from '../constants';
 import { audioManager } from '../utils/audio';
-
+import { toAbsoluteMinutes, isNightHour } from '../utils/time';
+import { NUM_SAVE_SLOTS, slotKey, storage, validateSaveData } from '../utils/saveFormat';
 import { useTimeStore } from './timeStore';
 import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
 import { useCombatStore } from './combatStore';
 import { useNarrativeStore } from './narrativeStore';
+import { narrativeService } from '../services/NarrativeService';
+import { questService } from '../services/questService';
 
 // ═══════════════════════════════════════════════════════════════════════════
-// SAVE GAME SYSTEM - Version 2.0.0
+// SAVE GAME SYSTEM
 // ═══════════════════════════════════════════════════════════════════════════
 /**
- * Current save system version.
- * Used for save file compatibility and migration between versions.
- *
- * @constant {string}
- * @see migrateSaveData for version migration logic
+ * Save format version. 2.1.0 stores only gameplay state (no map, no UI state)
+ * and adds points of interest, trader stock and pending cutscenes. Older saves
+ * load through defaults in every fromJSON.
  */
-const SAVE_VERSION = "2.0.0";
-
-/**
- * LocalStorage key for tracking the last used save slot.
- * Used to remember which slot the player saved to most recently.
- *
- * @constant {string}
- */
+export const SAVE_VERSION = '2.1.0';
 const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
-// Legacy cutscene id -> Ink knot. Add an entry here once a cutscene has been rewritten
-// in `src/assets/story/modules/cutscenes/`. Anything not listed keeps using the legacy
-// page-based player.
+/** Cutscenes rewritten in Ink: legacy id -> Ink knot. */
 const LEGACY_CUTSCENE_TO_INK_KNOT: Record<string, string> = {
-    'CS_OPENING': 'intro',
+  'CS_OPENING': 'intro',
 };
 
+/** Trophies unlocked by story flags. */
+const FLAG_TROPHIES: Record<string, string> = {
+  FATHERS_LETTER_DESTROYED: 'trophy_secret_destroy_letter',
+  FATHERS_LETTER_KEPT: 'trophy_secret_keep_letter',
+};
+
+const MAX_STORY_EVENTS_PER_DAY = 2;
+const LEGACY_ARMOR_FLAG = /^ARMOR_UPGRADED_(HEAD|CHEST|LEGS)_(\d+)$/;
+
 /**
- * @function migrateSaveData
- * @description Migrates save data from older versions to the current version.
- * @param {any} saveData - The save data to migrate.
- * @returns {any} The migrated save data.
+ * Saves before 2.1 stored Anya's armour upgrades as ARMOR_UPGRADED_<SLOT>_<N>
+ * flags applied to whatever sat in that slot: move them onto the equipped piece.
  */
-const migrateSaveData = (saveData: any): any => {
-  const version = saveData.saveVersion || "1.0.0";
-  
-  // Migration from 1.0.0 to 2.0.0
-  if (version === "1.0.0") {
-    console.log("Migrating save from 1.0.0 to 2.0.0...");
-    
-    // Add any missing store data with defaults
-    if (!saveData.interaction) {
-      saveData.interaction = {
-        isInventoryOpen: false,
-        isInRefuge: false,
-        isCraftingOpen: false,
-      };
+function migrateLegacyArmorUpgrades() {
+  const flags = useGameStore.getState().gameFlags;
+  const legacy = [...flags].filter(flag => LEGACY_ARMOR_FLAG.test(flag));
+  if (legacy.length === 0) return;
+  const character = useCharacterStore.getState();
+  const inventory = [...character.inventory];
+  for (const flag of legacy) {
+    const [, slot, bonus] = LEGACY_ARMOR_FLAG.exec(flag)!;
+    const index = slot === 'HEAD' ? character.equippedHead : slot === 'LEGS' ? character.equippedLegs : character.equippedArmor;
+    if (index !== null && inventory[index]) {
+      inventory[index] = { ...inventory[index], upgradeBonus: (inventory[index].upgradeBonus ?? 0) + Number(bonus) };
     }
-    
-    if (!saveData.event) {
-      saveData.event = {
-        availableEvents: [],
-        eventHistory: [],
-      };
-    }
-    
-    if (!saveData.combat) {
-      saveData.combat = {
-        currentEnemy: null,
-        combatLog: [],
-      };
-    }
-    
-    // Ensure gameFlags and visitedBiomes are arrays (not Sets)
-    if (saveData.game) {
-      if (!Array.isArray(saveData.game.gameFlags)) {
-        saveData.game.gameFlags = [];
-      }
-      if (!Array.isArray(saveData.game.visitedBiomes)) {
-        saveData.game.visitedBiomes = [];
-      }
-    }
-    
-    // Ensure character status and trophies are arrays
-    if (saveData.character) {
-      if (!Array.isArray(saveData.character.status)) {
-        saveData.character.status = [];
-      }
-      if (!Array.isArray(saveData.character.unlockedTrophies)) {
-        saveData.character.unlockedTrophies = [];
-      }
-    }
-    
-    saveData.saveVersion = "2.0.0";
   }
-  
-  // Future migrations can be added here
-  // if (version === "2.0.0") { ... migrate to 3.0.0 ... }
-  
-  return saveData;
+  useCharacterStore.setState({ inventory });
+  useGameStore.setState({ gameFlags: new Set([...flags].filter(flag => !LEGACY_ARMOR_FLAG.test(flag))) });
+}
+
+const findTile = (map: string[][], tile: string): Position | null => {
+  for (let y = 0; y < map.length; y++) {
+    const x = map[y].indexOf(tile);
+    if (x !== -1) return { x, y };
+  }
+  return null;
 };
 
-// --- Helper Functions ---
-/**
- * @function timeToMinutes
- * @description Converts a GameTime object to minutes.
- * @param {GameTime} time - The GameTime object to convert.
- * @returns {number} The time in minutes.
- */
-const timeToMinutes = (time: GameTime): number => {
-    return (time.day - 1) * 1440 + time.hour * 60 + time.minute;
-};
+const distance = (a: Position, b: Position) => Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 
-/**
- * @function getRandom
- * @description Gets a random element from an array.
- * @param {T[]} arr - The array to get a random element from.
- * @returns {T} A random element from the array.
- */
-const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+/** Static POIs from data merged with the runtime state saved in a game. */
+function buildPOIs(saved: PointOfInterest[] | undefined): PointOfInterest[] {
+  const statics = usePoiDatabaseStore.getState().pois;
+  const savedById = new Map((saved ?? []).map(p => [p.id, p]));
+  const merged: PointOfInterest[] = statics.map(def => {
+    const s = savedById.get(def.id);
+    return { ...def, revealed: s?.revealed ?? def.revealed ?? false, consumed: s?.consumed ?? false };
+  });
+  const staticIds = new Set(statics.map(p => p.id));
+  for (const poi of saved ?? []) {
+    if (!staticIds.has(poi.id)) merged.push(poi);
+  }
+  return merged;
+}
 
+const initialWorldState = () => ({
+  repairedPumps: [],
+  destroyedPumps: [],
+  waterPlantActive: false,
+  waterPlantLocation: null,
+});
 
-/**
- * Mapping of tile characters to their Italian display names.
- * @constant
- * @version 1.6.0 - Added special location tiles (A, N, L, B)
- */
-const TILE_NAMES: Record<string, string> = {
-    '.': 'Pianura', 'F': 'Foresta', '~': 'Acqua', 'M': 'Montagna',
-    'R': 'Rifugio', 'C': 'Città', 'V': 'Villaggio',
-    'S': 'Punto di Partenza', 'E': 'Destinazione', '@': 'Tu',
-    'A': 'Avamposto', 'N': 'Nido della Cenere', 'T': 'Commerciante',
-    'L': 'Laboratorio', 'B': 'Biblioteca'
-};
-
-/**
- * Set of tile types that cannot be traversed by the player.
- * @constant
- */
-const IMPASSABLE_TILES = new Set(['M']);
-
-/**
- * Set of tile types that can be traversed by the player.
- * @constant
- * @version 1.6.0 - Added special location tiles (A, N, T, L, B)
- */
-const TRAVERSABLE_TILES = new Set(['.', 'R', 'C', 'V', 'F', 'S', 'E', '~', 'A', 'N', 'T', 'L', 'B']);
-
-/**
- * Base time cost in minutes for a single movement action.
- * @constant
- */
-const BASE_TIME_COST_PER_MOVE = 10;
-
-/**
- * Game Store - Main game state management
- *
- * @description Central Zustand store that manages the core game state including:
- * - Game flow (menu, gameplay, cutscenes)
- * - Map and player position
- * - Journal/log system
- * - Main story progression
- * - Cutscene system
- * - Save/load functionality
- *
- * @remarks
- * This store coordinates with other stores (character, time, event, combat, interaction)
- * to provide a complete game state management system.
- *
- * Architecture: Service Layer Pattern
- * - Complex logic delegated to services/gameService.ts
- * - Store focuses on state management
- * - Actions trigger side effects in other stores
- */
 export const useGameStore = create<GameStoreState>((set, get) => ({
   // --- State ---
   gameState: GameState.INITIAL_BLACK_SCREEN,
   previousGameState: null,
   visualTheme: 'standard',
-  map: [],
+  map: MAP_DATA,
   playerPos: { x: 0, y: 0 },
   playerStatus: { isExitingWater: false },
   journal: [],
@@ -192,747 +114,472 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lastEncounterTime: null,
   lastSearchedBiome: null,
   lastLoreEventDay: null,
-  lootedRefuges: [],
+  lastCombatDay: 1,
   visitedRefuges: [],
   mainStoryStage: 1,
   totalSteps: 0,
   totalCombatWins: 0,
   activeMainStoryEvent: null,
   activeCutscene: null,
+  pendingCutscenes: [],
   gameFlags: new Set(),
   mainStoryEventsToday: { day: 0, count: 0 },
   deathCause: null,
   visitedBiomes: new Set(),
   damageFlash: false,
   wanderingTrader: null,
-  worldState: {
-    repairedPumps: [],
-    destroyedPumps: [],
-    waterPlantActive: false,
-    waterPlantLocation: null,
-  },
+  worldState: initialWorldState(),
+  pois: [],
+  traderStock: {},
+  lightUntil: 0,
+  repelUntil: 0,
+  lastShelterDay: 0,
+  lastRadioDay: 0,
 
-  /**
-   * Triggers a brief red flash effect to indicate player damage.
-   *
-   * @description Sets damageFlash to true for 150ms, then resets it.
-   * Used to provide visual feedback when the player takes damage.
-   *
-   * @remarks
-   * - Duration: 150ms
-   * - Non-blocking (uses setTimeout)
-   * - Can be triggered multiple times (overlapping flashes)
-   *
-   * @example
-   * // After player takes damage in combat
-   * gameStore.triggerDamageFlash();
-   */
   triggerDamageFlash: () => {
     set({ damageFlash: true });
     setTimeout(() => set({ damageFlash: false }), 150);
   },
 
-  // --- Actions ---
-  /**
-   * @function setGameState
-   * @description Sets the current state of the game.
-   * @param {GameState} newState - The new state of the game.
-   */
-  setGameState: (newState) => set(state => {
-    if (state.gameState === newState) return { gameState: newState };
-    return { 
-        previousGameState: state.gameState, 
-        gameState: newState 
-    };
-  }),
+  setGameState: (newState) => {
+    const previous = get().gameState;
+    if (previous !== newState) {
+      set({ previousGameState: previous, gameState: newState });
+    }
+    // Back in free roam: play the next cutscene that was waiting for it.
+    if (newState === GameState.IN_GAME && get().pendingCutscenes.length > 0) {
+      setTimeout(() => {
+        const state = get();
+        if (state.gameState !== GameState.IN_GAME || state.pendingCutscenes.length === 0) return;
+        const [next, ...rest] = state.pendingCutscenes;
+        set({ pendingCutscenes: rest });
+        state.startCutscene(next);
+      }, 0);
+    }
+  },
 
-  /**
-   * @function setGameOver
-   * @description Sets the game state to GAME_OVER.
-   * @param {DeathCause} cause - The cause of death.
-   */
   setGameOver: (cause: DeathCause) => {
+    if (get().gameState === GameState.GAME_OVER) return;
     const { unlockTrophy } = useCharacterStore.getState();
     unlockTrophy('trophy_misc_first_death');
-    if(cause === 'STARVATION') unlockTrophy('trophy_misc_death_by_starvation');
-    if(cause === 'DEHYDRATION') unlockTrophy('trophy_misc_death_by_dehydration');
-    
+    if (cause === 'STARVATION') unlockTrophy('trophy_misc_death_by_starvation');
+    if (cause === 'DEHYDRATION') unlockTrophy('trophy_misc_death_by_dehydration');
+
     audioManager.playSound('defeat');
     get().addJournalEntry({ text: "Sei stato sconfitto...", type: JournalEntryType.SYSTEM_ERROR });
-    set({ gameState: GameState.GAME_OVER, deathCause: cause });
+    useCombatStore.getState().reset();
+    useEventStore.setState({ activeEvent: null, eventResolutionText: null });
+    set({ gameState: GameState.GAME_OVER, deathCause: cause, pendingCutscenes: [] });
   },
-  
-  /**
-   * @function setVisualTheme
-   * @description Sets the visual theme of the game.
-   * @param {string} theme - The theme to set.
-   */
+
   setVisualTheme: (theme) => {
     set({ visualTheme: theme });
     document.documentElement.className = `theme-${theme}`;
-    localStorage.setItem('tspc_visual_theme', theme);
+    try {
+      localStorage.setItem('tspc_visual_theme', theme);
+    } catch {
+      // Storage unavailable: the theme still applies for this session.
+    }
   },
 
-  /**
-   * @function addJournalEntry
-   * @description Adds a new entry to the journal.
-   * @param {JournalEntry} entry - The journal entry to add.
-   */
   addJournalEntry: (entry) => {
     const gameTime = useTimeStore.getState().gameTime;
     set(state => ({
-        journal: [{ ...entry, time: gameTime }, ...state.journal].slice(0, 100)
+      journal: [{ ...entry, time: gameTime }, ...state.journal].slice(0, 100)
     }));
     switch (entry.type) {
-        case JournalEntryType.ITEM_ACQUIRED: audioManager.playSound('item_get'); break;
-        case JournalEntryType.XP_GAIN: audioManager.playSound('xp_gain'); break;
-        case JournalEntryType.ACTION_FAILURE:
-        case JournalEntryType.SYSTEM_ERROR:
-             audioManager.playSound('error');
-             break;
-        case JournalEntryType.COMBAT:
-            if (entry.text.includes('danni')) {
-                audioManager.playSound('hit_player');
-            }
-            break;
+      case JournalEntryType.ITEM_ACQUIRED: audioManager.playSound('item_get'); break;
+      case JournalEntryType.XP_GAIN: audioManager.playSound('xp_gain'); break;
+      case JournalEntryType.ACTION_FAILURE:
+      case JournalEntryType.SYSTEM_ERROR:
+        audioManager.playSound('error');
+        break;
+      case JournalEntryType.COMBAT:
+        if (entry.text.includes('danni')) audioManager.playSound('hit_player');
+        break;
     }
   },
 
-  /**
-   * @function setMap
-   * @description Initializes the game map and player position.
-   */
+  /** Starts a new game: resets every store and puts the player on 'S'. */
   setMap: () => {
-    const newMap = MAP_DATA;
-    let startPos = { x: 0, y: 0 };
-    for (let y = 0; y < newMap.length; y++) {
-      const x = newMap[y].indexOf('S');
-      if (x !== -1) {
-        startPos = { x, y };
-        break;
-      }
-    }
-    
+    const startPos = findTile(MAP_DATA, 'S') ?? { x: 0, y: 0 };
+
     useTimeStore.getState().reset();
     useInteractionStore.getState().reset();
     useEventStore.getState().reset();
     useCombatStore.getState().reset();
-    // v2.0.14: a second "Nuova Partita" in the same session used to inherit the
-    // previous run's Ink variables and narrativeStore state (dirty quests/flags).
-    import('../services/NarrativeService').then(({ narrativeService }) => {
-        narrativeService.resetNarrative();
-    });
+    narrativeService.resetNarrative();
 
-    set({ 
-        map: newMap, 
-        playerPos: startPos,
-        playerStatus: { isExitingWater: false },
-        journal: [],
-        currentBiome: 'S',
-        lastRestTime: null,
-        lastEncounterTime: null,
-        lastLoreEventDay: 0,
-        lootedRefuges: [],
-        visitedRefuges: [],
-        mainStoryStage: 1,
-        totalSteps: 0,
-        totalCombatWins: 0,
-        activeMainStoryEvent: null,
-        gameFlags: new Set(),
-        activeCutscene: null,
-        mainStoryEventsToday: { day: 1, count: 0 },
-        deathCause: null,
-        visitedBiomes: new Set(['S']),
-        worldState: {
-            repairedPumps: [],
-            destroyedPumps: [],
-            waterPlantActive: false,
-            waterPlantLocation: null,
-        },
+    set({
+      map: MAP_DATA,
+      playerPos: startPos,
+      playerStatus: { isExitingWater: false },
+      journal: [],
+      currentBiome: 'S',
+      lastRestTime: null,
+      lastEncounterTime: null,
+      lastSearchedBiome: null,
+      lastLoreEventDay: 0,
+      lastCombatDay: 1,
+      visitedRefuges: [],
+      mainStoryStage: 1,
+      totalSteps: 0,
+      totalCombatWins: 0,
+      activeMainStoryEvent: null,
+      activeCutscene: null,
+      pendingCutscenes: [],
+      gameFlags: new Set(),
+      mainStoryEventsToday: { day: 1, count: 0 },
+      deathCause: null,
+      visitedBiomes: new Set(['S']),
+      wanderingTrader: null,
+      worldState: initialWorldState(),
+      pois: buildPOIs(undefined),
+      traderStock: {},
+      lightUntil: 0,
+      repelUntil: 0,
+      lastShelterDay: 0,
+      lastRadioDay: 0,
     });
     get().addJournalEntry({ text: "Benvenuto in The Safe Place. La tua avventura inizia ora.", type: JournalEntryType.GAME_START });
     get().addJournalEntry({ text: BIOME_MESSAGES['S'], type: JournalEntryType.NARRATIVE, color: BIOME_COLORS['S'] });
-    
-    // v1.9.0: Auto-start Main Quest
-    import('../services/questService').then(({ questService }) => {
-        questService.startQuest('MQ_THE_ECHO_OF_THE_JOURNEY');
-    });
   },
 
-  /**
-   * Moves the player on the map.
-   *
-   * @description This is a placeholder for the refactored movePlayer logic.
-   * The actual implementation is now in services/gameService.ts.
-   * This function exists to maintain the interface contract but delegates to the service layer.
-   *
-   * @param {number} dx - Horizontal movement delta (-1 for left, +1 for right, 0 for no horizontal movement)
-   * @param {number} dy - Vertical movement delta (-1 for up, +1 for down, 0 for no vertical movement)
-   *
-   * @see services/gameService.ts for the actual implementation
-   */
-  movePlayer: (dx, dy) => {
-    // This is a placeholder for the refactored movePlayer logic.
-    // The actual implementation is now in services/gameService.ts.
-  },
-
-  /**
-   * @function getTileInfo
-   * @description Gets information about a tile on the map.
-   * @param {number} x - The x-coordinate of the tile.
-   * @param {number} y - The y-coordinate of the tile.
-   * @returns {TileInfo} Information about the tile.
-   */
   getTileInfo: (x, y) => {
     const { map } = get();
     if (y < 0 || y >= map.length || x < 0 || x >= map[y].length) {
-        return { char: ' ', name: 'Sconosciuto' };
+      return { char: ' ', name: 'Sconosciuto' };
     }
     const char = map[y][x];
     return { char, name: TILE_NAMES[char] || 'Terreno Misterioso' };
   },
-  
-  /**
-   * @function performQuickRest
-   * @description Performs a quick rest, advancing time and healing the player.
-   */
+
   performQuickRest: () => {
     const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
     if (isInventoryOpen || isInRefuge) return;
     const { lastRestTime, addJournalEntry } = get();
     const { gameTime, advanceTime } = useTimeStore.getState();
     if (lastRestTime) {
-        if (timeToMinutes(gameTime) - timeToMinutes(lastRestTime) < 1440) {
-            addJournalEntry({ text: "Troppo presto per riposare di nuovo. Devi aspettare.", type: JournalEntryType.ACTION_FAILURE });
-            return;
-        }
+      const elapsed = toAbsoluteMinutes(gameTime) - toAbsoluteMinutes(lastRestTime);
+      if (elapsed < 1440) {
+        const hoursLeft = Math.ceil((1440 - elapsed) / 60);
+        addJournalEntry({ text: `Troppo presto per riposare di nuovo. Potrai farlo tra circa ${hoursLeft} ore.`, type: JournalEntryType.ACTION_FAILURE });
+        return;
+      }
     }
     addJournalEntry({ text: "Ti fermi per riposare per un'ora.", type: JournalEntryType.NARRATIVE });
     advanceTime(60, true);
     set({ lastRestTime: useTimeStore.getState().gameTime });
-    useCharacterStore.getState().heal(20);
-    useCharacterStore.getState().rest(15);
-    addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Hai recuperato 20 HP e ti senti meno stanco.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+    const character = useCharacterStore.getState();
+    character.heal(20);
+    character.rest(15);
+    addJournalEntry({ text: `Un breve riposo ti ridona un po' di energie. Ti senti meno stanco.`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
   },
 
-  /**
-   * @function performActiveSearch
-   * @description Searches the current area for resources. Consumes time and uses Survival skill.
-   */
   performActiveSearch: () => {
     const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
     if (isInventoryOpen || isInRefuge) return;
-    
-    const { currentBiome, addJournalEntry, getTileInfo, playerPos, lastSearchedBiome } = get();
+
+    const { currentBiome, addJournalEntry, getTileInfo, playerPos, lastSearchedBiome, map, worldState } = get();
     const { advanceTime } = useTimeStore.getState();
-    const { performSkillCheck, addItem, unlockedTalents, restoreHydration } = useCharacterStore.getState();
-    
+    const character = useCharacterStore.getState();
     const tileType = getTileInfo(playerPos.x, playerPos.y).char;
-    
-    // Can't search in water
-    if (tileType === '≈' || tileType === '~') {
-      addJournalEntry({ text: "Non puoi cercare risorse nell'acqua.", type: JournalEntryType.ACTION_FAILURE });
-      audioManager.playSound('error');
+
+    if (tileType === '~') {
+      addJournalEntry({ text: "Non puoi cercare risorse mentre guadi il fiume.", type: JournalEntryType.ACTION_FAILURE });
       return;
     }
-    
-    // Cooldown per bioma: puoi cercare solo una volta per bioma nuovo
+    // One search per area: walk into a different biome to search again.
     if (lastSearchedBiome === currentBiome) {
-      addJournalEntry({ text: "Hai già perlustra questa zona. Esplora un nuovo bioma per cercare ancora.", type: JournalEntryType.ACTION_FAILURE });
-      audioManager.playSound('error');
+      addJournalEntry({ text: "Hai già perlustrato questa zona. Esplora un nuovo bioma per cercare ancora.", type: JournalEntryType.ACTION_FAILURE });
       return;
     }
-    
-    // Update last searched biome
     set({ lastSearchedBiome: currentBiome });
-    
+
     addJournalEntry({ text: `Inizi a perlustrare l'area in cerca di risorse utili...`, type: JournalEntryType.NARRATIVE });
     advanceTime(30, true);
-    
-    // Survival skill check
+
     const dc = 10;
-    const skillCheck = performSkillCheck('sopravvivenza', dc);
-    
-    const hasScavenger = unlockedTalents.includes('scavenger');
-    const hasForager = unlockedTalents.includes('forager'); // If this talent exists
-    
-    if (skillCheck.success) {
-      audioManager.playSound('item_pickup');
-      addJournalEntry({ 
-        text: `[CHECK: Sopravvivenza] ${skillCheck.roll} + ${skillCheck.bonus} = ${skillCheck.total} vs CD ${dc}`, 
-        type: JournalEntryType.SKILL_CHECK_SUCCESS 
-      });
-      
-      // Biome-specific loot tables
-      let lootPool: Array<{ id: string; weight: number; quantity: number }> = [];
-      
-      // v2.0.14: currentBiome holds the TILE CHARACTER ('.', 'F', 'C', 'V'…),
-      // not the biome name — the old name-based cases never matched and every
-      // search fell through to the generic default pool.
-      switch (currentBiome) {
-        case '.':
-        case 'S':
-        case 'Pianura':
-          lootPool = [
-            { id: 'dirty_water', weight: 30, quantity: hasScavenger ? 3 : 2 },
-            { id: 'wild_berries', weight: 25, quantity: hasScavenger ? 3 : 2 },
-            { id: 'bottle_empty', weight: 15, quantity: 1 },
-            { id: 'clean_cloth', weight: 10, quantity: 1 },
-            { id: 'firewood', weight: 10, quantity: hasScavenger ? 3 : 2 },
-            { id: 'animal_hide', weight: 10, quantity: 1 },
-          ];
-          break;
-          
-        case 'F':
-        case 'Foresta':
-          lootPool = [
-            { id: 'firewood', weight: 35, quantity: hasScavenger ? 4 : 3 },
-            { id: 'edible_mushrooms', weight: 20, quantity: hasScavenger ? 3 : 2 },
-            { id: 'wild_berries', weight: 15, quantity: hasScavenger ? 3 : 2 },
-            { id: 'animal_hide', weight: 15, quantity: 1 },
-            { id: 'dirty_water', weight: 10, quantity: 2 },
-            { id: 'clean_cloth', weight: 5, quantity: 1 },
-          ];
-          break;
-          
-        case 'C':
-        case 'Città':
-          lootPool = [
-            { id: 'scrap_metal', weight: 30, quantity: hasScavenger ? 4 : 2 },
-            { id: 'bottle_empty', weight: 25, quantity: hasScavenger ? 3 : 2 },
-            { id: 'clean_cloth', weight: 15, quantity: hasScavenger ? 2 : 1 },
-            { id: 'adhesive_tape', weight: 10, quantity: 1 },
-            { id: 'metal_piece', weight: 10, quantity: hasScavenger ? 4 : 2 },
-            { id: 'nylon_wire', weight: 5, quantity: 1 },
-            { id: 'tech_components', weight: 5, quantity: 1 },
-          ];
-          break;
-          
-        case 'V':
-        case 'Villaggio':
-          lootPool = [
-            { id: 'clean_cloth', weight: 25, quantity: hasScavenger ? 3 : 2 },
-            { id: 'bottle_empty', weight: 20, quantity: hasScavenger ? 2 : 1 },
-            { id: 'carrot', weight: 15, quantity: hasScavenger ? 3 : 2 },
-            { id: 'potato', weight: 15, quantity: hasScavenger ? 3 : 2 },
-            { id: 'dirty_water', weight: 10, quantity: 2 },
-            { id: 'garden_tools', weight: 10, quantity: 1 },
-            { id: 'nails_box', weight: 5, quantity: 1 },
-          ];
-          break;
-          
-        default:
-          // Fallback generic loot
-          lootPool = [
-            { id: 'dirty_water', weight: 30, quantity: 2 },
-            { id: 'bottle_empty', weight: 25, quantity: 1 },
-            { id: 'clean_cloth', weight: 20, quantity: 1 },
-            { id: 'scrap_metal', weight: 15, quantity: 1 },
-            { id: 'firewood', weight: 10, quantity: 2 },
-          ];
-      }
-      
-      // Water sources give bonus clean water
-      // v2.0.14: the water tile is '~' — 'R' is a REFUGE; the bonus used to
-      // trigger while standing on refuges and never near actual water.
-      if (tileType === '~') {
-        addItem('dirty_water', hasScavenger ? 4 : 3);
-        restoreHydration(10); // Drink some directly
-        addJournalEntry({ 
-          text: `Trovi una fonte d'acqua! Raccogli acqua e ne bevi un po'. [+${hasScavenger ? 4 : 3} Acqua Contaminata, +10 Idratazione]`, 
-          type: JournalEntryType.ITEM_ACQUIRED,
-          color: '#60BF77'
-        });
-        return;
-      }
-      
-      // Roll for loot
-      const totalWeight = lootPool.reduce((sum, item) => sum + item.weight, 0);
-      const roll = Math.random() * totalWeight;
-      let cumulativeWeight = 0;
-      let foundItem = lootPool[0];
-      
-      for (const item of lootPool) {
-        cumulativeWeight += item.weight;
-        if (roll < cumulativeWeight) {
-          foundItem = item;
-          break;
-        }
-      }
-      
-      // Always add the item - addItem() will handle validation
-      addItem(foundItem.id, foundItem.quantity);
-      
-      // Try to get item name for journal, fallback to ID
-      const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
-      const itemDetails = itemDatabase[foundItem.id];
-      const itemName = itemDetails?.name || foundItem.id;
-      
-      addJournalEntry({ 
-        text: `Hai trovato: ${itemName} x${foundItem.quantity}.`, 
-        type: JournalEntryType.ITEM_ACQUIRED,
-        color: '#60BF77'
-      });
-      
-    } else {
-      audioManager.playSound('error');
-      addJournalEntry({ 
-        text: `[CHECK: Sopravvivenza] ${skillCheck.roll} + ${skillCheck.bonus} = ${skillCheck.total} vs CD ${dc} - FALLITO`, 
-        type: JournalEntryType.SKILL_CHECK_FAILURE 
-      });
-      addJournalEntry({ 
-        text: "Non trovi nulla di utile. Hai sprecato tempo ed energie.", 
-        type: JournalEntryType.ACTION_FAILURE 
-      });
+    const check = character.performSkillCheck('sopravvivenza', dc);
+    const hasScavenger = character.hasTalent('scavenger');
+
+    if (!check.success) {
+      addJournalEntry({ text: `[CHECK: Sopravvivenza] ${check.roll} + ${check.bonus} = ${check.total} vs CD ${dc} - FALLITO`, type: JournalEntryType.SKILL_CHECK_FAILURE });
+      addJournalEntry({ text: "Non trovi nulla di utile. Hai sprecato tempo ed energie.", type: JournalEntryType.ACTION_FAILURE });
+      return;
+    }
+    addJournalEntry({ text: `[CHECK: Sopravvivenza] ${check.roll} + ${check.bonus} = ${check.total} vs CD ${dc}`, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+
+    const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+    const grant = (itemId: string, quantity: number, note = '') => {
+      character.addItem(itemId, quantity);
+      const name = itemDatabase[itemId]?.name || itemId;
+      addJournalEntry({ text: `Hai trovato: ${name} x${quantity}.${note}`, type: JournalEntryType.ITEM_ACQUIRED, color: '#60BF77' });
+    };
+
+    // Near a river you can always refill: dirty water to purify, plus a few sips.
+    const nearWater = [-1, 0, 1].some(dy => [-1, 0, 1].some(dx => map[playerPos.y + dy]?.[playerPos.x + dx] === '~'));
+    if (nearWater) {
+      grant('dirty_water', hasScavenger ? 4 : 3, ' Bevi anche qualche sorso dal fiume.');
+      character.restoreHydration(10);
+    }
+    // The repaired water treatment plant supplies clean water to the area around it.
+    if (worldState.waterPlantActive && worldState.waterPlantLocation && distance(playerPos, worldState.waterPlantLocation) <= 8) {
+      grant('CONS_002', 2, " L'impianto di depurazione riattivato fa scorrere acqua pulita.");
+    }
+
+    const tables = useLootTableStore.getState().tables.activeSearch;
+    const loot = rollLoot(tables[currentBiome] ?? tables.default ?? []);
+    if (loot) {
+      const stackable = itemDatabase[loot.itemId]?.stackable;
+      grant(loot.itemId, loot.quantity + (hasScavenger && stackable ? 1 : 0), hasScavenger && stackable ? ' [Scavenger]' : '');
     }
   },
 
-  /**
-   * @function openLevelUpScreen
-   * @description Opens the level up screen if the player has enough XP.
-   */
   openLevelUpScreen: () => {
-      if (useCharacterStore.getState().levelUpPending) {
-          audioManager.playSound('confirm');
-          get().setGameState(GameState.LEVEL_UP_SCREEN);
-      } else {
-          get().addJournalEntry({ text: "Non hai abbastanza XP per salire di livello.", type: JournalEntryType.SYSTEM_WARNING });
-      }
+    if (useCharacterStore.getState().levelUpPending) {
+      audioManager.playSound('confirm');
+      get().setGameState(GameState.LEVEL_UP_SCREEN);
+    } else {
+      get().addJournalEntry({ text: "Non hai abbastanza XP per salire di livello.", type: JournalEntryType.SYSTEM_WARNING });
+    }
   },
 
-  /**
-   * Checks if any cutscene triggers have been met and starts the appropriate cutscene.
-   *
-   * @description This function evaluates various game conditions to determine if a cutscene
-   * should be triggered. Cutscenes are checked in priority order and only one can trigger per call.
-   *
-   * Cutscenes checked (in order):
-   * 1. CS_CITY_OF_GHOSTS - First time entering a City biome
-   * 2. CS_BEING_WATCHED - Automatically at day 3+
-   * 3. CS_RIVER_INTRO - When near water tiles (within 2 tile radius)
-   * 4. CS_HALF_JOURNEY - After 100+ steps AND 3+ days survived
-   * 5. CS_POINT_OF_NO_RETURN - Within 20 tiles of destination 'E'
-   *
-   * @remarks
-   * - Only triggers when gameState is IN_GAME
-   * - Uses game flags to prevent cutscene repetition
-   * - Each cutscene sets a flag (e.g., 'CITY_OF_GHOSTS_PLAYED')
-   * - Distance calculations use Euclidean distance (sqrt(dx² + dy²))
-   *
-   * @example
-   * // Called automatically after player movement
-   * gameStore.checkCutsceneTriggers();
-   */
+  /** One-off cutscenes tied to places and milestones (checked after moves and new days). */
   checkCutsceneTriggers: () => {
     const { gameTime } = useTimeStore.getState();
     const state = get();
-    
     if (state.gameState !== GameState.IN_GAME) return;
-    
-    // CS_CITY_OF_GHOSTS: First time entering a City (HIGH PRIORITY - before city events)
-    if (state.currentBiome === 'Città' && !state.gameFlags.has('CITY_OF_GHOSTS_PLAYED')) {
-        set(s => ({ gameFlags: new Set(s.gameFlags).add('CITY_OF_GHOSTS_PLAYED') }));
-        state.startCutscene('CS_CITY_OF_GHOSTS');
-        return;
+
+    const once = (flag: string, cutsceneId: string) => {
+      state.setFlag(flag);
+      state.startCutscene(cutsceneId);
+    };
+
+    if (state.currentBiome === 'C' && !state.gameFlags.has('CITY_OF_GHOSTS_PLAYED')) {
+      once('CITY_OF_GHOSTS_PLAYED', 'CS_CITY_OF_GHOSTS');
+      return;
     }
-    
-    // CS_BEING_WATCHED: Automatically triggers at day 3
     if (gameTime.day >= 3 && !state.gameFlags.has('BEING_WATCHED_PLAYED')) {
-        set(s => ({ gameFlags: new Set(s.gameFlags).add('BEING_WATCHED_PLAYED') }));
-        state.startCutscene('CS_BEING_WATCHED');
-        return;
+      once('BEING_WATCHED_PLAYED', 'CS_BEING_WATCHED');
+      return;
     }
-    
-    // CS_RIVER_INTRO: Near water tiles
     if (!state.gameFlags.has('RIVER_INTRO_PLAYED')) {
-        let riverFound = false;
-        for (let dy = -2; dy <= 2; dy++) {
-            for (let dx = -2; dx <= 2; dx++) {
-                const checkY = state.playerPos.y + dy;
-                const checkX = state.playerPos.x + dx;
-                if (checkY >= 0 && checkY < state.map.length && checkX >= 0 && checkX < state.map[checkY].length && state.map[checkY][checkX] === '~') {
-                    riverFound = true;
-                    break;
-                }
-            }
-            if (riverFound) break;
+      const { x, y } = state.playerPos;
+      let riverFound = false;
+      for (let dy = -2; dy <= 2 && !riverFound; dy++) {
+        for (let dx = -2; dx <= 2 && !riverFound; dx++) {
+          riverFound = state.map[y + dy]?.[x + dx] === '~';
         }
-        if (riverFound) {
-            set(s => ({ gameFlags: new Set(s.gameFlags).add('RIVER_INTRO_PLAYED') }));
-            state.startCutscene('CS_RIVER_INTRO');
-            return;
-        }
+      }
+      if (riverFound) {
+        once('RIVER_INTRO_PLAYED', 'CS_RIVER_INTRO');
+        return;
+      }
     }
-    
-    // CS_HALF_JOURNEY: stepsTaken >= 100 AND daysSurvived >= 3
     if (state.totalSteps >= 100 && gameTime.day >= 3 && !state.gameFlags.has('HALF_JOURNEY_PLAYED')) {
-        set(s => ({ gameFlags: new Set(s.gameFlags).add('HALF_JOURNEY_PLAYED') }));
-        state.startCutscene('CS_HALF_JOURNEY');
-        return;
+      once('HALF_JOURNEY_PLAYED', 'CS_HALF_JOURNEY');
+      return;
     }
-    
-    // CS_POINT_OF_NO_RETURN: distance < 20 tiles from 'E'
     if (!state.gameFlags.has('POINT_OF_NO_RETURN_PLAYED')) {
-        let endPos: { x: number; y: number } | null = null;
-        for (let y = 0; y < state.map.length; y++) {
-            for (let x = 0; x < state.map[y].length; x++) {
-                if (state.map[y][x] === 'E') {
-                    endPos = { x, y };
-                    break;
-                }
-            }
-            if (endPos) break;
-        }
-        if (endPos) {
-            const distance = Math.sqrt(
-                Math.pow(state.playerPos.x - endPos.x, 2) +
-                Math.pow(state.playerPos.y - endPos.y, 2)
-            );
-            if (distance <= 20) {
-                set(s => ({ gameFlags: new Set(s.gameFlags).add('POINT_OF_NO_RETURN_PLAYED') }));
-                state.startCutscene('CS_POINT_OF_NO_RETURN');
-                return;
-            }
-        }
+      const endPos = findTile(state.map, 'E');
+      if (endPos && distance(state.playerPos, endPos) <= 20) {
+        once('POINT_OF_NO_RETURN_PLAYED', 'CS_POINT_OF_NO_RETURN');
+      }
     }
   },
 
-  /**
-   * Checks if any main story chapter triggers have been met and activates the chapter.
-   *
-   * @description Evaluates trigger conditions for the next main story chapter and activates it
-   * if all conditions are satisfied. Respects day/night cycle and daily event limits.
-   *
-   * Main Story System:
-   * - 12 chapters total ("Echi della Memoria")
-   * - Maximum 2 story events per day
-   * - Some chapters only trigger during day (unless allowNightTrigger is true)
-   * - Triggers are checked after every significant game action
-   *
-   * Trigger Types:
-   * - stepsTaken: Player has walked X steps
-   * - daysSurvived: Player has survived X days
-   * - levelReached: Player has reached level X
-   * - combatWins: Player has won X combats
-   * - reachLocation: Player is at specific coordinates
-   * - reachEnd: Player is on the 'E' tile
-   * - nearEnd: Player is within X tiles of 'E'
-   * - firstRefugeEntry: Player enters a refuge for the first time
-   *
-   * @remarks
-   * - Unlocks survival trophies at day 5 and day 30
-   * - Resets daily event counter at midnight
-   * - Only triggers when gameState is IN_GAME
-   * - Night check: hour >= 20 OR hour < 6
-   *
-   * @example
-   * // Called after player movement, time advancement, or level up
-   * gameStore.checkMainStoryTriggers();
-   */
-  checkMainStoryTriggers: () => {
+  /** Activates the pending main story chapter when its condition is met. */
+  checkMainStoryTriggers: (context) => {
     const { gameTime } = useTimeStore.getState();
-    const { unlockTrophy } = useCharacterStore.getState();
+    if (get().mainStoryEventsToday.day !== gameTime.day) {
+      set({ mainStoryEventsToday: { day: gameTime.day, count: 0 } });
+    }
+    get().checkTimeTrophies();
+
     const state = get();
+    if (state.mainStoryEventsToday.count >= MAX_STORY_EVENTS_PER_DAY) return;
+    if (state.activeMainStoryEvent || state.gameState !== GameState.IN_GAME) return;
 
-    // Reset daily story event counter if the day has changed
-    if (state.mainStoryEventsToday.day !== gameTime.day) {
-        set({ mainStoryEventsToday: { day: gameTime.day, count: 0 } });
-    }
-    
-    if (gameTime.day >= 5) unlockTrophy('trophy_survive_7_days');
-    if (gameTime.day >= 30) unlockTrophy('trophy_survive_30_days');
-
-    const currentState = get();
-
-    // Block if 2 story events already happened today
-    if (currentState.mainStoryEventsToday.count >= 2) {
-        return;
-    }
-
-    if (currentState.activeMainStoryEvent || currentState.gameState !== GameState.IN_GAME) return;
     const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
-    const nextChapter = mainStoryChapters.find(c => c.stage === currentState.mainStoryStage);
+    const nextChapter = mainStoryChapters.find(c => c.stage === state.mainStoryStage);
     if (!nextChapter) return;
+    if (isNightHour(gameTime.hour) && !nextChapter.allowNightTrigger) return;
 
-    const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
-    if (isNight && !nextChapter.allowNightTrigger) {
-        return; // Non attivare eventi diurni durante la notte
-    }
-
-    let conditionMet = false;
     const trigger = nextChapter.trigger;
-    const { level } = useCharacterStore.getState();
-
+    let conditionMet = false;
     switch (trigger.type) {
-        case 'stepsTaken': conditionMet = currentState.totalSteps >= trigger.value; break;
-        case 'daysSurvived': conditionMet = gameTime.day >= trigger.value; break;
-        case 'levelReached': conditionMet = level >= trigger.value; break;
-        case 'combatWins': conditionMet = currentState.totalCombatWins >= trigger.value; break;
-        case 'reachLocation': conditionMet = currentState.playerPos.x === trigger.value.x && currentState.playerPos.y === trigger.value.y; break;
-        case 'reachEnd': conditionMet = currentState.map[currentState.playerPos.y][currentState.playerPos.x] === 'E'; break;
-        case 'nearEnd': {
-            // Find position of 'E' in the map
-            let endPos: { x: number; y: number } | null = null;
-            for (let y = 0; y < currentState.map.length; y++) {
-                for (let x = 0; x < currentState.map[y].length; x++) {
-                    if (currentState.map[y][x] === 'E') {
-                        endPos = { x, y };
-                        break;
-                    }
-                }
-                if (endPos) break;
-            }
-            if (endPos) {
-                const distance = Math.sqrt(
-                    Math.pow(currentState.playerPos.x - endPos.x, 2) +
-                    Math.pow(currentState.playerPos.y - endPos.y, 2)
-                );
-                conditionMet = distance <= trigger.distance;
-            }
-            break;
-        }
-        case 'firstRefugeEntry': break;
+      case 'stepsTaken': conditionMet = state.totalSteps >= trigger.value; break;
+      case 'daysSurvived': conditionMet = gameTime.day >= trigger.value; break;
+      case 'levelReached': conditionMet = useCharacterStore.getState().level >= trigger.value; break;
+      case 'combatWins': conditionMet = state.totalCombatWins >= trigger.value; break;
+      case 'reachLocation': conditionMet = state.playerPos.x === trigger.value.x && state.playerPos.y === trigger.value.y; break;
+      case 'reachEnd': conditionMet = state.map[state.playerPos.y]?.[state.playerPos.x] === 'E'; break;
+      case 'nearEnd': {
+        const endPos = findTile(state.map, 'E');
+        conditionMet = !!endPos && distance(state.playerPos, endPos) <= trigger.distance;
+        break;
+      }
+      // Entering any refuge while this chapter is pending (interactionStore.enterRefuge).
+      case 'firstRefugeEntry': conditionMet = Boolean(context?.refugeEntry); break;
     }
-    if (conditionMet) {
-        set(prevState => ({
-            activeMainStoryEvent: nextChapter,
-            gameState: GameState.MAIN_STORY,
-            mainStoryEventsToday: {
-                day: prevState.mainStoryEventsToday.day,
-                count: prevState.mainStoryEventsToday.count + 1
-            }
-        }));
-    }
+    if (conditionMet) get().activateMainStoryChapter(nextChapter);
   },
 
-  /**
-   * @function resolveMainStory
-   * @description Resolves the current main story event and advances to the next stage.
-   */
+  activateMainStoryChapter: (chapter: MainStoryChapter) => {
+    set(prev => ({
+      activeMainStoryEvent: chapter,
+      gameState: GameState.MAIN_STORY,
+      previousGameState: prev.gameState,
+      mainStoryEventsToday: { day: prev.mainStoryEventsToday.day, count: prev.mainStoryEventsToday.count + 1 },
+    }));
+  },
+
   resolveMainStory: () => {
     const completedStage = get().mainStoryStage;
     useCharacterStore.getState().unlockTrophy(`trophy_mq_${completedStage}`);
     const newStage = completedStage + 1;
 
-    // v2.0.8: The final chapter ("La Verità", reachEnd) leads to the ending
-    // instead of dropping the player back into free-roam forever.
     const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
-    const hasNextChapter = mainStoryChapters.some(c => c.stage === newStage);
-    const isFinalStage = !hasNextChapter && mainStoryChapters.length > 0;
-
+    const isFinalStage = mainStoryChapters.length > 0 && !mainStoryChapters.some(c => c.stage === newStage);
     if (isFinalStage) {
-        audioManager.playSound('victory');
-        set({
-            mainStoryStage: newStage,
-            activeMainStoryEvent: null,
-            gameState: GameState.VICTORY,
-        });
-        return;
+      // The last chapter ("La Verità", reachEnd) leads to the ending.
+      if (useCharacterStore.getState().activeQuests['MQ_THE_ECHO_OF_THE_JOURNEY']) {
+        questService.completeQuest('MQ_THE_ECHO_OF_THE_JOURNEY');
+      }
+      audioManager.playSound('victory');
+      set({ mainStoryStage: newStage, activeMainStoryEvent: null, gameState: GameState.VICTORY, pendingCutscenes: [] });
+      return;
     }
 
-    set({
-        mainStoryStage: newStage,
-        activeMainStoryEvent: null,
-        gameState: GameState.IN_GAME,
-    });
-
-    // v1.9.0: Check quest triggers for mainStoryComplete
-    import('../services/questService').then(({ questService }) => {
-        questService.checkQuestTriggers();
-    });
+    set({ mainStoryStage: newStage, activeMainStoryEvent: null });
+    get().setGameState(GameState.IN_GAME);
+    questService.checkQuestTriggers({ source: 'story' });
   },
-  
-  /**
-   * @function startCutscene
-   * @description Starts a cutscene.
-   * @param {string} id - The ID of the cutscene to start.
-   */
+
   startCutscene: (id) => {
-    // Selective Ink routing: when an Ink knot is available for this legacy cutscene id,
-    // hand control to NarrativeService and skip the legacy page-based player.
-    // Knots that don't have an Ink rewrite yet keep using the legacy CutsceneScreen pages.
     const knot = LEGACY_CUTSCENE_TO_INK_KNOT[id];
     if (knot) {
-        // v2.0.14: the opening must land on CHARACTER_CREATION like the legacy
-        // path did (endCutscene). Defaulting to IN_GAME skipped the stat roll
-        // entirely — the creation screen was unreachable, every run started
-        // with flat attributes.
-        const returnState = id === 'CS_OPENING' ? GameState.CHARACTER_CREATION : undefined;
-        import('../services/NarrativeService').then(({ narrativeService }) => {
-            narrativeService.startCutscene(knot, returnState);
-        });
-        return;
+      // The opening lands on character creation, like the legacy player did.
+      narrativeService.startCutscene(knot, id === 'CS_OPENING' ? GameState.CHARACTER_CREATION : undefined);
+      return;
     }
-
     const { cutscenes } = useCutsceneDatabaseStore.getState();
     if (cutscenes[id]) {
-        set({ activeCutscene: cutscenes[id], gameState: GameState.CUTSCENE });
+      set(state => ({ activeCutscene: cutscenes[id], previousGameState: state.gameState, gameState: GameState.CUTSCENE }));
     }
   },
 
-  /**
-   * @function processCutsceneConsequences
-   * @description Processes the consequences of a cutscene.
-   * @param {CutsceneConsequence[]} consequences - The consequences to process.
-   */
-  processCutsceneConsequences: (consequences) => {
-    const { addItem, equipItem, unlockTrophy } = useCharacterStore.getState();
+  /** Plays a cutscene now if the player is in free roam, otherwise as soon as they are back. */
+  queueCutscene: (id) => {
+    const state = get();
+    if (state.gameState === GameState.IN_GAME && !state.activeCutscene) {
+      state.startCutscene(id);
+    } else if (!state.pendingCutscenes.includes(id)) {
+      set({ pendingCutscenes: [...state.pendingCutscenes, id] });
+    }
+  },
+
+  processCutsceneConsequences: (consequences: CutsceneConsequence[]) => {
+    const character = useCharacterStore.getState();
     const { addJournalEntry } = get();
     const { advanceTime } = useTimeStore.getState();
-    consequences.forEach(consequence => {
-        switch (consequence.type) {
-            case 'addItem': addItem(consequence.payload.itemId, consequence.payload.quantity); break;
-            // FIX: The CutsceneConsequence type is 'equipItemByIndex', not 'equipItem'. This aligns the implementation with the type definition.
-            case 'equipItemByIndex': equipItem(consequence.payload); break;
-            case 'setFlag': {
-              const flag = consequence.payload;
-              set(state => ({ gameFlags: new Set(state.gameFlags).add(flag) }));
-              if (flag === 'FATHERS_LETTER_DESTROYED') unlockTrophy('trophy_secret_destroy_letter');
-              break;
-            }
-            case 'performModifiedRest': {
-                addJournalEntry({ text: "Il sonno è leggero, agitato.", type: JournalEntryType.NARRATIVE });
-                advanceTime(60, true);
-                set({ lastRestTime: useTimeStore.getState().gameTime });
-                useCharacterStore.getState().heal(10);
-                addJournalEntry({ text: `Un breve e inquieto riposo ti ha concesso solo 10 HP.`, type: JournalEntryType.SYSTEM_WARNING });
-                break;
-            }
+    for (const consequence of consequences) {
+      switch (consequence.type) {
+        case 'addItem':
+          character.addItem(consequence.payload.itemId, consequence.payload.quantity);
+          break;
+        case 'equipItem':
+          character.equipItem(consequence.payload);
+          break;
+        case 'setFlag':
+          get().setFlag(consequence.payload);
+          break;
+        case 'startQuest':
+          questService.startQuest(consequence.payload);
+          break;
+        case 'alignmentChange': {
+          const { type, amount } = consequence.value ?? consequence.payload ?? {};
+          if (type === 'lena' || type === 'elian') character.changeAlignment(type, amount);
+          break;
         }
+        case 'performModifiedRest':
+          addJournalEntry({ text: "Il sonno è leggero, agitato.", type: JournalEntryType.NARRATIVE });
+          advanceTime(60, true);
+          set({ lastRestTime: useTimeStore.getState().gameTime });
+          character.heal(10);
+          addJournalEntry({ text: `Un breve e inquieto riposo ti ha concesso solo 10 HP.`, type: JournalEntryType.SYSTEM_WARNING });
+          break;
+      }
+    }
+  },
+
+  endCutscene: () => {
+    const currentSceneId = get().activeCutscene?.id;
+    if (currentSceneId === 'CS_ASH_LULLABY') {
+      useCharacterStore.getState().unlockTrophy('trophy_secret_ash_lullaby');
+    }
+    set({ activeCutscene: null });
+    get().setGameState(currentSceneId === 'CS_OPENING' ? GameState.CHARACTER_CREATION : GameState.IN_GAME);
+  },
+
+  setFlag: (flag) => {
+    if (get().gameFlags.has(flag)) return;
+    set(state => ({ gameFlags: new Set(state.gameFlags).add(flag) }));
+    const trophy = FLAG_TROPHIES[flag];
+    if (trophy) useCharacterStore.getState().unlockTrophy(trophy);
+  },
+
+  hasFlag: (flag) => get().gameFlags.has(flag),
+
+  /** Trophies tied to elapsed days. Called whenever a day changes. */
+  checkTimeTrophies: () => {
+    const { day } = useTimeStore.getState().gameTime;
+    const { unlockTrophy } = useCharacterStore.getState();
+    // "Sopravvivi per N giorni" = N full days behind you.
+    if (day > 7) unlockTrophy('trophy_survive_7_days');
+    if (day > 30) unlockTrophy('trophy_survive_30_days');
+    if (day - get().lastCombatDay >= 3) unlockTrophy('trophy_misc_no_combat_3_days');
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // POINTS OF INTEREST
+  // ═══════════════════════════════════════════════════════════════════════
+  addPOI: (poi) => {
+    set(state => {
+      const existing = state.pois.find(p => p.id === poi.id);
+      if (existing) {
+        return { pois: state.pois.map(p => p.id === poi.id ? { ...p, ...poi, revealed: p.revealed || poi.revealed } : p) };
+      }
+      return { pois: [...state.pois, poi] };
     });
   },
 
-  /**
-   * @function endCutscene
-   * @description Ends the current cutscene.
-   */
-  endCutscene: () => {
-    const { unlockTrophy } = useCharacterStore.getState();
-    const currentSceneId = get().activeCutscene?.id;
-    let nextState = GameState.IN_GAME;
-    if (currentSceneId === 'CS_OPENING') {
-        nextState = GameState.CHARACTER_CREATION;
+  revealPOI: (poiId) => {
+    const poi = get().pois.find(p => p.id === poiId);
+    if (!poi) {
+      console.warn(`[POI] Unknown point of interest: ${poiId}`);
+      return false;
     }
-    if(currentSceneId === 'CS_ASH_LULLABY') {
-      unlockTrophy('trophy_secret_ash_lullaby');
-    }
-    set({ activeCutscene: null, gameState: nextState });
+    if (poi.revealed) return true;
+    set(state => ({ pois: state.pois.map(p => p.id === poiId ? { ...p, revealed: true } : p) }));
+    get().addJournalEntry({ text: `[MAPPA] Nuovo luogo segnato: ${poi.name}.`, type: JournalEntryType.EVENT, color: '#a78bfa' });
+    return true;
   },
 
+  getPOI: (poiId) => get().pois.find(p => p.id === poiId),
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // SAVE / LOAD
+  // ═══════════════════════════════════════════════════════════════════════
   saveGame: (slot) => {
+    if (slot < 1 || slot > NUM_SAVE_SLOTS) {
+      get().addJournalEntry({ text: "Slot di salvataggio non valido.", type: JournalEntryType.SYSTEM_ERROR });
+      return false;
+    }
     try {
       const characterState = useCharacterStore.getState();
       const timeState = useTimeStore.getState();
-
-      // Validate slot number
-      if (slot < 1 || slot > 5) {
-        console.error("Invalid slot number:", slot);
-        get().addJournalEntry({ text: "Slot di salvataggio non valido.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // Collect all save data
       const saveData = {
         saveVersion: SAVE_VERSION,
         timestamp: Date.now(),
@@ -947,418 +594,197 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         time: timeState.toJSON(),
         interaction: useInteractionStore.getState().toJSON(),
         event: useEventStore.getState().toJSON(),
-        combat: useCombatStore.getState().toJSON(),
-        // v2.0.14: serialized Ink state (variables, one-shot choices, flags).
-        // Cached by NarrativeService at the end of every dialogue — saves were
-        // silently dropping all narrative progression before this.
         narrative: { inkState: useNarrativeStore.getState().inkStateJson },
       };
-
-      // Validate save data before saving
-      if (!saveData.character || !saveData.game || !saveData.time) {
-        console.error("Invalid save data structure");
-        get().addJournalEntry({ text: "Errore: dati di salvataggio incompleti.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // Try to stringify to catch any serialization errors
-      let saveDataJSON: string;
-      try {
-        saveDataJSON = JSON.stringify(saveData);
-      } catch (stringifyError) {
-        console.error("Error stringifying save data:", stringifyError);
-        get().addJournalEntry({ text: "Errore durante la serializzazione dei dati.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // Check localStorage space
-      try {
-        localStorage.setItem(`tspc_save_${slot}`, saveDataJSON);
-        localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
-      } catch (storageError) {
-        if (storageError instanceof DOMException && storageError.name === 'QuotaExceededError') {
-          console.error("localStorage quota exceeded");
-          get().addJournalEntry({ text: "Spazio di archiviazione insufficiente. Elimina altri salvataggi.", type: JournalEntryType.SYSTEM_ERROR });
-        } else {
-          console.error("localStorage error:", storageError);
-          get().addJournalEntry({ text: "Errore durante l'accesso allo storage.", type: JournalEntryType.SYSTEM_ERROR });
-        }
-        return false;
-      }
-
-      audioManager.playSound('confirm');
-      get().addJournalEntry({ text: `Partita salvata nello slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
-      return true;
+      storage.set(slotKey(slot), JSON.stringify(saveData));
+      storage.set(LAST_SAVE_SLOT_KEY, slot.toString());
     } catch (error) {
-      console.error("Unexpected error saving game:", error);
-      get().addJournalEntry({ text: "Errore imprevisto durante il salvataggio.", type: JournalEntryType.SYSTEM_ERROR });
+      const quota = error instanceof DOMException && error.name === 'QuotaExceededError';
+      console.error('Error saving game:', error);
+      get().addJournalEntry({
+        text: quota ? "Spazio di archiviazione insufficiente. Elimina altri salvataggi." : "Errore durante il salvataggio.",
+        type: JournalEntryType.SYSTEM_ERROR,
+      });
       return false;
     }
+    audioManager.playSound('confirm');
+    get().addJournalEntry({ text: `Partita salvata nello slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
+    return true;
   },
 
   loadGame: (slot) => {
+    const raw = storage.get(slotKey(slot));
+    if (!raw) return false;
+    let savedData: any;
     try {
-      const savedDataJSON = localStorage.getItem(`tspc_save_${slot}`);
-      if (!savedDataJSON) {
-        get().addJournalEntry({ text: `Nessun dato di salvataggio trovato nello slot ${slot}.`, type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      let savedData;
-      try {
-        savedData = JSON.parse(savedDataJSON);
-      } catch (parseError) {
-        console.error("Error parsing save data:", parseError);
-        get().addJournalEntry({ text: "File di salvataggio corrotto. Impossibile caricare.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // Validate save data structure
-      if (!savedData.metadata || !savedData.character || !savedData.game || !savedData.time) {
-        console.error("Invalid save data structure");
-        get().addJournalEntry({ text: "File di salvataggio incompleto o non valido.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // Migrate save data if needed
-      if (savedData.saveVersion !== SAVE_VERSION) {
-        console.warn(`Save file version (${savedData.saveVersion || '1.0.0'}) does not match game version (${SAVE_VERSION}). Attempting migration...`);
-        try {
-          savedData = migrateSaveData(savedData);
-          console.log("Migration successful!");
-        } catch (migrationError) {
-          console.error("Migration failed:", migrationError);
-          get().addJournalEntry({ text: "Impossibile migrare il salvataggio alla versione corrente.", type: JournalEntryType.SYSTEM_ERROR });
-          return false;
-        }
-      }
-      
-      // Restore all stores
-      try {
-        useCharacterStore.getState().fromJSON(savedData.character);
-        get().fromJSON(savedData.game);
-        useTimeStore.getState().fromJSON(savedData.time);
-        useInteractionStore.getState().fromJSON(savedData.interaction);
-        useEventStore.getState().fromJSON(savedData.event);
-        useCombatStore.getState().fromJSON(savedData.combat);
-      } catch (restoreError) {
-        console.error("Error restoring game state:", restoreError);
-        get().addJournalEntry({ text: "Errore durante il ripristino dello stato di gioco.", type: JournalEntryType.SYSTEM_ERROR });
-        return false;
-      }
-
-      // v1.9.9 - Fix: Initialize wandering trader if not present in save
-      if (!get().wanderingTrader) {
-        console.log('[LOAD GAME] Wandering Trader not in save, initializing...');
-        get().initializeWanderingTrader();
-      }
-
-      // v2.0.14: restore the Ink narrative state (or reset it for old saves
-      // that never captured it — better a clean narrative than a stale one
-      // leaking from the current session).
-      const inkState = savedData.narrative?.inkState ?? null;
-      import('../services/NarrativeService').then(({ narrativeService }) => {
-        narrativeService.loadInkStateJson(inkState);
-      });
-
-      localStorage.setItem(LAST_SAVE_SLOT_KEY, slot.toString());
-      get().addJournalEntry({ text: `Partita caricata dallo slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
-      
-      // Ensure the game is in a playable state after loading
-      get().setGameState(GameState.IN_GAME);
-      return true;
+      savedData = JSON.parse(raw);
     } catch (error) {
-      console.error("Unexpected error loading game:", error);
-      get().addJournalEntry({ text: "Errore imprevisto durante il caricamento. Riprova.", type: JournalEntryType.SYSTEM_ERROR });
+      console.error('Corrupted save:', error);
       return false;
     }
+    const invalid = validateSaveData(savedData);
+    if (invalid) {
+      console.error(`Invalid save in slot ${slot}: ${invalid}`);
+      return false;
+    }
+
+    try {
+      useCombatStore.getState().reset();
+      useCharacterStore.getState().fromJSON(savedData.character);
+      get().fromJSON(savedData.game);
+      useTimeStore.getState().fromJSON(savedData.time);
+      useInteractionStore.getState().fromJSON(savedData.interaction);
+      useEventStore.getState().fromJSON(savedData.event);
+      migrateLegacyArmorUpgrades();
+    } catch (error) {
+      console.error('Error restoring game state:', error);
+      return false;
+    }
+
+    if (!get().wanderingTrader) get().initializeWanderingTrader();
+    narrativeService.loadInkStateJson(savedData.narrative?.inkState ?? null);
+
+    try { storage.set(LAST_SAVE_SLOT_KEY, slot.toString()); } catch { /* not critical */ }
+    get().addJournalEntry({ text: `Partita caricata dallo slot ${slot}.`, type: JournalEntryType.SYSTEM_MESSAGE });
+    set({ previousGameState: null });
+    get().setGameState(GameState.IN_GAME);
+    // Re-evaluate quests against the loaded state (old saves may be mid-stage).
+    questService.checkQuestTriggers({ source: 'load' });
+    return true;
   },
-  /**
-   * Serializes the game store state to a JSON-compatible object.
-   *
-   * @description Converts the store state to a plain object suitable for JSON serialization.
-   * Handles conversion of Set objects to Arrays for JSON compatibility.
-   *
-   * Used by the save game system to persist game state to localStorage.
-   *
-   * @returns {object} A JSON-serializable representation of the game store state
-   *
-   * @remarks
-   * - Converts Set<string> to string[] for gameFlags and visitedBiomes
-   * - All other state properties are preserved as-is
-   * - Compatible with save system version 2.0.0
-   *
-   * @see fromJSON for the reverse operation
-   * @see saveGame for the complete save system
-   */
+
   toJSON: () => {
-    const state = get();
+    const s = get();
     return {
-      ...state,
-      gameFlags: Array.from(state.gameFlags),
-      visitedBiomes: Array.from(state.visitedBiomes),
-      worldState: state.worldState, // Already serializable (arrays of positions)
+      playerPos: s.playerPos,
+      playerStatus: s.playerStatus,
+      journal: s.journal,
+      currentBiome: s.currentBiome,
+      lastRestTime: s.lastRestTime,
+      lastEncounterTime: s.lastEncounterTime,
+      lastSearchedBiome: s.lastSearchedBiome,
+      lastLoreEventDay: s.lastLoreEventDay,
+      lastCombatDay: s.lastCombatDay,
+      visitedRefuges: s.visitedRefuges,
+      mainStoryStage: s.mainStoryStage,
+      totalSteps: s.totalSteps,
+      totalCombatWins: s.totalCombatWins,
+      activeMainStoryEvent: s.activeMainStoryEvent,
+      pendingCutscenes: s.pendingCutscenes,
+      gameFlags: Array.from(s.gameFlags),
+      mainStoryEventsToday: s.mainStoryEventsToday,
+      visitedBiomes: Array.from(s.visitedBiomes),
+      wanderingTrader: s.wanderingTrader,
+      worldState: s.worldState,
+      pois: s.pois.map(({ id, name, x, y, eventId, revealed, marker, oneShot, consumed }) => ({ id, name, x, y, eventId, revealed, marker, oneShot, consumed })),
+      traderStock: s.traderStock,
+      lightUntil: s.lightUntil,
+      repelUntil: s.repelUntil,
+      lastShelterDay: s.lastShelterDay,
+      lastRadioDay: s.lastRadioDay,
     };
   },
 
-  /**
-   * Deserializes a JSON object and restores the game store state.
-   *
-   * @description Converts a plain JSON object back to the store state format.
-   * Handles conversion of Arrays back to Set objects.
-   *
-   * Used by the load game system to restore game state from localStorage.
-   *
-   * @param {any} json - The JSON object to deserialize (from saved game data)
-   *
-   * @remarks
-   * - Converts string[] back to Set<string> for gameFlags and visitedBiomes
-   * - All other properties are restored directly
-   * - Compatible with save system version 2.0.0
-   * - Handles migration from version 1.0.0 via migrateSaveData()
-   *
-   * @see toJSON for the serialization operation
-   * @see loadGame for the complete load system
-   * @see migrateSaveData for version migration
-   */
   fromJSON: (json) => {
+    const startPos = findTile(MAP_DATA, 'S') ?? { x: 0, y: 0 };
+    const flags = new Set<string>(Array.isArray(json.gameFlags) ? json.gameFlags : []);
+    // Saves before 2.1 tracked the debug panel through a game flag.
+    flags.delete('SHOW_DEBUG_PANEL');
     set({
-      ...json,
-      gameFlags: new Set(json.gameFlags),
-      visitedBiomes: new Set(json.visitedBiomes),
-      worldState: json.worldState || { repairedPumps: [], destroyedPumps: [], waterPlantActive: false, waterPlantLocation: null },
+      map: MAP_DATA,
+      playerPos: json.playerPos ?? startPos,
+      playerStatus: json.playerStatus ?? { isExitingWater: false },
+      journal: Array.isArray(json.journal) ? json.journal : [],
+      currentBiome: json.currentBiome ?? 'S',
+      lastRestTime: json.lastRestTime ?? null,
+      lastEncounterTime: json.lastEncounterTime ?? null,
+      lastSearchedBiome: json.lastSearchedBiome ?? null,
+      lastLoreEventDay: json.lastLoreEventDay ?? 0,
+      lastCombatDay: json.lastCombatDay ?? 1,
+      visitedRefuges: Array.isArray(json.visitedRefuges) ? json.visitedRefuges : [],
+      mainStoryStage: json.mainStoryStage ?? 1,
+      totalSteps: json.totalSteps ?? 0,
+      totalCombatWins: json.totalCombatWins ?? 0,
+      activeMainStoryEvent: null,
+      activeCutscene: null,
+      pendingCutscenes: Array.isArray(json.pendingCutscenes) ? json.pendingCutscenes : [],
+      gameFlags: flags,
+      mainStoryEventsToday: json.mainStoryEventsToday ?? { day: 1, count: 0 },
+      deathCause: null,
+      visitedBiomes: new Set<string>(Array.isArray(json.visitedBiomes) ? json.visitedBiomes : []),
+      wanderingTrader: json.wanderingTrader ?? null,
+      worldState: json.worldState ?? initialWorldState(),
+      pois: buildPOIs(json.pois),
+      traderStock: json.traderStock ?? {},
+      lightUntil: json.lightUntil ?? 0,
+      repelUntil: json.repelUntil ?? 0,
+      lastShelterDay: json.lastShelterDay ?? 0,
+      lastRadioDay: json.lastRadioDay ?? 0,
     });
   },
 
-  /**
-   * Restores the game store state from a partial state object.
-   *
-   * @description Low-level function to restore state. Used internally by the save/load system.
-   * Directly sets the store state without any transformation or validation.
-   *
-   * @param {any} state - The state object to restore
-   *
-   * @warning This function performs no validation. Use fromJSON() for safe deserialization.
-   *
-   * @internal
-   */
-  restoreState: (state: any) => {
-    set({ ...state });
-  },
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // WANDERING TRADER SYSTEM (v1.6.0)
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /**
-   * Initializes the Wandering Trader at a random valid position on the map.
-   *
-   * @description Scans the map for traversable tiles and spawns the trader
-   * at a random location. Should be called once when starting a new game.
-   *
-   * @remarks
-   * - Only spawns on traversable tiles (., F, C, V)
-   * - Excludes water (~), mountains (M), refuges (R), start (S), end (E)
-   * - Sets initial turnsUntilMove to 5
-   */
+  // ═══════════════════════════════════════════════════════════════════════
+  // WANDERING TRADER
+  // ═══════════════════════════════════════════════════════════════════════
   initializeWanderingTrader: () => {
-    const { map } = get();
+    const { map, playerPos } = get();
     const validTiles: Position[] = [];
-    
-    // Scan map for valid spawn positions
     for (let y = 0; y < map.length; y++) {
       for (let x = 0; x < map[y].length; x++) {
         const tile = map[y][x];
-        // Valid tiles: Plains, Forest, City, Village
-        if (tile === '.' || tile === 'F' || tile === 'C' || tile === 'V') {
+        if ((tile === '.' || tile === 'F' || tile === 'C' || tile === 'V') && (x !== playerPos.x || y !== playerPos.y)) {
           validTiles.push({ x, y });
         }
       }
     }
-    
-    if (validTiles.length === 0) {
-      console.error('[initializeWanderingTrader] No valid spawn positions found!');
-      return;
-    }
-    
-    // Pick random position
-    const randomIndex = Math.floor(Math.random() * validTiles.length);
-    const spawnPosition = validTiles[randomIndex];
-    
-    set({
-      wanderingTrader: {
-        position: spawnPosition,
-        turnsUntilMove: 5
-      }
-    });
-    
-    console.log(`[Wandering Trader] Spawned at (${spawnPosition.x}, ${spawnPosition.y})`);
+    if (validTiles.length === 0) return;
+    const spawn = validTiles[Math.floor(Math.random() * validTiles.length)];
+    set({ wanderingTrader: { position: spawn, turnsUntilMove: 5 } });
   },
 
-  /**
-   * Decrements the trader's turn counter.
-   *
-   * @description Called each player turn to count down until the trader moves.
-   */
   advanceTraderTurn: () => {
-    set(state => {
-      if (!state.wanderingTrader) return {};
-      return {
-        wanderingTrader: {
-          ...state.wanderingTrader,
-          turnsUntilMove: state.wanderingTrader.turnsUntilMove - 1
-        }
-      };
-    });
+    set(state => state.wanderingTrader
+      ? { wanderingTrader: { ...state.wanderingTrader, turnsUntilMove: state.wanderingTrader.turnsUntilMove - 1 } }
+      : {});
   },
 
-  /**
-   * Moves the trader to a new position and resets the turn counter.
-   *
-   * @param {Position} newPosition - The new position for the trader
-   */
   moveTrader: (newPosition: Position) => {
-    set(state => {
-      if (!state.wanderingTrader) return {};
-      return {
-        wanderingTrader: {
-          position: newPosition,
-          turnsUntilMove: 5
-        }
-      };
-    });
+    set(state => state.wanderingTrader ? { wanderingTrader: { position: newPosition, turnsUntilMove: 5 } } : {});
   },
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // WORLD STATE SYSTEM (v1.8.0)
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /**
-   * Activates a water pump at the specified location.
-   *
-   * @description Marks a pump as repaired and functional. The pump becomes
-   * a permanent water source that the player can interact with.
-   *
-   * @param {Position} location - Coordinates of the pump
-   *
-   * @remarks
-   * - Adds location to repairedPumps array
-   * - Removes from destroyedPumps if present
-   * - Persists in save/load system
-   * - Triggers visual marker on map
-   *
-   * @example
-   * activateWaterPump({ x: 45, y: 85 });
-   */
+  // ═══════════════════════════════════════════════════════════════════════
+  // WORLD STATE
+  // ═══════════════════════════════════════════════════════════════════════
   activateWaterPump: (location: Position) => {
-    set(state => {
-      const newRepaired = [...state.worldState.repairedPumps, location];
-      const newDestroyed = state.worldState.destroyedPumps.filter(
-        p => !(p.x === location.x && p.y === location.y)
-      );
-      
-      return {
-        worldState: {
-          ...state.worldState,
-          repairedPumps: newRepaired,
-          destroyedPumps: newDestroyed,
-        }
-      };
-    });
-    
-    get().addJournalEntry({
-      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è ora funzionante!`,
-      type: JournalEntryType.XP_GAIN,
-      color: '#38bdf8' // cyan
-    });
-  },
-
-  /**
-   * Destroys a water pump at the specified location.
-   *
-   * @description Marks a pump as permanently destroyed and unusable.
-   *
-   * @param {Position} location - Coordinates of the pump
-   *
-   * @remarks
-   * - Adds location to destroyedPumps array
-   * - Removes from repairedPumps if present
-   * - Persists in save/load system
-   *
-   * @example
-   * destroyWaterPump({ x: 45, y: 85 });
-   */
-  destroyWaterPump: (location: Position) => {
-    set(state => {
-      const newDestroyed = [...state.worldState.destroyedPumps, location];
-      const newRepaired = state.worldState.repairedPumps.filter(
-        p => !(p.x === location.x && p.y === location.y)
-      );
-      
-      return {
-        worldState: {
-          ...state.worldState,
-          repairedPumps: newRepaired,
-          destroyedPumps: newDestroyed,
-        }
-      };
-    });
-    
-    get().addJournalEntry({
-      text: `[MONDO] La pompa a (${location.x}, ${location.y}) è stata distrutta.`,
-      type: JournalEntryType.SYSTEM_WARNING
-    });
-  },
-
-  /**
-   * Checks if a water pump at the specified location can be used.
-   *
-   * @description Returns true if pump is repaired and functional.
-   *
-   * @param {Position} location - Coordinates to check
-   * @returns {boolean} True if pump is usable
-   *
-   * @example
-   * if (canUseWaterPump({ x: 45, y: 85 })) {
-   *   // Show pump interaction option
-   * }
-   */
-  canUseWaterPump: (location: Position): boolean => {
-    const { repairedPumps } = get().worldState;
-    return repairedPumps.some(p => p.x === location.x && p.y === location.y);
-  },
-
-  /**
-   * Activates the water treatment plant.
-   *
-   * @description Marks the water plant as active, providing clean water
-   * in the surrounding area via Active Search.
-   *
-   * @param {Position} location - Coordinates of the plant
-   *
-   * @remarks
-   * v1.8.4 - Repair Quest System:
-   * - Sets waterPlantActive flag
-   * - Stores plant location
-   * - Modifies Active Search loot in area
-   * - Persists in save/load
-   *
-   * @example
-   * activateWaterPlant({ x: 50, y: 80 });
-   */
-  activateWaterPlant: (location: Position) => {
     set(state => ({
       worldState: {
         ...state.worldState,
-        waterPlantActive: true,
-        waterPlantLocation: location,
+        repairedPumps: [...state.worldState.repairedPumps.filter(p => p.x !== location.x || p.y !== location.y), location],
+        destroyedPumps: state.worldState.destroyedPumps.filter(p => p.x !== location.x || p.y !== location.y),
       }
     }));
-    
-    get().addJournalEntry({
-      text: `[MONDO] L'impianto di depurazione è ora attivo! L'area circostante ha acqua pulita.`,
-      type: JournalEntryType.XP_GAIN,
-      color: '#38bdf8' // cyan
-    });
+    get().setFlag('PUMP_REPAIRED');
+    get().addJournalEntry({ text: `[MONDO] La pompa è di nuovo funzionante: potrai tornare a riempire le borracce.`, type: JournalEntryType.XP_GAIN, color: '#38bdf8' });
+  },
+
+  destroyWaterPump: (location: Position) => {
+    set(state => ({
+      worldState: {
+        ...state.worldState,
+        destroyedPumps: [...state.worldState.destroyedPumps.filter(p => p.x !== location.x || p.y !== location.y), location],
+        repairedPumps: state.worldState.repairedPumps.filter(p => p.x !== location.x || p.y !== location.y),
+      }
+    }));
+    get().setFlag('PUMP_DESTROYED');
+    get().addJournalEntry({ text: `[MONDO] La pompa è irrimediabilmente distrutta.`, type: JournalEntryType.SYSTEM_WARNING });
+  },
+
+  canUseWaterPump: (location: Position): boolean =>
+    get().worldState.repairedPumps.some(p => p.x === location.x && p.y === location.y),
+
+  activateWaterPlant: (location: Position) => {
+    set(state => ({ worldState: { ...state.worldState, waterPlantActive: true, waterPlantLocation: location } }));
+    get().setFlag('WATER_PLANT_ACTIVE');
+    get().addJournalEntry({ text: `[MONDO] L'impianto di depurazione è attivo! Cercando risorse nei dintorni troverai acqua pulita.`, type: JournalEntryType.XP_GAIN, color: '#38bdf8' });
   },
 }));

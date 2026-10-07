@@ -1,70 +1,45 @@
 import { create } from 'zustand';
 import { IItem } from '../types';
+import { fetchJson } from './fetchJson';
 
 type RawItem = Omit<IItem, 'color'>;
 
-async function loadAllItems(): Promise<Record<string, IItem>> {
-    // Fetch paths are relative to the root HTML file
-    const files = [
-        './data/items/weapons.json',
-        './data/items/armor.json',
-        './data/items/consumables.json',
-        './data/items/materials.json',
-        './data/items/quest.json',
-        './data/items/ammo.json',
-        './data/items/restored_items.json',
-        // v2.0.11: these two files were shipped but never loaded — 8 items
-        // (incl. both repair kits, output of a STARTING recipe) did not exist
-        // at runtime, so crafting/rewards granting them silently no-oped.
-        './data/items/repair_kits.json',
-        './data/items/unique_items.json'
-    ];
-    try {
-        const responses = await Promise.all(files.map(file => fetch(file)));
-        for (const res of responses) {
-            if (!res.ok) {
-                throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
-            }
-        }
-        const jsonDataArrays = await Promise.all(responses.map(res => res.json()));
+const ITEM_FILES = [
+    'weapons', 'armor', 'consumables', 'materials', 'quest',
+    'ammo', 'restored_items', 'repair_kits', 'unique_items',
+].map(name => `data/items/${name}.json`);
 
-        const allRawItems: RawItem[] = jsonDataArrays.flat();
-
-        const finalDatabase: Record<string, IItem> = {};
-
-        allRawItems.forEach(item => {
-            let color = '#ffffff'; // Default color: white
-
-            switch (item.type) {
-                case 'weapon': color = '#ef4444'; break; // red-500
-                case 'ammo': color = '#f97316'; break; // orange-500
-                case 'armor': color = '#d1d5db'; break; // gray-300
-                case 'material': color = '#a16207'; break; // yellow-700
-                case 'quest': color = '#facc15'; break; // yellow-400
-                case 'consumable':
-                    if (item.id.includes('med') || item.effects?.some(e => e.type === 'heal')) {
-                        color = '#4ade80'; // green-400 for medical
-                    } else if (item.effects?.some(e => e.type === 'hydration')) {
-                        color = '#7dd3fc'; // sky-300
-                    } else if (item.effects?.some(e => e.type === 'satiety')) {
-                        color = '#fb923c'; // orange-400
-                    } else {
-                        color = '#a78bfa'; // violet-400 for other consumables
-                    }
-                    break;
-                default:
-                    color = '#ffffff';
-            }
-            finalDatabase[item.id] = { ...item, color };
-        });
-
-        return finalDatabase;
-    } catch (error) {
-        console.error("Error loading item database:", error);
-        return {}; // Return empty DB on error
+/** Display color by item category. */
+export function itemColor(item: RawItem): string {
+    switch (item.type) {
+        case 'weapon': return '#ef4444';
+        case 'ammo': return '#f97316';
+        case 'armor': return '#d1d5db';
+        case 'material': return '#a16207';
+        case 'valuable': return '#fde047';
+        case 'quest': return '#facc15';
+        case 'manual': return '#c084fc';
+        case 'tool': return '#94a3b8';
+        case 'consumable':
+            if (item.effects?.some(e => e.type === 'heal' || e.type === 'cureStatus')) return '#4ade80';
+            if (item.effects?.some(e => e.type === 'hydration')) return '#7dd3fc';
+            if (item.effects?.some(e => e.type === 'satiety')) return '#fb923c';
+            return '#a78bfa';
+        default: return '#ffffff';
     }
 }
 
+/** Builds the item database; later files override earlier ones on duplicate ids. */
+export function buildItemDatabase(lists: RawItem[][]): Record<string, IItem> {
+    const database: Record<string, IItem> = {};
+    for (const item of lists.flat()) {
+        database[item.id] = { ...item, color: itemColor(item) };
+    }
+    return database;
+}
+
+/** Quest items can't be dropped, sold or salvaged. */
+export const isQuestItem = (item: Pick<IItem, 'type'> | undefined | null): boolean => item?.type === 'quest';
 
 interface ItemDatabaseState {
     isLoaded: boolean;
@@ -77,7 +52,7 @@ export const useItemDatabaseStore = create<ItemDatabaseState>((set, get) => ({
     itemDatabase: {},
     loadDatabase: async () => {
         if (get().isLoaded) return;
-        const db = await loadAllItems();
-        set({ itemDatabase: db, isLoaded: true });
-    }
+        const lists = await Promise.all(ITEM_FILES.map(file => fetchJson<RawItem[]>(file)));
+        set({ itemDatabase: buildItemDatabase(lists), isLoaded: true });
+    },
 }));
