@@ -23,7 +23,7 @@ const warnings = [];
 const error = (where, message) => errors.push(`${where}: ${message}`);
 const warn = (where, message) => warnings.push(`${where}: ${message}`);
 
-const readText = file => fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
+const readText = file => fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
 const readJson = rel => JSON.parse(readText(path.join(DATA, rel)));
 const src = rel => readText(path.join(SRC, rel));
 

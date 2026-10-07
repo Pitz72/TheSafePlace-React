@@ -150,4 +150,4 @@ R.........F.........................................F...........................
 ................................R...................R.................................................................................................`;
 
 // FIX: Convert map string into a 2D array of characters to match the `string[][]` type.
-export const MAP_DATA = MAP_STRING.split('\n').map(line => line.split(''));
+export const MAP_DATA = MAP_STRING.split(/\r?\n/).map(line => line.split(''));
