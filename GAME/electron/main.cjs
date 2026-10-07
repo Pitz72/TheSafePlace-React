@@ -36,6 +36,21 @@ const MIME = {
   '.txt': 'text/plain',
 };
 
+// The bundled game needs nothing from the outside world: scripts, styles,
+// fonts and data come from app://bundle, the map tileset is a data: SVG.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'",
+  "frame-ancestors 'none'",
+].join('; ');
+
 // Must run before app is ready.
 protocol.registerSchemesAsPrivileged([
   {
@@ -68,15 +83,17 @@ function registerAppProtocol() {
       // is packed into app.asar.
       const data = await fs.promises.readFile(filePath);
       const ext = path.extname(filePath).toLowerCase();
-      return new Response(data, {
-        headers: { 'content-type': MIME[ext] || 'application/octet-stream' },
-      });
+      const headers = { 'content-type': MIME[ext] || 'application/octet-stream' };
+      if (ext === '.html') headers['content-security-policy'] = CONTENT_SECURITY_POLICY;
+      return new Response(data, { headers });
     } catch {
       // SPA fallback: unknown non-file paths return index.html.
       if (!path.extname(filePath)) {
         try {
           const html = await fs.promises.readFile(path.join(DIST, 'index.html'));
-          return new Response(html, { headers: { 'content-type': 'text/html' } });
+          return new Response(html, {
+            headers: { 'content-type': 'text/html', 'content-security-policy': CONTENT_SECURITY_POLICY },
+          });
         } catch {
           /* fall through */
         }
