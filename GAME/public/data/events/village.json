@@ -1218,5 +1218,477 @@
         ]
       }
     ]
+  },
+  {
+    "id": "village_locked_house",
+    "title": "Casa con Porta Chiusa",
+    "description": "Una casetta di campagna con la porta chiusa a chiave. Le finestre sono barricate dall'interno.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Forza la porta",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "La porta cede con un colpo deciso. Dentro trovi una dispensa con qualche riserva.",
+            "failureText": "La serratura regge e ti affatichi inutilmente.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un ingresso secondario",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi una finestrella sul retro mal chiusa. Riesci a entrare senza fare troppo rumore.",
+            "failureText": "Le entrate sono tutte ben chiuse o barricate.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_doghouse",
+    "title": "Cuccia Abbandonata",
+    "description": "Nel giardino di una casa trovi una piccola cuccia di legno. C'è qualcosa dentro.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Metti la mano dentro",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 10,
+            "successText": "Tiri fuori una palla di gomma e un osso di plastica. Niente di speciale, ma la palla può essere utile come distrazione.",
+            "failureText": "Qualcosa ti morde. Era un animale nascosto!",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "rubber_ball", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 4}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Solleva la cuccia",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Sotto la cuccia trovi un piccolo tesoro: monete, un coltello pieghevole e batterie.",
+            "failureText": "Non trovi nulla se non insetti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "folding_knife", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_canned_food_cache",
+    "title": "Nascondiglio di Scatolette",
+    "description": "Dietro un cassonetto rovesciato, noti una cavità con alcune scatolette conservate al fresco.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Recupera le scatolette",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Prendi tutte le scatolette rimaste, sono ancora buone."
+              },
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Controlla se ci sono trappole",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Nessuna trappola. Sembra proprio una scorta dimenticata.",
+            "failureText": "Smuovi qualcosa e fai rumore, attirando attenzioni indesiderate.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_wind_chimes",
+    "title": "Campanelli a Vento",
+    "description": "Una casa ha ancora appesi dei campanelli a vento. Suonano a ogni soffio.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Smontali con cura",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 10,
+            "successText": "Recuperi fili resistenti e piccoli componenti metallici.",
+            "failureText": "Cadono a terra e si rompono.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "resistant_wire", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "metal_piece", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ignora e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Non hai tempo da perdere con queste sciocchezze."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_family_album",
+    "title": "Album di Famiglia",
+    "description": "In una casa abbandonata trovi un album fotografico pieno di ricordi sbiaditi.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sfoglia l'album",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Ti senti rinvigorito dai ricordi di una vita normale. Una spinta emotiva ti fortifica.",
+            "failureText": "La nostalgia ti ferisce. Ti senti più vulnerabile per un po'.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca tasche o scomparti nascosti",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi una lettera con indizi su un rifugio poco distante.",
+            "failureText": "Niente di utile nascosto qui.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_scrawled_warning",
+    "title": "Avviso Scarabocchiato",
+    "description": "Un graffito su un muro avverte: 'Non andare verso nord. Pericolo'.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ignora l'avviso",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Prosegui per la tua strada, deciso a non farti intimorire."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Indaga sul perché",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Scopri segni di una banda che pattuglia quella zona. Meglio evitarla.",
+            "failureText": "Non trovi indizi sufficienti.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_church_bell",
+    "title": "Campanile della Chiesa",
+    "description": "La chiesa del villaggio ha il campanile ancora in piedi. Potresti arrampicarti per avere una visuale migliore.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali sul campanile",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Con fatica, raggiungi la cima. Da quassù vedi altri villaggi e zone sicure.",
+            "failureText": "Una scala cede sotto il tuo peso. Cadi e ti fai male a una gamba.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "local_map", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 10},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca nella chiesa",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 9,
+            "successText": "Trovi alcuni oggetti sacri e cibo conservato destinato ai bisognosi.",
+            "failureText": "La chiesa è stata profanata e saccheggiata. Non rimane nulla.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_survivor_family",
+    "title": "Famiglia di Sopravvissuti",
+    "description": "Incontri una famiglia di sopravvissuti nascosta in una cantina. Sembrano spaventati ma amichevoli.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Offri aiuto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 11,
+            "successText": "La famiglia apprezza il tuo aiuto e condivide le loro scorte con te.",
+            "failureText": "La famiglia è troppo spaventata e rifiuta il tuo aiuto.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Chiedi informazioni",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "persuasione",
+            "dc": 10,
+            "successText": "La tua conoscenza del territorio migliora.",
+            "failureText": "La famiglia non si fida abbastanza da condividere informazioni.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_burned_house",
+    "title": "Casa Bruciata",
+    "description": "Una casa carbonizzata dal fuoco. Tra le ceneri potrebbero esserci oggetti sopravvissuti.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Fruga tra le ceneri",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Con attenzione, trovi oggetti metallici sopravvissuti al fuoco.",
+            "failureText": "Le ceneri calde ti bruciano le mani mentre frughi.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "metal_piece", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "tool_hammer", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 7}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il giardino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Il giardino è sopravvissuto. Trovi verdure fresche.",
+            "failureText": "Il giardino è stato distrutto dal fuoco.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "carrot", "quantity": 4}},
+              {"type": "addItem", "value": {"itemId": "potato", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_animal_shelter",
+    "title": "Rifugio Animali",
+    "description": "Un rifugio per animali abbandonato. Alcuni animali potrebbero essere sopravvissuti.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca cibo per animali",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi cibo per animali ancora buono e lo prendi per te.",
+            "failureText": "Gli animali sopravvissuti ti attaccano quando entri.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca attrezzature veterinarie",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi medicinali veterinari che possono essere usati sugli umani.",
+            "failureText": "L'attrezzatura è troppo specializzata per i tuoi bisogni.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "expired_medicine", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
   }
 ]

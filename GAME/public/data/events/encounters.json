@@ -645,5 +645,169 @@
         ]
       }
     ]
+  },
+  {
+    "id": "encounter_cry_for_help",
+    "title": "Grido d'Aiuto",
+    "description": "Senti un grido disperato provenire da un edificio vicino. Qualcuno sta chiamando aiuto.",
+    "biomes": ["Global"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Investigare con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi una donna intrappolata sotto delle macerie. La liberi e ti ringrazia con alcune medicine.",
+            "failureText": "È una trappola! Dei predoni ti tendono un agguato mentre ti avvicini.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "expired_medicine", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 18}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ignorare e continuare",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il mondo è pieno di pericoli. Meglio non rischiare la vita per uno sconosciuto."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "encounter_traveler_remains",
+    "title": "Resti di un Viaggiatore",
+    "description": "Trovi i resti di un altro viaggiatore sul ciglio della strada. È morto da diversi giorni.",
+    "biomes": ["Global"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Perquisire i resti",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 9,
+            "successText": "Trovi alcune razioni ancora utilizzabili e una borraccia d'acqua.",
+            "failureText": "Mentre frughi, fai rumore e attrai l'attenzione di animali selvatici.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Seppellirlo con rispetto",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Dedichi del tempo a seppellire dignitosamente i resti. Un gesto di umanità in questo mondo crudele."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "encounter_minefield",
+    "title": "Campo Minato",
+    "description": "Ti avvicini a quella che sembra una zona sicura, ma noti fili metallici e cartelli di pericolo mezzo sepolti.",
+    "biomes": ["Global"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cercare un percorso sicuro",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 14,
+            "successText": "Trovi anche un vecchio zaino militare abbandonato.",
+            "failureText": "Fai un passo falso e attivi una mina. L'esplosione ti ferisce gravemente.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Fare dietrofront",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il rischio è troppo alto. Fai dietrofront e cerchi un'altra strada."
+              },
+              {"type": "advanceTime", "value": 60}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "encounter_hidden_stash",
+    "title": "Nascondiglio Nascosto",
+    "description": "Noti una piccola montagnola di terra che sembra artificiale. Potrebbe essere un nascondiglio.",
+    "biomes": ["Global"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Scavare con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Trovi un nascondiglio ben conservato con cibo e acqua!",
+            "failureText": "Mentre scavi fai crollare il nascondiglio. Gran parte del contenuto va perso.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "ammo_shotgun", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 1}},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignorarlo",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Meglio non disturbare quello che potrebbe essere una trappola."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

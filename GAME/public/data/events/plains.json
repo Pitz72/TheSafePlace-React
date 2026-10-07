@@ -1125,5 +1125,340 @@
         ]
       }
     ]
+  },
+  {
+    "id": "plains_abandoned_vehicle",
+    "title": "Veicolo Abbandonato",
+    "description": "La carcassa arrugginita di un'auto è ferma sul ciglio di quella che un tempo era una strada. Il bagagliaio sembra chiuso ermeticamente.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Forza il bagagliaio",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 13,
+            "successText": "Con uno sforzo immane, riesci a scardinare il bagagliaio. Dentro, trovi dei rottami metallici e una tanica con un po' di carburante.",
+            "failureText": "Il meccanismo è saldato dalla ruggine. Non riesci ad aprirlo e lo sforzo ti lascia senza fiato e con una fitta alla schiena.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "fuel_canister", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "statusChange", "value": "FERITO"}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla l'abitacolo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Nel vano portaoggetti, dietro a carte ammuffite, trovi una vecchia mappa stradale della regione. Potrebbe rivelarsi preziosa.",
+            "failureText": "L'interno è stato completamente saccheggiato e vandalizzato. Non c'è rimasto assolutamente nulla di valore.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "local_map", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_strange_carcass",
+    "title": "Carcassa Misteriosa",
+    "description": "Vedi una carcassa di una creatura che non riconosci. È enorme, non assomiglia a nessun animale che tu abbia mai visto. Potrebbe essere una fonte di cibo o un nido di malattie.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Recupera carne con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Analizzando la carcassa, noti che la carne vicino alle ossa è ancora buona e non sembra contaminata. Recuperi un bel pezzo.",
+            "failureText": "Mentre tagli la carne, liberi una sacca di gas putridi. L'odore nauseabondo ti investe e ti senti subito male.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "dried_meat", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "statusChange", "value": "MALATO"}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Mantieni le distanze",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "L'istinto ti dice che il rischio è troppo alto. Prosegui, lasciando che la natura faccia il suo corso."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_memorial_forgotten",
+    "title": "Monumento Dimenticato",
+    "description": "Trovi una piccola lapide di pietra grezza, incisa rozzamente. Dice: 'Hanno combattuto per un domani che non hanno mai visto'. Alla base, qualcuno ha lasciato un piccolo oggetto avvolto in un panno.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Prendi l'oggetto",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Con rispetto, prendi l'offerta. È una bussola funzionante. Chiunque l'abbia lasciata voleva che aiutasse un altro viaggiatore."
+              },
+              {"type": "addItem", "value": {"itemId": "compass", "quantity": 1}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia una tua razione in segno di rispetto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "religione",
+            "dc": 8,
+            "successText": "Decidi di onorare il loro sacrificio. Lasci una delle tue razioni. Questo semplice gesto ti riempie di una strana determinazione.",
+            "failureText": "Vorresti onorarli, ma la tua fame è più forte. Tieni le tue scorte per te, sentendoti un po' in colpa.",
+            "success": [
+              {"type": "removeItem", "value": {"itemId": "CONS_001", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_old_well",
+    "title": "Vecchio Pozzo",
+    "description": "Ti imbatti in un vecchio pozzo di pietra. Una corda logora pende al suo interno. Potrebbe esserci ancora dell'acqua sul fondo, ma sembra profondo e buio.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Tira su il secchio",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "La corda regge! Tiri su un secchio pieno di acqua fresca e pulita, filtrata dal terreno. Una vera fortuna.",
+            "failureText": "Mentre tiri, la corda si spezza. Il secchio precipita nel buio con un tonfo sordo. L'occasione è persa.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non ti fidi della vecchia corda. Meglio non rischiare di perdere tempo o di cadere dentro."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_mirage",
+    "title": "Miraggio",
+    "description": "In lontananza, sotto il sole cocente, vedi quella che sembra un'oasi con acqua e palme. Potrebbe essere la tua salvezza, o solo un inganno della mente affaticata.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Dirigiti verso l'oasi",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Ti avvicini e ti rendi conto che è solo un miraggio. Deluso, stai per andartene quando noti qualcosa di semi-sepolto nella sabbia dove avrebbe dovuto esserci l'acqua: una borraccia quasi piena!",
+            "failureText": "Cammini per quasi un'ora verso l'oasi, solo per vederla svanire nel nulla. Hai sprecato tempo ed energie preziose per un'illusione.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "advanceTime", "value": 60}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_fissure",
+    "title": "Fenditura nel Terreno",
+    "description": "Una profonda crepa si apre nel terreno arido. È troppo larga per essere saltata facilmente. Puoi cercare un punto più stretto o provare a calarti al suo interno.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca un passaggio",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Dopo una breve ricerca, trovi un punto in cui le due sponde quasi si toccano, permettendoti di attraversare senza problemi.",
+            "failureText": "Giri a vuoto per un po', non trovando un passaggio sicuro. Perdi tempo e decidi di tornare indietro.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Calati nella fenditura",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 14,
+            "successText": "Scendendo con attenzione, scopri che la fenditura porta a una piccola grotta nascosta. All'interno trovi i resti di un accampamento e un kit medico.",
+            "failureText": "Perdi la presa durante la discesa e scivoli, graffiandoti contro le rocce taglienti. Risali a fatica, ferito e senza aver trovato nulla.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "medkit_field", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 15}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_time_capsule",
+    "title": "Capsula del Tempo",
+    "description": "Sotto le macerie di una scuola elementare trovi una capsula del tempo sepolta dai bambini prima della catastrofe. Contiene lettere, foto e piccoli oggetti personali.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Apri la capsula con rispetto",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Tra i ricordi innocenti di un mondo perduto, trovi anche alcune provviste che i bambini avevano nascosto per 'il futuro'."
+              },
+              {"type": "addItem", "value": {"itemId": "energy_bar", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "toys", "quantity": 1}}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plains_highway_sign",
+    "title": "Cartello autostradale",
+    "description": "Un cartello stradale abbandonato indica direzioni per città lontane. Potrebbe avere informazioni utili.",
+    "biomes": ["Pianura"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Studia il cartello",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 8,
+            "successText": "Il cartello ti dà indicazioni utili per navigare nella zona.",
+            "failureText": "Il cartello è troppo deteriorato per essere leggibile.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "local_map", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca attorno al cartello",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi una borraccia abbandonata ai piedi del cartello.",
+            "failureText": "Non trovi nulla di interessante.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
   }
 ]

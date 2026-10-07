@@ -1112,5 +1112,372 @@
         ]
       }
     ]
+  },
+  {
+    "id": "city_rooftop_access",
+    "title": "Accesso ai Tetti",
+    "description": "Una scala antincendio porta ai tetti. Da lì la visuale potrebbe aiutarti a pianificare il percorso.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali e osserva",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Dall'alto individui aree pericolose e punti di interesse.",
+            "failureText": "La scala cede in parte; scendi in fretta grattandoti.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il locale tecnico",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi attrezzi, fusibili e una lampadina di ricambio.",
+            "failureText": "È stato svuotato da tempo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "tool_kit", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "electronic_parts", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "electronic_parts", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_department_store",
+    "title": "Grande Magazzino",
+    "description": "Un grande magazzino con diversi reparti. Molti scaffali sono rovesciati ma potrebbero esserci scorte dimenticate.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ispeziona il reparto campeggio",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi tende, corde e kit multiuso.",
+            "failureText": "Gli scaffali sono vuoti o danneggiati.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "portable_tent", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "rope_coil", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "cloth_scraps", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "multitool", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il magazzino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Apri una porta bloccata e trovi scatoloni con conserve e acqua.",
+            "failureText": "La porta non si apre.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_mutant_rats",
+    "title": "Ratti Mutanti",
+    "description": "Un branco di ratti enormi e deformi blocca la strada. I loro occhi rossi brillano nell'oscurità e sembrano affamati.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Usa una granata fumogena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 11,
+            "successText": "Lanci la granata con precisione. Il fumo confonde i ratti che fuggono in tutte le direzioni.",
+            "failureText": "La granata finisce troppo vicino a te. Il fumo ti acceca temporaneamente e i ratti ne approfittano.",
+            "success": [
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "takeDamage", "value": 8},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ],
+        "itemRequirements": [{"itemId": "smoke_grenade", "quantity": 1}]
+      },
+      {
+        "text": "Cerca di aggirarli silenziosamente",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Ti muovi come un'ombra tra i vicoli, evitando completamente l'incontro con i ratti mutanti.",
+            "failureText": "Fai rumore spostando una lattina. I ratti si lanciano su di te, mordendoti ferocemente.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_radioactive_barrel",
+    "title": "Barile Radioattivo",
+    "description": "Vedi un barile giallo con simboli di radiazioni abbandonato in mezzo alla strada. Sembra contenere rifiuti nucleari.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Controlla se è sigillato",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Il barile è ben sigillato e non rappresenta un pericolo immediato. Lo lasci stare.",
+            "failureText": "Mentre tocchi il barile, noti una piccola perdita. Le radiazioni ti colpiscono immediatamente.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 25},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Mantieni le distanze",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Meglio non rischiare. Girai alla larga dal barile pericoloso."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_army_surplus",
+    "title": "Magazzino Surplus Militare",
+    "description": "Un magazzino militare abbandonato con le porte sfondate. All'interno vedi casse e attrezzature militari.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca equipaggiamento",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi un giubbotto antiproiettile e alcune granate ancora funzionanti.",
+            "failureText": "Le casse sono troppo pesanti. Ti fai male tentando di spostarle.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "kevlar_vest", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca medicinali militari",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 11,
+            "successText": "Trovi una cassetta di medicinali militari avanzati e bende sterili.",
+            "failureText": "I medicinali sono stati già presi o sono scaduti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "MED_BANDAGE_ADVANCED", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 8}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_bank_vault",
+    "title": "Caveau Bancario",
+    "description": "La porta blindata di una banca è socchiusa. All'interno potrebbe esserci qualcosa di valore.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Entra nel caveau",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 14,
+            "successText": "Muovendoti silenziosamente, trovi alcune monete d'oro e gioielli sopravvissuti all'apocalisse.",
+            "failureText": "Fai scattare una trappola antica. Dardi avvelenati ti feriscono.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "gold_coin", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "precious_stone", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 18},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Controlla l'ufficio del direttore",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi una cassaforte personale con documenti importanti e contanti pre-bellici.",
+            "failureText": "L'ufficio è vuoto, saccheggiato da tempo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "sensitive_documents", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_mutant_lair",
+    "title": "Tana di Mutanti",
+    "description": "Scopri l'ingresso di quello che sembra essere un rifugio sotterraneo. Potrebbe essere abitato da mutanti.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Entra con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 15,
+            "successText": "Ti muovi come un fantasma. Trovi alcune scorte abbandonate ma nessun mutante.",
+            "failureText": "Vieni scoperto da mutanti feroci. Riesci a fuggire ma non illeso.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Blocca l'ingresso",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Hai reso quest'area più sicura per altri viaggiatori.",
+            "failureText": "I detriti sono troppo pesanti. Ti fai male nel tentativo.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
   }
 ]

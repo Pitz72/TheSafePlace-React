@@ -1126,5 +1126,230 @@
         ]
       }
     ]
+  },
+  {
+    "id": "forest_bird_song",
+    "title": "Canto degli Uccelli",
+    "description": "Senti un melodioso canto di uccelli provenire da un boschetto più denso. Potrebbe essere un segno di un ambiente sano, o di una trappola.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Segui il canto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 11,
+            "successText": "Gli uccelli ti accettano come presenza non minacciosa. Ti guidano verso un piccolo stagno naturale con acqua pulita e bacche commestibili.",
+            "failureText": "Il tuo movimento brusco spaventa gli uccelli, che volano via cinguettando di allarme. Altri predatori potrebbero aver sentito.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "wild_berries", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ignora e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi che non vale la pena deviare dal sentiero. Prosegui la tua strada senza distrazioni."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_overgrown_path",
+    "title": "Sentiero Ricoperto",
+    "description": "Il sentiero che stai seguendo sembra essere stato abbandonato da tempo. La vegetazione lo ha quasi completamente ricoperto, ma puoi intravedere qualcosa più avanti.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Apri un varco tra la vegetazione",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Dopo aver lottato con rovi e rami, riesci ad aprire un passaggio e scopri i resti di un vecchio ponte di legno con una cassetta degli attrezzi ancora sigillata.",
+            "failureText": "Le spine dei rovi ti graffiano e i rami ti colpiscono. Apri un passaggio, ma a caro prezzo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "tool_box", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un sentiero alternativo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Studiando la vegetazione, trovi un sentiero di animali che ti porta nella stessa direzione ma è molto più agevole.",
+            "failureText": "Ti perdi tra sentieri che non portano da nessuna parte. Perdi molto tempo prima di ritrovare la strada giusta.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 90}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_poachers_camp",
+    "title": "Campo di Bracconieri",
+    "description": "Trovi un accampamento abbandonato di bracconieri. Ci sono tende, un fuoco spento e alcune trappole. Potrebbe esserci qualcosa di utile.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca nelle tende",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi alcune munizioni per fucile e un coltello da caccia ben affilato.",
+            "failureText": "Mentre frughi, attivi una trappola nascosta che ti ferisce alla gamba.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "ammo_rifle", "quantity": 15}},
+              {"type": "addItem", "value": {"itemId": "combat_knife", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 12},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Prendi solo il necessario e vai",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Vedi alcune cartucce per fucile abbandonate e le prendi velocemente."
+              },
+              {"type": "addItem", "value": {"itemId": "ammo_shotgun", "quantity": 8}}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_radioactive_zone",
+    "title": "Zona Radioattiva",
+    "description": "Entri in una zona dove gli alberi sembrano malati e contorti. L'aria ha un odore metallico strano. Potrebbe essere radioattiva.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Attraversala velocemente",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 13,
+            "successText": "Trattieni il respiro e corri attraverso. Riesci a passare con solo una leggera nausea.",
+            "failureText": "La radioattività ti colpisce duramente. Ti senti debole e malato.",
+            "success": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un percorso alternativo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi un sentiero che aggira la zona contaminata, anche se ti costa tempo.",
+            "failureText": "Ti perdi cercando di aggirare la zona e finisci per passarci attraverso comunque.",
+            "success": [{"type": "advanceTime", "value": 45}, {"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 8}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_wild_berries",
+    "title": "Bacche Selvatiche",
+    "description": "Vedi un cespuglio carico di bacche rosse. Potrebbero essere commestibili o velenose.",
+    "biomes": ["Foresta"],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Raccoglile con attenzione",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 10,
+            "successText": "Riconosci queste bacche come sicure. Sono dolci e nutrienti.",
+            "failureText": "Ne mangi una per testare. È amara e ti senti male dopo poco.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "wild_berries", "quantity": 8}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 6},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lasciale perdere",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Meglio non rischiare. Continui il tuo cammino."}]
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -39,5 +39,706 @@
         ]
       }
     ]
+  },
+  {
+    "id": "river_fishing_spot",
+    "title": "Punto di Pesca",
+    "description": "Un tratto del fiume è calmo e trasparente. Si vedono pesci che nuotano pigramente.",
+    "biomes": ["Acqua"],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Pesca con lenza improvvisata",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 11,
+            "successText": "Riesci a prendere alcuni pesci.",
+            "failureText": "I pesci non abboccano.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Recupera acqua",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {"type": "journalEntry", "text": "Riempi alcune borracce con acqua da filtrare."},
+              {"type": "addItem", "value": {"itemId": "dirty_water", "quantity": 3}}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_old_pier",
+    "title": "Vecchio Molo",
+    "description": "Un vecchio molo di legno sporge sull'acqua. Alcune assi sono marce.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Controlla sotto il molo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi una cassetta impermeabile con attrezzatura da pesca.",
+            "failureText": "Scivoli e cadi in acqua.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fishing_kit", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "hook_set", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ispeziona le assi",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi chiodi e tavole riutilizzabili.",
+            "failureText": "Il legno è troppo marcio.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "nails_box", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_makeshift_filter",
+    "title": "Filtro di Fortuna",
+    "description": "Una struttura improvvisata per filtrare l'acqua è stata lasciata qui da qualcuno.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Usa il filtro",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 10,
+            "successText": "Ottieni acqua parzialmente purificata.",
+            "failureText": "Il filtro è rotto e inefficace.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Smontalo per materiali",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Recuperi tessuti e sabbia fine.",
+            "failureText": "Si disfa senza recuperare nulla.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "clean_cloth", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_submerged_car",
+    "title": "Auto Sommersa",
+    "description": "Un'auto parzialmente sommersa vicino alla riva. Forse c'è qualcosa dentro.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ispeziona l'interno",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi una cassetta impermeabile con strumenti.",
+            "failureText": "Tagli e contusioni mentre cerchi.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "waterproof_case", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "tool_kit", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 7}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Recupera benzina",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Riesci a sifonare un po' di carburante.",
+            "failureText": "Serbatoio vuoto o acqua dentro.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fuel_canister", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_rapids",
+    "title": "Rapide Pericolose",
+    "description": "Un tratto del fiume diventa improvvisamente turbolento. Attraversarlo qui è rischioso.",
+    "biomes": ["Acqua"],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Attraversa con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 14,
+            "successText": "Riesci ad attraversare senza danni.",
+            "failureText": "Vieni trascinato per qualche metro.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un guado",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi un punto in cui l'acqua è più bassa.",
+            "failureText": "Perdi molto tempo senza successo.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 60}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_strange_glow",
+    "title": "Bagliore Strano",
+    "description": "Di notte, un bagliore verdastro illumina la superficie del fiume.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Indaga la fonte",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Scopri alghe bioluminescenti non pericolose.",
+            "failureText": "Ti spaventi e scivoli nell'acqua.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Evita e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non avvicinarti."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_skeletal_remains",
+    "title": "Resti Scheletrici",
+    "description": "Sulla riva trovi resti umani. Accanto, uno zaino consunto.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ispeziona lo zaino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi una borraccia, corde e una foto ingiallita.",
+            "failureText": "Lo zaino è strappato e quasi vuoto.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "rope_coil", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Seppellisci i resti",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "religione",
+            "dc": 10,
+            "successText": "Ti senti più saldo e concentrato dopo il gesto.",
+            "failureText": "Il tempo scarseggia e rinunci.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_beaver_dam",
+    "title": "Diga di Castori",
+    "description": "Una diga blocca un ramo del fiume. Potrebbe contenere materiali utili.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Smonta parte della diga",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Recuperi legname e rami resistenti.",
+            "failureText": "Fai crollare troppo e vieni bagnato.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 4}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Osserva e impara",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Studi la struttura e impari tecniche utili."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_fresh_water",
+    "title": "Acqua Fresca del Fiume",
+    "description": "Il fiume scorre limpido e invitante. L'acqua sembra potabile ma potrebbe nascondere pericoli.",
+    "biomes": ["Acqua"],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Riempi le borracce",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 9,
+            "successText": "L'acqua sembra pulita e la bevi senza problemi.",
+            "failureText": "L'acqua ha un sapore strano. Ti senti male dopo averla bevuta.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 5},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Pesca con le mani",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 11,
+            "successText": "Riesci a catturare alcuni pesci con le mani nude.",
+            "failureText": "Scivoli sulla riva fangosa e cadi in acqua.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 3}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_old_bridge",
+    "title": "Vecchio Ponte",
+    "description": "Un ponte di pietra attraversa il fiume. Sembra antico ma solido. Potrebbe esserci qualcosa sotto.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Attraversa il ponte",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il ponte regge il tuo peso. Attraversi senza problemi."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Guarda sotto il ponte",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Sotto il ponte trovi una piccola grotta con alcune scorte abbandonate.",
+            "failureText": "Sotto il ponte c'è solo acqua e fango.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_abandoned_boat",
+    "title": "Barca Abbandonata",
+    "description": "Una barca a remi è incagliata sulla riva. Potrebbe essere riparabile o contenere qualcosa di utile.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Controlla la barca",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi alcuni remi utilizzabili e una cassetta di sopravvivenza.",
+            "failureText": "La barca è troppo danneggiata per essere utile.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "first_aid_kit", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca attorno alla barca",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi alcuni rottami metallici trasportati dalla corrente.",
+            "failureText": "Non trovi nulla di interessante.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_fisherman_hut",
+    "title": "Capanna del Pescatore",
+    "description": "Una piccola capanna da pesca sulla riva del fiume. La porta è aperta e senti odore di pesce.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Entra nella capanna",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Il pescatore sopravvissuto ti offre alcuni pesci in cambio di protezione.",
+            "failureText": "Il pescatore è morto da tempo. Trovi solo resti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Prendi l'attrezzatura da pesca",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 9,
+            "successText": "Trovi ami da pesca e lenze ancora utilizzabili.",
+            "failureText": "L'attrezzatura è troppo deteriorata.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_waterfall",
+    "title": "Cascata",
+    "description": "Una cascata spettacolare blocca il cammino. L'acqua cade da un'altezza considerevole.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca un sentiero alternativo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Trovi un sentiero nascosto che aggira la cascata.",
+            "failureText": "Il sentiero è troppo ripido e scivoloso. Rinunci e torni indietro.",
+            "success": [{"type": "advanceTime", "value": 45}, {"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Scala la parete rocciosa",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 15,
+            "successText": "Con grande sforzo, superi la cascata scalando la parete.",
+            "failureText": "La parete è troppo liscia. Scivoli e cadi.",
+            "success": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 12}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_flooded_area",
+    "title": "Zona Allagata",
+    "description": "Il fiume ha inondato una zona circostante. L'acqua è profonda e la corrente è forte.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Attraversa a nuoto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Nuoti con forza e superi la zona allagata.",
+            "failureText": "La corrente è troppo forte. Vieni trascinato via.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Trova un albero caduto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Attraversi senza bagnarti i piedi.",
+            "failureText": "L'albero cede sotto il tuo peso. Cadi in acqua.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "river_trading_post",
+    "title": "Posto di Commercio Fluviale",
+    "description": "Un vecchio posto di commercio fluviale abbandonato. Potrebbero esserci merci preziose.",
+    "biomes": ["Acqua"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca nelle casse",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi merci preziose sopravvissute all'abbandono.",
+            "failureText": "Le casse sono vuote o contenengono solo spazzatura.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "gold_coin", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "precious_stone", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla gli ormeggi",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi una barca ben conservata che potresti riparare.",
+            "failureText": "Gli ormeggi sono vuoti e pericolanti.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
   }
 ]
