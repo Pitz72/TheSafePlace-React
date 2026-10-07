@@ -78,6 +78,9 @@ Serve Node.js 20 o superiore.
 - `src/test/quests.test.ts` gioca ogni quest dall'inizio alla fine con i dati veri, la storia Ink compilata e gli
   store reali (muoversi sulla mappa, parlare, scegliere negli eventi, combattere).
 - `src/test/regressions.test.ts` riproduce i bug corretti nella 2.1.0 e verifica che restino corretti.
+- `src/test/simulation.test.ts` fa giocare un giocatore casuale (ma riproducibile) per migliaia di azioni (eventi,
+  combattimenti, rifugi, dialoghi, level up, morti e nuove partite) e controlla a ogni azione che lo stato resti
+  coerente: statistiche nei limiti, inventario ed equipaggiamento validi, posizione sulla mappa, tempo che avanza.
 - Un warning o un errore inatteso in console fa fallire il test (`src/test/setup.ts`).
 
 La CI (`.github/workflows/ci.yml`, nella root del repository) esegue a ogni push e pull request la ricompilazione
