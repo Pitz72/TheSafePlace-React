@@ -2,7 +2,7 @@
   {
     "id": "scavenger",
     "name": "Scavenger",
-    "description": "Aumenta la quantità di oggetti trovati durante la ricerca nei rifugi.",
+    "description": "Trovi di più: +1 a ogni ritrovamento quando cerchi nei rifugi o con la Ricerca Attiva, e due tiri sul bottino dei nemici sconfitti.",
     "requiredSkill": "sopravvivenza",
     "levelRequirement": 2
   },
@@ -30,7 +30,7 @@
   {
     "id": "field_armorer",
     "name": "Armaiolo da Campo",
-    "description": "Le armi craftate hanno +10 durabilità e richiedono -20% tempo di creazione.",
+    "description": "Armi e armature che crei hanno +10 di durabilità, e ogni creazione richiede il 20% di tempo in meno.",
     "requiredSkill": "investigare",
     "levelRequirement": 2
   },
@@ -51,7 +51,7 @@
   {
     "id": "hawks_eye",
     "name": "Occhio di Falco",
-    "description": "+2 bonus ai tiri per colpire ranged. Rivela automaticamente le trappole.",
+    "description": "+2 ai tiri per colpire con le armi a distanza e +2 alle prove di Percezione (trappole, imboscate, dettagli nascosti).",
     "requiredSkill": "percezione",
     "levelRequirement": 5
   },

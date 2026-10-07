@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { INSTRUCTIONS_PAGES } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { useTypewriter } from '../hooks/useTypewriter';
 import { audioManager } from '../utils/audio';
 
 /**
@@ -13,33 +14,9 @@ import { audioManager } from '../utils/audio';
 const InstructionsScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const [pageIndex, setPageIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-
   const currentPage = INSTRUCTIONS_PAGES[pageIndex];
   const totalPages = INSTRUCTIONS_PAGES.length;
-
-  useEffect(() => {
-    setIsTyping(true);
-    setDisplayedText('');
-    let charIndex = 0;
-    const typingInterval = setInterval(() => {
-      if (charIndex < currentPage.length) {
-        setDisplayedText(currentPage.substring(0, charIndex + 1));
-        charIndex++;
-      } else {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-      }
-    }, 5); // Veloce ma leggibile
-
-    return () => clearInterval(typingInterval);
-  }, [currentPage]);
-
-  const finishTyping = useCallback(() => {
-    setIsTyping(false);
-    setDisplayedText(currentPage);
-  }, [currentPage]);
+  const { displayed: displayedText, isTyping, finish: finishTyping } = useTypewriter(currentPage, 5);
 
   const handleNextPage = useCallback(() => {
     if (isTyping) {
