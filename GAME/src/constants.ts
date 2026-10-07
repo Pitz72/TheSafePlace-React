@@ -2,31 +2,6 @@ import { AttributeName, SkillDefinition, SkillName, JournalEntryType } from "./t
 
 export const GAME_VERSION: string = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
 
-export const BOOT_TEXT = [
-  'Runtime Radio BIOS v1.02',
-  'Copyright (C) 1983 Runtime Radio Corp.',
-  '',
-  'CPU: R-8088 @ 4.77MHz',
-  'Memory Test: 640K OK',
-  '',
-  'Checking drives...',
-  'Drive A: Floppy Disk',
-  'Drive C: Hard Disk',
-  '',
-  'Booting from C:...',
-  'Starting RR-DOS...',
-  '',
-  'HIMEM is testing extended memory...done.',
-  'RR-DOS Mouse Driver installed.',
-  'RR-DOS CD-ROM Driver installed.',
-  'Sound Blaster 8 card detected at A220 I5 D1.',
-  '',
-  'C:\\> autoexec.bat',
-  'C:\\> echo off',
-  'C:\\> load game.exe',
-  'Loading TSP Chronicles...',
-];
-
 export const DONOR_NAMES = [
   'Paolo Nicoletti',
   'Michele Bancheri',

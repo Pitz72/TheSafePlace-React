@@ -40,8 +40,6 @@ export const getSaveSlots = (): SaveSlot[] =>
         };
     });
 
-export const isSlotEmpty = (slot: number): boolean => storage.get(slotKey(slot)) === null;
-
 export const handleLoadGame = (slot: number): boolean => useGameStore.getState().loadGame(slot);
 
 export const handleSaveGame = (slot: number): boolean => useGameStore.getState().saveGame(slot);

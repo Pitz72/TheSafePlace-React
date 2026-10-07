@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import {
-  GameEvent, EventChoice, EventResult, AttributeName, JournalEntryType, GameState, Enemy,
-  PlayerStatusCondition, Position,
+  GameEvent, EventChoice, EventResult, AttributeName, JournalEntryType, GameState, Enemy, PlayerStatusCondition, Position, SpecialEffectName,
 } from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
@@ -245,7 +244,8 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
     };
 
     const applySpecial = (value: any, text?: string) => {
-      const effect = value?.effect;
+      // Unknown names are reported by scripts/validate-data.mjs, which reads this union.
+      const effect = value?.effect as SpecialEffectName;
       switch (effect) {
         case 'startDialogue':
           say(text ?? 'Inizi una conversazione...');

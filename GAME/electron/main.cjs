@@ -164,18 +164,31 @@ ipcMain.handle('tsp:set-fullscreen', (event, value) => {
   return win.isFullScreen();
 });
 
-app.whenReady().then(() => {
-  // No menu bar; on macOS keep the app menu so Cmd+Q / Cmd+H keep working.
-  Menu.setApplicationMenu(process.platform === 'darwin'
-    ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }])
-    : null);
-  if (!isDev) registerAppProtocol();
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+// Two running copies would share (and fight over) the same save storage:
+// a second launch just brings the open window to the front.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    const [win] = BrowserWindow.getAllWindows();
+    if (!win) return;
+    if (win.isMinimized()) win.restore();
+    win.focus();
   });
-});
+
+  app.whenReady().then(() => {
+    // No menu bar; on macOS keep the app menu so Cmd+Q / Cmd+H keep working.
+    Menu.setApplicationMenu(process.platform === 'darwin'
+      ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }])
+      : null);
+    if (!isDev) registerAppProtocol();
+    createWindow();
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  });
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

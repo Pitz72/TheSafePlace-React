@@ -1,6 +1,6 @@
 # The Safe Place Chronicles: The Echo of the Journey
 
-![version](https://img.shields.io/badge/gioco-v2.0.16-blue.svg)
+![version](https://img.shields.io/badge/gioco-v2.1.0-blue.svg)
 ![platform](https://img.shields.io/badge/desktop-Windows%20%7C%20macOS%20%7C%20Linux-informational.svg)
 ![status](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 
@@ -8,7 +8,7 @@ Un **GDR testuale di sopravvivenza** post-apocalittico in estetica retrocomputaz
 
 Progetto di **Simone Pizzi** / **Runtime Radio**, nato come esperimento sul portare in fondo un videogioco non banale con l'aiuto di un LLM.
 
-> **Stato**: il gioco è **giocabile dall'inizio alla fine** (nuova partita → 12 capitoli di trama → Safe Place → epilogo secondo la bussola morale → THE END). Lo sviluppo del codice è chiuso; il progetto viene distribuito come applicazione desktop.
+> **Stato**: il gioco è **giocabile dall'inizio alla fine** (nuova partita → 12 capitoli di trama → Safe Place → epilogo secondo la bussola morale → THE END) e tutte le 21 quest si possono completare: dalla v2.1.0 lo verificano test automatici che giocano ogni quest. Il progetto viene distribuito come applicazione desktop.
 
 ---
 
@@ -18,7 +18,7 @@ Gli installer per Windows, macOS e Linux vengono prodotti dalla GitHub Action **
 
 | OS | Formati |
 |----|---------|
-| **Windows** | `.exe` (installer NSIS) · versione `portable` |
+| **Windows** | `.exe` (installer NSIS) |
 | **macOS** | `.dmg` · `.zip` — *app non firmata: al primo avvio click destro → Apri* |
 | **Linux** | `.AppImage` · `.deb` |
 
@@ -68,21 +68,24 @@ npm run build         # bundle web
 npm run electron      # apre l'app Electron sul bundle
 ```
 
-### Altri script utili
+### Controlli e test
 
-- `npm run test` — suite Vitest
-- `npm run build` — bundle di produzione (`GAME/dist/`)
+- `npm run check` — tutti i controlli della CI: formato e validazione dei dati, typecheck, lint, test
+- `npm test` — test (ogni quest giocata dall'inizio alla fine, più i test di regressione)
 - `npm run validate:data` — validazione dei dati di gioco
+- `npm run build` — bundle di produzione (`GAME/dist/`)
+
+Dettagli sull'architettura e su come aggiungere contenuti: [`GAME/README.md`](./GAME/README.md).
 
 ---
 
-## 🤖 Release automatica (GitHub Actions)
+## 🤖 CI e release (GitHub Actions)
 
-Il workflow [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=2.0.16`):
-
-1. builda il gioco su runner **Windows, macOS e Linux** in parallelo;
-2. impacchetta gli installer con electron-builder;
-3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.
+- [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) gira a ogni push e pull request che tocca `GAME/`: storia Ink compilata e aggiornata, `npm run check` e build.
+- [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=2.1.0`):
+  1. verifica che la versione richiesta coincida con `GAME/package.json` ed esegue gli stessi controlli della CI;
+  2. builda il gioco su runner **Windows, macOS e Linux** in parallelo e impacchetta gli installer con electron-builder;
+  3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.
 
 ---
 

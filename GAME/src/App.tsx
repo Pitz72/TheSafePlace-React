@@ -28,6 +28,7 @@ import GameOverScreen from './components/GameOverScreen';
 import VictoryScreen from './components/VictoryScreen';
 import TrophyScreen from './components/TrophyScreen';
 import ErrorScreen from './components/ErrorScreen';
+import GameErrorBoundary from './components/GameErrorBoundary';
 import { useInteractionStore } from './store/interactionStore';
 import { loadAllGameData } from './data/loadAllGameData';
 import { inkStoryData } from './data/inkStoryDatabase';
@@ -179,7 +180,7 @@ const App: React.FC = () => {
         }}
       >
         <div className="w-full h-full relative">
-          {renderContent()}
+          <GameErrorBoundary>{renderContent()}</GameErrorBoundary>
         </div>
       </div>
     </div>

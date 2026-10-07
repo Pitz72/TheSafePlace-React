@@ -31,7 +31,13 @@ class AudioManager {
         try {
             const settingsStr = localStorage.getItem(AUDIO_SETTINGS_KEY);
             if (settingsStr) {
-                return JSON.parse(settingsStr);
+                const saved = JSON.parse(settingsStr);
+                // A damaged value must not leave the volume at NaN.
+                const volume = Number(saved?.volume);
+                return {
+                    volume: Number.isFinite(volume) ? Math.min(10, Math.max(0, Math.round(volume))) : 7,
+                    isMuted: saved?.isMuted === true,
+                };
             }
         } catch (e) {
             console.error("Failed to parse audio settings from localStorage", e);

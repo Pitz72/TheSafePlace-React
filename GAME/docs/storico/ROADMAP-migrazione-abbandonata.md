@@ -1,3 +1,5 @@
+> **Archivio** — questo è la roadmap della migrazione Phaser/Tauri, poi abbandonata. Contiene piani, configurazioni e percorsi che non corrispondono più al codice (i link relativi possono non funzionare). Lo stato attuale è descritto nel [README del gioco](../../README.md) e in [`docs/logs/v2.1.0-revisione-completa.md`](../logs/v2.1.0-revisione-completa.md).
+
 # ROADMAP: Completamento Migrazione & Desktop Release (Tauri)
 
 Percorso tecnico per completare la transizione architetturale (React 19 + Phaser + Inkjs) e arrivare a un'applicazione desktop Win+Linux distribuibile via Tauri.
