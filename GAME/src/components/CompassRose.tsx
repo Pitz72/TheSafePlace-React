@@ -36,6 +36,18 @@ interface POI {
   icon: string; // v1.9.9 - Distinctive icon
 }
 
+const distanceTo = (poi: POI, from: Position): number =>
+  Math.floor(Math.hypot(poi.position.x - from.x, poi.position.y - from.y));
+
+/** Main direction of a POI, or null when it is close enough to see on the map. */
+const directionOf = (poi: POI, from: Position): 'north' | 'south' | 'east' | 'west' | null => {
+  const dx = poi.position.x - from.x;
+  const dy = poi.position.y - from.y;
+  if (Math.hypot(dx, dy) < 3) return null;
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? 'east' : 'west';
+  return dy > 0 ? 'south' : 'north';
+};
+
 export const CompassRose: React.FC = () => {
   const playerPos = useGameStore(state => state.playerPos);
   const map = useGameStore(state => state.map);
@@ -48,7 +60,7 @@ export const CompassRose: React.FC = () => {
     const pois: POI[] = [];
 
     // Quest markers (highest priority)
-    const questMarkers = getActiveQuestMarkers();
+    const questMarkers = getActiveQuestMarkers(activeQuests);
     questMarkers.forEach(marker => {
       pois.push({
         name: quests[marker.id]?.title ?? (marker.type === 'MAIN' ? 'Missione principale' : 'Missione'),
@@ -103,31 +115,8 @@ export const CompassRose: React.FC = () => {
     }
 
     return pois;
-    // getActiveQuestMarkers reads activeQuests and the POI positions.
+    // Quest markers also move with the places discovered on the map (knownPois).
   }, [map, wanderingTrader, activeQuests, knownPois, quests]);
-
-  // Calculate direction and distance for each POI
-  const getDirection = (poi: POI): 'north' | 'south' | 'east' | 'west' | null => {
-    const dx = poi.position.x - playerPos.x;
-    const dy = poi.position.y - playerPos.y;
-
-    // If very close (within 3 tiles), don't show
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < 3) return null;
-
-    // Determine primary direction (stronger axis)
-    if (Math.abs(dx) > Math.abs(dy)) {
-      return dx > 0 ? 'east' : 'west';
-    } else {
-      return dy > 0 ? 'south' : 'north';
-    }
-  };
-
-  const getDistance = (poi: POI): number => {
-    const dx = poi.position.x - playerPos.x;
-    const dy = poi.position.y - playerPos.y;
-    return Math.floor(Math.sqrt(dx * dx + dy * dy));
-  };
 
   // Group POIs by direction
   const poiByDirection = useMemo(() => {
@@ -139,7 +128,7 @@ export const CompassRose: React.FC = () => {
     };
 
     allPOIs.forEach(poi => {
-      const dir = getDirection(poi);
+      const dir = directionOf(poi, playerPos);
       if (dir) {
         grouped[dir].push(poi);
       }
@@ -149,7 +138,7 @@ export const CompassRose: React.FC = () => {
     Object.keys(grouped).forEach(dir => {
       grouped[dir].sort((a, b) => {
         if (a.priority !== b.priority) return b.priority - a.priority;
-        return getDistance(a) - getDistance(b);
+        return distanceTo(a, playerPos) - distanceTo(b, playerPos);
       });
       // Keep only top 3 per direction
       grouped[dir] = grouped[dir].slice(0, 3);
@@ -159,7 +148,7 @@ export const CompassRose: React.FC = () => {
   }, [allPOIs, playerPos]);
 
   const renderPOI = (poi: POI, arrow: string) => {
-    const distance = getDistance(poi);
+    const distance = distanceTo(poi, playerPos);
     return (
       <div
         key={`${poi.name}-${poi.position.x}-${poi.position.y}`}

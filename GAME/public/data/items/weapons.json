@@ -101,7 +101,8 @@
     "weight": 0.8,
     "value": 120,
     "stackable": false,
-    "rarity": "uncommon"
+    "rarity": "uncommon",
+    "ammoType": "ammo_9mm"
   },
   {
     "id": "pistol_military",
@@ -114,16 +115,14 @@
     "weight": 1.2,
     "value": 250,
     "stackable": false,
-    "rarity": "rare"
+    "rarity": "rare",
+    "ammoType": "ammo_9mm"
   },
   {
     "id": "sniper_rifle_disassembled",
     "name": "Fucile di Precisione (Smontato)",
-    "description": "Le parti di un fucile di precisione, nascoste con cura. Richiede assemblaggio per poter essere utilizzato.",
-    "type": "weapon",
-    "weaponType": "ranged",
-    "damage": 0,
-    "durability": 100,
+    "description": "Le parti di un fucile di precisione, nascoste con cura. Manca il percussore: così com'è vale solo per chi sa rimetterlo insieme.",
+    "type": "valuable",
     "weight": 8,
     "value": 400,
     "stackable": false,
@@ -167,7 +166,8 @@
     "value": 70,
     "stackable": false,
     "rarity": "uncommon",
-    "color": "#60BF77"
+    "color": "#60BF77",
+    "ammoType": "ammo_arrow"
   },
   {
     "id": "weapon_wooden_spear",
@@ -196,5 +196,32 @@
     "stackable": false,
     "rarity": "epic",
     "color": "#a855f7"
+  },
+  {
+    "id": "weapon_molotov",
+    "name": "Molotov",
+    "type": "weapon",
+    "weaponType": "thrown",
+    "rarity": "uncommon",
+    "weight": 0.6,
+    "value": 20,
+    "stackable": true,
+    "damage": 12,
+    "effects": [{"type": "fire", "value": 3}],
+    "description": "Una bottiglia di liquore con uno straccio per miccia. Si lancia in combattimento e incendia il bersaglio."
+  },
+  {
+    "id": "weapon_slingshot",
+    "name": "Fionda",
+    "type": "weapon",
+    "weaponType": "ranged",
+    "rarity": "common",
+    "weight": 0.3,
+    "value": 15,
+    "stackable": false,
+    "damage": 7,
+    "durability": 40,
+    "ammoType": "metal_piece",
+    "description": "Un ramo biforcuto e una striscia di gomma. Lancia piccoli pezzi di metallo con sorprendente precisione."
   }
 ]

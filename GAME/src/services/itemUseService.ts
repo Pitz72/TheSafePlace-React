@@ -34,7 +34,7 @@ export const ACTION = {
 /** Effects that do something when used from the inventory. */
 const FIELD_EFFECTS = new Set<ItemEffect['type']>([
     'heal', 'satiety', 'hydration', 'fatigue', 'cureStatus', 'light', 'vision', 'shelter',
-    'random', 'fishing', 'fire', 'communication', 'repel', 'maxHp', 'spoiled',
+    'random', 'fishing', 'fire', 'communication', 'repel', 'spoiled',
 ]);
 /** Effects that only work in combat. */
 export const COMBAT_ONLY_EFFECTS = new Set<ItemEffect['type']>(['trap', 'smoke']);
@@ -259,9 +259,6 @@ function applyEffect(effect: ItemEffect, details: IItem): { message?: string } {
             useGameStore.setState({ repelUntil: until });
             return { message: `Un ronzio acuto riempie l'aria. Per ${value} ore le creature ti staranno alla larga.` };
         }
-        case 'maxHp':
-            useCharacterStore.setState(state => ({ hp: { max: state.hp.max + value, current: state.hp.current + value } }));
-            return { message: `Un calore profondo ti attraversa. HP massimi +${value}.` };
         case 'random': {
             const loot = rollLoot(useLootTableStore.getState().tables.randomItem);
             if (!loot) return { message: "Dentro non c'è niente di utile." };

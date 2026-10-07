@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { useCharacterStore } from '../store/characterStore';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { useItemDatabaseStore } from '../data/itemDatabase';
@@ -53,7 +53,6 @@ const formatEffect = (effect: ItemEffect): string => {
         case 'communication': return 'Radio';
         case 'fire': return 'Accende un fuoco';
         case 'repel': return `Tiene lontane le creature per ${v} ore`;
-        case 'maxHp': return `+${v} HP massimi`;
         case 'spoiled': return `Avariato (${v}% di ammalarsi)`;
         default: return String(effect.type);
     }

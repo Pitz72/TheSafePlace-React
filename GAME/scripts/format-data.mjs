@@ -45,7 +45,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     const check = process.argv.includes('--check');
     let dirty = 0;
     for (const file of jsonFiles(ROOT)) {
-        const raw = fs.readFileSync(file, 'utf8').replace(/^﻿/, '');
+        const raw = fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
         const formatted = formatJson(JSON.parse(raw)) + '\n';
         if (formatted !== raw) {
             dirty++;

@@ -22,6 +22,7 @@ import { TradeItem } from '../types';
 const TradeScreen: React.FC = () => {
   const {
     activeTraderId,
+    traderStock,
     playerOffer,
     traderOffer,
     playerOfferValue,
@@ -40,48 +41,50 @@ const TradeScreen: React.FC = () => {
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-  const { traders } = useTraderDatabaseStore();
-  const { inventory } = useCharacterStore();
-  const { itemDatabase } = useItemDatabaseStore();
+  const traders = useTraderDatabaseStore(state => state.traders);
+  const inventory = useCharacterStore(state => state.inventory);
+  const equippedSlots = useCharacterStore(state => [state.equippedWeapon, state.equippedArmor, state.equippedHead, state.equippedLegs].join(','));
+  const itemDatabase = useItemDatabaseStore(state => state.itemDatabase);
 
   const trader = activeTraderId ? traders[activeTraderId] : null;
 
-  // Build trader inventory with item details
-  const traderInventory = useMemo(() => {
-    if (!trader) return [];
-    return trader.inventory.map((invItem, index) => {
-      const itemData = itemDatabase[invItem.itemId];
-      if (!itemData) {
-        console.warn(`[TRADE] Item ${invItem.itemId} not found in database`);
-      }
-      return {
-        index,
-        itemId: invItem.itemId,
-        name: itemData?.name || `[${invItem.itemId}]`,
-        quantity: invItem.quantity,
-        value: itemData?.value || 0,
-        color: itemData?.color || '#a3a3a3',
-      };
-    });
-  }, [trader, itemDatabase]);
+  const traderInventory = useMemo(() => traderStock.map((entry, index) => {
+    const itemData = itemDatabase[entry.itemId];
+    return {
+      index,
+      itemId: entry.itemId,
+      name: itemData?.name || `[${entry.itemId}]`,
+      quantity: entry.quantity,
+      value: tradingService.unitValue({ itemId: entry.itemId }),
+      color: itemData?.color || '#a3a3a3',
+      tradable: true,
+      note: '',
+    };
+  }), [traderStock, itemDatabase]);
 
-  // Build player inventory with item details
+  // Worn gear is worth less; quest items can't be traded.
   const playerInventory = useMemo(() => {
+    const equipped = new Set(equippedSlots.split(',').filter(Boolean).map(Number));
     return inventory.map((invItem, index) => {
       const itemData = itemDatabase[invItem.itemId];
-      if (!itemData) {
-        console.warn(`[TRADE] Item ${invItem.itemId} not found in database`);
-      }
+      const tradable = tradingService.isTradable(invItem.itemId);
+      const notes = [
+        invItem.durability ? `${invItem.durability.current}/${invItem.durability.max}` : '',
+        equipped.has(index) ? 'E' : '',
+        tradable ? '' : 'missione',
+      ].filter(Boolean);
       return {
         index,
         itemId: invItem.itemId,
         name: itemData?.name || `[${invItem.itemId}]`,
         quantity: invItem.quantity,
-        value: itemData?.value || 0,
+        value: tradingService.unitValue(invItem),
         color: itemData?.color || '#a3a3a3',
+        tradable,
+        note: notes.length ? ` (${notes.join(', ')})` : '',
       };
     });
-  }, [inventory, itemDatabase]);
+  }, [inventory, itemDatabase, equippedSlots]);
 
   // Current inventory being viewed
   const currentInventory = selectedPanel === 'player' ? playerInventory : traderInventory;
@@ -119,6 +122,7 @@ const TradeScreen: React.FC = () => {
     if (!selectedItem) return;
 
     if (selectedPanel === 'player') {
+      if (!selectedItem.tradable) return;
       // Check if item is already in player offer
       const offerIndex = playerOffer.findIndex(
         item => item.inventoryIndex === selectedItem.index
@@ -213,7 +217,7 @@ const TradeScreen: React.FC = () => {
         cancelTrade();
         break;
     }
-  }, [navigate, switchPanel, adjustQuantity, toggleItem, confirmTrade, cancelTrade, balance, playerOffer, traderOffer]);
+  }, [navigate, switchPanel, adjustQuantity, toggleItem, confirmTrade, cancelTrade, balance, playerOffer, traderOffer, selectedPanel]);
 
   const handlerMap = useMemo(() => ({
     'w': () => handleKeyPress('w'),
@@ -245,7 +249,6 @@ const TradeScreen: React.FC = () => {
   }
 
   const markupPercent = Math.round((effectiveMarkup - 1) * 100);
-  const tradeValid = balance >= 0 && playerOffer.length > 0 && traderOffer.length > 0;
 
   return (
     <div className="absolute inset-0 bg-black/95 flex flex-col p-4">
@@ -255,7 +258,7 @@ const TradeScreen: React.FC = () => {
           ═══ COMMERCIO CON {trader.name.toUpperCase()} ═══
         </h1>
         <p className="text-2xl text-amber-400/70 mt-2">
-          Markup: {markupPercent}% | Sistema di Baratto
+          Ricarico: {markupPercent}% | Baratto: offri oggetti di valore pari o superiore
         </p>
       </div>
 
@@ -276,7 +279,7 @@ const TradeScreen: React.FC = () => {
                   }`}
                   style={{ color: !isSelected && !isInOffer ? item.color : undefined }}
                 >
-                  {isSelected && '> '}{item.name} x{item.quantity} [{item.value}v]
+                  {isSelected && '> '}{item.name}{item.note} x{item.quantity} [{item.tradable ? `${item.value}v` : '—'}]
                   {isSelected && selectedPanel === 'player' && item.quantity > 1 && (
                     <span className="ml-2 text-yellow-400">[Qtà: {selectedQuantity}]</span>
                   )}

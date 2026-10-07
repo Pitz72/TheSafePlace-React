@@ -108,7 +108,7 @@
             "successText": "Una lettera attira la tua attenzione: un abitante scrive di una 'scorta di famiglia nascosta sotto il vecchio pozzo'.",
             "failureText": "Le lettere sono per lo più illeggibili, l'inchiostro sbavato.",
             "success": [
-              {"type": "special", "value": {"effect": "lore_clue", "clueId": "village_well_cache"}},
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "village_well_cache"}},
               {"type": "addXp", "value": 30}
             ],
             "failure": [{"type": "addXp", "value": 10}]
@@ -194,13 +194,14 @@
             "results": [
               {
                 "type": "journalEntry",
-                "text": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia. Impari qualcosa sulle minacce biologiche."
+                "text": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia: ora sai riconoscerli (+1 a Medicina)."
               },
-              {"type": "special", "value": {"effect": "learn_disease_symptoms"}},
+              {"type": "setFlag", "value": "KNOWS_DISEASE_SYMPTOMS"},
               {"type": "addXp", "value": 20}
             ]
           }
-        ]
+        ],
+        "hideIfFlag": "KNOWS_DISEASE_SYMPTOMS"
       }
     ]
   },
@@ -399,7 +400,8 @@
             "success": [
               {"type": "addItem", "value": {"itemId": "hammer_heavy", "quantity": 1}},
               {"type": "addItem", "value": {"itemId": "metal_ingots", "quantity": 3}},
-              {"type": "addXp", "value": 35}
+              {"type": "addXp", "value": 35},
+              {"type": "addItem", "value": {"itemId": "precision_tools", "quantity": 1}}
             ],
             "failure": [{"type": "addXp", "value": 5}]
           }
@@ -702,7 +704,8 @@
               {"type": "journalEntry", "text": "Raccogli zappe, pale e un'ascia ancora affilata."},
               {"type": "addItem", "value": {"itemId": "shovel", "quantity": 1}},
               {"type": "addItem", "value": {"itemId": "hand_axe", "quantity": 1}},
-              {"type": "addXp", "value": 20}
+              {"type": "addXp", "value": 20},
+              {"type": "addItem", "value": {"itemId": "rubber_gasket", "quantity": 2}}
             ]
           }
         ]
@@ -1095,7 +1098,7 @@
     "title": "L'Utilitaria Azzurrina",
     "description": "In fondo a un vicolo cieco, seminascosta sotto un telo cerato lacero, noti la sagoma di una piccola auto. È un vecchio modello di utilitaria, la cui vernice, un tempo di un azzurro brillante, è ora scrostata e opaca. La portiera del conducente è socchiusa.\n\nAvvicinandoti, vedi che l'interno è stato trasformato in una sorta di studio improvvisato. Cavi corrono ovunque, collegando un vecchio microfono a un trasmettitore radio modificato, il tutto alimentato da una serie di batterie per auto collegate in serie. Sul cruscotto, un pezzo di nastro adesivo ingiallito reca una scritta a pennarello: 'The Katzus'.\n\nSembra che qualcuno, in questo piccolo angolo di mondo, abbia cercato di tenere accesa una voce nel silenzio.",
     "biomes": ["Villaggio"],
-    "isUnique": true,
+    "isUnique": false,
     "choices": [
       {
         "text": "Esamina l'attrezzatura radio",
@@ -1105,7 +1108,7 @@
             "skill": "investigare",
             "dc": 12,
             "successText": "L'attrezzatura è un capolavoro di ingegno e improvvisazione. Il trasmettitore è stato modificato per funzionare a bassa potenza, ma con un'ampia portata. Trovi un registratore a nastro collegato al mixer. Premi 'play'. Una voce calda e un po' stanca riempie l'abitacolo: '...e questo era l'ultimo messaggio del Capitano Keith Arrow per The Elder Radio. Se qualcuno è in ascolto... non mollate. C'è sempre una canzone che vale la pena ascoltare. Passo e chiudo.' La registrazione finisce. Recuperi la cassetta e alcuni componenti elettronici utili.",
-            "failureText": "L'attrezzatura è troppo complessa e danneggiata. Toccando un cavo sbagliato, provochi un corto circuito. L'ultima luce sul trasmettitore si spegne con un sibilo. Qualunque segreto custodisse, è andato perduto.",
+            "failureText": "Tocchi il cavo sbagliato e un corto circuito ti fa sobbalzare. Dovrai lasciar raffreddare i circuiti e riprovare.",
             "success": [
               {"type": "addItem", "value": {"itemId": "captains_last_broadcast", "quantity": 1}},
               {"type": "addItem", "value": {"itemId": "tech_components", "quantity": 2}},
@@ -1113,9 +1116,10 @@
                 "type": "journalEntry",
                 "text": "Hai recuperato l'ultima trasmissione del Capitano Keith Arrow. Un'eco di speranza in un mondo silenzioso."
               },
-              {"type": "addXp", "value": 150}
+              {"type": "addXp", "value": 150},
+              {"type": "setFlag", "value": "ELDER_RADIO_DONE"}
             ],
-            "failure": [{"type": "addXp", "value": 30}]
+            "failure": [{"type": "advanceTime", "value": 20}]
           }
         ]
       },
@@ -1131,10 +1135,12 @@
               },
               {"type": "addItem", "value": {"itemId": "rare_music_cassettes", "quantity": 2}},
               {"type": "revealMapPOI", "value": {"x": 55, "y": 120, "name": "Rifugio Segnalato"}},
-              {"type": "addXp", "value": 120}
+              {"type": "addXp", "value": 120},
+              {"type": "setFlag", "value": "ELDER_RADIO_GLOVEBOX"}
             ]
           }
-        ]
+        ],
+        "hideIfFlag": "ELDER_RADIO_GLOVEBOX"
       },
       {
         "text": "Lascia questo santuario intatto",
@@ -1147,7 +1153,66 @@
                 "text": "Decidi di non toccare nulla. Questo non è un deposito da saccheggiare; è il monumento a qualcuno che ha combattuto il Silenzio con l'unica arma che aveva: la sua voce. Chiudi piano la portiera dell'utilitaria azzurrina, lasciando 'The Katzus' al suo riposo. L'idea che qualcuno, da qualche parte, abbia cercato di mantenere viva una connessione umana ti dà una strana forza."
               },
               {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
-              {"type": "addXp", "value": 100}
+              {"type": "addXp", "value": 100},
+              {"type": "setFlag", "value": "ELDER_RADIO_DONE"}
+            ]
+          }
+        ]
+      }
+    ],
+    "excludesFlag": "ELDER_RADIO_DONE"
+  },
+  {
+    "id": "trigger_pump_quest",
+    "title": "Pompa Rotta",
+    "description": "Al centro di una piccola piazza desolata, vedi una vecchia pompa dell'acqua a mano, arrugginita e chiaramente fuori uso. Un tempo doveva essere il cuore di questo villaggio. Con i pezzi giusti, forse potresti rimetterla in funzione.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la pompa",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "La pompa è danneggiata ma riparabile. Ti serviranno: 1 Guarnizione di Gomma e 2 Rottami Metallici."
+              },
+              {"type": "startQuest", "value": "repair_water_pump"},
+              {"type": "addXp", "value": 30},
+              {
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "village_pump",
+                  "name": "Pompa del villaggio",
+                  "eventId": "village_pump"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Ignora la pompa",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non hai tempo per riparazioni adesso, ma ti segni dove si trova la pompa."
+              },
+              {
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "village_pump",
+                  "name": "Pompa del villaggio",
+                  "eventId": "village_pump"
+                }
+              }
             ]
           }
         ]

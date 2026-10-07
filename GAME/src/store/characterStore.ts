@@ -69,6 +69,28 @@ function reindexEquipment(state: Pick<CharacterState, SlotKey>, removed: number[
 const journal = (text: string, type: JournalEntryType, color?: string) =>
   useGameStore.getState().addJournalEntry({ text, type, color });
 
+/**
+ * Inventory read from a save: entries that are malformed or name items that no
+ * longer exist are dropped, and the equipped slots follow the surviving entries.
+ */
+function sanitizeInventory(raw: unknown): { inventory: InventoryItem[]; equippedAt: (index: unknown) => number | null } {
+  const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
+  const checkIds = Object.keys(itemDatabase).length > 0;
+  const inventory: InventoryItem[] = [];
+  const newIndex = new Map<number, number>();
+  (Array.isArray(raw) ? raw : []).forEach((entry, index) => {
+    if (!entry || typeof entry.itemId !== 'string' || (checkIds && !itemDatabase[entry.itemId])) {
+      console.warn(`[SAVE] Oggetto non valido scartato dal salvataggio: ${JSON.stringify(entry)}`);
+      return;
+    }
+    const quantity = Number.isFinite(entry.quantity) && entry.quantity >= 1 ? Math.floor(entry.quantity) : 1;
+    newIndex.set(index, inventory.length);
+    inventory.push({ ...entry, quantity });
+  });
+  const equippedAt = (index: unknown) => (typeof index === 'number' ? newIndex.get(index) ?? null : null);
+  return { inventory, equippedAt };
+}
+
 export const useCharacterStore = create<CharacterState>((set, get) => ({
   level: 1,
   xp: { current: 0, next: XP_PER_LEVEL[2] },
@@ -649,6 +671,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     const questFlags: Record<string, boolean> = { ...(json.questFlags ?? {}) };
     // Saves before 2.1 tracked purified water with a dedicated flag.
     if (questFlags.hasCraftedWater) questFlags.crafted_CONS_002 = true;
+    const { inventory, equippedAt } = sanitizeInventory(json.inventory);
     set({
       level: json.level ?? 1,
       xp: json.xp ?? { current: 0, next: XP_PER_LEVEL[2] },
@@ -658,11 +681,11 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
       fatigue: json.fatigue ?? { current: 0, max: 100 },
       attributes: { ...initialAttributes, ...(json.attributes ?? {}) },
       skills: { ...makeSkills(), ...(json.skills ?? {}) },
-      inventory: Array.isArray(json.inventory) ? json.inventory : [],
-      equippedWeapon: json.equippedWeapon ?? null,
-      equippedArmor: json.equippedArmor ?? null,
-      equippedHead: json.equippedHead ?? null,
-      equippedLegs: json.equippedLegs ?? null,
+      inventory,
+      equippedWeapon: equippedAt(json.equippedWeapon),
+      equippedArmor: equippedAt(json.equippedArmor),
+      equippedHead: equippedAt(json.equippedHead),
+      equippedLegs: equippedAt(json.equippedLegs),
       alignment: json.alignment ?? { ...initialAlignment },
       status: new Set<PlayerStatusCondition>((Array.isArray(json.status) ? json.status : []).filter((s: string) => VALID_STATUSES.has(s))),
       levelUpPending: Boolean(json.levelUpPending),

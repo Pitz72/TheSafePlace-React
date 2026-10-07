@@ -32,7 +32,7 @@ Lo chiamiamo 'Il Crocevia'. È solo un mucchio di rottami, ma è il più vicino 
 }
 
 = dangers_success
-Hai un modo di fare convincente. Va bene, ascolta. A nord-ovest, tra le montagne... c'è un posto che chiamiamo 'Il Nido'. Non andarci. Chi ci va, non torna. È un luogo di cenere e silenzio. Capito?
+Hai un modo di fare convincente. Va bene, ascolta. A nord, tra le rocce... c'è un posto che chiamiamo 'Il Nido'. Non andarci. Chi ci va, non torna. È un luogo di cenere e silenzio. Capito?
 -> hub
 
 = dangers_failure

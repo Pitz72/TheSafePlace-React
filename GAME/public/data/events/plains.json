@@ -21,7 +21,8 @@
                 "text": "L'uomo ti ringrazia con le lacrime agli occhi. Usi le tue risorse per aiutarli."
               },
               {"type": "addXp", "value": 50},
-              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}},
+              {"type": "unlockTrophy", "value": "trophy_secret_help_strangers"}
             ]
           }
         ]
@@ -96,7 +97,8 @@
               {"type": "removeItem", "value": {"itemId": "CONS_003", "quantity": 1}},
               {"type": "advanceTime", "value": 30},
               {"type": "addXp", "value": 35},
-              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}},
+              {"type": "unlockTrophy", "value": "trophy_secret_free_animal"}
             ],
             "failure": [
               {
@@ -165,7 +167,8 @@
             "success": [
               {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
               {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 10}},
-              {"type": "addXp", "value": 40}
+              {"type": "addXp", "value": 40},
+              {"type": "addItem", "value": {"itemId": "vehicle_battery", "quantity": 1}}
             ],
             "failure": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 5}]
           }
@@ -628,7 +631,12 @@
             "success": [
               {"type": "addItem", "value": {"itemId": "tech_components", "quantity": 2}},
               {"type": "addItem", "value": {"itemId": "rare_music_cassettes", "quantity": 1}},
-              {"type": "addXp", "value": 50}
+              {"type": "addXp", "value": 50},
+              {
+                "type": "journalEntry",
+                "text": "Da lassù noti in lontananza un'altra torre, molto più alta: la segni sulla mappa."
+              },
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "radio_tower"}}
             ],
             "failure": [{"type": "takeDamage", "value": 15}, {"type": "addXp", "value": 10}]
           }
@@ -667,11 +675,12 @@
             "results": [
               {
                 "type": "journalEntry",
-                "text": "Il bambino mangia avidamente. Ti racconta che i suoi genitori sono morti. Ti ringrazia e si allontana verso sud."
+                "text": "Il bambino mangia avidamente. Ti racconta che i suoi genitori sono morti e che suo padre aveva nascosto il 'tesoro di famiglia' sotto una torre di ferro dove le voci corrono veloci. Poi si allontana verso sud."
               },
               {"type": "removeItem", "value": {"itemId": "CONS_001", "quantity": 1}},
               {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
-              {"type": "addXp", "value": 40}
+              {"type": "addXp", "value": 40},
+              {"type": "startQuest", "value": "find_family_treasure"}
             ]
           }
         ]
@@ -901,9 +910,9 @@
   {
     "id": "plains_refugee_family",
     "title": "Famiglia di Rifugiati",
-    "description": "Una famiglia di quattro persone cammina lentamente verso sud. Sembrano esausti e affamati.",
+    "description": "Una famiglia di quattro persone cammina lentamente verso nord. Il padre si presenta: sono gli Alenko, diretti al Crocevia. Sembrano esausti e affamati.",
     "biomes": ["Pianura"],
-    "isUnique": false,
+    "isUnique": true,
     "choices": [
       {
         "text": "[Lena] Condividi le tue provviste",
@@ -915,13 +924,14 @@
             "results": [
               {
                 "type": "journalEntry",
-                "text": "La famiglia ti ringrazia con le lacrime agli occhi. Il padre ti offre una vecchia mappa in cambio."
+                "text": "Gli Alenko ti ringraziano con le lacrime agli occhi. Il padre ti offre una vecchia mappa e ti chiede di passare a trovarli al Crocevia, se mai ci arriverai."
               },
               {"type": "removeItem", "value": {"itemId": "CONS_001", "quantity": 2}},
               {"type": "removeItem", "value": {"itemId": "CONS_002", "quantity": 2}},
               {"type": "addItem", "value": {"itemId": "local_map", "quantity": 1}},
               {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
-              {"type": "addXp", "value": 50}
+              {"type": "addXp", "value": 50},
+              {"type": "startQuest", "value": "check_on_alenkos"}
             ]
           }
         ]

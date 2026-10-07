@@ -282,6 +282,25 @@
         ]
       },
       {
+        "text": "Osservali di nascosto mentre preparano le loro armi",
+        "hideIfFlag": "LOOTERS_OBSERVED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 12,
+            "successText": "Nascosto tra le macerie, li guardi riempire bottiglie di liquore e infilarci stracci: ora sai come si fa una molotov.",
+            "failureText": "Uno di loro alza lo sguardo verso il tuo nascondiglio. Ti allontani prima di essere scoperto.",
+            "success": [
+              {"type": "learnRecipe", "value": "recipe_molotov"},
+              {"type": "addXp", "value": 30},
+              {"type": "setFlag", "value": "LOOTERS_OBSERVED"}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
         "text": "Evita l'accampamento",
         "outcomes": [
           {
@@ -291,81 +310,6 @@
                 "type": "journalEntry",
                 "text": "Rubare ai saccheggiatori è rischioso. Meglio proseguire."
               }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "city_police_station",
-    "title": "Stazione di Polizia Abbandonata",
-    "description": "L'edificio della polizia è stato parzialmente bruciato. Le celle sono vuote, ma l'armeria potrebbe ancora avere qualcosa.",
-    "biomes": ["Città"],
-    "isUnique": true,
-    "choices": [
-      {
-        "text": "Cerca nell'armeria",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "rapiditaDiMano",
-            "dc": 14,
-            "successText": "Scassini la porta dell'armeria. Trovi una pistola ancora funzionante e munizioni.",
-            "failureText": "L'armeria è vuota. Qualcun altro è arrivato prima di te.",
-            "success": [
-              {"type": "addItem", "value": {"itemId": "weapon_handgun", "quantity": 1}},
-              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 20}},
-              {"type": "addXp", "value": 50}
-            ],
-            "failure": [{"type": "addXp", "value": 10}]
-          }
-        ]
-      },
-      {
-        "text": "Cerca negli uffici",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 11,
-            "successText": "Trovi documenti confidenziali, mappe della città pre-guerra e un vecchio badge aziendale intatto. Apparteneva a un certo {RANDOM_DONOR}.",
-            "failureText": "Gli uffici sono stati saccheggiati a fondo. Niente di utile.",
-            "success": [
-              {"type": "addItem", "value": {"itemId": "sensitive_documents", "quantity": 2}},
-              {"type": "addXp", "value": 30}
-            ],
-            "failure": [{"type": "addXp", "value": 5}]
-          }
-        ]
-      },
-      {
-        "text": "[QUEST] Usa un terminale per decifrare il chip",
-        "itemRequirements": [{"itemId": "drone_memory_chip", "quantity": 1}],
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 14,
-            "successText": "Dopo aver armeggiato con i cavi, riesci ad alimentare un vecchio terminale. Inserisci il chip. Sullo schermo appaiono delle coordinate e un messaggio: 'Deposito scorte emergenza 7-B. Integro.'",
-            "failureText": "Il terminale emette una scintilla e si spegne definitivamente. Il chip è fritto. L'informazione è persa per sempre.",
-            "success": [
-              {"type": "removeItem", "value": {"itemId": "drone_memory_chip", "quantity": 1}},
-              {
-                "type": "special",
-                "value": {"effect": "completeQuestFromEvent", "questId": "decipher_drone_data"},
-                "text": "Le coordinate del bunker militare sono state aggiunte alla tua mappa."
-              },
-              {"type": "addXp", "value": 100}
-            ],
-            "failure": [
-              {"type": "removeItem", "value": {"itemId": "drone_memory_chip", "quantity": 1}},
-              {
-                "type": "special",
-                "value": {"effect": "failQuestFromEvent", "questId": "decipher_drone_data"},
-                "text": "Hai perso l'opportunità di decifrare i dati."
-              },
-              {"type": "addXp", "value": 30}
             ]
           }
         ]
@@ -565,7 +509,9 @@
             "success": [
               {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 2}},
               {"type": "addItem", "value": {"itemId": "portable_gps", "quantity": 1}},
-              {"type": "addXp", "value": 30}
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "precision_tools", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 2}}
             ],
             "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
           }
@@ -731,7 +677,12 @@
             "failureText": "L'arrampicata è troppo difficile. Rinunci a metà strada.",
             "success": [
               {"type": "addItem", "value": {"itemId": "electronics_advanced", "quantity": 3}},
-              {"type": "addXp", "value": 40}
+              {"type": "addXp", "value": 40},
+              {
+                "type": "journalEntry",
+                "text": "Da lassù noti in lontananza un'altra torre, molto più alta: la segni sulla mappa."
+              },
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "radio_tower"}}
             ],
             "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 10}]
           }
@@ -747,48 +698,6 @@
                 "type": "journalEntry",
                 "text": "Arrampicarsi su una torre così alta è pericoloso. Prosegui."
               }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "city_school_ruins",
-    "title": "Scuola in Rovina",
-    "description": "Una scuola abbandonata. Le aule sono vuote, ma la mensa potrebbe avere provviste.",
-    "biomes": ["Città"],
-    "isUnique": false,
-    "choices": [
-      {
-        "text": "Cerca nella mensa",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 10,
-            "successText": "Trovi lattine conservate e cibo in scatola ancora commestibile.",
-            "failureText": "Tutto è andato a male. Non c'è nulla di commestibile.",
-            "success": [
-              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 4}},
-              {"type": "addXp", "value": 25}
-            ],
-            "failure": [{"type": "addXp", "value": 5}]
-          }
-        ]
-      },
-      {
-        "text": "Riposa nell'aula",
-        "outcomes": [
-          {
-            "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Ti siedi in un'aula vuota. I ricordi del mondo perduto ti assalgono."
-              },
-              {"type": "heal", "value": 10},
-              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -815,7 +724,8 @@
               {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
               {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
               {"type": "addItem", "value": {"itemId": "tool_kit", "quantity": 1}},
-              {"type": "addXp", "value": 30}
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "industrial_filter", "quantity": 2}}
             ],
             "failure": [{"type": "addXp", "value": 5}]
           }
@@ -986,7 +896,16 @@
                 "text": "Il pianoforte è una reliquia incredibile. I tasti sono intatti, ma quando premi uno, il suono è terribilmente stonato. Con gli strumenti giusti, forse potresti accordarlo..."
               },
               {"type": "startQuest", "value": "broken_melody"},
-              {"type": "addXp", "value": 50}
+              {"type": "addXp", "value": 50},
+              {
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "theater",
+                  "name": "Teatro in Rovina",
+                  "eventId": "theater_piano"
+                }
+              }
             ]
           }
         ]
@@ -1006,41 +925,6 @@
               {"type": "addXp", "value": 40}
             ],
             "failure": [{"type": "addXp", "value": 5}]
-          }
-        ]
-      },
-      {
-        "text": "[QUEST] Tenta di accordare il pianoforte",
-        "itemRequirements": [{"itemId": "precision_tools", "quantity": 1}],
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 15,
-            "successText": "Con pazienza infinita, accorda ogni corda. Poi, esitante, suoni alcune note. La melodia che ne esce è semplice, malinconica, ma pura. Per un istante, il suono della musica riempie le rovine, un'eco di bellezza in un mondo di cenere. Ti senti... più umano.",
-            "failureText": "Tenti di accordare le corde, ma una si spezza con un suono stridente. Il delicato meccanismo è compromesso. Il pianoforte non suonerà mai più.",
-            "success": [
-              {"type": "removeItem", "value": {"itemId": "precision_tools", "quantity": 1}},
-              {
-                "type": "special",
-                "value": {"effect": "completeQuestFromEvent", "questId": "broken_melody"}
-              },
-              {"type": "statBoost", "value": {"stat": "car", "amount": 1}},
-              {
-                "type": "journalEntry",
-                "text": "[EREDITÀ] Hai riportato in vita l'arte. Il tuo Carisma aumenta permanentemente."
-              },
-              {"type": "addXp", "value": 200}
-            ],
-            "failure": [
-              {"type": "removeItem", "value": {"itemId": "precision_tools", "quantity": 1}},
-              {
-                "type": "special",
-                "value": {"effect": "failQuestFromEvent", "questId": "broken_melody"}
-              },
-              {"type": "journalEntry", "text": "[FALLIMENTO] Il pianoforte è perduto per sempre."},
-              {"type": "addXp", "value": 50}
-            ]
           }
         ]
       },
@@ -1074,7 +958,7 @@
         "outcomes": [
           {
             "type": "skillCheck",
-            "skill": "intelligenza",
+            "skill": "investigare",
             "dc": 12,
             "successText": "Smonti trasformatori e recuperi fili di rame e componenti elettronici preziosi.",
             "failureText": "Non sai da dove iniziare. Perdi solo tempo.",
@@ -1166,7 +1050,7 @@
             "success": [
               {
                 "type": "special",
-                "value": {"effect": "trigger_cutscene", "cutsceneId": "CS_MOTHERS_ECHO"}
+                "value": {"effect": "startCutscene", "cutsceneId": "CS_MOTHERS_ECHO"}
               },
               {"type": "addXp", "value": 50}
             ],
@@ -1180,6 +1064,50 @@
           {
             "type": "direct",
             "results": [{"type": "journalEntry", "text": "È solo un pezzo di stoffa vecchia. Vai avanti."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique_grandmothers_letter",
+    "title": "Lettera Ritrovata",
+    "description": "Frugando tra i documenti ammuffiti di un vecchio ufficio, trovi una lettera personale, protetta in una busta di plastica. La calligrafia è incerta, quella di una persona anziana. L'inchiostro è sbiadito, ma il testo è ancora leggibile.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi la lettera",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "La lettera recita: 'Mio caro nipote, so che non puoi ricevere questa lettera dove sei ora, nel Tubo N.403. Ma la scrivo lo stesso, perché scrivere è l'unico modo che ho per sentirti vicino. La vigna che tanto amavi è ancora lì, anche se nessuno la cura più. Ho conservato il tuo maglioncino a strisce rosse e bianche, quello che indossavi sempre da bambino. Ti aspetto, anche se so che non tornerai. Con tutto il mio amore, Nonna.'"
+              },
+              {
+                "type": "journalEntry",
+                "text": "Sul retro della busta c'è un timbro sbiadito: 'Ospedale Psichiatrico Sant'Ambrogio — Reparto Speciale'. Lo segni sulla mappa."
+              },
+              {"type": "addItem", "value": {"itemId": "grandmothers_letter", "quantity": 1}},
+              {"type": "startQuest", "value": "the_arsonist_and_the_tube"},
+              {"type": "addXp", "value": 100}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia la lettera dov'è",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare questa corrispondenza privata. Alcune storie sono troppo personali."
+              }
+            ]
           }
         ]
       }

@@ -112,6 +112,8 @@ const EventScreen: React.FC = () => {
     useKeyboardInput(handlerMap);
 
     if (!activeEvent) return null;
+    // Places change once the player has acted there (the camp is empty, the pump works...).
+    const description = [...(activeEvent.variants ?? [])].reverse().find(v => gameFlags.has(v.requiresFlag))?.description ?? activeEvent.description;
 
     if (eventResolutionText) {
         return (
@@ -136,7 +138,7 @@ const EventScreen: React.FC = () => {
             <div className="w-full max-w-6xl border-8 border-double border-green-400/50 flex flex-col p-8">
                 <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ {activeEvent.title} ═══</h1>
                 <div ref={descriptionBoxRef} className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl" style={{ scrollbarWidth: 'none' }}>
-                    <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{fill(activeEvent.description)}</pre>
+                    <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{fill(description)}</pre>
                 </div>
                 <div className="w-full max-w-4xl mx-auto text-4xl space-y-4">
                     {choices.map(({ choice, met, requirement }, index) => {

@@ -93,7 +93,7 @@
                 "type": "journalEntry",
                 "text": "Ti avvicini al carretto per esaminare la sua merce."
               },
-              {"type": "special", "value": {"effect": "trade_screen_placeholder"}}
+              {"type": "special", "value": {"effect": "startTrading", "traderId": "cart_merchant"}}
             ]
           }
         ]
@@ -152,7 +152,11 @@
             "failureText": "Mentre ti avvicini, il lupo, in un impeto di dolore e paura, si divincola e riesce a morderti prima di liberarsi e fuggire. La ferita è profonda.",
             "success": [
               {"type": "addXp", "value": 40},
-              {"type": "special", "value": {"effect": "wolf_gratitude"}}
+              {"type": "setFlag", "value": "WOLF_FRIEND"},
+              {
+                "type": "journalEntry",
+                "text": "[BRANCO] I lupi di queste terre sembrano ricordarsi di te: finché non darai loro la caccia, ti lasceranno passare."
+              }
             ],
             "failure": [
               {"type": "takeDamage", "value": 15},
@@ -419,7 +423,7 @@
     "title": "L'Occhio nel Cielo",
     "description": "Un ronzio acuto attira la tua attenzione verso il cielo. Un piccolo drone di sorveglianza ti sta sorvolando, un singolo occhio rosso che ti fissa. Non sembra armato, ma sta chiaramente registrando la tua posizione.",
     "biomes": ["Global"],
-    "isUnique": true,
+    "isUnique": false,
     "choices": [
       {
         "text": "Tenta di abbatterlo con un sasso.",
@@ -460,7 +464,8 @@
           }
         ]
       }
-    ]
+    ],
+    "excludesQuest": "decipher_drone_data"
   },
   {
     "id": "random_minefield",
@@ -628,9 +633,10 @@
             "type": "skillCheck",
             "skill": "investigare",
             "dc": 12,
-            "successText": "Decidi di non saccheggiarlo, ma trovi un ordine di consegna per un 'avamposto a nord'. La conoscenza di questo luogo potrebbe guidarti.",
+            "successText": "Non lo derubi. Trovi però un ordine di consegna per un 'avamposto a nord' e il pacco sigillato che portava: decidi di finire tu il suo lavoro.",
             "failureText": "Non trovi alcun documento o indizio. La sua storia muore con lui.",
             "success": [
+              {"type": "addItem", "value": {"itemId": "sealed_package_quest", "quantity": 1}},
               {"type": "startQuest", "value": "deliver_last_message"},
               {"type": "addXp", "value": 35}
             ],

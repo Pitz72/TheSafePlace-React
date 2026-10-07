@@ -2,26 +2,12 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { MENU_ITEMS, GAME_VERSION } from '../constants';
 import { useGameStore } from '../store/gameStore';
-import { useCharacterStore } from '../store/characterStore';
 import { GameState } from '../types';
 import { audioManager } from '../utils/audio';
 import { handleLoadGame } from '../services/saveGameService';
-import { questService } from '../services/questService';
+import { startNewGame } from '../services/newGameService';
 import { quitGame } from '../utils/desktop';
-import { storage } from '../utils/saveFormat';
-
-export const MAIN_QUEST_ID = 'MQ_THE_ECHO_OF_THE_JOURNEY';
-const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
-
-/** Fresh world, fresh character, the main quest, then the opening. */
-export function startNewGame() {
-    const game = useGameStore.getState();
-    game.setMap();
-    useCharacterStore.getState().initCharacter();
-    questService.startQuest(MAIN_QUEST_ID);
-    game.initializeWanderingTrader();
-    game.startCutscene('CS_OPENING');
-}
+import { lastSaveSlot } from '../utils/saveFormat';
 
 const MainMenuScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -41,7 +27,7 @@ const MainMenuScreen: React.FC = () => {
                 startNewGame();
                 break;
             case 'Continua Partita': {
-                const lastSlot = Number(storage.get(LAST_SAVE_SLOT_KEY));
+                const lastSlot = lastSaveSlot();
                 if (!lastSlot) setMessage('Nessun salvataggio da continuare.');
                 else if (!handleLoadGame(lastSlot)) setMessage(`Impossibile caricare l'ultimo salvataggio (slot ${lastSlot}).`);
                 break;

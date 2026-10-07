@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GameState, DeathCause } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { handleLoadGame } from '../services/saveGameService';
+import { lastSaveSlot } from '../utils/saveFormat';
 
 const DEATH_MESSAGES: Record<DeathCause, string> = {
     COMBAT: "Sconfitto in combattimento. La tua guardia non era abbastanza alta.",
@@ -45,14 +47,22 @@ const GameOverScreen: React.FC = () => {
     // Use useMemo to ensure the random check happens only once per render
     const isEasterEgg = useMemo(() => Math.random() < 0.1, []);
 
+    const [lastSlot] = useState(lastSaveSlot);
+    const [loadError, setLoadError] = useState(false);
+
     const handleConfirm = useCallback(() => {
         setGameState(GameState.MAIN_MENU);
     }, [setGameState]);
 
+    const loadLast = useCallback(() => {
+        if (lastSlot && !handleLoadGame(lastSlot)) setLoadError(true);
+    }, [lastSlot]);
+
     const handlerMap = useMemo(() => ({
-        'Enter': handleConfirm,
-        'Escape': handleConfirm,
-    }), [handleConfirm]);
+        Enter: handleConfirm,
+        Escape: handleConfirm,
+        c: loadLast, C: loadLast,
+    }), [handleConfirm, loadLast]);
 
     useKeyboardInput(handlerMap);
 
@@ -71,8 +81,10 @@ const GameOverScreen: React.FC = () => {
             <p className="text-3xl text-center mt-4 italic text-gray-300">
                 {message}
             </p>
-            <div className="flex-shrink-0 text-center text-3xl mt-12 pt-4 text-gray-300 animate-pulse">
-                [INVIO per tornare al Menu Principale]
+            <div className="flex-shrink-0 text-center text-3xl mt-12 pt-4 text-gray-300 animate-pulse space-y-2">
+                <p>[INVIO] Menu Principale</p>
+                {lastSlot && <p>[C] Carica l'ultimo salvataggio (slot {lastSlot})</p>}
+                {loadError && <p className="text-red-400">Impossibile caricare il salvataggio.</p>}
             </div>
         </div>
     );

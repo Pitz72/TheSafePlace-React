@@ -104,9 +104,10 @@
             "failureText": "Provi a sintonizzare meglio, ma il segnale è instabile. Con un ultimo crepitio, svanisce, lasciandoti con più domande che risposte.",
             "success": [
               {
-                "type": "revealMapPOI",
-                "text": "Hai triangolato il segnale! Sembra provenire da una zona remota verso est."
+                "type": "journalEntry",
+                "text": "Hai triangolato il segnale: arriva da una torre radio. L'hai segnata sulla mappa."
               },
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "radio_tower"}},
               {"type": "addXp", "value": 75}
             ],
             "failure": [{"type": "addXp", "value": 15}]

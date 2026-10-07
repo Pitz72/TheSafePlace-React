@@ -142,7 +142,7 @@
         "outcomes": [
           {
             "type": "skillCheck",
-            "skill": "int",
+            "skill": "investigare",
             "dc": 14,
             "success": [
               {
@@ -247,7 +247,7 @@
         "outcomes": [
           {
             "type": "skillCheck",
-            "skill": "int",
+            "skill": "investigare",
             "dc": 12,
             "success": [
               {

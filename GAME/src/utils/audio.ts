@@ -15,6 +15,7 @@ interface AudioSettings {
 
 class AudioManager {
     private audioContext: AudioContext | null = null;
+    private audioUnavailable = false;
     private musicBoxSource: OscillatorNode | null = null;
     
     private volume: number; // Stored as 0.0 to 0.2
@@ -104,10 +105,13 @@ class AudioManager {
         if (this.isMuted) return null;
 
         if (!this.audioContext) {
+            if (this.audioUnavailable) return null;
             try {
                 this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-            } catch (e) {
-                console.error("Web Audio API is not supported in this browser");
+            } catch {
+                // No Web Audio (old browser, test environment): play silently from now on.
+                this.audioUnavailable = true;
+                console.warn('Web Audio API non disponibile: il gioco proseguirà senza suoni.');
                 return null;
             }
         }

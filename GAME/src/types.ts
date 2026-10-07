@@ -265,7 +265,7 @@ export type EventResultType =
   | 'addItem' | 'removeItem' | 'addXp' | 'takeDamage' | 'advanceTime'
   | 'journalEntry' | 'alignmentChange' | 'statusChange' | 'removeStatus' | 'statBoost'
   | 'revealMapPOI' | 'heal' | 'special' | 'startQuest' | 'setFlag' | 'unlockTrophy'
-  | 'learnRecipe' | 'addLore' | 'questTrigger';
+  | 'learnRecipe' | 'addLore' | 'questTrigger' | 'hydration' | 'satiety';
 
 export type SpecialEffectName =
   | 'startDialogue' | 'startTrading' | 'startCombat' | 'startCutscene' | 'setFlag'
@@ -302,10 +302,10 @@ export interface EventChoice {
   requiresQuest?: string;
   /** Choice hidden once this quest has been started (active, completed or failed). */
   hideIfQuestKnown?: string;
-  /** Choice only shown when this game flag is set. */
-  requiresFlag?: string;
-  /** Choice hidden once this game flag is set. */
-  hideIfFlag?: string;
+  /** Choice only shown when these game flags are all set. */
+  requiresFlag?: string | string[];
+  /** Choice hidden as soon as any of these game flags is set. */
+  hideIfFlag?: string | string[];
   outcomes: EventOutcome[];
 }
 
@@ -325,6 +325,8 @@ export interface GameEvent {
   excludesFlag?: string;
   /** Never picked by random encounters: opened by points of interest or code. */
   questOnly?: boolean;
+  /** Alternative descriptions; the last one whose flag is set replaces the description. */
+  variants?: Array<{ requiresFlag: string; description: string }>;
 }
 
 // --- Crafting System ---
@@ -386,6 +388,8 @@ export interface Enemy {
   guaranteedLoot?: Array<{ itemId: string; quantity: number }>;
   /** Quest trigger id emitted when this enemy is defeated. */
   defeatTrigger?: string;
+  /** Game flag set when this enemy is defeated (story enemies that stay dead). */
+  defeatFlag?: string;
   specialAbility?: {
     id: string;
     name: string;
@@ -716,7 +720,7 @@ export type ArmorSlot = 'head' | 'chest' | 'legs';
 export type ItemEffectType =
   | 'heal' | 'satiety' | 'hydration' | 'fatigue' | 'cureStatus'
   | 'light' | 'trap' | 'container' | 'vision' | 'repair' | 'shelter' | 'random'
-  | 'power' | 'fishing' | 'smoke' | 'communication' | 'fire' | 'repel' | 'maxHp'
+  | 'power' | 'fishing' | 'smoke' | 'communication' | 'fire' | 'repel'
   /** Spoiled food: value = % chance of falling sick. */
   | 'spoiled';
 

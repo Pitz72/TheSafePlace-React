@@ -118,7 +118,7 @@
     "value": 4,
     "stackable": true,
     "rarity": "common",
-    "effects": [{"type": "light", "value": 60}]
+    "effects": [{"type": "light", "value": 2}]
   },
   {
     "id": "TRAP_SIMPLE",
@@ -169,12 +169,12 @@
     "id": "survival_backpack",
     "name": "Zaino sopravvivenza",
     "description": "Uno zaino ben equipaggiato con attrezzi essenziali per la sopravvivenza.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 2.5,
     "value": 50,
     "stackable": false,
     "rarity": "rare",
-    "effects": [{"type": "container", "value": 20}]
+    "effects": [{"type": "container", "value": 5}]
   },
   {
     "id": "fresh_fish",
@@ -191,7 +191,7 @@
     "id": "binoculars",
     "name": "Binocolo",
     "description": "Strumento ottico per vedere lontano. Utile per esplorazione e avvistamento.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.8,
     "value": 30,
     "stackable": false,
@@ -202,23 +202,24 @@
     "id": "tool_box",
     "name": "Cassetta attrezzi",
     "description": "Una cassetta contenente vari attrezzi per riparazioni e costruzioni.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 4,
     "value": 40,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "repair", "value": 15}]
+    "effects": [{"type": "repair", "value": 15}],
+    "durability": 4
   },
   {
     "id": "hiking_backpack",
     "name": "Zaino escursionismo",
     "description": "Zaino resistente per escursioni lunghe, con tasche multiple.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 1.8,
     "value": 35,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "container", "value": 15}]
+    "effects": [{"type": "container", "value": 4}]
   },
   {
     "id": "edible_mushrooms",
@@ -235,7 +236,7 @@
     "id": "portable_tent",
     "name": "Tenda portatile",
     "description": "Una piccola tenda leggera per riparo temporaneo.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 2,
     "value": 45,
     "stackable": false,
@@ -268,12 +269,12 @@
     "id": "military_backpack",
     "name": "Zaino militare",
     "description": "Zaino tattico militare con molte tasche e compartimenti.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 3,
     "value": 60,
     "stackable": false,
     "rarity": "rare",
-    "effects": [{"type": "container", "value": 25}]
+    "effects": [{"type": "container", "value": 6}]
   },
   {
     "id": "medkit_advanced",
@@ -315,19 +316,19 @@
   {
     "id": "rad_away_pills",
     "name": "Pillole anti-radiazioni",
-    "description": "Medicina specifica contro l'avvelenamento da radiazioni.",
+    "description": "Pillole contro l'avvelenamento da radiazioni. Placano la nausea e la febbre da esposizione.",
     "type": "consumable",
     "weight": 0.05,
     "value": 50,
     "stackable": true,
     "rarity": "rare",
-    "effects": [{"type": "antirad", "value": 100}]
+    "effects": [{"type": "heal", "value": 10}, {"type": "cureStatus", "value": "MALATO"}]
   },
   {
     "id": "batteries_pack",
     "name": "Pacco batterie",
     "description": "Set di batterie ricaricabili per dispositivi elettronici.",
-    "type": "consumable",
+    "type": "material",
     "weight": 0.3,
     "value": 15,
     "stackable": true,
@@ -338,12 +339,13 @@
     "id": "fishing_kit",
     "name": "Kit pesca",
     "description": "Attrezzi completi per pescare: canna, ami, esche.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 1.5,
     "value": 25,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "fishing", "value": 15}]
+    "effects": [{"type": "fishing", "value": 15}],
+    "durability": 10
   },
   {
     "id": "hook_set",
@@ -360,12 +362,12 @@
     "id": "waterproof_case",
     "name": "Custodia impermeabile",
     "description": "Custodia sigillata per proteggere oggetti dall'acqua.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.5,
     "value": 18,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "container", "value": 8}]
+    "effects": [{"type": "container", "value": 1}]
   },
   {
     "id": "smoke_grenade",
@@ -382,7 +384,7 @@
     "id": "walkie_talkie",
     "name": "Radio portatile",
     "description": "Dispositivo di comunicazione a corto raggio.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.3,
     "value": 35,
     "stackable": false,
@@ -398,13 +400,13 @@
     "value": 8,
     "stackable": true,
     "rarity": "common",
-    "effects": [{"type": "light", "value": 45}]
+    "effects": [{"type": "light", "value": 3}]
   },
   {
     "id": "tarp",
     "name": "Telo impermeabile",
     "description": "Un telo di plastica impermeabile per ripararsi dalla pioggia.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 1,
     "value": 12,
     "stackable": false,
@@ -414,13 +416,14 @@
   {
     "id": "lighter",
     "name": "Accendino",
-    "description": "Un accendino funzionante per accendere fuochi o torce.",
-    "type": "consumable",
+    "description": "Un accendino a benzina. Con un po' di legna secca accende un fuoco che scalda e tiene lontano il gelo.",
+    "type": "tool",
     "weight": 0.05,
     "value": 15,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "fire", "value": 100}]
+    "effects": [{"type": "fire", "value": 100}],
+    "consumes": {"itemId": "firewood", "quantity": 1}
   },
   {
     "id": "energy_bar",
@@ -437,12 +440,13 @@
     "id": "flashlight",
     "name": "Torcia Elettrica",
     "description": "Una torcia a batteria, affidabile e duratura.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.4,
     "value": 20,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "light", "value": 120}]
+    "effects": [{"type": "light", "value": 6}],
+    "consumes": {"itemId": "batteries_pack", "quantity": 1}
   },
   {
     "id": "first_aid_kit",
@@ -481,12 +485,13 @@
     "id": "mechanic_toolkit",
     "name": "Kit Attrezzi Meccanico",
     "description": "Un set di attrezzi di buona qualità per riparazioni meccaniche complesse.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 3,
     "value": 60,
     "stackable": false,
     "rarity": "rare",
-    "effects": [{"type": "repair", "value": 25}]
+    "effects": [{"type": "repair", "value": 25}],
+    "durability": 6
   },
   {
     "id": "antibiotics_expired",
@@ -506,7 +511,7 @@
     "type": "consumable",
     "weight": 0.7,
     "value": 20,
-    "stackable": false,
+    "stackable": true,
     "rarity": "uncommon",
     "effects": [{"type": "heal", "value": 2}, {"type": "hydration", "value": -10}]
   },
@@ -514,12 +519,11 @@
     "id": "cigars_box",
     "name": "Scatola di Sigari",
     "description": "Una scatola di sigari di lusso, ancora sigillata. Un raro lusso in questo mondo.",
-    "type": "consumable",
+    "type": "valuable",
     "weight": 0.3,
     "value": 40,
     "stackable": false,
-    "rarity": "rare",
-    "effects": []
+    "rarity": "rare"
   },
   {
     "id": "wild_berries",
@@ -536,34 +540,37 @@
     "id": "multitool",
     "name": "Multiuso",
     "description": "Un attrezzo compatto con pinze, cacciaviti e una piccola lama. Incredibilmente versatile.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.3,
     "value": 80,
     "stackable": false,
     "rarity": "rare",
-    "effects": [{"type": "repair", "value": 10}]
+    "effects": [{"type": "repair", "value": 10}],
+    "durability": 5
   },
   {
     "id": "precision_tools",
     "name": "Strumenti di Precisione",
     "description": "Un set di piccoli cacciaviti e pinzette per lavori delicati su componenti elettronici.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.4,
     "value": 70,
     "stackable": false,
     "rarity": "rare",
-    "effects": [{"type": "repair", "value": 15}]
+    "effects": [{"type": "repair", "value": 15}],
+    "durability": 3
   },
   {
     "id": "sewing_kit_professional",
     "name": "Kit da Cucito Professionale",
     "description": "Un kit completo con aghi, fili resistenti e toppe. Perfetto per riparare vestiti e armature.",
-    "type": "consumable",
+    "type": "tool",
     "weight": 0.2,
     "value": 45,
     "stackable": false,
     "rarity": "uncommon",
-    "effects": [{"type": "repair", "value": 12}]
+    "effects": [{"type": "repair", "value": 12}],
+    "durability": 5
   },
   {
     "id": "gourmet_canned_food",
@@ -595,12 +602,11 @@
     "id": "cigarettes_pack",
     "name": "Pacchetto di Sigarette",
     "description": "Un pacchetto di sigarette pre-catastrofe, ancora sigillato. Una merce di scambio preziosa, o un vizio da concedersi.",
-    "type": "consumable",
+    "type": "valuable",
     "weight": 0.1,
     "value": 25,
     "stackable": false,
-    "rarity": "uncommon",
-    "effects": []
+    "rarity": "uncommon"
   },
   {
     "id": "stimpak_military",
@@ -638,13 +644,13 @@
   {
     "id": "sonic_dissuader",
     "name": "Dissuasore Sonico",
-    "description": "Un rozzo dispositivo assemblato con componenti di radio e cristalli. Se attivato, emette un'onda sonora ad alta frequenza, inudibile per gli umani, ma apparentemente intollerabile per gli Angeli della Cenere. Garantisce 6 ore di viaggio sicuro.",
+    "description": "Un congegno che emette frequenze acute e dissonanti. Acceso, tiene lontane le creature per circa sei ore.",
     "type": "consumable",
     "weight": 1.2,
     "value": 300,
     "stackable": true,
     "rarity": "epic",
-    "effects": [{"type": "special", "value": "ash_angel_protection_6h"}],
+    "effects": [{"type": "repel", "value": 6}],
     "color": "#8b5cf6"
   },
   {
@@ -668,22 +674,80 @@
     "stackable": true,
     "rarity": "epic",
     "effects": [
-      {"type": "heal", "value": 30},
+      {"type": "heal", "value": 40},
       {"type": "cureStatus", "value": "IPOTERMIA"},
-      {"type": "special", "value": "fortitude_buff_12h"}
+      {"type": "cureStatus", "value": "MALATO"},
+      {"type": "cureStatus", "value": "AVVELENATO"},
+      {"type": "fatigue", "value": 40}
     ],
     "color": "#60a5fa"
   },
   {
     "id": "pyromaniacs_lighter",
     "name": "L'Accendino del Piromane",
-    "description": "Un vecchio accendino a benzina, stranamente freddo al tatto. Sul lato è incisa una piccola vigna. Non si scarica mai. Un'eredità tragica trasformata in strumento di sopravvivenza.",
-    "type": "consumable",
+    "description": "Un accendino di metallo, stranamente freddo al tatto. La sua fiamma non si spegne mai e non ha bisogno di legna.",
+    "type": "tool",
     "weight": 0.1,
     "value": 500,
     "stackable": false,
     "rarity": "epic",
     "effects": [{"type": "fire", "value": 999999}],
     "color": "#ef4444"
+  },
+  {
+    "id": "MED_STIMPACK",
+    "name": "Stimpack Improvvisato",
+    "type": "consumable",
+    "rarity": "uncommon",
+    "weight": 0.2,
+    "value": 45,
+    "stackable": true,
+    "effects": [{"type": "heal", "value": 40}, {"type": "cureStatus", "value": "FERITO"}],
+    "description": "Un iniettore rimesso insieme con medicine e disinfettante. Brucia come il fuoco, ma rimette in piedi."
+  },
+  {
+    "id": "FOOD_PRESERVED_MEAT",
+    "name": "Carne Conservata",
+    "type": "consumable",
+    "rarity": "common",
+    "weight": 0.3,
+    "value": 12,
+    "stackable": true,
+    "effects": [{"type": "satiety", "value": 35}],
+    "description": "Pesce essiccato e salato con cura. Si conserva per settimane."
+  },
+  {
+    "id": "spoiled_canned_food",
+    "name": "Scatoletta Avariata",
+    "type": "consumable",
+    "rarity": "common",
+    "weight": 0.4,
+    "value": 1,
+    "stackable": true,
+    "effects": [{"type": "satiety", "value": 20}, {"type": "spoiled", "value": 50}],
+    "description": "Il coperchio è gonfio e l'odore è dubbio. Sfama, se lo stomaco regge."
+  },
+  {
+    "id": "tool_upgraded_backpack",
+    "name": "Zaino Migliorato",
+    "type": "tool",
+    "rarity": "uncommon",
+    "weight": 2,
+    "value": 70,
+    "stackable": false,
+    "effects": [{"type": "container", "value": 7}],
+    "description": "Uno zaino rinforzato con tasche cucite a mano e cinghie di nylon. Ti permette di portare molto di più."
+  },
+  {
+    "id": "tool_fishing_kit",
+    "name": "Kit Pesca Improvvisato",
+    "type": "tool",
+    "rarity": "common",
+    "weight": 0.8,
+    "value": 20,
+    "stackable": false,
+    "durability": 8,
+    "effects": [{"type": "fishing", "value": 10}],
+    "description": "Lenza di nylon e ami ricavati da pezzi di metallo. Vicino a un corso d'acqua ti procura da mangiare."
   }
 ]

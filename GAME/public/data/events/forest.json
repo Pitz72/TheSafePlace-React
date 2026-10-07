@@ -595,7 +595,7 @@
     "title": "Cerchio Rituale",
     "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate. L'aria qui sembra vibrare con una frequenza quasi impercettibile.",
     "biomes": ["Foresta"],
-    "isUnique": true,
+    "isUnique": false,
     "choices": [
       {
         "text": "Esamina i simboli con attenzione",
@@ -628,7 +628,8 @@
           }
         ]
       }
-    ]
+    ],
+    "excludesQuest": "signs_of_ash"
   },
   {
     "id": "forest_clear_stream",
@@ -771,7 +772,8 @@
             "failureText": "Ti confondi e raccogli piante sbagliate. Inutili.",
             "success": [
               {"type": "addItem", "value": {"itemId": "edible_mushrooms", "quantity": 3}},
-              {"type": "addXp", "value": 30}
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "MED_HEALING_HERBS", "quantity": 2}}
             ],
             "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
           }

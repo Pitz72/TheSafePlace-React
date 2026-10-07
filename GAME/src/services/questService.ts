@@ -45,9 +45,10 @@ const currentStageOf = (quest: Quest, stageNumber: number): QuestStage | undefin
   quest.stages.find(s => s.stage === stageNumber);
 
 /** Markers for the current stage of every active quest that has a location. */
-export const getActiveQuestMarkers = (): Array<{ pos: Position, type: QuestType, id: string }> => {
+export const getActiveQuestMarkers = (
+  activeQuests: Record<string, number> = useCharacterStore.getState().activeQuests,
+): Array<{ pos: Position, type: QuestType, id: string }> => {
   const { quests } = useQuestDatabaseStore.getState();
-  const { activeQuests } = useCharacterStore.getState();
   const markers: Array<{ pos: Position, type: QuestType, id: string }> = [];
   for (const questId of Object.keys(activeQuests)) {
     const quest = quests[questId];

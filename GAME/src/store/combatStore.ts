@@ -128,10 +128,11 @@ export const useCombatStore = create<CombatStoreState>((set, get) => {
         if (combat.usedTactic) character.unlockTrophy('trophy_combat_tactic');
         audioManager.playSound('victory');
 
+        const game = useGameStore.getState();
+        if (enemy.defeatFlag) game.setFlag(enemy.defeatFlag);
         questService.incrementQuestKillCount(enemy.id);
         if (enemy.defeatTrigger) questService.checkQuestTriggers({ source: 'combat', nodeId: enemy.defeatTrigger });
 
-        const game = useGameStore.getState();
         if (enemy.type === 'humanoid' && !game.hasFlag('FIRST_HUMAN_KILL_PLAYED')) {
             game.setFlag('FIRST_HUMAN_KILL_PLAYED');
             game.queueCutscene('CS_FIRST_KILL');

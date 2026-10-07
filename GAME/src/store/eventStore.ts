@@ -22,6 +22,11 @@ const VALID_STATUSES: ReadonlySet<string> = new Set([
 const ECHO_ITEMS = ['pixeldebh_plate', 'eurocenter_business_card'];
 const WOLF_IDS = new Set(['mutated_wolf', 'alpha_wolf_pack_leader']);
 
+/** Freed wolves leave the player alone, unless the player is hunting them for Silas. */
+const wolvesSpare = (enemyId: string) =>
+  WOLF_IDS.has(enemyId) && useGameStore.getState().hasFlag('WOLF_FRIEND') &&
+  !useCharacterStore.getState().activeQuests['bounty_kill_wolves'];
+
 interface EventStoreState {
   activeEvent: GameEvent | null;
   eventHistory: string[];
@@ -39,6 +44,8 @@ interface EventStoreState {
 }
 
 const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+const asList = (value: string | string[] | undefined): string[] => (value === undefined ? [] : Array.isArray(value) ? value : [value]);
 
 const questKnown = (questId: string) => {
   const { activeQuests, completedQuests, failedQuests } = useCharacterStore.getState();
@@ -85,7 +92,7 @@ export const pickAmbushEnemy = (): string | null => {
   if (game.repelUntil > toAbsoluteMinutes(useTimeStore.getState().gameTime)) return null;
   const enemy = pickEnemy(BIOME_NAMES[game.currentBiome] || 'Global');
   if (!enemy) return null;
-  if (WOLF_IDS.has(enemy.id) && game.hasFlag('WOLF_FRIEND')) return null;
+  if (wolvesSpare(enemy.id)) return null;
   return enemy.id;
 };
 
@@ -132,7 +139,7 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
       }
       const enemy = pickEnemy(biomeName);
       if (!enemy) return;
-      if (WOLF_IDS.has(enemy.id) && game.hasFlag('WOLF_FRIEND')) {
+      if (wolvesSpare(enemy.id)) {
         game.addJournalEntry({ text: "Un lupo ti osserva dal limitare degli alberi. Ti riconosce, e se ne va senza attaccare.", type: JournalEntryType.NARRATIVE });
         return;
       }
@@ -176,8 +183,8 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
     const { gameFlags } = useGameStore.getState();
     if (choice.requiresQuest && !activeQuests[choice.requiresQuest]) return false;
     if (choice.hideIfQuestKnown && questKnown(choice.hideIfQuestKnown)) return false;
-    if (choice.requiresFlag && !gameFlags.has(choice.requiresFlag)) return false;
-    if (choice.hideIfFlag && gameFlags.has(choice.hideIfFlag)) return false;
+    if (!asList(choice.requiresFlag).every(flag => gameFlags.has(flag))) return false;
+    if (asList(choice.hideIfFlag).some(flag => gameFlags.has(flag))) return false;
     return true;
   },
 
@@ -328,6 +335,14 @@ export const useEventStore = create<EventStoreState>((set, get) => ({
         case 'heal':
           character.heal(result.value);
           say(`Recuperi ${result.value} HP.`);
+          break;
+        case 'hydration':
+          character.restoreHydration(result.value);
+          say(`Idratazione ${result.value >= 0 ? '+' : ''}${result.value}.`);
+          break;
+        case 'satiety':
+          character.restoreSatiety(result.value);
+          say(`Sazietà ${result.value >= 0 ? '+' : ''}${result.value}.`);
           break;
         case 'advanceTime':
           useTimeStore.getState().advanceTime(result.value, true);

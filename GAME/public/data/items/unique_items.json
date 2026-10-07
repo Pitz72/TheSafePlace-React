@@ -8,8 +8,7 @@
     "weight": 0.5,
     "value": 30,
     "stackable": false,
-    "color": "#ef4444",
-    "effects": [{"type": "repair", "value": 10}]
+    "color": "#ef4444"
   },
   {
     "id": "advanced_tool_kit",
@@ -21,7 +20,8 @@
     "value": 100,
     "stackable": false,
     "color": "#f59e0b",
-    "effects": [{"type": "repair", "value": 50}]
+    "effects": [{"type": "repair", "value": 50}],
+    "durability": 3
   },
   {
     "id": "vintage_film_reel",

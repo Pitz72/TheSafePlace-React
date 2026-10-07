@@ -412,7 +412,10 @@
           "skillCheck": {"skill": "sopravvivenza", "dc": 14}
         }
       ]
-    }
+    },
+    "randomEncounter": false,
+    "defeatTrigger": "found_the_arsonist",
+    "defeatFlag": "ARSONIST_RESOLVED"
   },
   {
     "id": "thief_raider",
@@ -435,6 +438,9 @@
           "skillCheck": {"skill": "percezione", "dc": 12}
         }
       ]
-    }
+    },
+    "randomEncounter": false,
+    "guaranteedLoot": [{"itemId": "old_watch", "quantity": 1}],
+    "defeatFlag": "THIEF_DEALT_WITH"
   }
 ]

@@ -3,7 +3,7 @@
     "id": "gold_ring",
     "name": "Anello d'Oro",
     "description": "Un semplice anello d'oro. Ha un certo valore per i commercianti.",
-    "type": "material",
+    "type": "valuable",
     "weight": 0.05,
     "value": 50,
     "stackable": true,
@@ -40,7 +40,8 @@
     "weight": 1,
     "value": 150,
     "stackable": false,
-    "rarity": "uncommon"
+    "rarity": "uncommon",
+    "ammoType": "ammo_9mm"
   },
   {
     "id": "titanic_cassette",
@@ -63,16 +64,6 @@
     "rarity": "rare"
   },
   {
-    "id": "drone_memory_chip",
-    "name": "Chip di Memoria Drone",
-    "description": "Un chip di memoria recuperato da un drone di sorveglianza. Contiene dati criptati.",
-    "type": "material",
-    "weight": 0.05,
-    "value": 200,
-    "stackable": false,
-    "rarity": "epic"
-  },
-  {
     "id": "weapon_sniper_rifle",
     "name": "Fucile di Precisione",
     "description": "Un fucile di precisione ad alta potenza.",
@@ -82,17 +73,20 @@
     "weight": 4.5,
     "value": 350,
     "stackable": false,
-    "rarity": "rare"
+    "rarity": "rare",
+    "ammoType": "ammo_rifle",
+    "durability": 60
   },
   {
     "id": "manual_wilderness_survival",
     "name": "Manuale di Sopravvivenza",
     "description": "Guida pratica per sopravvivere nelle terre selvagge.",
-    "type": "material",
+    "type": "manual",
     "weight": 0.5,
     "value": 50,
-    "stackable": true,
-    "rarity": "uncommon"
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": ["recipe_fishing_kit", "recipe_molotov", "recipe_torch"]
   },
   {
     "id": "antibiotics",
@@ -102,7 +96,12 @@
     "weight": 0.1,
     "value": 80,
     "stackable": true,
-    "rarity": "rare"
+    "rarity": "rare",
+    "effects": [
+      {"type": "heal", "value": 5},
+      {"type": "cureStatus", "value": "INFEZIONE"},
+      {"type": "cureStatus", "value": "MALATO"}
+    ]
   },
   {
     "id": "electronics_advanced",
@@ -138,7 +137,7 @@
     "id": "silver_ring",
     "name": "Anello d'Argento",
     "description": "Un anello d'argento lavorato.",
-    "type": "material",
+    "type": "valuable",
     "weight": 0.05,
     "value": 30,
     "stackable": true,
@@ -162,13 +161,14 @@
     "weight": 1,
     "value": 50,
     "stackable": true,
-    "rarity": "rare"
+    "rarity": "rare",
+    "effects": [{"type": "hydration", "value": 10}, {"type": "fatigue", "value": 10}]
   },
   {
     "id": "silver_cross",
     "name": "Croce d'Argento",
     "description": "Un simbolo religioso in argento.",
-    "type": "material",
+    "type": "valuable",
     "weight": 0.1,
     "value": 40,
     "stackable": true,
@@ -184,7 +184,8 @@
     "weight": 2.5,
     "value": 30,
     "stackable": false,
-    "rarity": "common"
+    "rarity": "common",
+    "durability": 40
   },
   {
     "id": "rope_coil",
@@ -198,13 +199,14 @@
   },
   {
     "id": "manual_first_aid",
-    "name": "Manuale di Primo Soccorso",
+    "name": "Prontuario del Soccorritore",
     "description": "Istruzioni base per trattare ferite.",
-    "type": "material",
+    "type": "manual",
     "weight": 0.5,
     "value": 40,
-    "stackable": true,
-    "rarity": "uncommon"
+    "stackable": false,
+    "rarity": "uncommon",
+    "unlocksRecipe": ["recipe_natural_antidote", "recipe_improvised_stimpack"]
   },
   {
     "id": "old_atlas",
@@ -226,7 +228,8 @@
     "weight": 3,
     "value": 45,
     "stackable": false,
-    "rarity": "uncommon"
+    "rarity": "uncommon",
+    "durability": 60
   },
   {
     "id": "metal_ingots",
@@ -266,7 +269,12 @@
     "weight": 1,
     "value": 60,
     "stackable": true,
-    "rarity": "rare"
+    "rarity": "rare",
+    "effects": [
+      {"type": "heal", "value": 3},
+      {"type": "fatigue", "value": 15},
+      {"type": "hydration", "value": -5}
+    ]
   },
   {
     "id": "kitchen_knife",
@@ -278,17 +286,19 @@
     "weight": 0.3,
     "value": 10,
     "stackable": false,
-    "rarity": "common"
+    "rarity": "common",
+    "durability": 30
   },
   {
     "id": "spyglass",
     "name": "Cannocchiale",
     "description": "Strumento ottico per vedere lontano.",
-    "type": "material",
+    "type": "tool",
     "weight": 0.5,
     "value": 80,
     "stackable": false,
-    "rarity": "rare"
+    "rarity": "rare",
+    "effects": [{"type": "vision", "value": 3}]
   },
   {
     "id": "flour_sack",
@@ -320,7 +330,8 @@
     "weight": 2,
     "value": 25,
     "stackable": false,
-    "rarity": "common"
+    "rarity": "common",
+    "durability": 45
   },
   {
     "id": "fresh_eggs",
@@ -330,7 +341,8 @@
     "weight": 0.1,
     "value": 5,
     "stackable": true,
-    "rarity": "common"
+    "rarity": "common",
+    "effects": [{"type": "satiety", "value": 12}]
   },
   {
     "id": "shovel",
@@ -342,7 +354,8 @@
     "weight": 2.5,
     "value": 20,
     "stackable": false,
-    "rarity": "common"
+    "rarity": "common",
+    "durability": 50
   },
   {
     "id": "hand_axe",
@@ -354,7 +367,8 @@
     "weight": 1.5,
     "value": 35,
     "stackable": false,
-    "rarity": "common"
+    "rarity": "common",
+    "durability": 50
   },
   {
     "id": "fresh_fruit",
@@ -364,7 +378,8 @@
     "weight": 0.2,
     "value": 8,
     "stackable": true,
-    "rarity": "common"
+    "rarity": "common",
+    "effects": [{"type": "satiety", "value": 10}, {"type": "hydration", "value": 10}]
   },
   {
     "id": "cloth_roll",
@@ -394,7 +409,8 @@
     "weight": 0.3,
     "value": 15,
     "stackable": true,
-    "rarity": "common"
+    "rarity": "common",
+    "effects": [{"type": "satiety", "value": 30}]
   },
   {
     "id": "fresh_vegetables",
@@ -404,7 +420,8 @@
     "weight": 0.5,
     "value": 8,
     "stackable": true,
-    "rarity": "common"
+    "rarity": "common",
+    "effects": [{"type": "satiety", "value": 15}, {"type": "hydration", "value": 5}]
   },
   {
     "id": "beeswax",

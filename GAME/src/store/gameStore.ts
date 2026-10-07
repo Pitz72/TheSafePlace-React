@@ -13,7 +13,7 @@ import { useLootTableStore, rollLoot } from '../data/lootTableDatabase';
 import { BIOME_MESSAGES, BIOME_COLORS, TILE_NAMES } from '../constants';
 import { audioManager } from '../utils/audio';
 import { toAbsoluteMinutes, isNightHour } from '../utils/time';
-import { NUM_SAVE_SLOTS, slotKey, storage, validateSaveData } from '../utils/saveFormat';
+import { LAST_SAVE_SLOT_KEY, NUM_SAVE_SLOTS, slotKey, storage, validateSaveData } from '../utils/saveFormat';
 import { useTimeStore } from './timeStore';
 import { useInteractionStore } from './interactionStore';
 import { useEventStore } from './eventStore';
@@ -31,7 +31,6 @@ import { questService } from '../services/questService';
  * load through defaults in every fromJSON.
  */
 export const SAVE_VERSION = '2.1.0';
-const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
 
 /** Cutscenes rewritten in Ink: legacy id -> Ink knot. */
 const LEGACY_CUTSCENE_TO_INK_KNOT: Record<string, string> = {
@@ -628,16 +627,34 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       return false;
     }
 
-    try {
+    const restore = (data: any) => {
       useCombatStore.getState().reset();
-      useCharacterStore.getState().fromJSON(savedData.character);
-      get().fromJSON(savedData.game);
-      useTimeStore.getState().fromJSON(savedData.time);
-      useInteractionStore.getState().fromJSON(savedData.interaction);
-      useEventStore.getState().fromJSON(savedData.event);
+      useCharacterStore.getState().fromJSON(data.character);
+      get().fromJSON(data.game);
+      useTimeStore.getState().fromJSON(data.time);
+      useInteractionStore.getState().fromJSON(data.interaction);
+      useEventStore.getState().fromJSON(data.event);
+    };
+    // A save that fails halfway must not leave the running game half overwritten.
+    const current = {
+      character: useCharacterStore.getState().toJSON(),
+      game: get().toJSON(),
+      time: useTimeStore.getState().toJSON(),
+      interaction: useInteractionStore.getState().toJSON(),
+      event: useEventStore.getState().toJSON(),
+    };
+    const currentGameState = get().gameState;
+    try {
+      restore(savedData);
       migrateLegacyArmorUpgrades();
     } catch (error) {
       console.error('Error restoring game state:', error);
+      try {
+        restore(current);
+        set({ gameState: currentGameState });
+      } catch (rollbackError) {
+        console.error('Rollback failed:', rollbackError);
+      }
       return false;
     }
 

@@ -4,6 +4,9 @@ export const NUM_SAVE_SLOTS = 5;
 
 export const slotKey = (slot: number) => `${SAVE_SLOT_KEY_PREFIX}${slot}`;
 
+/** Slot of the last save written or loaded ("Continua Partita"). */
+export const LAST_SAVE_SLOT_KEY = 'tspc_last_save_slot';
+
 const isObject = (value: unknown): value is Record<string, unknown> =>
     typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -39,3 +42,9 @@ export const storage = {
         try { localStorage.removeItem(key); } catch { /* nothing to remove */ }
     },
 };
+
+/** The slot "Continua Partita" resumes, or null when there is none. */
+export function lastSaveSlot(): number | null {
+    const slot = Number(storage.get(LAST_SAVE_SLOT_KEY));
+    return Number.isInteger(slot) && slot >= 1 && slot <= NUM_SAVE_SLOTS ? slot : null;
+}

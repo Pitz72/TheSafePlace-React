@@ -21,7 +21,6 @@ function useParagraphReveal(paragraphs: string[], key: unknown) {
             if (count >= paragraphs.length) clearInterval(interval);
         }, PARAGRAPH_REVEAL_MS);
         return () => clearInterval(interval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paragraphs, key]);
     return { visible, allVisible: visible >= paragraphs.length, showAll: () => setVisible(paragraphs.length) };
 }
@@ -159,7 +158,7 @@ const LegacyCutscene: React.FC<{ cutscene: Cutscene }> = ({ cutscene }) => {
         endCutscene();
     }, [pageIndex, cutscene, applyPage, endCutscene]);
 
-    const choices = page?.choices ?? [];
+    const choices = useMemo(() => page?.choices ?? [], [page]);
     const handlerMap = useMemo((): KeyHandlerMap => {
         const map: KeyHandlerMap = {
             Enter: () => {

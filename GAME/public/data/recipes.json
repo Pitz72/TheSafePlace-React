@@ -147,11 +147,7 @@
     "skill": "sopravvivenza",
     "dc": 9,
     "timeCost": 20,
-    "ingredients": [
-      {"itemId": "firewood", "quantity": 1},
-      {"itemId": "rubber_gasket", "quantity": 1},
-      {"itemId": "durable_cloth", "quantity": 1}
-    ],
+    "ingredients": [{"itemId": "firewood", "quantity": 1}, {"itemId": "rubber_ball", "quantity": 1}],
     "results": [{"itemId": "weapon_slingshot", "quantity": 1}]
   },
   {

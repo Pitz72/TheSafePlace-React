@@ -199,10 +199,11 @@ export const gameService = {
         return true;
       case 'N':
         return openOnce('ASH_NEST_VISITED', 'lore_ash_nest');
+      // The laboratory and the library can be revisited: each action inside happens once.
       case 'L':
-        return openOnce('LAB_VISITED', 'unique_scientist_notes');
+        return useEventStore.getState().openEvent('unique_scientist_notes');
       case 'B':
-        return openOnce('LIBRARY_VISITED', 'unique_ancient_library');
+        return useEventStore.getState().openEvent('unique_ancient_library');
       default:
         return false;
     }

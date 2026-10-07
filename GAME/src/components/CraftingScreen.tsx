@@ -6,6 +6,7 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Recipe } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
 import { craftingService } from '../services/CraftingService';
+import { SKILL_LABELS } from '../constants';
 
 /**
  * DetailLine component.
@@ -32,6 +33,8 @@ const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: stri
  */
 const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     const { itemDatabase } = useItemDatabaseStore();
+    const inventory = useCharacterStore(state => state.inventory);
+    const owned = (itemId: string) => inventory.reduce((sum, item) => (item.itemId === itemId ? sum + item.quantity : sum), 0);
 
     if (!recipe) {
         return (
@@ -50,15 +53,20 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
                 {recipe.description}
             </p>
             <div className="flex-shrink-0 space-y-3 pt-4 border-t-2 border-green-400/20">
-                <DetailLine label="Abilità Richiesta" value={`${recipe.skill.toUpperCase()} (CD ${recipe.dc})`} />
-                <DetailLine label="Tempo Richiesto" value={`${recipe.timeCost} minuti`} />
+                <DetailLine label="Abilità Richiesta" value={`${SKILL_LABELS[recipe.skill] ?? recipe.skill} (CD ${recipe.dc}, tuo bonus ${useCharacterStore.getState().getSkillBonus(recipe.skill) >= 0 ? '+' : ''}${useCharacterStore.getState().getSkillBonus(recipe.skill)})`} />
+                <DetailLine label="Tempo Richiesto" value={`${craftingService.getTimeCost(recipe)} minuti`} />
                 <div className="pt-2">
                     <span className="w-48 flex-shrink-0 opacity-70">Ingredienti:</span>
                     <ul className="ml-6 space-y-1">
-                        {recipe.ingredients?.map(ing => {
+                        {recipe.ingredients.map(ing => {
                             const item = itemDatabase[ing.itemId];
-                            return <li key={ing.itemId} style={{ color: item?.color }}>- {item?.name || ing.itemId} x{ing.quantity}</li>
-                        }) || <li className="opacity-50">Nessun ingrediente</li>}
+                            const have = owned(ing.itemId);
+                            return (
+                                <li key={ing.itemId} style={{ color: have >= ing.quantity ? item?.color : '#ef4444' }}>
+                                    - {item?.name || ing.itemId} x{ing.quantity} <span className="opacity-70">(hai {have})</span>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
                 <div className="pt-2">
@@ -91,9 +99,11 @@ const CraftingScreen: React.FC = () => {
         allRecipes.filter(recipe => knownRecipes.includes(recipe.id))
         , [allRecipes, knownRecipes]);
 
-    const craftableStatus = useMemo(() => {
-        return displayableRecipes.map(recipe => craftingService.canCraft(recipe.id));
-    }, [displayableRecipes, inventory]);
+    const craftableStatus = useMemo(
+        () => displayableRecipes.map(recipe => craftingService.canCraft(recipe.id)),
+        // canCraft reads the inventory from the store.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [displayableRecipes, inventory]);
 
     const selectedRecipe = displayableRecipes[selectedIndex] || null;
 
@@ -140,7 +150,7 @@ const CraftingScreen: React.FC = () => {
                                 {displayableRecipes.map((recipe, index) => {
                                     const isSelected = index === selectedIndex;
                                     const isCraftable = craftableStatus[index];
-                                    let color = isCraftable ? '#ffffff' : '#6b7280'; // White for craftable, gray for not
+                                    const color = isCraftable ? '#ffffff' : '#6b7280';
 
                                     return (
                                         <li

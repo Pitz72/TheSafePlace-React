@@ -4,9 +4,7 @@ import { fetchJson } from './fetchJson';
 
 /** Biome event files (random encounters by biome, plus quest/POI-only events). */
 const BIOME_FILES = [
-    'plains', 'forest', 'village', 'city', 'river_events', 'unique_events',
-    'village_pump', 'forest_thief', 'special_locations', 'hermit_location',
-    'repair_quests', 'olivia_herbalist', 'arsonist_quest', 'unique_donor_events', 'poi_events',
+    'plains', 'forest', 'village', 'city', 'river_events', 'special_locations', 'unique_donor_events', 'poi_events',
 ].map(name => `data/events/${name}.json`);
 
 interface EventDatabaseState {

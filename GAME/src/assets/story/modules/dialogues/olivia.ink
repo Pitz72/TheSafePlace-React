@@ -35,7 +35,7 @@ Conoscenza. E pazienza. Queste piante... sono più forti di quanto pensiamo. Cre
     -> hub
 
 = need_help
-Una pianta che cresceva solo in luoghi freddi e alti, dove l'aria è sottile. La chiamavano 'Fiore di Ghiaccio' per la sua resistenza. I suoi petali sono quasi trasparenti, di un blu pallido, e sono freddi al tatto. Mi serve per un decotto importante, un elisir che rinforza il corpo contro le avversità. L'ultima volta l'ho visto su un passo innevato a nord, tra le montagne oltre la foresta grande. Te lo segno sulla mappa. Se ne trovi uno... ti ricompenserei generosamente.
+Una pianta che cresceva solo in luoghi freddi e alti, dove l'aria è sottile. La chiamavano 'Fiore di Ghiaccio' per la sua resistenza. I suoi petali sono quasi trasparenti, di un blu pallido, e sono freddi al tatto. Mi serve per un decotto importante, un elisir che rinforza il corpo contro le avversità. L'ultima volta l'ho visto su un passo innevato molto a nord-ovest di qui, tra le rocce sopra il Crocevia. Te lo segno sulla mappa. Se ne trovi uno... ti ricompenserei generosamente.
     ~ startQuest("the_waiting_woman")
     ~ revealPOI("ice_flower_pass")
     + [Cercherò questo fiore per te.] -> hub

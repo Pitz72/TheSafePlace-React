@@ -22,8 +22,8 @@
       {
         "text": "La carta trema tra le tue dita, le ultime parole incise a fuoco nella tua mente: \"Con tutto l'amore che un padre distrutto può dare, Papà.\"\n\nL'amore. Una parola che suona strana, quasi estranea, dopo anni di addestramento spietato. E ora, quel silenzio. Un silenzio assordante che urla una sola, terribile verità: sei solo.\n\nLa rabbia e la paura si mescolano nel tuo petto, un groviglio soffocante. La lettera, questo fragile pezzo di carta, è l'unica cosa che ti lega a lui, al passato, a questa missione che ti ha imposto.\n\nCosa ne fai?",
         "choices": [
-          {"text": "[1] Strappi la lettera in un impeto di rabbia.", "targetPage": 5},
-          {"text": "[2] Pieghi la lettera con cura e la metti in tasca.", "targetPage": 6}
+          {"text": "Strappi la lettera in un impeto di rabbia.", "targetPage": 5},
+          {"text": "Pieghi la lettera con cura e la metti in tasca.", "targetPage": 6}
         ]
       },
       {
@@ -229,11 +229,11 @@
         "text": "Pensi al viaggio. Ogni passo, ogni lotta, ogni scelta. Non sei più la persona che eri quando hai lasciato il rifugio. Quella persona era spaventata, indifesa, persa.\n\nTu ora sei... diverso. Più forte, forse. Più cinico, sicuramente. Hai ucciso. Hai rubato. Hai fatto cose che quella persona non avrebbe mai immaginato di dover fare.\n\nMa sei anche sopravvissuto. Hai trovato un nome per tua madre. Hai resistito alla solitudine, alla fame, alla disperazione. Hai attraversato la desolazione e sei ancora in piedi.\n\nForse non hai bisogno del Safe Place. Forse non hai bisogno di tuo padre.",
         "choices": [
           {
-            "text": "[1] No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.",
+            "text": "No. Devi sapere. Devi finire quello che hai iniziato. Vai verso la 'E'.",
             "targetPage": 3
           },
           {
-            "text": "[2] Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.",
+            "text": "Questo viaggio non riguarda tuo padre. Riguarda te. Ma devi vedere con i tuoi occhi.",
             "targetPage": 4
           }
         ]
