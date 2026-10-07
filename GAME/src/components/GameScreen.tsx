@@ -35,6 +35,8 @@ import { useInteractionStore } from '../store/interactionStore';
 import { useTimeStore } from '../store/timeStore';
 import { DebugPanel } from './DebugPanel';
 import { CompassRose } from './CompassRose';
+import { isNightHour, toAbsoluteMinutes } from '../utils/time';
+import { gameService } from '../services/gameService';
 
 /**
  * Color mapping for player status conditions.
@@ -84,10 +86,7 @@ const SurvivalPanel: React.FC = () => {
 
   const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
   const isHigh = (stat: Stat) => stat.current / stat.max >= 0.75;
-
-  const totalWeight = useCharacterStore.getState().getTotalWeight();
-  const maxCarryWeight = useCharacterStore.getState().getMaxCarryWeight();
-  const isOverEncumbered = totalWeight > maxCarryWeight;
+  const isOverEncumbered = useCharacterStore((state) => state.getTotalWeight() > state.getMaxCarryWeight());
 
   const allStatuses = Array.from(status);
   if (isOverEncumbered) {
@@ -155,9 +154,8 @@ const InventoryPanel: React.FC = () => {
   const equippedLegsIndex = useCharacterStore((state) => state.equippedLegs);
   const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
   const isLoaded = useItemDatabaseStore((state) => state.isLoaded);
-
-  const totalWeight = useCharacterStore.getState().getTotalWeight();
-  const maxCarryWeight = useCharacterStore.getState().getMaxCarryWeight();
+  const totalWeight = useCharacterStore((state) => state.getTotalWeight());
+  const maxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight());
   const isOverEncumbered = totalWeight > maxCarryWeight;
 
   return (
@@ -193,7 +191,7 @@ const InventoryPanel: React.FC = () => {
               }
 
               return (
-                <li key={`${invItem.itemId}-${index}`} style={{ color: itemDetails.color }}>
+                <li key={index} style={{ color: itemDetails.color }}>
                   {displayName}
                 </li>
               );
@@ -285,21 +283,29 @@ const InfoPanel: React.FC = () => {
   const tileInfo = getTileInfo(playerPos.x, playerPos.y);
   const formattedTime = `${String(gameTime.hour).padStart(2, '0')}:${String(gameTime.minute).padStart(2, '0')}`;
   const weatherInfo = WEATHER_DATA[weather.type];
-  const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
+  const isNight = isNightHour(gameTime.hour);
+  const now = toAbsoluteMinutes(gameTime);
+  const lightHours = Math.ceil((useGameStore((state) => state.lightUntil) - now) / 60);
+  const repelHours = Math.ceil((useGameStore((state) => state.repelUntil) - now) / 60);
 
   const getWeatherEffects = () => {
     switch (weather.type) {
       case WeatherType.PIOGGIA:
-        return { text: "Movimento rallentato", color: 'var(--text-accent)' };
+        return { text: "Movimento rallentato, terreno scivoloso", color: 'var(--text-accent)' };
       case WeatherType.TEMPESTA:
-        return { text: "Mov. rallentato, +consumo", color: 'var(--text-danger)' };
+        return { text: "Mov. rallentato, più sete, cadute", color: 'var(--text-danger)' };
       case WeatherType.NEBBIA:
-        return { text: "Visibilità ridotta", color: 'var(--text-secondary)' };
+        return { text: "Movimento rallentato", color: 'var(--text-secondary)' };
       default:
         return { text: "Nessun effetto", color: 'var(--text-primary)' };
     }
   };
   const weatherEffects = getWeatherEffects();
+  const activeEffects = [
+    lightHours > 0 ? `Luce (${lightHours}h)` : null,
+    repelHours > 0 ? `Dissuasore (${repelHours}h)` : null,
+    isNight && lightHours <= 0 ? 'Buio: rischio di inciampare' : null,
+  ].filter(Boolean).join(' · ');
 
   return (
     <Panel title="INFORMAZIONI">
@@ -324,6 +330,7 @@ const InfoPanel: React.FC = () => {
             </div>
           </div>
           <div style={{ color: weatherEffects.color }}>Effetti: {weatherEffects.text}</div>
+          {activeEffects && <div className="text-xs text-cyan-300">{activeEffects}</div>}
         </div>
       </div>
     </Panel>
@@ -584,8 +591,6 @@ const TravelJournalPanel: React.FC = () => {
  * @returns {JSX.Element} Complete gameplay interface
  */
 
-import { gameService } from '../services/gameService';
-
 const GameScreen: React.FC = () => {
   const { setGameState, performQuickRest, performActiveSearch, openLevelUpScreen } = useGameStore();
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
@@ -626,7 +631,7 @@ const GameScreen: React.FC = () => {
       return {};
     }
 
-    const map: { [key: string]: () => void } = {
+    const map: Record<string, () => void> = {
       ArrowUp: () => handleMove(0, -1),
       w: () => handleMove(0, -1),
       ArrowDown: () => handleMove(0, 1),
@@ -662,7 +667,7 @@ const GameScreen: React.FC = () => {
 
   return (
     <>
-      <DebugPanel />
+      {import.meta.env.DEV && <DebugPanel />}
       <div className="game-screen-container w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
         {/* Left Column (25%) */}
         <div className="w-1/4 h-full flex flex-col space-y-1">

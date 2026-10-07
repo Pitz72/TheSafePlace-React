@@ -40,13 +40,33 @@
     "rarity": "common"
   },
   {
-    "id": "special_ammo",
-    "name": "Munizioni Speciali",
-    "description": "Munizioni avanzate con proprietà uniche, come proiettili perforanti o incendiari. Estremamente rare e preziose.",
+    "id": "ammo_piercing",
+    "name": "Munizioni Perforanti",
     "type": "ammo",
-    "weight": 0.3,
+    "rarity": "rare",
+    "weight": 0.2,
+    "value": 45,
+    "stackable": true,
+    "description": "Un caricatore di tre colpi a punta d'acciaio: ignorano parte della corazza nemica. Si caricano nelle armi da fuoco."
+  },
+  {
+    "id": "ammo_incendiary",
+    "name": "Munizioni Incendiarie",
+    "type": "ammo",
+    "rarity": "rare",
+    "weight": 0.2,
+    "value": 50,
+    "stackable": true,
+    "description": "Un caricatore di tre colpi al fosforo che appiccano il fuoco al bersaglio. Si caricano nelle armi da fuoco."
+  },
+  {
+    "id": "ammo_hollow_point",
+    "name": "Munizioni a Espansione",
+    "type": "ammo",
+    "rarity": "rare",
+    "weight": 0.2,
     "value": 40,
     "stackable": true,
-    "rarity": "rare"
+    "description": "Un caricatore di tre colpi a punta cava: lacerano la carne e fanno danni extra. Si caricano nelle armi da fuoco."
   }
 ]

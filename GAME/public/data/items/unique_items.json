@@ -8,13 +8,7 @@
     "weight": 0.5,
     "value": 30,
     "stackable": false,
-    "color": "#ef4444",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 10
-      }
-    ]
+    "color": "#ef4444"
   },
   {
     "id": "advanced_tool_kit",
@@ -26,12 +20,8 @@
     "value": 100,
     "stackable": false,
     "color": "#f59e0b",
-    "effects": [
-      {
-        "type": "repair",
-        "value": 50
-      }
-    ]
+    "effects": [{"type": "repair", "value": 50}],
+    "durability": 3
   },
   {
     "id": "vintage_film_reel",
@@ -67,16 +57,7 @@
     "value": 10,
     "stackable": true,
     "color": "#facc15",
-    "effects": [
-      {
-        "type": "hydration",
-        "value": 10
-      },
-      {
-        "type": "satiety",
-        "value": 5
-      }
-    ]
+    "effects": [{"type": "hydration", "value": 10}, {"type": "satiety", "value": 5}]
   },
   {
     "id": "electronic_parts",

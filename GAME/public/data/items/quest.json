@@ -18,9 +18,9 @@
     "value": 100,
     "stackable": false,
     "rarity": "uncommon",
-    "unlocksRecipe": "recipe_bandage_adv"
+    "unlocksRecipe": ["recipe_bandage_adv", "recipe_natural_antidote", "recipe_improvised_stimpack"]
   },
-   {
+  {
     "id": "manual_survival_basics",
     "name": "Manuale: Sopravvivenza Base",
     "description": "Un opuscolo su come sfruttare al meglio le risorse naturali, con istruzioni per cucinare zuppe nutrienti e costruire frecce.",
@@ -29,18 +29,18 @@
     "value": 100,
     "stackable": false,
     "rarity": "uncommon",
-    "unlocksRecipe": "recipe_soup"
+    "unlocksRecipe": ["recipe_soup", "recipe_torch", "recipe_preserved_meat"]
   },
   {
     "id": "manual_archery_basics",
     "name": "Manuale: Fondamenti di Tiro con l'Arco",
-    "description": "Un vecchio manuale militare che spiega come costruire frecce rudimentali ma efficaci da materiali di scarto.",
+    "description": "Un manuale illustrato sul tiro con l'arco e con la fionda: come costruirli, come tenderli, come mirare.",
     "type": "manual",
     "weight": 0.5,
     "value": 100,
     "stackable": false,
     "rarity": "uncommon",
-    "unlocksRecipe": "recipe_arrows"
+    "unlocksRecipe": ["recipe_makeshift_bow", "recipe_slingshot"]
   },
   {
     "id": "manual_advanced_repairs",
@@ -51,14 +51,14 @@
     "value": 150,
     "stackable": false,
     "rarity": "rare",
-    "unlocksRecipe": "recipe_repair_kit_advanced"
+    "unlocksRecipe": ["recipe_repair_kit_advanced", "recipe_sharp_dagger", "recipe_makeshift_helmet"]
   },
   {
     "id": "sealed_package_quest",
     "name": "Pacco Sigillato",
     "description": "Un pacco avvolto in tela cerata e sigillato con cura. Non sai cosa contenga, ma sembra importante. È indirizzato a un 'avamposto a nord'.",
     "type": "quest",
-    "weight": 1.0,
+    "weight": 1,
     "value": 0,
     "stackable": false,
     "rarity": "quest"
@@ -67,9 +67,9 @@
     "id": "sensitive_documents",
     "name": "Documenti Sensibili",
     "description": "Una cartella contenente documenti con il sigillo di un'agenzia governativa ormai defunta. Sembrano contenere informazioni riservate.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.5,
-    "value": 0,
+    "value": 40,
     "stackable": false,
     "rarity": "quest"
   },
@@ -77,27 +77,28 @@
     "id": "rugged_laptop_military",
     "name": "Laptop Militare Corazzato",
     "description": "Un vecchio computer portatile di tipo militare, pesante e obsoleto. La sua batteria interna ha ancora una carica residua e potrebbe contenere dati preziosi.",
-    "type": "quest",
-    "weight": 5.0,
-    "value": 0,
+    "type": "valuable",
+    "weight": 5,
+    "value": 120,
     "stackable": false,
     "rarity": "quest"
   },
   {
     "id": "local_map",
     "name": "Mappa della Zona",
-    "description": "Una mappa disegnata a mano dell'area circostante, trovata in un accampamento abbandonato. Potrebbe rivelare punti di interesse sconosciuti.",
-    "type": "quest",
+    "description": "Una mappa disegnata a mano dell'area circostante. Studiarla ti permette di segnare i luoghi vicini sulla tua.",
+    "type": "consumable",
     "weight": 0.1,
     "value": 0,
     "stackable": false,
-    "rarity": "quest"
+    "rarity": "quest",
+    "effects": [{"type": "vision", "value": 4}]
   },
   {
     "id": "silver_medallion",
     "name": "Medaglione d'Argento",
     "description": "Un piccolo medaglione d'argento annerito dal tempo, trovato nella cassetta delle offerte di una vecchia chiesa. Potrebbe avere un valore sentimentale o storico.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.1,
     "value": 50,
     "stackable": false,
@@ -107,7 +108,7 @@
     "id": "old_coins",
     "name": "Vecchie Monete",
     "description": "Una manciata di monete di un'era passata. Non hanno più corso legale, ma potrebbero essere usate come merce di scambio con qualche collezionista.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.2,
     "value": 5,
     "stackable": true,
@@ -117,39 +118,29 @@
     "id": "gold_coin",
     "name": "Moneta d'Oro",
     "description": "Una vecchia moneta d'oro, ancora brillante. Un piccolo tesoro del mondo passato.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.1,
     "value": 100,
     "stackable": false,
     "rarity": "quest"
   },
-   {
+  {
     "id": "precious_stone",
     "name": "Pietra Preziosa",
     "description": "Una piccola gemma grezza, probabilmente un rubino o un granato. Scintilla anche nella penombra.",
-    "type": "quest",
+    "type": "material",
     "weight": 0.1,
     "value": 150,
     "stackable": false,
-    "rarity": "quest"
+    "rarity": "rare"
   },
   {
     "id": "gold_bar",
     "name": "Lingotto d'Oro",
     "description": "Un piccolo ma pesante lingotto d'oro, trovato nel caveau di una banca. Un tesoro di inestimabile valore nel vecchio mondo, e forse anche in questo.",
-    "type": "quest",
-    "weight": 1.0,
+    "type": "valuable",
+    "weight": 1,
     "value": 1000,
-    "stackable": false,
-    "rarity": "quest"
-  },
-  {
-    "id": "fathers_compass",
-    "name": "Bussola del Padre",
-    "description": "La vecchia bussola di tuo padre. È rovinata ma punta sempre a nord. Un ricordo di un tempo più semplice e delle lezioni che ti ha insegnato.",
-    "type": "quest",
-    "weight": 0.2,
-    "value": 0,
     "stackable": false,
     "rarity": "quest"
   },
@@ -157,29 +148,31 @@
     "id": "mechanic_manual",
     "name": "Manuale di Meccanica",
     "description": "Un manuale tecnico su motori e macchinari semplici. Potrebbe sbloccare nuove ricette di crafting.",
-    "type": "quest",
+    "type": "manual",
     "weight": 0.5,
-    "value": 0,
+    "value": 80,
     "stackable": false,
-    "rarity": "quest"
+    "rarity": "quest",
+    "unlocksRecipe": ["recipe_upgraded_backpack", "recipe_fishing_kit"]
   },
   {
     "id": "first_aid_book",
     "name": "Manuale di Primo Soccorso",
     "description": "Un libro illustrato sulle procedure di primo soccorso. Leggerlo potrebbe migliorare le tue abilità mediche.",
-    "type": "quest",
+    "type": "manual",
     "weight": 0.5,
-    "value": 0,
+    "value": 60,
     "stackable": false,
-    "rarity": "quest"
+    "rarity": "quest",
+    "unlocksRecipe": ["recipe_bandage_adv", "recipe_natural_antidote"]
   },
   {
     "id": "code_list",
     "name": "Lista di Codici",
     "description": "Un foglio con una serie di codici numerici e frequenze radio. Potrebbe essere utile per accedere a luoghi o comunicazioni bloccate.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.1,
-    "value": 0,
+    "value": 25,
     "stackable": false,
     "rarity": "quest"
   },
@@ -217,9 +210,9 @@
     "id": "rare_music_cassettes",
     "name": "Musicassetta Rara",
     "description": "Una vecchia musicassetta con un frammento di musica registrato dall'etere. Un tesoro in un mondo silenzioso.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.1,
-    "value": 0,
+    "value": 30,
     "stackable": false,
     "rarity": "quest"
   },
@@ -242,8 +235,7 @@
     "value": 0,
     "stackable": false,
     "rarity": "quest"
-  }
-,
+  },
   {
     "id": "jonas_talisman",
     "name": "Talismano di Jonas",
@@ -278,13 +270,14 @@
   {
     "id": "compass",
     "name": "Bussola Affidabile",
-    "description": "Una bussola di ottima fattura, ancora perfettamente funzionante. Punta sempre a nord con precisione. Uno strumento prezioso per un viaggiatore.",
-    "type": "quest",
+    "description": "Una bussola di ottima fattura. Con lei e un punto alto da cui guardare, ti orienti e riconosci i luoghi vicini.",
+    "type": "tool",
     "weight": 0.2,
     "value": 150,
     "stackable": false,
     "rarity": "uncommon",
-    "color": "#60BF77"
+    "color": "#60BF77",
+    "effects": [{"type": "vision", "value": 2}]
   },
   {
     "id": "drone_memory_chip",
@@ -327,13 +320,15 @@
     "value": 200,
     "stackable": false,
     "rarity": "rare",
-    "color": "#a855f7"
+    "color": "#a855f7",
+    "effects": [{"type": "repair", "value": 20}],
+    "durability": 8
   },
   {
     "id": "silver_locket",
     "name": "Medaglione d'Argento",
     "description": "Un delicato medaglione d'argento con una foto sbiadita all'interno. Un tesoro di valore sentimentale inestimabile.",
-    "type": "quest",
+    "type": "valuable",
     "weight": 0.1,
     "value": 150,
     "stackable": false,
@@ -405,5 +400,16 @@
     "stackable": false,
     "rarity": "rare",
     "color": "#60a5fa"
+  },
+  {
+    "id": "manual_leatherwork",
+    "name": "Manuale: Lavorazione del Cuoio",
+    "type": "manual",
+    "rarity": "uncommon",
+    "weight": 0.5,
+    "value": 110,
+    "stackable": false,
+    "unlocksRecipe": ["recipe_leather_chestpiece", "recipe_reinforced_leggings", "recipe_durable_boots"],
+    "description": "Un quaderno di un conciatore: come trattare le pelli e trasformarle in protezioni robuste."
   }
 ]

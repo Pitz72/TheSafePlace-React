@@ -1,42 +1,27 @@
 import { create } from 'zustand';
-import { ActionMenuState, RefugeMenuState, CraftingMenuState, GameState, JournalEntryType, PlayerStatusCondition } from '../types';
+import { ActionMenuState, RefugeMenuState, CraftingMenuState, GameState, JournalEntryType } from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
+import { useTimeStore } from './timeStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useRecipeDatabaseStore } from '../data/recipeDatabase';
+import { useLootTableStore, rollLoot } from '../data/lootTableDatabase';
 import { audioManager } from '../utils/audio';
-import { useMainStoryDatabaseStore } from '../data/mainStoryDatabase';
-import { useTimeStore } from './timeStore';
+import { isNightHour, minutesUntilDawn } from '../utils/time';
+import { craftingService } from '../services/CraftingService';
+import {
+    ACTION, applyItemUse, describeItem, getItemActions, getRepairTargets, repairWith, studyItem,
+} from '../services/itemUseService';
 
-/**
- * @interface InteractionStoreState
- * @description Represents the state of the interaction store.
- * @property {boolean} isInventoryOpen - Whether the inventory is open.
- * @property {boolean} isInRefuge - Whether the player is in a refuge.
- * @property {boolean} isCraftingOpen - Whether the crafting menu is open.
- * @property {number} inventorySelectedIndex - The index of the selected item in the inventory.
- * @property {ActionMenuState} actionMenuState - The state of the action menu.
- * @property {RefugeMenuState} refugeMenuState - The state of the refuge menu.
- * @property {CraftingMenuState} craftingMenuState - The state of the crafting menu.
- * @property {string | null} refugeActionMessage - A message to display after a refuge action.
- * @property {boolean} refugeJustSearched - Whether the refuge has just been searched.
- * @property {() => void} toggleInventory - Toggles the inventory open or closed.
- * @property {(updater: (prev: number) => number) => void} setInventorySelectedIndex - Sets the selected index in the inventory.
- * @property {() => void} openActionMenu - Opens the action menu for the selected item.
- * @property {() => void} closeActionMenu - Closes the action menu.
- * @property {(direction: number) => void} navigateActionMenu - Navigates the action menu.
- * @property {() => void} confirmActionMenuSelection - Confirms the selected action in the action menu.
- * @property {() => void} enterRefuge - Enters a refuge.
- * @property {() => void} leaveRefuge - Leaves a refuge.
- * @property {(direction: number) => void} navigateRefugeMenu - Navigates the refuge menu.
- * @property {() => void} confirmRefugeMenuSelection - Confirms the selected action in the refuge menu.
- * @property {() => void} searchRefuge - Searches the current refuge for items.
- * @property {() => void} clearRefugeActionMessage - Clears the refuge action message.
- * @property {() => void} toggleCrafting - Toggles the crafting menu open or closed.
- * @property {(direction: number) => void} navigateCraftingMenu - Navigates the crafting menu.
- * @property {() => void} performCrafting - Performs the selected crafting recipe.
- * @property {() => void} reset - Resets the store to its initial state.
- */
+export const REFUGE_ACTION = {
+    WAIT: "Aspetta un'ora",
+    SLEEP: "Dormi fino all'alba",
+    SEARCH: 'Cerca nei dintorni',
+    WORKBENCH: 'Banco di Lavoro',
+    INVENTORY: 'Gestisci Inventario',
+    LEAVE: 'Esci dal Rifugio',
+} as const;
+
 interface InteractionStoreState {
     isInventoryOpen: boolean;
     isInRefuge: boolean;
@@ -46,7 +31,8 @@ interface InteractionStoreState {
     refugeMenuState: RefugeMenuState;
     craftingMenuState: CraftingMenuState;
     refugeActionMessage: string | null;
-    refugeJustSearched: boolean;
+    /** The refuge being visited was already searched. */
+    refugeSearched: boolean;
 
     toggleInventory: () => void;
     setInventorySelectedIndex: (updater: (prev: number) => number) => void;
@@ -62,7 +48,6 @@ interface InteractionStoreState {
     confirmRefugeMenuSelection: () => void;
     searchRefuge: () => void;
     clearRefugeActionMessage: () => void;
-    startUniqueEvent: (eventId: string) => void;
 
     toggleCrafting: () => void;
     navigateCraftingMenu: (direction: number) => void;
@@ -73,673 +58,337 @@ interface InteractionStoreState {
     fromJSON: (json: any) => void;
 }
 
-const initialState = {
+const closedActionMenu = (): ActionMenuState => ({ isOpen: false, options: [], selectedIndex: 0, mode: 'actions' });
+const closedRefugeMenu = (): RefugeMenuState => ({ isOpen: false, options: [], selectedIndex: 0 });
+
+const initialState = () => ({
     isInventoryOpen: false,
     isInRefuge: false,
     isCraftingOpen: false,
     inventorySelectedIndex: 0,
-    actionMenuState: { isOpen: false, options: [], selectedIndex: 0 },
-    refugeMenuState: { isOpen: false, options: [], selectedIndex: 0 },
+    actionMenuState: closedActionMenu(),
+    refugeMenuState: closedRefugeMenu(),
     craftingMenuState: { selectedIndex: 0 },
     refugeActionMessage: null,
-    refugeJustSearched: false,
+    refugeSearched: false,
+});
+
+const journal = (text: string, type: JournalEntryType = JournalEntryType.NARRATIVE) =>
+    useGameStore.getState().addJournalEntry({ text, type });
+
+const refugeOptions = (searched: boolean): string[] => {
+    const night = isNightHour(useTimeStore.getState().gameTime.hour);
+    return [
+        night ? REFUGE_ACTION.SLEEP : REFUGE_ACTION.WAIT,
+        ...(searched ? [] : [REFUGE_ACTION.SEARCH]),
+        REFUGE_ACTION.WORKBENCH,
+        REFUGE_ACTION.INVENTORY,
+        REFUGE_ACTION.LEAVE,
+    ];
+};
+
+const knownRecipeList = () => {
+    const { knownRecipes } = useCharacterStore.getState();
+    return useRecipeDatabaseStore.getState().recipes.filter(r => knownRecipes.includes(r.id));
 };
 
 export const useInteractionStore = create<InteractionStoreState>((set, get) => ({
-    ...initialState,
+    ...initialState(),
 
-    /**
-     * @function toggleInventory
-     * @description Toggles the inventory open or closed.
-     */
     toggleInventory: () => {
-        set(state => {
-            if (state.actionMenuState.isOpen) {
-                return { actionMenuState: { ...state.actionMenuState, isOpen: false } };
-            }
-            if (state.isCraftingOpen) return {};
-            const isOpen = !state.isInventoryOpen;
-            audioManager.playSound(isOpen ? 'confirm' : 'cancel');
-            return { isInventoryOpen: isOpen, inventorySelectedIndex: 0 };
-        });
+        const state = get();
+        if (state.actionMenuState.isOpen) {
+            set({ actionMenuState: closedActionMenu() });
+            return;
+        }
+        if (state.isCraftingOpen) return;
+        const isOpen = !state.isInventoryOpen;
+        audioManager.playSound(isOpen ? 'confirm' : 'cancel');
+        set({ isInventoryOpen: isOpen, inventorySelectedIndex: 0 });
     },
 
-    /**
-     * @function setInventorySelectedIndex
-     * @description Sets the selected index in the inventory.
-     * @param {function} updater - A function that takes the previous index and returns the new index.
-     */
     setInventorySelectedIndex: (updater) => {
-        const inventory = useCharacterStore.getState().inventory;
-        if (inventory.length === 0) { set({ inventorySelectedIndex: 0 }); return; }
+        const { length } = useCharacterStore.getState().inventory;
+        if (length === 0) {
+            set({ inventorySelectedIndex: 0 });
+            return;
+        }
         set(state => {
-            const newIndex = updater(state.inventorySelectedIndex);
-            if (newIndex < 0) return { inventorySelectedIndex: inventory.length - 1 };
-            if (newIndex >= inventory.length) return { inventorySelectedIndex: 0 };
-            return { inventorySelectedIndex: newIndex };
+            const next = updater(state.inventorySelectedIndex);
+            return { inventorySelectedIndex: ((next % length) + length) % length };
         });
         audioManager.playSound('navigate');
     },
 
-    /**
-     * @function openActionMenu
-     * @description Opens the action menu for the selected item.
-     */
     openActionMenu: () => {
-        const { inventorySelectedIndex } = get();
-        const { inventory, equippedWeapon, equippedArmor } = useCharacterStore.getState();
-        const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
-        if (!inventory[inventorySelectedIndex]) return;
-
-        const selectedItem = inventory[inventorySelectedIndex];
-        const itemDetails = itemDatabase[selectedItem.itemId];
-        if (!itemDetails) return;
-
-        let options: string[] = [];
-        const isEquipped = equippedWeapon === inventorySelectedIndex || equippedArmor === inventorySelectedIndex;
-        const isBroken = selectedItem.durability && selectedItem.durability.current <= 0;
-
-        if (isBroken) {
-            options = ['Recupera Materiali', 'Scarta', 'Annulla'];
-        } else {
-            switch (itemDetails.type) {
-                case 'consumable': options = ['Usa', 'Scarta', 'Annulla']; break;
-                case 'manual': options = ['Leggi', 'Scarta', 'Annulla']; break;
-                case 'weapon': case 'armor':
-                    if (isEquipped) { options = ['Togli', 'Scarta', 'Annulla']; }
-                    else { options = ['Equipaggia', 'Scarta', 'Annulla']; }
-                    break;
-                case 'tool':
-                    if (itemDetails.effects?.some((e: any) => e.type === 'repair')) {
-                        options = ['Ripara Oggetto', 'Scarta', 'Annulla'];
-                    } else {
-                        options = ['Usa', 'Scarta', 'Annulla'];
-                    }
-                    break;
-                default: options = ['Esamina', 'Scarta', 'Annulla']; break;
-            }
-        }
-
-        set({ actionMenuState: { isOpen: true, options, selectedIndex: 0 } });
+        const index = get().inventorySelectedIndex;
+        if (!useCharacterStore.getState().inventory[index]) return;
+        set({ actionMenuState: { isOpen: true, options: getItemActions(index), selectedIndex: 0, mode: 'actions' } });
         audioManager.playSound('confirm');
     },
 
-    /**
-     * @function closeActionMenu
-     * @description Closes the action menu.
-     */
     closeActionMenu: () => {
-        set({ actionMenuState: { isOpen: false, options: [], selectedIndex: 0 } });
+        set({ actionMenuState: closedActionMenu() });
         audioManager.playSound('cancel');
     },
 
-    /**
-     * @function navigateActionMenu
-     * @description Navigates the action menu.
-     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
-     */
     navigateActionMenu: (direction) => {
         set(state => {
             const { options, selectedIndex } = state.actionMenuState;
-            let newIndex = selectedIndex + direction;
-            if (newIndex < 0) newIndex = options.length - 1;
-            if (newIndex >= options.length) newIndex = 0;
-            return { actionMenuState: { ...state.actionMenuState, selectedIndex: newIndex } };
+            if (options.length === 0) return {};
+            const next = (selectedIndex + direction + options.length) % options.length;
+            return { actionMenuState: { ...state.actionMenuState, selectedIndex: next } };
         });
         audioManager.playSound('navigate');
     },
 
-    /**
-     * @function confirmActionMenuSelection
-     * @description Confirms the selected action in the action menu.
-     */
     confirmActionMenuSelection: () => {
-        const { actionMenuState, inventorySelectedIndex } = get();
-        const charState = useCharacterStore.getState();
-        const itemDatabase = useItemDatabaseStore.getState().itemDatabase;
-        const selectedAction = actionMenuState.options[actionMenuState.selectedIndex];
-
-        if (!charState.inventory[inventorySelectedIndex]) { get().closeActionMenu(); return; }
-
-        const itemToActOn = charState.inventory[inventorySelectedIndex];
-        const itemDetails = itemDatabase[itemToActOn.itemId];
-        if (!itemDetails) { get().closeActionMenu(); return; }
-
-        audioManager.playSound('confirm');
-
-
-
-        switch (selectedAction) {
-            case 'Usa':
-                if (itemDetails.type === 'consumable' && itemDetails.effects) {
-                    let baseMessage = `Hai usato: ${itemDetails.name}.`;
-                    let effectMessages: string[] = [];
-                    let hasFoodOrDrink = false;
-                    itemDetails.effects.forEach((effect: any) => {
-                        switch (effect.type) {
-                            case 'heal': {
-                                let healAmount = effect.value as number;
-                                const hasFieldMedic = charState.unlockedTalents.includes('field_medic');
-                                if (hasFieldMedic) {
-                                    healAmount = Math.floor(healAmount * 1.25);
-                                }
-                                charState.heal(healAmount);
-                                effectMessages.push(`Recuperi ${healAmount} HP.${hasFieldMedic ? ' [Medico da Campo]' : ''}`);
-                                break;
-                            }
-                            case 'satiety':
-                                charState.restoreSatiety(effect.value as number);
-                                effectMessages.push(`Recuperi ${effect.value} sazietà.`);
-                                hasFoodOrDrink = true;
-                                break;
-                            case 'hydration':
-                                charState.restoreHydration(effect.value as number);
-                                effectMessages.push(`Recuperi ${effect.value} idratazione.`);
-                                hasFoodOrDrink = true;
-                                break;
-                            case 'cureStatus':
-                                if (charState.status.has(effect.value as PlayerStatusCondition)) {
-                                    charState.removeStatus(effect.value as PlayerStatusCondition);
-                                    effectMessages.push(`Ti senti meglio. Lo stato ${effect.value} è svanito.`);
-                                } else {
-                                    effectMessages.push(`Non ha avuto alcun effetto...`);
-                                }
-                                break;
-                            default: effectMessages.push(`Senti un effetto strano...`); break;
-                        }
-                    });
-                    // FIX: Mangiare/bere riduce la stanchezza di 10
-                    if (hasFoodOrDrink) {
-                        charState.rest(10);
-                        effectMessages.push(`Ti senti meno stanco.`);
-                    }
-                    useGameStore.getState().addJournalEntry({ text: [baseMessage, ...effectMessages].join(' '), type: JournalEntryType.NARRATIVE });
-                    charState.discardItem(inventorySelectedIndex, 1);
-                }
-                break;
-            case 'Leggi':
-                if (itemDetails.type === 'manual' && itemDetails.unlocksRecipe) {
-                    charState.learnRecipe(itemDetails.unlocksRecipe);
-                    charState.discardItem(inventorySelectedIndex, 1);
-                }
-                break;
-            case 'Equipaggia': charState.equipItem(inventorySelectedIndex); useGameStore.getState().addJournalEntry({ text: `Hai equipaggiato: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE }); break;
-            case 'Togli': charState.unequipItem(itemDetails.type === 'weapon' ? 'weapon' : 'armor'); useGameStore.getState().addJournalEntry({ text: `Hai tolto: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE }); break;
-            case 'Scarta':
-                charState.discardItem(inventorySelectedIndex, 1);
-                useGameStore.getState().addJournalEntry({ text: `Hai scartato: ${itemDetails.name}.`, type: JournalEntryType.NARRATIVE });
-                break;
-            case 'Esamina': useGameStore.getState().addJournalEntry({ text: `Esamini: ${itemDetails.name}. ${itemDetails.description}`, type: JournalEntryType.NARRATIVE }); break;
-            case 'Recupera Materiali': charState.salvageItem(inventorySelectedIndex); break;
-            case 'Ripara Oggetto': {
-                const repairValue = itemDetails.effects?.find((e: any) => e.type === 'repair')?.value as number;
-                if (!repairValue) break;
-
-                let repaired = false;
-                const repairTargets = [
-                    ...charState.inventory.filter(i => i.durability && i.durability.current < i.durability.max)
-                ];
-
-                if (repairTargets.length > 0) {
-                    // For now, let's just repair the first damaged item found for simplicity.
-                    // A more complex system could let the user choose.
-                    const itemToRepairIndex = charState.inventory.findIndex(i => i.itemId === repairTargets[0].itemId);
-                    if (itemToRepairIndex !== -1) {
-                        charState.repairItem(itemToRepairIndex, repairValue);
-                        const repairedItemDetails = itemDatabase[repairTargets[0].itemId];
-                        useGameStore.getState().addJournalEntry({ text: `Hai usato ${itemDetails.name} per riparare ${repairedItemDetails.name}.`, type: JournalEntryType.NARRATIVE });
-                        charState.discardItem(inventorySelectedIndex, 1);
-                        repaired = true;
-                    }
-                }
-
-                if (!repaired) {
-                    useGameStore.getState().addJournalEntry({ text: `Non hai oggetti da riparare.`, type: JournalEntryType.ACTION_FAILURE });
-                }
-                break;
-            }
-        }
-
-        get().closeActionMenu();
-        if (useCharacterStore.getState().inventory.length <= inventorySelectedIndex) {
-            set({ inventorySelectedIndex: Math.max(0, useCharacterStore.getState().inventory.length - 1) });
-        }
-    },
-
-    /**
-     * @function clearRefugeActionMessage
-     * @description Clears the refuge action message.
-     */
-    clearRefugeActionMessage: () => set({ refugeActionMessage: null }),
-
-    /**
-     * @function enterRefuge
-     * @description Enters a refuge.
-     */
-    enterRefuge: () => {
-        const { visitedRefuges, mainStoryStage, addJournalEntry, playerPos, lootedRefuges } = useGameStore.getState();
-        const { gameTime } = useTimeStore.getState();
-        const { refugeJustSearched } = get();
-
-        const isFirstRefuge = visitedRefuges.length === 0;
-        if (isFirstRefuge) {
-            const { mainStoryChapters } = useMainStoryDatabaseStore.getState();
-            const nextChapter = mainStoryChapters.find(c => c.stage === mainStoryStage);
-            if (nextChapter && nextChapter.trigger.type === 'firstRefugeEntry') {
-                const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
-                if (!isNight || nextChapter.allowNightTrigger) {
-                    useGameStore.setState({ activeMainStoryEvent: nextChapter, gameState: GameState.MAIN_STORY });
-                    // Don't show the refuge menu until the story event is resolved
-                    return;
-                }
-            }
-        }
-
-        const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
-        const isLooted = lootedRefuges.some(pos => pos.x === playerPos.x && pos.y === playerPos.y);
-
-        const options = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora"];
-        if (!isLooted && !refugeJustSearched) {
-            options.push("Cerca nei dintorni");
-        }
-        options.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
-
-        set({
-            isInRefuge: true,
-            refugeJustSearched: false,
-            refugeMenuState: { isOpen: true, options, selectedIndex: 0 }
-        });
-        addJournalEntry({ text: "Sei entrato in un rifugio. Sei al sicuro.", type: JournalEntryType.NARRATIVE });
-    },
-
-    /**
-     * @function enterOutpost
-     * @description Enters the Outpost special location (v1.6.0).
-     */
-    enterOutpost: () => {
-        const { addJournalEntry } = useGameStore.getState();
-        useGameStore.getState().setGameState(GameState.OUTPOST);
-        audioManager.playSound('enter_refuge'); // Reuse appropriate sound
-        addJournalEntry({
-            text: "Sei arrivato al Crocevia. Un insediamento di fortuna, ma il primo segno di civiltà da settimane.",
-            type: JournalEntryType.NARRATIVE
-        });
-    },
-
-    /**
-     * @function startUniqueEvent
-     * @description Starts a unique event by ID (v1.6.0).
-     * Used for special location tiles (N, L, B) to trigger guaranteed unique events.
-     * @param {string} eventId - The ID of the unique event to start.
-     */
-    startUniqueEvent: async (eventId: string) => {
-        const { setGameState, addJournalEntry } = useGameStore.getState();
-        const { useEventStore } = await import('./eventStore');
-        const { useEventDatabaseStore } = await import('../data/eventDatabase');
-
-        // Get all events from database (unique events are in biomeEvents and loreEvents)
-        const { loreEvents, biomeEvents } = useEventDatabaseStore.getState();
-
-        // Search for the event in both lore and biome events
-        const allEvents = [...(loreEvents || []), ...(biomeEvents || [])];
-        let event = allEvents.find((e: any) => e.id === eventId);
-
-        if (!event) {
-            console.error(`[startUniqueEvent] Event ${eventId} not found in database`);
-            console.log('Available events:', allEvents.map((e: any) => e.id));
-            addJournalEntry({
-                text: `Errore: evento ${eventId} non trovato.`,
-                type: JournalEntryType.SYSTEM_ERROR
-            });
+        const { actionMenuState, inventorySelectedIndex: index } = get();
+        const character = useCharacterStore.getState();
+        const invItem = character.inventory[index];
+        const details = invItem ? useItemDatabaseStore.getState().itemDatabase[invItem.itemId] : undefined;
+        const choice = actionMenuState.options[actionMenuState.selectedIndex];
+        if (!invItem || !details || choice === undefined) {
+            set({ actionMenuState: closedActionMenu() });
             return;
         }
+        audioManager.playSound('confirm');
 
-        // v1.9.8: Check if event requires an active quest
-        if (event.requiresQuest) {
-            const { activeQuests } = useCharacterStore.getState();
-            if (!activeQuests[event.requiresQuest]) {
-                // Quest not active - try to find alternative event
-                const alternativeEventId = eventId.replace('unique_find_the_arsonist', 'unique_empty_cell_403');
-                const alternativeEvent = allEvents.find((e: any) => e.id === alternativeEventId);
-
-                if (alternativeEvent) {
-                    event = alternativeEvent;
-                    console.log(`[startUniqueEvent] Quest ${event.requiresQuest} not active, using alternative event: ${alternativeEventId}`);
-                } else {
-                    console.warn(`[startUniqueEvent] Event requires quest ${event.requiresQuest} but quest not active and no alternative found`);
-                    addJournalEntry({
-                        text: `Questo luogo sembra vuoto. Forse c'è qualcosa che devi scoprire prima di tornare qui.`,
-                        type: JournalEntryType.NARRATIVE
+        // Second step of "Ripara un oggetto": the player picked the target.
+        if (actionMenuState.mode === 'repair') {
+            const target = actionMenuState.targetIndices?.[actionMenuState.selectedIndex];
+            if (target !== undefined) repairWith(index, target);
+            set({ actionMenuState: closedActionMenu() });
+        } else {
+            switch (choice) {
+                case ACTION.USE:
+                    applyItemUse(index);
+                    break;
+                case ACTION.REPAIR: {
+                    const targets = getRepairTargets(index);
+                    if (targets.length === 0) {
+                        journal('Non hai nulla da riparare.', JournalEntryType.ACTION_FAILURE);
+                        break;
+                    }
+                    const db = useItemDatabaseStore.getState().itemDatabase;
+                    const options = targets.map(t => {
+                        const item = character.inventory[t];
+                        return `${db[item.itemId]?.name ?? item.itemId} (${item.durability!.current}/${item.durability!.max})`;
                     });
+                    set({ actionMenuState: { isOpen: true, options: [...options, ACTION.CANCEL], selectedIndex: 0, mode: 'repair', targetIndices: targets } });
                     return;
                 }
+                case ACTION.READ:
+                case ACTION.STUDY:
+                    studyItem(index);
+                    break;
+                case ACTION.EQUIP:
+                    character.equipItem(index);
+                    if (useCharacterStore.getState().getEquippedSlot(index)) journal(`Hai equipaggiato: ${details.name}.`);
+                    break;
+                case ACTION.UNEQUIP: {
+                    const slot = character.getEquippedSlot(index);
+                    if (slot) {
+                        character.unequipItem(slot);
+                        journal(`Hai tolto: ${details.name}.`);
+                    }
+                    break;
+                }
+                case ACTION.SALVAGE:
+                    character.salvageItem(index);
+                    break;
+                case ACTION.EXAMINE:
+                    journal(describeItem(index));
+                    break;
+                case ACTION.DISCARD:
+                    character.discardItem(index, 1);
+                    journal(`Hai scartato: ${details.name}.`);
+                    break;
             }
+            set({ actionMenuState: closedActionMenu() });
         }
 
-        // Set the event as active in eventStore and switch to event screen
-        useEventStore.setState({
-            activeEvent: event,
-            eventResolutionText: null
-        });
-
-        setGameState(GameState.EVENT_SCREEN);
-        addJournalEntry({
-            text: `EVENTO SPECIALE: ${event.title}`,
-            type: JournalEntryType.EVENT
-        });
-
-        audioManager.playSound('confirm');
+        // Keep the cursor on a valid slot after items disappear.
+        const { length } = useCharacterStore.getState().inventory;
+        if (get().inventorySelectedIndex >= length) set({ inventorySelectedIndex: Math.max(0, length - 1) });
+        // Something took over the screen (an ambush while camping): close the bag.
+        if (useGameStore.getState().gameState !== GameState.IN_GAME) set({ isInventoryOpen: false });
     },
 
-    /**
-     * @function leaveRefuge
-     * @description Leaves a refuge.
-     */
+    clearRefugeActionMessage: () => set({ refugeActionMessage: null }),
+
+    enterRefuge: () => {
+        set({
+            isInRefuge: true,
+            refugeSearched: false,
+            refugeActionMessage: null,
+            refugeMenuState: { isOpen: true, options: refugeOptions(false), selectedIndex: 0 },
+        });
+        audioManager.playSound('enter_refuge');
+        journal('Sei entrato in un rifugio. Sei al sicuro.');
+        // Chapters waiting for the player to walk into a refuge.
+        useGameStore.getState().checkMainStoryTriggers({ refugeEntry: true });
+    },
+
+    enterOutpost: () => {
+        useGameStore.getState().setGameState(GameState.OUTPOST);
+        audioManager.playSound('enter_refuge');
+        journal('Sei arrivato al Crocevia. Un insediamento di fortuna, ma il primo segno di civiltà da settimane.');
+    },
+
+    /** Leaving uses the refuge up: it stays on the map as ruins. */
     leaveRefuge: () => {
-        set(() => {
-            useGameStore.setState(gs => {
-                const newFlags = new Set(gs.gameFlags);
-                newFlags.delete('LULLABY_CHOICE_OFFERED_THIS_REST');
-                // v2.0.14: mark this refuge as used. visitedRefuges was NEVER
-                // populated: the "already used" gate in gameService was dead code
-                // (refuges reusable forever) and isFirstRefuge was always true.
-                // Marked on exit so the whole first stay works normally.
-                const alreadyVisited = gs.visitedRefuges.some(pos => pos.x === gs.playerPos.x && pos.y === gs.playerPos.y);
-                return {
-                    gameFlags: newFlags,
-                    visitedRefuges: alreadyVisited ? gs.visitedRefuges : [...gs.visitedRefuges, { ...gs.playerPos }],
-                };
-            });
+        useGameStore.setState(game => {
+            const gameFlags = new Set(game.gameFlags);
+            gameFlags.delete('LULLABY_CHOICE_OFFERED_THIS_REST');
+            const known = game.visitedRefuges.some(p => p.x === game.playerPos.x && p.y === game.playerPos.y);
             return {
-                isInRefuge: false,
-                refugeMenuState: { isOpen: false, options: [], selectedIndex: 0 },
-                refugeActionMessage: null,
-                refugeJustSearched: false,
+                gameFlags,
+                visitedRefuges: known ? game.visitedRefuges : [...game.visitedRefuges, { ...game.playerPos }],
             };
         });
-        useGameStore.getState().addJournalEntry({ text: "Lasci la sicurezza del rifugio.", type: JournalEntryType.NARRATIVE });
+        set({ isInRefuge: false, isCraftingOpen: false, isInventoryOpen: false, refugeMenuState: closedRefugeMenu(), refugeActionMessage: null, refugeSearched: false });
+        journal('Lasci la sicurezza del rifugio. Alle tue spalle restano solo rovine.');
         audioManager.playSound('cancel');
     },
 
-    /**
-     * @function navigateRefugeMenu
-     * @description Navigates the refuge menu.
-     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
-     */
     navigateRefugeMenu: (direction) => {
-        get().clearRefugeActionMessage();
         set(state => {
             if (!state.isInRefuge) return {};
             const { options, selectedIndex } = state.refugeMenuState;
-            let newIndex = selectedIndex + direction;
-            if (newIndex < 0) newIndex = options.length - 1;
-            if (newIndex >= options.length) newIndex = 0;
-            return { refugeMenuState: { ...state.refugeMenuState, selectedIndex: newIndex } };
+            const next = (selectedIndex + direction + options.length) % options.length;
+            return { refugeMenuState: { ...state.refugeMenuState, selectedIndex: next }, refugeActionMessage: null };
         });
         audioManager.playSound('navigate');
     },
 
-    /**
-     * @function searchRefuge
-     * @description Searches the current refuge for items.
-     */
     searchRefuge: () => {
-        const { addJournalEntry } = useGameStore.getState();
-        const { advanceTime } = useTimeStore.getState();
-        advanceTime(30, true);
-
-        const skillCheckResult = useCharacterStore.getState().performSkillCheck('percezione', 10);
-        let journalText = `Prova di Percezione (CD ${skillCheckResult.dc}): ${skillCheckResult.roll} (d20) + ${skillCheckResult.bonus} (mod) = ${skillCheckResult.total}. `;
-
-        if (skillCheckResult.success) {
-            journalText += "SUCCESSO. ";
-
-            // v1.9.9: Massively increased manual drop rate (20% → 40%) and added crafting materials
-            const hasScavenger = useCharacterStore.getState().unlockedTalents.includes('scavenger');
-            const lootTable = [
-                // Water & Food (30% combined - reduced to make room for manuals)
-                { id: 'CONS_002', weight: 12, quantity: hasScavenger ? 3 : 2 }, // Clean water
-                { id: 'dirty_water', weight: 8, quantity: hasScavenger ? 4 : 2 }, // Dirty water (common)
-                { id: 'CONS_001', weight: 10, quantity: hasScavenger ? 2 : 1 }, // Food
-
-                // Medical supplies (10%)
-                { id: 'CONS_003', weight: 5, quantity: hasScavenger ? 2 : 1 }, // Bandages
-                { id: 'MED_BANDAGE_BASIC', weight: 3, quantity: hasScavenger ? 3 : 2 },
-                { id: 'MED_ANTISEPTIC', weight: 2, quantity: 1 },
-
-                // Crafting materials (20% - increased)
-                { id: 'scrap_metal', weight: 6, quantity: hasScavenger ? 3 : 2 },
-                { id: 'clean_cloth', weight: 5, quantity: hasScavenger ? 3 : 2 },
-                { id: 'bottle_empty', weight: 4, quantity: hasScavenger ? 3 : 2 },
-                { id: 'firewood', weight: 3, quantity: hasScavenger ? 4 : 2 }, // NEW: For arrows/spears
-                { id: 'durable_cloth', weight: 2, quantity: 1 },
-
-                // Manuals (40% - MASSIVELY INCREASED)
-                { id: 'manual_field_medicine', weight: 10, quantity: 1 },
-                { id: 'manual_survival_basics', weight: 10, quantity: 1 },
-                { id: 'manual_archery_basics', weight: 10, quantity: 1 },
-                { id: 'manual_advanced_repairs', weight: 10, quantity: 1 },
-
-                // Advanced consumables (0% - removed to prioritize manuals)
-            ];
-
-            const totalWeight = lootTable.reduce((sum, item) => sum + item.weight, 0);
-            const roll = Math.random() * totalWeight;
-            let cumulativeWeight = 0;
-            let foundItem = lootTable[0];
-
-            for (const item of lootTable) {
-                cumulativeWeight += item.weight;
-                if (roll < cumulativeWeight) {
-                    foundItem = item;
-                    break;
-                }
-            }
-
-            const itemDetails = useItemDatabaseStore.getState().itemDatabase[foundItem.id];
-            if (itemDetails) {
-                useCharacterStore.getState().addItem(foundItem.id, foundItem.quantity);
-                journalText += `Frugando sotto un'asse del pavimento, trovi: ${itemDetails.name} (x${foundItem.quantity}).`;
-                if (hasScavenger) journalText += " [Scavenger]";
-                addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_SUCCESS });
+        useTimeStore.getState().advanceTime(30, true);
+        const character = useCharacterStore.getState();
+        const check = character.performSkillCheck('percezione', 10);
+        let text = `Prova di Percezione (CD ${check.dc}): ${check.roll} (d20) + ${check.bonus} (mod) = ${check.total}. `;
+        if (check.success) {
+            const loot = rollLoot(useLootTableStore.getState().tables.refugeSearch);
+            const details = loot ? useItemDatabaseStore.getState().itemDatabase[loot.itemId] : undefined;
+            if (loot && details) {
+                const bonus = character.hasTalent('scavenger') && details.stackable ? 1 : 0;
+                character.addItem(loot.itemId, loot.quantity + bonus);
+                text += `SUCCESSO. Frugando sotto un'asse del pavimento, trovi: ${details.name} (x${loot.quantity + bonus}).${bonus ? ' [Scavenger]' : ''}`;
+                journal(text, JournalEntryType.SKILL_CHECK_SUCCESS);
             } else {
-                journalText += "Non trovi nulla di valore.";
-                addJournalEntry({ text: journalText, type: JournalEntryType.ACTION_FAILURE });
+                text += 'SUCCESSO, ma non trovi nulla di valore.';
+                journal(text, JournalEntryType.ACTION_FAILURE);
             }
         } else {
-            journalText += "FALLIMENTO. Hai cercato ovunque, ma non trovi nulla di utile.";
-            addJournalEntry({ text: journalText, type: JournalEntryType.SKILL_CHECK_FAILURE });
+            text += 'FALLIMENTO. Hai cercato ovunque, ma non trovi nulla di utile.';
+            journal(text, JournalEntryType.SKILL_CHECK_FAILURE);
         }
-
-        set({ refugeActionMessage: journalText, refugeJustSearched: true });
-
-        const isNight = useTimeStore.getState().gameTime.hour >= 20 || useTimeStore.getState().gameTime.hour < 6;
-        const newOptions = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora", "Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio"];
-        set(state => ({ refugeMenuState: { ...state.refugeMenuState, options: newOptions, selectedIndex: 0 } }));
+        set({ refugeActionMessage: text, refugeSearched: true });
     },
 
-    /**
-     * @function confirmRefugeMenuSelection
-     * @description Confirms the selected action in the refuge menu.
-     */
     confirmRefugeMenuSelection: () => {
-        get().clearRefugeActionMessage();
         const { refugeMenuState } = get();
-        const { addJournalEntry, setGameState, gameFlags } = useGameStore.getState();
+        const game = useGameStore.getState();
         const { gameTime, advanceTime } = useTimeStore.getState();
-        const { satiety, hydration } = useCharacterStore.getState();
-        const selectedAction = refugeMenuState.options[refugeMenuState.selectedIndex];
+        const choice = refugeMenuState.options[refugeMenuState.selectedIndex];
+        set({ refugeActionMessage: null });
 
-        if (selectedAction === "Aspetta un'ora" || selectedAction === "Dormi fino all'alba") {
-            // CS_ASH_LULLABY trigger: First refuge at night on day 3+
-            const isNight = gameTime.hour >= 20 || gameTime.hour < 6;
-            if (gameTime.day >= 3 && isNight && !gameFlags.has('ASH_LULLABY_PLAYED') && !gameFlags.has('LULLABY_CHOICE_OFFERED_THIS_REST')) {
-                useGameStore.setState(state => ({ gameFlags: new Set(state.gameFlags).add('LULLABY_CHOICE_OFFERED_THIS_REST') }));
-                setGameState(GameState.ASH_LULLABY_CHOICE);
+        if (choice === REFUGE_ACTION.WAIT || choice === REFUGE_ACTION.SLEEP) {
+            // The blackened music box calls once, on a night in a refuge from day 3 on.
+            if (gameTime.day >= 3 && isNightHour(gameTime.hour) && !game.hasFlag('ASH_LULLABY_PLAYED') && !game.hasFlag('LULLABY_CHOICE_OFFERED_THIS_REST')) {
+                game.setFlag('LULLABY_CHOICE_OFFERED_THIS_REST');
+                game.setGameState(GameState.ASH_LULLABY_CHOICE);
                 audioManager.playSound('confirm');
                 return;
             }
         }
-
         audioManager.playSound('confirm');
 
-        switch (selectedAction) {
-            case "Aspetta un'ora": {
-                addJournalEntry({ text: "Decidi di riposare per un'ora.", type: JournalEntryType.NARRATIVE });
+        switch (choice) {
+            case REFUGE_ACTION.WAIT: {
+                journal("Decidi di riposare per un'ora.");
                 advanceTime(60, true);
-                const { fatigue, heal, rest } = useCharacterStore.getState();
-                let healAmount = 5;
-                if (fatigue.current > 75) {
-                    healAmount = Math.floor(healAmount / 2);
-                }
-                heal(healAmount);
-                rest(15);
+                const character = useCharacterStore.getState();
+                const healAmount = character.fatigue.current > 75 ? 2 : 5;
+                character.heal(healAmount);
+                character.rest(15);
                 set({ refugeActionMessage: `Hai recuperato ${healAmount} HP e ti senti meno stanco.` });
                 break;
             }
-            case "Dormi fino all'alba": {
-                let hoursToRest = (24 - gameTime.hour) + 6;
-                if (gameTime.hour < 6) hoursToRest = 6 - gameTime.hour;
-                const minutesToRest = (hoursToRest * 60) - gameTime.minute;
-                const { satietyCost, hydrationCost } = useCharacterStore.getState().calculateSurvivalCost(minutesToRest);
-
-                // FIX v1.2.4: Always allow sleep, but apply penalties if malnourished/dehydrated
-                const hasSufficientResources = satiety.current >= satietyCost && hydration.current >= hydrationCost;
-
-                if (!hasSufficientResources) {
-                    addJournalEntry({
-                        text: "Ti addormenti nonostante la fame e la sete...",
-                        type: JournalEntryType.NARRATIVE
-                    });
-                } else {
-                    addJournalEntry({
-                        text: "Ti addormenti profondamente...",
-                        type: JournalEntryType.NARRATIVE
-                    });
-                }
-
-                advanceTime(minutesToRest, true);
-                const { heal, rest, hp, addStatus } = useCharacterStore.getState();
-
-                if (hasSufficientResources) {
-                    // Full recovery
-                    heal(hp.max);
-                    rest(50);
+            case REFUGE_ACTION.SLEEP: {
+                const minutes = minutesUntilDawn(gameTime);
+                const before = useCharacterStore.getState();
+                const { satietyCost, hydrationCost } = before.calculateSurvivalCost(minutes);
+                const fed = before.satiety.current >= satietyCost && before.hydration.current >= hydrationCost;
+                journal(fed ? 'Ti addormenti profondamente...' : 'Ti addormenti nonostante la fame e la sete...');
+                advanceTime(minutes, true);
+                const character = useCharacterStore.getState();
+                if (character.hp.current <= 0) return;
+                if (fed) {
+                    character.heal(character.hp.max);
+                    character.rest(50);
                     set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
                 } else {
-                    // Penalized recovery
-                    const healAmount = Math.floor(hp.max * 0.3); // Only 30% HP recovery
-                    heal(healAmount);
-                    rest(25); // Only 25 fatigue recovery
-                    addStatus('MALATO');
-                    addJournalEntry({
-                        text: "Il sonno è stato inquieto. La mancanza di cibo e acqua ti ha lasciato debole.",
-                        type: JournalEntryType.SYSTEM_WARNING
-                    });
+                    character.heal(Math.floor(character.hp.max * 0.3));
+                    character.rest(25);
+                    character.addStatus('MALATO');
+                    journal('Il sonno è stato inquieto. La mancanza di cibo e acqua ti ha lasciato debole e MALATO.', JournalEntryType.SYSTEM_WARNING);
                     set({ refugeActionMessage: "Ti svegli all'alba, ma sei debole e malato." });
                 }
                 break;
             }
-            case "Cerca nei dintorni":
+            case REFUGE_ACTION.SEARCH:
                 get().searchRefuge();
+                break;
+            case REFUGE_ACTION.WORKBENCH:
+                get().toggleCrafting();
+                break;
+            case REFUGE_ACTION.INVENTORY:
+                get().toggleInventory();
+                break;
+            case REFUGE_ACTION.LEAVE:
+                get().leaveRefuge();
                 return;
-            case "Banco di Lavoro": get().toggleCrafting(); break;
-            case "Gestisci Inventario": get().toggleInventory(); break;
-            case "Esci dal Rifugio": get().leaveRefuge(); break;
         }
 
         if (get().isInRefuge) {
-            const { playerPos, lootedRefuges } = useGameStore.getState();
-            const { gameTime: newGameTime } = useTimeStore.getState();
-            const { refugeJustSearched } = get();
-            const isNight = newGameTime.hour >= 20 || newGameTime.hour < 6;
-            const isLooted = lootedRefuges.some(pos => pos.x === playerPos.x && pos.y === playerPos.y);
-            const newOptions = [isNight ? "Dormi fino all'alba" : "Aspetta un'ora"];
-            if (!isLooted && !refugeJustSearched) newOptions.push("Cerca nei dintorni");
-            newOptions.push("Banco di Lavoro", "Gestisci Inventario", "Esci dal Rifugio");
-            // FIX: Reset selectedIndex a 0 quando il menu cambia per evitare confusione
-            set({ refugeMenuState: { isOpen: true, options: newOptions, selectedIndex: 0 } });
+            set(state => ({ refugeMenuState: { isOpen: true, options: refugeOptions(state.refugeSearched), selectedIndex: 0 } }));
         }
     },
 
-    /**
-     * @function toggleCrafting
-     * @description Toggles the crafting menu open or closed.
-     */
     toggleCrafting: () => {
-        set(state => {
-            if (state.isInventoryOpen) return {};
-            const isOpening = !state.isCraftingOpen;
-            audioManager.playSound(isOpening ? 'confirm' : 'cancel');
-            return { isCraftingOpen: isOpening, craftingMenuState: { selectedIndex: 0 } };
-        });
+        const state = get();
+        if (state.isInventoryOpen) return;
+        const isOpening = !state.isCraftingOpen;
+        audioManager.playSound(isOpening ? 'confirm' : 'cancel');
+        set({ isCraftingOpen: isOpening, craftingMenuState: { selectedIndex: 0 } });
     },
 
-    /**
-     * @function navigateCraftingMenu
-     * @description Navigates the crafting menu.
-     * @param {number} direction - The direction to navigate (-1 for up, 1 for down).
-     */
     navigateCraftingMenu: (direction) => {
-        const { knownRecipes } = useCharacterStore.getState();
-        const displayableRecipes = useRecipeDatabaseStore.getState().recipes.filter(r => knownRecipes.includes(r.id));
-        if (displayableRecipes.length === 0) return;
-
-        set(state => {
-            let newIndex = state.craftingMenuState.selectedIndex + direction;
-            if (newIndex < 0) newIndex = displayableRecipes.length - 1;
-            if (newIndex >= displayableRecipes.length) newIndex = 0;
-            return { craftingMenuState: { selectedIndex: newIndex } };
-        });
+        const count = knownRecipeList().length;
+        if (count === 0) return;
+        set(state => ({ craftingMenuState: { selectedIndex: (state.craftingMenuState.selectedIndex + direction + count) % count } }));
         audioManager.playSound('navigate');
     },
 
-    /**
-     * @function performCrafting
-     * @description Performs the selected crafting recipe.
-     */
     performCrafting: () => {
-        const { craftingMenuState } = get();
-        const { knownRecipes } = useCharacterStore.getState();
-        const { recipes } = useRecipeDatabaseStore.getState();
+        const recipe = knownRecipeList()[get().craftingMenuState.selectedIndex];
+        if (recipe) craftingService.craft(recipe.id);
+    },
 
-        // Import craftingService dynamically to avoid circular dependencies if any
-        import('../services/CraftingService').then(({ craftingService }) => {
-            const displayableRecipes = recipes.filter(r => knownRecipes.includes(r.id));
-            const recipe = displayableRecipes[craftingMenuState.selectedIndex];
+    reset: () => set(initialState()),
 
-            if (!recipe) {
-                console.error('[CRAFTING] Recipe not found at index', craftingMenuState.selectedIndex);
-                return;
-            }
+    toJSON: () => ({ isInRefuge: get().isInRefuge, refugeSearched: get().refugeSearched }),
 
-            craftingService.craft(recipe.id);
+    /** A game saved inside a refuge reopens it. */
+    fromJSON: (json) => {
+        const isInRefuge = Boolean(json?.isInRefuge);
+        const refugeSearched = Boolean(json?.refugeSearched ?? json?.refugeJustSearched);
+        set({
+            ...initialState(),
+            isInRefuge,
+            refugeSearched,
+            refugeMenuState: isInRefuge ? { isOpen: true, options: refugeOptions(refugeSearched), selectedIndex: 0 } : closedRefugeMenu(),
         });
     },
-
-    /**
-     * @function reset
-     * @description Resets the store to its initial state.
-     */
-    reset: () => {
-        set(initialState);
-    },
-
-    /**
-     * @function toJSON
-     * @description Serializes the store's state to a JSON object.
-     * @returns {object} The serialized state.
-     */
-    toJSON: () => {
-        return get();
-    },
-
-    /**
-     * @function fromJSON
-     * @description Deserializes the store's state from a JSON object.
-     * @param {object} json - The JSON object to deserialize.
-     */
-    fromJSON: (json) => {
-        set(json);
-    }
 }));

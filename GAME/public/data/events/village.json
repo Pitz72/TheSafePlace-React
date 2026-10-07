@@ -3,9 +3,7 @@
     "id": "village_community_board",
     "title": "Bacheca del Villaggio",
     "description": "Una vecchia bacheca di legno con un avviso scritto a mano: 'AVVISO: Un orologio da tasca di grande valore affettivo mi è stato rubato. Sospetto di un predone che si nasconde nelle foreste a nord di qui. Offro una generosa ricompensa a chiunque me lo riporti. - Marcus, Il Crocevia.'",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -14,18 +12,12 @@
           {
             "type": "direct",
             "results": [
-              {
-                "type": "startQuest",
-                "value": "crossroads_investigation"
-              },
+              {"type": "startQuest", "value": "crossroads_investigation"},
               {
                 "type": "journalEntry",
                 "text": "Hai accettato di aiutare Marcus. Devi andare al Crocevia per parlare con lui."
               },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -35,12 +27,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Non hai tempo per fare il detective. Prosegui."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Non hai tempo per fare il detective. Prosegui."}]
           }
         ]
       }
@@ -50,9 +37,7 @@
     "id": "village_water_mill",
     "title": "La Ruota Silenziosa",
     "isUnique": true,
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "description": "Ti imbatti nelle rovine di un vecchio mulino ad acqua. La struttura sembra solida e potresti ispezionare i meccanismi interni o cercare nel granaio adiacente.",
     "choices": [
       {
@@ -65,24 +50,10 @@
             "successText": "Tra ingranaggi arrugginiti, trovi una piccola cassetta degli attrezzi da meccanico di ottima fattura.",
             "failureText": "I meccanismi sono un groviglio incomprensibile di metallo corroso. Non trovi nulla di utile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "mechanic_toolkit",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "mechanic_toolkit", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -96,17 +67,8 @@
                 "type": "journalEntry",
                 "text": "Sotto un telo cerato, trovi alcuni sacchi di grano secco ancora commestibili."
               },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "grain_sack",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "grain_sack", "quantity": 2}},
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -117,9 +79,7 @@
     "id": "village_post_office",
     "title": "Corrispondenza Incompiuta",
     "isUnique": true,
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "description": "Trovi un ufficio postale abbandonato, con lettere e pacchi sparsi ovunque.",
     "choices": [
       {
@@ -132,17 +92,8 @@
                 "type": "journalEntry",
                 "text": "La maggior parte dei pacchi è rovinata, ma ne trovi uno piccolo e pesante. Dentro c'è un set di coltelli da lancio."
               },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "throwing_knives",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "throwing_knives", "quantity": 3}},
+              {"type": "addXp", "value": 25}
             ]
           }
         ]
@@ -157,24 +108,10 @@
             "successText": "Una lettera attira la tua attenzione: un abitante scrive di una 'scorta di famiglia nascosta sotto il vecchio pozzo'.",
             "failureText": "Le lettere sono per lo più illeggibili, l'inchiostro sbavato.",
             "success": [
-              {
-                "type": "special",
-                "value": {
-                  "effect": "lore_clue",
-                  "clueId": "village_well_cache"
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "village_well_cache"}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       }
@@ -184,9 +121,7 @@
     "id": "village_general_store",
     "title": "L'Emporio Silenzioso",
     "isUnique": true,
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "description": "Ti trovi di fronte a un vecchio emporio. La vetrina è coperta di polvere e l'insegna di legno è quasi illeggibile. La porta è socchiusa.",
     "choices": [
       {
@@ -199,31 +134,11 @@
             "successText": "Sotto il bancone, in un cassetto nascosto, trovi un manuale di sopravvivenza e una scatola di sigari.",
             "failureText": "Cerchi ovunque, ma trovi solo scontrini sbiaditi e polvere.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_survival_basics",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "cigars_box",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "manual_survival_basics", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "cigars_box", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -237,24 +152,9 @@
                 "type": "journalEntry",
                 "text": "Il magazzino è umido e buio. Trovi un piede di porco appoggiato a un muro e alcuni rottami metallici."
               },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "crowbar",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "scrap_metal",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "crowbar", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -265,9 +165,7 @@
     "id": "village_doctor_clinic",
     "title": "Il Giuramento Silenzioso",
     "isUnique": true,
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "description": "La porta della clinica di un medico di campagna è socchiusa.",
     "choices": [
       {
@@ -280,31 +178,11 @@
             "successText": "Identifichi alcuni antidolorifici e antibiotici ancora efficaci.",
             "failureText": "Trovi solo boccette vuote e scatole strappate. Qualcuno ha fatto pulizia.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "MED_PAINKILLER",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "antibiotics_expired",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "antibiotics_expired", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -316,21 +194,14 @@
             "results": [
               {
                 "type": "journalEntry",
-                "text": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia. Impari qualcosa sulle minacce biologiche."
+                "text": "Trovi il diario del dottore. Le ultime pagine descrivono i sintomi di una strana malattia: ora sai riconoscerli (+1 a Medicina)."
               },
-              {
-                "type": "special",
-                "value": {
-                  "effect": "learn_disease_symptoms"
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "setFlag", "value": "KNOWS_DISEASE_SYMPTOMS"},
+              {"type": "addXp", "value": 20}
             ]
           }
-        ]
+        ],
+        "hideIfFlag": "KNOWS_DISEASE_SYMPTOMS"
       }
     ]
   },
@@ -338,9 +209,7 @@
     "id": "village_old_well",
     "title": "Il Pozzo Abbandonato",
     "description": "Un vecchio pozzo di pietra al centro del villaggio. L'acqua è stagnante, ma potresti trovare qualcosa sul fondo.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -353,38 +222,14 @@
             "successText": "Scendi con cautela. Sul fondo trovi una cassetta di legno con monete antiche e un anello.",
             "failureText": "La corda cede e cadi nell'acqua. Ti fai male e ti bagni completamente.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 25
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "silver_ring",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 25}},
+              {"type": "addItem", "value": {"itemId": "silver_ring", "quantity": 1}},
+              {"type": "addXp", "value": 35}
             ],
             "failure": [
-              {
-                "type": "takeDamage",
-                "value": 20
-              },
-              {
-                "type": "advanceTime",
-                "value": 45
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "takeDamage", "value": 20},
+              {"type": "advanceTime", "value": 45},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -409,9 +254,7 @@
     "id": "village_church_ruins",
     "title": "Chiesa in Rovina",
     "description": "Una piccola chiesa di campagna con il tetto parzialmente crollato. Le panche sono ancora intatte.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -424,38 +267,12 @@
             "successText": "Trovi candele, vino liturgico ancora sigillato e un vecchio crocifisso d'argento.",
             "failureText": "La sacrestia è vuota. Non c'è nulla di valore.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "candles_bundle",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_wine",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "silver_cross",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "candles_bundle", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "old_wine", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "silver_cross", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -469,21 +286,9 @@
                 "type": "journalEntry",
                 "text": "Ti siedi su una panca e preghi. Non sai se qualcuno ti ascolta, ma ti senti più sereno."
               },
-              {
-                "type": "heal",
-                "value": 15
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 1
-                }
-              }
+              {"type": "heal", "value": 15},
+              {"type": "advanceTime", "value": 30},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
             ]
           }
         ]
@@ -494,9 +299,7 @@
     "id": "village_barn",
     "title": "Fienile Abbandonato",
     "description": "Un grande fienile con le porte spalancate. All'interno ci sono balle di fieno e vecchi attrezzi agricoli.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -509,38 +312,12 @@
             "successText": "Trovi una falce ancora affilata, corde e chiodi.",
             "failureText": "Gli attrezzi sono troppo arrugginiti per essere utili.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "scythe",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "rope_coil",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "nails_box",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "scythe", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "rope_coil", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "nails_box", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -554,14 +331,8 @@
                 "type": "journalEntry",
                 "text": "Il fieno è morbido e profuma ancora di estate. Ti concedi un riposo ben meritato."
               },
-              {
-                "type": "heal",
-                "value": 20
-              },
-              {
-                "type": "advanceTime",
-                "value": 60
-              }
+              {"type": "heal", "value": 20},
+              {"type": "advanceTime", "value": 60}
             ]
           }
         ]
@@ -572,9 +343,7 @@
     "id": "village_school_house",
     "title": "Scuola di Campagna",
     "description": "Una piccola scuola con un'unica aula. I banchi sono rovesciati e i libri sparsi ovunque.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -587,31 +356,11 @@
             "successText": "Trovi un manuale di primo soccorso per insegnanti e un vecchio atlante.",
             "failureText": "La maggior parte dei libri sono danneggiati dall'acqua. Inutili.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_first_aid",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_atlas",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "manual_first_aid", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "old_atlas", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -625,10 +374,7 @@
                 "type": "journalEntry",
                 "text": "Disegni colorati di famiglie felici ricoprono le pareti. Un mondo perduto per sempre."
               },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -639,9 +385,7 @@
     "id": "village_blacksmith_shop",
     "title": "Fucina del Fabbro",
     "description": "Una fucina abbandonata con l'incudine ancora al suo posto. Gli attrezzi sono sparsi ovunque.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -654,31 +398,12 @@
             "successText": "Trovi martelli, tenaglie e lingotti di metallo grezzo. Materiali preziosi per il crafting.",
             "failureText": "Gli attrezzi sono troppo pesanti o inutilizzabili. Non prendi nulla.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "hammer_heavy",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "metal_ingots",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "hammer_heavy", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "metal_ingots", "quantity": 3}},
+              {"type": "addXp", "value": 35},
+              {"type": "addItem", "value": {"itemId": "precision_tools", "quantity": 1}}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -692,31 +417,11 @@
             "successText": "Trovi una spada parzialmente forgiata e alcune punte di lancia.",
             "failureText": "Non c'è nulla di completo. Solo pezzi di metallo inutilizzabili.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "unfinished_sword",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "spear_tips",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "unfinished_sword", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "spear_tips", "quantity": 3}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       }
@@ -726,9 +431,7 @@
     "id": "village_graveyard",
     "title": "Cimitero del Villaggio",
     "description": "Un piccolo cimitero recintato. Alcune tombe sono state profanate.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -741,38 +444,12 @@
             "successText": "Qualcuno ha scavato recentemente. Trovi gioielli funerari sparsi.",
             "failureText": "Le tombe sono vuote. I profanatori hanno già preso tutto.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "gold_ring",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "silver_medallion",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "elian",
-                  "amount": 1
-                }
-              }
+              {"type": "addItem", "value": {"itemId": "gold_ring", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "silver_medallion", "quantity": 1}},
+              {"type": "addXp", "value": 30},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -786,17 +463,8 @@
                 "type": "journalEntry",
                 "text": "Sposti il muschio da una lapide di pietra. L'incisione recita: 'Qui riposa {RANDOM_DONOR}, che ha cercato di ricostruire il mondo.'"
               },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 1
-                }
-              },
-              {
-                "type": "heal",
-                "value": 10
-              }
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}},
+              {"type": "heal", "value": 10}
             ]
           }
         ]
@@ -811,13 +479,7 @@
                 "type": "journalEntry",
                 "text": "Profanare le tombe è un atto barbaro. Non ti abbasserai a questo livello."
               },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 1
-                }
-              }
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
             ]
           }
         ]
@@ -828,9 +490,7 @@
     "id": "village_tavern",
     "title": "Taverna del Villaggio",
     "description": "Una piccola taverna con le sedie rovesciate e bicchieri rotti sul pavimento.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -843,31 +503,11 @@
             "successText": "La cantina è piena di bottiglie ancora sigillate. Alcol di qualità.",
             "failureText": "La cantina è allagata. Nulla è recuperabile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "whiskey_bottle",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_wine",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "whiskey_bottle", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "old_wine", "quantity": 2}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -881,31 +521,11 @@
             "successText": "Trovi provviste alimentari conservate e utensili da cucina.",
             "failureText": "Tutto è andato a male. L'odore è insopportabile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 4
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "kitchen_knife",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 4}},
+              {"type": "addItem", "value": {"itemId": "kitchen_knife", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       }
@@ -915,9 +535,7 @@
     "id": "village_windmill",
     "title": "Mulino a Vento",
     "description": "Un vecchio mulino a vento con le pale ferme. La struttura è ancora solida.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -930,28 +548,10 @@
             "successText": "La vista dall'alto è spettacolare. Trovi anche un vecchio cannocchiale.",
             "failureText": "Le scale di legno cedono. Cadi e ti fai male.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "spyglass",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "spyglass", "quantity": 1}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 20
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 20}, {"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -965,17 +565,8 @@
                 "type": "journalEntry",
                 "text": "Al piano terra trovi sacchi di farina ancora asciutti."
               },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "flour_sack",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "flour_sack", "quantity": 3}},
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -986,9 +577,7 @@
     "id": "village_mayor_house",
     "title": "Casa del Sindaco",
     "description": "La casa più grande del villaggio, con una targa che indica 'Sindaco'. È stata saccheggiata ma potrebbe esserci ancora qualcosa.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -1001,38 +590,12 @@
             "successText": "Trovi documenti ufficiali, mappe e una cassaforte con denaro e gioielli.",
             "failureText": "Lo studio è stato completamente svuotato.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "official_documents",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 40
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "gold_ring",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 40
-              }
+              {"type": "addItem", "value": {"itemId": "official_documents", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 40}},
+              {"type": "addItem", "value": {"itemId": "gold_ring", "quantity": 1}},
+              {"type": "addXp", "value": 40}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1046,14 +609,8 @@
                 "type": "journalEntry",
                 "text": "Il letto è morbido e invitante. Ti concedi un riposo prolungato."
               },
-              {
-                "type": "heal",
-                "value": 25
-              },
-              {
-                "type": "advanceTime",
-                "value": 90
-              }
+              {"type": "heal", "value": 25},
+              {"type": "advanceTime", "value": 90}
             ]
           }
         ]
@@ -1064,9 +621,7 @@
     "id": "village_pig_farm",
     "title": "Allevamento di Maiali",
     "description": "Un allevamento abbandonato con recinti vuoti. L'odore è ancora forte.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1079,31 +634,11 @@
             "successText": "Trovi sacchi di mangime ancora chiusi e attrezzature agricole.",
             "failureText": "Il mangime è ammuffito. Non c'è nulla di utilizzabile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "animal_feed",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "pitchfork",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "animal_feed", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "pitchfork", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1112,12 +647,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "L'odore è insopportabile. Te ne vai rapidamente."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "L'odore è insopportabile. Te ne vai rapidamente."}]
           }
         ]
       }
@@ -1127,9 +657,7 @@
     "id": "village_chicken_coop",
     "title": "Pollaio Abbandonato",
     "description": "Un pollaio con le porte aperte. Ci sono ancora piume ovunque ma nessuna gallina.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1142,24 +670,10 @@
             "successText": "Trovi alcune uova ancora fresche. Cibo prezioso.",
             "failureText": "Le uova sono tutte marce. Niente da recuperare.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fresh_eggs",
-                  "quantity": 6
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "fresh_eggs", "quantity": 6}},
+              {"type": "addXp", "value": 20}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1168,12 +682,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Non vale la pena cercare in un pollaio vuoto."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Non vale la pena cercare in un pollaio vuoto."}]
           }
         ]
       }
@@ -1183,9 +692,7 @@
     "id": "village_tool_shed",
     "title": "Capanno Attrezzi",
     "description": "Un piccolo capanno con attrezzi da giardinaggio appesi alle pareti.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1194,28 +701,11 @@
           {
             "type": "direct",
             "results": [
-              {
-                "type": "journalEntry",
-                "text": "Raccogli zappe, pale e un'ascia ancora affilata."
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "shovel",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "hand_axe",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "journalEntry", "text": "Raccogli zappe, pale e un'ascia ancora affilata."},
+              {"type": "addItem", "value": {"itemId": "shovel", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "hand_axe", "quantity": 1}},
+              {"type": "addXp", "value": 20},
+              {"type": "addItem", "value": {"itemId": "rubber_gasket", "quantity": 2}}
             ]
           }
         ]
@@ -1226,9 +716,7 @@
     "id": "village_orchard",
     "title": "Frutteto Abbandonato",
     "description": "Un piccolo frutteto con alberi da frutta ancora carichi. Mele, pere e prugne sono mature.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1241,30 +729,12 @@
             "successText": "Raccogli frutta fresca e sana. Cibo nutriente.",
             "failureText": "La maggior parte della frutta è bacata o marcia.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fresh_fruit",
-                  "quantity": 8
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "fresh_fruit", "quantity": 8}},
+              {"type": "addXp", "value": 25}
             ],
             "failure": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fresh_fruit",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "addItem", "value": {"itemId": "fresh_fruit", "quantity": 2}},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -1279,14 +749,8 @@
                 "type": "journalEntry",
                 "text": "L'ombra è fresca e l'aria profuma di frutta. Un momento di pace."
               },
-              {
-                "type": "heal",
-                "value": 15
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
+              {"type": "heal", "value": 15},
+              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -1297,9 +761,7 @@
     "id": "village_old_bridge",
     "title": "Ponte di Pietra",
     "description": "Un vecchio ponte di pietra che attraversa un torrente. La struttura sembra solida.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1312,28 +774,10 @@
             "successText": "Peschi alcuni pesci di fiume. Cibo fresco.",
             "failureText": "Il torrente è quasi asciutto. Nessun pesce.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fresh_fish",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 3}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "advanceTime",
-                "value": 30
-              },
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1342,12 +786,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Il ponte è solido. Lo attraversi senza problemi."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Il ponte è solido. Lo attraversi senza problemi."}]
           }
         ]
       }
@@ -1357,9 +796,7 @@
     "id": "village_abandoned_cart",
     "title": "Carro Abbandonato",
     "description": "Un vecchio carro di legno rovesciato sul ciglio della strada. Il carico è sparso ovunque.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1372,31 +809,11 @@
             "successText": "Trovi tessuti, corde e alcuni attrezzi ancora utilizzabili.",
             "failureText": "Il carico è rovinato e inutilizzabile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "cloth_roll",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "rope_coil",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "cloth_roll", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "rope_coil", "quantity": 2}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1405,12 +822,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Non sembra esserci nulla di utile. Vai avanti."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Non sembra esserci nulla di utile. Vai avanti."}]
           }
         ]
       }
@@ -1420,9 +832,7 @@
     "id": "village_flower_field",
     "title": "Campo di Fiori Selvatici",
     "description": "Un campo coperto di fiori colorati. Un'oasi di bellezza in un mondo morto.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1435,24 +845,10 @@
             "successText": "Riconosci alcune piante con proprietà curative. Le raccogli.",
             "failureText": "Non riesci a distinguere le piante utili dalle comuni erbacce.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "medicinal_herbs",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "medicinal_herbs", "quantity": 5}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1466,14 +862,8 @@
                 "type": "journalEntry",
                 "text": "Il profumo dei fiori è rilassante. Per un momento dimentichi la devastazione."
               },
-              {
-                "type": "heal",
-                "value": 20
-              },
-              {
-                "type": "advanceTime",
-                "value": 45
-              }
+              {"type": "heal", "value": 20},
+              {"type": "advanceTime", "value": 45}
             ]
           }
         ]
@@ -1484,9 +874,7 @@
     "id": "village_hunters_cabin",
     "title": "Capanna del Cacciatore",
     "description": "Una piccola capanna isolata nel bosco. Pelli di animali sono appese fuori.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": true,
     "choices": [
       {
@@ -1499,38 +887,12 @@
             "successText": "Trovi trappole, munizioni e carne essiccata.",
             "failureText": "La capanna è vuota. Il cacciatore ha portato via tutto.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "bear_trap",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "ammo_arrow",
-                  "quantity": 15
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "dried_meat",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "bear_trap", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "ammo_arrow", "quantity": 15}},
+              {"type": "addItem", "value": {"itemId": "dried_meat", "quantity": 5}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1540,18 +902,9 @@
           {
             "type": "direct",
             "results": [
-              {
-                "type": "journalEntry",
-                "text": "La capanna è accogliente. Ti riposi al caldo."
-              },
-              {
-                "type": "heal",
-                "value": 20
-              },
-              {
-                "type": "advanceTime",
-                "value": 60
-              }
+              {"type": "journalEntry", "text": "La capanna è accogliente. Ti riposi al caldo."},
+              {"type": "heal", "value": 20},
+              {"type": "advanceTime", "value": 60}
             ]
           }
         ]
@@ -1562,9 +915,7 @@
     "id": "village_scarecrow_field",
     "title": "Campo con Spaventapasseri",
     "description": "Un campo agricolo con spaventapasseri inquietanti che oscillano nel vento.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1577,31 +928,11 @@
             "successText": "Uno degli spaventapasseri nasconde un corpo umano. Trovi oggetti nelle tasche.",
             "failureText": "Sono solo spaventapasseri. Niente di strano.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 15
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "rusty_key",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 15}},
+              {"type": "addItem", "value": {"itemId": "rusty_key", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1625,9 +956,7 @@
     "id": "village_vegetable_garden",
     "title": "Orto Comunitario",
     "description": "Un orto con verdure ancora in crescita. Pomodori, carote e lattuga crescono rigogliose.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1636,21 +965,9 @@
           {
             "type": "direct",
             "results": [
-              {
-                "type": "journalEntry",
-                "text": "Raccogli verdure fresche. Cibo sano e nutriente."
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fresh_vegetables",
-                  "quantity": 10
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "journalEntry", "text": "Raccogli verdure fresche. Cibo sano e nutriente."},
+              {"type": "addItem", "value": {"itemId": "fresh_vegetables", "quantity": 10}},
+              {"type": "addXp", "value": 25}
             ]
           }
         ]
@@ -1661,9 +978,7 @@
     "id": "village_bee_hives",
     "title": "Arnie Abbandonate",
     "description": "Alcune arnie di legno sono ancora attive. Le api ronzano minacciose.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1676,35 +991,11 @@
             "successText": "Il fumo calma le api. Raccogli miele prezioso e cera.",
             "failureText": "Le api si arrabbiano e ti attaccano in massa!",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "food_honey",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "beeswax",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "food_honey", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "beeswax", "quantity": 3}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 25
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -1713,12 +1004,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Le api sono pericolose. Meglio non rischiare."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Le api sono pericolose. Meglio non rischiare."}]
           }
         ]
       }
@@ -1728,9 +1014,7 @@
     "id": "village_hanging_laundry",
     "title": "Panni Stesi",
     "description": "Vestiti stesi su una corda oscillano nel vento. Sono lì da mesi.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1743,31 +1027,11 @@
             "successText": "Alcuni vestiti sono ancora in buone condizioni. Li prendi.",
             "failureText": "I vestiti sono completamente rovinati dall'intemperie.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_clothes",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "cloth_scraps",
-                  "quantity": 10
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "old_clothes", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "cloth_scraps", "quantity": 10}},
+              {"type": "addXp", "value": 20}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1791,9 +1055,7 @@
     "id": "village_childrens_playground",
     "title": "Parco Giochi",
     "description": "Un piccolo parco giochi con altalene arrugginite e uno scivolo rotto. I giocattoli dei bambini sono sparsi ovunque.",
-    "biomes": [
-      "Villaggio"
-    ],
+    "biomes": ["Villaggio"],
     "isUnique": false,
     "choices": [
       {
@@ -1806,31 +1068,11 @@
             "successText": "Trovi una palla, alcuni giocattoli di metallo e monete perse.",
             "failureText": "Tutto è rotto o inutile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 10
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "metal_toys",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "metal_toys", "quantity": 3}},
+              {"type": "addXp", "value": 20}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1844,10 +1086,7 @@
                 "type": "journalEntry",
                 "text": "Ti siedi sull'altalena e ricordi quando eri bambino. Un mondo perduto."
               },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -1858,10 +1097,8 @@
     "id": "unique_elder_radio_car",
     "title": "L'Utilitaria Azzurrina",
     "description": "In fondo a un vicolo cieco, seminascosta sotto un telo cerato lacero, noti la sagoma di una piccola auto. È un vecchio modello di utilitaria, la cui vernice, un tempo di un azzurro brillante, è ora scrostata e opaca. La portiera del conducente è socchiusa.\n\nAvvicinandoti, vedi che l'interno è stato trasformato in una sorta di studio improvvisato. Cavi corrono ovunque, collegando un vecchio microfono a un trasmettitore radio modificato, il tutto alimentato da una serie di batterie per auto collegate in serie. Sul cruscotto, un pezzo di nastro adesivo ingiallito reca una scritta a pennarello: 'The Katzus'.\n\nSembra che qualcuno, in questo piccolo angolo di mondo, abbia cercato di tenere accesa una voce nel silenzio.",
-    "biomes": [
-      "Villaggio"
-    ],
-    "isUnique": true,
+    "biomes": ["Villaggio"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Esamina l'attrezzatura radio",
@@ -1871,37 +1108,18 @@
             "skill": "investigare",
             "dc": 12,
             "successText": "L'attrezzatura è un capolavoro di ingegno e improvvisazione. Il trasmettitore è stato modificato per funzionare a bassa potenza, ma con un'ampia portata. Trovi un registratore a nastro collegato al mixer. Premi 'play'. Una voce calda e un po' stanca riempie l'abitacolo: '...e questo era l'ultimo messaggio del Capitano Keith Arrow per The Elder Radio. Se qualcuno è in ascolto... non mollate. C'è sempre una canzone che vale la pena ascoltare. Passo e chiudo.' La registrazione finisce. Recuperi la cassetta e alcuni componenti elettronici utili.",
-            "failureText": "L'attrezzatura è troppo complessa e danneggiata. Toccando un cavo sbagliato, provochi un corto circuito. L'ultima luce sul trasmettitore si spegne con un sibilo. Qualunque segreto custodisse, è andato perduto.",
+            "failureText": "Tocchi il cavo sbagliato e un corto circuito ti fa sobbalzare. Dovrai lasciar raffreddare i circuiti e riprovare.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "captains_last_broadcast",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "tech_components",
-                  "quantity": 2
-                }
-              },
+              {"type": "addItem", "value": {"itemId": "captains_last_broadcast", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "tech_components", "quantity": 2}},
               {
                 "type": "journalEntry",
                 "text": "Hai recuperato l'ultima trasmissione del Capitano Keith Arrow. Un'eco di speranza in un mondo silenzioso."
               },
-              {
-                "type": "addXp",
-                "value": 150
-              }
+              {"type": "addXp", "value": 150},
+              {"type": "setFlag", "value": "ELDER_RADIO_DONE"}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 30
-              }
-            ]
+            "failure": [{"type": "advanceTime", "value": 20}]
           }
         ]
       },
@@ -1915,28 +1133,14 @@
                 "type": "journalEntry",
                 "text": "Nel vano portaoggetti, trovi una collezione di musicassette con etichette scritte a mano: 'Rock Classico', 'Anni '80', 'Per le Notti Solitarie'. Sotto il sedile del passeggero, una mappa della regione con decine di cerchi e note. Sembra che il 'Capitano' stesse cercando di mappare altri insediamenti, forse per creare una rete di ascoltatori. È la mappa di un sognatore."
               },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "rare_music_cassettes",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "revealMapPOI",
-                "value": {
-                  "x": 55,
-                  "y": 120,
-                  "name": "Rifugio Segnalato"
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 120
-              }
+              {"type": "addItem", "value": {"itemId": "rare_music_cassettes", "quantity": 2}},
+              {"type": "revealMapPOI", "value": {"x": 55, "y": 120, "name": "Rifugio Segnalato"}},
+              {"type": "addXp", "value": 120},
+              {"type": "setFlag", "value": "ELDER_RADIO_GLOVEBOX"}
             ]
           }
-        ]
+        ],
+        "hideIfFlag": "ELDER_RADIO_GLOVEBOX"
       },
       {
         "text": "Lascia questo santuario intatto",
@@ -1948,18 +1152,540 @@
                 "type": "journalEntry",
                 "text": "Decidi di non toccare nulla. Questo non è un deposito da saccheggiare; è il monumento a qualcuno che ha combattuto il Silenzio con l'unica arma che aveva: la sua voce. Chiudi piano la portiera dell'utilitaria azzurrina, lasciando 'The Katzus' al suo riposo. L'idea che qualcuno, da qualche parte, abbia cercato di mantenere viva una connessione umana ti dà una strana forza."
               },
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
+              {"type": "addXp", "value": 100},
+              {"type": "setFlag", "value": "ELDER_RADIO_DONE"}
+            ]
+          }
+        ]
+      }
+    ],
+    "excludesFlag": "ELDER_RADIO_DONE"
+  },
+  {
+    "id": "trigger_pump_quest",
+    "title": "Pompa Rotta",
+    "description": "Al centro di una piccola piazza desolata, vedi una vecchia pompa dell'acqua a mano, arrugginita e chiaramente fuori uso. Un tempo doveva essere il cuore di questo villaggio. Con i pezzi giusti, forse potresti rimetterla in funzione.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Esamina la pompa",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
               {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 2
-                }
+                "type": "journalEntry",
+                "text": "La pompa è danneggiata ma riparabile. Ti serviranno: 1 Guarnizione di Gomma e 2 Rottami Metallici."
               },
+              {"type": "startQuest", "value": "repair_water_pump"},
+              {"type": "addXp", "value": 30},
               {
-                "type": "addXp",
-                "value": 100
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "village_pump",
+                  "name": "Pompa del villaggio",
+                  "eventId": "village_pump"
+                }
               }
             ]
+          }
+        ]
+      },
+      {
+        "text": "Ignora la pompa",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non hai tempo per riparazioni adesso, ma ti segni dove si trova la pompa."
+              },
+              {
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "village_pump",
+                  "name": "Pompa del villaggio",
+                  "eventId": "village_pump"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_locked_house",
+    "title": "Casa con Porta Chiusa",
+    "description": "Una casetta di campagna con la porta chiusa a chiave. Le finestre sono barricate dall'interno.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Forza la porta",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "La porta cede con un colpo deciso. Dentro trovi una dispensa con qualche riserva.",
+            "failureText": "La serratura regge e ti affatichi inutilmente.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un ingresso secondario",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi una finestrella sul retro mal chiusa. Riesci a entrare senza fare troppo rumore.",
+            "failureText": "Le entrate sono tutte ben chiuse o barricate.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_doghouse",
+    "title": "Cuccia Abbandonata",
+    "description": "Nel giardino di una casa trovi una piccola cuccia di legno. C'è qualcosa dentro.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Metti la mano dentro",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 10,
+            "successText": "Tiri fuori una palla di gomma e un osso di plastica. Niente di speciale, ma la palla può essere utile come distrazione.",
+            "failureText": "Qualcosa ti morde. Era un animale nascosto!",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "rubber_ball", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 4}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Solleva la cuccia",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Sotto la cuccia trovi un piccolo tesoro: monete, un coltello pieghevole e batterie.",
+            "failureText": "Non trovi nulla se non insetti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "folding_knife", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_canned_food_cache",
+    "title": "Nascondiglio di Scatolette",
+    "description": "Dietro un cassonetto rovesciato, noti una cavità con alcune scatolette conservate al fresco.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Recupera le scatolette",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Prendi tutte le scatolette rimaste, sono ancora buone."
+              },
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Controlla se ci sono trappole",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Nessuna trappola. Sembra proprio una scorta dimenticata.",
+            "failureText": "Smuovi qualcosa e fai rumore, attirando attenzioni indesiderate.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_wind_chimes",
+    "title": "Campanelli a Vento",
+    "description": "Una casa ha ancora appesi dei campanelli a vento. Suonano a ogni soffio.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Smontali con cura",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 10,
+            "successText": "Recuperi fili resistenti e piccoli componenti metallici.",
+            "failureText": "Cadono a terra e si rompono.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "resistant_wire", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "metal_piece", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ignora e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Non hai tempo da perdere con queste sciocchezze."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_family_album",
+    "title": "Album di Famiglia",
+    "description": "In una casa abbandonata trovi un album fotografico pieno di ricordi sbiaditi.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sfoglia l'album",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Ti senti rinvigorito dai ricordi di una vita normale. Una spinta emotiva ti fortifica.",
+            "failureText": "La nostalgia ti ferisce. Ti senti più vulnerabile per un po'.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca tasche o scomparti nascosti",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi una lettera con indizi su un rifugio poco distante.",
+            "failureText": "Niente di utile nascosto qui.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_scrawled_warning",
+    "title": "Avviso Scarabocchiato",
+    "description": "Un graffito su un muro avverte: 'Non andare verso nord. Pericolo'.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ignora l'avviso",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Prosegui per la tua strada, deciso a non farti intimorire."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Indaga sul perché",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Scopri segni di una banda che pattuglia quella zona. Meglio evitarla.",
+            "failureText": "Non trovi indizi sufficienti.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_church_bell",
+    "title": "Campanile della Chiesa",
+    "description": "La chiesa del villaggio ha il campanile ancora in piedi. Potresti arrampicarti per avere una visuale migliore.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali sul campanile",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Con fatica, raggiungi la cima. Da quassù vedi altri villaggi e zone sicure.",
+            "failureText": "Una scala cede sotto il tuo peso. Cadi e ti fai male a una gamba.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "local_map", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 10},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca nella chiesa",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 9,
+            "successText": "Trovi alcuni oggetti sacri e cibo conservato destinato ai bisognosi.",
+            "failureText": "La chiesa è stata profanata e saccheggiata. Non rimane nulla.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_survivor_family",
+    "title": "Famiglia di Sopravvissuti",
+    "description": "Incontri una famiglia di sopravvissuti nascosta in una cantina. Sembrano spaventati ma amichevoli.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Offri aiuto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 11,
+            "successText": "La famiglia apprezza il tuo aiuto e condivide le loro scorte con te.",
+            "failureText": "La famiglia è troppo spaventata e rifiuta il tuo aiuto.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "fresh_fish", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Chiedi informazioni",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "persuasione",
+            "dc": 10,
+            "successText": "La tua conoscenza del territorio migliora.",
+            "failureText": "La famiglia non si fida abbastanza da condividere informazioni.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_burned_house",
+    "title": "Casa Bruciata",
+    "description": "Una casa carbonizzata dal fuoco. Tra le ceneri potrebbero esserci oggetti sopravvissuti.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Fruga tra le ceneri",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Con attenzione, trovi oggetti metallici sopravvissuti al fuoco.",
+            "failureText": "Le ceneri calde ti bruciano le mani mentre frughi.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "metal_piece", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "tool_hammer", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 7}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il giardino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Il giardino è sopravvissuto. Trovi verdure fresche.",
+            "failureText": "Il giardino è stato distrutto dal fuoco.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "carrot", "quantity": 4}},
+              {"type": "addItem", "value": {"itemId": "potato", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "village_animal_shelter",
+    "title": "Rifugio Animali",
+    "description": "Un rifugio per animali abbandonato. Alcuni animali potrebbero essere sopravvissuti.",
+    "biomes": ["Villaggio"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca cibo per animali",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi cibo per animali ancora buono e lo prendi per te.",
+            "failureText": "Gli animali sopravvissuti ti attaccano quando entri.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca attrezzature veterinarie",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi medicinali veterinari che possono essere usati sugli umani.",
+            "failureText": "L'attrezzatura è troppo specializzata per i tuoi bisogni.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "expired_medicine", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
           }
         ]
       }

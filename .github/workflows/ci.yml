@@ -1,0 +1,54 @@
+name: CI (gioco)
+
+# Controlli automatici del gioco (cartella GAME/) a ogni push e pull request:
+# dati JSON formattati e coerenti, storia Ink compilata e aggiornata,
+# typecheck, lint, test (tutte le quest giocate dall'inizio alla fine) e build.
+
+on:
+  push:
+    paths:
+      - 'GAME/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'GAME/**'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: GAME
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: GAME/package-lock.json
+
+      # Il binario di Electron serve solo per impacchettare gli installer.
+      - name: Install dependencies
+        run: npm ci
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+
+      - name: Storia Ink compilata e aggiornata
+        run: |
+          npm run compile:ink
+          git diff --exit-code -- src/assets/story/main.json
+
+      - name: Dati, typecheck, lint e test
+        run: npm run check
+
+      - name: Build
+        run: npm run build

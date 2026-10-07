@@ -7,7 +7,7 @@
     "slot": "chest",
     "defense": 5,
     "durability": 50,
-    "weight": 3.0,
+    "weight": 3,
     "value": 50,
     "stackable": false,
     "rarity": "common"
@@ -20,7 +20,7 @@
     "slot": "chest",
     "defense": 1,
     "durability": 15,
-    "weight": 1.0,
+    "weight": 1,
     "value": 1,
     "stackable": false,
     "rarity": "common"
@@ -33,7 +33,7 @@
     "slot": "chest",
     "defense": 15,
     "durability": 100,
-    "weight": 8.0,
+    "weight": 8,
     "value": 350,
     "stackable": false,
     "rarity": "rare"
@@ -98,9 +98,48 @@
     "slot": "legs",
     "defense": 8,
     "durability": 80,
-    "weight": 4.0,
+    "weight": 4,
     "value": 200,
     "stackable": false,
     "rarity": "rare"
+  },
+  {
+    "id": "armor_leather_chestpiece",
+    "name": "Pettorale di Cuoio",
+    "type": "armor",
+    "slot": "chest",
+    "rarity": "common",
+    "weight": 2.5,
+    "value": 45,
+    "stackable": false,
+    "defense": 4,
+    "durability": 45,
+    "description": "Tre pelli conciate e cucite a doppio strato. Pesante, ma ferma un morso o una lama."
+  },
+  {
+    "id": "armor_makeshift_helmet",
+    "name": "Elmo Improvvisato",
+    "type": "armor",
+    "slot": "head",
+    "rarity": "common",
+    "weight": 1.2,
+    "value": 30,
+    "stackable": false,
+    "defense": 3,
+    "durability": 35,
+    "description": "Lamiera martellata e imbottita di stoffa. Non è bello, ma la testa resta al suo posto."
+  },
+  {
+    "id": "armor_durable_boots",
+    "name": "Stivali Resistenti",
+    "type": "armor",
+    "slot": "legs",
+    "rarity": "common",
+    "weight": 1.5,
+    "value": 35,
+    "stackable": false,
+    "defense": 3,
+    "durability": 50,
+    "description": "Stivali di pelle cuciti con filo di nylon. Proteggono gambe e caviglie su ogni terreno."
   }
 ]

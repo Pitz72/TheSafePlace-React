@@ -1,41 +1,22 @@
-
 import { useEffect } from 'react';
-import { useInputStore } from '../store/inputStore';
 
-type KeyHandlerMap = {
-  [key: string]: () => void;
-};
+/** Key (KeyboardEvent.key) -> handler. Missing or undefined keys are ignored. */
+export type KeyHandlerMap = Partial<Record<string, (() => void) | undefined>>;
 
-/**
- * Custom hook to handle keyboard input.
- * @param {KeyHandlerMap} handlerMap - A map of key codes to handler functions.
- */
+const GAME_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Tab']);
+
+/** Listens to keydown while the component is mounted and calls the matching handler. */
 export const useKeyboardInput = (handlerMap: KeyHandlerMap) => {
-  const currentContext = useInputStore((state) => state.currentContext);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat && event.key === 'Enter') return;
       const handler = handlerMap[event.key];
-
-      // Global keys (like ESC) might need to work everywhere, but generally
-      // UI components using this hook should only respond if they are "focused"
-      // or if the context is appropriate.
-      // For now, we assume if this hook is mounted, the component is visible.
-      // But we should check if we are in a blocking context (like CUTSCENE) if this is a gameplay UI.
-
-      if (handler) {
-        // Prevent default browser actions for game keys
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter'].includes(event.key)) {
-          event.preventDefault();
-        }
-        handler();
-      }
+      if (!handler) return;
+      // Keep the browser from scrolling the page or moving focus.
+      if (GAME_KEYS.has(event.key)) event.preventDefault();
+      handler();
     };
-
     window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handlerMap, currentContext]);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handlerMap]);
 };

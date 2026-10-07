@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
 import { GameState, AttributeName, Attributes } from '../types';
@@ -32,32 +32,39 @@ const CharacterCreationScreen: React.FC = () => {
   const [rollingValue, setRollingValue] = useState<number>(0);
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [cursorVisible, setCursorVisible] = useState(true);
+  // ENTER during the animation reveals the remaining rolls at once.
+  const skipRef = useRef(false);
 
+  // The roll animation: cancelled on unmount (and on React's double mount in development).
   useEffect(() => {
+    let cancelled = false;
+    let rollInterval: ReturnType<typeof setInterval> | undefined;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const wait = (ms: number) => new Promise<void>(resolve => { timers.push(setTimeout(resolve, ms)); });
+
     const rollSequence = async () => {
       const finalStats: Partial<Attributes> = {};
-      
       for (const attr of ATTRIBUTES) {
+        if (cancelled) return;
         setCurrentAttribute(attr);
-        const rollInterval = setInterval(() => {
-          setRollingValue(Math.floor(Math.random() * 16) + 3); // Valori casuali tra 3 e 18
-        }, 50);
-
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Durata del "roll"
-
+        rollInterval = setInterval(() => setRollingValue(Math.floor(Math.random() * 16) + 3), 50);
+        await wait(skipRef.current ? 0 : 2000);
         clearInterval(rollInterval);
-        const finalValue = rollStat();
-        finalStats[attr] = finalValue;
+        if (cancelled) return;
+        finalStats[attr] = rollStat();
         setRolledStats({ ...finalStats });
-        
-        await new Promise(resolve => setTimeout(resolve, 500)); // Pausa tra i roll
+        await wait(skipRef.current ? 0 : 500);
       }
-      
+      if (cancelled) return;
       setCurrentAttribute(null);
       setIsComplete(true);
     };
-
     rollSequence();
+    return () => {
+      cancelled = true;
+      if (rollInterval) clearInterval(rollInterval);
+      timers.forEach(clearTimeout);
+    };
   }, []);
   
   // Cursore lampeggiante
@@ -71,10 +78,12 @@ const CharacterCreationScreen: React.FC = () => {
   }, [isComplete]);
 
   const startGame = useCallback(() => {
-    if (isComplete) {
-      setAttributes(rolledStats as Attributes);
-      setGameState(GameState.IN_GAME);
+    if (!isComplete) {
+      skipRef.current = true;
+      return;
     }
+    setAttributes(rolledStats as Attributes);
+    setGameState(GameState.IN_GAME);
   }, [isComplete, rolledStats, setAttributes, setGameState]);
 
   const handlerMap = useMemo(() => ({
@@ -90,7 +99,7 @@ const CharacterCreationScreen: React.FC = () => {
         className="text-2xl md:text-3xl mb-12 text-center"
         style={{ color: 'var(--text-primary)' }}
       >
-        Generazione statistiche in corso...
+        {isComplete ? 'Statistiche generate.' : 'Generazione statistiche in corso... [INVIO] per accelerare'}
       </p>
       
       <div className="w-full max-w-2xl text-4xl space-y-4 border-2 border-[var(--border-primary)] p-8">

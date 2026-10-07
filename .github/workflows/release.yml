@@ -1,16 +1,17 @@
 name: Release (Win/Mac/Linux)
 
 # Avvio MANUALE (Actions → Release → Run workflow), oppure:
-#   gh workflow run release.yml -f version=2.0.16
-# Builda gli installer sui tre sistemi operativi e crea una Release nel repo.
+#   gh workflow run release.yml -f version=2.1.0
+# Verifica il gioco (stessi controlli della CI), builda gli installer sui tre
+# sistemi operativi e crea una Release nel repo.
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Versione release, senza la 'v' (es. 2.0.16)"
+        description: "Versione release, senza la 'v' (es. 2.1.0)"
         required: true
-        default: "2.0.16"
+        default: "2.1.0"
       prerelease:
         description: "Segna come pre-release"
         type: boolean
@@ -20,7 +21,44 @@ permissions:
   contents: write
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: GAME
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: GAME/package-lock.json
+
+      # Gli installer prendono il nome dalla versione in package.json:
+      # deve coincidere con quella della release.
+      - name: Versione coerente con package.json
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          PKG=$(node -p "require('./package.json').version")
+          if [ "$PKG" != "$VERSION" ]; then
+            echo "::error::package.json è alla versione $PKG, la release richiesta è $VERSION"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+
+      - name: Dati, typecheck, lint e test
+        run: npm run check
+
   build:
+    needs: verify
     strategy:
       fail-fast: false
       matrix:
@@ -37,7 +75,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: GAME/package-lock.json
 
@@ -48,7 +86,7 @@ jobs:
         run: npm run build
 
       # electron-builder rileva l'OS del runner e builda i target giusti
-      # (win: nsis+portable · mac: dmg+zip · linux: AppImage+deb).
+      # (win: nsis · mac: dmg+zip · linux: AppImage+deb).
       # CSC_IDENTITY_AUTO_DISCOVERY=false: niente firma su macOS (nessun certificato).
       - name: Package installers
         run: npx electron-builder --publish never

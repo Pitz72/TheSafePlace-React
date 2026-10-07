@@ -8,25 +8,25 @@ Un altro nuovo arrivato. Spero tu sappia come usare quell'arma che porti. Questo
     + [Addio.] -> END
 
 = bounty_board
-Ho sempre un paio di problemi da risolvere. Vedi se c'è qualcosa che fa per te. Ogni taglia ha la sua ricompensa.
-    + [\[TAGLIA\] Cinghiali aggressivi minacciano i sentieri.]
+Ho sempre un paio di problemi da risolvere. Vedi se c'è qualcosa che fa per te. Ogni taglia ha la sua ricompensa, e te la pago appena il lavoro è fatto: le voci girano in fretta, qui.
+    + {not quest_active("bounty_kill_boars") && not quest_done("bounty_kill_boars")} [\[TAGLIA\] Cinghiali aggressivi minacciano i sentieri.]
         ~ startQuest("bounty_kill_boars")
         -> hub
-    + [\[TAGLIA\] Lupi affamati attaccano i viaggiatori.]
+    + {not quest_active("bounty_kill_wolves") && not quest_done("bounty_kill_wolves")} [\[TAGLIA\] Lupi affamati attaccano i viaggiatori.]
         ~ startQuest("bounty_kill_wolves")
         -> hub
-    + [\[TAGLIA\] Predoni armati terrorizzano la zona.]
+    + {not quest_active("bounty_kill_raiders") && not quest_done("bounty_kill_raiders")} [\[TAGLIA\] Predoni armati terrorizzano la zona.]
         ~ startQuest("bounty_kill_raiders")
         -> hub
     + [Non ora. Ho altre domande.] -> hub
 
 = teaching
 Insegnare? Non sono un maestro. Ma se mi porti 5 pelli di animali di qualità, posso mostrarti come costruire trappole migliori. È un commercio equo.
-    * {has_item("animal_hide")} [\[5× Pelli\] Ecco le pelli. Insegnami.] -> learn_traps
+    * {item_count("animal_hide") >= 5} [\[5× Pelli\] Ecco le pelli. Insegnami.] -> learn_traps
     + [Non ho abbastanza pelli. Tornerò.] -> hub
 
 = learn_traps
 Bene. Guarda e impara.
-    ~ learnRecipe("recipe_advanced_bear_trap")
     ~ takeItem("animal_hide", 5)
+    ~ learnRecipe("recipe_advanced_bear_trap")
     -> hub

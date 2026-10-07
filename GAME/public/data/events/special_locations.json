@@ -3,46 +3,64 @@
     "id": "unique_scientist_notes",
     "title": "Il Laboratorio Dimenticato",
     "description": "Entri in un laboratorio abbandonato, ancora illuminato da luci di emergenza tremolanti. Terminali spenti, attrezzature scientifiche rovesciate, e un odore chimico persistente nell'aria. Su una scrivania, trovi un fascicolo di documenti con il sigillo 'PROGETTO RINASCITA - MASSIMA SEGRETEZZA'.",
-    "biomes": ["Laboratorio"],
-    "isUnique": true,
+    "biomes": [],
+    "isUnique": false,
     "choices": [
       {
         "text": "Leggi i documenti del Progetto Rinascita",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "investigare",
-          "dc": 13,
-          "successText": "I documenti rivelano segreti inquietanti: il Progetto Rinascita era un tentativo disperato di invertire gli effetti del Grande Silenzio. Gli scienziati studiavano gli 'Angeli della Cenere', scoprendo che non erano mutazioni casuali ma trasformazioni guidate. Le note parlano di 'matrici energetiche' e 'frequenze di risveglio'. Questo cambia tutto ciò che pensavi di sapere.",
-          "failureText": "Il gergo tecnico è troppo complesso. Capisci solo frammenti: esperimenti falliti, soggetti perduti, speranze infrante.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "research_notes_rebirth", "quantity": 1 } },
-            { "type": "addXp", "value": 100 },
-            { "type": "statBoost", "value": { "stat": "int", "amount": 1 } }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 30 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "I documenti rivelano segreti inquietanti: il Progetto Rinascita era un tentativo disperato di invertire gli effetti del Grande Silenzio. Gli scienziati studiavano gli 'Angeli della Cenere', scoprendo che non erano mutazioni casuali ma trasformazioni guidate. Le note parlano di 'matrici energetiche' e 'frequenze di risveglio'. Questo cambia tutto ciò che pensavi di sapere."
+              },
+              {"type": "startQuest", "value": "lore_quest_laboratory"},
+              {"type": "addItem", "value": {"itemId": "research_notes_rebirth", "quantity": 1}},
+              {"type": "addXp", "value": 100},
+              {"type": "addLore", "value": "lore_project_rebirth"},
+              {"type": "setFlag", "value": "LAB_DOCUMENTS_READ"}
+            ]
+          }
+        ],
+        "hideIfFlag": "LAB_DOCUMENTS_READ"
       },
       {
         "text": "Cerca materiali utili nel laboratorio",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "medicina",
-          "dc": 12,
-          "successText": "Trovi un armadietto medico ancora sigillato con antibiotici, stimpack militari e componenti chimici di alta qualità.",
-          "failureText": "La maggior parte delle scorte è scaduta o contaminata. Recuperi solo pochi oggetti.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "antibiotics", "quantity": 2 } },
-            { "type": "addItem", "value": { "itemId": "stimpak_military", "quantity": 1 } },
-            { "type": "addItem", "value": { "itemId": "chemicals_basic", "quantity": 3 } },
-            { "type": "addXp", "value": 50 }
-          ],
-          "failure": [
-            { "type": "addItem", "value": { "itemId": "chemicals_basic", "quantity": 1 } },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 12,
+            "successText": "Trovi un armadietto medico ancora sigillato con antibiotici, stimpack militari e componenti chimici di alta qualità.",
+            "failureText": "La maggior parte delle scorte è scaduta o contaminata. Recuperi solo pochi oggetti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "antibiotics", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "stimpak_military", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "chemicals_basic", "quantity": 3}},
+              {"type": "addXp", "value": 50},
+              {"type": "setFlag", "value": "LAB_SUPPLIES_SEARCHED"}
+            ],
+            "failure": [
+              {"type": "addItem", "value": {"itemId": "chemicals_basic", "quantity": 1}},
+              {"type": "addXp", "value": 15},
+              {"type": "setFlag", "value": "LAB_SUPPLIES_SEARCHED"}
+            ]
+          }
+        ],
+        "hideIfFlag": "LAB_SUPPLIES_SEARCHED"
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "questOnly": true,
+    "variants": [
+      {
+        "requiresFlag": "LAB_SUPPLIES_SEARCHED",
+        "description": "Il laboratorio è come l'hai lasciato: luci d'emergenza, terminali spenti e un silenzio chimico."
       }
     ]
   },
@@ -50,46 +68,148 @@
     "id": "unique_ancient_library",
     "title": "La Biblioteca dei Sussurri",
     "description": "Entri in un'antica biblioteca, miracolosamente intatta. Gli scaffali sono carichi di libri polverosi. Al centro della sala, un terminale di consultazione è ancora alimentato da pannelli solari sul tetto. Sullo schermo lampeggia un messaggio: 'ARCHIVIO PROGETTO ECO - ACCESSO PUBBLICO'.",
-    "biomes": ["Biblioteca"],
-    "isUnique": true,
+    "biomes": [],
+    "isUnique": false,
     "choices": [
       {
         "text": "Accedi all'archivio del Progetto Eco",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "investigare",
-          "dc": 12,
-          "successText": "Il terminale si anima. File dopo file, scopri la verità sul Progetto Eco: un'interfaccia neurale collettiva che avrebbe dovuto unire l'umanità. Ma qualcosa andò storto. Il sistema creò il Grande Silenzio - un'onda di frequenze che spense non solo le macchine, ma qualcosa di fondamentale nell'animo umano. Non era un'arma. Era un errore. Un errore che costò tutto.",
-          "failureText": "Il terminale si blocca. Riesci a leggere solo frammenti prima che si spenga definitivamente.",
-          "success": [
-            { "type": "addXp", "value": 100 },
-            { "type": "statBoost", "value": { "stat": "int", "amount": 1 } },
-            { "type": "journalEntry", "text": "[SCOPERTA] Hai svelato i segreti del Progetto Eco. La verità è più terribile di quanto immaginassi." }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 30 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il terminale si anima. File dopo file, scopri la verità sul Progetto Eco: un'interfaccia neurale collettiva che avrebbe dovuto unire l'umanità. Ma qualcosa andò storto. Il sistema creò il Grande Silenzio - un'onda di frequenze che spense non solo le macchine, ma qualcosa di fondamentale nell'animo umano. Non era un'arma. Era un errore. Un errore che costò tutto."
+              },
+              {"type": "startQuest", "value": "lore_quest_library"},
+              {"type": "addXp", "value": 100},
+              {
+                "type": "journalEntry",
+                "text": "[SCOPERTA] Hai svelato i segreti del Progetto Eco. La verità è più terribile di quanto immaginassi."
+              },
+              {"type": "addLore", "value": "lore_project_echo"},
+              {"type": "setFlag", "value": "LIBRARY_ARCHIVE_READ"}
+            ]
+          }
+        ],
+        "hideIfFlag": "LIBRARY_ARCHIVE_READ"
       },
       {
         "text": "Cerca manuali tecnici tra i libri",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "investigare",
-          "dc": 11,
-          "successText": "Tra i volumi trovi manuali di sopravvivenza, medicina e ingegneria. Conoscenza preziosa del mondo perduto.",
-          "failureText": "La maggior parte dei libri sono romanzi o saggi filosofici. Nulla di pratico.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "manual_wilderness_survival", "quantity": 1 } },
-            { "type": "addItem", "value": { "itemId": "manual_field_medicine", "quantity": 1 } },
-            { "type": "addItem", "value": { "itemId": "manual_advanced_repairs", "quantity": 1 } },
-            { "type": "addXp", "value": 60 }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Tra i volumi trovi manuali di sopravvivenza, medicina e ingegneria. Conoscenza preziosa del mondo perduto.",
+            "failureText": "Romanzi, saggi, enciclopedie gonfie d'umidità. Dovrai cercare ancora tra gli scaffali.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "manual_wilderness_survival", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "manual_field_medicine", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "manual_advanced_repairs", "quantity": 1}},
+              {"type": "addXp", "value": 60},
+              {"type": "setFlag", "value": "LIBRARY_MANUALS_FOUND"}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ],
+        "hideIfFlag": "LIBRARY_MANUALS_FOUND"
+      },
+      {
+        "text": "Cerca un manuale di idraulica",
+        "requiresQuest": "water_of_life",
+        "hideIfFlag": ["LIBRARY_HYDRAULIC_FOUND", "WATER_PLANT_OFFICE_SEARCHED"],
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "In uno scaffale tecnico trovi un manuale di manutenzione per impianti idraulici.",
+            "failureText": "Non trovi nulla di simile. Forse in un altro scaffale.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "hydraulic_manual", "quantity": 1}},
+              {"type": "setFlag", "value": "LIBRARY_HYDRAULIC_FOUND"}
+            ],
+            "failure": [{"type": "advanceTime", "value": 20}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
       }
-    ]
+    ],
+    "questOnly": true
+  },
+  {
+    "id": "lore_ash_nest",
+    "title": "Il Nido della Cenere",
+    "description": "Trovi un luogo dove diversi Angeli della Cenere sono immobili, in cerchio attorno a una strana antenna o a un dispositivo tecnologico ronzante. Non sembrano ostili, sono in uno stato di \"ricarica\" o \"comunione\". Al centro, vedi che stanno \"coltivando\" qualcosa: corpi umani ricoperti da un bozzolo di cavi e cenere cristallizzata. È un processo di trasformazione.",
+    "biomes": [],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Fuggi silenziosamente (Furtività DC 14)",
+        "alignment": "Elian",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 14,
+            "successText": "Ti muovi con la grazia di un fantasma, allontanandoti dal nido senza attirare l'attenzione. L'immagine dei bozzoli ti perseguiterà, ma sei al sicuro. Per ora.",
+            "failureText": "Un rametto si spezza sotto il tuo piede. Uno degli Angeli si muove, la testa scatta nella tua direzione. Devi fuggire in fretta!",
+            "success": [
+              {
+                "type": "journalEntry",
+                "text": "Riflessione: Ho visto abbastanza. Non sono solo mostri. Sono... qualcosa di più. E non voglio farne parte."
+              },
+              {"type": "journalEntry", "text": "Il terrore ti stringe lo stomaco per ore."},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 2}}
+            ],
+            "failure": [
+              {
+                "type": "journalEntry",
+                "text": "Riflessione: Sono stato troppo lento. La loro attenzione è su di me. Devo scappare!"
+              },
+              {"type": "takeDamage", "value": 5},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "journalEntry", "text": "Il terrore ti stringe lo stomaco per ore."}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Avvicinati per osservare (Percezione DC 16)",
+        "alignment": "Lena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 16,
+            "successText": "Con un brivido di orrore ti avvicini abbastanza da distinguere i corpi. In uno dei bozzoli più freschi intravedi un lembo di camice bianco, logoro. Come quello che portava tua madre. Gli Angeli non uccidono e basta: raccolgono. E trasformano.",
+            "failureText": "Non riesci a distinguere nulla di significativo tra i bozzoli. L'orrore è sufficiente. Ti ritiri, l'immagine di quei corpi avvolti ti brucia nella mente.",
+            "success": [
+              {
+                "type": "journalEntry",
+                "text": "Riflessione: un camice bianco, come il suo. Cosa diventano, quelli che prendono? Cosa è diventata lei?"
+              },
+              {"type": "journalEntry", "text": "Sei sconvolto da ciò che hai visto."},
+              {"type": "journalEntry", "text": "Il senso di colpa ti segue come un'ombra."},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": -1}},
+              {"type": "setFlag", "value": "ASH_NEST_OBSERVED"}
+            ],
+            "failure": [
+              {
+                "type": "journalEntry",
+                "text": "Riflessione: Non ho visto abbastanza, ma ho visto troppo. Questo posto è un incubo."
+              },
+              {"type": "journalEntry", "text": "Il terrore ti stringe lo stomaco per ore."}
+            ]
+          }
+        ]
+      }
+    ],
+    "questOnly": true
   }
 ]

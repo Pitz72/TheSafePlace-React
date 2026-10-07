@@ -3,6 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
+import { useInteractionStore } from '../store/interactionStore';
 
 /**
  * AshLullabyChoiceScreen component.
@@ -26,19 +27,16 @@ const AshLullabyChoiceScreen: React.FC = () => {
 
     const handleConfirm = useCallback(() => {
         audioManager.playSound('confirm');
-        if (selectedIndex === 0) { // Apri
-            // Set the permanent flag to prevent this event from ever happening again
-            // FIX: Changed `useGameStore.getState().set` to `useGameStore.setState`.
-            // `getState()` returns only the state, while `setState` is the correct method
-            // on the store hook to update the state from outside the store definition.
-            useGameStore.setState(state => ({ 
-                gameFlags: new Set(state.gameFlags).add('ASH_LULLABY_PLAYED') 
-            }));
+        if (selectedIndex === 0) {
+            // The music box plays only once per game.
+            useGameStore.getState().setFlag('ASH_LULLABY_PLAYED');
             audioManager.playSound('ash_lullaby');
             startCutscene('CS_ASH_LULLABY');
-        } else { // Ignora
-            // Just return to the game (the refuge screen will be there)
+        } else {
+            // Back to the refuge and on with the rest the player asked for
+            // (the choice is not offered again during this stay).
             setGameState(GameState.IN_GAME);
+            useInteractionStore.getState().confirmRefugeMenuSelection();
         }
     }, [selectedIndex, setGameState, startCutscene]);
     

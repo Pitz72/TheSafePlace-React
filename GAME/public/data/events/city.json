@@ -3,9 +3,7 @@
     "id": "city_military_checkpoint",
     "title": "Posto di Blocco Militare",
     "isUnique": true,
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "description": "Barricate di cemento e filo spinato bloccano una strada. Ci sono segnali di un vecchio checkpoint militare, con postazioni di guardia abbandonate e un container sigillato.",
     "choices": [
       {
@@ -18,38 +16,12 @@
             "successText": "La maggior parte sono vuoti, ma in uno trovi un kit di pronto soccorso militare, granate fumogene e un manuale tattico militare.",
             "failureText": "I posti di guardia sono stati saccheggiati a fondo e ora rivelano solo detriti e spazzatura.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "first_aid_kit",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "smoke_grenade",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_advanced_repairs",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "first_aid_kit", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "smoke_grenade", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "manual_advanced_repairs", "quantity": 1}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -63,38 +35,12 @@
             "successText": "Con uno sforzo immenso, riesci a far leva sulla serratura, che si spezza. All'interno trovi una cassa di munizioni per fucile, razioni e un manuale di sopravvivenza militare.",
             "failureText": "Il container è sigillato ermeticamente. Le serrature sono troppo resistenti anche per i tuoi sforzi.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "ammo_rifle",
-                  "quantity": 10
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_wilderness_survival",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 40
-              }
+              {"type": "addItem", "value": {"itemId": "ammo_rifle", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "manual_wilderness_survival", "quantity": 1}},
+              {"type": "addXp", "value": 40}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 15
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 15}]
           }
         ]
       }
@@ -104,9 +50,7 @@
     "id": "city_broken_pharmacy",
     "title": "Farmacia Saccheggiata",
     "isUnique": true,
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "description": "Una farmacia con la vetrina infranta. Gli scaffali sono stati quasi completamente svuotati, ma qualcosa potrebbe essere sfuggito ai saccheggiatori.",
     "choices": [
       {
@@ -119,31 +63,11 @@
             "successText": "Dietro una scatola di cotone idrofilo rovesciata, recuperi una scatola di antibiotici scaduti e alcune bende ancora sigillate.",
             "failureText": "Hai cercato ovunque, ma non è rimasto assolutamente nulla di utile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "antibiotics_expired",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_003",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "antibiotics_expired", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "CONS_003", "quantity": 2}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -157,31 +81,11 @@
             "successText": "Sgattaioli oltre uno scaffale pericolante nel retro e trovi un armadietto del personale. Dentro ci sono degli antidolorifici e un manuale di medicina.",
             "failureText": "Nel tentativo di passare, urti lo scaffale che crolla con un boato, facendo rumore e costringendoti a una rapida ritirata.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "MED_PAINKILLER",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_field_medicine",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "manual_field_medicine", "quantity": 1}},
+              {"type": "addXp", "value": 20}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       }
@@ -191,9 +95,7 @@
     "id": "city_subway_entrance",
     "title": "Ingresso della Metropolitana",
     "isUnique": true,
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "description": "Una scala porta nel buio di una stazione sotterranea. Si sentono gocce d'acqua e un ronzio lontano. L'aria è umida e fredda.",
     "choices": [
       {
@@ -206,31 +108,11 @@
             "successText": "Ti muovi con cautela nell'oscurità, trovando i resti di rifugi improvvisati. Recuperi un pacco di batterie e un vecchio radio portatile.",
             "failureText": "Scivoli sui gradini bagnati e ti perdi nei corridoi bui. Dopo aver vagato per un po', decidi che è troppo pericoloso e risali.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "batteries_pack",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "walkie_talkie",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "walkie_talkie", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -254,9 +136,7 @@
     "id": "city_collapsed_building",
     "title": "Palazzo Collassato",
     "description": "Un edificio è parzialmente crollato, creando una montagna di macerie. Si intravedono stanze interne ancora accessibili.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -269,35 +149,11 @@
             "successText": "Trovi oggetti personali tra i detriti: foto, documenti e un orologio da tasca ancora funzionante.",
             "failureText": "Le macerie sono troppo instabili. Rischi di essere sepolto e ti allontani.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_watch",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "sensitive_documents",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "old_watch", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "sensitive_documents", "quantity": 1}},
+              {"type": "addXp", "value": 30}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 15
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 15}, {"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -321,9 +177,7 @@
     "id": "city_burning_car",
     "title": "Auto in Fiamme",
     "description": "Un'auto brucia sul ciglio della strada, con fiamme ancora alte. Le esplosioni sono imprevedibili.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -336,35 +190,11 @@
             "successText": "Apri il bagagliaio velocemente e afferri uno zaino con provviste prima di allontanarti.",
             "failureText": "Il calore è troppo intenso. Sei costretto a ritirarsi senza nulla.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_002",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 10
-              },
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -388,9 +218,7 @@
     "id": "city_sewer_grate",
     "title": "Tombino Aperto",
     "description": "Un tombino è stato forzato e lasciato aperto. Le fogne sottostanti potrebbero nascondere qualcosa.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -403,42 +231,15 @@
             "successText": "Scendi con cautela. Le fogne ospitano rifugi abbandonati. Trovi provviste.",
             "failureText": "Scivoli e cadi nella fogna. Ti fai male e l'odore è insopportabile.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "scrap_metal",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "advanceTime",
-                "value": 45
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "advanceTime", "value": 45},
+              {"type": "addXp", "value": 30}
             ],
             "failure": [
-              {
-                "type": "takeDamage",
-                "value": 20
-              },
-              {
-                "type": "advanceTime",
-                "value": 60
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "takeDamage", "value": 20},
+              {"type": "advanceTime", "value": 60},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -448,12 +249,7 @@
         "outcomes": [
           {
             "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Le fogne sono piene di pericoli. Meglio evitare."
-              }
-            ]
+            "results": [{"type": "journalEntry", "text": "Le fogne sono piene di pericoli. Meglio evitare."}]
           }
         ]
       }
@@ -463,9 +259,7 @@
     "id": "city_looters_camp",
     "title": "Accampamento Saccheggiatori",
     "description": "Un gruppo di saccheggiatori ha lasciato un accampamento improvvisato. Sembra abbandonato... o forse no?",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -478,42 +272,31 @@
             "successText": "Nessuno è nei paraggi. Rubi rapidamente cibo, munizioni e un coltello.",
             "failureText": "Un saccheggiatore torna e ti vede! Devi combattere per scappare.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "ammo_9mm",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 40
-              },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "elian",
-                  "amount": 1
-                }
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 5}},
+              {"type": "addXp", "value": 40},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 30
-              },
-              {
-                "type": "addXp",
-                "value": 15
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 30}, {"type": "addXp", "value": 15}]
+          }
+        ]
+      },
+      {
+        "text": "Osservali di nascosto mentre preparano le loro armi",
+        "hideIfFlag": "LOOTERS_OBSERVED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 12,
+            "successText": "Nascosto tra le macerie, li guardi riempire bottiglie di liquore e infilarci stracci: ora sai come si fa una molotov.",
+            "failureText": "Uno di loro alza lo sguardo verso il tuo nascondiglio. Ti allontani prima di essere scoperto.",
+            "success": [
+              {"type": "learnRecipe", "value": "recipe_molotov"},
+              {"type": "addXp", "value": 30},
+              {"type": "setFlag", "value": "LOOTERS_OBSERVED"}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -534,152 +317,10 @@
     ]
   },
   {
-    "id": "city_police_station",
-    "title": "Stazione di Polizia Abbandonata",
-    "description": "L'edificio della polizia è stato parzialmente bruciato. Le celle sono vuote, ma l'armeria potrebbe ancora avere qualcosa.",
-    "biomes": [
-      "Città"
-    ],
-    "isUnique": true,
-    "choices": [
-      {
-        "text": "Cerca nell'armeria",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "rapiditaDiMano",
-            "dc": 14,
-            "successText": "Scassini la porta dell'armeria. Trovi una pistola ancora funzionante e munizioni.",
-            "failureText": "L'armeria è vuota. Qualcun altro è arrivato prima di te.",
-            "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "weapon_handgun",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "ammo_9mm",
-                  "quantity": 20
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 50
-              }
-            ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "text": "Cerca negli uffici",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 11,
-            "successText": "Trovi documenti confidenziali, mappe della città pre-guerra e un vecchio badge aziendale intatto. Apparteneva a un certo {RANDOM_DONOR}.",
-            "failureText": "Gli uffici sono stati saccheggiati a fondo. Niente di utile.",
-            "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "sensitive_documents",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
-            ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "text": "[QUEST] Usa un terminale per decifrare il chip",
-        "itemRequirements": [
-          {
-            "itemId": "drone_memory_chip",
-            "quantity": 1
-          }
-        ],
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 14,
-            "successText": "Dopo aver armeggiato con i cavi, riesci ad alimentare un vecchio terminale. Inserisci il chip. Sullo schermo appaiono delle coordinate e un messaggio: 'Deposito scorte emergenza 7-B. Integro.'",
-            "failureText": "Il terminale emette una scintilla e si spegne definitivamente. Il chip è fritto. L'informazione è persa per sempre.",
-            "success": [
-              {
-                "type": "removeItem",
-                "value": {
-                  "itemId": "drone_memory_chip",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "special",
-                "value": {
-                  "effect": "completeQuestFromEvent",
-                  "questId": "decipher_drone_data"
-                },
-                "text": "Le coordinate del bunker militare sono state aggiunte alla tua mappa."
-              },
-              {
-                "type": "addXp",
-                "value": 100
-              }
-            ],
-            "failure": [
-              {
-                "type": "removeItem",
-                "value": {
-                  "itemId": "drone_memory_chip",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "special",
-                "value": {
-                  "effect": "failQuestFromEvent",
-                  "questId": "decipher_drone_data"
-                },
-                "text": "Hai perso l'opportunità di decifrare i dati."
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "city_rooftop_garden",
     "title": "Giardino Pensile",
     "description": "Su un tetto accessibile c'è un piccolo giardino con piante cresciute spontaneamente. Alcuni ortaggi sono ancora commestibili.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -692,30 +333,12 @@
             "successText": "Raccogli pomodori, carote e erbe aromatiche. Cibo fresco è raro.",
             "failureText": "Molti ortaggi sono marci o infestati da parassiti. Ne recuperi pochi.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 5}},
+              {"type": "addXp", "value": 25}
             ],
             "failure": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 1}},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -730,14 +353,8 @@
                 "type": "journalEntry",
                 "text": "La vista dall'alto è mozzafiato. Per un attimo dimentichi il mondo che è andato perduto."
               },
-              {
-                "type": "heal",
-                "value": 15
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
+              {"type": "heal", "value": 15},
+              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -748,9 +365,7 @@
     "id": "city_flooded_street",
     "title": "Strada Allagata",
     "description": "Una strada è completamente allagata da una conduttura rotta. L'acqua è torbida e potrebbe nascondere pericoli.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -762,25 +377,11 @@
             "dc": 12,
             "successText": "Attraversi l'acqua con attenzione, evitando detriti sommersi.",
             "failureText": "Scivoli e cadi nell'acqua. Ti bagni completamente e perdi tempo.",
-            "success": [
-              {
-                "type": "addXp",
-                "value": 20
-              }
-            ],
+            "success": [{"type": "addXp", "value": 20}],
             "failure": [
-              {
-                "type": "takeDamage",
-                "value": 10
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              },
-              {
-                "type": "addXp",
-                "value": 5
-              }
+              {"type": "takeDamage", "value": 10},
+              {"type": "advanceTime", "value": 30},
+              {"type": "addXp", "value": 5}
             ]
           }
         ]
@@ -795,10 +396,7 @@
                 "type": "journalEntry",
                 "text": "Non vale la pena bagnarsi. Trovi un percorso alternativo."
               },
-              {
-                "type": "advanceTime",
-                "value": 20
-              }
+              {"type": "advanceTime", "value": 20}
             ]
           }
         ]
@@ -809,9 +407,7 @@
     "id": "city_graffiti_message",
     "title": "Messaggio Graffiti",
     "description": "Su un muro c'è un graffito recente: 'RIFUGIO SICURO A EST - CHIEDERE DI MARCUS'. Potrebbe essere una trappola.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -838,10 +434,7 @@
                 "type": "journalEntry",
                 "text": "Potrebbe essere utile in futuro. Memorizzi l'informazione."
               },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -852,9 +445,7 @@
     "id": "city_trapped_survivor",
     "title": "Sopravvissuto Intrappolato",
     "description": "Un uomo è intrappolato sotto una trave di metallo. Ti implora di aiutarlo.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -867,31 +458,16 @@
             "successText": "Con uno sforzo immane, sollevi la trave abbastanza da permettergli di liberarsi. Ansima, grato, ma i suoi occhi sono pieni di panico. 'Grazie,' sussurra, 'ma mia figlia... era con me. È corsa a nascondersi nella vecchia scuola quando l'edificio è crollato. Ti prego, trovala. Il suo nome è Elara. Io andrò al Crocevia, l'avamposto a est. Se la trovi, portala lì. Ti sarò debitore per sempre.'",
             "failureText": "Non riesci a sollevare la trave. L'uomo muore davanti ai tuoi occhi.",
             "success": [
-              {
-                "type": "startQuest",
-                "value": "find_elara"
-              },
-              {
-                "type": "addXp",
-                "value": 50
-              },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 2
-                }
-              }
+              {"type": "startQuest", "value": "find_elara"},
+              {"type": "addXp", "value": 50},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}}
             ],
             "failure": [
               {
                 "type": "journalEntry",
                 "text": "Non sei riuscito a salvarlo. La sua morte ti pesa sulla coscienza."
               },
-              {
-                "type": "addXp",
-                "value": 15
-              }
+              {"type": "addXp", "value": 15}
             ]
           }
         ]
@@ -906,17 +482,8 @@
                 "type": "journalEntry",
                 "text": "Non puoi aiutarlo. La sua morte è inevitabile. Prosegui."
               },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "elian",
-                  "amount": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -927,9 +494,7 @@
     "id": "city_electronics_shop",
     "title": "Negozio di Elettronica",
     "description": "Un negozio di elettronica con la vetrina infranta. Gli scaffali sono pieni di gadget inutili, ma forse c'è qualcosa di utile.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -942,35 +507,13 @@
             "successText": "Trovi batterie ancora cariche e un dispositivo GPS portatile.",
             "failureText": "Tutto è rotto o inutile. Perdi solo tempo.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "batteries_pack",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "portable_gps",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "portable_gps", "quantity": 1}},
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "precision_tools", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "batteries_pack", "quantity": 2}}
             ],
-            "failure": [
-              {
-                "type": "advanceTime",
-                "value": 20
-              },
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -994,9 +537,7 @@
     "id": "city_sniper_position",
     "title": "Posizione da Cecchino",
     "description": "Sulla cima di un edificio noti una posizione di tiro abbandonata. Potrebbe esserci equipaggiamento.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1009,35 +550,11 @@
             "successText": "Raggiungi la cima. Trovi un fucile da cecchino e munizioni.",
             "failureText": "Scivoli e cadi. Ti fai male.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "weapon_sniper_rifle",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "ammo_rifle",
-                  "quantity": 10
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 50
-              }
+              {"type": "addItem", "value": {"itemId": "weapon_sniper_rifle", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "ammo_rifle", "quantity": 10}},
+              {"type": "addXp", "value": 50}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 25
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -1061,9 +578,7 @@
     "id": "city_book_store",
     "title": "Libreria Abbandonata",
     "description": "Una libreria con i libri sparsi ovunque. Molti sono danneggiati, ma alcuni potrebbero essere utili.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -1076,31 +591,11 @@
             "successText": "Trovi manuali di sopravvivenza, medicina e armi. Conoscenza preziosa.",
             "failureText": "La maggior parte dei libri sono romanzi o saggi inutili.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_wilderness_survival",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "manual_field_medicine",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "manual_wilderness_survival", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "manual_field_medicine", "quantity": 1}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1114,14 +609,8 @@
                 "type": "journalEntry",
                 "text": "La libreria è silenziosa. Ti concedi un momento di pace."
               },
-              {
-                "type": "heal",
-                "value": 10
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
+              {"type": "heal", "value": 10},
+              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -1132,9 +621,7 @@
     "id": "city_hospital_ruins",
     "title": "Rovine dell'Ospedale",
     "description": "Un ospedale in rovina. L'interno è buio e inquietante, ma potrebbe contenere medicinali.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1147,38 +634,12 @@
             "successText": "Trovi antibiotici, antidolorifici e kit di primo soccorso ancora sigillati.",
             "failureText": "La farmacia è stata svuotata. Trovi solo confezioni vuote.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "antibiotics",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "MED_PAINKILLER",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "first_aid_kit",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 50
-              }
+              {"type": "addItem", "value": {"itemId": "antibiotics", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "first_aid_kit", "quantity": 2}},
+              {"type": "addXp", "value": 50}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -1202,9 +663,7 @@
     "id": "city_radio_tower",
     "title": "Torre Radio",
     "description": "Una torre radio svetta sopra la città. Il trasmettitore potrebbe ancora funzionare.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1217,28 +676,15 @@
             "successText": "Raggiungi la cima. Il trasmettitore è rotto, ma trovi componenti elettronici utili.",
             "failureText": "L'arrampicata è troppo difficile. Rinunci a metà strada.",
             "success": [
+              {"type": "addItem", "value": {"itemId": "electronics_advanced", "quantity": 3}},
+              {"type": "addXp", "value": 40},
               {
-                "type": "addItem",
-                "value": {
-                  "itemId": "electronics_advanced",
-                  "quantity": 3
-                }
+                "type": "journalEntry",
+                "text": "Da lassù noti in lontananza un'altra torre, molto più alta: la segni sulla mappa."
               },
-              {
-                "type": "addXp",
-                "value": 40
-              }
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "radio_tower"}}
             ],
-            "failure": [
-              {
-                "type": "advanceTime",
-                "value": 30
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
-            ]
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 10}]
           }
         ]
       },
@@ -1259,76 +705,10 @@
     ]
   },
   {
-    "id": "city_school_ruins",
-    "title": "Scuola in Rovina",
-    "description": "Una scuola abbandonata. Le aule sono vuote, ma la mensa potrebbe avere provviste.",
-    "biomes": [
-      "Città"
-    ],
-    "isUnique": false,
-    "choices": [
-      {
-        "text": "Cerca nella mensa",
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 10,
-            "successText": "Trovi lattine conservate e cibo in scatola ancora commestibile.",
-            "failureText": "Tutto è andato a male. Non c'è nulla di commestibile.",
-            "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 4
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
-            ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "text": "Riposa nell'aula",
-        "outcomes": [
-          {
-            "type": "direct",
-            "results": [
-              {
-                "type": "journalEntry",
-                "text": "Ti siedi in un'aula vuota. I ricordi del mondo perduto ti assalgono."
-              },
-              {
-                "type": "heal",
-                "value": 10
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "city_gas_station",
     "title": "Stazione di Servizio",
     "description": "Una stazione di servizio con le pompe vuote. Il negozio interno potrebbe avere provviste.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -1341,38 +721,13 @@
             "successText": "Trovi snack, bibite e un kit di attrezzi.",
             "failureText": "Il negozio è stato completamente saccheggiato.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 3
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_002",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "tool_kit",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 30
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "tool_kit", "quantity": 1}},
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "industrial_filter", "quantity": 2}}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1386,24 +741,10 @@
             "successText": "Trovi un bidone con carburante residuo. Potrebbe essere utile per accendere fuochi.",
             "failureText": "Le pompe sono completamente vuote.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "fuel_canister",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 25
-              }
+              {"type": "addItem", "value": {"itemId": "fuel_canister", "quantity": 1}},
+              {"type": "addXp", "value": 25}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       }
@@ -1413,9 +754,7 @@
     "id": "city_statue_square",
     "title": "Piazza con Statua",
     "description": "Una grande piazza con una statua abbattuta. È un punto di riferimento noto.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1428,31 +767,11 @@
             "successText": "Qualcuno ha nascosto oggetti nella base cava della statua. Trovi un nascondiglio segreto.",
             "failureText": "Non c'è nulla di interessante. Solo detriti.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 20
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "gold_ring",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 20}},
+              {"type": "addItem", "value": {"itemId": "gold_ring", "quantity": 1}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1466,14 +785,8 @@
                 "type": "journalEntry",
                 "text": "La piazza è aperta e silenziosa. Ti concedi un momento di respiro."
               },
-              {
-                "type": "heal",
-                "value": 10
-              },
-              {
-                "type": "advanceTime",
-                "value": 20
-              }
+              {"type": "heal", "value": 10},
+              {"type": "advanceTime", "value": 20}
             ]
           }
         ]
@@ -1484,9 +797,7 @@
     "id": "city_apartment_fire",
     "title": "Appartamento in Fiamme",
     "description": "Un appartamento ai piani alti di un condominio sta bruciando. Senti urla dall'interno.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1499,42 +810,12 @@
             "successText": "Entri tra le fiamme e salvi una famiglia. Ti ricompensano con provviste e gratitudine.",
             "failureText": "Il calore è troppo intenso. Sei costretto a ritirarsi, ustionato.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "silver_medallion",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 60
-              },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "lena",
-                  "amount": 2
-                }
-              }
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "silver_medallion", "quantity": 1}},
+              {"type": "addXp", "value": 60},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}}
             ],
-            "failure": [
-              {
-                "type": "takeDamage",
-                "value": 35
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
-            ]
+            "failure": [{"type": "takeDamage", "value": 35}, {"type": "addXp", "value": 20}]
           }
         ]
       },
@@ -1548,13 +829,7 @@
                 "type": "journalEntry",
                 "text": "Le fiamme sono troppo alte. Non puoi aiutarli. Vai via."
               },
-              {
-                "type": "alignmentChange",
-                "value": {
-                  "type": "elian",
-                  "amount": 1
-                }
-              }
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
             ]
           }
         ]
@@ -1565,9 +840,7 @@
     "id": "city_broken_bridge",
     "title": "Ponte Crollato",
     "description": "Un ponte pedonale è parzialmente crollato. Attraversarlo è rischioso ma risparmierebbe tempo.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -1579,25 +852,11 @@
             "dc": 13,
             "successText": "Attraversi il ponte instabile con equilibrio perfetto.",
             "failureText": "Il ponte cede e cadi nel fiume sottostante. Ti fai molto male.",
-            "success": [
-              {
-                "type": "addXp",
-                "value": 30
-              }
-            ],
+            "success": [{"type": "addXp", "value": 30}],
             "failure": [
-              {
-                "type": "takeDamage",
-                "value": 30
-              },
-              {
-                "type": "advanceTime",
-                "value": 45
-              },
-              {
-                "type": "addXp",
-                "value": 10
-              }
+              {"type": "takeDamage", "value": 30},
+              {"type": "advanceTime", "value": 45},
+              {"type": "addXp", "value": 10}
             ]
           }
         ]
@@ -1612,10 +871,7 @@
                 "type": "journalEntry",
                 "text": "Non vale la pena rischiare. Trovi un altro percorso più lungo."
               },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
+              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -1626,9 +882,7 @@
     "id": "city_theater_ruins",
     "title": "Teatro in Rovina",
     "description": "Un vecchio teatro abbandonato. Il palco è crollato, ma il retroscena potrebbe nascondere qualcosa. Al centro della sala, miracolosamente intatto, c'è un magnifico pianoforte a coda.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1641,13 +895,16 @@
                 "type": "journalEntry",
                 "text": "Il pianoforte è una reliquia incredibile. I tasti sono intatti, ma quando premi uno, il suono è terribilmente stonato. Con gli strumenti giusti, forse potresti accordarlo..."
               },
+              {"type": "startQuest", "value": "broken_melody"},
+              {"type": "addXp", "value": 50},
               {
-                "type": "startQuest",
-                "value": "broken_melody"
-              },
-              {
-                "type": "addXp",
-                "value": 50
+                "type": "special",
+                "value": {
+                  "effect": "registerPOI",
+                  "poiId": "theater",
+                  "name": "Teatro in Rovina",
+                  "eventId": "theater_piano"
+                }
               }
             ]
           }
@@ -1663,104 +920,11 @@
             "successText": "Trovi costumi, oggetti di scena e una cassaforte con vecchie banconote e gioielli.",
             "failureText": "Non c'è nulla di utile. Solo polvere e ricordi.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "old_coins",
-                  "quantity": 30
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "gold_ring",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 40
-              }
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 30}},
+              {"type": "addItem", "value": {"itemId": "gold_ring", "quantity": 2}},
+              {"type": "addXp", "value": 40}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "text": "[QUEST] Tenta di accordare il pianoforte",
-        "itemRequirements": [
-          {
-            "itemId": "precision_tools",
-            "quantity": 1
-          }
-        ],
-        "outcomes": [
-          {
-            "type": "skillCheck",
-            "skill": "investigare",
-            "dc": 15,
-            "successText": "Con pazienza infinita, accorda ogni corda. Poi, esitante, suoni alcune note. La melodia che ne esce è semplice, malinconica, ma pura. Per un istante, il suono della musica riempie le rovine, un'eco di bellezza in un mondo di cenere. Ti senti... più umano.",
-            "failureText": "Tenti di accordare le corde, ma una si spezza con un suono stridente. Il delicato meccanismo è compromesso. Il pianoforte non suonerà mai più.",
-            "success": [
-              {
-                "type": "removeItem",
-                "value": {
-                  "itemId": "precision_tools",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "special",
-                "value": {
-                  "effect": "completeQuestFromEvent",
-                  "questId": "broken_melody"
-                }
-              },
-              {
-                "type": "statBoost",
-                "value": {
-                  "stat": "car",
-                  "amount": 1
-                }
-              },
-              {
-                "type": "journalEntry",
-                "text": "[EREDITÀ] Hai riportato in vita l'arte. Il tuo Carisma aumenta permanentemente."
-              },
-              {
-                "type": "addXp",
-                "value": 200
-              }
-            ],
-            "failure": [
-              {
-                "type": "removeItem",
-                "value": {
-                  "itemId": "precision_tools",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "special",
-                "value": {
-                  "effect": "failQuestFromEvent",
-                  "questId": "broken_melody"
-                }
-              },
-              {
-                "type": "journalEntry",
-                "text": "[FALLIMENTO] Il pianoforte è perduto per sempre."
-              },
-              {
-                "type": "addXp",
-                "value": 50
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1774,14 +938,8 @@
                 "type": "journalEntry",
                 "text": "Immagini come doveva essere questo luogo prima della guerra. Pieno di risate e applausi."
               },
-              {
-                "type": "heal",
-                "value": 10
-              },
-              {
-                "type": "advanceTime",
-                "value": 30
-              }
+              {"type": "heal", "value": 10},
+              {"type": "advanceTime", "value": 30}
             ]
           }
         ]
@@ -1792,9 +950,7 @@
     "id": "city_power_substation",
     "title": "Sottostazione Elettrica",
     "description": "Una sottostazione elettrica abbandonata. I trasformatori sono spenti, ma ci sono materiali utili.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1802,40 +958,16 @@
         "outcomes": [
           {
             "type": "skillCheck",
-            "skill": "intelligenza",
+            "skill": "investigare",
             "dc": 12,
             "successText": "Smonti trasformatori e recuperi fili di rame e componenti elettronici preziosi.",
             "failureText": "Non sai da dove iniziare. Perdi solo tempo.",
             "success": [
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "copper_wire",
-                  "quantity": 5
-                }
-              },
-              {
-                "type": "addItem",
-                "value": {
-                  "itemId": "electronics_advanced",
-                  "quantity": 2
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 35
-              }
+              {"type": "addItem", "value": {"itemId": "copper_wire", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "electronics_advanced", "quantity": 2}},
+              {"type": "addXp", "value": 35}
             ],
-            "failure": [
-              {
-                "type": "advanceTime",
-                "value": 30
-              },
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1859,9 +991,7 @@
     "id": "city_dog_pack",
     "title": "Branco di Cani Randagi",
     "description": "Un branco di cani randagi affamati ti blocca la strada. Ringhiano minacciosamente.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": false,
     "choices": [
       {
@@ -1873,37 +1003,18 @@
             "dc": 13,
             "successText": "I cani si spaventano e si allontanano lentamente.",
             "failureText": "I cani attaccano! Devi combattere per difenderti.",
-            "success": [
-              {
-                "type": "addXp",
-                "value": 25
-              }
-            ],
+            "success": [{"type": "addXp", "value": 25}],
             "failure": [
-              {
-                "type": "takeDamage",
-                "value": 25
-              },
-              {
-                "type": "statusChange",
-                "value": "FERITO"
-              },
-              {
-                "type": "addXp",
-                "value": 15
-              }
+              {"type": "takeDamage", "value": 25},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 15}
             ]
           }
         ]
       },
       {
         "text": "Offrigi del cibo",
-        "itemRequirements": [
-          {
-            "itemId": "CONS_001",
-            "quantity": 1
-          }
-        ],
+        "itemRequirements": [{"itemId": "CONS_001", "quantity": 1}],
         "outcomes": [
           {
             "type": "direct",
@@ -1912,17 +1023,8 @@
                 "type": "journalEntry",
                 "text": "I cani mangiano avidamente il cibo e si allontanano pacificamente."
               },
-              {
-                "type": "removeItem",
-                "value": {
-                  "itemId": "CONS_001",
-                  "quantity": 1
-                }
-              },
-              {
-                "type": "addXp",
-                "value": 20
-              }
+              {"type": "removeItem", "value": {"itemId": "CONS_001", "quantity": 1}},
+              {"type": "addXp", "value": 20}
             ]
           }
         ]
@@ -1933,9 +1035,7 @@
     "id": "city_mothers_trace",
     "title": "Un Nome Dimenticato",
     "description": "Stai frugando tra i detriti di un edificio crollato quando lo vedi: un pezzo di tessuto intrappolato sotto una trave. Un lembo di stoffa bianca, un tempo parte di un camice medico.",
-    "biomes": [
-      "Città"
-    ],
+    "biomes": ["Città"],
     "isUnique": true,
     "choices": [
       {
@@ -1950,22 +1050,11 @@
             "success": [
               {
                 "type": "special",
-                "value": {
-                  "effect": "trigger_cutscene",
-                  "cutsceneId": "CS_MOTHERS_ECHO"
-                }
+                "value": {"effect": "startCutscene", "cutsceneId": "CS_MOTHERS_ECHO"}
               },
-              {
-                "type": "addXp",
-                "value": 50
-              }
+              {"type": "addXp", "value": 50}
             ],
-            "failure": [
-              {
-                "type": "addXp",
-                "value": 5
-              }
-            ]
+            "failure": [{"type": "addXp", "value": 5}]
           }
         ]
       },
@@ -1974,12 +1063,418 @@
         "outcomes": [
           {
             "type": "direct",
+            "results": [{"type": "journalEntry", "text": "È solo un pezzo di stoffa vecchia. Vai avanti."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique_grandmothers_letter",
+    "title": "Lettera Ritrovata",
+    "description": "Frugando tra i documenti ammuffiti di un vecchio ufficio, trovi una lettera personale, protetta in una busta di plastica. La calligrafia è incerta, quella di una persona anziana. L'inchiostro è sbiadito, ma il testo è ancora leggibile.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Leggi la lettera",
+        "outcomes": [
+          {
+            "type": "direct",
             "results": [
               {
                 "type": "journalEntry",
-                "text": "È solo un pezzo di stoffa vecchia. Vai avanti."
+                "text": "La lettera recita: 'Mio caro nipote, so che non puoi ricevere questa lettera dove sei ora, nel Tubo N.403. Ma la scrivo lo stesso, perché scrivere è l'unico modo che ho per sentirti vicino. La vigna che tanto amavi è ancora lì, anche se nessuno la cura più. Ho conservato il tuo maglioncino a strisce rosse e bianche, quello che indossavi sempre da bambino. Ti aspetto, anche se so che non tornerai. Con tutto il mio amore, Nonna.'"
+              },
+              {
+                "type": "journalEntry",
+                "text": "Sul retro della busta c'è un timbro sbiadito: 'Ospedale Psichiatrico Sant'Ambrogio — Reparto Speciale'. Lo segni sulla mappa."
+              },
+              {"type": "addItem", "value": {"itemId": "grandmothers_letter", "quantity": 1}},
+              {"type": "startQuest", "value": "the_arsonist_and_the_tube"},
+              {"type": "addXp", "value": 100}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia la lettera dov'è",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare questa corrispondenza privata. Alcune storie sono troppo personali."
               }
             ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_rooftop_access",
+    "title": "Accesso ai Tetti",
+    "description": "Una scala antincendio porta ai tetti. Da lì la visuale potrebbe aiutarti a pianificare il percorso.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Sali e osserva",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Dall'alto individui aree pericolose e punti di interesse.",
+            "failureText": "La scala cede in parte; scendi in fretta grattandoti.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il locale tecnico",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi attrezzi, fusibili e una lampadina di ricambio.",
+            "failureText": "È stato svuotato da tempo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "tool_kit", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "electronic_parts", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "electronic_parts", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_department_store",
+    "title": "Grande Magazzino",
+    "description": "Un grande magazzino con diversi reparti. Molti scaffali sono rovesciati ma potrebbero esserci scorte dimenticate.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Ispeziona il reparto campeggio",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi tende, corde e kit multiuso.",
+            "failureText": "Gli scaffali sono vuoti o danneggiati.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "portable_tent", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "rope_coil", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "cloth_scraps", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "multitool", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Controlla il magazzino",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Apri una porta bloccata e trovi scatoloni con conserve e acqua.",
+            "failureText": "La porta non si apre.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_mutant_rats",
+    "title": "Ratti Mutanti",
+    "description": "Un branco di ratti enormi e deformi blocca la strada. I loro occhi rossi brillano nell'oscurità e sembrano affamati.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Usa una granata fumogena",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 11,
+            "successText": "Lanci la granata con precisione. Il fumo confonde i ratti che fuggono in tutte le direzioni.",
+            "failureText": "La granata finisce troppo vicino a te. Il fumo ti acceca temporaneamente e i ratti ne approfittano.",
+            "success": [
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "removeItem", "value": {"itemId": "smoke_grenade", "quantity": 1}},
+              {"type": "takeDamage", "value": 8},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ],
+        "itemRequirements": [{"itemId": "smoke_grenade", "quantity": 1}]
+      },
+      {
+        "text": "Cerca di aggirarli silenziosamente",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Ti muovi come un'ombra tra i vicoli, evitando completamente l'incontro con i ratti mutanti.",
+            "failureText": "Fai rumore spostando una lattina. I ratti si lanciano su di te, mordendoti ferocemente.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_radioactive_barrel",
+    "title": "Barile Radioattivo",
+    "description": "Vedi un barile giallo con simboli di radiazioni abbandonato in mezzo alla strada. Sembra contenere rifiuti nucleari.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Controlla se è sigillato",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Il barile è ben sigillato e non rappresenta un pericolo immediato. Lo lasci stare.",
+            "failureText": "Mentre tocchi il barile, noti una piccola perdita. Le radiazioni ti colpiscono immediatamente.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 25},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Mantieni le distanze",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Meglio non rischiare. Girai alla larga dal barile pericoloso."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_army_surplus",
+    "title": "Magazzino Surplus Militare",
+    "description": "Un magazzino militare abbandonato con le porte sfondate. All'interno vedi casse e attrezzature militari.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca equipaggiamento",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Trovi un giubbotto antiproiettile e alcune granate ancora funzionanti.",
+            "failureText": "Le casse sono troppo pesanti. Ti fai male tentando di spostarle.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "kevlar_vest", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 6}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca medicinali militari",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 11,
+            "successText": "Trovi una cassetta di medicinali militari avanzati e bende sterili.",
+            "failureText": "I medicinali sono stati già presi o sono scaduti.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "MED_BANDAGE_ADVANCED", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "MED_PAINKILLER", "quantity": 8}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_bank_vault",
+    "title": "Caveau Bancario",
+    "description": "La porta blindata di una banca è socchiusa. All'interno potrebbe esserci qualcosa di valore.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Entra nel caveau",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 14,
+            "successText": "Muovendoti silenziosamente, trovi alcune monete d'oro e gioielli sopravvissuti all'apocalisse.",
+            "failureText": "Fai scattare una trappola antica. Dardi avvelenati ti feriscono.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "gold_coin", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "precious_stone", "quantity": 2}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 18},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Controlla l'ufficio del direttore",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi una cassaforte personale con documenti importanti e contanti pre-bellici.",
+            "failureText": "L'ufficio è vuoto, saccheggiato da tempo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "sensitive_documents", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "city_mutant_lair",
+    "title": "Tana di Mutanti",
+    "description": "Scopri l'ingresso di quello che sembra essere un rifugio sotterraneo. Potrebbe essere abitato da mutanti.",
+    "biomes": ["Città"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Entra con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 15,
+            "successText": "Ti muovi come un fantasma. Trovi alcune scorte abbandonate ma nessun mutante.",
+            "failureText": "Vieni scoperto da mutanti feroci. Riesci a fuggire ma non illeso.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 4}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Blocca l'ingresso",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Hai reso quest'area più sicura per altri viaggiatori.",
+            "failureText": "I detriti sono troppo pesanti. Ti fai male nel tentativo.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
           }
         ]
       }

@@ -6,7 +6,7 @@
     "type": "humanoid",
     "hp": 30,
     "ac": 12,
-    "attack": { "damage": 6, "bonus": 2 },
+    "attack": {"damage": 6, "bonus": 2},
     "xp": 50,
     "biomes": ["Global"],
     "tactics": {
@@ -17,7 +17,7 @@
           "id": "tactic_trip",
           "name": "[Tattico] Sbilancialo",
           "description": "Tenta di sbilanciare il predone colpendo la sua gamba ferita.",
-          "skillCheck": { "skill": "atletica", "dc": 13 }
+          "skillCheck": {"skill": "atletica", "dc": 13}
         }
       ]
     }
@@ -29,7 +29,7 @@
     "type": "beast",
     "hp": 25,
     "ac": 13,
-    "attack": { "damage": 8, "bonus": 3 },
+    "attack": {"damage": 8, "bonus": 3},
     "xp": 60,
     "biomes": ["Foresta", "Pianura"],
     "tactics": {
@@ -40,7 +40,7 @@
           "id": "tactic_feint",
           "name": "[Tattico] Finta per esporlo",
           "description": "Fingi un attacco per costringere la bestia a una mossa avventata, lasciandola scoperta.",
-          "skillCheck": { "skill": "inganno", "dc": 14 }
+          "skillCheck": {"skill": "inganno", "dc": 14}
         }
       ]
     }
@@ -52,7 +52,7 @@
     "type": "humanoid",
     "hp": 28,
     "ac": 13,
-    "attack": { "damage": 7, "bonus": 3 },
+    "attack": {"damage": 7, "bonus": 3},
     "xp": 80,
     "biomes": ["Pianura"],
     "tactics": {
@@ -63,7 +63,7 @@
           "id": "tactic_close_gap",
           "name": "[Tattico] Chiudi la Distanza",
           "description": "Corri verso di lui per impedirgli di usare l'arco efficacemente.",
-          "skillCheck": { "skill": "atletica", "dc": 12 }
+          "skillCheck": {"skill": "atletica", "dc": 12}
         }
       ]
     }
@@ -75,7 +75,7 @@
     "type": "beast",
     "hp": 20,
     "ac": 14,
-    "attack": { "damage": 5, "bonus": 2 },
+    "attack": {"damage": 5, "bonus": 2},
     "xp": 70,
     "biomes": ["Pianura", "Villaggio"],
     "tactics": {
@@ -86,7 +86,7 @@
           "id": "tactic_intimidate_dog",
           "name": "[Tattico] Intimidisci",
           "description": "Usa la tua presenza per spaventare l'animale e farlo indietreggiare.",
-          "skillCheck": { "skill": "intimidire", "dc": 11 }
+          "skillCheck": {"skill": "intimidire", "dc": 11}
         }
       ]
     }
@@ -98,7 +98,7 @@
     "type": "humanoid",
     "hp": 35,
     "ac": 11,
-    "attack": { "damage": 6, "bonus": 1 },
+    "attack": {"damage": 6, "bonus": 1},
     "xp": 90,
     "biomes": ["Pianura", "Villaggio"],
     "tactics": {
@@ -109,7 +109,7 @@
           "id": "tactic_persuade_merchant",
           "name": "[Tattico] Negozia",
           "description": "Tenta di convincerlo che un accordo è più vantaggioso del combattimento.",
-          "skillCheck": { "skill": "persuasione", "dc": 15 }
+          "skillCheck": {"skill": "persuasione", "dc": 15}
         }
       ]
     }
@@ -121,7 +121,7 @@
     "type": "beast",
     "hp": 60,
     "ac": 12,
-    "attack": { "damage": 12, "bonus": 4 },
+    "attack": {"damage": 12, "bonus": 4},
     "xp": 150,
     "biomes": ["Foresta"],
     "tactics": {
@@ -132,7 +132,7 @@
           "id": "tactic_dodge_bear",
           "name": "[Tattico] Schivata Acrobatica",
           "description": "Usa la tua agilità per evitare i suoi attacchi pesanti e colpire i fianchi.",
-          "skillCheck": { "skill": "acrobazia", "dc": 14 }
+          "skillCheck": {"skill": "acrobazia", "dc": 14}
         }
       ]
     }
@@ -144,7 +144,7 @@
     "type": "humanoid",
     "hp": 32,
     "ac": 13,
-    "attack": { "damage": 7, "bonus": 2 },
+    "attack": {"damage": 7, "bonus": 2},
     "xp": 100,
     "biomes": ["Foresta"],
     "tactics": {
@@ -155,7 +155,7 @@
           "id": "tactic_avoid_traps",
           "name": "[Tattico] Evita le Trappole",
           "description": "Osserva il terreno e i suoi movimenti per evitare le sue trappole nascoste.",
-          "skillCheck": { "skill": "percezione", "dc": 13 }
+          "skillCheck": {"skill": "percezione", "dc": 13}
         }
       ]
     }
@@ -167,7 +167,7 @@
     "type": "beast",
     "hp": 40,
     "ac": 11,
-    "attack": { "damage": 10, "bonus": 3 },
+    "attack": {"damage": 10, "bonus": 3},
     "xp": 110,
     "biomes": ["Foresta", "Pianura"],
     "tactics": {
@@ -178,7 +178,7 @@
           "id": "tactic_sidestep_charge",
           "name": "[Tattico] Schivata Laterale",
           "description": "Aspetta la carica e spostati lateralmente all'ultimo istante.",
-          "skillCheck": { "skill": "acrobazia", "dc": 13 }
+          "skillCheck": {"skill": "acrobazia", "dc": 13}
         }
       ]
     }
@@ -190,7 +190,7 @@
     "type": "humanoid",
     "hp": 35,
     "ac": 14,
-    "attack": { "damage": 9, "bonus": 3 },
+    "attack": {"damage": 9, "bonus": 3},
     "xp": 120,
     "biomes": ["Città"],
     "tactics": {
@@ -201,7 +201,7 @@
           "id": "tactic_wait_reload",
           "name": "[Tattico] Aspetta il Ricaricamento",
           "description": "Resta coperto e attendi che debba ricaricare, poi attacca.",
-          "skillCheck": { "skill": "sopravvivenza", "dc": 13 }
+          "skillCheck": {"skill": "sopravvivenza", "dc": 13}
         }
       ]
     }
@@ -213,7 +213,7 @@
     "type": "humanoid",
     "hp": 25,
     "ac": 10,
-    "attack": { "damage": 6, "bonus": 2 },
+    "attack": {"damage": 6, "bonus": 2},
     "xp": 90,
     "biomes": ["Città"],
     "tactics": {
@@ -224,7 +224,7 @@
           "id": "tactic_predict_attack",
           "name": "[Tattico] Prevedi e Parata",
           "description": "Osserva i suoi movimenti goffi e parata il suo attacco prevedibile.",
-          "skillCheck": { "skill": "percezione", "dc": 11 }
+          "skillCheck": {"skill": "percezione", "dc": 11}
         }
       ]
     }
@@ -236,7 +236,7 @@
     "type": "humanoid",
     "hp": 40,
     "ac": 15,
-    "attack": { "damage": 8, "bonus": 3 },
+    "attack": {"damage": 8, "bonus": 3},
     "xp": 130,
     "biomes": ["Città"],
     "tactics": {
@@ -247,7 +247,7 @@
           "id": "tactic_flank_guard",
           "name": "[Tattico] Attacco ai Fianchi",
           "description": "Aggiralo e colpisci da dietro dove l'armatura è più debole.",
-          "skillCheck": { "skill": "furtivita", "dc": 14 }
+          "skillCheck": {"skill": "furtivita", "dc": 14}
         }
       ]
     }
@@ -259,7 +259,7 @@
     "type": "humanoid",
     "hp": 30,
     "ac": 12,
-    "attack": { "damage": 6, "bonus": 2 },
+    "attack": {"damage": 6, "bonus": 2},
     "xp": 85,
     "biomes": ["Global"],
     "tactics": {
@@ -270,7 +270,7 @@
           "id": "tactic_precise_strike",
           "name": "[Tattico] Colpo Preciso",
           "description": "Mira a un punto vitale per terminare velocemente lo scontro.",
-          "skillCheck": { "skill": "medicina", "dc": 13 }
+          "skillCheck": {"skill": "medicina", "dc": 13}
         }
       ]
     }
@@ -282,7 +282,7 @@
     "type": "beast",
     "hp": 45,
     "ac": 13,
-    "attack": { "damage": 9, "bonus": 3 },
+    "attack": {"damage": 9, "bonus": 3},
     "xp": 115,
     "biomes": ["Global"],
     "tactics": {
@@ -293,7 +293,7 @@
           "id": "tactic_disorient_beast",
           "name": "[Tattico] Disorientamento Acustico",
           "description": "Usa un fischio o un suono acuto per confondere la creatura.",
-          "skillCheck": { "skill": "natura", "dc": 14 }
+          "skillCheck": {"skill": "natura", "dc": 14}
         }
       ]
     }
@@ -305,7 +305,7 @@
     "type": "humanoid",
     "hp": 38,
     "ac": 14,
-    "attack": { "damage": 8, "bonus": 3 },
+    "attack": {"damage": 8, "bonus": 3},
     "xp": 105,
     "biomes": ["Global"],
     "tactics": {
@@ -316,12 +316,11 @@
           "id": "tactic_exploit_arrogance",
           "name": "[Tattico] Sfrutta l'Arroganza",
           "description": "Fai leva sulla sua sicurezza eccessiva per indurlo a un errore tattico.",
-          "skillCheck": { "skill": "inganno", "dc": 14 }
+          "skillCheck": {"skill": "inganno", "dc": 14}
         }
       ]
     }
-  }
-  ,
+  },
   {
     "id": "alpha_wolf_pack_leader",
     "name": "Capobranco dei Lupi Mutati",
@@ -329,7 +328,7 @@
     "type": "beast",
     "hp": 55,
     "ac": 14,
-    "attack": { "damage": 10, "bonus": 4 },
+    "attack": {"damage": 10, "bonus": 4},
     "xp": 200,
     "biomes": ["Foresta"],
     "isElite": true,
@@ -348,7 +347,7 @@
           "id": "tactic_loud_noise",
           "name": "[Tattico] Spara un Colpo in Aria",
           "description": "Usa un'arma da fuoco per creare un rumore assordante che impedisce al Capobranco di ululare.",
-          "skillCheck": { "skill": "intimidire", "dc": 15 }
+          "skillCheck": {"skill": "intimidire", "dc": 15}
         }
       ]
     }
@@ -360,7 +359,7 @@
     "type": "humanoid",
     "hp": 50,
     "ac": 16,
-    "attack": { "damage": 11, "bonus": 4 },
+    "attack": {"damage": 11, "bonus": 4},
     "xp": 250,
     "biomes": ["Città", "Foresta"],
     "isElite": true,
@@ -379,7 +378,7 @@
           "id": "tactic_feint_chief",
           "name": "[Tattico] Finta Elaborata",
           "description": "Fingi un attacco per indurlo a scoprirsi, annullando il suo contrattacco per questo turno.",
-          "skillCheck": { "skill": "inganno", "dc": 16 }
+          "skillCheck": {"skill": "inganno", "dc": 16}
         }
       ]
     }
@@ -391,7 +390,7 @@
     "type": "humanoid",
     "hp": 45,
     "ac": 12,
-    "attack": { "damage": 12, "bonus": 3 },
+    "attack": {"damage": 12, "bonus": 3},
     "xp": 600,
     "biomes": ["Città"],
     "isElite": true,
@@ -410,9 +409,38 @@
           "id": "tactic_douse_flames",
           "name": "[Tattico] Spegni le Fiamme",
           "description": "Usa acqua o un oggetto freddo per spegnere le sue fiamme e ridurre il suo potere.",
-          "skillCheck": { "skill": "sopravvivenza", "dc": 14 }
+          "skillCheck": {"skill": "sopravvivenza", "dc": 14}
         }
       ]
-    }
+    },
+    "randomEncounter": false,
+    "defeatTrigger": "found_the_arsonist",
+    "defeatFlag": "ARSONIST_RESOLVED"
+  },
+  {
+    "id": "thief_raider",
+    "name": "Predone Ladro",
+    "description": "Il ladro dell'orologio di Marcus. Un predone esperto e vigile, armato con un coltello da combattimento. Non sarà facile sconfiggerlo.",
+    "type": "humanoid",
+    "hp": 32,
+    "ac": 13,
+    "attack": {"damage": 7, "bonus": 3},
+    "xp": 95,
+    "biomes": ["Foresta"],
+    "tactics": {
+      "revealDc": 13,
+      "description": "È veloce e agile, ma tende a proteggere eccessivamente il suo lato sinistro. Una vecchia ferita, forse.",
+      "actions": [
+        {
+          "id": "tactic_exploit_wound",
+          "name": "[Tattico] Colpisci il Lato Debole",
+          "description": "Mira al suo lato sinistro dove sembra avere una vecchia ferita.",
+          "skillCheck": {"skill": "percezione", "dc": 12}
+        }
+      ]
+    },
+    "randomEncounter": false,
+    "guaranteedLoot": [{"itemId": "old_watch", "quantity": 1}],
+    "defeatFlag": "THIEF_DEALT_WITH"
   }
 ]

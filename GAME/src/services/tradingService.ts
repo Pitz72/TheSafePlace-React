@@ -1,294 +1,139 @@
 /**
- * @fileoverview Trading Service - Barter system logic layer
+ * Barter between the player and the traders.
  *
- * @description Service layer that handles all trading-related logic including:
- * - Starting trading sessions
- * - Calculating effective markup based on Persuasion skill
- * - Managing trade balance
- * - Finalizing trades (item exchange)
- *
- * Trading Philosophy:
- * - Barter system (no currency)
- * - Value-based exchange using item.value property
- * - Dynamic markup adjusted by player's Persuasion skill
- * - Fair trade when: playerOfferValue >= (traderOfferValue × effectiveMarkup)
- *
- * @module services/tradingService
- * @version 1.7.0
+ * A trade is fair when what the player offers is worth at least the trader's
+ * goods times the markup; Persuasion lowers the markup. Traders have a real,
+ * finite stock (saved in gameStore.traderStock) that refills every few days;
+ * whatever the player sells is added to it.
  */
-
-import { useTradingStore } from '../store/tradingStore';
+import { useTradingStore, StockEntry } from '../store/tradingStore';
 import { useTraderDatabaseStore } from '../data/traderDatabase';
 import { useGameStore } from '../store/gameStore';
-import { useCharacterStore } from '../store/characterStore';
+import { useCharacterStore, isProtectedItem } from '../store/characterStore';
+import { useTimeStore } from '../store/timeStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
-import { GameState, JournalEntryType } from '../types';
+import { GameState, InventoryItem, JournalEntryType } from '../types';
 import { audioManager } from '../utils/audio';
+import { toAbsoluteMinutes } from '../utils/time';
 
-/**
- * Trading Service - Barter system management
- *
- * @description Service object containing trading management functions.
- * Centralizes all trading logic including markup calculation and trade execution.
- */
+const DEFAULT_RESTOCK_HOURS = 72;
+const MINIMUM_MARKUP = 1.05;
+
 export const tradingService = {
-  /**
-   * Calculates effective markup based on player's Persuasion skill.
-   *
-   * @description The trader's markup starts high and decreases with better Persuasion.
-   * Formula: effectiveMarkup = baseMarkup - (persuasionBonus × 0.02)
-   * 
-   * @param {number} baseMarkup - Trader's base markup (e.g., 1.5 = 150%)
-   * @param {number} persuasionBonus - Player's Persuasion skill bonus
-   * @returns {number} Effective markup multiplier
-   *
-   * @remarks
-   * Examples:
-   * - Base 150%, Persuasion +0: 150% markup
-   * - Base 150%, Persuasion +5: 140% markup
-   * - Base 150%, Persuasion +10: 130% markup
-   * - Base 150%, Persuasion +20: 110% markup (minimum)
-   * 
-   * Minimum markup: 1.05 (105%) - even master negotiators pay a small premium
-   *
-   * @example
-   * const markup = tradingService.calculateEffectiveMarkup(1.5, 10);
-   * // Returns 1.3 (130% markup)
-   */
-  calculateEffectiveMarkup: (baseMarkup: number, persuasionBonus: number): number => {
-    const reduction = persuasionBonus * 0.02; // 2% reduction per point of bonus
-    let effectiveMarkup = baseMarkup - reduction;
-    const minimumMarkup = 1.05; // 5% minimum markup
-    
-    effectiveMarkup = Math.max(effectiveMarkup, minimumMarkup);
-    
-    return effectiveMarkup;
+  /** 2% less markup per point of Persuasion bonus, never below 105%. */
+  calculateEffectiveMarkup: (baseMarkup: number, persuasionBonus: number): number =>
+    Math.max(baseMarkup - persuasionBonus * 0.02, MINIMUM_MARKUP),
+
+  /** Value of one unit; worn gear is worth less (down to a quarter). */
+  unitValue: (item: Pick<InventoryItem, 'itemId' | 'durability'>): number => {
+    const base = useItemDatabaseStore.getState().itemDatabase[item.itemId]?.value ?? 0;
+    if (!item.durability || item.durability.max <= 0) return base;
+    return Math.round(base * Math.max(0.25, item.durability.current / item.durability.max));
   },
 
-  /**
-   * Starts a new trading session with a trader.
-   *
-   * @description Initializes trading state, calculates effective markup,
-   * and switches to the trading screen.
-   *
-   * @param {string} traderId - The ID of the trader to trade with
-   *
-   * @remarks
-   * - Validates that trader exists in database
-   * - Calculates effective markup based on player's Persuasion
-   * - Sets activeTraderId and effectiveMarkup in tradingStore
-   * - Switches gameState to TRADING
-   * - Plays confirmation sound
-   *
-   * @example
-   * tradingService.startTradingSession('marcus');
-   * // Trading screen opens with Marcus's inventory
-   */
-  startTradingSession: (traderId: string, returnState?: GameState) => {
-    const { traders } = useTraderDatabaseStore.getState();
-    const { setActiveTrader } = useTradingStore.getState();
-    const { setGameState, addJournalEntry, gameState: currentState } = useGameStore.getState();
-    const { getSkillBonus } = useCharacterStore.getState();
+  isTradable: (itemId: string): boolean => !isProtectedItem(itemId),
 
-    const trader = traders[traderId];
+  /** Current stock of a trader, refilled when the restock time has passed. */
+  getTraderStock: (traderId: string): StockEntry[] => {
+    const trader = useTraderDatabaseStore.getState().traders[traderId];
+    if (!trader) return [];
+    const now = toAbsoluteMinutes(useTimeStore.getState().gameTime);
+    const saved = useGameStore.getState().traderStock[traderId];
+    const restockMinutes = (trader.restockHours ?? DEFAULT_RESTOCK_HOURS) * 60;
+    if (!saved || now - saved.restockedAt >= restockMinutes) {
+      const items: Record<string, number> = {};
+      trader.inventory.forEach(entry => { items[entry.itemId] = (items[entry.itemId] ?? 0) + entry.quantity; });
+      useGameStore.setState(state => ({ traderStock: { ...state.traderStock, [traderId]: { items, restockedAt: now } } }));
+      return Object.entries(items).map(([itemId, quantity]) => ({ itemId, quantity }));
+    }
+    return Object.entries(saved.items).filter(([, quantity]) => quantity > 0).map(([itemId, quantity]) => ({ itemId, quantity }));
+  },
+
+  startTradingSession: (traderId: string, returnState?: GameState) => {
+    const trader = useTraderDatabaseStore.getState().traders[traderId];
+    const game = useGameStore.getState();
     if (!trader) {
       console.error(`[TRADING SERVICE] Trader ${traderId} not found in database`);
-      addJournalEntry({
-        text: `Errore: mercante ${traderId} non trovato.`,
-        type: JournalEntryType.SYSTEM_ERROR
-      });
+      game.addJournalEntry({ text: `Errore: mercante ${traderId} non trovato.`, type: JournalEntryType.SYSTEM_ERROR });
       return;
     }
 
-    // Calculate effective markup based on Persuasion skill
-    // v2.0.10: guard against missing/invalid baseMarkup in trader data — an
-    // undefined markup propagated NaN through every price and no trade could
-    // ever be finalized (balance >= 0 was always false).
-    const baseMarkup = (typeof trader.baseMarkup === 'number' && Number.isFinite(trader.baseMarkup))
-      ? trader.baseMarkup
-      : 1.3;
-    if (baseMarkup !== trader.baseMarkup) {
-      console.warn(`[TRADING SERVICE] Trader ${traderId} has no valid baseMarkup, defaulting to 1.3`);
-    }
-    const persuasionBonus = getSkillBonus('persuasione');
-    let effectiveMarkup = tradingService.calculateEffectiveMarkup(baseMarkup, persuasionBonus);
-    
-    // v1.8.0: Marcus friendship discount (10% additional)
-    const hasMarcusFriendship = useGameStore.getState().gameFlags.has('MARCUS_FRIENDSHIP');
-    if (hasMarcusFriendship && traderId === 'marcus') {
-      effectiveMarkup *= 0.9; // 10% discount
-      addJournalEntry({
-        text: `[AMICIZIA] Marcus ti fa uno sconto speciale come amico.`,
-        type: JournalEntryType.NARRATIVE,
-        color: '#22c55e' // green-500
-      });
-    }
+    const baseMarkup = Number.isFinite(trader.baseMarkup) ? trader.baseMarkup : 1.3;
+    const persuasionBonus = useCharacterStore.getState().getSkillBonus('persuasione');
+    let markup = tradingService.calculateEffectiveMarkup(baseMarkup, persuasionBonus);
+    const friendship = traderId === 'marcus' && game.hasFlag('MARCUS_FRIENDSHIP');
+    if (friendship) markup = Math.max(1, markup * 0.9);
 
-    // Initialize trading session
-    // If returnState not specified, use current state (for context preservation)
-    const stateToReturn = returnState || (currentState === GameState.OUTPOST ? GameState.OUTPOST : GameState.IN_GAME);
-    setActiveTrader(traderId, effectiveMarkup, stateToReturn);
-    setGameState(GameState.TRADING);
-    
+    const stateToReturn = returnState ?? (game.gameState === GameState.OUTPOST ? GameState.OUTPOST : GameState.IN_GAME);
+    useTradingStore.getState().setActiveTrader(traderId, markup, tradingService.getTraderStock(traderId), stateToReturn);
+    game.setGameState(GameState.TRADING);
     audioManager.playSound('confirm');
-    
-    const markupPercent = Math.round((effectiveMarkup - 1) * 100);
-    addJournalEntry({
-      text: `Inizi a commerciare con ${trader.name}. Markup: ${markupPercent}% [Persuasione: ${persuasionBonus >= 0 ? '+' : ''}${persuasionBonus}]`,
-      type: JournalEntryType.NARRATIVE
+
+    const markupPercent = Math.round((markup - 1) * 100);
+    game.addJournalEntry({
+      text: `Inizi a commerciare con ${trader.name}. Ricarico: ${markupPercent}% [Persuasione ${persuasionBonus >= 0 ? '+' : ''}${persuasionBonus}]${friendship ? ' [Amicizia: -10%]' : ''}`,
+      type: JournalEntryType.NARRATIVE,
     });
-    
-    console.log(`[TRADING SERVICE] ✅ Started trading with ${traderId} (${trader.name})`);
-    console.log(`[TRADING SERVICE] Base markup: ${trader.baseMarkup}, Persuasion: ${persuasionBonus}, Effective: ${effectiveMarkup}`);
   },
 
-  /**
-   * Finalizes the trade and exchanges items.
-   *
-   * @description Validates trade balance, then:
-   * - Removes player offer items from player inventory
-   * - Adds trader offer items to player inventory
-   * - Updates trader inventory (removes sold items)
-   * - Closes trading screen
-   *
-   * @returns {boolean} True if trade was successful, false otherwise
-   *
-   * @remarks
-   * Trade Requirements:
-   * - balance >= 0 (player offering enough value)
-   * - Both offers must have at least one item
-   * 
-   * On Success:
-   * - Items exchanged
-   * - Journal entries added
-   * - Trading screen closes
-   * - Success sound plays
-   * 
-   * On Failure:
-   * - Error message shown
-   * - Trading screen remains open
-   * - Error sound plays
-   *
-   * @example
-   * const success = tradingService.finalizeTrade();
-   * if (success) {
-   *   // Trade completed
-   * }
-   */
   finalizeTrade: (): boolean => {
-    const { 
-      activeTraderId, 
-      playerOffer, 
-      traderOffer, 
-      balance,
-      reset 
-    } = useTradingStore.getState();
-    
-    const { setGameState, addJournalEntry } = useGameStore.getState();
-    const { addItem, removeItem, inventory } = useCharacterStore.getState();
+    const { activeTraderId, playerOffer, traderOffer, balance, traderStock, returnState, reset } = useTradingStore.getState();
+    const game = useGameStore.getState();
     const { itemDatabase } = useItemDatabaseStore.getState();
-
-    // Validation
-    if (!activeTraderId) {
-      console.error('[TRADING SERVICE] No active trader');
-      return false;
-    }
+    if (!activeTraderId) return false;
 
     if (playerOffer.length === 0 || traderOffer.length === 0) {
-      addJournalEntry({
-        text: 'Entrambe le parti devono offrire almeno un oggetto.',
-        type: JournalEntryType.ACTION_FAILURE
-      });
+      game.addJournalEntry({ text: 'Entrambe le parti devono offrire almeno un oggetto.', type: JournalEntryType.ACTION_FAILURE });
       audioManager.playSound('error');
       return false;
     }
-
     if (balance < 0) {
-      const deficit = Math.abs(balance);
-      addJournalEntry({
-        text: `La tua offerta è insufficiente. Mancano ${deficit} punti valore.`,
-        type: JournalEntryType.ACTION_FAILURE
-      });
+      game.addJournalEntry({ text: `La tua offerta è insufficiente. Mancano ${Math.abs(balance)} punti valore.`, type: JournalEntryType.ACTION_FAILURE });
+      audioManager.playSound('error');
+      return false;
+    }
+    const { inventory } = useCharacterStore.getState();
+    const offerValid = playerOffer.every(o => inventory[o.inventoryIndex]?.itemId === o.itemId && inventory[o.inventoryIndex].quantity >= o.quantity && tradingService.isTradable(o.itemId))
+      && traderOffer.every(o => traderStock[o.inventoryIndex]?.itemId === o.itemId && traderStock[o.inventoryIndex].quantity >= o.quantity);
+    if (!offerValid) {
+      game.addJournalEntry({ text: "Lo scambio non è più valido. Ricomponi l'offerta.", type: JournalEntryType.ACTION_FAILURE });
       audioManager.playSound('error');
       return false;
     }
 
-    // Execute trade
-    try {
-      // Remove items from player inventory
-      playerOffer.forEach(tradeItem => {
-        removeItem(tradeItem.itemId, tradeItem.quantity);
-      });
+    // Exact slots the player picked, from the last one so indices stay valid.
+    const character = useCharacterStore.getState();
+    [...playerOffer].sort((a, b) => b.inventoryIndex - a.inventoryIndex)
+      .forEach(o => useCharacterStore.getState().discardItem(o.inventoryIndex, o.quantity));
+    traderOffer.forEach(o => character.addItem(o.itemId, o.quantity));
 
-      // Add items to player inventory
-      traderOffer.forEach(tradeItem => {
-        addItem(tradeItem.itemId, tradeItem.quantity);
-      });
+    const items: Record<string, number> = {};
+    traderStock.forEach(entry => { items[entry.itemId] = entry.quantity; });
+    traderOffer.forEach(o => { items[o.itemId] = (items[o.itemId] ?? 0) - o.quantity; });
+    playerOffer.forEach(o => { items[o.itemId] = (items[o.itemId] ?? 0) + o.quantity; });
+    useGameStore.setState(state => ({
+      traderStock: {
+        ...state.traderStock,
+        [activeTraderId]: { items, restockedAt: state.traderStock[activeTraderId]?.restockedAt ?? toAbsoluteMinutes(useTimeStore.getState().gameTime) },
+      },
+    }));
 
-      // Build trade summary for journal
-      const playerGaveText = playerOffer.map(item => {
-        const itemData = itemDatabase[item.itemId];
-        return `${itemData?.name || item.itemId} x${item.quantity}`;
-      }).join(', ');
+    const describe = (list: typeof playerOffer) => list.map(o => `${itemDatabase[o.itemId]?.name ?? o.itemId} x${o.quantity}`).join(', ');
+    game.addJournalEntry({ text: `Scambio completato! Hai dato: ${describe(playerOffer)}.`, type: JournalEntryType.NARRATIVE });
+    game.addJournalEntry({ text: `Hai ricevuto: ${describe(traderOffer)}.`, type: JournalEntryType.ITEM_ACQUIRED });
 
-      const playerReceivedText = traderOffer.map(item => {
-        const itemData = itemDatabase[item.itemId];
-        return `${itemData?.name || item.itemId} x${item.quantity}`;
-      }).join(', ');
-
-      addJournalEntry({
-        text: `Scambio completato! Hai dato: ${playerGaveText}`,
-        type: JournalEntryType.NARRATIVE
-      });
-
-      addJournalEntry({
-        text: `Hai ricevuto: ${playerReceivedText}`,
-        type: JournalEntryType.ITEM_ACQUIRED
-      });
-
-      // Close trading screen and return to previous state
-      const targetState = useTradingStore.getState().returnState || GameState.IN_GAME;
-      reset();
-      setGameState(targetState);
-      audioManager.playSound('confirm');
-
-      console.log('[TRADING SERVICE] ✅ Trade completed successfully');
-      return true;
-
-    } catch (error) {
-      console.error('[TRADING SERVICE] Error finalizing trade:', error);
-      addJournalEntry({
-        text: 'Errore durante lo scambio. Riprova.',
-        type: JournalEntryType.SYSTEM_ERROR
-      });
-      audioManager.playSound('error');
-      return false;
-    }
+    reset();
+    game.setGameState(returnState ?? GameState.IN_GAME);
+    audioManager.playSound('confirm');
+    return true;
   },
 
-  /**
-   * Cancels the current trading session.
-   *
-   * @description Resets trading store and returns to game without exchanging items.
-   *
-   * @example
-   * tradingService.cancelTrade();
-   * // Trading screen closes, no items exchanged
-   */
   cancelTrade: () => {
     const { reset, returnState } = useTradingStore.getState();
-    const { setGameState, addJournalEntry } = useGameStore.getState();
-
-    const targetState = returnState || GameState.IN_GAME;
+    const game = useGameStore.getState();
     reset();
-    setGameState(targetState);
+    game.setGameState(returnState ?? GameState.IN_GAME);
     audioManager.playSound('cancel');
-    
-    addJournalEntry({
-      text: 'Hai annullato lo scambio.',
-      type: JournalEntryType.NARRATIVE
-    });
-    
-    console.log('[TRADING SERVICE] Trade cancelled');
+    game.addJournalEntry({ text: 'Hai chiuso le trattative.', type: JournalEntryType.NARRATIVE });
   },
 };

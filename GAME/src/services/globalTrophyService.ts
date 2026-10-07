@@ -38,7 +38,7 @@ export const loadGlobalTrophies = (): Set<string> => {
       return new Set<string>();
     }
 
-    return new Set<string>(parsed.trophies);
+    return new Set<string>(parsed.trophies.filter(id => typeof id === 'string'));
   } catch (error) {
     console.error('Error loading global trophies:', error);
     return new Set<string>();
@@ -97,65 +97,3 @@ export const mergeWithGlobalTrophies = (localTrophies: Set<string>): Set<string>
   const globalTrophies = loadGlobalTrophies();
   return new Set([...localTrophies, ...globalTrophies]);
 };
-
-/**
- * @function exportGlobalTrophies
- * @description Esporta i trofei globali in formato JSON per backup
- * @returns {string} JSON string dei trofei globali
- */
-export const exportGlobalTrophies = (): string => {
-  const trophies = loadGlobalTrophies();
-  const data: GlobalTrophyData = {
-    version: '1.0.0',
-    lastUpdated: Date.now(),
-    trophies: Array.from(trophies),
-  };
-  return JSON.stringify(data, null, 2);
-};
-
-/**
- * @function importGlobalTrophies
- * @description Importa trofei globali da JSON backup
- * @param {string} jsonData - JSON string dei trofei
- * @returns {boolean} True se l'importazione ha avuto successo
- */
-export const importGlobalTrophies = (jsonData: string): boolean => {
-  try {
-    const data: GlobalTrophyData = JSON.parse(jsonData);
-    
-    if (!data.trophies || !Array.isArray(data.trophies)) {
-      throw new Error('Invalid trophy data structure');
-    }
-
-    localStorage.setItem(GLOBAL_TROPHY_KEY, JSON.stringify(data));
-    return true;
-  } catch (error) {
-    console.error('Error importing global trophies:', error);
-    return false;
-  }
-};
-
-/**
- * @function clearGlobalTrophies
- * @description Cancella tutti i trofei globali (reset completo)
- * @returns {boolean} True se la cancellazione ha avuto successo
- */
-export const clearGlobalTrophies = (): boolean => {
-  try {
-    localStorage.removeItem(GLOBAL_TROPHY_KEY);
-    return true;
-  } catch (error) {
-    console.error('Error clearing global trophies:', error);
-    return false;
-  }
-};
-
-/**
- * @function getGlobalTrophyCount
- * @description Ottiene il numero di trofei sbloccati globalmente
- * @returns {number} Numero di trofei sbloccati
- */
-export const getGlobalTrophyCount = (): number => {
-  return loadGlobalTrophies().size;
-};
-

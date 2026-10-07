@@ -2,90 +2,78 @@ import { create } from 'zustand';
 import { GameTime, WeatherState, WeatherType, JournalEntryType } from '../types';
 import { useGameStore } from './gameStore';
 import { useCharacterStore } from './characterStore';
-import { WEATHER_DATA, WEATHER_DURATIONS, pickNextWeather } from '../utils/weather';
+import { WEATHER_DATA, pickNextWeather, rollWeatherDuration } from '../utils/weather';
 import { useInteractionStore } from './interactionStore';
 
-/**
- * @interface TimeStoreState
- * @description Represents the state of the time store.
- * @property {GameTime} gameTime - The current in-game time.
- * @property {WeatherState} weather - The current weather state.
- * @property {(minutes: number, bypassPause?: boolean) => void} advanceTime - Function to advance the in-game time.
- * @property {() => void} reset - Function to reset the time store to its initial state.
- */
 interface TimeStoreState {
     gameTime: GameTime;
     weather: WeatherState;
+    /** Advances the clock. Without bypassPause nothing happens while a menu or a refuge is open. */
     advanceTime: (minutes: number, bypassPause?: boolean) => void;
     reset: () => void;
     toJSON: () => object;
     fromJSON: (json: any) => void;
 }
 
-const initialState = {
-    gameTime: { day: 1, hour: 8, minute: 0 },
-    weather: { type: WeatherType.SERENO, duration: Math.floor(Math.random() * (WEATHER_DURATIONS[WeatherType.SERENO].max - WEATHER_DURATIONS[WeatherType.SERENO].min + 1)) + WEATHER_DURATIONS[WeatherType.SERENO].min },
-};
+const initialTime = (): GameTime => ({ day: 1, hour: 8, minute: 0 });
+const initialWeather = (): WeatherState => ({ type: WeatherType.SERENO, duration: rollWeatherDuration(WeatherType.SERENO) });
+
+const isWeatherType = (value: unknown): value is WeatherType =>
+    Object.values(WeatherType).includes(value as WeatherType);
 
 export const useTimeStore = create<TimeStoreState>((set, get) => ({
-    ...initialState,
-    
-    /**
-     * @function advanceTime
-     * @description Advances the in-game time by a specified number of minutes.
-     * @param {number} minutes - The number of minutes to advance the time by.
-     * @param {boolean} [bypassPause=false] - Whether to advance time even if the game is paused (e.g., in a menu).
-     */
-    advanceTime: (minutes: number, bypassPause: boolean = false) => {
-        // FIX: Destructure state from the correct stores (interactionStore and gameStore).
-        const { addJournalEntry, checkMainStoryTriggers, checkCutsceneTriggers } = useGameStore.getState();
+    gameTime: initialTime(),
+    weather: initialWeather(),
+
+    advanceTime: (minutes, bypassPause = false) => {
+        const elapsed = Math.round(minutes);
+        if (elapsed <= 0) return;
         const { isInventoryOpen, isInRefuge } = useInteractionStore.getState();
-
         if ((isInventoryOpen || isInRefuge) && !bypassPause) return;
-        
-        const oldDay = get().gameTime.day;
 
-        let newMinute = get().gameTime.minute + minutes;
-        let newHour = get().gameTime.hour;
-        let newDay = get().gameTime.day;
-        while (newMinute >= 60) { newMinute -= 60; newHour += 1; }
-        while (newHour >= 24) { newHour -= 24; newDay += 1; }
-        set({ gameTime: { day: newDay, hour: newHour, minute: newMinute } });
+        const { gameTime, weather } = get();
+        const totalMinutes = gameTime.hour * 60 + gameTime.minute + elapsed;
+        const newTime: GameTime = {
+            day: gameTime.day + Math.floor(totalMinutes / 1440),
+            hour: Math.floor((totalMinutes % 1440) / 60),
+            minute: totalMinutes % 60,
+        };
 
-        if(newDay > oldDay) {
-            checkMainStoryTriggers();
-            checkCutsceneTriggers();
+        // A long rest can go through several weather spells: keep the leftover time.
+        let next: WeatherState = { type: weather.type, duration: weather.duration - elapsed };
+        while (next.duration <= 0) {
+            const type = pickNextWeather(next.type);
+            next = { type, duration: next.duration + rollWeatherDuration(type) };
+        }
+        set({ gameTime: newTime, weather: next });
+        if (next.type !== weather.type) {
+            useGameStore.getState().addJournalEntry({
+                text: `Il tempo sta cambiando... Ora è ${WEATHER_DATA[next.type].name.toLowerCase()}.`,
+                type: JournalEntryType.NARRATIVE,
+            });
         }
 
-        let newWeather = { ...get().weather };
-        newWeather.duration -= minutes;
-        if (newWeather.duration <= 0) {
-            const nextWeatherType = pickNextWeather(newWeather.type);
-            const { min, max } = WEATHER_DURATIONS[nextWeatherType];
-            const newDuration = Math.floor(Math.random() * (max - min + 1)) + min;
-            newWeather = { type: nextWeatherType, duration: newDuration };
-            addJournalEntry({ text: `Il tempo sta cambiando... Ora è ${WEATHER_DATA[nextWeatherType].name.toLowerCase()}.`, type: JournalEntryType.NARRATIVE });
+        // A refuge shelters from the weather.
+        const exposure = useInteractionStore.getState().isInRefuge ? WeatherType.SERENO : next.type;
+        useCharacterStore.getState().updateSurvivalStats(elapsed, exposure);
+
+        if (newTime.day > gameTime.day) {
+            const game = useGameStore.getState();
+            game.checkMainStoryTriggers();
+            game.checkCutsceneTriggers();
         }
-        set({ weather: newWeather });
-        
-        // FIX: Check isInRefuge from useInteractionStore, not useGameStore.
-        const currentActivityWeather = useInteractionStore.getState().isInRefuge ? WeatherType.SERENO : get().weather.type;
-        useCharacterStore.getState().updateSurvivalStats(minutes, currentActivityWeather);
     },
 
-    /**
-     * @function reset
-     * @description Resets the time store to its initial state.
-     */
-    reset: () => {
-        set(initialState);
-    },
+    reset: () => set({ gameTime: initialTime(), weather: initialWeather() }),
 
-    toJSON: () => {
-        return get();
-    },
+    toJSON: () => ({ gameTime: get().gameTime, weather: get().weather }),
 
     fromJSON: (json) => {
-        set(json);
-    }
+        const time = json?.gameTime;
+        const weather = json?.weather;
+        set({
+            gameTime: time && typeof time.day === 'number' ? { day: time.day, hour: time.hour ?? 8, minute: time.minute ?? 0 } : initialTime(),
+            weather: weather && isWeatherType(weather.type) ? { type: weather.type, duration: Math.max(1, weather.duration ?? 60) } : initialWeather(),
+        });
+    },
 }));

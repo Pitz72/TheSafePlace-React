@@ -1,0 +1,114 @@
+[
+  {
+    "id": "windmill",
+    "name": "Vecchio Mulino a Vento",
+    "x": 78,
+    "y": 9,
+    "eventId": "windmill_site",
+    "revealed": false
+  },
+  {
+    "id": "thief_camp",
+    "name": "Accampamento del Predone",
+    "x": 36,
+    "y": 29,
+    "eventId": "thief_camp_site",
+    "revealed": false
+  },
+  {
+    "id": "ruined_school",
+    "name": "Scuola in Rovina",
+    "x": 27,
+    "y": 38,
+    "eventId": "ruined_school_site",
+    "revealed": false
+  },
+  {
+    "id": "water_plant",
+    "name": "Impianto di Depurazione",
+    "x": 64,
+    "y": 72,
+    "eventId": "water_plant_site",
+    "revealed": true
+  },
+  {
+    "id": "police_station",
+    "name": "Stazione di Polizia",
+    "x": 114,
+    "y": 107,
+    "eventId": "police_station_site",
+    "revealed": false
+  },
+  {
+    "id": "military_bunker",
+    "name": "Deposito Militare 7-B",
+    "x": 108,
+    "y": 70,
+    "eventId": "military_bunker_site",
+    "revealed": false
+  },
+  {
+    "id": "radio_tower",
+    "name": "Torre Radio",
+    "x": 88,
+    "y": 60,
+    "eventId": "radio_tower_site",
+    "revealed": true
+  },
+  {
+    "id": "asylum",
+    "name": "Manicomio di Sant'Ambrogio",
+    "x": 120,
+    "y": 85,
+    "eventId": "asylum_site",
+    "revealed": false
+  },
+  {
+    "id": "ice_flower_pass",
+    "name": "Passo del Fiore di Ghiaccio",
+    "x": 45,
+    "y": 17,
+    "eventId": "ice_flower_site",
+    "revealed": false
+  },
+  {
+    "id": "ritual_cave",
+    "name": "Grotta dei Sussurri",
+    "x": 102,
+    "y": 11,
+    "eventId": "ritual_cave_site",
+    "revealed": false
+  },
+  {
+    "id": "ancient_tree",
+    "name": "L'Albero Segnato",
+    "x": 75,
+    "y": 14,
+    "eventId": "ancient_tree_site",
+    "revealed": false
+  },
+  {
+    "id": "hermit_cabin",
+    "name": "Capanna dell'Ascoltatore",
+    "x": 88,
+    "y": 28,
+    "eventId": "hermit_cabin_site",
+    "revealed": false
+  },
+  {
+    "id": "hidden_medical_cache",
+    "name": "Deposito Medico Nascosto",
+    "x": 63,
+    "y": 79,
+    "eventId": "hidden_medical_cache_site",
+    "revealed": false
+  },
+  {
+    "id": "village_well_cache",
+    "name": "Il Pozzo della Scorta",
+    "x": 38,
+    "y": 114,
+    "eventId": "village_well_cache_site",
+    "revealed": false
+  }
+]

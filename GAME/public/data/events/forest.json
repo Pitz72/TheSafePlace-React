@@ -3,28 +3,39 @@
     "id": "forest_hidden_trap",
     "title": "Trappola Nascosta",
     "description": "Mentre cammini tra gli alberi, il tuo piede urta contro qualcosa di metallico semi-sepolto sotto le foglie. È una vecchia tagliola arrugginita.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Disinnescala con cautela",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "rapiditaDiMano", "dc": 12,
-          "successText": "Con movimenti precisi, riesci a disattivare il meccanismo. Ora puoi prenderla per usarla come trappola.",
-          "failureText": "Il meccanismo arrugginito scatta e ti afferra la caviglia. Il dolore è lancinante.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "bear_trap", "quantity": 1 } }, { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 20 }, { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 12,
+            "successText": "Con movimenti precisi, riesci a disattivare il meccanismo. Ora puoi prenderla per usarla come trappola.",
+            "failureText": "Il meccanismo arrugginito scatta e ti afferra la caviglia. Il dolore è lancinante.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "bear_trap", "quantity": 1}},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [{"type": "takeDamage", "value": 20}, {"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Evitala e prosegui",
-        "outcomes": [{
-          "type": "direct",
-          "results": [{ "type": "journalEntry", "text": "Fai attenzione a non inciampare di nuovo e prosegui il tuo cammino." }]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Fai attenzione a non inciampare di nuovo e prosegui il tuo cammino."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -32,70 +43,85 @@
     "id": "forest_spider_webs",
     "title": "Ragnatele Giganti",
     "description": "Ti imbatti in un tratto di foresta coperto di ragnatele spesse e appiccicose. Sembrano deserte, ma non puoi esserne sicuro.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
-        {
-            "text": "Attraversale con cautela",
-            "outcomes": [
-                {
-                    "type": "skillCheck",
-                    "skill": "furtivita",
-                    "dc": 13,
-                    "successText": "Ti muovi lentamente, evitando i fili più spessi. Riesci a passare dall'altra parte senza problemi.",
-                    "failureText": "Resti impigliato. Mentre ti liberi, un ragno delle dimensioni di un pugno scende e ti morde prima di fuggire.",
-                    "success": [{ "type": "addXp", "value": 20 }],
-                    "failure": [
-                        { "type": "takeDamage", "value": 10 },
-                        { "type": "statusChange", "value": "AVVELENATO" },
-                        { "type": "addXp", "value": 5 }
-                    ]
-                }
+      {
+        "text": "Attraversale con cautela",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 13,
+            "successText": "Ti muovi lentamente, evitando i fili più spessi. Riesci a passare dall'altra parte senza problemi.",
+            "failureText": "Resti impigliato. Mentre ti liberi, un ragno delle dimensioni di un pugno scende e ti morde prima di fuggire.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 10},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 5}
             ]
-        },
-        {
-            "text": "Cerca un altro sentiero",
-            "outcomes": [
-                {
-                    "type": "direct",
-                    "results": [
-                        { "type": "journalEntry", "text": "Decidi che non vale la pena rischiare. Trovi un sentiero alternativo, ma perdi tempo prezioso." },
-                        { "type": "advanceTime", "value": 30 }
-                    ]
-                }
+          }
+        ]
+      },
+      {
+        "text": "Cerca un altro sentiero",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi che non vale la pena rischiare. Trovi un sentiero alternativo, ma perdi tempo prezioso."
+              },
+              {"type": "advanceTime", "value": 30}
             ]
-        }
+          }
+        ]
+      }
     ]
-},
+  },
   {
     "id": "forest_hermit_shelter",
     "title": "Rifugio dell'Eremita",
     "description": "Scopri una piccola capanna abbandonata, nascosta tra gli alberi. La porta è aperta e sembra che nessuno ci sia da tempo.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Esplora l'interno",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "investigare", "dc": 10,
-          "successText": "All'interno trovi un piccolo magazzino di sopravvivenza: cibo in scatola, acqua pulita e medicine scadute ma ancora utilizzabili.",
-          "failureText": "La capanna è stata già saccheggiata tempo fa. Non c'è rimasto nulla di utile, solo polvere e ragnatele.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
-            { "type": "addItem", "value": { "itemId": "CONS_002", "quantity": 2 } },
-            { "type": "addItem", "value": { "itemId": "expired_medicine", "quantity": 1 } }, { "type": "addXp", "value": 25 }
-          ],
-          "failure": [{ "type": "addXp", "value": 10 }]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "All'interno trovi un piccolo magazzino di sopravvivenza: cibo in scatola, acqua pulita e medicine scadute ma ancora utilizzabili.",
+            "failureText": "La capanna è stata già saccheggiata tempo fa. Non c'è rimasto nulla di utile, solo polvere e ragnatele.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "expired_medicine", "quantity": 1}},
+              {"type": "addXp", "value": 25}
+            ],
+            "failure": [{"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Riposati qui per un po'",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Ti concedi una pausa rigenerante al riparo. Ti senti più riposato." },
-            { "type": "heal", "value": 15 },
-            { "type": "advanceTime", "value": 60 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ti concedi una pausa rigenerante al riparo. Ti senti più riposato."
+              },
+              {"type": "heal", "value": 15},
+              {"type": "advanceTime", "value": 60}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -103,35 +129,42 @@
     "id": "forest_ancient_tree",
     "title": "Albero Antico",
     "description": "Un albero mastodontico e antichissimo domina la radura. Alla sua base c'è un'apertura che conduce nel tronco cavo.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Esplora l'interno del tronco",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "percezione", "dc": 11,
-          "successText": "All'interno trovi un vecchio rifugio di cacciatori con provviste e strumenti.",
-          "failureText": "Il tronco è pieno di insetti aggressivi. Sei costretto a uscire rapidamente.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "firewood", "quantity": 5 } },
-            { "type": "addItem", "value": { "itemId": "bear_trap", "quantity": 1 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 10 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 11,
+            "successText": "All'interno trovi un vecchio rifugio di cacciatori con provviste e strumenti.",
+            "failureText": "Il tronco è pieno di insetti aggressivi. Sei costretto a uscire rapidamente.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "bear_trap", "quantity": 1}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Riposa all'ombra dell'albero",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "C'è qualcosa di pacifico in questo luogo. Ti senti rinvigorito." },
-            { "type": "heal", "value": 20 },
-            { "type": "advanceTime", "value": 30 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "C'è qualcosa di pacifico in questo luogo. Ti senti rinvigorito."
+              },
+              {"type": "heal", "value": 20},
+              {"type": "advanceTime", "value": 30}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -139,39 +172,43 @@
     "id": "forest_wolf_den",
     "title": "Tana di Lupi",
     "description": "Tracce di lupi e ossa rosicchiate indicano una tana nelle vicinanze. Senti ululati distanti.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Evita la zona con attenzione",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "furtivita", "dc": 13,
-          "successText": "Ti muovi silenziosamente e aggiri la tana senza essere notato.",
-          "failureText": "Un lupo ti individua e attacca prima che tu possa allontanarti.",
-          "success": [
-            { "type": "addXp", "value": 25 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 25 },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 13,
+            "successText": "Ti muovi silenziosamente e aggiri la tana senza essere notato.",
+            "failureText": "Un lupo ti individua e attacca prima che tu possa allontanarti.",
+            "success": [{"type": "addXp", "value": 25}],
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 15}]
+          }
+        ]
       },
       {
         "text": "Cerca nella tana quando i lupi sono via",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "sopravvivenza", "dc": 14,
-          "successText": "Trovi la tana vuota e recuperi alcune pelli e ossa utili.",
-          "failureText": "I lupi tornano mentre sei nella tana. Devi combattere per uscire.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 3 } },
-            { "type": "addXp", "value": 40 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 30 },
-            { "type": "statusChange", "value": "FERITO" },
-            { "type": "addXp", "value": 20 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 14,
+            "successText": "Trovi la tana vuota e recuperi alcune pelli e ossa utili.",
+            "failureText": "I lupi tornano mentre sei nella tana. Devi combattere per uscire.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "animal_hide", "quantity": 3}},
+              {"type": "addXp", "value": 40}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 30},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 20}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -179,33 +216,43 @@
     "id": "forest_mushroom_patch",
     "title": "Zona di Funghi",
     "description": "Una vasta area coperta di funghi colorati. Alcuni sembrano commestibili, altri... decisamente no.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Raccogli i funghi commestibili",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "natura", "dc": 12,
-          "successText": "Riconosci i funghi sicuri e ne raccogli diversi. Sono nutrienti.",
-          "failureText": "Ti sbagli. Alcuni funghi sono tossici. Li mangi e stai male.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "edible_mushrooms", "quantity": 5 } },
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 15 },
-            { "type": "statusChange", "value": "AVVELENATO" },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 12,
+            "successText": "Riconosci i funghi sicuri e ne raccogli diversi. Sono nutrienti.",
+            "failureText": "Ti sbagli. Alcuni funghi sono tossici. Li mangi e stai male.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "edible_mushrooms", "quantity": 5}},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 10}
+            ]
+          }
+        ]
       },
       {
         "text": "Non rischiare. Lascia i funghi",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Senza conoscenze adeguate, i funghi possono essere mortali. Meglio evitare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Senza conoscenze adeguate, i funghi possono essere mortali. Meglio evitare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -213,34 +260,41 @@
     "id": "forest_hunters_cache",
     "title": "Nascondiglio del Cacciatore",
     "description": "Scopri un capanno mimetizzato tra gli alberi. Sembra usato di recente.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Rovista nel capanno",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "investigare", "dc": 10,
-          "successText": "Il cacciatore ha lasciato attrezzatura e munizioni. Le prendi.",
-          "failureText": "Il capanno è vuoto. Forse il cacciatore tornerà presto. Meglio andare.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "ammo_arrow", "quantity": 10 } },
-            { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 2 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "advanceTime", "value": 15 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Il cacciatore ha lasciato attrezzatura e munizioni. Le prendi.",
+            "failureText": "Il capanno è vuoto. Forse il cacciatore tornerà presto. Meglio andare.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "ammo_arrow", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "animal_hide", "quantity": 2}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [{"type": "advanceTime", "value": 15}, {"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Non disturbare le cose altrui",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Non è giusto rubare a un altro sopravvissuto. Vai via." },
-            { "type": "alignmentChange", "value": {"type": "lena", "amount": 1} }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non è giusto rubare a un altro sopravvissuto. Vai via."
+              },
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -248,31 +302,39 @@
     "id": "forest_hanging_corpse",
     "title": "Impiccato",
     "description": "Un cadavere penzola da un albero, appeso con una corda. Non sembra un suicidio.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Perlustra l'area",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "investigare", "dc": 13,
-          "successText": "È un avvertimento. Trovi segni di predoni nelle vicinanze. Trovi anche qualcosa nelle tasche del morto.",
-          "failureText": "Non trovi indizi. Solo la vista macabra di una morte violenta.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "old_coins", "quantity": 10 } },
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "È un avvertimento. Trovi segni di predoni nelle vicinanze. Trovi anche qualcosa nelle tasche del morto.",
+            "failureText": "Non trovi indizi. Solo la vista macabra di una morte violenta.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 10}},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Allontanati velocemente",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Chi ha fatto questo potrebbe ancora essere nei paraggi. Meglio non restare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Chi ha fatto questo potrebbe ancora essere nei paraggi. Meglio non restare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -280,33 +342,41 @@
     "id": "forest_deer_hunting",
     "title": "Cervo al Pascolo",
     "description": "Un cervo adulto pascola tranquillo, ignaro della tua presenza. Carne fresca...",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Tenta di cacciarlo",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "furtivita", "dc": 14,
-          "successText": "Ti avvicini silenziosamente e colpisci. Il cervo cade. Hai carne e pelli.",
-          "failureText": "Il cervo ti sente e scappa via. Hai perso l'opportunità.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 5 } },
-            { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 2 } },
-            { "type": "addXp", "value": 45 }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 14,
+            "successText": "Ti avvicini silenziosamente e colpisci. Il cervo cade. Hai carne e pelli.",
+            "failureText": "Il cervo ti sente e scappa via. Hai perso l'opportunità.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 5}},
+              {"type": "addItem", "value": {"itemId": "animal_hide", "quantity": 2}},
+              {"type": "addXp", "value": 45}
+            ],
+            "failure": [{"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Lascialo in pace",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "C'è già troppa morte in questo mondo. Lasci vivere l'animale." },
-            { "type": "alignmentChange", "value": {"type": "lena", "amount": 1} }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "C'è già troppa morte in questo mondo. Lasci vivere l'animale."
+              },
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -314,31 +384,42 @@
     "id": "forest_poison_ivy",
     "title": "Edera Velenosa",
     "description": "Cammini attraverso un'area densamente ricoperta di vegetazione. Troppo tardi realizzi che è edera velenosa!",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Lava subito la pelle esposta",
-        "itemRequirements": [{ "itemId": "CONS_002", "quantity": 1 }],
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Usi l'acqua per rimuovere gli oli velenosi. Eviti il peggio." },
-            { "type": "removeItem", "value": { "itemId": "CONS_002", "quantity": 1 } },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "itemRequirements": [{"itemId": "CONS_002", "quantity": 1}],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Usi l'acqua per rimuovere gli oli velenosi. Eviti il peggio."
+              },
+              {"type": "removeItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "addXp", "value": 15}
+            ]
+          }
+        ]
       },
       {
         "text": "Ignora il prurito",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Ore dopo, la pelle inizia a bruciare e gonfiarsi. Sei stato avvelenato." },
-            { "type": "statusChange", "value": "AVVELENATO" },
-            { "type": "advanceTime", "value": 120 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ore dopo, la pelle inizia a bruciare e gonfiarsi. Sei stato avvelenato."
+              },
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "advanceTime", "value": 120},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -346,32 +427,39 @@
     "id": "forest_bee_hive",
     "title": "Alveare Nascosto",
     "description": "Un grande alveare di api è nascosto tra i rami di un albero. Gocciola miele dorato.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Usa il fumo per raccogliere il miele",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "sopravvivenza", "dc": 13,
-          "successText": "Il fumo calma le api. Raccogli miele prezioso.",
-          "failureText": "Le api si arrabbiano e ti attaccano in massa.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "food_honey", "quantity": 3 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 25 },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 13,
+            "successText": "Il fumo calma le api. Raccogli miele prezioso.",
+            "failureText": "Le api si arrabbiano e ti attaccano in massa.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "food_honey", "quantity": 3}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [{"type": "takeDamage", "value": 25}, {"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Lascia stare l'alveare",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Non vale la pena rischiare punture potenzialmente mortali." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non vale la pena rischiare punture potenzialmente mortali."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -379,33 +467,41 @@
     "id": "forest_wild_boar",
     "title": "Cinghiale Territoriale",
     "description": "Un cinghiale massiccio blocca il sentiero, ringhiando. È chiaro che non vuole compagnia.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Intimidisci l'animale",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "intimidire", "dc": 13,
-          "successText": "Fai abbastanza rumore da spaventare il cinghiale. Si allontana ringhiando.",
-          "failureText": "Il cinghiale carica! Il suo impatto è devastante.",
-          "success": [
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 30 },
-            { "type": "statusChange", "value": "FERITO" },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "intimidire",
+            "dc": 13,
+            "successText": "Fai abbastanza rumore da spaventare il cinghiale. Si allontana ringhiando.",
+            "failureText": "Il cinghiale carica! Il suo impatto è devastante.",
+            "success": [{"type": "addXp", "value": 30}],
+            "failure": [
+              {"type": "takeDamage", "value": 30},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 15}
+            ]
+          }
+        ]
       },
       {
         "text": "Fai un lungo giro",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Meglio non rischiare uno scontro. Aggiri l'animale con cautela." },
-            { "type": "advanceTime", "value": 30 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Meglio non rischiare uno scontro. Aggiri l'animale con cautela."
+              },
+              {"type": "advanceTime", "value": 30}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -413,32 +509,40 @@
     "id": "forest_abandoned_campsite",
     "title": "Accampamento Abbandonato",
     "description": "Resti di un accampamento con tende lacerate e un fuoco spento. Qualcosa è andato storto qui.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Cerca tra le rovine",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "percezione", "dc": 11,
-          "successText": "Trovi provviste sparse e equipaggiamento ancora utilizzabile.",
-          "failureText": "Non c'è nulla di valore. Solo segni di violenza.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 2 } },
-            { "type": "addItem", "value": { "itemId": "firewood", "quantity": 3 } },
-            { "type": "addXp", "value": 25 }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 11,
+            "successText": "Trovi provviste sparse e equipaggiamento ancora utilizzabile.",
+            "failureText": "Non c'è nulla di valore. Solo segni di violenza.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 3}},
+              {"type": "addXp", "value": 25}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Vai via velocemente",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Chiunque abbia attaccato questo accampamento potrebbe tornare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Chiunque abbia attaccato questo accampamento potrebbe tornare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -446,33 +550,43 @@
     "id": "forest_bear_tracks",
     "title": "Tracce di Orso",
     "description": "Impronte enormi nel terreno umido. Un orso, e grande. Recenti.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Segui le tracce con cautela",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "sopravvivenza", "dc": 14,
-          "successText": "Trovi la tana dell'orso. È vuota e contiene resti di prede. Trovi qualcosa di utile.",
-          "failureText": "L'orso è nella tana! Ti attacca furiosamente.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 3 } },
-            { "type": "addXp", "value": 40 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 40 },
-            { "type": "statusChange", "value": "FERITO" },
-            { "type": "addXp", "value": 20 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 14,
+            "successText": "Trovi la tana dell'orso. È vuota e contiene resti di prede. Trovi qualcosa di utile.",
+            "failureText": "L'orso è nella tana! Ti attacca furiosamente.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "animal_hide", "quantity": 3}},
+              {"type": "addXp", "value": 40}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 40},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 20}
+            ]
+          }
+        ]
       },
       {
         "text": "Cambia direzione",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Un orso non è qualcosa con cui scherzare. Scegli un altro percorso." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Un orso non è qualcosa con cui scherzare. Scegli un altro percorso."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -480,68 +594,82 @@
     "id": "forest_ritual_circle",
     "title": "Cerchio Rituale",
     "description": "Pietre disposte in cerchio con simboli strani incisi. Al centro, cenere e ossa bruciate. L'aria qui sembra vibrare con una frequenza quasi impercettibile.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Esamina i simboli con attenzione",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "storia", "dc": 15,
-          "successText": "Sotto una delle pietre principali, protetto da un involucro di pelle cerata, trovi un diario. Le pagine sono piene di simboli astronomici, calcoli complessi e note scritte in una calligrafia frenetica. Parla di 'frequenze dissonanti', di 'armonizzare gli echi' e di un 'rituale di schermatura'. Non è il diario di un pazzo, ma di qualcuno che stava cercando disperatamente una soluzione.",
-          "failureText": "I simboli sono troppo complessi. Sembrano astronomici, ma non riesci a decifrarli. Trovi solo cenere e ossa.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "cultist_coded_journal", "quantity": 1 } },
-            { "type": "startQuest", "value": "signs_of_ash" },
-            { "type": "addXp", "value": 60 },
-            { "type": "journalEntry", "text": "[SCOPERTA] Il diario menziona altri due 'luoghi di potere' necessari per completare il rituale." }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "storia",
+            "dc": 15,
+            "successText": "Sotto una delle pietre principali, protetto da un involucro di pelle cerata, trovi un diario. Le pagine sono piene di simboli astronomici, calcoli complessi e note scritte in una calligrafia frenetica. Parla di 'frequenze dissonanti', di 'armonizzare gli echi' e di un 'rituale di schermatura'. Non è il diario di un pazzo, ma di qualcuno che stava cercando disperatamente una soluzione.",
+            "failureText": "I simboli sono troppo complessi. Sembrano astronomici, ma non riesci a decifrarli. Trovi solo cenere e ossa.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "cultist_coded_journal", "quantity": 1}},
+              {"type": "startQuest", "value": "signs_of_ash"},
+              {"type": "addXp", "value": 60},
+              {
+                "type": "journalEntry",
+                "text": "[SCOPERTA] Il diario menziona altri due 'luoghi di potere' necessari per completare il rituale."
+              }
+            ],
+            "failure": [{"type": "addXp", "value": 15}]
+          }
+        ]
       },
       {
         "text": "Questo posto dà i brividi. Vai via",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "C'è un'energia oscura qui. Decidi di non restare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "C'è un'energia oscura qui. Decidi di non restare."}]
+          }
+        ]
       }
-    ]
+    ],
+    "excludesQuest": "signs_of_ash"
   },
   {
     "id": "forest_clear_stream",
     "title": "Ruscello Limpido",
     "description": "Un ruscello cristallino scorre tra le rocce. L'acqua sembra pulita.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Riempi tutte le tue borracce",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "sopravvivenza", "dc": 10,
-          "successText": "L'acqua è pulita e fresca. Riempi le tue riserve.",
-          "failureText": "Bevi troppo velocemente e ti viene male allo stomaco.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "CONS_002", "quantity": 5 } },
-            { "type": "addXp", "value": 25 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 10 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 10,
+            "successText": "L'acqua è pulita e fresca. Riempi le tue riserve.",
+            "failureText": "Bevi troppo velocemente e ti viene male allo stomaco.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 5}},
+              {"type": "addXp", "value": 25}
+            ],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Riposa vicino al ruscello",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Il suono dell'acqua è rilassante. Ti concedi una pausa." },
-            { "type": "heal", "value": 15 },
-            { "type": "advanceTime", "value": 30 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il suono dell'acqua è rilassante. Ti concedi una pausa."
+              },
+              {"type": "heal", "value": 15},
+              {"type": "advanceTime", "value": 30}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -549,34 +677,39 @@
     "id": "forest_snare_trap",
     "title": "Trappola a Laccio",
     "description": "Il tuo piede inciampa in un filo. Un laccio si stringe attorno alla tua caviglia e ti solleva a testa in giù!",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Taglia la corda con il coltello",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "rapiditaDiMano", "dc": 12,
-          "successText": "Tagli la corda e cadi controllando la caduta. Sei libero.",
-          "failureText": "Cadi malamente e ti fai male.",
-          "success": [
-            { "type": "addXp", "value": 25 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 15 },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 12,
+            "successText": "Tagli la corda e cadi controllando la caduta. Sei libero.",
+            "failureText": "Cadi malamente e ti fai male.",
+            "success": [{"type": "addXp", "value": 25}],
+            "failure": [{"type": "takeDamage", "value": 15}, {"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Cerca di liberarti contorcendoti",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Dopo lunghi minuti di sforzi dolorosi, riesci a liberare il piede." },
-            { "type": "takeDamage", "value": 10 },
-            { "type": "advanceTime", "value": 30 },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Dopo lunghi minuti di sforzi dolorosi, riesci a liberare il piede."
+              },
+              {"type": "takeDamage", "value": 10},
+              {"type": "advanceTime", "value": 30},
+              {"type": "addXp", "value": 15}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -584,33 +717,40 @@
     "id": "forest_owl_nest",
     "title": "Nido di Gufo",
     "description": "Un grande nido su un albero alto. Dentro brillano oggetti luccicanti che il gufo ha raccolto.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Arrampicati per prendere gli oggetti",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "acrobazia", "dc": 13,
-          "successText": "Raggiungi il nido mentre il gufo è via. Trovi monete e un piccolo gioiello.",
-          "failureText": "Il gufo torna e ti attacca gli occhi. Cadi dall'albero.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "old_coins", "quantity": 15 } },
-            { "type": "addItem", "value": { "itemId": "silver_medallion", "quantity": 1 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 20 },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 13,
+            "successText": "Raggiungi il nido mentre il gufo è via. Trovi monete e un piccolo gioiello.",
+            "failureText": "Il gufo torna e ti attacca gli occhi. Cadi dall'albero.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 15}},
+              {"type": "addItem", "value": {"itemId": "silver_medallion", "quantity": 1}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [{"type": "takeDamage", "value": 20}, {"type": "addXp", "value": 10}]
+          }
+        ]
       },
       {
         "text": "Lascia in pace l'animale",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Non è giusto rubare al nido di un animale. Lo lasci stare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non è giusto rubare al nido di un animale. Lo lasci stare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -618,32 +758,40 @@
     "id": "forest_medicinal_herbs",
     "title": "Erbe Medicinali",
     "description": "Riconosci alcune piante con proprietà curative che crescono in quest'area.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Raccogli le erbe",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "medicina", "dc": 11,
-          "successText": "Raccogli le erbe correttamente. Sono potenti medicine naturali.",
-          "failureText": "Ti confondi e raccogli piante sbagliate. Inutili.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "edible_mushrooms", "quantity": 3 } },
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "advanceTime", "value": 20 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "medicina",
+            "dc": 11,
+            "successText": "Raccogli le erbe correttamente. Sono potenti medicine naturali.",
+            "failureText": "Ti confondi e raccogli piante sbagliate. Inutili.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "edible_mushrooms", "quantity": 3}},
+              {"type": "addXp", "value": 30},
+              {"type": "addItem", "value": {"itemId": "MED_HEALING_HERBS", "quantity": 2}}
+            ],
+            "failure": [{"type": "advanceTime", "value": 20}, {"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Non sei sicuro. Lascia perdere",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Senza conoscenze botaniche, potresti fare più danni che altro." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Senza conoscenze botaniche, potresti fare più danni che altro."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -651,34 +799,42 @@
     "id": "forest_woodcutter_cabin",
     "title": "Capanna del Boscaiolo",
     "description": "Una vecchia capanna con asce e seghe arrugginite sparse ovunque. La porta è aperta.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Rovista nella capanna",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "investigare", "dc": 10,
-          "successText": "Trovi attrezzi ancora in buone condizioni e legna già tagliata.",
-          "failureText": "La capanna è piena di ragnatele e muffa. Niente di utile.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "firewood", "quantity": 10 } },
-            { "type": "addItem", "value": { "itemId": "scrap_metal", "quantity": 3 } },
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi attrezzi ancora in buone condizioni e legna già tagliata.",
+            "failureText": "La capanna è piena di ragnatele e muffa. Niente di utile.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "firewood", "quantity": 10}},
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Riposa qui per un po'",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Ti concedi una pausa al riparo. Ti senti meno stanco." },
-            { "type": "heal", "value": 10 },
-            { "type": "advanceTime", "value": 45 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Ti concedi una pausa al riparo. Ti senti meno stanco."
+              },
+              {"type": "heal", "value": 10},
+              {"type": "advanceTime", "value": 45}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -686,33 +842,43 @@
     "id": "forest_fairy_ring",
     "title": "Anello di Funghi",
     "description": "Un perfetto cerchio di funghi bianchi. Le leggende dicevano che erano portali fatati. Ora sai che sono solo funghi.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Raccogli i funghi del cerchio",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "natura", "dc": 13,
-          "successText": "Sono funghi commestibili e nutrienti. Ne raccogli molti.",
-          "failureText": "Sono velenosi! Ne assaggi uno per errore e stai male.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "edible_mushrooms", "quantity": 8 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 20 },
-            { "type": "statusChange", "value": "AVVELENATO" },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 13,
+            "successText": "Sono funghi commestibili e nutrienti. Ne raccogli molti.",
+            "failureText": "Sono velenosi! Ne assaggi uno per errore e stai male.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "edible_mushrooms", "quantity": 8}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 20},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 10}
+            ]
+          }
+        ]
       },
       {
         "text": "Lascia stare il cerchio",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Le vecchie superstizioni muoiono lentamente. Decidi di non rischiare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Le vecchie superstizioni muoiono lentamente. Decidi di non rischiare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -720,32 +886,37 @@
     "id": "forest_fallen_tree",
     "title": "Albero Caduto",
     "description": "Un enorme albero abbattuto blocca il sentiero. Dovrai scavalcarlo o aggirarlo.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Scavalcalo",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "atletica", "dc": 10,
-          "successText": "Scavalchi l'albero senza problemi.",
-          "failureText": "Scivoli e cadi dall'altra parte, facendoti male.",
-          "success": [
-            { "type": "addXp", "value": 15 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 10 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 10,
+            "successText": "Scavalchi l'albero senza problemi.",
+            "failureText": "Scivoli e cadi dall'altra parte, facendoti male.",
+            "success": [{"type": "addXp", "value": 15}],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
       },
       {
         "text": "Fai il giro",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Aggiri l'albero con cautela. Perdi un po' di tempo ma arrivi sano e salvo." },
-            { "type": "advanceTime", "value": 20 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Aggiri l'albero con cautela. Perdi un po' di tempo ma arrivi sano e salvo."
+              },
+              {"type": "advanceTime", "value": 20}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -753,34 +924,41 @@
     "id": "forest_raven_flock",
     "title": "Stormo di Corvi",
     "description": "Centinaia di corvi neri si radunano sugli alberi, osservandoti con i loro occhi brillanti. È inquietante.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Continua ignorandoli",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "I corvi gracchiano e volano via. Sono solo uccelli." },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "I corvi gracchiano e volano via. Sono solo uccelli."
+              },
+              {"type": "addXp", "value": 10}
+            ]
+          }
+        ]
       },
       {
         "text": "Segui i corvi",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "sopravvivenza", "dc": 12,
-          "successText": "I corvi ti guidano a una carogna fresca. Recuperi carne e pelli.",
-          "failureText": "I corvi volano via senza condurti da nessuna parte. Perdi tempo.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "CONS_001", "quantity": 3 } },
-            { "type": "addItem", "value": { "itemId": "animal_hide", "quantity": 1 } },
-            { "type": "addXp", "value": 30 }
-          ],
-          "failure": [
-            { "type": "advanceTime", "value": 30 },
-            { "type": "addXp", "value": 5 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 12,
+            "successText": "I corvi ti guidano a una carogna fresca. Recuperi carne e pelli.",
+            "failureText": "I corvi volano via senza condurti da nessuna parte. Perdi tempo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "animal_hide", "quantity": 1}},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}, {"type": "addXp", "value": 5}]
+          }
+        ]
       }
     ]
   },
@@ -788,35 +966,45 @@
     "id": "forest_old_mine_entrance",
     "title": "Ingresso Miniera Abbandonata",
     "description": "L'ingresso di una vecchia miniera si apre nella roccia. Buio e minaccioso.",
-    "biomes": ["Foresta"], "isUnique": true,
+    "biomes": ["Foresta"],
+    "isUnique": true,
     "choices": [
       {
         "text": "Esplora la miniera",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "percezione", "dc": 13,
-          "successText": "Trovi vecchi attrezzi minerari e minerali preziosi nelle gallerie superiori.",
-          "failureText": "Ti perdi nel buio e impieghi ore per uscire. Hai sprecato tempo ed energie.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "scrap_metal_high_quality", "quantity": 3 } },
-            { "type": "addItem", "value": { "itemId": "precious_stone", "quantity": 1 } },
-            { "type": "advanceTime", "value": 60 },
-            { "type": "addXp", "value": 50 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 15 },
-            { "type": "advanceTime", "value": 120 },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 13,
+            "successText": "Trovi vecchi attrezzi minerari e minerali preziosi nelle gallerie superiori.",
+            "failureText": "Ti perdi nel buio e impieghi ore per uscire. Hai sprecato tempo ed energie.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "scrap_metal_high_quality", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "precious_stone", "quantity": 1}},
+              {"type": "advanceTime", "value": 60},
+              {"type": "addXp", "value": 50}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "advanceTime", "value": 120},
+              {"type": "addXp", "value": 10}
+            ]
+          }
+        ]
       },
       {
         "text": "Troppo pericoloso. Vai via",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            { "type": "journalEntry", "text": "Le miniere abbandonate sono trappole mortali. Meglio evitare." }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Le miniere abbandonate sono trappole mortali. Meglio evitare."
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -824,40 +1012,47 @@
     "id": "forest_giant_spider",
     "title": "Ragno Gigante",
     "description": "Un ragno delle dimensioni di un cane ti blocca il passaggio. I suoi occhi brillano nel buio.",
-    "biomes": ["Foresta"], "isUnique": false,
+    "biomes": ["Foresta"],
+    "isUnique": false,
     "choices": [
       {
         "text": "Combatti il ragno",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "atletica", "dc": 14,
-          "successText": "Uccidi il ragno dopo una breve lotta. Le sue ghiandole velenifere sono intatte.",
-          "failureText": "Il ragno ti morde prima che tu possa ucciderlo. Il veleno brucia.",
-          "success": [
-            { "type": "addItem", "value": { "itemId": "chemicals_basic", "quantity": 2 } },
-            { "type": "addXp", "value": 35 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 25 },
-            { "type": "statusChange", "value": "AVVELENATO" },
-            { "type": "addXp", "value": 15 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 14,
+            "successText": "Uccidi il ragno dopo una breve lotta. Le sue ghiandole velenifere sono intatte.",
+            "failureText": "Il ragno ti morde prima che tu possa ucciderlo. Il veleno brucia.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "chemicals_basic", "quantity": 2}},
+              {"type": "addXp", "value": 35}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 25},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 15}
+            ]
+          }
+        ]
       },
       {
         "text": "Aggiralo con cautela",
-        "outcomes": [{
-          "type": "skillCheck", "skill": "furtivita", "dc": 12,
-          "successText": "Ti muovi silenziosamente e passi senza essere notato.",
-          "failureText": "Il ragno ti individua e attacca!",
-          "success": [
-            { "type": "addXp", "value": 20 }
-          ],
-          "failure": [
-            { "type": "takeDamage", "value": 20 },
-            { "type": "statusChange", "value": "AVVELENATO" },
-            { "type": "addXp", "value": 10 }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 12,
+            "successText": "Ti muovi silenziosamente e passi senza essere notato.",
+            "failureText": "Il ragno ti individua e attacca!",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 20},
+              {"type": "statusChange", "value": "AVVELENATO"},
+              {"type": "addXp", "value": 10}
+            ]
+          }
+        ]
       }
     ]
   },
@@ -870,106 +1065,290 @@
     "choices": [
       {
         "text": "Esamina la spada e l'armatura",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "investigare",
-          "dc": 12,
-          "successText": "Tocchi il metallo freddo della spada. È pesante, ben bilanciata, un'arma forgiata da un vero artigiano. Noti un'incisione quasi cancellata sulla lama: 'In Hoc Signo Vinces'. L'armatura, sebbene rovinata, è un'opera di incredibile complessità, ogni anello intrecciato a mano. Ti rendi conto che, chiunque fosse quest'uomo, non era un semplice predone. Era qualcosa di più. Decidi di prendere la spada. È un'arma anacronistica, ma la sua fattura è senza tempo.",
-          "failureText": "La spada è troppo pesante e conficcata nel terreno. L'armatura è troppo corrosa. Non riesci a recuperare nulla di utile, solo schegge di metallo arrugginito. Il mistero di quest'uomo rimane intatto.",
-          "success": [
-            {
-              "type": "addItem",
-              "value": {
-                "itemId": "greatsword_vargeon",
-                "quantity": 1
-              }
-            },
-            {
-              "type": "journalEntry",
-              "text": "Hai recuperato lo Spadone di Vargeon. Un'arma di un'epoca perduta."
-            },
-            {
-              "type": "addXp",
-              "value": 150
-            }
-          ],
-          "failure": [
-            {
-              "type": "addItem",
-              "value": {
-                "itemId": "scrap_metal",
-                "quantity": 2
-              }
-            },
-            {
-              "type": "addXp",
-              "value": 30
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "Tocchi il metallo freddo della spada. È pesante, ben bilanciata, un'arma forgiata da un vero artigiano. Noti un'incisione quasi cancellata sulla lama: 'In Hoc Signo Vinces'. L'armatura, sebbene rovinata, è un'opera di incredibile complessità, ogni anello intrecciato a mano. Ti rendi conto che, chiunque fosse quest'uomo, non era un semplice predone. Era qualcosa di più. Decidi di prendere la spada. È un'arma anacronistica, ma la sua fattura è senza tempo.",
+            "failureText": "La spada è troppo pesante e conficcata nel terreno. L'armatura è troppo corrosa. Non riesci a recuperare nulla di utile, solo schegge di metallo arrugginito. Il mistero di quest'uomo rimane intatto.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "greatsword_vargeon", "quantity": 1}},
+              {
+                "type": "journalEntry",
+                "text": "Hai recuperato lo Spadone di Vargeon. Un'arma di un'epoca perduta."
+              },
+              {"type": "addXp", "value": 150}
+            ],
+            "failure": [
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 2}},
+              {"type": "addXp", "value": 30}
+            ]
+          }
+        ]
       },
       {
         "text": "Cerca un'identificazione o degli effetti personali",
-        "outcomes": [{
-          "type": "skillCheck",
-          "skill": "percezione",
-          "dc": 14,
-          "successText": "Cerchi con delicatezza tra i resti del suo equipaggiamento. Nascosto in una piccola borsa di cuoio alla cintura, non trovi documenti, ma un oggetto strano: un medaglione di legno con un simbolo inciso che non riconosci - forse uno stemma di un'associazione? - e la scritta 'Leonardus Vargeon'. Accanto, un piccolo sacchetto di erbe essiccate, ancora aromatiche. Forse non era solo un guerriero.",
-          "failureText": "Il tempo ha consumato tutto. Non trovi nulla che possa dare un nome o una storia a questo guerriero silenzioso. Rimarrà un enigma.",
-          "success": [
-            {
-              "type": "addItem",
-              "value": {
-                "itemId": "vargeon_medallion",
-                "quantity": 1
-              }
-            },
-            {
-              "type": "addItem",
-              "value": {
-                "itemId": "MED_HEALING_HERBS",
-                "quantity": 2
-              }
-            },
-            {
-              "type": "journalEntry",
-              "text": "Hai trovato il medaglione di Leonardus Vargeon. Un mistero di un'epoca perduta."
-            },
-            {
-              "type": "addXp",
-              "value": 120
-            }
-          ],
-          "failure": [
-            {
-              "type": "addXp",
-              "value": 20
-            }
-          ]
-        }]
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 14,
+            "successText": "Cerchi con delicatezza tra i resti del suo equipaggiamento. Nascosto in una piccola borsa di cuoio alla cintura, non trovi documenti, ma un oggetto strano: un medaglione di legno con un simbolo inciso che non riconosci - forse uno stemma di un'associazione? - e la scritta 'Leonardus Vargeon'. Accanto, un piccolo sacchetto di erbe essiccate, ancora aromatiche. Forse non era solo un guerriero.",
+            "failureText": "Il tempo ha consumato tutto. Non trovi nulla che possa dare un nome o una storia a questo guerriero silenzioso. Rimarrà un enigma.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "vargeon_medallion", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "MED_HEALING_HERBS", "quantity": 2}},
+              {
+                "type": "journalEntry",
+                "text": "Hai trovato il medaglione di Leonardus Vargeon. Un mistero di un'epoca perduta."
+              },
+              {"type": "addXp", "value": 120}
+            ],
+            "failure": [{"type": "addXp", "value": 20}]
+          }
+        ]
       },
       {
         "text": "Lascia il guerriero al suo riposo. Onora la sua veglia.",
-        "outcomes": [{
-          "type": "direct",
-          "results": [
-            {
-              "type": "journalEntry",
-              "text": "Decidi che questo luogo è una tomba, non un deposito da saccheggiare. C'è una strana pace in questa radura, una solennità che non vuoi violare. Fai un cenno di rispetto allo scheletro, un guerriero che ha trovato la sua fine in un'epoca che non era la sua. Riprendi il cammino, lasciandoti alle spalle l'eco silenzioso di una storia che non conoscerai mai, ma che ora senti parte della tua."
-            },
-            {
-              "type": "alignmentChange",
-              "value": {
-                "type": "lena",
-                "amount": 2
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi che questo luogo è una tomba, non un deposito da saccheggiare. C'è una strana pace in questa radura, una solennità che non vuoi violare. Fai un cenno di rispetto allo scheletro, un guerriero che ha trovato la sua fine in un'epoca che non era la sua. Riprendi il cammino, lasciandoti alle spalle l'eco silenzioso di una storia che non conoscerai mai, ma che ora senti parte della tua."
+              },
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
+              {"type": "addXp", "value": 100}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_bird_song",
+    "title": "Canto degli Uccelli",
+    "description": "Senti un melodioso canto di uccelli provenire da un boschetto più denso. Potrebbe essere un segno di un ambiente sano, o di una trappola.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Segui il canto",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 11,
+            "successText": "Gli uccelli ti accettano come presenza non minacciosa. Ti guidano verso un piccolo stagno naturale con acqua pulita e bacche commestibili.",
+            "failureText": "Il tuo movimento brusco spaventa gli uccelli, che volano via cinguettando di allarme. Altri predatori potrebbero aver sentito.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "wild_berries", "quantity": 3}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Ignora e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi che non vale la pena deviare dal sentiero. Prosegui la tua strada senza distrazioni."
               }
-            },
-            {
-              "type": "addXp",
-              "value": 100
-            }
-          ]
-        }]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_overgrown_path",
+    "title": "Sentiero Ricoperto",
+    "description": "Il sentiero che stai seguendo sembra essere stato abbandonato da tempo. La vegetazione lo ha quasi completamente ricoperto, ma puoi intravedere qualcosa più avanti.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Apri un varco tra la vegetazione",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Dopo aver lottato con rovi e rami, riesci ad aprire un passaggio e scopri i resti di un vecchio ponte di legno con una cassetta degli attrezzi ancora sigillata.",
+            "failureText": "Le spine dei rovi ti graffiano e i rami ti colpiscono. Apri un passaggio, ma a caro prezzo.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "tool_box", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [{"type": "takeDamage", "value": 10}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un sentiero alternativo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Studiando la vegetazione, trovi un sentiero di animali che ti porta nella stessa direzione ma è molto più agevole.",
+            "failureText": "Ti perdi tra sentieri che non portano da nessuna parte. Perdi molto tempo prima di ritrovare la strada giusta.",
+            "success": [{"type": "addXp", "value": 20}],
+            "failure": [{"type": "advanceTime", "value": 90}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_poachers_camp",
+    "title": "Campo di Bracconieri",
+    "description": "Trovi un accampamento abbandonato di bracconieri. Ci sono tende, un fuoco spento e alcune trappole. Potrebbe esserci qualcosa di utile.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Cerca nelle tende",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi alcune munizioni per fucile e un coltello da caccia ben affilato.",
+            "failureText": "Mentre frughi, attivi una trappola nascosta che ti ferisce alla gamba.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "ammo_rifle", "quantity": 15}},
+              {"type": "addItem", "value": {"itemId": "combat_knife", "quantity": 1}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 12},
+              {"type": "statusChange", "value": "FERITO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Prendi solo il necessario e vai",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Vedi alcune cartucce per fucile abbandonate e le prendi velocemente."
+              },
+              {"type": "addItem", "value": {"itemId": "ammo_shotgun", "quantity": 8}}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_radioactive_zone",
+    "title": "Zona Radioattiva",
+    "description": "Entri in una zona dove gli alberi sembrano malati e contorti. L'aria ha un odore metallico strano. Potrebbe essere radioattiva.",
+    "biomes": ["Foresta"],
+    "isUnique": true,
+    "choices": [
+      {
+        "text": "Attraversala velocemente",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 13,
+            "successText": "Trattieni il respiro e corri attraverso. Riesci a passare con solo una leggera nausea.",
+            "failureText": "La radioattività ti colpisce duramente. Ti senti debole e malato.",
+            "success": [{"type": "takeDamage", "value": 5}, {"type": "addXp", "value": 20}],
+            "failure": [
+              {"type": "takeDamage", "value": 15},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca un percorso alternativo",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi un sentiero che aggira la zona contaminata, anche se ti costa tempo.",
+            "failureText": "Ti perdi cercando di aggirare la zona e finisci per passarci attraverso comunque.",
+            "success": [{"type": "advanceTime", "value": 45}, {"type": "addXp", "value": 20}],
+            "failure": [{"type": "takeDamage", "value": 8}, {"type": "addXp", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Lascia perdere e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Decidi di non rischiare e prosegui."}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forest_wild_berries",
+    "title": "Bacche Selvatiche",
+    "description": "Vedi un cespuglio carico di bacche rosse. Potrebbero essere commestibili o velenose.",
+    "biomes": ["Foresta"],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Raccoglile con attenzione",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "sopravvivenza",
+            "dc": 10,
+            "successText": "Riconosci queste bacche come sicure. Sono dolci e nutrienti.",
+            "failureText": "Ne mangi una per testare. È amara e ti senti male dopo poco.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "wild_berries", "quantity": 8}},
+              {"type": "addXp", "value": 20}
+            ],
+            "failure": [
+              {"type": "takeDamage", "value": 6},
+              {"type": "statusChange", "value": "MALATO"},
+              {"type": "addXp", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Lasciale perdere",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "journalEntry", "text": "Meglio non rischiare. Continui il tuo cammino."}]
+          }
+        ]
       }
     ]
   }

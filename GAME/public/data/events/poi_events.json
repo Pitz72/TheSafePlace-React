@@ -1,0 +1,1186 @@
+[
+  {
+    "id": "windmill_site",
+    "title": "Il Vecchio Mulino a Vento",
+    "description": "Il vecchio mulino cigola nel vento, le pale arrugginite ferme a metà giro. È il posto descritto nel messaggio di Jonas.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Cerca il talismano alla base del mulino",
+        "hideIfFlag": "JONAS_TALISMAN_FOUND",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Dopo una lunga ricerca tra l'erba alta e le pietre, lo vedi. Un piccolo oggetto di legno scuro, quasi mimetizzato con il terreno. Hai trovato il Talismano di Jonas.",
+            "failureText": "Cerchi per quasi un'ora tra l'erba alta, ma non trovi nulla. Forse, con più calma, la prossima volta.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "jonas_talisman", "quantity": 1}},
+              {"type": "addXp", "value": 50},
+              {"type": "setFlag", "value": "JONAS_TALISMAN_FOUND"}
+            ],
+            "failure": [{"type": "advanceTime", "value": 60}]
+          }
+        ]
+      },
+      {
+        "text": "Sali in cima per guardarti intorno",
+        "hideIfFlag": "WINDMILL_CLIMBED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 12,
+            "successText": "Dalla cima vedi per chilometri: annoti i rifugi intatti all'orizzonte.",
+            "failureText": "Una tavola marcia scricchiola sotto il tuo peso: scendi prima di farti male.",
+            "success": [
+              {"type": "addXp", "value": 20},
+              {"type": "advanceTime", "value": 20},
+              {"type": "setFlag", "value": "WINDMILL_CLIMBED"}
+            ],
+            "failure": [{"type": "advanceTime", "value": 10}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "JONAS_TALISMAN_FOUND",
+        "description": "Il vecchio mulino cigola nel vento. Qui hai trovato il talismano di Jonas: non c'è altro da cercare."
+      }
+    ]
+  },
+  {
+    "id": "thief_camp_site",
+    "title": "Accampamento del Predone",
+    "description": "Trovi un accampamento nascosto tra gli alberi. Un uomo armato dorme vicino a un fuoco morente. Vedi l'orologio appeso alla sua cintura.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Ruba l'orologio senza farti vedere",
+        "hideIfFlag": "THIEF_DEALT_WITH",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "furtivita",
+            "dc": 14,
+            "successText": "Ti avvicini senza un rumore e sganci l'orologio dalla cintura. Il predone non si sveglia.",
+            "failureText": "Un ramo secco si spezza sotto il tuo piede. Il predone apre gli occhi e afferra il coltello!",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "old_watch", "quantity": 1}},
+              {"type": "setFlag", "value": "THIEF_DEALT_WITH"},
+              {"type": "addXp", "value": 50},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
+            ],
+            "failure": [{"type": "special", "value": {"effect": "startCombat", "enemyId": "thief_raider"}}]
+          }
+        ]
+      },
+      {
+        "text": "Sveglialo e affrontalo",
+        "hideIfFlag": "THIEF_DEALT_WITH",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Calci via il suo coltello e lo svegli. Ringhia e si lancia su di te."
+              },
+              {"type": "special", "value": {"effect": "startCombat", "enemyId": "thief_raider"}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Convincilo a restituire l'orologio",
+        "hideIfFlag": "THIEF_DEALT_WITH",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "persuasione",
+            "dc": 16,
+            "successText": "Gli racconti di Marcus e di suo padre. Il predone resta in silenzio a lungo, poi ti lancia l'orologio. 'Prendilo. Non porta fortuna, comunque.'",
+            "failureText": "Il predone ride della tua ingenuità e ti si scaglia addosso!",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "old_watch", "quantity": 1}},
+              {"type": "setFlag", "value": "THIEF_DEALT_WITH"},
+              {"type": "addXp", "value": 80},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}}
+            ],
+            "failure": [{"type": "special", "value": {"effect": "startCombat", "enemyId": "thief_raider"}}]
+          }
+        ]
+      },
+      {
+        "text": "Fruga tra le cose del predone",
+        "requiresFlag": "THIEF_DEALT_WITH",
+        "hideIfFlag": "THIEF_CAMP_LOOTED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Tra coperte lacere e ossa spolpate trovi qualcosa di utile."
+              },
+              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 6}},
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "throwing_knives", "quantity": 3}},
+              {"type": "setFlag", "value": "THIEF_CAMP_LOOTED"}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "THIEF_DEALT_WITH",
+        "description": "L'accampamento del predone è deserto. Il fuoco è spento da tempo."
+      }
+    ]
+  },
+  {
+    "id": "ruined_school_site",
+    "title": "La Scuola in Rovina",
+    "description": "Una scuola sventrata, con i banchi rovesciati e i disegni dei bambini ancora appesi alle pareti. Il silenzio è rotto solo dal gocciolio dell'acqua.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Chiama Elara a bassa voce",
+        "requiresQuest": "find_elara",
+        "hideIfFlag": "ELARA_FOUND",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Entri nella scuola in rovina. Il silenzio è rotto solo dal gocciolio dell'acqua. Chiami a bassa voce il nome 'Elara'. Dopo un momento di esitazione, una ragazzina spaurita emerge da dietro una cattedra rovesciata. 'Papà... papà ti ha mandato?' chiede con voce tremante."
+              },
+              {
+                "type": "journalEntry",
+                "text": "Le dici che suo padre è vivo e che ti ha mandato lui. Elara ti prende la mano: ora devi scortarla al Crocevia."
+              },
+              {"type": "setFlag", "value": "ELARA_FOUND"},
+              {"type": "questTrigger", "value": "elara_found"},
+              {"type": "addXp", "value": 50},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 1}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca nella mensa",
+        "hideIfFlag": "SCHOOL_CANTEEN_SEARCHED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 10,
+            "successText": "Trovi lattine conservate e cibo in scatola ancora commestibile.",
+            "failureText": "Tutto è andato a male. Non c'è nulla di commestibile.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "spoiled_canned_food", "quantity": 1}},
+              {"type": "addXp", "value": 20},
+              {"type": "setFlag", "value": "SCHOOL_CANTEEN_SEARCHED"}
+            ],
+            "failure": [{"type": "setFlag", "value": "SCHOOL_CANTEEN_SEARCHED"}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ]
+  },
+  {
+    "id": "police_station_site",
+    "title": "Stazione di Polizia Abbandonata",
+    "description": "L'edificio della polizia è stato parzialmente bruciato. Le celle sono vuote, ma l'armeria potrebbe ancora avere qualcosa.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Cerca nell'armeria",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "rapiditaDiMano",
+            "dc": 14,
+            "successText": "Scassini la porta dell'armeria. Trovi una pistola ancora funzionante e munizioni.",
+            "failureText": "L'armeria è vuota. Qualcun altro è arrivato prima di te.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "weapon_handgun", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 20}},
+              {"type": "addXp", "value": 50},
+              {"type": "setFlag", "value": "POLICE_ARMORY_SEARCHED"}
+            ],
+            "failure": [{"type": "addXp", "value": 10}, {"type": "setFlag", "value": "POLICE_ARMORY_SEARCHED"}]
+          }
+        ],
+        "hideIfFlag": "POLICE_ARMORY_SEARCHED"
+      },
+      {
+        "text": "Cerca negli uffici",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 11,
+            "successText": "Trovi documenti confidenziali, mappe della città pre-guerra e un vecchio badge aziendale intatto. Apparteneva a un certo {RANDOM_DONOR}. In un cassetto c'è anche un nastro con una sequenza di numeri e suoni distorti.",
+            "failureText": "Gli uffici sono stati saccheggiati a fondo. Niente di utile.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "sensitive_documents", "quantity": 2}},
+              {"type": "addXp", "value": 30},
+              {"type": "setFlag", "value": "POLICE_OFFICES_SEARCHED"},
+              {"type": "addItem", "value": {"itemId": "cryptic_recording", "quantity": 1}}
+            ],
+            "failure": [{"type": "addXp", "value": 5}, {"type": "setFlag", "value": "POLICE_OFFICES_SEARCHED"}]
+          }
+        ],
+        "hideIfFlag": "POLICE_OFFICES_SEARCHED"
+      },
+      {
+        "text": "[QUEST] Usa un terminale per decifrare il chip del drone",
+        "itemRequirements": [{"itemId": "drone_memory_chip", "quantity": 1}],
+        "requiresQuest": "decipher_drone_data",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 14,
+            "successText": "Dopo aver armeggiato con i cavi, riesci ad alimentare un vecchio terminale. Inserisci il chip. Sullo schermo appaiono delle coordinate e un messaggio: 'Deposito scorte emergenza 7-B. Integro.'",
+            "failureText": "Il terminale sfrigola e si spegne. Ci vorrà un'altra ora di tentativi, ma il chip è intatto.",
+            "success": [
+              {"type": "questTrigger", "value": "police_terminal_interaction"},
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "military_bunker"}},
+              {"type": "addXp", "value": 100}
+            ],
+            "failure": [{"type": "advanceTime", "value": 60}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ]
+  },
+  {
+    "id": "military_bunker_site",
+    "title": "Deposito Militare 7-B",
+    "description": "Una porta blindata semisepolta nel terreno, con una sigla stampigliata in vernice gialla: 7-B. Le coordinate del drone erano giuste.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Forza la porta blindata",
+        "hideIfFlag": "BUNKER_OPENED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 14,
+            "successText": "Con una leva e tutto il tuo peso, la porta cede con un gemito metallico. Dentro, casse militari ancora sigillate.",
+            "failureText": "La porta non si muove di un millimetro. Ti fai male a una spalla.",
+            "success": [
+              {"type": "setFlag", "value": "BUNKER_OPENED"},
+              {"type": "addItem", "value": {"itemId": "military_grade_electronics", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "portable_generator", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 20}},
+              {"type": "addItem", "value": {"itemId": "ammo_piercing", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "stimpak_military", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "military_backpack", "quantity": 1}},
+              {"type": "addXp", "value": 120}
+            ],
+            "failure": [{"type": "takeDamage", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Bypassa il pannello di controllo",
+        "hideIfFlag": "BUNKER_OPENED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Il pannello si riaccende con un bip. Inserisci il codice trovato nel chip e la porta scorre di lato. Dentro, casse militari ancora sigillate.",
+            "failureText": "Il pannello emette un ronzio d'errore e si blocca. Dovrai riprovare più tardi.",
+            "success": [
+              {"type": "setFlag", "value": "BUNKER_OPENED"},
+              {"type": "addItem", "value": {"itemId": "military_grade_electronics", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "portable_generator", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "ammo_9mm", "quantity": 20}},
+              {"type": "addItem", "value": {"itemId": "ammo_piercing", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "stimpak_military", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "military_backpack", "quantity": 1}},
+              {"type": "addXp", "value": 120}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "BUNKER_OPENED",
+        "description": "Il deposito 7-B è aperto e ormai vuoto. Restano solo casse sfondate e polvere."
+      }
+    ]
+  },
+  {
+    "id": "radio_tower_site",
+    "title": "La Torre Radio",
+    "description": "Una torre di trasmissione svetta solitaria sulla pianura. Alla base, la sala trasmissioni è in rovina, ma l'antenna sul tetto sembra intatta.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Esamina la console di trasmissione",
+        "hideIfQuestKnown": "tower_of_light",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "La console è gravemente danneggiata. Ti servirebbero tre componenti di grado militare e un generatore portatile. Ma se ci riuscissi... potresti rimettere in onda un segnale."
+              },
+              {"type": "startQuest", "value": "tower_of_light"},
+              {"type": "addXp", "value": 50}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[QUEST] Installa i componenti e riattiva la torre",
+        "itemRequirements": [
+          {"itemId": "military_grade_electronics", "quantity": 3},
+          {"itemId": "portable_generator", "quantity": 1}
+        ],
+        "requiresQuest": "tower_of_light",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 15,
+            "successText": "Dopo ore di lavoro febbrile, colleghi l'ultimo cavo. Il generatore tossisce, poi si avvia con un ronzio costante. Le luci della console si accendono una a una. Attivi il trasmettitore di emergenza. Per un lungo momento, c'è solo statica. Poi, una voce debole, quasi sommersa dal rumore: '...qui Stazione Delta... c'è qualcuno in ascolto?... Ripeto, c'è qualcuno...' Hai trovato altri sopravvissuti!",
+            "failureText": "Un collegamento sbagliato: un componente fonde con un odore di plastica bruciata. Te ne servirà un altro.",
+            "success": [
+              {
+                "type": "removeItem",
+                "value": {"itemId": "military_grade_electronics", "quantity": 3}
+              },
+              {"type": "removeItem", "value": {"itemId": "portable_generator", "quantity": 1}},
+              {"type": "setFlag", "value": "RADIO_TOWER_REPAIRED"},
+              {"type": "questTrigger", "value": "radio_tower_repair_complete"},
+              {"type": "addXp", "value": 150}
+            ],
+            "failure": [
+              {
+                "type": "removeItem",
+                "value": {"itemId": "military_grade_electronics", "quantity": 1}
+              },
+              {"type": "advanceTime", "value": 60}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[QUEST] Cerca il tesoro del bambino sotto la torre",
+        "requiresQuest": "find_family_treasure",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Tra le fondamenta della torre trovi una cassetta di latta avvolta in un telo cerato. Dentro, i ricordi di una famiglia: un medaglione, delle bende, una foto. Il tesoro di cui parlava il bambino."
+              },
+              {"type": "questTrigger", "value": "radio_tower_search_treasure"},
+              {"type": "addXp", "value": 30}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Arrampicati sull'antenna per guardarti intorno",
+        "hideIfFlag": "RADIO_TOWER_CLIMBED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "acrobazia",
+            "dc": 13,
+            "successText": "Dalla cima vedi l'intera valle. Riconosci la sagoma dell'impianto di depurazione e recuperi dei componenti dall'antenna.",
+            "failureText": "A metà salita un piolo cede. Scivoli giù per qualche metro prima di riprendere la presa.",
+            "success": [
+              {"type": "setFlag", "value": "RADIO_TOWER_CLIMBED"},
+              {"type": "special", "value": {"effect": "revealPOI", "poiId": "water_plant"}},
+              {"type": "addItem", "value": {"itemId": "electronics_advanced", "quantity": 2}},
+              {"type": "addXp", "value": 40}
+            ],
+            "failure": [{"type": "takeDamage", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "RADIO_TOWER_REPAIRED",
+        "description": "La torre ronza piano: il generatore gira e la spia del trasmettitore lampeggia. Da qualche parte, la Stazione Delta è in ascolto."
+      }
+    ]
+  },
+  {
+    "id": "water_plant_site",
+    "title": "Impianto di Depurazione Acqua",
+    "description": "Un vasto complesso industriale, sorprendentemente intatto. Le enormi vasche di depurazione sono vuote, le pompe silenziose. Ma i sistemi principali sembrano solo spenti, non distrutti. Questo impianto potrebbe fornire acqua pulita a un'intera area urbana.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Ispeziona i sistemi principali",
+        "hideIfQuestKnown": "water_of_life",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Il generatore è offline e i filtri sono intasati, ma la struttura è solida. Con il manuale di manutenzione, tre filtri industriali e una batteria per veicoli pesanti potresti riattivare tutto."
+              },
+              {"type": "startQuest", "value": "water_of_life"},
+              {"type": "addXp", "value": 50}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Cerca nell'ufficio del capoturno",
+        "hideIfFlag": "WATER_PLANT_OFFICE_SEARCHED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 12,
+            "successText": "In un armadietto di metallo trovi un manuale rilegato: 'Manutenzione impianti idraulici — Edizione tecnica'.",
+            "failureText": "L'ufficio è un caos di carte bagnate. Ci vorrà più tempo per trovarci qualcosa.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "hydraulic_manual", "quantity": 1}},
+              {"type": "setFlag", "value": "WATER_PLANT_OFFICE_SEARCHED"},
+              {"type": "addXp", "value": 30}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ]
+      },
+      {
+        "text": "[QUEST] Ripara l'impianto di depurazione",
+        "itemRequirements": [
+          {"itemId": "hydraulic_manual", "quantity": 1},
+          {"itemId": "industrial_filter", "quantity": 3},
+          {"itemId": "vehicle_battery", "quantity": 1}
+        ],
+        "requiresQuest": "water_of_life",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 15,
+            "successText": "Segui le istruzioni del manuale passo dopo passo. Sostituisci i filtri, colleghi la batteria, riavvii le pompe. Con un rombo profondo, le vecchie macchine si rimettono in moto. L'acqua inizia a scorrere attraverso i filtri. Nelle fontane e nei rubinetti di tutto il quartiere, l'acqua torna a sgorgare, pulita e potabile. Hai riportato in vita un pezzo di civiltà.",
+            "failureText": "Un filtro si squarcia sotto la pressione dell'acqua. Te ne servirà un altro prima di riprovare.",
+            "success": [
+              {"type": "removeItem", "value": {"itemId": "industrial_filter", "quantity": 3}},
+              {"type": "removeItem", "value": {"itemId": "vehicle_battery", "quantity": 1}},
+              {"type": "special", "value": {"effect": "activateWaterPlant"}},
+              {"type": "questTrigger", "value": "water_plant_repair_complete"},
+              {"type": "addXp", "value": 150}
+            ],
+            "failure": [
+              {"type": "removeItem", "value": {"itemId": "industrial_filter", "quantity": 1}},
+              {"type": "advanceTime", "value": 60}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Fai rifornimento d'acqua pulita",
+        "requiresFlag": "WATER_PLANT_ACTIVE",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Riempi due taniche pulite dai rubinetti dell'impianto."
+              },
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "advanceTime", "value": 15}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "WATER_PLANT_ACTIVE",
+        "description": "Le pompe dell'impianto rombano. L'acqua scorre limpida nelle vasche: hai riportato in vita un pezzo di civiltà."
+      }
+    ]
+  },
+  {
+    "id": "theater_piano",
+    "title": "Il Pianoforte del Teatro",
+    "description": "Il teatro è come l'hai lasciato. Al centro della sala, il pianoforte a coda aspetta sotto uno strato di polvere.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "[QUEST] Accorda il pianoforte",
+        "itemRequirements": [{"itemId": "precision_tools", "quantity": 1}],
+        "requiresQuest": "broken_melody",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 15,
+            "successText": "Con pazienza infinita, accorda ogni corda. Poi, esitante, suoni alcune note. La melodia che ne esce è semplice, malinconica, ma pura. Per un istante, il suono della musica riempie le rovine, un'eco di bellezza in un mondo di cenere. Ti senti... più umano.",
+            "failureText": "Una corda si spezza con un suono stridente. Ne sostituisci una con un filo di riserva: dovrai ricominciare con più calma.",
+            "success": [
+              {"type": "questTrigger", "value": "piano_tuning_complete"},
+              {"type": "setFlag", "value": "PIANO_TUNED"},
+              {"type": "addXp", "value": 100}
+            ],
+            "failure": [{"type": "advanceTime", "value": 60}]
+          }
+        ]
+      },
+      {
+        "text": "Suona qualcosa",
+        "requiresFlag": "PIANO_TUNED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Le tue dita trovano una melodia che non sapevi di ricordare. Per qualche minuto, le rovine non sembrano più rovine."
+              },
+              {"type": "heal", "value": 10},
+              {"type": "advanceTime", "value": 20}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ]
+  },
+  {
+    "id": "village_pump",
+    "title": "La Pompa del Villaggio",
+    "description": "Al centro della piazzetta, la vecchia pompa a mano è arrugginita e muta. Con una guarnizione nuova e un po' di metallo, forse ripartirebbe.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Esamina il meccanismo",
+        "hideIfQuestKnown": "repair_water_pump",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "La pompa è danneggiata ma riparabile: servono una guarnizione di gomma e due rottami metallici."
+              },
+              {"type": "startQuest", "value": "repair_water_pump"}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[QUEST] Ripara la pompa",
+        "itemRequirements": [{"itemId": "rubber_gasket", "quantity": 1}, {"itemId": "scrap_metal", "quantity": 2}],
+        "requiresQuest": "repair_water_pump",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "Smonti il meccanismo, sostituisci la guarnizione e rinforzi il pistone. Azioni la leva: dopo qualche cigolio, un fiotto d'acqua limpida sgorga dal beccuccio.",
+            "failureText": "La guarnizione si strappa mentre la monti. Te ne servirà un'altra.",
+            "success": [
+              {"type": "removeItem", "value": {"itemId": "rubber_gasket", "quantity": 1}},
+              {"type": "removeItem", "value": {"itemId": "scrap_metal", "quantity": 2}},
+              {"type": "special", "value": {"effect": "activateWaterPump"}},
+              {"type": "questTrigger", "value": "pump_repaired"},
+              {"type": "addXp", "value": 60}
+            ],
+            "failure": [{"type": "removeItem", "value": {"itemId": "rubber_gasket", "quantity": 1}}]
+          }
+        ]
+      },
+      {
+        "text": "Bevi alla pompa",
+        "requiresFlag": "PUMP_REPAIRED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {"type": "journalEntry", "text": "Bevi a lunghi sorsi l'acqua fresca della pompa."},
+              {"type": "hydration", "value": 40},
+              {"type": "advanceTime", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Riempi una bottiglia vuota",
+        "itemRequirements": [{"itemId": "bottle_empty", "quantity": 1}],
+        "requiresFlag": "PUMP_REPAIRED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {"type": "removeItem", "value": {"itemId": "bottle_empty", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 1}},
+              {"type": "advanceTime", "value": 5}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Smonta la pompa per recuperare i pezzi",
+        "hideIfFlag": ["PUMP_REPAIRED", "PUMP_DESTROYED"],
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Smonti tutto quello che si può smontare. La pompa non funzionerà mai più."
+              },
+              {"type": "special", "value": {"effect": "destroyWaterPump"}},
+              {"type": "special", "value": {"effect": "failQuest", "questId": "repair_water_pump"}},
+              {"type": "addItem", "value": {"itemId": "scrap_metal", "quantity": 3}},
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "PUMP_REPAIRED",
+        "description": "La pompa che hai riparato cigola, ma l'acqua scorre limpida."
+      },
+      {
+        "requiresFlag": "PUMP_DESTROYED",
+        "description": "Della pompa restano solo un tubo spezzato e un buco nel terreno."
+      }
+    ]
+  },
+  {
+    "id": "asylum_site",
+    "title": "Manicomio di Sant'Ambrogio",
+    "description": "Le rovine di un grande edificio si ergono davanti a te. Un cartello arrugginito recita 'Ospedale Psichiatrico Sant'Ambrogio - Fondato 1892'. Le finestre sono sbarrate, le porte sfondate. Un'aura di sofferenza permea questo luogo.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "[QUEST] Cerca negli archivi dei pazienti",
+        "requiresQuest": "the_arsonist_and_the_tube",
+        "hideIfFlag": "ASYLUM_RECORDS_FOUND",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 14,
+            "successText": "Tra i registri dei pazienti, trovi una cartella clinica. 'Paziente: [NOME CENSURATO]. Soprannome: Il Piromane. Assegnato alla Sezione di Massima Sicurezza - Tubo N.403, Ala Est, Livello Sotterraneo.' Il registro menziona anche una 'terapia sperimentale di soppressione emotiva' a cui era stato sottoposto poco prima del Grande Silenzio. Le coordinate della sezione sono segnate su una mappa dell'edificio.",
+            "failureText": "Gli archivi sono un caos di documenti bruciati. Dovrai cercare ancora.",
+            "success": [
+              {"type": "setFlag", "value": "ASYLUM_RECORDS_FOUND"},
+              {"type": "questTrigger", "value": "asylum_records_found"},
+              {"type": "addXp", "value": 60}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ]
+      },
+      {
+        "text": "[Tubo N.403] Mostra al Piromane la lettera della nonna",
+        "itemRequirements": [{"itemId": "grandmothers_letter", "quantity": 1}],
+        "requiresQuest": "the_arsonist_and_the_tube",
+        "requiresFlag": "ASYLUM_RECORDS_FOUND",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Scendi nelle profondità sotterranee del manicomio. L'aria diventa progressivamente più calda e soffocante. Segni di piccoli incendi sono ovunque - carta bruciata, legno carbonizzato, persino il metallo delle porte mostra segni di fusione.\n\nFinalmente raggiungi una porta massiccia con la scritta 'TUBO N.403 - MASSIMA SICUREZZA'. La porta è divelta, fusa dall'interno. Oltre la soglia, vedi una cella annerita.\n\nAl centro della stanza, accovacciata, c'è una figura. È un uomo, o ciò che ne resta. Incredibilmente magro e secco, la pelle tesa sulle ossa come pergamena bruciacchiata. Indossa i resti di un maglioncino a strisce rosse e bianche, quasi completamente bruciato ma ancora riconoscibile.\n\nAlza lentamente la testa. Non è un uomo. Non del tutto. Un occhio è umano, selvaggio e perso in un abisso di follia. L'altro è una lente scura e incrinata da cui proviene un debole bagliore rossastro. Parti del suo corpo sono fuse con cavi e placche metalliche annerite, ma il processo sembra... sbagliato. Incompleto. È un Angelo della Cenere mal riuscito, un abominio rifiutato persino dal suo stesso genere.\n\nNon ti attacca. Ti fissa. E con una voce che è un sibilo di statica e cenere, sussurra parole sconnesse: 'Nonna... la vigna... brucia... tutto brucia... così caldo... e comodo...'\n\nDalle sue dita scheletriche, una piccola fiamma si accende e si spegne, ipnotica."
+              },
+              {
+                "type": "journalEntry",
+                "text": "Avvicini lentamente la lettera. I suoi occhi si fissano sulla calligrafia. La fiamma sulla sua mano si spegne. Il sibilo cessa. Per un istante, l'occhio umano sembra avere un lampo di lucidità, di dolore immenso. Sussurra una sola parola: 'More...'. Poi, il bagliore rosso nel suo occhio meccanico pulsa violentemente. Urla, un suono straziante di metallo e carne, e viene avvolto dalle fiamme, consumandosi in un mucchio di cenere e circuiti fumanti. Tra le ceneri, trovi un accendino di metallo, stranamente freddo al tatto."
+              },
+              {"type": "removeItem", "value": {"itemId": "grandmothers_letter", "quantity": 1}},
+              {"type": "alignmentChange", "value": {"type": "lena", "amount": 2}},
+              {"type": "addXp", "value": 700},
+              {"type": "setFlag", "value": "ARSONIST_RESOLVED"},
+              {"type": "questTrigger", "value": "found_the_arsonist"}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[Tubo N.403] Affronta il Piromane",
+        "requiresQuest": "the_arsonist_and_the_tube",
+        "requiresFlag": "ASYLUM_RECORDS_FOUND",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Scendi nel buio del Tubo N.403. L'aria brucia. Il Piromane si volta verso di te, le mani avvolte da fiamme instabili."
+              },
+              {
+                "type": "special",
+                "value": {"effect": "startCombat", "enemyId": "aberrant_angel_arsonist"}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "[Tubo N.403] Lascialo alla sua follia",
+        "requiresQuest": "the_arsonist_and_the_tube",
+        "requiresFlag": "ASYLUM_RECORDS_FOUND",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Non puoi affrontare questo orrore. Lasci il Piromane alla sua veglia di fiamme: la lettera della nonna resterà non consegnata."
+              },
+              {
+                "type": "special",
+                "value": {"effect": "failQuest", "questId": "the_arsonist_and_the_tube"}
+              },
+              {"type": "alignmentChange", "value": {"type": "elian", "amount": 1}}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Esplora le celle comuni",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "percezione",
+            "dc": 12,
+            "successText": "Le celle sono vuote e inquietanti. Trovi solo graffiti disperati e qualche oggetto personale abbandonato.",
+            "failureText": "Le celle sono troppo buie e pericolose. Ti allontani rapidamente.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "old_coins", "quantity": 20}},
+              {"type": "addXp", "value": 40},
+              {"type": "setFlag", "value": "ASYLUM_CELLS_SEARCHED"}
+            ],
+            "failure": [{"type": "addXp", "value": 10}, {"type": "setFlag", "value": "ASYLUM_CELLS_SEARCHED"}]
+          }
+        ],
+        "hideIfFlag": "ASYLUM_CELLS_SEARCHED"
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "ARSONIST_RESOLVED",
+        "description": "Il manicomio è silenzioso. Nel Tubo N.403 restano solo cenere e metallo fuso."
+      }
+    ]
+  },
+  {
+    "id": "ice_flower_site",
+    "title": "Il Passo del Fiore di Ghiaccio",
+    "description": "Arrampicandoti su una cengia esposta al vento gelido, noti una macchia di colore innaturale. In una crepa della roccia, protetto dal peggio delle intemperie, cresce un singolo, piccolo fiore blu pallido. I suoi petali sono quasi trasparenti e sembrano brillare di luce propria. È il Fiore di Ghiaccio che Olivia cercava.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Raccogli il fiore con delicatezza",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 12,
+            "successText": "Con mani delicate, raccogli il fiore senza danneggiarlo. È freddo al tatto e sembra pulsare di una luce tenue. Un tesoro botanico raro.",
+            "failureText": "I petali si sbriciolano tra le tue dita. Poco più in alto, in un'altra crepa, ne scorgi un secondo: dovrai riprovare con più delicatezza.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "ice_flower", "quantity": 1}},
+              {
+                "type": "journalEntry",
+                "text": "Hai raccolto il Fiore di Ghiaccio! Olivia sarà felice di vederlo."
+              },
+              {"type": "addXp", "value": 100}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ]
+  },
+  {
+    "id": "ritual_cave_site",
+    "title": "La Grotta dei Sussurri",
+    "description": "Entri in una grotta nascosta tra le rocce. Le pareti sono coperte dagli stessi simboli astronomici che hai visto nel cerchio rituale. Al centro, un altare di pietra con cenere ancora calda. Qualcuno è stato qui di recente.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Esamina l'altare e i simboli",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "investigare",
+            "dc": 13,
+            "successText": "I simboli formano un pattern complesso. Riconosci alcune costellazioni e calcoli di frequenze sonore. Questo luogo era usato per 'ascoltare' qualcosa. Annoti tutto nel diario che hai trovato.",
+            "failureText": "I simboli sono troppo complessi. Riesci solo a copiarne alcuni nel diario. Dovrai tornare a studiarli con più calma.",
+            "success": [
+              {"type": "setFlag", "value": "RITUAL_SITE_CAVE_VISITED"},
+              {
+                "type": "journalEntry",
+                "text": "[RITUALE] Hai documentato il secondo luogo di potere. Il pattern inizia a prendere forma."
+              },
+              {"type": "addXp", "value": 75}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ],
+        "requiresQuest": "signs_of_ash",
+        "hideIfFlag": "RITUAL_SITE_CAVE_VISITED"
+      },
+      {
+        "text": "Osserva i simboli",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Simboli astronomici incisi con cura maniacale. Senza una chiave per leggerli, restano un enigma."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Questo posto è inquietante. Esci",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "L'aria qui vibra in modo innaturale. Decidi di non restare."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ancient_tree_site",
+    "title": "L'Albero Segnato",
+    "description": "Ti trovi di fronte a un albero antico e mastodontico. La sua corteccia è coperta di incisioni profonde - gli stessi simboli del cerchio rituale e della grotta. Alla base dell'albero, cenere e cristalli disposti in un pattern preciso.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Studia le incisioni e il pattern",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "natura",
+            "dc": 14,
+            "successText": "L'albero è vivo, ma i simboli sono antichi. Qualcuno ha usato questo luogo per anni, forse decenni. I cristalli alla base vibrano leggermente quando ti avvicini. Documenti tutto accuratamente.",
+            "failureText": "Le incisioni sono troppo erose dal tempo. Riesci a copiarne solo alcune. Dovrai tornare a studiarli con più calma.",
+            "success": [
+              {"type": "setFlag", "value": "RITUAL_SITE_TREE_VISITED"},
+              {
+                "type": "journalEntry",
+                "text": "[RITUALE] Hai documentato il terzo luogo di potere. Ora hai tutti i pezzi del puzzle."
+              },
+              {"type": "addXp", "value": 75}
+            ],
+            "failure": [{"type": "advanceTime", "value": 30}]
+          }
+        ],
+        "requiresQuest": "signs_of_ash",
+        "hideIfFlag": "RITUAL_SITE_TREE_VISITED"
+      },
+      {
+        "text": "Osserva i simboli",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Simboli astronomici incisi con cura maniacale. Senza una chiave per leggerli, restano un enigma."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Non toccare nulla. Vai via",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Qualcosa in questo luogo ti mette a disagio. Meglio non interferire."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hermit_cabin_site",
+    "title": "La Capanna dell'Ascoltatore",
+    "description": "Nascosta nel profondo della foresta, trovi una capanna isolata. Fumo esce dal camino. Alla porta, campanelli eolici di metallo tintinnano dolcemente. Un vecchio con occhi velati da cataratte ti osserva dalla soglia. 'Ti ho sentito arrivare da lontano,' dice con voce roca. 'Il mondo è pieno di suoni per chi sa ascoltare.'",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Saluta l'eremita",
+        "outcomes": [{"type": "special", "value": {"effect": "startDialogue", "dialogueId": "hermit_main"}}]
+      },
+      {
+        "text": "Vai via senza disturbare",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Decidi di non disturbare il vecchio. Forse tornerai un'altra volta."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hidden_medical_cache_site",
+    "title": "Il Deposito Medico Nascosto",
+    "description": "Una botola di metallo mimetizzata sotto lastre di cemento, esattamente dove indicava il codice decifrato da Anya.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Apri la botola e scendi",
+        "hideIfFlag": "MEDICAL_CACHE_LOOTED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Scaffali di medicinali ancora sigillati nel loro imballaggio militare. Prendi tutto quello che puoi portare."
+              },
+              {"type": "addItem", "value": {"itemId": "first_aid_kit", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "MED_ANTISEPTIC", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "antibiotics", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "MED_HEALING_HERBS", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "MED_STIMPACK", "quantity": 1}},
+              {"type": "setFlag", "value": "MEDICAL_CACHE_LOOTED"},
+              {"type": "addXp", "value": 60}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ],
+    "variants": [
+      {
+        "requiresFlag": "MEDICAL_CACHE_LOOTED",
+        "description": "Il deposito medico è vuoto: hai già preso tutto quello che c'era."
+      }
+    ]
+  },
+  {
+    "id": "village_well_cache_site",
+    "title": "Il Pozzo della Scorta",
+    "description": "Il vecchio pozzo di cui parlava la lettera. Una corda marcita pende ancora dalla carrucola.",
+    "biomes": [],
+    "isUnique": false,
+    "questOnly": true,
+    "choices": [
+      {
+        "text": "Cala la corda e scendi",
+        "hideIfFlag": "WELL_CACHE_LOOTED",
+        "outcomes": [
+          {
+            "type": "skillCheck",
+            "skill": "atletica",
+            "dc": 11,
+            "successText": "Sul fondo, in una nicchia asciutta, trovi la scorta di famiglia: provviste, qualche oggetto di valore e una cassetta chiusa a chiave.",
+            "failureText": "La corda scivola e cadi per l'ultimo metro. Ti rialzi dolorante: dovrai riprovare.",
+            "success": [
+              {"type": "addItem", "value": {"itemId": "CONS_001", "quantity": 3}},
+              {"type": "addItem", "value": {"itemId": "CONS_002", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "rubber_gasket", "quantity": 2}},
+              {"type": "addItem", "value": {"itemId": "gold_ring", "quantity": 1}},
+              {"type": "setFlag", "value": "WELL_CACHE_LOOTED"},
+              {"type": "addXp", "value": 40}
+            ],
+            "failure": [{"type": "takeDamage", "value": 5}]
+          }
+        ]
+      },
+      {
+        "text": "Apri la cassetta con la chiave arrugginita",
+        "itemRequirements": [{"itemId": "rusty_key", "quantity": 1}],
+        "requiresFlag": "WELL_CACHE_LOOTED",
+        "hideIfFlag": "WELL_LOCKBOX_OPENED",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "La chiave gira con un lamento. Dentro, avvolti in un panno, una moneta d'oro e una pietra rossa che scintilla."
+              },
+              {"type": "removeItem", "value": {"itemId": "rusty_key", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "gold_coin", "quantity": 1}},
+              {"type": "addItem", "value": {"itemId": "precious_stone", "quantity": 1}},
+              {"type": "setFlag", "value": "WELL_LOCKBOX_OPENED"},
+              {"type": "addXp", "value": 30}
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Vai via.",
+        "outcomes": [{"type": "direct", "results": [{"type": "journalEntry", "text": "Ti allontani."}]}]
+      }
+    ]
+  },
+  {
+    "id": "unique_wandering_trader_encounter",
+    "title": "Giona, il Mercante Errante",
+    "description": "Giona ha piantato il suo bastone da viaggio e aperto lo zaino sul terreno. 'Ah, finalmente qualcuno! Siediti, viaggiatore.'",
+    "biomes": [],
+    "isUnique": false,
+    "choices": [
+      {
+        "text": "Commercia",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {"type": "journalEntry", "text": "Ti avvicini per vedere cosa ha da offrire."},
+              {
+                "type": "special",
+                "value": {"effect": "startTrading", "traderId": "wandering_trader"}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "Parla con lui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [{"type": "special", "value": {"effect": "startDialogue", "dialogueId": "giona_main"}}]
+          }
+        ]
+      },
+      {
+        "text": "Saluta e prosegui",
+        "outcomes": [
+          {
+            "type": "direct",
+            "results": [
+              {
+                "type": "journalEntry",
+                "text": "Fai un cenno di saluto e continui per la tua strada."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "questOnly": true
+  }
+]

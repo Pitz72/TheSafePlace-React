@@ -1,175 +1,87 @@
 import { useGameStore } from '../store/gameStore';
+import { NUM_SAVE_SLOTS, slotKey, storage, validateSaveData } from '../utils/saveFormat';
 
-const SAVE_SLOT_KEY_PREFIX = 'tspc_save_';
-export const NUM_SLOTS = 5; // Aumentato da 3 a 5
+export const NUM_SLOTS = NUM_SAVE_SLOTS;
 
-/**
- * @interface SaveSlot
- * @description Represents a save slot.
- * @property {number} slot - The slot number.
- * @property {boolean} isEmpty - Whether the slot is empty.
- * @property {string} label - The label for the slot.
- */
 export interface SaveSlot {
     slot: number;
     isEmpty: boolean;
+    /** The slot holds data that can't be loaded. */
+    isCorrupted: boolean;
     label: string;
 }
 
-/**
- * @interface SaveValidationResult
- * @description Result of save file validation.
- */
-interface SaveValidationResult {
-    valid: boolean;
-    error?: string;
-}
-
-/**
- * @function validateSaveData
- * @description Validates save data structure.
- * @param {any} data - The data to validate.
- * @returns {SaveValidationResult} Validation result.
- */
-const validateSaveData = (data: any): SaveValidationResult => {
-    if (!data || typeof data !== 'object') {
-        return { valid: false, error: 'Dati di salvataggio non validi' };
+const readSlot = (slot: number): { data: any; error: string | null } | null => {
+    const raw = storage.get(slotKey(slot));
+    if (!raw) return null;
+    try {
+        const data = JSON.parse(raw);
+        return { data, error: validateSaveData(data) };
+    } catch {
+        return { data: null, error: 'File illeggibile.' };
     }
-
-    if (!data.saveVersion) {
-        return { valid: false, error: 'Versione salvataggio mancante' };
-    }
-
-    if (!data.metadata || !data.character || !data.game || !data.time) {
-        return { valid: false, error: 'Dati di salvataggio incompleti' };
-    }
-
-    return { valid: true };
 };
 
-/**
- * @function getSaveSlots
- * @description Gets a list of save slots.
- * @returns {SaveSlot[]} A list of save slots.
- */
-export const getSaveSlots = (): SaveSlot[] => {
-    return Array.from({ length: NUM_SLOTS }, (_, i) => {
+export const getSaveSlots = (): SaveSlot[] =>
+    Array.from({ length: NUM_SLOTS }, (_, i) => {
         const slot = i + 1;
-        const saveDataJSON = localStorage.getItem(`${SAVE_SLOT_KEY_PREFIX}${slot}`);
-        if (saveDataJSON) {
-            try {
-                const saveData = JSON.parse(saveDataJSON);
-                const validation = validateSaveData(saveData);
-
-                if (!validation.valid) {
-                    return { slot, isEmpty: true, label: `Slot ${slot} (Corrotto)` };
-                }
-
-                const { level, day, hour, minute } = saveData.metadata;
-                return {
-                    slot,
-                    isEmpty: false,
-                    label: `Liv. ${level} | Giorno ${day}, ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
-                };
-            } catch (e) {
-                return { slot, isEmpty: true, label: `Slot ${slot} (Corrotto)` };
-            }
-        }
-        return { slot, isEmpty: true, label: `Slot ${slot} (Vuoto)` };
+        const saved = readSlot(slot);
+        if (!saved) return { slot, isEmpty: true, isCorrupted: false, label: `Slot ${slot} (Vuoto)` };
+        if (saved.error) return { slot, isEmpty: false, isCorrupted: true, label: `Slot ${slot} (Corrotto)` };
+        const { level, day, hour, minute } = saved.data.metadata;
+        const when = typeof saved.data.timestamp === 'number'
+            ? ` | ${new Date(saved.data.timestamp).toLocaleDateString('it-IT')}`
+            : '';
+        return {
+            slot,
+            isEmpty: false,
+            isCorrupted: false,
+            label: `Liv. ${level} | Giorno ${day}, ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}${when}`,
+        };
     });
-};
 
-/**
- * @function handleLoadGame
- * @description Handles loading a game from a save slot.
- * @param {number} slot - The slot number to load from.
- * @returns {boolean} Whether the game was loaded successfully.
- */
-export const handleLoadGame = (slot: number): boolean => {
-    return useGameStore.getState().loadGame(slot);
-};
+export const handleLoadGame = (slot: number): boolean => useGameStore.getState().loadGame(slot);
 
-/**
- * @function handleSaveGame
- * @description Handles saving a game to a save slot.
- * @param {number} slot - The slot number to save to.
- * @returns {boolean} Whether the game was saved successfully.
- */
-export const handleSaveGame = (slot: number): boolean => {
-    return useGameStore.getState().saveGame(slot);
-};
+export const handleSaveGame = (slot: number): boolean => useGameStore.getState().saveGame(slot);
 
-/**
- * @function exportSaveToFile
- * @description Exports a save slot to a JSON file.
- * @param {number} slot - The slot number to export.
- */
+/** Downloads a slot as a JSON file. Throws with a message for the player. */
 export const exportSaveToFile = (slot: number): void => {
+    const saved = readSlot(slot);
+    if (!saved) throw new Error(`Nessun salvataggio nello slot ${slot}.`);
+    if (saved.error) throw new Error(saved.error);
+
+    const blob = new Blob([JSON.stringify(saved.data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const { level, day } = saved.data.metadata;
+    link.href = url;
+    link.download = `TSP_Save_Slot${slot}_Lv${level}_Day${day}_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+};
+
+/** Reads and validates a save file. Throws with a message for the player. */
+export const readSaveFile = async (file: File): Promise<object> => {
+    let data: unknown;
     try {
-        const saveDataJSON = localStorage.getItem(`${SAVE_SLOT_KEY_PREFIX}${slot}`);
-        if (!saveDataJSON) {
-            throw new Error(`Nessun salvataggio trovato nello slot ${slot}`);
-        }
+        data = JSON.parse(await file.text());
+    } catch {
+        throw new Error('Il file non è un salvataggio valido.');
+    }
+    const error = validateSaveData(data);
+    if (error) throw new Error(error);
+    return data as object;
+};
 
-        const saveData = JSON.parse(saveDataJSON);
-        const validation = validateSaveData(saveData);
-
-        if (!validation.valid) {
-            throw new Error(validation.error);
-        }
-
-        // Create blob and download
-        const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-
-        // Generate filename with timestamp
-        const { level, day } = saveData.metadata;
-        const timestamp = new Date().toISOString().slice(0, 10);
-        a.download = `TSP_Save_Slot${slot}_Lv${level}_Day${day}_${timestamp}.json`;
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    } catch (error) {
-        console.error('Error exporting save:', error);
-        throw error;
+/** Writes an already validated save into a slot (overwriting it). */
+export const writeSaveToSlot = (data: object, slot: number): void => {
+    try {
+        storage.set(slotKey(slot), JSON.stringify(data));
+    } catch {
+        throw new Error('Spazio di archiviazione insufficiente.');
     }
 };
 
-/**
- * @function importSaveFromFile
- * @description Imports a save from a JSON file to a slot.
- * @param {File} file - The file to import.
- * @param {number} slot - The slot to import to.
- * @returns {Promise<boolean>} Whether the import was successful.
- */
-export const importSaveFromFile = async (file: File, slot: number): Promise<boolean> => {
-    try {
-        const text = await file.text();
-        const saveData = JSON.parse(text);
-
-        const validation = validateSaveData(saveData);
-        if (!validation.valid) {
-            throw new Error(validation.error || 'File di salvataggio non valido');
-        }
-
-        // Save to localStorage
-        localStorage.setItem(`${SAVE_SLOT_KEY_PREFIX}${slot}`, JSON.stringify(saveData));
-        return true;
-    } catch (error) {
-        console.error('Error importing save:', error);
-        throw error;
-    }
-};
-
-/**
- * @function deleteSave
- * @description Deletes a save from a slot.
- * @param {number} slot - The slot to delete.
- */
-export const deleteSave = (slot: number): void => {
-    localStorage.removeItem(`${SAVE_SLOT_KEY_PREFIX}${slot}`);
-};
+export const deleteSave = (slot: number): void => storage.remove(slotKey(slot));

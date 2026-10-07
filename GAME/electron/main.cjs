@@ -7,7 +7,7 @@
 // under app://bundle/. A privileged+secure scheme also gives the renderer a
 // stable origin so localStorage (the save system) persists across launches.
 
-const { app, BrowserWindow, protocol, shell, Menu } = require('electron');
+const { app, BrowserWindow, protocol, shell, Menu, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 
@@ -36,6 +36,21 @@ const MIME = {
   '.txt': 'text/plain',
 };
 
+// The bundled game needs nothing from the outside world: scripts, styles,
+// fonts and data come from app://bundle, the map tileset is a data: SVG.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'",
+  "frame-ancestors 'none'",
+].join('; ');
+
 // Must run before app is ready.
 protocol.registerSchemesAsPrivileged([
   {
@@ -57,8 +72,9 @@ function registerAppProtocol() {
     if (rel === '/' || rel === '') rel = '/index.html';
 
     const filePath = path.normalize(path.join(DIST, rel));
-    // Never serve anything outside the bundled dist directory.
-    if (!filePath.startsWith(DIST)) {
+    // Never serve anything outside the bundled dist directory (a plain prefix
+    // check would also accept a sibling such as "dist-evil").
+    if (filePath !== DIST && !filePath.startsWith(DIST + path.sep)) {
       return new Response('Forbidden', { status: 403 });
     }
 
@@ -67,15 +83,17 @@ function registerAppProtocol() {
       // is packed into app.asar.
       const data = await fs.promises.readFile(filePath);
       const ext = path.extname(filePath).toLowerCase();
-      return new Response(data, {
-        headers: { 'content-type': MIME[ext] || 'application/octet-stream' },
-      });
+      const headers = { 'content-type': MIME[ext] || 'application/octet-stream' };
+      if (ext === '.html') headers['content-security-policy'] = CONTENT_SECURITY_POLICY;
+      return new Response(data, { headers });
     } catch {
       // SPA fallback: unknown non-file paths return index.html.
       if (!path.extname(filePath)) {
         try {
           const html = await fs.promises.readFile(path.join(DIST, 'index.html'));
-          return new Response(html, { headers: { 'content-type': 'text/html' } });
+          return new Response(html, {
+            headers: { 'content-type': 'text/html', 'content-security-policy': CONTENT_SECURITY_POLICY },
+          });
         } catch {
           /* fall through */
         }
@@ -100,6 +118,8 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
   });
 
@@ -109,13 +129,19 @@ function createWindow() {
     win.show();
   });
 
-  // External http(s) links open in the system browser, never inside the app.
+  // External http(s) links open in the system browser; the app never opens
+  // windows of its own.
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:/i.test(url)) {
-      shell.openExternal(url);
-      return { action: 'deny' };
+    if (/^https?:/i.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  // The page never navigates away from the bundled game.
+  win.webContents.on('will-navigate', (event, url) => {
+    const allowed = isDev ? url.startsWith(DEV_URL) : url.startsWith('app://bundle/');
+    if (!allowed) {
+      event.preventDefault();
+      if (/^https?:/i.test(url)) shell.openExternal(url);
     }
-    return { action: 'allow' };
   });
 
   if (isDev) {
@@ -126,15 +152,43 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(() => {
-  Menu.setApplicationMenu(null); // no default menu bar
-  if (!isDev) registerAppProtocol();
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+ipcMain.on('tsp:quit', () => app.quit());
+ipcMain.handle('tsp:is-fullscreen', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  return win ? win.isFullScreen() : false;
 });
+ipcMain.handle('tsp:set-fullscreen', (event, value) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return false;
+  win.setFullScreen(Boolean(value));
+  return win.isFullScreen();
+});
+
+// Two running copies would share (and fight over) the same save storage:
+// a second launch just brings the open window to the front.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    const [win] = BrowserWindow.getAllWindows();
+    if (!win) return;
+    if (win.isMinimized()) win.restore();
+    win.focus();
+  });
+
+  app.whenReady().then(() => {
+    // No menu bar; on macOS keep the app menu so Cmd+Q / Cmd+H keep working.
+    Menu.setApplicationMenu(process.platform === 'darwin'
+      ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }])
+      : null);
+    if (!isDev) registerAppProtocol();
+    createWindow();
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  });
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

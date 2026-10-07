@@ -1,76 +1,69 @@
 [
-    {
-        "id": "marcus",
-        "name": "Mercante Errante",
-        "baseMarkup": 1.3,
-        "inventory": [
-            {
-                "itemId": "clean_cloth",
-                "quantity": 5,
-                "price": 5
-            },
-            {
-                "itemId": "scrap_metal",
-                "quantity": 5,
-                "price": 8
-            },
-            {
-                "itemId": "firewood",
-                "quantity": 5,
-                "price": 3
-            },
-            {
-                "itemId": "CONS_001",
-                "quantity": 3,
-                "price": 15
-            },
-            {
-                "itemId": "CONS_002",
-                "quantity": 3,
-                "price": 10
-            },
-            {
-                "itemId": "ammo_9mm",
-                "quantity": 10,
-                "price": 5
-            }
-        ]
-    },
-    {
-        "id": "wandering_trader",
-        "name": "Venditore Ambulante",
-        "baseMarkup": 1.5,
-        "inventory": [
-            {
-                "itemId": "CONS_001",
-                "quantity": 2,
-                "price": 15
-            },
-            {
-                "itemId": "CONS_002",
-                "quantity": 4,
-                "price": 10
-            },
-            {
-                "itemId": "MED_BANDAGE_BASIC",
-                "quantity": 3,
-                "price": 12
-            },
-            {
-                "itemId": "MED_ANTIDOTE",
-                "quantity": 1,
-                "price": 30
-            },
-            {
-                "itemId": "scrap_metal",
-                "quantity": 3,
-                "price": 8
-            },
-            {
-                "itemId": "ammo_9mm",
-                "quantity": 6,
-                "price": 5
-            }
-        ]
-    }
+  {
+    "id": "marcus",
+    "name": "Marcus",
+    "description": "Il custode non ufficiale del Crocevia: vende, compra, scambia.",
+    "baseMarkup": 1.3,
+    "restockHours": 72,
+    "inventory": [
+      {"itemId": "CONS_001", "quantity": 4},
+      {"itemId": "CONS_002", "quantity": 4},
+      {"itemId": "clean_cloth", "quantity": 5},
+      {"itemId": "scrap_metal", "quantity": 6},
+      {"itemId": "firewood", "quantity": 6},
+      {"itemId": "nylon_wire", "quantity": 2},
+      {"itemId": "rubber_gasket", "quantity": 2},
+      {"itemId": "industrial_filter", "quantity": 1},
+      {"itemId": "precision_tools", "quantity": 1},
+      {"itemId": "MED_ANTISEPTIC", "quantity": 2},
+      {"itemId": "torch", "quantity": 3},
+      {"itemId": "batteries_pack", "quantity": 2},
+      {"itemId": "ammo_9mm", "quantity": 12},
+      {"itemId": "ammo_arrow", "quantity": 15},
+      {"itemId": "manual_leatherwork", "quantity": 1}
+    ]
+  },
+  {
+    "id": "wandering_trader",
+    "name": "Giona, il mercante errante",
+    "description": "Un mercante che non resta mai a lungo nello stesso posto.",
+    "baseMarkup": 1.5,
+    "restockHours": 48,
+    "inventory": [
+      {"itemId": "CONS_001", "quantity": 3},
+      {"itemId": "CONS_002", "quantity": 4},
+      {"itemId": "MED_BANDAGE_BASIC", "quantity": 3},
+      {"itemId": "MED_ANTIDOTE", "quantity": 1},
+      {"itemId": "strong_liquor", "quantity": 2},
+      {"itemId": "tarp", "quantity": 1},
+      {"itemId": "rad_away_pills", "quantity": 2},
+      {"itemId": "hook_set", "quantity": 2},
+      {"itemId": "military_grade_electronics", "quantity": 1},
+      {"itemId": "manual_survival_basics", "quantity": 1},
+      {"itemId": "ammo_9mm", "quantity": 8},
+      {"itemId": "ammo_piercing", "quantity": 1},
+      {"itemId": "vehicle_battery", "quantity": 1}
+    ]
+  },
+  {
+    "id": "cart_merchant",
+    "name": "Il vecchio del carretto",
+    "description": "Un vecchio sdentato che spinge un carretto pieno di cianfrusaglie.",
+    "baseMarkup": 1.4,
+    "restockHours": 96,
+    "inventory": [
+      {"itemId": "binoculars", "quantity": 1},
+      {"itemId": "flashlight", "quantity": 1},
+      {"itemId": "batteries_pack", "quantity": 3},
+      {"itemId": "energy_bar", "quantity": 2},
+      {"itemId": "MED_PAINKILLER", "quantity": 2},
+      {"itemId": "copper_wire", "quantity": 3},
+      {"itemId": "rubber_ball", "quantity": 2},
+      {"itemId": "mechanic_manual", "quantity": 1},
+      {"itemId": "lighter", "quantity": 1},
+      {"itemId": "ammo_hollow_point", "quantity": 1},
+      {"itemId": "TRAP_SIMPLE", "quantity": 2},
+      {"itemId": "fishing_kit", "quantity": 1}
+    ]
+  }
 ]
