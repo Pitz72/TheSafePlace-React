@@ -15,7 +15,7 @@ una vecchia mappa che porta a Est, verso un luogo chiamato The Safe Place.
 
 Nato come esperimento tecnico e narrativo, è stato sviluppato da Simone Pizzi in simbiosi creativa con il supporto di
 modelli linguistici (LLM). Si gioca da tastiera ed è un'applicazione desktop **gratuita e open source** per Windows,
-macOS e Linux (React + Ink + Electron).
+macOS e Linux (React + Ink + Electron). *Dalla 3.1.0 le release ufficiali includono solo Windows e Linux; i testi del sito vanno allineati alla pubblicazione.*
 
 ## Caratteristiche principali del gioco
 
@@ -77,11 +77,11 @@ npm run build     # build di produzione in dist/
 npm run preview   # anteprima della build
 ```
 
-Il deploy è automatico: `.github/workflows/deploy-site.yml` builda e pubblica `dist/` a ogni push su `main` che tocca `SITO/`.
+Il deploy **non è più automatico** (sospeso il 2026-10-22): `.github/workflows/deploy-site.yml` builda e pubblica `dist/` solo se avviato a mano da Actions → *Run workflow*. Per ripristinare la pubblicazione a ogni push su `main` che tocca `SITO/` va rimesso il trigger `push` nel workflow.
 
 ## Gioca / Scarica
 
-Il gioco è **open source** e scaricabile gratuitamente per Windows, macOS e Linux dalla release pubblica su GitHub:
+Il gioco è **open source** e scaricabile gratuitamente per Windows e Linux dalla release pubblica su GitHub (ultima: v3.1.0):
 
 - **Release e download:** [github.com/Pitz72/TheSafePlace-React/releases](https://github.com/Pitz72/TheSafePlace-React/releases)
 - **Codice sorgente:** [github.com/Pitz72/TheSafePlace-React](https://github.com/Pitz72/TheSafePlace-React)

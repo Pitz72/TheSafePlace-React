@@ -6,7 +6,7 @@
 
 Gioco di ruolo narrativo di sopravvivenza post-apocalittico, giocabile interamente da tastiera.
 È una single page application React (mappa illustrata su HTML Canvas, grafica vettoriale SVG, dialoghi e cutscene in
-[Ink](https://www.inklestudios.com/ink/)) distribuita come app desktop per Windows, macOS e Linux con Electron.
+[Ink](https://www.inklestudios.com/ink/)) distribuita come app desktop per Windows e Linux con Electron (macOS non è incluso nelle release).
 
 ## Avvio rapido
 
