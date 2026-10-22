@@ -1,12 +1,12 @@
 # The Safe Place Chronicles: The Echo of the Journey
 
-![version](https://img.shields.io/badge/gioco-v3.0.0-blue.svg)
+![version](https://img.shields.io/badge/gioco-v3.1.0-blue.svg)
 ![platform](https://img.shields.io/badge/desktop-Windows%20%7C%20macOS%20%7C%20Linux-informational.svg)
 ![status](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 
 Un **gioco di ruolo narrativo di sopravvivenza** in un'Europa post-apocalittica. Il giocatore — *Ultimo* — attraversa una mappa devastata per raggiungere il **Safe Place**, gestendo risorse, incontri, combattimenti e scelte morali, mentre gli "Echi della Memoria" svelano il suo passato fino al confronto finale.
 
-Dalla **3.0** il gioco ha un'identità visiva nuova, disegnata da zero: illustrazioni vettoriali al crepuscolo, una mappa del mondo dipinta in tempo reale con luce del giorno e meteo, un'interfaccia da gioco narrativo moderno. Nessun terminale, nessun CRT, nessun pixel.
+Dalla **3.0** il gioco ha un'identità visiva nuova, disegnata da zero: illustrazioni vettoriali al crepuscolo, una mappa del mondo dipinta in tempo reale con luce del giorno e meteo, un'interfaccia da gioco narrativo moderno. Nessun terminale, nessun CRT, nessun pixel. Con la **3.1** anche il suono cambia: niente più beep, ma suoni morbidi di legno, feltro e vetro e un paesaggio sonoro che segue luogo, ora e meteo (vento, pioggia, uccelli all'alba, grilli di notte), tutto sintetizzato in tempo reale.
 
 Progetto di **Simone Pizzi** / **Runtime Radio**, nato come esperimento sul portare in fondo un videogioco non banale con l'aiuto di un LLM.
 
@@ -84,7 +84,7 @@ Dettagli sull'architettura e su come aggiungere contenuti: [`GAME/README.md`](./
 ## 🤖 CI e release (GitHub Actions)
 
 - [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) gira a ogni push e pull request che tocca `GAME/`: storia Ink compilata e aggiornata, `npm run check` e build.
-- [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=3.0.0`):
+- [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=3.1.0`):
   1. verifica che la versione richiesta coincida con `GAME/package.json` ed esegue gli stessi controlli della CI;
   2. builda il gioco su runner **Windows, macOS e Linux** in parallelo e impacchetta gli installer con electron-builder;
   3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.

@@ -1,7 +1,7 @@
 name: Release (Win/Mac/Linux)
 
 # Avvio MANUALE (Actions → Release → Run workflow), oppure:
-#   gh workflow run release.yml -f version=3.0.0
+#   gh workflow run release.yml -f version=3.1.0
 # Verifica il gioco (stessi controlli della CI), builda gli installer sui tre
 # sistemi operativi e crea una Release nel repo.
 
@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Versione release, senza la 'v' (es. 3.0.0)"
+        description: "Versione release, senza la 'v' (es. 3.1.0)"
         required: true
-        default: "3.0.0"
+        default: "3.1.0"
       prerelease:
         description: "Segna come pre-release"
         type: boolean

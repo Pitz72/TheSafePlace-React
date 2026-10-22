@@ -7,7 +7,7 @@ import { isFullScreen, setFullScreen } from '../utils/desktop';
 import Modal from './ui/Modal';
 import Icon, { IconName } from './ui/Icon';
 
-type OptionId = 'fullscreen' | 'audio' | 'volume' | 'display';
+type OptionId = 'fullscreen' | 'audio' | 'volume' | 'ambience' | 'display';
 
 type OptionRow =
   | { type: 'header'; label: string }
@@ -22,6 +22,7 @@ const OPTIONS_CONFIG: readonly OptionRow[] = [
   { type: 'header', label: 'Audio' },
   { type: 'option', id: 'audio', label: 'Suono', icon: 'sound', kind: 'multiple', values: ['Attivo', 'Disattivo'] },
   { type: 'option', id: 'volume', label: 'Volume', icon: 'music', kind: 'slider', max: 10 },
+  { type: 'option', id: 'ambience', label: 'Ambiente', icon: 'leaf', kind: 'multiple', values: ['Attivo', 'Disattivo'] },
   { type: 'header', label: 'Visualizzazione' },
   { type: 'option', id: 'display', label: 'Tema', icon: 'eye', kind: 'multiple', values: ['Crepuscolo', 'Alto contrasto'] },
 ];
@@ -38,6 +39,7 @@ const OptionsScreen: React.FC = () => {
     fullscreen: 1,
     audio: audioManager.getIsMutedForUI() ? 1 : 0,
     volume: audioManager.getVolumeForUI(),
+    ambience: audioManager.getAmbienceEnabledForUI() ? 0 : 1,
     display: Math.max(0, THEMES.indexOf(visualTheme)),
   });
   const [selected, setSelected] = useState(0);
@@ -63,6 +65,9 @@ const OptionsScreen: React.FC = () => {
         break;
       case 'volume':
         audioManager.setVolume(value);
+        break;
+      case 'ambience':
+        audioManager.setAmbienceEnabled(value === 0);
         break;
       case 'display':
         setVisualTheme(THEMES[value]);

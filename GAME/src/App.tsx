@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { GameState, VisualTheme } from './types';
 import { useGameScale } from './hooks/useGameScale';
+import { useAmbience } from './hooks/useAmbience';
 import BootScreen from './components/BootScreen';
 import MainMenuScreen from './components/MainMenuScreen';
 import InstructionsScreen from './components/InstructionsScreen';
@@ -46,6 +47,7 @@ const App: React.FC = () => {
   const isInRefuge = useInteractionStore((state) => state.isInRefuge);
   const isCraftingOpen = useInteractionStore((state) => state.isCraftingOpen);
   const scaleStyle = useGameScale();
+  useAmbience();
 
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
