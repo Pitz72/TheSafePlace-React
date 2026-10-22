@@ -6,6 +6,9 @@ import { GameState, SkillName } from '../types';
 import { ATTRIBUTES, ATTRIBUTE_LABELS, SKILLS, SKILL_LABELS } from '../constants';
 import { useTalentDatabaseStore } from '../data/talentDatabase';
 import { audioManager } from '../utils/audio';
+import Modal from './ui/Modal';
+import Icon from './ui/Icon';
+import ChoiceList from './ui/ChoiceList';
 
 /**
  * Level up: +1 to an attribute, plus a talent — or, when no talent is
@@ -82,80 +85,129 @@ const LevelUpScreen: React.FC = () => {
     const selectedTalent = mode === 'talent' ? availableTalents[secondIndex] : undefined;
     const selectedSkill = mode === 'proficiency' ? learnableSkills[secondIndex] : undefined;
     const talentsForSkill = selectedSkill ? talents.filter(t => t.requiredSkill === selectedSkill && !unlockedTalents.includes(t.id)) : [];
-    const sectionClass = (active: boolean) => `h-full border-2 p-4 ${active ? 'border-yellow-400 shadow-lg shadow-yellow-400/20' : 'border-green-400/30'}`;
+    const sectionStyle = (active: boolean): React.CSSProperties => active
+        ? { borderColor: 'rgb(var(--accent) / 0.5)', boxShadow: '0 0 0 1px rgb(var(--accent) / 0.12), 0 24px 60px -36px rgb(var(--accent) / 0.7)' }
+        : { opacity: 0.75 };
+    const stepBadge = (n: number, active: boolean) => (
+        <span className={`flex h-9 w-9 items-center justify-center rounded-full border font-cond text-[18px] font-semibold ${active ? 'border-accent bg-accent text-bg0' : 'border-line2 text-ink3'}`}>{n}</span>
+    );
 
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full h-full border-8 border-double border-green-400/50 flex flex-col p-6">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-4">═══ LIVELLO {level + 1} ═══</h1>
-                <p className="text-3xl text-center text-green-400/80 mb-6">
+        <Modal
+            eyebrow={`Livello ${level + 1}`}
+            icon="levelUp"
+            accent="gold"
+            title="Sei cresciuto"
+            subtitle={
+                <>
                     {mode === 'talent' && 'Migliora un attributo e scegli un nuovo talento.'}
                     {mode === 'proficiency' && 'Migliora un attributo e diventa competente in una nuova abilità.'}
                     {mode === 'none' && 'Migliora un attributo.'}
                     {' '}Salendo di livello recuperi tutti gli HP.
-                </p>
+                </>
+            }
+            size="xl"
+            className="h-full"
+            hints={[
+                { keys: ['↑↓'], label: 'Scegli' },
+                { keys: ['←→', 'TAB'], label: 'Cambia sezione', muted: mode === 'none' },
+                { keys: ['INVIO'], label: section === 'attribute' && mode !== 'none' ? 'Avanti' : 'Conferma' },
+                { keys: ['ESC'], label: 'Più tardi' },
+            ]}
+        >
+            <div className="flex h-full gap-6 px-12 pb-8">
+                <section className={`surface-flat flex flex-col px-6 py-6 transition-all duration-300 ${mode === 'none' ? 'mx-auto w-[640px]' : 'w-[36%] flex-shrink-0'}`} style={sectionStyle(section === 'attribute')}>
+                    <header className="mb-5 flex items-center gap-3">
+                        {stepBadge(1, section === 'attribute')}
+                        <div>
+                            <div className="eyebrow">Primo passo</div>
+                            <h2 className="text-[24px] font-medium text-ink">Attributo +1</h2>
+                        </div>
+                    </header>
+                    <ul className="flex flex-col gap-1.5">
+                        {ATTRIBUTES.map((attr, index) => {
+                            const isCursor = index === attributeIndex;
+                            const isSelected = isCursor && section === 'attribute';
+                            return (
+                                <li key={attr} className={`choice !py-3.5 text-[22px] ${isSelected ? 'is-selected' : ''} ${isCursor && !isSelected ? '!border-line2' : ''}`}>
+                                    <span className="w-12 font-cond text-[16px] font-semibold uppercase tracking-[0.2em] text-ink4">{attr}</span>
+                                    <span className="flex-1">{ATTRIBUTE_LABELS[attr]}</span>
+                                    <span className="tnum flex items-center gap-2 text-[22px]">
+                                        <span className={isCursor ? 'text-ink3' : 'text-ink2'}>{attributes[attr]}</span>
+                                        {isCursor && (
+                                            <>
+                                                <Icon name="arrowRight" size={16} className="text-ink4" />
+                                                <span className="font-semibold text-accent">{attributes[attr] + 1}</span>
+                                            </>
+                                        )}
+                                    </span>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
 
-                <div className="flex-grow flex space-x-6 overflow-hidden">
-                    <div className={`w-1/3 ${sectionClass(section === 'attribute')}`}>
-                        <h2 className="text-4xl text-center mb-4 border-b-2 border-green-400/30 pb-2">1. Attributo (+1)</h2>
-                        <ul className="space-y-2 text-4xl">
-                            {ATTRIBUTES.map((attr, index) => {
-                                const isSelected = index === attributeIndex;
-                                return (
-                                    <li key={attr} className={`pl-4 py-1 flex justify-between ${isSelected && section === 'attribute' ? 'bg-green-400 text-black' : isSelected ? 'text-yellow-400' : ''}`}>
-                                        <span>{isSelected && '> '}{ATTRIBUTE_LABELS[attr]}</span>
-                                        <span className="pr-2">{attributes[attr]}{isSelected ? ` → ${attributes[attr] + 1}` : ''}</span>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-
-                    {mode !== 'none' && (
-                        <div className={`w-2/3 flex flex-col ${sectionClass(section === 'second')}`}>
-                            <h2 className="text-4xl text-center mb-4 border-b-2 border-green-400/30 pb-2">
-                                2. {mode === 'talent' ? 'Talento' : 'Nuova Competenza'}
-                            </h2>
-                            <div className="flex-grow flex overflow-hidden">
-                                <ul className="w-1/2 space-y-2 text-3xl overflow-y-auto pr-2" style={{ scrollbarWidth: 'none' }}>
-                                    {(mode === 'talent' ? availableTalents.map(t => ({ id: t.id, label: t.name })) : learnableSkills.map(s => ({ id: s, label: SKILL_LABELS[s] })))
-                                        .map((option, index) => {
-                                            const isSelected = index === secondIndex;
-                                            return (
-                                                <li key={option.id} className={`pl-4 py-1 ${isSelected && section === 'second' ? 'bg-green-400 text-black' : isSelected ? 'text-yellow-400' : ''}`}>
-                                                    {isSelected && '> '}{option.label}
-                                                </li>
-                                            );
-                                        })}
-                                </ul>
-                                <div className="w-1/2 pl-4 border-l-2 border-green-400/30 text-2xl space-y-3">
-                                    {selectedTalent && (
-                                        <>
-                                            <h3 className="text-3xl font-bold text-yellow-400">{selectedTalent.name}</h3>
-                                            <p className="text-green-400/80 italic">{selectedTalent.description}</p>
-                                            <p>Richiede: {SKILL_LABELS[selectedTalent.requiredSkill]}, livello {selectedTalent.levelRequirement}</p>
-                                        </>
-                                    )}
-                                    {selectedSkill && (
-                                        <>
-                                            <h3 className="text-3xl font-bold text-yellow-400">{SKILL_LABELS[selectedSkill]}</h3>
-                                            <p className="text-green-400/80">Bonus di competenza alle prove di {SKILL_LABELS[selectedSkill]} ({ATTRIBUTE_LABELS[SKILLS[selectedSkill].attribute]}).</p>
-                                            {talentsForSkill.length > 0 && (
-                                                <p>Apre la strada ai talenti: {talentsForSkill.map(t => `${t.name} (liv. ${t.levelRequirement})`).join(', ')}.</p>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
+                {mode !== 'none' && (
+                    <section className="surface-flat flex min-w-0 flex-1 flex-col px-6 py-6 transition-all duration-300" style={sectionStyle(section === 'second')}>
+                        <header className="mb-5 flex items-center gap-3">
+                            {stepBadge(2, section === 'second')}
+                            <div>
+                                <div className="eyebrow">Secondo passo</div>
+                                <h2 className="text-[24px] font-medium text-ink">{mode === 'talent' ? 'Un nuovo talento' : 'Una nuova competenza'}</h2>
+                            </div>
+                        </header>
+                        <div className="flex min-h-0 flex-1 gap-6">
+                            <div className="scroll-y fade-edges w-1/2 py-1 pr-1">
+                                <ChoiceList
+                                    size="md"
+                                    selected={secondIndex}
+                                    active={section === 'second'}
+                                    items={mode === 'talent'
+                                        ? availableTalents.map(t => ({ id: t.id, label: t.name, icon: 'sparkle' as const }))
+                                        : learnableSkills.map(skill => ({ id: skill, label: SKILL_LABELS[skill], icon: 'check' as const }))}
+                                />
+                            </div>
+                            <div className="min-w-0 flex-1 border-l border-line pl-6">
+                                {selectedTalent && (
+                                    <div key={selectedTalent.id} className="anim-fade-in">
+                                        <div className="eyebrow text-gold">Talento</div>
+                                        <h3 className="title-display mt-2 text-[40px] text-ink">{selectedTalent.name}</h3>
+                                        <p className="prose-story mt-4 text-[21px] italic text-ink2">{selectedTalent.description}</p>
+                                        <div className="mt-6 flex flex-wrap gap-2">
+                                            <span className="chip text-ink2">{SKILL_LABELS[selectedTalent.requiredSkill]}</span>
+                                            <span className="chip text-ink2">Livello {selectedTalent.levelRequirement}</span>
+                                        </div>
+                                    </div>
+                                )}
+                                {selectedSkill && (
+                                    <div key={selectedSkill} className="anim-fade-in">
+                                        <div className="eyebrow text-gold">Competenza</div>
+                                        <h3 className="title-display mt-2 text-[40px] text-ink">{SKILL_LABELS[selectedSkill]}</h3>
+                                        <p className="prose-story mt-4 text-[21px] text-ink2">
+                                            Bonus di competenza alle prove di {SKILL_LABELS[selectedSkill]} ({ATTRIBUTE_LABELS[SKILLS[selectedSkill].attribute]}).
+                                        </p>
+                                        {talentsForSkill.length > 0 && (
+                                            <div className="mt-6">
+                                                <div className="eyebrow mb-3">Apre la strada ai talenti</div>
+                                                <ul className="flex flex-col gap-2">
+                                                    {talentsForSkill.map(t => (
+                                                        <li key={t.id} className="flex items-center gap-3 text-[19px] text-ink2">
+                                                            <Icon name="sparkle" size={16} className="text-gold" />
+                                                            <span className="flex-1">{t.name}</span>
+                                                            <span className="tnum text-[17px] text-ink4">liv. {t.levelRequirement}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    )}
-                </div>
-
-                <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-green-400/50 pt-3">
-                    [↑↓] Scegli | [←→/TAB] Cambia sezione | [INVIO] {section === 'attribute' && mode !== 'none' ? 'Avanti' : 'Conferma'} | [ESC] Più tardi
-                </div>
+                    </section>
+                )}
             </div>
-        </div>
+        </Modal>
     );
 };
 

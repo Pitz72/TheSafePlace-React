@@ -1,4 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+
+// Same design system as the game (GAME/tailwind.config.js, theme "Crepuscolo"):
+// colors are RGB triplets defined in src/index.css.
+const tone = name => `rgb(var(--c-${name}) / <alpha-value>)`;
+
 export default {
   content: [
     "./index.html",
@@ -6,38 +11,28 @@ export default {
   ],
   theme: {
     extend: {
-      keyframes: {
-        flicker: {
-          '0%, 100%': { opacity: 0.6 },
-          '50%': { opacity: 0.8 },
-        },
-        textFlicker: {
-          '0%': { opacity: 0.8 },
-          '2%': { opacity: 1 },
-          '8%': { opacity: 0.8 },
-          '9%': { opacity: 1 },
-          '12%': { opacity: 0.8 },
-          '20%': { opacity: 1 },
-          '25%': { opacity: 0.9 },
-          '30%': { opacity: 1 },
-          '70%': { opacity: 1 },
-          '72%': { opacity: 0.8 },
-          '77%': { opacity: 1 },
-          '100%': { opacity: 1 },
-        },
-        blink: {
-          '50%': { opacity: 0 },
-        },
-        fadeIn: {
-          'from': { opacity: 0 },
-          'to': { opacity: 1 },
-        }
+      fontFamily: {
+        sans: ['Barlow', 'system-ui', 'sans-serif'],
+        cond: ['"Barlow Condensed"', 'Barlow', 'sans-serif'],
+        serif: ['Literata', 'Georgia', 'serif'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
-      animation: {
-        flicker: 'flicker 0.15s infinite',
-        'text-flicker': 'textFlicker 3s linear infinite',
-        blink: 'blink 1s step-end infinite',
-        'fade-in': 'fadeIn 1s ease-in forwards',
+      colors: {
+        bg0: tone('bg0'),
+        bg1: tone('bg1'),
+        bg2: tone('bg2'),
+        bg3: tone('bg3'),
+        ink: tone('ink'),
+        ink2: tone('ink2'),
+        ink3: tone('ink3'),
+        ink4: tone('ink4'),
+        ember: tone('ember'),
+        ember2: tone('ember2'),
+        gold: tone('gold'),
+        violet: tone('violet'),
+        line: 'var(--line)',
+        line2: 'var(--line-2)',
+        line3: 'var(--line-3)',
       },
     },
   },

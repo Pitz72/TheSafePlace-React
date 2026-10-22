@@ -9,6 +9,8 @@ export interface SaveSlot {
     /** The slot holds data that can't be loaded. */
     isCorrupted: boolean;
     label: string;
+    /** Details of a valid save, for the slot cards. */
+    meta?: { level: number; day: number; time: string; date: string | null };
 }
 
 const readSlot = (slot: number): { data: any; error: string | null } | null => {
@@ -32,11 +34,13 @@ export const getSaveSlots = (): SaveSlot[] =>
         const when = typeof saved.data.timestamp === 'number'
             ? ` | ${new Date(saved.data.timestamp).toLocaleDateString('it-IT')}`
             : '';
+        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
         return {
             slot,
             isEmpty: false,
             isCorrupted: false,
-            label: `Liv. ${level} | Giorno ${day}, ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}${when}`,
+            label: `Liv. ${level} | Giorno ${day}, ${time}${when}`,
+            meta: { level, day, time, date: when ? when.slice(3) : null },
         };
     });
 

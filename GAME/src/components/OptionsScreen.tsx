@@ -4,34 +4,29 @@ import { GameState, VisualTheme } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 import { isFullScreen, setFullScreen } from '../utils/desktop';
+import Modal from './ui/Modal';
+import Icon, { IconName } from './ui/Icon';
 
 type OptionId = 'fullscreen' | 'audio' | 'volume' | 'display';
 
 type OptionRow =
   | { type: 'header'; label: string }
-  | { type: 'spacer' }
-  | { type: 'option'; id: OptionId; label: string; kind: 'multiple'; values: string[] }
-  | { type: 'option'; id: OptionId; label: string; kind: 'slider'; max: number };
+  | { type: 'option'; id: OptionId; label: string; icon: IconName; kind: 'multiple'; values: string[] }
+  | { type: 'option'; id: OptionId; label: string; icon: IconName; kind: 'slider'; max: number };
 
-const THEMES: VisualTheme[] = ['standard', 'crt', 'high_contrast'];
+const THEMES: VisualTheme[] = ['standard', 'high_contrast'];
 
 const OPTIONS_CONFIG: readonly OptionRow[] = [
   { type: 'header', label: 'Schermo' },
-  { type: 'option', id: 'fullscreen', label: 'Modalità', kind: 'multiple', values: ['Schermo intero', 'Finestra'] },
-  { type: 'spacer' },
+  { type: 'option', id: 'fullscreen', label: 'Modalità', icon: 'monitor', kind: 'multiple', values: ['Schermo intero', 'Finestra'] },
   { type: 'header', label: 'Audio' },
-  { type: 'option', id: 'audio', label: 'Suono', kind: 'multiple', values: ['On', 'Off'] },
-  { type: 'option', id: 'volume', label: 'Volume', kind: 'slider', max: 10 },
-  { type: 'spacer' },
-  { type: 'header', label: 'Video' },
-  { type: 'option', id: 'display', label: 'Visualizzazione', kind: 'multiple', values: ['Standard', 'CRT Fosfori Verdi', 'Alto Contrasto'] },
+  { type: 'option', id: 'audio', label: 'Suono', icon: 'sound', kind: 'multiple', values: ['Attivo', 'Disattivo'] },
+  { type: 'option', id: 'volume', label: 'Volume', icon: 'music', kind: 'slider', max: 10 },
+  { type: 'header', label: 'Visualizzazione' },
+  { type: 'option', id: 'display', label: 'Tema', icon: 'eye', kind: 'multiple', values: ['Crepuscolo', 'Alto contrasto'] },
 ];
 
 const SELECTABLE_ROWS = OPTIONS_CONFIG.map((row, index) => (row.type === 'option' ? index : -1)).filter(i => i >= 0);
-
-const VolumeBar: React.FC<{ level: number, max: number }> = ({ level, max }) => (
-  <span className="font-mono">{`[${'█'.repeat(level)}${'░'.repeat(Math.max(0, max - level))}]`}</span>
-);
 
 const OptionsScreen: React.FC = () => {
   const setGameState = useGameStore(state => state.setGameState);
@@ -109,26 +104,52 @@ const OptionsScreen: React.FC = () => {
   useKeyboardInput(handlerMap);
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-4">
-      <h1 className="text-5xl md:text-6xl mb-2 text-center">═══ IMPOSTAZIONI ═══</h1>
-      <p className="text-2xl md:text-3xl mb-8 text-center text-[var(--text-secondary)]">Le impostazioni vengono salvate automaticamente</p>
-      <div className="w-full max-w-4xl text-3xl space-y-3">
+    <Modal
+      backdrop={returnState === GameState.PAUSE_MENU ? 'blur' : 'soft'}
+      eyebrow="Impostazioni"
+      icon="sliders"
+      title="Opzioni"
+      subtitle="Le impostazioni vengono salvate automaticamente."
+      size="md"
+      hints={[{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['←→'], label: 'Cambia' }, { keys: ['ESC'], label: 'Indietro' }]}
+    >
+      <div className="px-12 pb-10">
         {OPTIONS_CONFIG.map((row, index) => {
-          if (row.type === 'header') return <h2 key={index} className="text-4xl pt-4">{row.label}</h2>;
-          if (row.type === 'spacer') return <div key={index} className="h-4" />;
+          if (row.type === 'header') {
+            return <h2 key={index} className="eyebrow mb-3 mt-7 first:mt-0">{row.label}</h2>;
+          }
           const isSelected = SELECTABLE_ROWS[selected] === index;
+          const value = settings[row.id];
           return (
-            <div key={row.id} className={`flex justify-between items-center transition-colors duration-100 px-2 ${isSelected ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''}`}>
-              <span>{row.label}:</span>
-              <span>{row.kind === 'multiple' ? `< ${row.values[settings[row.id]]} >` : <VolumeBar level={settings.volume} max={row.max} />}</span>
+            <div key={row.id} className={`choice mb-1.5 !py-4 text-[23px] ${isSelected ? 'is-selected' : ''}`}>
+              <Icon name={row.icon} size={24} className={isSelected ? 'text-accent' : 'text-ink3'} />
+              <span className="flex-1">{row.label}</span>
+              {row.kind === 'multiple' ? (
+                <div className="flex rounded-full border border-line2 bg-bg0/40 p-1">
+                  {row.values.map((label, i) => (
+                    <span
+                      key={label}
+                      className={`rounded-full px-5 py-1.5 text-[19px] transition-colors ${i === value ? 'bg-ink text-bg0 font-semibold' : 'text-ink3'}`}
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <div className="flex items-end gap-1.5">
+                    {Array.from({ length: row.max }, (_, i) => (
+                      <span key={i} className={`w-2.5 rounded-sm transition-colors ${i < value ? 'bg-ember' : 'bg-ink4/40'}`} style={{ height: 10 + i * 2 }} />
+                    ))}
+                  </div>
+                  <span className="w-8 text-right font-cond text-[22px] font-semibold tnum">{value}</span>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-      <div className="mt-auto text-2xl md:text-3xl text-center">
-        [W/S/↑↓] Muovi | [A/D/←→] Cambia | [ESC] Torna Indietro
-      </div>
-    </div>
+    </Modal>
   );
 };
 

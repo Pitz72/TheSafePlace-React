@@ -214,7 +214,7 @@ export interface Trader {
 }
 
 // --- UI & Menu States ---
-export type VisualTheme = 'standard' | 'crt' | 'high_contrast';
+export type VisualTheme = 'standard' | 'high_contrast';
 
 export interface ActionMenuState {
   isOpen: boolean;

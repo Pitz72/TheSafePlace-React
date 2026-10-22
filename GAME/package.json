@@ -1,9 +1,9 @@
 {
   "name": "the-safe-place-chronicles-the-echo-of-the-journey",
   "private": true,
-  "version": "2.1.0",
+  "version": "3.0.0",
   "type": "module",
-  "description": "The Safe Place Chronicles: The Echo of the Journey — un GDR testuale post-apocalittico.",
+  "description": "The Safe Place Chronicles: The Echo of the Journey — un gioco di ruolo narrativo post-apocalittico.",
   "author": "Runtime Radio <noreply@runtimeradio.it>",
   "homepage": "https://github.com/Pitz72/TheSafePlace-React",
   "repository": {
@@ -84,7 +84,7 @@
       ],
       "category": "Game",
       "maintainer": "Runtime Radio <noreply@runtimeradio.it>",
-      "synopsis": "GDR testuale di sopravvivenza post-apocalittico",
+      "synopsis": "Gioco di ruolo narrativo di sopravvivenza post-apocalittico",
       "artifactName": "TheSafePlace-${version}-linux-${arch}.${ext}"
     }
   },

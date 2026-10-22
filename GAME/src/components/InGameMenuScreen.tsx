@@ -1,14 +1,27 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useTimeStore } from '../store/timeStore';
 import { GameState } from '../types';
 import { useKeyboardInput, KeyHandlerMap } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
+import Icon, { IconName } from './ui/Icon';
 
 const MENU_ITEMS = ['Continua', 'Salva Partita', 'Carica Partita', 'Opzioni', 'Menu Principale'] as const;
+
+const MENU_ICONS: Record<(typeof MENU_ITEMS)[number], IconName> = {
+    'Continua': 'play',
+    'Salva Partita': 'save',
+    'Carica Partita': 'load',
+    'Opzioni': 'sliders',
+    'Menu Principale': 'exit',
+};
 
 const InGameMenuScreen: React.FC = () => {
     const gameState = useGameStore(state => state.gameState);
     const setGameState = useGameStore(state => state.setGameState);
+    const gameTime = useTimeStore(state => state.gameTime);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [confirmQuit, setConfirmQuit] = useState(false);
 
@@ -46,29 +59,42 @@ const InGameMenuScreen: React.FC = () => {
 
     useKeyboardInput(handlerMap);
 
-    return (
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-8">
-            <div className="w-full max-w-2xl border-8 border-double border-[var(--border-primary)] flex flex-col p-6 bg-[var(--bg-primary)]">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-8">═══ PAUSA ═══</h1>
-                {confirmQuit ? (
-                    <div className="text-center space-y-8">
-                        <p className="text-4xl">Tornare al menu principale?</p>
-                        <p className="text-3xl text-[var(--text-accent)]">I progressi non salvati andranno persi.</p>
-                    </div>
-                ) : (
-                    <div className="w-full max-w-lg mx-auto text-4xl space-y-3">
-                        {MENU_ITEMS.map((option, index) => (
-                            <div key={option} className={`pl-4 py-1 transition-colors duration-100 ${index === selectedIndex ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : 'bg-transparent'}`}>
-                                {index === selectedIndex && '> '}{option}
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-[var(--border-primary)] pt-4">
-                    {confirmQuit ? '[INVIO] Sì, esci | [ESC] No' : '[W/S / ↑↓] Seleziona | [INVIO] Conferma | [ESC] Continua'}
+    const time = `${String(gameTime.hour).padStart(2, '0')}:${String(gameTime.minute).padStart(2, '0')}`;
+
+    if (confirmQuit) {
+        return (
+            <Modal
+                accent="danger"
+                eyebrow="Pausa"
+                icon="warning"
+                title="Tornare al menu principale?"
+                size="sm"
+                hints={[{ keys: ['INVIO'], label: 'Sì, esci' }, { keys: ['ESC'], label: 'No, resta' }]}
+            >
+                <div className="flex items-start gap-4 px-12 pb-10">
+                    <Icon name="warning" size={26} className="mt-1 text-danger" />
+                    <p className="text-[22px] leading-snug text-ink2">I progressi non salvati andranno persi.</p>
                 </div>
+            </Modal>
+        );
+    }
+
+    return (
+        <Modal
+            eyebrow="Pausa"
+            icon="hourglass"
+            title="Il viaggio si ferma"
+            subtitle={`Giorno ${gameTime.day} · ${time}`}
+            size="sm"
+            hints={[{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Conferma' }, { keys: ['ESC'], label: 'Continua' }]}
+        >
+            <div className="px-12 pb-9">
+                <ChoiceList
+                    selected={selectedIndex}
+                    items={MENU_ITEMS.map(option => ({ id: option, label: option, icon: MENU_ICONS[option] }))}
+                />
             </div>
-        </div>
+        </Modal>
     );
 };
 

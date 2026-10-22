@@ -1,45 +1,42 @@
 import React from 'react';
 import { useCharacterStore } from '../store/characterStore';
-import Panel from './Panel';
+import Icon from './ui/Icon';
 
+const ALIGNMENT_THRESHOLD = 5;
+
+/** Moral compass: the needle between Lena (compassion) and Elian (pragmatism). */
 const AlignmentPanel: React.FC = () => {
     const alignment = useCharacterStore((state) => state.alignment);
     const { lena, elian } = alignment;
 
     const totalPoints = Math.max(1, lena + elian);
     const balance = totalPoints === 1 ? 0 : (elian - lena) / totalPoints;
-    
-    // Converte il bilanciamento in una percentuale da 0% (Lena) a 100% (Elian) per il posizionamento
+    // From 0% (Lena) to 100% (Elian).
     const positionPercent = ((balance + 1) / 2) * 100;
 
-    let dominantAlignment = 'NEUTRALE';
-    const alignmentDifference = lena - elian;
-    const ALIGNMENT_THRESHOLD = 5;
-
-    if (alignmentDifference > ALIGNMENT_THRESHOLD) dominantAlignment = 'COMPASSIONEVOLE (LENA)';
-    if (alignmentDifference < -ALIGNMENT_THRESHOLD) dominantAlignment = 'PRAGMATICO (ELIAN)';
-
+    const difference = lena - elian;
+    const dominant = difference > ALIGNMENT_THRESHOLD ? 'lena' : difference < -ALIGNMENT_THRESHOLD ? 'elian' : null;
+    const label = dominant === 'lena' ? 'Compassionevole' : dominant === 'elian' ? 'Pragmatico' : 'In equilibrio';
 
     return (
-        <Panel title="BUSSOLA MORALE">
-            <div className="flex flex-col items-center justify-center h-full px-2 space-y-1 text-sm">
-                <div className="w-full flex justify-between">
-                    <span className="text-blue-400">Lena</span>
-                    <span className="text-red-400">Elian</span>
+        <section className="surface flex-shrink-0 px-6 pb-5 pt-4">
+            <header className="mb-3 flex items-center gap-2.5">
+                <Icon name="compass" size={18} className="text-ink3" />
+                <h2 className="eyebrow flex-1">Bussola morale</h2>
+                <span className={`text-[17px] ${dominant === 'lena' ? 'text-lena' : dominant === 'elian' ? 'text-elian' : 'text-ink2'}`}>{label}</span>
+            </header>
+            <div className="flex items-center gap-3">
+                <span className={`text-[18px] ${dominant === 'lena' ? 'font-semibold text-lena' : 'text-lena/80'}`}>Lena</span>
+                <div className="relative h-2 flex-1 rounded-full" style={{ background: 'linear-gradient(90deg, rgb(var(--c-lena)), rgb(var(--c-ink4) / 0.6) 50%, rgb(var(--c-elian)))' }}>
+                    <div className="absolute left-1/2 top-1/2 h-3.5 w-px -translate-y-1/2 bg-ink3" />
+                    <div
+                        className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-ink bg-bg1 shadow-lg transition-[left] duration-700"
+                        style={{ left: `${positionPercent}%` }}
+                    />
                 </div>
-                {/* FIX v1.2.4: Increased bar size and marker visibility */}
-                <div className="w-full h-3 bg-gray-900 rounded-full relative border border-green-400/50">
-                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-gray-300 to-red-500 rounded-full w-full opacity-80"></div>
-                    <div 
-                        className="absolute -top-1 w-2 h-5 bg-yellow-400 border-2 border-green-400 rounded shadow-lg shadow-yellow-400/50"
-                        style={{ left: `calc(${positionPercent}% - 4px)` }}
-                    ></div>
-                </div>
-                <div className="text-center text-xs">
-                    {dominantAlignment}
-                </div>
+                <span className={`text-[18px] ${dominant === 'elian' ? 'font-semibold text-elian' : 'text-elian/80'}`}>Elian</span>
             </div>
-        </Panel>
+        </section>
     );
 };
 

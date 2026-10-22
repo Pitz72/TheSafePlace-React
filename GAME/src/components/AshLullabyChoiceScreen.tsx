@@ -4,6 +4,8 @@ import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 import { useInteractionStore } from '../store/interactionStore';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
 
 /**
  * AshLullabyChoiceScreen component.
@@ -49,33 +51,29 @@ const AshLullabyChoiceScreen: React.FC = () => {
     useKeyboardInput(handlerMap);
 
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full max-w-4xl border-8 border-double border-green-400/50 flex flex-col p-6">
-                <h1 className="text-5xl text-center font-bold tracking-widest uppercase mb-6">═══ UN RICORDO PESANTE ═══</h1>
-                
-                <p className="text-3xl text-center text-green-400/80 mb-8 leading-relaxed">
-                    Mentre ti prepari a riposare, la tua mano sfiora qualcosa di freddo e spigoloso nella tasca. Il carillon annerito. L'avvertimento di tuo padre ti risuona in testa: "Non aprirlo mai. Il suo suono... attira i ricordi sbagliati".<br/><br/>
+        <Modal
+            backdrop="blur"
+            accent="violet"
+            eyebrow="Il carillon"
+            icon="music"
+            title="Un ricordo pesante"
+            size="md"
+            hints={[{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Conferma' }]}
+        >
+            <div className="px-12 pb-9">
+                <div className="hairline mb-6" />
+                <p className="prose-story mb-5 text-[25px]">
+                    Mentre ti prepari a riposare, la tua mano sfiora qualcosa di freddo e spigoloso nella tasca. Il carillon annerito. L'avvertimento di tuo padre ti risuona in testa: <span className="italic text-violet">"Non aprirlo mai. Il suo suono... attira i ricordi sbagliati"</span>.
+                </p>
+                <p className="prose-story mb-8 text-[25px] text-ink2">
                     Eppure, qui, nel silenzio del rifugio, senti un'attrazione inspiegabile. Una curiosità dolorosa.
                 </p>
-
-                <div className="w-full max-w-2xl mx-auto text-4xl space-y-3 mt-4">
-                    {choices.map((option, index) => (
-                        <div
-                            key={option}
-                            className={`pl-4 py-1 transition-colors duration-100 ${
-                                index === selectedIndex ? 'bg-green-400 text-black' : 'bg-transparent'
-                            }`}
-                        >
-                            {index === selectedIndex && '> '}{option}
-                        </div>
-                    ))}
-                </div>
-
-                <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">
-                    [W/S / ↑↓] Seleziona | [INVIO] Conferma
-                </div>
+                <ChoiceList
+                    selected={selectedIndex}
+                    items={choices.map((option, index) => ({ id: option, label: option, icon: index === 0 ? 'music' : 'bed' }))}
+                />
             </div>
-        </div>
+        </Modal>
     );
 };
 

@@ -1,20 +1,20 @@
 # 01. Panoramica del Progetto
 
 ## 1.1 Concetto Generale
-**The Safe Place Chronicles: The Echo of the Journey** è un Gioco di Ruolo (RPG) testuale con elementi survival e roguelite, ambientato in un mondo post-apocalittico devastato dalla "Guerra Inespressa". Il gioco emula l'estetica e il feeling dei computer dei primi anni '80 (monitor CRT a fosfori verdi, interfaccia keyboard-only), offrendo un'esperienza narrativa profonda e meccaniche di sopravvivenza punitive.
+**The Safe Place Chronicles: The Echo of the Journey** è un Gioco di Ruolo (RPG) narrativo con elementi survival e roguelite, ambientato in un mondo post-apocalittico devastato dalla "Guerra Inespressa". Dalla versione 3.0 ha un'identità visiva da gioco narrativo moderno (illustrazione vettoriale, luce del crepuscolo, tipografia editoriale), offrendo un'esperienza narrativa profonda e meccaniche di sopravvivenza punitive.
 
 Il giocatore veste i panni di "Ultimo", un sopravvissuto che intraprende un viaggio disperato verso Est alla ricerca del leggendario "Safe Place", guidato solo dagli insegnamenti del padre e da una mappa criptica.
 
 ## 1.2 Filosofia di Design
-*   **Retro-Minimalismo:** L'interfaccia è puramente testuale e basata su griglia ASCII/simbolica. Nessuna grafica moderna, solo testo e immaginazione.
-*   **Keyboard-Only:** L'intero gioco è controllato esclusivamente tramite tastiera, senza supporto per il mouse, per massimizzare l'immersione nell'era informatica di riferimento.
+*   **Il testo al centro:** la storia si legge. Le illustrazioni (vettoriali, senza figure umane disegnate in codice) danno luogo, ora e meteo; le parole fanno il resto.
+*   **Tastiera prima di tutto:** l'intero gioco si controlla da tastiera; il mouse è solo un aiuto (menu principale, zoom della mappa).
 *   **Narrativa Emergente:** Sebbene ci sia una trama principale ("Echi della Memoria"), gran parte della storia emerge dalle interazioni sistemiche tra biomi, eventi casuali e stato del giocatore.
 *   **Sopravvivenza Realistica:** La gestione delle risorse (fame, sete, fatica, salute) è centrale. Il mondo è ostile e indifferente; la morte è una possibilità concreta e frequente.
 *   **Scelte Morali:** Il sistema di allineamento (Lena vs Elian) non giudica "buono" o "cattivo", ma contrappone "Compassione" a "Pragmatismo", influenzando opzioni di dialogo e finali.
 
 ## 1.3 Estetica e Atmosfera
-*   **Visual:** Stile terminale DOS/Unix. Font monospaziati, colori ad alto contrasto (verde su nero, ambra su nero), effetti CRT opzionali (scanlines, bagliore, distorsione).
-*   **Audio:** Sound design minimale generato proceduralmente o tramite campionamenti lo-fi che emulano chip audio FM o PC Speaker.
+*   **Visual:** illustrazione vettoriale a strati (riferimenti: *Firewatch*, *Kentucky Route Zero*, *Road 96*), crepuscolo sull'Europa centrale in rovina: autostrade spaccate, palazzi coperti di rampicanti, una sola luce all'orizzonte. Interfaccia in vetro fumé con accento color brace; titoli in Cormorant Garamond, testi narrativi in Literata, interfaccia in Barlow. Nessun richiamo retro (terminali, CRT, pixel). Direzione artistica completa in `COVER-UFFICIALE/README.md`.
+*   **Audio:** Sound design minimale generato proceduralmente con la Web Audio API.
 *   **Tono:** Malinconico, solitario, opprimente ma con sprazzi di speranza. Il "Grande Silenzio" è un tema ricorrente.
 
 ## 1.4 Ciclo di Gioco (Core Loop)

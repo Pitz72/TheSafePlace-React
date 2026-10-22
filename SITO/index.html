@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
-    <title>The Safe Place Chronicles: The Echo of the Journey — GDR di sopravvivenza retro</title>
-    <meta name="description" content="The Safe Place Chronicles è un GDR narrativo di sopravvivenza post-apocalittico in stile retro anni '80 (fosfori verdi, keyboard-only). Gioco desktop gratuito e open source per Windows, macOS e Linux." />
-    <meta name="keywords" content="The Safe Place Chronicles, RPG testuale, GDR italiano, gioco di sopravvivenza, post-apocalittico, retrocomputing, open source, gioco desktop, Windows, macOS, Linux, Runtime Radio" />
+    <title>The Safe Place Chronicles: The Echo of the Journey — GDR narrativo di sopravvivenza</title>
+    <meta name="description" content="The Safe Place Chronicles è un gioco di ruolo narrativo di sopravvivenza in un'Europa post-apocalittica: un viaggio a piedi verso l'ultimo luogo sicuro. Gioco desktop gratuito e open source per Windows, macOS e Linux." />
+    <meta name="keywords" content="The Safe Place Chronicles, The Echo of the Journey, gioco di ruolo, GDR italiano, gioco narrativo, gioco di sopravvivenza, post-apocalittico, avventura, open source, gioco desktop, Windows, macOS, Linux, Runtime Radio" />
     <meta name="author" content="Simone Pizzi — Runtime Radio" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#050a05" />
+    <meta name="theme-color" content="#090a0d" />
+    <meta name="color-scheme" content="dark" />
     <link rel="canonical" href="https://thesafeplace.runtimeradio.it/" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -22,18 +24,19 @@
     <meta property="og:locale" content="it_IT" />
     <meta property="og:url" content="https://thesafeplace.runtimeradio.it/" />
     <meta property="og:title" content="The Safe Place Chronicles: The Echo of the Journey" />
-    <meta property="og:description" content="GDR narrativo di sopravvivenza post-apocalittico in stile retro anni '80. Gioco desktop gratuito e open source per Windows, macOS e Linux." />
-    <meta property="og:image" content="https://thesafeplace.runtimeradio.it/image/og-preview.png" />
+    <meta property="og:description" content="Un gioco di ruolo narrativo di sopravvivenza in un'Europa post-apocalittica: un viaggio a piedi verso l'ultimo luogo sicuro. Gratuito e open source per Windows, macOS e Linux." />
+    <meta property="og:image" content="https://thesafeplace.runtimeradio.it/image/og-preview.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Schermata di The Safe Place Chronicles: The Echo of the Journey, con il titolo a fosfori verdi su una città in rovina." />
+    <meta property="og:image:alt" content="Copertina di The Safe Place Chronicles: The Echo of the Journey: il logo e una strada deserta che corre verso il sole al tramonto, tra le rovine di una città." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="The Safe Place Chronicles: The Echo of the Journey" />
-    <meta name="twitter:description" content="GDR narrativo di sopravvivenza post-apocalittico in stile retro anni '80. Gioco desktop gratuito e open source per Windows, macOS e Linux." />
-    <meta name="twitter:image" content="https://thesafeplace.runtimeradio.it/image/og-preview.png" />
-    <meta name="twitter:image:alt" content="Schermata di The Safe Place Chronicles con il titolo a fosfori verdi." />
+    <meta name="twitter:description" content="Un gioco di ruolo narrativo di sopravvivenza in un'Europa post-apocalittica: un viaggio a piedi verso l'ultimo luogo sicuro. Gratuito e open source per Windows, macOS e Linux." />
+    <meta name="twitter:image" content="https://thesafeplace.runtimeradio.it/image/og-preview.jpg" />
+    <meta name="twitter:image:alt" content="Copertina di The Safe Place Chronicles: il logo e una strada deserta verso il sole al tramonto." />
 
     <!-- Structured Data (schema.org VideoGame) -->
     <script type="application/ld+json">
@@ -42,8 +45,8 @@
       "@type": "VideoGame",
       "name": "The Safe Place Chronicles: The Echo of the Journey",
       "url": "https://thesafeplace.runtimeradio.it/",
-      "image": "https://thesafeplace.runtimeradio.it/image/og-preview.png",
-      "description": "GDR narrativo di sopravvivenza post-apocalittico in stile retro anni '80. Gioco desktop gratuito e open source per Windows, macOS e Linux.",
+      "image": "https://thesafeplace.runtimeradio.it/image/og-preview.jpg",
+      "description": "Gioco di ruolo narrativo di sopravvivenza in un'Europa post-apocalittica: un viaggio a piedi verso l'ultimo luogo sicuro. Gioco desktop gratuito e open source per Windows, macOS e Linux.",
       "author": { "@type": "Person", "name": "Simone Pizzi" },
       "publisher": { "@type": "Organization", "name": "Runtime Radio" },
       "genre": ["RPG", "Survival", "Interactive Fiction"],
@@ -58,9 +61,17 @@
     }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <!-- Font inclusi nel sito (public/fonts, licenza OFL): nessuna richiesta esterna.
+         Si precaricano quelli del titolo e del testo, visibili subito. -->
+    <link rel="preload" href="/fonts/cormorant-garamond-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Key art dell'apertura: stessi srcset e media di src/images.ts (KEYART). -->
+    <link rel="preload" as="image" type="image/webp" fetchpriority="high" media="(max-width: 1023px) and (orientation: portrait)"
+      imagesrcset="/image/keyart-verticale-720.webp 720w, /image/keyart-verticale-1080.webp 1080w" imagesizes="100vw" />
+    <link rel="preload" as="image" type="image/webp" fetchpriority="high" media="not all and (max-width: 1023px) and (orientation: portrait)"
+      imagesrcset="/image/keyart-1280.webp 1280w, /image/keyart-1920.webp 1920w, /image/keyart-2560.webp 2560w, /image/keyart-3840.webp 3840w" imagesizes="100vw" />
   </head>
   <body>
     <div id="root"></div>

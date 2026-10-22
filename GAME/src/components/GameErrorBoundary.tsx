@@ -5,6 +5,8 @@ import { useEventStore } from '../store/eventStore';
 import { useNarrativeStore } from '../store/narrativeStore';
 import { GameState } from '../types';
 import { lastSaveSlot } from '../utils/saveFormat';
+import Icon from './ui/Icon';
+import KeyHints from './ui/KeyHints';
 
 interface GameErrorBoundaryState {
     error: Error | null;
@@ -55,15 +57,22 @@ class GameErrorBoundary extends React.Component<{ children: React.ReactNode }, G
         if (!this.state.error) return this.props.children;
         const canLoad = lastSaveSlot() !== null;
         return (
-            <div className="w-full h-full flex items-center justify-center bg-black">
-                <div className="text-center max-w-3xl p-8 border-2 border-[var(--border-primary)] rounded-lg">
-                    <h1 className="text-5xl mb-6 text-[var(--text-danger)] font-bold">ERRORE IMPREVISTO</h1>
-                    <p className="text-2xl mb-4 text-[var(--text-primary)] leading-relaxed">
+            <div className="flex h-full w-full items-center justify-center bg-bg0 p-10">
+                <div className="surface w-full max-w-[820px] px-12 py-10 text-center">
+                    <Icon name="warning" size={44} className="mx-auto text-danger" />
+                    <h1 className="eyebrow mt-5 text-danger">ERRORE IMPREVISTO</h1>
+                    <p className="title-display mt-4 text-[40px] text-ink">
                         Qualcosa si è rotto mentre il gioco disegnava questa schermata.
                     </p>
-                    <p className="text-xl mb-8 text-[var(--text-secondary)] opacity-70 break-words">{this.state.error.message}</p>
-                    <p className="text-2xl text-[var(--text-primary)]">[INVIO] Torna al menu principale</p>
-                    {canLoad && <p className="text-2xl mt-2 text-[var(--text-primary)]">[C] Carica l'ultimo salvataggio</p>}
+                    <p className="mt-4 break-words text-[18px] text-ink3">{this.state.error.message}</p>
+                    <div className="mt-9">
+                        <KeyHints
+                            hints={[
+                                { keys: ['INVIO'], label: 'Torna al menu principale' },
+                                ...(canLoad ? [{ keys: ['C'], label: "Carica l'ultimo salvataggio" }] : []),
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
         );

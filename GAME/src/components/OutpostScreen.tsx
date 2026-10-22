@@ -7,6 +7,10 @@ import { GameState, JournalEntryType } from '../types';
 import { narrativeService } from '../services/NarrativeService';
 import { tradingService } from '../services/tradingService';
 import { audioManager } from '../utils/audio';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
+import Icon, { IconName } from './ui/Icon';
+import BiomeScene from './art/BiomeScene';
 
 const REST_HOURS = 8;
 
@@ -19,11 +23,15 @@ const OPTIONS = [
     "Lascia l'Avamposto",
 ] as const;
 
+const OPTION_ICONS: IconName[] = ['chat', 'chat', 'chat', 'coins', 'bed', 'exit'];
+
 /** "Il Crocevia": the outpost hub with its NPCs, trade and a safe place to sleep. */
 const OutpostScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [actionMessage, setActionMessage] = useState<string | null>(null);
     const setGameState = useGameStore(state => state.setGameState);
+    const gameTime = useTimeStore(state => state.gameTime);
+    const weather = useTimeStore(state => state.weather);
 
     const navigate = useCallback((direction: number) => {
         setActionMessage(null);
@@ -79,28 +87,33 @@ const OutpostScreen: React.FC = () => {
     useKeyboardInput(handlerMap);
 
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full max-w-4xl border-8 border-double border-amber-600/50 flex flex-col p-6">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6 text-amber-500">═══ IL CROCEVIA ═══</h1>
-                <p className="text-2xl text-center text-amber-400/80 mb-6 px-4 leading-relaxed">
+        <Modal
+            backdrop="blur"
+            banner={<BiomeScene biome="A" variant="outpost" hour={gameTime.hour + gameTime.minute / 60} weather={weather.type} height={210} />}
+            eyebrow="Avamposto"
+            icon="signpost"
+            title="Il Crocevia"
+            size="md"
+            hints={[{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Conferma' }, { keys: ['ESC'], label: 'Esci' }]}
+        >
+            <div className="px-12 pb-9">
+                <p className="prose-story mb-6 text-[22px] text-ink2">
                     Non è molto: un pugno di container arrugginiti e tende rattoppate disposte in cerchio attorno a un fuoco
                     fumante. Eppure è il primo luogo da settimane che odora di umanità e non di decadenza.
                 </p>
                 {actionMessage && (
-                    <div className="text-3xl text-center text-yellow-400 mb-6 p-4 border border-yellow-400/50 bg-yellow-400/10">{actionMessage}</div>
+                    <div key={actionMessage} className="mb-5 flex items-start gap-3 rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-[20px] leading-snug text-ink anim-fade-up">
+                        <Icon name="info" size={22} className="mt-0.5 text-gold" />
+                        <span>{actionMessage}</span>
+                    </div>
                 )}
-                <div className="w-full max-w-2xl mx-auto text-3xl space-y-2 mb-6">
-                    {OPTIONS.map((option, index) => (
-                        <div key={option} className={`pl-4 py-1 ${index === selectedIndex ? 'bg-amber-500 text-black' : 'bg-transparent text-amber-400'}`}>
-                            {index === selectedIndex && '> '}{option}
-                        </div>
-                    ))}
-                </div>
-                <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-amber-600/50 pt-4">
-                    [W/S / ↑↓] Seleziona | [INVIO] Conferma | [ESC] Esci
-                </div>
+                <ChoiceList
+                    size="sm"
+                    selected={selectedIndex}
+                    items={OPTIONS.map((option, index) => ({ id: option, label: option, icon: OPTION_ICONS[index] }))}
+                />
             </div>
-        </div>
+        </Modal>
     );
 };
 

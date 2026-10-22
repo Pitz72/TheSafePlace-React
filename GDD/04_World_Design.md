@@ -55,4 +55,4 @@ La mappa contiene POI specifici posizionati manualmente per guidare l'esplorazio
 *   **Zone Speciali (`A`, `N`, `L`, `B`):** Spesso legati a quest secondarie o alla trama principale. Offrono loot unico o pezzi di lore.
 
 ## 4.5 Navigazione
-Il giocatore non vede l'intera mappa all'inizio. La "Fog of War" (se implementata) o la limitata visibilità del terminale rendono l'esplorazione una meccanica chiave. L'uso di oggetti come il *Binocolo* o la salita su punti elevati (Montagne accessibili?) potrebbe espandere la visuale.
+Il giocatore non vede l'intera mappa all'inizio. La "Fog of War" (se implementata) o la visuale limitata della mappa rendono l'esplorazione una meccanica chiave. L'uso di oggetti come il *Binocolo* o la salita su punti elevati (Montagne accessibili?) potrebbe espandere la visuale.

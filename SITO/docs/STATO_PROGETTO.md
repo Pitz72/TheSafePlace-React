@@ -2,29 +2,37 @@
 
 ## Progetto
 **Nome:** Landing Page - The Safe Place Chronicles
-**Versione:** 1.0.0
+**Versione:** 2.0.0
 
 ---
 
 ## Stato Attuale
 **Stato:** Stabile e Funzionante
 
-Il progetto è stato ripristinato a uno stato funzionante dopo interventi che avevano corrotto i percorsi delle risorse e impedito la build di produzione.
+### 2.0.0 — Nuova identità visiva
+Il sito è stato ridisegnato con l'identità visiva della versione 3.0 del gioco (vedi
+`GAME/docs/logs/v3.0.0-nuova-identita-visiva.md` e `COVER-UFFICIALE/README.md`).
 
-### Interventi Effettuati:
-1.  **Correzione Build Fallita:**
-    -   **Problema:** Il comando `npm run build` falliva a causa di percorsi errati per le immagini (`01.png`, `02.png`, `03.jpg`, `sfondo.png`) referenziate nei componenti React (`App.tsx`, `Header.tsx`).
-    -   **Soluzione:** I percorsi degli asset sono stati corretti per puntare alla cartella corretta nella root del progetto (`/image/*.png` e `/sfondo.png`), risolvendo gli errori `ENOENT` e permettendo alla build di Vite di completarsi con successo.
+1.  **Via il terminale:** rimossi l'animazione di avvio CRT (che bloccava la pagina finché non si premeva un tasto),
+    scanline, fosfori verdi, il font VT323 e le immagini in pixel art (`image/`, `sfondo.png`, la vecchia
+    `og-preview.png`). Il parametro `?skipintro` non serve più e viene ignorato.
+2.  **Apertura:** key art del gioco a tutto schermo (con un taglio verticale per i telefoni, precaricata da
+    `index.html`), lenta carrellata e cenere nell'aria come nel menu del gioco, logo ed emblema, tagline e pulsanti.
+3.  **Design system:** palette *Crepuscolo*, componenti (vetro, pulsanti, chip) e font del gioco, inclusi in
+    `public/fonts` (licenza OFL): nessuna richiesta a Google Fonts o ad altri domini.
+4.  **Sezioni:** tutte quelle di prima (il gioco, caratteristiche, galleria, trailer, download, diario di sviluppo,
+    prossimi passi, contatti) con testi che descrivono un GDR narrativo moderno; barra di navigazione fissa;
+    galleria con le copertine ufficiali e ingrandimento; il teaser di YouTube si carica solo premendo play.
+5.  **SEO e social:** nuova immagine Open Graph 1200×630 (`public/image/og-preview.jpg`, dalla copertina del gioco),
+    favicon nuove (`favicon.ico`, `favicon.svg`, `favicon-48.png`, `apple-touch-icon.png`), meta e dati strutturati
+    aggiornati. `robots.txt` e `sitemap.xml` invariati.
+6.  **Immagini riproducibili:** `scripts/export-images.mjs` rigenera tutte le immagini dalla grafica ufficiale
+    (vedi `README.md`).
 
-2.  **Impostazione Favicon:**
-    -   **Problema:** La landing page utilizzava la favicon di default di Vite.
-    -   **Soluzione:** Il file `image/ivon.png` è stato impostato come favicon del sito modificando il tag `<link rel="icon">` nel file `index.html`.
+I link di download puntano ancora alla release pubblica **v2.0.17**: quando sarà pubblicata la 3.0 vanno aggiornati in
+`src/constants.ts` (`RELEASE_VERSION`, `RELEASE_BASE`, nomi e dimensioni dei file), insieme a `softwareVersion` in
+`index.html`, ai badge "Prossima release" della timeline e alla riga sulla versione 3.0 nella sezione Scarica.
 
-3.  **Creazione Documentazione:**
-    -   È stato creato un file `README.md` completo per la presentazione del progetto su piattaforme come GitHub.
-    -   È stato creato questo documento per tracciare lo stato e gli interventi sul progetto.
-
-### Note Aggiuntive:
-- Durante il processo di build, viene mostrato il seguente avviso: `/index.css doesn't exist at build time, it will remain unchanged to be resolved at runtime`. Questo non impedisce la corretta compilazione e funzionalità del sito, ma potrebbe essere analizzato in futuro per ripulire l'output della build.
-
-Il progetto è ora correttamente configurato, documentato e pronto per la visualizzazione e ulteriori sviluppi.
+### 1.0.0 — Ripristino
+Il progetto è stato ripristinato a uno stato funzionante dopo interventi che avevano corrotto i percorsi delle risorse
+e impedito la build di produzione (percorsi delle immagini corretti, favicon impostata, README e questo documento).

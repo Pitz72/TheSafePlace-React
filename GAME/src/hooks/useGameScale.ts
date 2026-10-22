@@ -15,9 +15,9 @@ export const useGameScale = (): CSSProperties => {
     const handleResize = () => {
       const { innerWidth: windowWidth, innerHeight: windowHeight } = window;
 
-      // Define the target container size (95% of the window)
-      const targetWidth = windowWidth * 0.95;
-      const targetHeight = windowHeight * 0.95;
+      // The game fills the window (letterboxed when the aspect ratio differs).
+      const targetWidth = windowWidth;
+      const targetHeight = windowHeight;
 
       // Calculate the scale factor to fit the TARGET container size
       const scale = Math.min(targetWidth / NATIVE_WIDTH, targetHeight / NATIVE_HEIGHT);

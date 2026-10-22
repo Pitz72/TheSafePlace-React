@@ -8,17 +8,20 @@ const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/down
 
 export const DOWNLOAD_BASE_URL = RELEASE_BASE;
 
+export const CONTACT_EMAIL = 'runtimeradio@gmail.com';
+export const TRAILER_YOUTUBE_ID = '6PJaJECxwhM';
+
 export const DOWNLOAD_TARGETS: DownloadTarget[] = [
   {
     os: 'Windows',
-    icon: '⊞', // ⊞ finestra
+    icon: 'windows',
     requirement: 'Windows 10/11 - 64 bit (x64)',
     primary: { label: 'Installer (.exe)', file: 'TheSafePlace-2.0.17-win-x64.exe', size: '~115 MB' },
     notice: 'Windows SmartScreen potrebbe mostrare un avviso ("Windows ha protetto il PC") perché l’eseguibile non è firmato con un certificato commerciale. È normale per un progetto open source: clicca su "Ulteriori informazioni" e poi "Esegui comunque".',
   },
   {
     os: 'macOS',
-    icon: '⌘', // ⌘
+    icon: 'macos',
     requirement: 'macOS su Apple Silicon (arm64) - M1 o superiore',
     primary: { label: 'Disk Image (.dmg)', file: 'TheSafePlace-2.0.17-mac-arm64.dmg', size: '~154 MB' },
     secondary: { label: 'Archivio (.zip)', file: 'TheSafePlace-2.0.17-mac-arm64.zip', size: '~147 MB' },
@@ -26,7 +29,7 @@ export const DOWNLOAD_TARGETS: DownloadTarget[] = [
   },
   {
     os: 'Linux',
-    icon: '⚇', // ⚇
+    icon: 'linux',
     requirement: 'Distribuzioni 64 bit (x86_64 / amd64)',
     primary: { label: 'AppImage', file: 'TheSafePlace-2.0.17-linux-x86_64.AppImage', size: '~150 MB' },
     secondary: { label: 'Pacchetto Debian (.deb)', file: 'TheSafePlace-2.0.17-linux-amd64.deb', size: '~114 MB' },
@@ -36,28 +39,34 @@ export const DOWNLOAD_TARGETS: DownloadTarget[] = [
 
 export const FEATURES: Feature[] = [
   {
-    title: "MONDO VIVO E DINAMICO",
-    description: "Esplora una vasta mappa con biomi unici (Pianure, Foreste, Città) influenzati da un sistema meteo e temporale dinamico. Sopravvivi ai pericoli notturni, dove cercare riparo è una decisione strategica, e tieni traccia di ogni evento nel tuo dettagliato Diario di Viaggio."
+    icon: 'map',
+    title: 'Un mondo vivo',
+    description: "Esplora una vasta mappa con biomi unici (pianure, foreste, città) influenzati dal meteo e dal ciclo del giorno e della notte. Col buio i pericoli crescono e cercare riparo diventa una decisione strategica; ogni incontro finisce nel tuo Diario di Viaggio."
   },
   {
-    title: "SOPRAVVIVENZA IMPEGNATIVA",
-    description: "Gestisci fame, sete e salute mentre curi stati multipli come Ferite, Malattie e Avvelenamento. Le armi e le armature si degradano con l'uso, costringendoti a riparare, smantellare e recuperare materiali preziosi per mantenere il tuo equipaggiamento funzionante."
+    icon: 'heart',
+    title: 'Sopravvivenza impegnativa',
+    description: "Gestisci fame, sete e salute, e cura stati come ferite, malattie e avvelenamento. Armi e armature si consumano con l'uso: riparale, smontale e recupera i materiali per tenere in vita il tuo equipaggiamento."
   },
   {
-    title: "STORIA STRATIFICATA",
-    description: "Vivi una trama principale in 12 capitoli, svelata organicamente attraverso il gameplay. Un sistema di eventi intelligente garantisce varietà, incontri a tema e la scoperta di rari Easter Egg che raccontano storie del mondo perduto, presentate con cutscene testuali immersive."
+    icon: 'book',
+    title: 'Una storia a strati',
+    description: "Una trama principale in 12 capitoli che si svela mentre giochi. Eventi a tema, incontri rari ed Easter Egg raccontano il mondo perduto, e le cutscene danno respiro ai momenti che contano."
   },
   {
-    title: "CRESCITA E SCELTE MORALI",
-    description: "Sali di livello e definisci il tuo stile di gioco scegliendo tra Talenti unici come 'Scavenger' o 'Guerrigliero'. Le tue decisioni morali modelleranno la tua Bussola Interiore (Lena/Elian), sbloccando potenti bonus passivi che riflettono il tuo cammino."
+    icon: 'compass',
+    title: 'Crescita e scelte morali',
+    description: "Sali di livello e definisci il tuo stile scegliendo tra Talenti come Scavenger o Guerrigliero. Le tue decisioni orientano la Bussola Interiore, tra Lena ed Elian, e sbloccano bonus che riflettono il tuo cammino."
   },
   {
-    title: "COMBATTIMENTO TATTICO",
-    description: "Affronta un combattimento a turni, testuale e narrativo. Spendi un turno per 'Analizzare' il nemico, scoprirne le debolezze e sbloccare opzioni di attacco uniche. L'ambiente stesso diventa una risorsa: nasconditi tra gli alberi o cerca copertura tra le rovine."
+    icon: 'shield',
+    title: 'Combattimento tattico',
+    description: "Scontri a turni raccontati come una storia. Spendi un turno per analizzare il nemico, scoprirne le debolezze e sbloccare attacchi mirati; anche l'ambiente è una risorsa: nasconditi tra gli alberi o cerca copertura tra le rovine."
   },
   {
-    title: "CRAFTING PROGRESSIVO",
-    description: "L'ingegno è progressione. Non conosci tutte le ricette fin dall'inizio. Trova manuali e schemi nel mondo per apprendere come creare oggetti essenziali, da bende migliorate a munizioni speciali, trasformando materiali grezzi in strumenti di sopravvivenza."
+    icon: 'hammer',
+    title: 'Crafting progressivo',
+    description: "Non conosci tutte le ricette fin dall'inizio: trova manuali e schemi lungo la strada e impara a costruire ciò che ti serve, dalle bende migliorate alle munizioni speciali, trasformando materiali grezzi in strumenti di sopravvivenza."
   }
 ];
 
@@ -106,5 +115,17 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     version: "v2.0.17",
     title: "Rifiniture Desktop",
     description: "Installer NSIS per Windows, avvio a schermo intero, nuova icona ufficiale dell'app e miglioramenti alle cutscene di apertura."
+  },
+  {
+    version: "v2.1.0",
+    title: "Revisione Completa",
+    description: "La trama principale arriva sempre fino al finale e tutte le 21 quest si avviano e si completano. Dialoghi, talenti e oggetti fanno quello che promettono, e test automatici giocano davvero il gioco a ogni modifica.",
+    upcoming: true
+  },
+  {
+    version: "v3.0.0",
+    title: "Nuova Identità Visiva",
+    description: "Dal terminale al gioco narrativo: interfaccia ridisegnata da zero, nuovo logo, key art e copertine in illustrazione vettoriale, mappa illustrata con la luce dell'ora e il meteo. Regole e salvataggi restano gli stessi.",
+    upcoming: true
   }
 ];

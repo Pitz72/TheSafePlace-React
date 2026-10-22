@@ -1,21 +1,12 @@
 /**
  * @fileoverview GameScreen - Main gameplay interface
  *
- * @description The primary gameplay screen that displays:
- * - Canvas-based world map with player position
- * - Survival stats panel (HP, satiety, hydration, fatigue, status)
- * - Inventory panel with weight tracking
- * - Equipment panel (weapon, head, chest, legs)
- * - Stats panel (level, XP, attributes)
- * - Alignment panel (Lena/Elian moral compass)
- * - Travel journal (chronological log with color coding)
- * - Commands panel (keyboard shortcuts)
- *
- * Layout:
- * - Left Column (25%): Survival, Inventory, Commands
- * - Center (50%): World Map (Canvas)
- * - Right Column (25%): Info, Equipment, Stats, Alignment
- * - Bottom (25%): Travel Journal
+ * Layout (1920×1080):
+ * - Left column: the traveller (level, XP, survival meters, conditions),
+ *   equipment, attributes, moral compass.
+ * - Center: the illustrated world map, under a header with place, hour and
+ *   weather; the keyboard commands below it.
+ * - Right column: the travel journal and the backpack.
  *
  * @module components/GameScreen
  */
@@ -23,130 +14,338 @@
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useCharacterStore } from '../store/characterStore';
-import { GameState, Stat, PlayerStatusCondition, WeatherType, InventoryItem, IItem } from '../types';
+import { GameState, Stat, WeatherType, InventoryItem, IItem, JournalEntryType } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import CanvasMap from './CanvasMap';
+import WorldMap from './map/WorldMap';
+import { useMapZoom } from './map/useMapZoom';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { WEATHER_DATA } from '../utils/weather';
 import { JOURNAL_ENTRY_COLORS } from '../constants';
-import Panel from './Panel';
 import AlignmentPanel from './AlignmentPanel';
 import { useInteractionStore } from '../store/interactionStore';
 import { useTimeStore } from '../store/timeStore';
 import { DebugPanel } from './DebugPanel';
-import { CompassRose } from './CompassRose';
 import { isNightHour, toAbsoluteMinutes } from '../utils/time';
 import { gameService } from '../services/gameService';
+import Icon, { IconName } from './ui/Icon';
+import KeyHints from './ui/KeyHints';
+import { Meter, StatMeter } from './ui/Meter';
+import { Tone, harmonize, splitTag, toneColor } from '../utils/palette';
 
-/**
- * Color mapping for player status conditions.
- * Used to visually distinguish different negative effects.
- * @constant
- */
-const STATUS_COLORS: Record<PlayerStatusCondition, string> = {
-  'FERITO': '#ef4444', // red-500
-  'MALATO': '#f97316', // orange-500
-  'AVVELENATO': '#a855f7', // purple-500
-  'IPOTERMIA': '#06b6d4', // cyan-500
-  'ESAUSTO': '#78716c', // stone-500
-  'AFFAMATO': '#eab308', // yellow-500
-  'DISIDRATATO': '#f59e0b', // amber-500
-  'INFEZIONE': '#dc2626', // red-600
+const STATUS_TONES: Record<string, Tone> = {
+  FERITO: 'danger',
+  MALATO: 'ember',
+  AVVELENATO: 'violet',
+  IPOTERMIA: 'teal',
+  ESAUSTO: 'ink3',
+  AFFAMATO: 'gold',
+  DISIDRATATO: 'ember2',
+  INFEZIONE: 'danger',
+  SOVRACCARICO: 'gold',
 };
 
-// --- Left Column Panels ---
+/** Condition chips shown before collapsing the rest into "+N". */
+const MAX_CONDITION_CHIPS = 4;
 
-/**
- * SurvivalPanel - Displays critical survival statistics
- *
- * @component
- * @description Shows HP, satiety, hydration, fatigue, and active status conditions.
- * Provides visual warnings for critical values and encumbrance.
- *
- * Visual Feedback:
- * - Critical stats (≤25%): Red text + pulse animation
- * - High fatigue (≥75%): Yellow text
- * - Status conditions: Color-coded by severity
- * - Encumbrance: Added as pseudo-status "SOVRACCARICO"
- *
- * Critical Thresholds:
- * - HP ≤25%: Death risk, pulse warning
- * - Satiety ≤25%: Starvation risk
- * - Hydration ≤25%: Dehydration risk
- * - Fatigue ≥75%: ESAUSTO status imminent
- *
- * @returns {JSX.Element} Survival stats panel
- */
-const SurvivalPanel: React.FC = () => {
+const BIOME_ICONS: Record<string, IconName> = {
+  '.': 'plains', F: 'tree', '~': 'water', M: 'mountain', C: 'city', V: 'house', R: 'tent',
+  S: 'flag', E: 'flag', A: 'signpost', N: 'flame', L: 'bolt', B: 'columns', H: 'leaf',
+};
+
+const WEATHER_ICONS: Record<WeatherType, IconName> = {
+  [WeatherType.SERENO]: 'sun',
+  [WeatherType.NUVOLOSO]: 'cloud',
+  [WeatherType.PIOGGIA]: 'rain',
+  [WeatherType.TEMPESTA]: 'storm',
+  [WeatherType.NEBBIA]: 'fog',
+};
+
+const WEATHER_EFFECTS: Partial<Record<WeatherType, string>> = {
+  [WeatherType.PIOGGIA]: 'Movimento rallentato, terreno scivoloso',
+  [WeatherType.TEMPESTA]: 'Movimento rallentato, più sete, cadute',
+  [WeatherType.NEBBIA]: 'Movimento rallentato',
+};
+
+const Card: React.FC<{ title?: string; icon?: IconName; aside?: React.ReactNode; className?: string; children: React.ReactNode }> = ({ title, icon, aside, className = '', children }) => (
+  <section className={`surface flex flex-col px-6 py-4 ${className}`}>
+    {title && (
+      <header className="mb-3 flex items-center gap-2.5">
+        {icon && <Icon name={icon} size={18} className="text-ink3" />}
+        <h2 className="eyebrow flex-1">{title}</h2>
+        {aside}
+      </header>
+    )}
+    {children}
+  </section>
+);
+
+// --- Left column -------------------------------------------------------------
+
+const TravellerCard: React.FC = () => {
   const hp = useCharacterStore((state) => state.hp);
   const satiety = useCharacterStore((state) => state.satiety);
   const hydration = useCharacterStore((state) => state.hydration);
   const fatigue = useCharacterStore((state) => state.fatigue);
   const status = useCharacterStore((state) => state.status);
-
-  const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
-  const isHigh = (stat: Stat) => stat.current / stat.max >= 0.75;
+  const level = useCharacterStore((state) => state.level);
+  const xp = useCharacterStore((state) => state.xp);
+  const levelUpPending = useCharacterStore((state) => state.levelUpPending);
   const isOverEncumbered = useCharacterStore((state) => state.getTotalWeight() > state.getMaxCarryWeight());
 
-  const allStatuses = Array.from(status);
-  if (isOverEncumbered) {
-    allStatuses.push('SOVRACCARICO' as PlayerStatusCondition);
-  }
+  const isCritical = (stat: Stat) => stat.current / stat.max <= 0.25;
+  const conditions: string[] = Array.from(status);
+  if (isOverEncumbered) conditions.push('SOVRACCARICO');
 
   return (
-    <Panel title="SOPRAVVIVENZA">
-      <div className="space-y-0.5 text-sm">
-        <div className={isCritical(hp) ? 'text-[var(--text-danger)] animate-pulse' : ''}>HP: {Math.floor(hp.current)}/{hp.max}</div>
-        <div className={isCritical(satiety) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Sazietà: {Math.floor(satiety.current)}/{satiety.max}</div>
-        <div className={isCritical(hydration) ? 'text-[var(--text-danger)] animate-pulse' : ''}>Idratazione: {Math.floor(hydration.current)}/{hydration.max}</div>
-        <div className={isHigh(fatigue) ? 'text-[var(--text-accent)]' : ''}>Stanchezza: {Math.floor(fatigue.current)}/{fatigue.max}</div>
+    <section className="surface px-6 pb-5 pt-4">
+      <div className="flex items-end justify-between">
         <div>
-          Status:
-          {allStatuses.length > 0 ? (
-            allStatuses.map((s: PlayerStatusCondition, index) => (
-              <React.Fragment key={s}>
-                <span style={{ color: STATUS_COLORS[s] || '#f59e0b' }}>
-                  {` ${s}`}
-                </span>
-                {index < allStatuses.length - 1 ? ',' : ''}
-              </React.Fragment>
-            ))
-          ) : (
-            ' Normale'
-          )}
+          <div className="eyebrow">Viaggiatore</div>
+          <div className="title-display mt-1 text-[46px] text-ink">Ultimo</div>
+        </div>
+        <div className="text-right">
+          <div className="eyebrow">Livello</div>
+          <div className="title-display text-[46px] text-ember tnum">{level}</div>
         </div>
       </div>
-    </Panel>
+      <div className="mt-3 flex h-7 items-center gap-3">
+        <Meter value={xp.current} max={xp.next} tone={levelUpPending ? 'ember' : 'gold'} height={4} className="flex-1" />
+        <span className={`tnum text-[16px] ${levelUpPending ? 'text-ember2' : 'text-ink3'}`}>{xp.current} / {xp.next} XP</span>
+        {levelUpPending && (
+          <span className="flex items-center gap-1.5 text-[16px] text-ember2 anim-breathe" title="Nuovo livello disponibile: premi L">
+            <Icon name="levelUp" size={16} /> <kbd className="kbd !h-6 !min-w-[26px] !text-[14px]">L</kbd>
+          </span>
+        )}
+      </div>
+
+      <div className="hairline my-4" />
+
+      <div className="flex flex-col gap-3">
+        <StatMeter icon="heart" label="Salute" value={hp.current} max={hp.max} tone="sage" critical={isCritical(hp)} />
+        <StatMeter icon="food" label="Sazietà" value={satiety.current} max={satiety.max} tone="ember" critical={isCritical(satiety)} />
+        <StatMeter icon="drop" label="Idratazione" value={hydration.current} max={hydration.max} tone="teal" critical={isCritical(hydration)} />
+        <StatMeter icon="fatigue" label="Stanchezza" value={fatigue.current} max={fatigue.max} tone={fatigue.current / fatigue.max >= 0.75 ? 'gold' : 'violet'} />
+      </div>
+
+      {/* Two rows at most: the column must never push the compass off screen. */}
+      <div className="mt-4 flex max-h-[64px] min-h-[28px] flex-wrap gap-2 overflow-hidden" title={conditions.join(', ')}>
+        {conditions.length > 0
+          ? <>
+            {conditions.slice(0, conditions.length > MAX_CONDITION_CHIPS ? MAX_CONDITION_CHIPS - 1 : MAX_CONDITION_CHIPS).map(condition => (
+              <span key={condition} className="chip" style={{ color: toneColor(STATUS_TONES[condition] ?? 'gold') }}>{condition.toLowerCase()}</span>
+            ))}
+            {conditions.length > MAX_CONDITION_CHIPS && <span className="chip text-ink2">+{conditions.length - MAX_CONDITION_CHIPS + 1}</span>}
+          </>
+          : <span className="flex items-center gap-2 text-[17px] text-ink3"><Icon name="check" size={16} className="text-sage" /> Nessuna condizione</span>}
+      </div>
+    </section>
   );
 };
 
+const EquipmentCard: React.FC = () => {
+  const inventory = useCharacterStore((state) => state.inventory);
+  const equippedWeapon = useCharacterStore((state) => state.equippedWeapon);
+  const equippedHead = useCharacterStore((state) => state.equippedHead);
+  const equippedArmor = useCharacterStore((state) => state.equippedArmor);
+  const equippedLegs = useCharacterStore((state) => state.equippedLegs);
+  const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
+
+  const slots: { label: string; icon: IconName; index: number | null }[] = [
+    { label: 'Arma', icon: 'weapon', index: equippedWeapon },
+    { label: 'Testa', icon: 'helmet', index: equippedHead },
+    { label: 'Torso', icon: 'torso', index: equippedArmor },
+    { label: 'Gambe', icon: 'legs', index: equippedLegs },
+  ];
+
+  const describe = (item: InventoryItem | null, details: IItem | null) => {
+    if (!item || !details) return null;
+    return { name: details.name, durability: item.durability, broken: !!item.durability && item.durability.current <= 0 };
+  };
+
+  return (
+    <Card title="Equipaggiamento" icon="shield" className="min-h-0 overflow-hidden">
+      <div className="flex flex-col gap-2">
+        {slots.map(slot => {
+          const item = slot.index !== null ? inventory[slot.index] ?? null : null;
+          const info = describe(item, item ? itemDatabase[item.itemId] ?? null : null);
+          return (
+            <div key={slot.label} className="flex items-center gap-3.5">
+              <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border ${info ? 'border-line2 bg-white/[0.04] text-ink2' : 'border-dashed border-line2 text-ink4'}`}>
+                <Icon name={slot.icon} size={22} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-cond text-[15px] font-semibold uppercase leading-none tracking-[0.18em] text-ink3">{slot.label}</div>
+                <div className={`mt-0.5 truncate text-[19px] leading-tight ${info ? (info.broken ? 'text-danger' : 'text-ink') : 'text-ink4'}`}>
+                  {info ? `${info.name}${info.broken ? ' · rotto' : ''}` : 'Nessuno'}
+                </div>
+              </div>
+              {info?.durability && !info.broken && (
+                <div className="w-14">
+                  <Meter value={info.durability.current} max={info.durability.max} tone={info.durability.current / info.durability.max < 0.3 ? 'danger' : 'ink2'} height={4} />
+                  <div className="mt-1 text-right text-[15px] text-ink3 tnum">{info.durability.current}/{info.durability.max}</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </Card>
+  );
+};
+
+const AttributesCard: React.FC = () => {
+  const attributes = useCharacterStore((state) => state.attributes);
+  const getAttributeModifier = useCharacterStore((state) => state.getAttributeModifier);
+  const keys = ['for', 'des', 'cos', 'int', 'sag', 'car'] as const;
+  return (
+    <Card title="Attributi" icon="user">
+      <div className="grid grid-cols-3 gap-2">
+        {keys.map(key => {
+          const mod = getAttributeModifier(key);
+          return (
+            <div key={key} className="flex items-baseline gap-2 rounded-xl border border-line bg-white/[0.025] px-3 py-1.5">
+              <div className="font-cond text-[15px] font-semibold uppercase tracking-[0.2em] text-ink3">{key}</div>
+              <div className="flex flex-1 items-baseline justify-between">
+                <span className="tnum text-[24px] font-semibold text-ink">{attributes[key]}</span>
+                <span className={`tnum text-[16px] ${mod > 0 ? 'text-sage' : mod < 0 ? 'text-danger' : 'text-ink3'}`}>{mod >= 0 ? '+' : ''}{mod}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Card>
+  );
+};
+
+// --- Map header --------------------------------------------------------------
+
+const PlaceHeader: React.FC = () => {
+  const playerPos = useGameStore((state) => state.playerPos);
+  const getTileInfo = useGameStore((state) => state.getTileInfo);
+  const lightUntil = useGameStore((state) => state.lightUntil);
+  const repelUntil = useGameStore((state) => state.repelUntil);
+  const gameTime = useTimeStore((state) => state.gameTime);
+  const weather = useTimeStore((state) => state.weather);
+
+  const tileInfo = getTileInfo(playerPos.x, playerPos.y);
+  const time = `${String(gameTime.hour).padStart(2, '0')}:${String(gameTime.minute).padStart(2, '0')}`;
+  const isNight = isNightHour(gameTime.hour);
+  const now = toAbsoluteMinutes(gameTime);
+  const lightHours = Math.ceil((lightUntil - now) / 60);
+  const repelHours = Math.ceil((repelUntil - now) / 60);
+  const effects = [
+    lightHours > 0 ? { icon: 'flame' as IconName, text: `Luce ${lightHours}h`, tone: 'ember2' as Tone } : null,
+    repelHours > 0 ? { icon: 'shield' as IconName, text: `Dissuasore ${repelHours}h`, tone: 'sage' as Tone } : null,
+    isNight && lightHours <= 0 ? { icon: 'warning' as IconName, text: 'Buio: rischio di inciampare', tone: 'gold' as Tone } : null,
+  ].filter((e): e is { icon: IconName; text: string; tone: Tone } => e !== null);
+  const weatherEffect = WEATHER_EFFECTS[weather.type];
+
+  return (
+    <header className="flex h-[78px] flex-shrink-0 items-center gap-6 px-6">
+      <div className="flex flex-shrink-0 items-center gap-4">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-line2 bg-white/[0.04] text-ember2">
+          <Icon name={BIOME_ICONS[tileInfo.char] ?? 'pin'} size={24} />
+        </div>
+        <div className="min-w-0">
+          <div className="title-display whitespace-nowrap text-[34px] text-ink">{tileInfo.name}</div>
+          <div className="tnum font-cond text-[15px] font-semibold tracking-[0.18em] text-ink3">{playerPos.x} · {playerPos.y}</div>
+        </div>
+      </div>
+      <div className="ml-auto flex items-center gap-6">
+        {effects.length > 0 && (
+          <div className="flex flex-col gap-0.5">
+            {effects.map(effect => (
+              <span key={effect.text} className="flex items-center gap-1.5 whitespace-nowrap text-[15px]" style={{ color: toneColor(effect.tone) }}>
+                <Icon name={effect.icon} size={16} /> {effect.text}
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center gap-3">
+          <Icon name={WEATHER_ICONS[weather.type]} size={28} className="text-ink2" />
+          <div>
+            <div className="text-[20px] leading-tight text-ink">{WEATHER_DATA[weather.type].name}</div>
+            <div className="text-[15px] leading-tight text-ink3">{weatherEffect ?? 'Nessun effetto'}</div>
+          </div>
+        </div>
+        <div className="h-10 w-px bg-line2" />
+        <div className="flex items-center gap-3">
+          <Icon name={isNight ? 'moon' : 'clock'} size={26} className={isNight ? 'text-lena' : 'text-ink2'} />
+          <div>
+            <div className="tnum text-[24px] font-semibold leading-tight text-ink">{time}</div>
+            <div className="text-[15px] leading-tight text-ink3">Giorno {gameTime.day}</div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+// --- Right column ------------------------------------------------------------
+
 /**
- * InventoryPanel - Compact inventory display with weight tracking
- *
- * @component
- * @description Shows all inventory items with durability, quantity, and equipped status.
- * Displays weight with color-coded warnings for encumbrance.
- *
- * Item Display Format:
- * - Name + durability (if applicable): "Knife (45/50)"
- * - Quantity (if >1): "x3"
- * - Equipped marker: "(E)"
- * - Broken items: "[ROTTO]"
- * - Color: Item rarity color from itemDatabase
- *
- * Weight Display:
- * - Normal: White text
- * - Overencumbered: Red text + pulse animation
- * - Format: "15.3 / 19.0 kg"
- *
- * @remarks
- * - Scrollable with hidden scrollbar
- * - Updates in real-time with inventory changes
- * - Click [I] to open full inventory screen
- *
- * @returns {JSX.Element} Inventory panel with weight indicator
+ * Stable keys for journal entries: the store keeps old entries by reference,
+ * so each object gets an id the first time it is drawn and new entries always
+ * mount (and fade in), even when the journal is full at 100.
  */
-const InventoryPanel: React.FC = () => {
+const journalIds = new WeakMap<object, number>();
+let nextJournalId = 0;
+const journalKey = (entry: object) => {
+  let id = journalIds.get(entry);
+  if (id === undefined) {
+    id = nextJournalId++;
+    journalIds.set(entry, id);
+  }
+  return id;
+};
+
+const JournalCard: React.FC = () => {
+  const journal = useGameStore((state) => state.journal);
+  const journalRef = useRef<HTMLDivElement>(null);
+
+  // The newest entry is on top.
+  useEffect(() => {
+    if (journalRef.current) journalRef.current.scrollTop = 0;
+  }, [journal]);
+
+  return (
+    <Card title="Diario di viaggio" icon="book" className="min-h-0 flex-1 !pb-2">
+      <div ref={journalRef} className="scroll-y fade-bottom -mx-2 min-h-0 flex-1 px-2">
+        {journal.length > 0 ? (
+          journal.map((entry, index) => {
+            const { tag, body } = splitTag(entry.text);
+            const color = entry.type === JournalEntryType.NARRATIVE && !entry.color
+              ? toneColor('ink')
+              : harmonize(entry.color || JOURNAL_ENTRY_COLORS[entry.type]);
+            return (
+              <div
+                key={journalKey(entry)}
+                className={`relative border-l pb-3.5 pl-4 ${index === 0 ? 'anim-fade-up' : ''}`}
+                style={{ borderColor: 'var(--line-2)', opacity: Math.max(0.42, 1 - index * 0.045) }}
+              >
+                <span className="absolute -left-[4.5px] top-[9px] h-2 w-2 rounded-full" style={{ background: color }} />
+                <div className="mb-0.5 flex items-center gap-2">
+                  <span className="tnum font-cond text-[15px] font-semibold tracking-[0.12em] text-ink3">
+                    {String(entry.time.hour).padStart(2, '0')}:{String(entry.time.minute).padStart(2, '0')}
+                  </span>
+                  {tag && <span className="font-cond text-[14px] font-semibold uppercase tracking-[0.2em]" style={{ color }}>{tag}</span>}
+                </div>
+                <p className="font-serif text-[18.5px] leading-[1.5]" style={{ color }}>{body}</p>
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <p className="prose-story text-[24px] italic text-ink2">Il tuo viaggio inizierà presto...</p>
+            <p className="mt-2 text-[17px] text-ink3">Le tue avventure saranno registrate qui</p>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+const BackpackCard: React.FC = () => {
   const inventory = useCharacterStore((state) => state.inventory);
   const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
   const equippedHeadIndex = useCharacterStore((state) => state.equippedHead);
@@ -157,444 +356,56 @@ const InventoryPanel: React.FC = () => {
   const totalWeight = useCharacterStore((state) => state.getTotalWeight());
   const maxCarryWeight = useCharacterStore((state) => state.getMaxCarryWeight());
   const isOverEncumbered = totalWeight > maxCarryWeight;
+  const equipped = new Set([equippedWeaponIndex, equippedHeadIndex, equippedArmorIndex, equippedLegsIndex]);
 
   return (
-    <Panel title="INVENTARIO" className="flex-grow">
-      <div className={`flex justify-between text-sm mb-0.5 px-1 ${isOverEncumbered ? 'text-[var(--text-danger)] animate-pulse' : ''}`}>
-        <span>Peso: {totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)}</span>
-      </div>
-      <div className="border border-[var(--border-primary)] p-1 h-full overflow-y-auto text-sm" style={{ scrollbarWidth: 'none' }}>
+    <Card
+      title="Zaino"
+      icon="backpack"
+      className="h-[360px] flex-shrink-0 !pb-3"
+      aside={<span className={`tnum text-[16px] ${isOverEncumbered ? 'text-danger anim-breathe' : 'text-ink3'}`}>{totalWeight.toFixed(1)} / {maxCarryWeight.toFixed(1)} kg</span>}
+    >
+      <Meter value={totalWeight} max={maxCarryWeight} tone={isOverEncumbered ? 'danger' : totalWeight / maxCarryWeight >= 0.8 ? 'gold' : 'ink2'} height={3} className="-mt-1 mb-3" />
+      <div className="scroll-y fade-bottom min-h-0 flex-1">
         {isLoaded && inventory.length > 0 ? (
-          <ul className="space-y-0.5">
+          <ul className="flex flex-col">
             {inventory.map((invItem, index) => {
               const itemDetails = itemDatabase[invItem.itemId];
               if (!itemDetails) return null;
-
-              const isEquipped = index === equippedWeaponIndex ||
-                index === equippedHeadIndex ||
-                index === equippedArmorIndex ||
-                index === equippedLegsIndex;
-              let displayName = itemDetails.name;
-
-              if (invItem.durability) {
-                if (invItem.durability.current <= 0) {
-                  displayName += ' [ROTTO]';
-                } else {
-                  displayName += ` (${invItem.durability.current}/${invItem.durability.max})`;
-                }
-              }
-              if (invItem.quantity > 1) {
-                displayName += ` x${invItem.quantity}`;
-              }
-              if (isEquipped) {
-                displayName += ' (E)';
-              }
-
+              const broken = !!invItem.durability && invItem.durability.current <= 0;
               return (
-                <li key={index} style={{ color: itemDetails.color }}>
-                  {displayName}
+                <li key={index} className="flex items-center gap-3 py-[5px] text-[18px]">
+                  <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ background: harmonize(itemDetails.color) }} />
+                  <span className={`min-w-0 flex-1 truncate ${broken ? 'text-danger' : 'text-ink2'}`}>{itemDetails.name}</span>
+                  {equipped.has(index) && <span className="rounded border border-ember/50 px-1.5 font-cond text-[14px] font-semibold tracking-wider text-ember">E</span>}
+                  {invItem.durability && <span className="tnum text-[15px] text-ink3">{broken ? 'rotto' : `${invItem.durability.current}/${invItem.durability.max}`}</span>}
+                  {invItem.quantity > 1 && <span className="tnum text-[16px] text-ink3">×{invItem.quantity}</span>}
                 </li>
               );
             })}
           </ul>
         ) : (
-          <div className="text-[var(--text-primary)]/50">-- Vuoto --</div>
+          <div className="py-8 text-center text-[18px] italic text-ink4">Lo zaino è vuoto</div>
         )}
       </div>
-    </Panel>
+    </Card>
   );
 };
 
 /**
- * CommandsPanel - Keyboard shortcut reference
+ * GameScreen - Main gameplay interface.
  *
- * @component
- * @description Displays all available keyboard commands for quick reference.
- *
- * Commands Listed:
- * - [WASD/Arrows]: Movement/Navigation
- * - [I]: Inventory (full screen)
- * - [J]: Missioni (quest log)
- * - [R]: Riposo Breve (quick rest, 24h cooldown)
- * - [F]: Cerca Risorse (active search, 30min)
- * - [L]: Level Up (when available)
- * - [ESC]: Menu/Back
- *
- * @remarks
- * - Always visible during gameplay
- * - Commands context-sensitive (some disabled in menus)
- * - Compact layout (2 columns)
- *
- * @returns {JSX.Element} Commands reference panel
+ * Keyboard: WASD/arrows move, I backpack, J quest log, R quick rest,
+ * F active search, L level up, + and - zoom the map, ESC pause.
+ * Input is ignored while the inventory or the refuge menu is open.
  */
-const CommandsPanel: React.FC = () => (
-  <Panel title="COMANDI">
-    <div className="space-y-0.5 text-xs">
-      <div className="flex justify-between"><span>[WASD/↑↓←→]</span> <span>Movimento/Navigazione</span></div>
-      <div className="flex justify-between"><span>[I]</span> <span>Inventario</span></div>
-      <div className="flex justify-between"><span>[J]</span> <span>Missioni</span></div>
-      <div className="flex justify-between"><span>[R]</span> <span>Riposo Breve</span></div>
-      <div className="flex justify-between"><span>[F]</span> <span>Cerca Risorse</span></div>
-      <div className="flex justify-between"><span>[L]</span> <span>Level Up</span></div>
-      <div className="flex justify-between"><span>[ESC]</span> <span>Menu/Indietro</span></div>
-    </div>
-  </Panel>
-);
-
-
-// --- Right Column Panels ---
-
-/**
- * InfoPanel - Location, time, and weather information
- *
- * @component
- * @description Displays current position, biome, time, day, and weather with effects.
- *
- * Information Shown:
- * - Position: (x, y) coordinates
- * - Luogo: Biome name (Pianura, Foresta, etc.)
- * - Time: HH:MM format with day number
- * - Weather: Current condition with color
- * - Effects: Weather impact on gameplay
- *
- * Weather Effects:
- * - Pioggia: Movement slowed
- * - Tempesta: Movement slowed + increased consumption
- * - Nebbia: Reduced visibility
- * - Sereno/Nuvoloso: No effects
- *
- * Visual Indicators:
- * - Night time (20:00-6:00): Cyan text
- * - Weather: Color-coded by severity
- *
- * @remarks
- * - Updates every game tick
- * - Weather changes dynamically
- * - Night indicator helps plan refuge stops
- *
- * @returns {JSX.Element} Info panel with location/time/weather
- */
-const InfoPanel: React.FC = () => {
-  const playerPos = useGameStore((state) => state.playerPos);
-  const gameTime = useTimeStore((state) => state.gameTime);
-  const weather = useTimeStore((state) => state.weather);
-  const getTileInfo = useGameStore((state) => state.getTileInfo);
-
-  const tileInfo = getTileInfo(playerPos.x, playerPos.y);
-  const formattedTime = `${String(gameTime.hour).padStart(2, '0')}:${String(gameTime.minute).padStart(2, '0')}`;
-  const weatherInfo = WEATHER_DATA[weather.type];
-  const isNight = isNightHour(gameTime.hour);
-  const now = toAbsoluteMinutes(gameTime);
-  const lightHours = Math.ceil((useGameStore((state) => state.lightUntil) - now) / 60);
-  const repelHours = Math.ceil((useGameStore((state) => state.repelUntil) - now) / 60);
-
-  const getWeatherEffects = () => {
-    switch (weather.type) {
-      case WeatherType.PIOGGIA:
-        return { text: "Movimento rallentato, terreno scivoloso", color: 'var(--text-accent)' };
-      case WeatherType.TEMPESTA:
-        return { text: "Mov. rallentato, più sete, cadute", color: 'var(--text-danger)' };
-      case WeatherType.NEBBIA:
-        return { text: "Movimento rallentato", color: 'var(--text-secondary)' };
-      default:
-        return { text: "Nessun effetto", color: 'var(--text-primary)' };
-    }
-  };
-  const weatherEffects = getWeatherEffects();
-  const activeEffects = [
-    lightHours > 0 ? `Luce (${lightHours}h)` : null,
-    repelHours > 0 ? `Dissuasore (${repelHours}h)` : null,
-    isNight && lightHours <= 0 ? 'Buio: rischio di inciampare' : null,
-  ].filter(Boolean).join(' · ');
-
-  return (
-    <Panel title="INFORMAZIONI">
-      <div className="space-y-1 text-sm">
-        <div>
-          <div className="flex justify-between">
-            <span>Posizione:</span>
-            <span>({playerPos.x}, {playerPos.y})</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Luogo:</span>
-            <span>{tileInfo.name}</span>
-          </div>
-          <div className={`flex justify-between ${isNight ? 'text-cyan-400' : ''}`}>
-            <span>{formattedTime}</span>
-            <span>Giorno {gameTime.day}</span>
-          </div>
-          <div className="border-t border-[var(--border-primary)] my-0.5"></div>
-          <div className="flex justify-between items-center">
-            <span className={weatherInfo.color}>* {weatherInfo.name}</span>
-            <div className="text-right">
-            </div>
-          </div>
-          <div style={{ color: weatherEffects.color }}>Effetti: {weatherEffects.text}</div>
-          {activeEffects && <div className="text-xs text-cyan-300">{activeEffects}</div>}
-        </div>
-      </div>
-    </Panel>
-  );
-};
-
-/**
- * EquipmentPanel - Currently equipped items display
- *
- * @component
- * @description Shows all 4 equipment slots with durability status.
- *
- * Equipment Slots:
- * - ARMA: Weapon (melee/ranged)
- * - TESTA: Head armor (helmet)
- * - TORSO: Chest armor (body)
- * - GAMBE: Leg armor (pants/boots)
- *
- * Display Format:
- * - Item name + durability: "Combat Knife (45/50)"
- * - Broken items: "[ROTTO]" suffix
- * - Empty slots: "Nessuna"
- *
- * @remarks
- * - Durability shown for all equipment
- * - Broken items (0 durability) cannot be equipped
- * - Equipment affects AC and combat effectiveness
- * - Manage via Inventory screen [I]
- *
- * @returns {JSX.Element} Equipment panel with 4 slots
- */
-const EquipmentPanel: React.FC = () => {
-  const inventory = useCharacterStore((state) => state.inventory);
-  const equippedWeaponIndex = useCharacterStore((state) => state.equippedWeapon);
-  const equippedHeadIndex = useCharacterStore((state) => state.equippedHead);
-  const equippedArmorIndex = useCharacterStore((state) => state.equippedArmor);
-  const equippedLegsIndex = useCharacterStore((state) => state.equippedLegs);
-  const itemDatabase = useItemDatabaseStore((state) => state.itemDatabase);
-
-  const weaponItem = equippedWeaponIndex !== null ? inventory[equippedWeaponIndex] : null;
-  const headItem = equippedHeadIndex !== null ? inventory[equippedHeadIndex] : null;
-  const chestItem = equippedArmorIndex !== null ? inventory[equippedArmorIndex] : null;
-  const legsItem = equippedLegsIndex !== null ? inventory[equippedLegsIndex] : null;
-
-  const weaponDetails = weaponItem ? itemDatabase[weaponItem.itemId] : null;
-  const headDetails = headItem ? itemDatabase[headItem.itemId] : null;
-  const chestDetails = chestItem ? itemDatabase[chestItem.itemId] : null;
-  const legsDetails = legsItem ? itemDatabase[legsItem.itemId] : null;
-
-  const getDisplayName = (item: InventoryItem | null, details: IItem | null): string => {
-    if (!item || !details) return 'Nessuna';
-    let name = details.name;
-    if (item.durability) {
-      if (item.durability.current <= 0) {
-        name += ' [ROTTO]';
-      } else {
-        name += ` (${item.durability.current}/${item.durability.max})`;
-      }
-    }
-    return name;
-  };
-
-  return (
-    <Panel title="EQUIPAGGIAMENTO">
-      <div className="space-y-0.5 text-sm">
-        <div>ARMA: {getDisplayName(weaponItem, weaponDetails)}</div>
-        <div className="border-t border-[var(--border-primary)] my-0.5"></div>
-        <div>TESTA: {getDisplayName(headItem, headDetails)}</div>
-        <div>TORSO: {getDisplayName(chestItem, chestDetails)}</div>
-        <div>GAMBE: {getDisplayName(legsItem, legsDetails)}</div>
-      </div>
-    </Panel>
-  );
-};
-
-/**
- * StatsPanel - Character level and attributes
- *
- * @component
- * @description Displays level, XP progress, and all 6 D&D-style attributes with modifiers.
- *
- * Stats Shown:
- * - Level: Current character level (1-20)
- * - XP: Current/Next with level up indicator (*)
- * - Attributes: FOR, DES, COS, INT, SAG, CAR
- * - Modifiers: Calculated as floor((value - 10) / 2)
- *
- * Attribute Display Format:
- * - "FOR: 14 (+2)" - Value + modifier
- * - Grid layout (2 columns, 3 rows)
- *
- * Level Up Indicator:
- * - Yellow asterisk (*) when levelUpPending
- * - Pulse animation to attract attention
- * - Press [L] to open level up screen
- *
- * @remarks
- * - Modifiers affect all skill checks
- * - CON modifier affects max HP
- * - DEX modifier affects AC
- * - Attributes increase on level up
- *
- * @returns {JSX.Element} Stats panel with attributes
- */
-const StatsPanel: React.FC = () => {
-  const level = useCharacterStore((state) => state.level);
-  const xp = useCharacterStore((state) => state.xp);
-  const attributes = useCharacterStore((state) => state.attributes);
-  const getAttributeModifier = useCharacterStore((state) => state.getAttributeModifier);
-  const levelUpPending = useCharacterStore((state) => state.levelUpPending);
-
-  const renderModifier = (attr: 'for' | 'des' | 'cos' | 'int' | 'sag' | 'car') => {
-    const mod = getAttributeModifier(attr);
-    return `(${mod >= 0 ? '+' : ''}${mod})`;
-  };
-
-  return (
-    <Panel title="STATISTICHE">
-      <div className="space-y-1 text-sm">
-        <div>Livello: {level}</div>
-        <div>
-          XP: {xp.current} / {xp.next}
-          {levelUpPending && <span className="text-[var(--text-accent)] animate-yellow-flash ml-2">*</span>}
-        </div>
-        <div className="border-t border-[var(--border-primary)] my-0.5"></div>
-        <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-          <div className="flex justify-between"><span>FOR:</span><span>{attributes.for} {renderModifier('for')}</span></div>
-          <div className="flex justify-between"><span>DES:</span><span>{attributes.des} {renderModifier('des')}</span></div>
-          <div className="flex justify-between"><span>COS:</span><span>{attributes.cos} {renderModifier('cos')}</span></div>
-          <div className="flex justify-between"><span>INT:</span><span>{attributes.int} {renderModifier('int')}</span></div>
-          <div className="flex justify-between"><span>SAG:</span><span>{attributes.sag} {renderModifier('sag')}</span></div>
-          <div className="flex justify-between"><span>CAR:</span><span>{attributes.car} {renderModifier('car')}</span></div>
-        </div>
-      </div>
-    </Panel>
-  );
-};
-
-
-// --- Bottom Panel ---
-
-/**
- * TravelJournalPanel - Chronological event log
- *
- * @component
- * @description Displays the last 100 journal entries with timestamps and color coding.
- *
- * Journal Entry Types (12):
- * - GAME_START: Green (#00ff00)
- * - SKILL_CHECK_SUCCESS: Green (#60BF77)
- * - SKILL_CHECK_FAILURE: Orange (#ff8c00)
- * - ACTION_FAILURE: Yellow (#ffff00)
- * - NARRATIVE: Gray (#d1d5db)
- * - ITEM_ACQUIRED: Cyan (#38bdf8)
- * - SYSTEM_ERROR: Red (#ff0000)
- * - SYSTEM_WARNING: Amber (#fbbf24)
- * - SYSTEM_MESSAGE: Neutral (#a3a3a3)
- * - COMBAT: Red (#ef4444)
- * - XP_GAIN: Gold (#f59e0b)
- * - EVENT: Violet (#a78bfa)
- * - TROPHY_UNLOCKED: Yellow (#eab308)
- *
- * Features:
- * - Auto-scroll to top (latest entry)
- * - Timestamp format: [HH:MM]
- * - Color-coded by entry type
- * - Max 100 entries (FIFO)
- * - Hidden scrollbar for clean look
- *
- * @remarks
- * - Critical for understanding game state
- * - All actions logged with context
- * - Skill checks show full calculation
- * - Combat shows damage/hit/miss details
- *
- * @returns {JSX.Element} Travel journal panel
- */
-const TravelJournalPanel: React.FC = () => {
-  const journal = useGameStore((state) => state.journal);
-  const journalRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll to the top (to show the latest message)
-  useEffect(() => {
-    if (journalRef.current) {
-      journalRef.current.scrollTop = 0;
-    }
-  }, [journal]);
-
-  return (
-    <Panel title="DIARIO DI VIAGGIO" className="h-full">
-      <div ref={journalRef} className="h-full overflow-y-auto space-y-0.5 text-sm text-[var(--text-secondary)]" style={{ scrollbarWidth: 'none' }}>
-        {journal.length > 0 ? (
-          journal.map((entry, index) => (
-            <div key={index}>
-              <span className="text-[var(--text-primary)]/60 mr-1 text-xs">
-                [{String(entry.time.hour).padStart(2, '0')}:{String(entry.time.minute).padStart(2, '0')}]
-              </span>
-              <span style={{ color: entry.color || JOURNAL_ENTRY_COLORS[entry.type] }}>
-                {entry.text}
-              </span>
-            </div>
-          ))
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center text-[var(--text-primary)]/60 text-center">
-            <p className="text-2xl">Il tuo viaggio inizierà presto...</p>
-            <p className="text-base">Le tue avventure saranno registrate qui</p>
-          </div>
-        )}
-      </div>
-    </Panel>
-  );
-};
-
-/**
- * GameScreen - Main gameplay interface
- *
- * @component
- * @description The core gameplay screen that orchestrates all UI panels and handles player input.
- *
- * Layout Structure:
- * ```
- * ┌─────────────┬──────────────────────┬─────────────┐
- * │  Survival   │                      │    Info     │
- * │             │                      │             │
- * │  Inventory  │     World Map        │  Equipment  │
- * │             │     (Canvas)         │             │
- * │  Commands   │                      │    Stats    │
- * │             │                      │  Alignment  │
- * ├─────────────┴──────────────────────┴─────────────┤
- * │              Travel Journal (Log)                │
- * └──────────────────────────────────────────────────┘
- * ```
- *
- * Keyboard Controls:
- * - [WASD/Arrows]: Move player on map
- * - [I]: Toggle inventory (full screen)
- * - [J]: Open quest log
- * - [R]: Quick rest (heal 20 HP, -15 fatigue, 24h cooldown)
- * - [F]: Active search (find resources, 30min, Survival DC 10)
- * - [L]: Level up (when XP threshold reached)
- * - [ESC]: Pause menu
- *
- * State Management:
- * - Delegates to gameService for complex logic
- * - Reads from multiple stores (game, character, time, interaction)
- * - Input disabled when inventory/refuge open
- *
- * @remarks
- * - Only active when gameState === IN_GAME
- * - Overlays (inventory, refuge, crafting) rendered on top
- * - All panels update reactively via Zustand
- * - Canvas map uses requestAnimationFrame for smooth rendering
- *
- * @see gameService.movePlayer for movement logic
- * @see InventoryScreen for full inventory interface
- * @see RefugeScreen for refuge menu
- *
- * @returns {JSX.Element} Complete gameplay interface
- */
-
 const GameScreen: React.FC = () => {
   const { setGameState, performQuickRest, performActiveSearch, openLevelUpScreen } = useGameStore();
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
   const gameState = useGameStore((state) => state.gameState);
+  const levelUpPending = useCharacterStore((state) => state.levelUpPending);
+  const mapZoom = useMapZoom();
+  const changeZoom = mapZoom.change;
 
   const handleOpenPauseMenu = useCallback(() => {
     setGameState(GameState.PAUSE_MENU);
@@ -658,50 +469,63 @@ const GameScreen: React.FC = () => {
       map['l'] = openLevelUpScreen;
       map['L'] = openLevelUpScreen;
       map['Escape'] = handleOpenPauseMenu;
+      // Map zoom: + closer, - further (with or without shift).
+      map['+'] = () => changeZoom(-1);
+      map['='] = () => changeZoom(-1);
+      map['-'] = () => changeZoom(1);
+      map['_'] = () => changeZoom(1);
     }
     return map;
-  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen]);
+  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen, changeZoom]);
 
   useKeyboardInput(keyHandlerMap);
-
 
   return (
     <>
       {import.meta.env.DEV && <DebugPanel />}
-      <div className="game-screen-container w-full h-full flex p-2 space-x-2 text-[var(--text-primary)]">
-        {/* Left Column (25%) */}
-        <div className="w-1/4 h-full flex flex-col space-y-1">
-          <SurvivalPanel />
-          <InventoryPanel />
-          <CommandsPanel />
+      <div className="hud flex h-full w-full gap-5 p-6 text-ink">
+        {/* Left column: the traveller. */}
+        <div className="flex min-h-0 w-[400px] flex-shrink-0 flex-col gap-3">
+          <TravellerCard />
+          <EquipmentCard />
+          <AttributesCard />
+          <AlignmentPanel />
         </div>
 
-        {/* Main Content Area (Center + Right Columns & Journal) (75%) */}
-        <div className="w-3/4 h-full flex flex-col space-y-1">
-          {/* Top part of Main Content (Map + Right Panels) */}
-          <div className="flex-grow flex space-x-2 overflow-hidden">
-            {/* Center Column (50% of total width) */}
-            <div className="w-2/3 h-full flex flex-col border border-[var(--border-primary)] bg-black/20">
-              <h2 className="text-center bg-[var(--text-primary)]/10 py-0.5 font-bold tracking-widest uppercase text-base flex-shrink-0">MAPPA DEL MONDO</h2>
-              <div className="flex-grow relative">
-                <CanvasMap />
-                <CompassRose />
-              </div>
+        {/* Center: the world. */}
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          <section className="surface flex min-h-0 flex-1 flex-col overflow-hidden">
+            <PlaceHeader />
+            <div className="relative min-h-0 flex-1 border-t border-line">
+              <WorldMap zoom={mapZoom.zoom} paused={gameState !== GameState.IN_GAME || isInventoryOpen || isInRefuge} />
             </div>
-
-            {/* Right Column (25% of total width) */}
-            <div className="w-1/3 h-full flex flex-col space-y-1">
-              <InfoPanel />
-              <EquipmentPanel />
-              <StatsPanel />
-              <AlignmentPanel />
+          </section>
+          <div className="surface flex h-[64px] flex-shrink-0 items-center justify-between gap-4 px-6 !rounded-2xl">
+            <KeyHints
+              className="!gap-x-4"
+              align="start"
+              hints={[
+                { keys: ['WASD'], label: 'Cammina' },
+                { keys: ['I'], label: 'Zaino' },
+                { keys: ['J'], label: 'Missioni' },
+                { keys: ['R'], label: 'Riposo' },
+                { keys: ['F'], label: 'Cerca' },
+                { keys: ['L'], label: 'Livello', muted: !levelUpPending, active: levelUpPending },
+                { keys: ['ESC'], label: 'Menu' },
+              ]}
+            />
+            <div className="flex flex-shrink-0 items-center gap-1.5 text-ink2">
+              <button type="button" tabIndex={-1} className="kbd hover:border-line3 disabled:opacity-35" onClick={() => changeZoom(1)} disabled={!mapZoom.canZoomOut} title="Allontana la mappa [-]">−</button>
+              <Icon name="search" size={20} className="mx-1 text-ink3" />
+              <button type="button" tabIndex={-1} className="kbd hover:border-line3 disabled:opacity-35" onClick={() => changeZoom(-1)} disabled={!mapZoom.canZoomIn} title="Avvicina la mappa [+]">+</button>
             </div>
           </div>
+        </div>
 
-          {/* Bottom part of Main Content (Journal) */}
-          <div className="h-1/4 flex-shrink-0">
-            <TravelJournalPanel />
-          </div>
+        {/* Right column: what happened, what we carry. */}
+        <div className="flex w-[440px] flex-shrink-0 flex-col gap-4">
+          <JournalCard />
+          <BackpackCard />
         </div>
       </div>
     </>

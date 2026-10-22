@@ -3,42 +3,25 @@ import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 import { INSTRUCTIONS_PAGES } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import { useTypewriter } from '../hooks/useTypewriter';
 import { audioManager } from '../utils/audio';
+import Modal from './ui/Modal';
+import ScreenBackdrop from './ui/ScreenBackdrop';
+import RichText from './ui/RichText';
+import PageDots from './ui/PageDots';
 
-/**
- * InstructionsScreen component.
- * This component displays the instructions for the game with pagination.
- * @returns {JSX.Element} The rendered InstructionsScreen component.
- */
+/** The survival guide, one page at a time. */
 const InstructionsScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const [pageIndex, setPageIndex] = useState(0);
-  const currentPage = INSTRUCTIONS_PAGES[pageIndex];
+  const page = INSTRUCTIONS_PAGES[pageIndex];
   const totalPages = INSTRUCTIONS_PAGES.length;
-  const { displayed: displayedText, isTyping, finish: finishTyping } = useTypewriter(currentPage, 5);
 
-  const handleNextPage = useCallback(() => {
-    if (isTyping) {
-      finishTyping();
-      return;
-    }
-    if (pageIndex < totalPages - 1) {
-      audioManager.playSound('navigate');
-      setPageIndex(prev => prev + 1);
-    }
-  }, [isTyping, finishTyping, pageIndex, totalPages]);
-
-  const handlePrevPage = useCallback(() => {
-    if (isTyping) {
-      finishTyping();
-      return;
-    }
-    if (pageIndex > 0) {
-      audioManager.playSound('navigate');
-      setPageIndex(prev => prev - 1);
-    }
-  }, [isTyping, finishTyping, pageIndex]);
+  const turn = useCallback((delta: number) => {
+    const next = pageIndex + delta;
+    if (next < 0 || next >= totalPages) return;
+    audioManager.playSound('navigate');
+    setPageIndex(next);
+  }, [pageIndex, totalPages]);
 
   const handleExit = useCallback(() => {
     audioManager.playSound('back');
@@ -46,41 +29,45 @@ const InstructionsScreen: React.FC = () => {
   }, [setGameState]);
 
   const handlerMap = useMemo(() => ({
-    ArrowRight: handleNextPage,
-    d: handleNextPage,
-    ArrowLeft: handlePrevPage,
-    a: handlePrevPage,
-    Enter: handleNextPage,
+    ArrowRight: () => turn(1), d: () => turn(1), Enter: () => turn(1),
+    ArrowLeft: () => turn(-1), a: () => turn(-1),
     Escape: handleExit,
-  }), [handleNextPage, handlePrevPage, handleExit]);
+  }), [turn, handleExit]);
 
   useKeyboardInput(handlerMap);
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-4">
-      <h1 className="text-5xl md:text-6xl mb-4 text-center">ISTRUZIONI</h1>
-      <div className="w-full h-[70%] border-2 border-[var(--border-primary)] p-6 flex items-center justify-center overflow-hidden">
-        <div className="whitespace-pre-wrap leading-relaxed text-3xl font-mono max-w-4xl w-full text-left">
-          {displayedText}
-          {isTyping && <span className="bg-[var(--text-primary)] w-4 h-6 inline-block animate-pulse ml-1" />}
+    <div className="relative h-full w-full">
+      <ScreenBackdrop />
+      <Modal
+        backdrop="soft"
+        eyebrow={`Istruzioni · ${pageIndex + 1} di ${totalPages}`}
+        icon="book"
+        title={page.title}
+        size="lg"
+        aside={<PageDots count={totalPages} current={pageIndex} />}
+        hints={[
+          { keys: ['←'], label: 'Indietro', muted: pageIndex === 0 },
+          { keys: ['→', 'INVIO'], label: 'Avanti', muted: pageIndex === totalPages - 1 },
+          { keys: ['ESC'], label: 'Torna al menu' },
+        ]}
+      >
+        <div key={pageIndex} className="min-h-[420px] px-12 pb-12 anim-fade-up">
+          <div className="hairline mb-9" />
+          {page.intro && <p className="prose-story max-w-[1000px] text-[30px] leading-[1.55]">{page.intro}</p>}
+          {page.points && (
+            <ul className="flex flex-col gap-6">
+              {page.points.map(point => (
+                <li key={point} className="flex gap-5 text-[25px] leading-[1.5] text-ink2">
+                  <span className="mt-[15px] h-2 w-2 flex-shrink-0 rotate-45 bg-ember" />
+                  <span><RichText text={point} lead /></span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {page.outro && <p className="prose-story mt-10 text-[26px] italic text-ember2">{page.outro}</p>}
         </div>
-      </div>
-      <div className="mt-4 text-2xl md:text-3xl text-center w-full">
-        <div className="flex justify-between items-center px-4">
-          <span className={pageIndex === 0 ? 'opacity-30' : ''}>
-            [A / ←] Pagina Precedente
-          </span>
-          <span className="text-amber-400">
-            Pagina {pageIndex + 1} / {totalPages}
-          </span>
-          <span className={pageIndex === totalPages - 1 ? 'opacity-30' : ''}>
-            [D / →] Pagina Successiva
-          </span>
-        </div>
-        <div className="mt-2 text-xl opacity-70">
-          [INVIO] Avanti | [ESC] Torna al Menu
-        </div>
-      </div>
+      </Modal>
     </div>
   );
 };

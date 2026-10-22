@@ -3,39 +3,40 @@ import { useGameStore } from '../store/gameStore';
 import { GameState } from '../types';
 
 /**
- * BootScreen component (v2.0.15).
- * Replaces the old credits + fake-BIOS boot sequence with a single splash:
- * Runtime Multimedia logo for 5 seconds → fade to black → main menu.
- * Any key skips straight to the menu.
+ * Opening splash: the Runtime Multimedia logo fades in, holds, fades out,
+ * then the main menu. Any key skips straight to the menu.
  */
 const BootScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
-  const [phase, setPhase] = useState<'logo' | 'black'>('logo');
+  const [phase, setPhase] = useState<'in' | 'logo' | 'out'>('in');
 
   useEffect(() => {
-    const toBlack = setTimeout(() => setPhase('black'), 5000);
-    const toMenu = setTimeout(() => setGameState(GameState.MAIN_MENU), 6000);
+    const show = setTimeout(() => setPhase('logo'), 120);
+    const hide = setTimeout(() => setPhase('out'), 4400);
+    const toMenu = setTimeout(() => setGameState(GameState.MAIN_MENU), 5400);
 
     const skip = () => setGameState(GameState.MAIN_MENU);
     window.addEventListener('keydown', skip);
 
     return () => {
-      clearTimeout(toBlack);
+      clearTimeout(show);
+      clearTimeout(hide);
       clearTimeout(toMenu);
       window.removeEventListener('keydown', skip);
     };
   }, [setGameState]);
 
   return (
-    <div className="w-full h-full bg-black flex items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center bg-bg0">
       <img
         src="./logo_runtime.png"
         alt="Runtime Multimedia"
         style={{
-          maxWidth: '40%',
-          maxHeight: '40%',
+          maxWidth: '36%',
+          maxHeight: '36%',
           opacity: phase === 'logo' ? 1 : 0,
-          transition: 'opacity 0.8s ease',
+          transform: phase === 'logo' ? 'scale(1)' : 'scale(0.97)',
+          transition: 'opacity 1s ease, transform 4s ease-out',
         }}
       />
     </div>
