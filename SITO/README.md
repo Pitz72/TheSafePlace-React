@@ -1,29 +1,60 @@
-# The Safe Place Chronicles: The Echo of the Journey
+# The Safe Place Chronicles: The Echo of the Journey — il sito
 
-*Le lezioni dal passato. Una lotta per il futuro. Un viaggio narrativo di sopravvivenza nel cuore di un mondo in rovina.*
+*Ogni passo è un'eco. Ogni eco, una scelta.*
 
-![Artwork del gioco](image/02.png)
+![Copertina del gioco](public/image/cover-orizzontale-1600.webp)
+
+Landing page ufficiale del gioco, pubblicata su [thesafeplace.runtimeradio.it](https://thesafeplace.runtimeradio.it/):
+presenta il gioco, la sua storia e lo sviluppo, e distribuisce gli installer della release pubblica.
 
 ## Cos'è The Safe Place Chronicles?
 
-**The Safe Place Chronicles** è un gioco di ruolo (RPG) narrativo di sopravvivenza che si ispira ai classici testuali degli anni '80. Nato come esperimento tecnico e narrativo, è stato sviluppato in simbiosi creativa con il supporto di modelli linguistici (LLM) per creare un'opera strutturata, coerente e dotata di un'anima.
+**The Safe Place Chronicles** è un gioco di ruolo narrativo di sopravvivenza in un'Europa post-apocalittica: un viaggio
+a piedi verso l'ultimo luogo sicuro. Ultimo si sveglia nel rifugio e suo padre non c'è più: gli ha lasciato una lettera e
+una vecchia mappa che porta a Est, verso un luogo chiamato The Safe Place.
 
-Il gioco è costruito con una filosofia "keyboard-only" per replicare il feeling autentico di quell'epoca, con un'interfaccia che richiama i vecchi monitor a fosfori verdi. Con la versione 2.0.17 il progetto è completo e giocabile dall'inizio alla fine, rilasciato come applicazione desktop **open source** per Windows, macOS e Linux (React + Ink + Electron).
+Nato come esperimento tecnico e narrativo, è stato sviluppato da Simone Pizzi in simbiosi creativa con il supporto di
+modelli linguistici (LLM). Si gioca da tastiera ed è un'applicazione desktop **gratuita e open source** per Windows,
+macOS e Linux (React + Ink + Electron).
 
-Questa è la landing page ufficiale del progetto, creata per presentare il concept, la storia dello sviluppo e distribuire il gioco.
-
-## Caratteristiche Principali del Gioco
+## Caratteristiche principali del gioco
 
 | Funzionalità | Descrizione |
 | :--- | :--- |
-| **MONDO VIVO E DINAMICO** | Esplora una vasta mappa con biomi unici (Pianure, Foreste, Città) influenzati da un sistema meteo e temporale dinamico. |
-| **SOPRAVVIVENZA IMPEGNATIVA** | Gestisci fame, sete e salute mentre curi stati multipli come Ferite, Malattie e Avvelenamento. |
-| **STORIA STRATIFICATA** | Vivi una trama principale in 12 capitoli, svelata organicamente attraverso il gameplay. |
-| **CRESCITA E SCELTE MORALI** | Sali di livello e definisci il tuo stile di gioco scegliendo tra Talenti unici. Le tue decisioni morali modelleranno la tua Bussola Interiore. |
-| **COMBATTIMENTO TATTICO** | Affronta un combattimento a turni, testuale e narrativo. Spendi un turno per 'Analizzare' il nemico e scoprirne le debolezze. |
-| **CRAFTING PROGRESSIVO** | Trova manuali e schemi nel mondo per apprendere come creare oggetti essenziali e trasformare materiali grezzi in strumenti di sopravvivenza. |
+| **Un mondo vivo** | Una vasta mappa con biomi unici (pianure, foreste, città), meteo e ciclo del giorno e della notte. |
+| **Sopravvivenza impegnativa** | Fame, sete e salute, stati come ferite, malattie e avvelenamento, equipaggiamento che si consuma. |
+| **Una storia a strati** | Una trama principale in 12 capitoli che si svela giocando, eventi a tema, Easter Egg e cutscene. |
+| **Crescita e scelte morali** | Talenti da scegliere salendo di livello; le decisioni orientano la Bussola Interiore (Lena/Elian). |
+| **Combattimento tattico** | Scontri a turni raccontati; analizza il nemico per scoprirne le debolezze, usa l'ambiente. |
+| **Crafting progressivo** | Manuali e schemi da trovare lungo la strada per imparare nuove ricette. |
 
-## Log Sviluppo Principali
+## Identità visiva (2.0 del sito)
+
+Il sito usa la stessa identità visiva del gioco dalla versione 3.0 (direzione artistica in
+[`../COVER-UFFICIALE/README.md`](../COVER-UFFICIALE/README.md)): illustrazione vettoriale al crepuscolo, un solo accento
+color brace, tipografia editoriale. Niente più terminale, fosfori verdi o effetti CRT.
+
+- **Palette e componenti** (`src/index.css`, `tailwind.config.js`): gli stessi colori del tema *Crepuscolo* del gioco,
+  come triplette RGB (`bg-ember/20`), con pannelli di vetro, pulsanti e animazioni del menu (carrellata sulla key art,
+  cenere nell'aria). Le animazioni si fermano con `prefers-reduced-motion`.
+- **Font** (`public/fonts`, licenza SIL OFL, gli stessi di `GAME/src/assets/fonts`): Cormorant Garamond per i titoli,
+  Literata per i testi narrativi, Barlow e Barlow Condensed per l'interfaccia. Sono inclusi nel sito: la pagina non fa
+  richieste esterne (il teaser di YouTube si carica solo quando si preme play).
+- **Logo, emblema e icone** (`src/components/Logo.tsx`, `src/components/Icon.tsx`): ripresi dal gioco.
+- **Immagini** (`public/image`): key art, copertine, poster e immagine Open Graph (1200×630), più le favicon in
+  `public/`. Si rigenerano tutte dalla grafica ufficiale con lo script qui sotto.
+
+### Rigenerare le immagini
+
+```bash
+cd GAME && npm run dev                      # in un altro terminale: le composizioni di GAME/preview.html
+cd SITO && node scripts/export-images.mjs   # richiede ImageMagick e Playwright (npm i -D playwright)
+```
+
+Lo script ridimensiona in WebP le immagini di `COVER-UFFICIALE/` (hero, galleria) e cattura da `GAME/preview.html`
+l'immagine Open Graph (`art=cover-landscape`) e le favicon (`art=icon`).
+
+## Log sviluppo principali
 
 - **v1.3.1 - The Survival Overhaul:** Introduzione della 'Ricerca Attiva' e revisione del loot.
 - **v1.5.0 - Quest System Framework:** Implementazione di un'infrastruttura completa per missioni.
@@ -34,27 +65,19 @@ Questa è la landing page ufficiale del progetto, creata per presentare il conce
 - **v2.0.14 - Campagna di Chiusura:** Audit completo e revisione dei sistemi; il gioco è completabile fino al finale.
 - **v2.0.16 - Rilascio Desktop Open Source:** App desktop Electron per Windows, macOS e Linux, con build via CI e release pubblica su GitHub.
 - **v2.0.17 - Rifiniture Desktop:** Installer NSIS per Windows, avvio a schermo intero, nuova icona ufficiale e miglioramenti alle cutscene.
+- **v2.1.0 - Revisione Completa** *(prossima release)*: trama e quest completabili, test automatici che giocano il gioco.
+- **v3.0.0 - Nuova Identità Visiva** *(prossima release)*: dal terminale al gioco narrativo, interfaccia, mappa, logo e copertine nuovi.
 
-## Come Eseguire il Progetto
+## Come eseguire il sito
 
-Questo repository contiene il codice sorgente della landing page. Per eseguirla in locale:
+```bash
+npm ci            # dipendenze
+npm run dev       # server di sviluppo
+npm run build     # build di produzione in dist/
+npm run preview   # anteprima della build
+```
 
-1.  **Clona il repository:**
-    ```bash
-    git clone <URL_DEL_REPOSITORY>
-    ```
-2.  **Installa le dipendenze:**
-    ```bash
-    npm install
-    ```
-3.  **Avvia il server di sviluppo:**
-    ```bash
-    npm run dev
-    ```
-4.  **Per creare una build di produzione:**
-    ```bash
-    npm run build
-    ```
+Il deploy è automatico: `.github/workflows/deploy-site.yml` builda e pubblica `dist/` a ogni push su `main` che tocca `SITO/`.
 
 ## Gioca / Scarica
 

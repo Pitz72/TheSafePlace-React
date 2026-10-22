@@ -1,15 +1,15 @@
 import React from 'react';
+import Icon from './Icon';
+import { Feature } from '../types';
 
-interface FeatureCardProps {
-  title: string;
-  description: string;
-}
-
-const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => {
+const FeatureCard: React.FC<{ feature: Feature }> = ({ feature }) => {
   return (
-    <div className="border-2 border-[#28cc28] p-6 bg-[rgba(51,255,51,0.05)] transition-all duration-300 ease-in-out hover:transform hover:-translate-y-1 hover:border-[#33ff33] hover:shadow-[0_0_15px_rgba(51,255,51,0.3)]">
-      <h3 className="text-2xl mb-4 text-[#ccffcc] text-glow">{title}</h3>
-      <p className="leading-relaxed">{description}</p>
+    <div className="surface-flat group h-full p-7 transition-colors duration-300 hover:border-[color:var(--line-2)] hover:bg-white/[0.04]">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-ember/40 bg-ember/10 text-ember transition-colors group-hover:bg-ember/20">
+        <Icon name={feature.icon} />
+      </span>
+      <h3 className="title-display mt-6 text-[1.75rem] text-ink">{feature.title}</h3>
+      <p className="mt-3 text-[16.5px] leading-relaxed text-ink2">{feature.description}</p>
     </div>
   );
 };
