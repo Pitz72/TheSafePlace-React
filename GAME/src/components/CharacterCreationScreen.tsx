@@ -4,25 +4,33 @@ import { useCharacterStore } from '../store/characterStore';
 import { GameState, AttributeName, Attributes } from '../types';
 import { ATTRIBUTES, ATTRIBUTE_LABELS } from '../constants';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import KeyArt from './art/KeyArt';
+import Modal from './ui/Modal';
+import Icon from './ui/Icon';
 
-/**
- * Simulates rolling 4d6 and dropping the lowest roll.
- * @returns {number} The sum of the three highest rolls.
- */
-// Simula il lancio di 4d6, scartando il più basso
-const rollStat = (): number => {  
+/** 4d6, the lowest die discarded. */
+const rollStat = (): number => {
   const rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
   rolls.sort((a, b) => a - b);
-  rolls.shift(); // Rimuove il più basso
+  rolls.shift();
   return rolls.reduce((sum, current) => sum + current, 0);
 };
 
-/**
- * CharacterCreationScreen component.
- * This component renders the character creation screen.
- * @returns {JSX.Element} The rendered CharacterCreationScreen component.
- */
+const ATTRIBUTE_HINTS: Record<AttributeName, string> = {
+  for: 'Colpire, sollevare, portare peso',
+  des: 'Schivare, mirare, muoversi in silenzio',
+  cos: 'Resistere a fame, freddo e ferite',
+  int: 'Capire, riparare, ricordare',
+  sag: 'Intuire, orientarsi, sopravvivere',
+  car: 'Convincere, mercanteggiare, intimidire',
+};
 
+const modifier = (value: number) => {
+  const mod = Math.floor((value - 10) / 2);
+  return `${mod >= 0 ? '+' : ''}${mod}`;
+};
+
+/** Ultimo's attributes are rolled one by one; ENTER speeds up, then starts the journey. */
 const CharacterCreationScreen: React.FC = () => {
   const setGameState = useGameStore((state) => state.setGameState);
   const setAttributes = useCharacterStore((state) => state.setAttributes);
@@ -31,7 +39,6 @@ const CharacterCreationScreen: React.FC = () => {
   const [currentAttribute, setCurrentAttribute] = useState<AttributeName | null>(null);
   const [rollingValue, setRollingValue] = useState<number>(0);
   const [isComplete, setIsComplete] = useState<boolean>(false);
-  const [cursorVisible, setCursorVisible] = useState(true);
   // ENTER during the animation reveals the remaining rolls at once.
   const skipRef = useRef(false);
 
@@ -48,12 +55,12 @@ const CharacterCreationScreen: React.FC = () => {
         if (cancelled) return;
         setCurrentAttribute(attr);
         rollInterval = setInterval(() => setRollingValue(Math.floor(Math.random() * 16) + 3), 50);
-        await wait(skipRef.current ? 0 : 2000);
+        await wait(skipRef.current ? 0 : 1100);
         clearInterval(rollInterval);
         if (cancelled) return;
         finalStats[attr] = rollStat();
         setRolledStats({ ...finalStats });
-        await wait(skipRef.current ? 0 : 500);
+        await wait(skipRef.current ? 0 : 350);
       }
       if (cancelled) return;
       setCurrentAttribute(null);
@@ -66,16 +73,6 @@ const CharacterCreationScreen: React.FC = () => {
       timers.forEach(clearTimeout);
     };
   }, []);
-  
-  // Cursore lampeggiante
-  useEffect(() => {
-    if (isComplete) {
-      const cursorInterval = setInterval(() => {
-        setCursorVisible(prev => !prev);
-      }, 500);
-      return () => clearInterval(cursorInterval);
-    }
-  }, [isComplete]);
 
   const startGame = useCallback(() => {
     if (!isComplete) {
@@ -93,45 +90,48 @@ const CharacterCreationScreen: React.FC = () => {
   useKeyboardInput(handlerMap);
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-4">
-      <h1 className="text-5xl md:text-6xl mb-8 text-center">═══ CREAZIONE PERSONAGGIO ═══</h1>
-      <p 
-        className="text-2xl md:text-3xl mb-12 text-center"
-        style={{ color: 'var(--text-primary)' }}
+    <div className="relative h-full w-full">
+      <KeyArt variant="dawn" shade="none" />
+      <div className="absolute inset-0 bg-bg0/30" />
+      <Modal
+        backdrop="soft"
+        eyebrow="Nuovo viaggio"
+        icon="dice"
+        title="Chi è Ultimo"
+        subtitle={isComplete ? 'Il viaggio può cominciare.' : 'Diciassette anni, e quello che il padre gli ha insegnato. Il resto lo decidono i dadi.'}
+        size="lg"
+        hints={[{ keys: ['INVIO'], label: isComplete ? "Inizia l'avventura" : 'Accelera', active: isComplete }]}
       >
-        {isComplete ? 'Statistiche generate.' : 'Generazione statistiche in corso... [INVIO] per accelerare'}
-      </p>
-      
-      <div className="w-full max-w-2xl text-4xl space-y-4 border-2 border-[var(--border-primary)] p-8">
-        {ATTRIBUTES.map((attr) => {
-          const label = ATTRIBUTE_LABELS[attr].padEnd(12, ' ');
-          let value: string | number = '...';
-          
-          if (rolledStats[attr] !== undefined) {
-            value = rolledStats[attr]!;
-          } else if (currentAttribute === attr) {
-            value = rollingValue;
-          }
-
-          return (
-            <div key={attr} className="flex justify-between font-mono">
-              <span>{label}:</span>
-              <span className={currentAttribute === attr ? 'animate-yellow-flash' : ''}>
-                {String(value).padStart(2, ' ')}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {isComplete && (
-        <div className="mt-12 text-3xl text-center">
-            <p className="animate-pulse">
-                Creazione completata. [Premi INVIO per iniziare l'avventura]
-                <span className="bg-[var(--highlight-bg)] w-5 h-7 inline-block ml-2" style={{ opacity: cursorVisible ? 1 : 0 }}></span>
-            </p>
+        <div className="grid grid-cols-3 gap-4 px-12 pb-10">
+          {ATTRIBUTES.map((attr) => {
+            const rolled = rolledStats[attr];
+            const isRolling = currentAttribute === attr;
+            const value = rolled ?? (isRolling ? rollingValue : null);
+            return (
+              <div
+                key={attr}
+                className={`surface-flat relative overflow-hidden px-7 py-6 transition-all duration-300 ${isRolling ? '!border-ember/60' : ''}`}
+                style={isRolling ? { boxShadow: '0 0 40px -10px rgb(var(--c-ember) / 0.6)' } : undefined}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="eyebrow">{attr}</div>
+                    <div className="mt-1 text-[25px] font-medium text-ink">{ATTRIBUTE_LABELS[attr]}</div>
+                  </div>
+                  {rolled !== undefined && (
+                    <span className="chip text-sage anim-fade-in">{modifier(rolled)}</span>
+                  )}
+                </div>
+                <div className={`title-display mt-3 text-[92px] tnum ${rolled !== undefined ? 'text-ink' : isRolling ? 'text-ember' : 'text-ink4'}`}>
+                  {value ?? '—'}
+                </div>
+                <div className="mt-1 text-[17px] text-ink3">{ATTRIBUTE_HINTS[attr]}</div>
+                {rolled !== undefined && <Icon name="check" size={20} className="absolute bottom-6 right-6 text-sage anim-fade-in" strokeWidth={2.4} />}
+              </div>
+            );
+          })}
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

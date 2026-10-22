@@ -7,11 +7,34 @@ import {
     getSaveSlots, handleSaveGame, handleLoadGame, SaveSlot, NUM_SLOTS, exportSaveToFile,
     readSaveFile, writeSaveToSlot, deleteSave,
 } from '../services/saveGameService';
+import Modal from './ui/Modal';
+import Icon from './ui/Icon';
+import KeyHints from './ui/KeyHints';
 
 type View = 'slots' | 'exportPick' | 'importPick';
 interface PendingConfirm { message: string; action: () => void }
 
 const errorText = (error: unknown) => (error instanceof Error ? error.message : 'Errore sconosciuto.');
+
+const SlotCard: React.FC<{ slot: SaveSlot; selected: boolean }> = ({ slot, selected }) => (
+    <div className={`choice !gap-6 !py-4 ${selected ? 'is-selected' : 'border-line bg-white/[0.02]'}`}>
+        <span className={`title-display w-12 text-center text-[46px] leading-none ${selected ? 'text-accent' : 'text-ink3'}`}>{slot.slot}</span>
+        <div className="min-w-0 flex-1">
+            {slot.isEmpty && <div className="text-[22px] italic text-ink3">Slot vuoto</div>}
+            {slot.isCorrupted && <div className="flex items-center gap-2 text-[22px] text-danger"><Icon name="warning" size={22} /> Salvataggio danneggiato</div>}
+            {slot.meta && (
+                <>
+                    <div className="text-[23px] text-ink">Giorno {slot.meta.day}<span className="mx-3 text-ink4">·</span>{slot.meta.time}</div>
+                    <div className="mt-0.5 flex items-center gap-4 text-[18px] text-ink3">
+                        <span>Livello {slot.meta.level}</span>
+                        {slot.meta.date && <span>Salvato il {slot.meta.date}</span>}
+                    </div>
+                </>
+            )}
+        </div>
+        <Icon name="chevronRight" size={20} className={selected ? 'text-accent' : 'opacity-0'} />
+    </div>
+);
 
 /**
  * Save slots: save, load, delete, export to a JSON file and import from one.
@@ -164,54 +187,49 @@ const SaveLoadScreen: React.FC<{ mode: 'save' | 'load' }> = ({ mode }) => {
 
     useKeyboardInput(handlerMap);
 
-    const title = view === 'exportPick' ? 'ESPORTA SLOT' : view === 'importPick' ? 'IMPORTA IN SLOT' : mode === 'save' ? 'SALVA PARTITA' : 'CARICA PARTITA';
-    const rowClass = (selected: boolean) => `transition-colors duration-100 pl-4 py-2 ${selected ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : 'border border-[var(--border-primary)]'}`;
+    const title = view === 'exportPick' ? 'Esporta uno slot' : view === 'importPick' ? 'Importa in uno slot' : mode === 'save' ? 'Salva la partita' : 'Carica una partita';
+    const actionRow = (index: number, icon: 'upload' | 'download' | 'arrowLeft', label: string) => (
+        <div className={`choice !py-3.5 text-[21px] ${selectedIndex === index ? 'is-selected' : ''}`}>
+            <Icon name={icon} size={22} className={selectedIndex === index ? 'text-accent' : 'text-ink3'} />
+            <span className="flex-1">{label}</span>
+        </div>
+    );
 
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full h-full max-w-5xl border-8 border-double border-[var(--border-primary)] flex flex-col p-6 bg-[var(--bg-primary)] relative">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ {title} ═══</h1>
-                {feedback && <p className="text-3xl text-center text-[var(--text-accent)] mb-4">{feedback}</p>}
-
-                <div className="w-full flex-grow text-4xl space-y-3">
-                    {slots.map((slot, index) => (
-                        <div key={slot.slot} className={rowClass(index === selectedIndex)}>
-                            {index === selectedIndex && '> '}
-                            <span>Slot {slot.slot}</span>
-                            <span className={`ml-4 ${slot.isCorrupted ? 'text-[var(--text-danger)]' : ''}`}>
-                                {slot.isEmpty ? '— vuoto —' : slot.isCorrupted ? 'danneggiato' : slot.label}
-                            </span>
-                        </div>
-                    ))}
+        <>
+            <Modal
+                backdrop={inGame ? 'blur' : 'soft'}
+                eyebrow={mode === 'save' ? 'Salvataggio' : 'Caricamento'}
+                icon={mode === 'save' ? 'save' : 'load'}
+                title={title}
+                subtitle={feedback ? <span className="text-ember2">{feedback}</span> : 'Cinque slot, conservati su questo computer.'}
+                size="md"
+                hints={view === 'slots'
+                    ? [{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Conferma' }, { keys: ['E'], label: 'Esporta' }, { keys: ['CANC'], label: 'Elimina' }, { keys: ['ESC'], label: 'Indietro' }]
+                    : [{ keys: ['↑↓'], label: 'Scegli lo slot' }, { keys: ['INVIO'], label: 'Conferma' }, { keys: ['ESC'], label: 'Annulla' }]}
+            >
+                <div className="flex flex-col gap-2 px-12 pb-9">
+                    {slots.map((slot, index) => <SlotCard key={slot.slot} slot={slot} selected={index === selectedIndex} />)}
                     {view === 'slots' && (
-                        <>
-                            <div className={`mt-6 ${rowClass(selectedIndex === NUM_SLOTS)}`}>
-                                {selectedIndex === NUM_SLOTS && '> '}{mode === 'load' ? 'Importa da file JSON' : 'Esporta uno slot in un file JSON'}
-                            </div>
-                            <div className={rowClass(selectedIndex === NUM_SLOTS + 1)}>
-                                {selectedIndex === NUM_SLOTS + 1 && '> '}Torna indietro
-                            </div>
-                        </>
+                        <div className="mt-4 grid grid-cols-2 gap-2">
+                            {actionRow(NUM_SLOTS, mode === 'load' ? 'upload' : 'download', mode === 'load' ? 'Importa da un file JSON' : 'Esporta uno slot in un file JSON')}
+                            {actionRow(NUM_SLOTS + 1, 'arrowLeft', 'Torna indietro')}
+                        </div>
                     )}
                 </div>
+            </Modal>
 
-                <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-[var(--border-primary)] pt-3">
-                    {view === 'slots'
-                        ? '[↑↓] Seleziona | [INVIO] Conferma | [E] Esporta | [CANC] Elimina | [ESC] Indietro'
-                        : '[↑↓] Seleziona slot | [INVIO] Conferma | [ESC] Annulla'}
-                </div>
-
-                {pendingConfirm && (
-                    <div className="absolute inset-0 bg-black/85 flex items-center justify-center">
-                        <div className="border-4 border-double border-[var(--text-accent)] p-8 max-w-3xl text-center bg-[var(--bg-primary)]">
-                            <p className="text-4xl mb-8">{pendingConfirm.message}</p>
-                            <p className="text-3xl text-[var(--text-accent)]">[INVIO] Sì | [ESC] No</p>
-                        </div>
+            {pendingConfirm && (
+                <div className="absolute inset-0 z-30 flex items-center justify-center" style={{ background: 'rgb(var(--c-bg0) / 0.6)' }}>
+                    <div className="surface w-[680px] px-12 py-10 text-center anim-scale-in" style={{ background: 'var(--glass-strong)' }}>
+                        <Icon name="warning" size={36} className="mx-auto mb-5 text-ember" />
+                        <p className="mb-8 text-[26px] leading-snug text-ink">{pendingConfirm.message}</p>
+                        <KeyHints hints={[{ keys: ['INVIO'], label: 'Sì' }, { keys: ['ESC'], label: 'No' }]} />
                     </div>
-                )}
-            </div>
+                </div>
+            )}
             <input ref={fileInputRef} type="file" accept=".json,application/json" onChange={handleFileSelected} style={{ display: 'none' }} />
-        </div>
+        </>
     );
 };
 

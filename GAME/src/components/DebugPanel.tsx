@@ -50,18 +50,18 @@ export const DebugPanel: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed top-2 right-2 bg-black/90 border-2 border-green-500 p-4 text-green-500 font-mono text-xs max-w-md max-h-[90vh] overflow-y-auto z-50">
-      <div className="text-yellow-400 font-bold mb-2 text-sm">DEBUG PANEL</div>
+    <div className="surface fixed right-2 top-2 z-50 max-h-[90vh] max-w-md overflow-y-auto p-4 font-mono text-xs text-ink2">
+      <div className="text-ember font-bold mb-2 text-sm">DEBUG PANEL</div>
       
       {/* Game State */}
       <div className="mb-3">
-        <div className="text-cyan-400 font-bold">GAME STATE:</div>
+        <div className="text-teal font-bold">GAME STATE:</div>
         <div className="ml-2">{gameState}</div>
       </div>
 
       {/* Player Info */}
       <div className="mb-3">
-        <div className="text-cyan-400 font-bold">PLAYER:</div>
+        <div className="text-teal font-bold">PLAYER:</div>
         <div className="ml-2">Position: ({playerPos.x}, {playerPos.y})</div>
         <div className="ml-2">Biome: {currentBiome}</div>
         <div className="ml-2">Level: {level} | XP: {xp.current}/{xp.next}</div>
@@ -69,15 +69,15 @@ export const DebugPanel: React.FC = () => {
 
       {/* Main Story */}
       <div className="mb-3">
-        <div className="text-cyan-400 font-bold">MAIN STORY:</div>
+        <div className="text-teal font-bold">MAIN STORY:</div>
         <div className="ml-2">Stage: {mainStoryStage}</div>
       </div>
 
       {/* Active Quests */}
       <div className="mb-3">
-        <div className="text-cyan-400 font-bold">ACTIVE QUESTS ({Object.keys(activeQuests).length}):</div>
+        <div className="text-teal font-bold">ACTIVE QUESTS ({Object.keys(activeQuests).length}):</div>
         {Object.keys(activeQuests).length === 0 ? (
-          <div className="ml-2 text-gray-500">None</div>
+          <div className="ml-2 text-ink4">None</div>
         ) : (
           Object.entries(activeQuests).map(([questId, stage]) => (
             <div key={questId} className="ml-2">
@@ -90,7 +90,7 @@ export const DebugPanel: React.FC = () => {
       {/* Quest Kill Counts */}
       {Object.keys(questKillCounts).length > 0 && (
         <div className="mb-3">
-          <div className="text-cyan-400 font-bold">KILL COUNTS:</div>
+          <div className="text-teal font-bold">KILL COUNTS:</div>
           {Object.entries(questKillCounts).map(([questId, counts]) => (
             <div key={questId} className="ml-2">
               {questId}:
@@ -107,7 +107,7 @@ export const DebugPanel: React.FC = () => {
       {/* Quest Flags */}
       {Object.keys(questFlags).length > 0 && (
         <div className="mb-3">
-          <div className="text-cyan-400 font-bold">QUEST FLAGS:</div>
+          <div className="text-teal font-bold">QUEST FLAGS:</div>
           {Object.entries(questFlags).map(([flag, value]) => (
             <div key={flag} className="ml-2">
               • {flag}: {value ? '✓' : '✗'}
@@ -118,10 +118,10 @@ export const DebugPanel: React.FC = () => {
 
       {/* Game Flags */}
       <div className="mb-3">
-        <div className="text-cyan-400 font-bold">GAME FLAGS ({gameFlags.size}):</div>
+        <div className="text-teal font-bold">GAME FLAGS ({gameFlags.size}):</div>
         <div className="ml-2 max-h-32 overflow-y-auto">
           {gameFlags.size === 0 ? (
-            <div className="text-gray-500">None</div>
+            <div className="text-ink4">None</div>
           ) : (
             Array.from(gameFlags).sort().map(flag => (
               <div key={flag} className="text-xs">• {flag}</div>
@@ -133,13 +133,13 @@ export const DebugPanel: React.FC = () => {
       {/* Wandering Trader */}
       {wanderingTrader && (
         <div className="mb-3">
-          <div className="text-cyan-400 font-bold">WANDERING TRADER:</div>
+          <div className="text-teal font-bold">WANDERING TRADER:</div>
           <div className="ml-2">Position: ({wanderingTrader.position.x}, {wanderingTrader.position.y})</div>
           <div className="ml-2">Moves in: {wanderingTrader.turnsUntilMove} turns</div>
         </div>
       )}
 
-      <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-700">
+      <div className="text-xs text-ink4 mt-2 pt-2 border-t border-line">
         Press F12 to open browser console for detailed logs
       </div>
     </div>

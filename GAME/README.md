@@ -1,12 +1,12 @@
 # The Safe Place Chronicles: The Echo of the Journey — il gioco
 
-![Versione](https://img.shields.io/badge/versione-2.1.0-blue.svg)
+![Versione](https://img.shields.io/badge/versione-3.0.0-blue.svg)
 ![Stato](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 ![Tech](https://img.shields.io/badge/tech-React%2019%20%7C%20Ink%20%7C%20Electron-purple.svg)
 
-GDR testuale di sopravvivenza post-apocalittico in estetica anni '80, giocabile interamente da tastiera.
-È una single page application React (mappa su HTML Canvas, dialoghi e cutscene in [Ink](https://www.inklestudios.com/ink/))
-distribuita come app desktop per Windows, macOS e Linux con Electron.
+Gioco di ruolo narrativo di sopravvivenza post-apocalittico, giocabile interamente da tastiera.
+È una single page application React (mappa illustrata su HTML Canvas, grafica vettoriale SVG, dialoghi e cutscene in
+[Ink](https://www.inklestudios.com/ink/)) distribuita come app desktop per Windows, macOS e Linux con Electron.
 
 ## Avvio rapido
 
@@ -39,6 +39,10 @@ Serve Node.js 20 o superiore.
 | `src/store/` | stato di gioco con Zustand: personaggio, mondo, tempo, eventi, combattimento, interazioni, narrativa, commercio |
 | `src/services/` | regole che attraversano più store: movimento, quest, uso degli oggetti, crafting, commercio, salvataggi, Ink |
 | `src/components/` | le schermate (una per stato di gioco) e i pannelli dell'interfaccia |
+| `src/components/ui/` | i mattoni dell'interfaccia: finestre (`Modal`), liste di scelte, tasti, barre, icone |
+| `src/components/art/` | la grafica vettoriale: key art, logo ed emblema, scene dei biomi |
+| `src/components/map/` | la mappa del mondo: terreno disegnato a blocchi, luce del giorno, meteo, segnalini |
+| `src/assets/fonts/`, `src/assets/art/` | i font (licenza OFL) e le illustrazioni esterne (figure, ritratti) |
 | `src/test/` | test che giocano davvero il gioco (vedi sotto) |
 | `scripts/` | validatore e formattatore dei dati |
 | `electron/` | processo principale e preload dell'app desktop |
@@ -66,6 +70,23 @@ Serve Node.js 20 o superiore.
   salvataggi), con Content-Security-Policy, nessun accesso a Node dalla pagina e un bridge minimo
   (`window.tspDesktop`: uscita e schermo intero).
 
+## Grafica (3.0)
+
+- **Design system** (`src/index.css`, `tailwind.config.js`): colori come triplette RGB per tema (`Crepuscolo` e
+  `Alto contrasto`, scelti nelle Opzioni), font Barlow / Barlow Condensed per l'interfaccia, Cormorant Garamond per i
+  titoli, Literata per i testi narrativi. I colori che arrivano dalla logica e dai dati (diario, combattimento,
+  oggetti) passano da `harmonize()` (`src/utils/palette.ts`), che li porta sulla palette del tema.
+- **Interfaccia di gioco a 1920×1080**, scalata sulla finestra (`useGameScale`): i testi sono dimensionati per restare
+  leggibili anche a 1024×640.
+- **Mappa** (`src/components/map`): il terreno è disegnato proceduralmente (fiumi continui, foreste, rovine, villaggi,
+  rifugi, luoghi speciali) in blocchi da 8×8 caselle tenuti in cache; la camera segue il giocatore con una transizione
+  morbida; sopra il terreno, la luce dell'ora (con la torcia attorno al giocatore di notte), il meteo, i segnalini delle
+  missioni e le frecce verso quello che è fuori vista. `+` e `-` cambiano lo zoom.
+- **Illustrazioni**: tutte vettoriali e senza figure umane; il viaggiatore e i ritratti si possono aggiungere come
+  immagini esterne in `src/assets/art/index.ts`. Copertine, poster e icone si esportano con `node scripts/export-art.mjs`
+  (vedi `../COVER-UFFICIALE/README.md`, che contiene anche la direzione artistica e i prompt per i generatori).
+- `preview.html` (solo sviluppo) mostra le illustrazioni a tutta pagina: `/preview.html?art=keyart&variant=dawn`.
+
 ## Aggiungere o modificare contenuti
 
 1. Modifica i JSON in `public/data` (o i file `.ink` in `src/assets/story/modules`).
@@ -89,7 +110,8 @@ installer.
 
 ## Documentazione
 
-- Novità della versione corrente: [`docs/logs/v2.1.0-revisione-completa.md`](./docs/logs/v2.1.0-revisione-completa.md)
+- Novità della versione corrente: [`docs/logs/v3.0.0-nuova-identita-visiva.md`](./docs/logs/v3.0.0-nuova-identita-visiva.md)
+- La revisione completa del gioco (2.1.0): [`docs/logs/v2.1.0-revisione-completa.md`](./docs/logs/v2.1.0-revisione-completa.md)
 - Log delle versioni precedenti: [`docs/logs/`](./docs/logs/)
 - Documenti di design e analisi storiche: [`docs/design/`](./docs/design/), [`docs/technical/`](./docs/technical/)
 - Il README e la roadmap fino alla 2.0.17 sono archiviati in [`docs/storico/`](./docs/storico/): descrivono piani

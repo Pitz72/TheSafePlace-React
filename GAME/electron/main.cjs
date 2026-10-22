@@ -37,7 +37,7 @@ const MIME = {
 };
 
 // The bundled game needs nothing from the outside world: scripts, styles,
-// fonts and data come from app://bundle, the map tileset is a data: SVG.
+// fonts and data come from app://bundle (data: images stay allowed for the art).
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "script-src 'self'",

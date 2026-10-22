@@ -5,6 +5,9 @@ import { narrativeService } from '../services/NarrativeService';
 import { useKeyboardInput, KeyHandlerMap } from '../hooks/useKeyboardInput';
 import { Cutscene, CutscenePage } from '../types';
 import { audioManager } from '../utils/audio';
+import KeyArt from './art/KeyArt';
+import ChoiceList from './ui/ChoiceList';
+import KeyHints, { KeyHint } from './ui/KeyHints';
 
 const PARAGRAPH_REVEAL_MS = 1000;
 
@@ -27,37 +30,56 @@ function useParagraphReveal(paragraphs: string[], key: unknown) {
 
 const splitParagraphs = (text: string) => text.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
 
+/** Short lines in quotes are spoken: set apart in italics. */
+const isSpoken = (paragraph: string) => /^["“'«]/.test(paragraph);
+
 const CutsceneFrame: React.FC<{
     paragraphs: string[];
     visible: number;
     choices: string[];
     selected: number;
-    footer: string;
-}> = ({ paragraphs, visible, choices, selected, footer }) => (
-    <div className="absolute inset-0 bg-black flex items-center justify-center p-4">
-        <div className="w-full max-w-6xl h-full flex flex-col justify-between py-8">
-            <div className="flex-1 flex items-center justify-center overflow-hidden">
-                <div className="border-y-4 border-double border-[var(--border-primary)] py-6 px-4 max-h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                    <div className="text-3xl leading-snug text-center font-mono max-w-5xl mx-auto space-y-6">
+    hints: KeyHint[];
+    page: unknown;
+}> = ({ paragraphs, visible, choices, selected, hints, page }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    }, [visible, choices.length]);
+
+    return (
+        <div className="absolute inset-0 overflow-hidden bg-bg0">
+            <KeyArt variant="night" shade="none" className="opacity-40" />
+            <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 80% at 50% 45%, rgb(var(--c-bg0) / 0.72), rgb(var(--c-bg0) / 0.96))' }} />
+            {/* Letterbox. */}
+            <div className="absolute inset-x-0 top-0 h-[72px] bg-black/80" />
+            <div className="absolute inset-x-0 bottom-0 h-[72px] bg-black/80" />
+
+            <div className="relative flex h-full flex-col items-center px-24 py-[110px]">
+                <div ref={scrollRef} className="scroll-y fade-edges flex w-full max-w-[1080px] flex-1 flex-col">
+                    <div key={String(page)} className="my-auto flex flex-col gap-7 py-10">
                         {paragraphs.slice(0, visible).map((paragraph, index) => (
-                            <p key={index} className="whitespace-pre-wrap">{paragraph}</p>
+                            <p
+                                key={index}
+                                className={`prose-story whitespace-pre-wrap text-center anim-fade-up ${isSpoken(paragraph) ? 'text-[31px] italic text-ember2' : 'text-[30px] text-ink'}`}
+                                style={{ animationDuration: '900ms' }}
+                            >
+                                {paragraph}
+                            </p>
                         ))}
                     </div>
                 </div>
-            </div>
-            {choices.length > 0 && (
-                <div className="mt-6 text-center text-2xl space-y-3 flex-shrink-0">
-                    {choices.map((choice, index) => (
-                        <p key={index} className={index === selected ? 'text-black bg-amber-400 inline-block px-3' : 'text-amber-400'}>
-                            <span className="font-bold">[{index + 1}]</span> {choice}
-                        </p>
-                    ))}
+                {choices.length > 0 && (
+                    <div className="mt-6 w-full max-w-[900px] flex-shrink-0 anim-fade-up">
+                        <ChoiceList items={choices.map((text, index) => ({ id: `${index}-${text}`, label: text }))} selected={selected} numbered size="md" />
+                    </div>
+                )}
+                <div className="mt-6 flex-shrink-0">
+                    <KeyHints hints={hints} />
                 </div>
-            )}
-            <div className="mt-6 text-center text-2xl animate-pulse flex-shrink-0 text-[var(--text-accent)]">{footer}</div>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 /**
  * Cutscene player. Ink cutscenes (the opening) run through NarrativeService;
@@ -69,6 +91,13 @@ const CutsceneScreen: React.FC = () => {
     if (isStoryActive) return <InkCutscene />;
     // A new cutscene always starts from its first page.
     return activeCutscene ? <LegacyCutscene key={activeCutscene.id} cutscene={activeCutscene} /> : null;
+};
+
+const hintsFor = (allVisible: boolean, choices: number): KeyHint[] => {
+    if (!allVisible) return [{ keys: ['INVIO'], label: 'Mostra tutto' }, { keys: ['ESC'], label: 'Salta' }];
+    if (choices > 1) return [{ keys: ['1-9'], label: 'Scegli' }, { keys: ['↑↓', 'INVIO'], label: 'Conferma' }, { keys: ['ESC'], label: 'Salta' }];
+    if (choices === 1) return [{ keys: ['INVIO'], label: 'Conferma', active: true }, { keys: ['ESC'], label: 'Salta' }];
+    return [{ keys: ['INVIO'], label: 'Continua', active: true }, { keys: ['ESC'], label: 'Salta' }];
 };
 
 const InkCutscene: React.FC = () => {
@@ -108,7 +137,8 @@ const InkCutscene: React.FC = () => {
             visible={visible}
             choices={allVisible ? currentChoices.map(c => c.text) : []}
             selected={selected}
-            footer={!allVisible ? '[INVIO] Mostra tutto | [ESC] Salta' : currentChoices.length > 1 ? '[1-9] oppure [↑↓] + [INVIO] Scegli | [ESC] Salta' : '[INVIO] Continua | [ESC] Salta'}
+            hints={hintsFor(allVisible, currentChoices.length)}
+            page={revision}
         />
     );
 };
@@ -182,7 +212,8 @@ const LegacyCutscene: React.FC<{ cutscene: Cutscene }> = ({ cutscene }) => {
             visible={visible}
             choices={allVisible ? choices.map(c => c.text) : []}
             selected={selected}
-            footer={!allVisible ? '[INVIO] Mostra tutto | [ESC] Salta' : choices.length > 0 ? '[1-9] oppure [↑↓] + [INVIO] Scegli | [ESC] Salta' : '[INVIO] Continua | [ESC] Salta'}
+            hints={hintsFor(allVisible, choices.length > 0 ? Math.max(2, choices.length) : 0)}
+            page={pageIndex}
         />
     );
 };

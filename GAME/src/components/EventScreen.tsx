@@ -4,8 +4,12 @@ import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { audioManager } from '../utils/audio';
 import { useEventStore } from '../store/eventStore';
 import { useGameStore } from '../store/gameStore';
+import { useTimeStore } from '../store/timeStore';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { DONOR_NAMES } from '../constants';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
+import BiomeScene from './art/BiomeScene';
 
 /** Random and location events: choices, then the resolution summary. */
 const EventScreen: React.FC = () => {
@@ -13,6 +17,11 @@ const EventScreen: React.FC = () => {
     const inventory = useCharacterStore(state => state.inventory);
     const activeQuests = useCharacterStore(state => state.activeQuests);
     const gameFlags = useGameStore(state => state.gameFlags);
+    const playerPos = useGameStore(state => state.playerPos);
+    const currentBiome = useGameStore(state => state.currentBiome);
+    const getTileInfo = useGameStore(state => state.getTileInfo);
+    const gameTime = useTimeStore(state => state.gameTime);
+    const weather = useTimeStore(state => state.weather);
     const itemDatabase = useItemDatabaseStore(state => state.itemDatabase);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const descriptionBoxRef = useRef<HTMLDivElement>(null);
@@ -36,7 +45,7 @@ const EventScreen: React.FC = () => {
                 const missing = (choice.itemRequirements ?? []).filter(req =>
                     inventory.reduce((sum, item) => (item.itemId === req.itemId ? sum + item.quantity : sum), 0) < req.quantity);
                 const requirement = missing.length > 0
-                    ? ` (Richiede: ${missing.map(req => `${itemDatabase[req.itemId]?.name ?? req.itemId} x${req.quantity}`).join(', ')})`
+                    ? `Richiede: ${missing.map(req => `${itemDatabase[req.itemId]?.name ?? req.itemId} x${req.quantity}`).join(', ')}`
                     : '';
                 return { choice, index, met: missing.length === 0, requirement };
             });
@@ -114,51 +123,57 @@ const EventScreen: React.FC = () => {
     if (!activeEvent) return null;
     // Places change once the player has acted there (the camp is empty, the pump works...).
     const description = [...(activeEvent.variants ?? [])].reverse().find(v => gameFlags.has(v.requiresFlag))?.description ?? activeEvent.description;
+    const biome = getTileInfo(playerPos.x, playerPos.y).char || currentBiome;
+    const banner = <BiomeScene biome={biome} hour={gameTime.hour + gameTime.minute / 60} weather={weather.type} height={210} />;
 
     if (eventResolutionText) {
         return (
-            <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-                <div className="w-full max-w-6xl border-8 border-double border-green-400/50 flex flex-col p-8">
-                    <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">
-                        ═══ ESITO: {activeEvent.title} ═══
-                    </h1>
-                    <div ref={resolutionBoxRef} className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl" style={{ scrollbarWidth: 'none' }}>
-                        <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{fill(eventResolutionText)}</pre>
-                    </div>
-                    <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4 animate-pulse">
-                        [W/S / ↑↓] Scorri | [INVIO] Continua
-                    </div>
+            <Modal
+                backdrop="blur"
+                banner={banner}
+                eyebrow="Esito"
+                icon="check"
+                title={activeEvent.title}
+                size="lg"
+                hints={[{ keys: ['↑↓'], label: 'Scorri' }, { keys: ['INVIO'], label: 'Continua' }]}
+            >
+                <div ref={resolutionBoxRef} className="scroll-y fade-bottom max-h-[460px] px-12 pb-10">
+                    <div className="hairline mb-7" />
+                    <p className="prose-story whitespace-pre-wrap text-[26px] anim-fade-up">{fill(eventResolutionText)}</p>
                 </div>
-            </div>
+            </Modal>
         );
     }
 
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full max-w-6xl border-8 border-double border-green-400/50 flex flex-col p-8">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ {activeEvent.title} ═══</h1>
-                <div ref={descriptionBoxRef} className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl" style={{ scrollbarWidth: 'none' }}>
-                    <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{fill(description)}</pre>
-                </div>
-                <div className="w-full max-w-4xl mx-auto text-4xl space-y-4">
-                    {choices.map(({ choice, met, requirement }, index) => {
-                        const isSelected = index === selectedIndex && met;
-                        return (
-                            <div
-                                key={`${activeEvent.id}-${index}`}
-                                className={`pl-4 py-2 transition-colors duration-100 ${isSelected ? 'bg-green-400 text-black' : met ? 'bg-transparent' : 'text-gray-500'}`}
-                            >
-                                {isSelected && '> '}{choice.text}
-                                {!met && <span className="text-red-500/80 italic">{requirement}</span>}
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="flex-shrink-0 text-center text-3xl mt-10 border-t-4 border-double border-green-400/50 pt-4">
-                    {noSelectableChoice ? '[ESC] Vai oltre' : '[W/S / ↑↓] Seleziona | [PAG↑↓] Scorri | [INVIO] Conferma'}
-                </div>
+        <Modal
+            backdrop="blur"
+            banner={banner}
+            eyebrow="Evento"
+            icon="pin"
+            title={activeEvent.title}
+            size="lg"
+            bodyClassName="flex flex-col"
+            hints={noSelectableChoice
+                ? [{ keys: ['ESC'], label: 'Vai oltre' }]
+                : [{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['PAG SU', 'PAG GIÙ'], label: 'Scorri' }, { keys: ['INVIO'], label: 'Conferma' }]}
+        >
+            <div ref={descriptionBoxRef} className="scroll-y fade-bottom min-h-[90px] flex-shrink px-12">
+                <div className="hairline mb-6" />
+                <p className="prose-story whitespace-pre-wrap pb-4 text-[25px] anim-fade-up">{fill(description)}</p>
             </div>
-        </div>
+            <div className="flex-shrink-0 px-12 pb-8 pt-3">
+                <ChoiceList
+                    selected={selectedIndex}
+                    items={choices.map(({ choice, met, requirement }, index) => ({
+                        id: `${activeEvent.id}-${index}`,
+                        label: choice.text,
+                        disabled: !met,
+                        detail: !met ? requirement : undefined,
+                    }))}
+                />
+            </div>
+        </Modal>
     );
 };
 

@@ -33,11 +33,14 @@ import { useInteractionStore } from './store/interactionStore';
 import { loadAllGameData } from './data/loadAllGameData';
 import { inkStoryData } from './data/inkStoryDatabase';
 import { narrativeService } from './services/NarrativeService';
+import { Emblem } from './components/art/Logo';
+import ScreenBackdrop from './components/ui/ScreenBackdrop';
 
-const THEMES: VisualTheme[] = ['standard', 'crt', 'high_contrast'];
+const THEMES: VisualTheme[] = ['standard', 'high_contrast'];
 
 const App: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
+  const previousGameState = useGameStore((state) => state.previousGameState);
   const setVisualTheme = useGameStore((state) => state.setVisualTheme);
   const isInventoryOpen = useInteractionStore((state) => state.isInventoryOpen);
   const isInRefuge = useInteractionStore((state) => state.isInRefuge);
@@ -77,6 +80,9 @@ const App: React.FC = () => {
   }, []);
 
   const renderContent = () => {
+    // Overlays of the journey keep the game visible (blurred) behind them; options
+    // and saves do the same when they come from the pause menu.
+    const behindMenu = previousGameState === GameState.PAUSE_MENU ? <GameScreen /> : <ScreenBackdrop />;
     switch (gameState) {
       case GameState.INITIAL_BLACK_SCREEN:
       case GameState.PRESENTS_SCREEN:
@@ -90,37 +96,37 @@ const App: React.FC = () => {
       case GameState.STORY_SCREEN:
         return <StoryScreen />;
       case GameState.OPTIONS_SCREEN:
-        return <OptionsScreen />;
+        return <>{behindMenu}<OptionsScreen /></>;
       case GameState.TROPHY_SCREEN:
         return <TrophyScreen />;
       case GameState.SAVE_GAME:
-        return <SaveLoadScreen mode="save" />;
+        return <>{behindMenu}<SaveLoadScreen mode="save" /></>;
       case GameState.LOAD_GAME:
-        return <SaveLoadScreen mode="load" />;
+        return <>{behindMenu}<SaveLoadScreen mode="load" /></>;
       case GameState.CUTSCENE:
         return <CutsceneScreen />;
       case GameState.CHARACTER_CREATION:
         return <CharacterCreationScreen />;
       case GameState.EVENT_SCREEN:
-        return <EventScreen />;
+        return <><GameScreen /><EventScreen /></>;
       case GameState.LEVEL_UP_SCREEN:
-        return <LevelUpScreen />;
+        return <><GameScreen /><LevelUpScreen /></>;
       case GameState.MAIN_STORY:
         return <MainStoryScreen />;
       case GameState.ASH_LULLABY_CHOICE:
-        return <AshLullabyChoiceScreen />;
+        return <><GameScreen /><AshLullabyChoiceScreen /></>;
       case GameState.GAME_OVER:
         return <GameOverScreen />;
       case GameState.VICTORY:
         return <VictoryScreen />;
       case GameState.QUEST_LOG:
-        return <QuestScreen />;
+        return <><GameScreen /><QuestScreen /></>;
       case GameState.OUTPOST:
-        return <OutpostScreen />;
+        return <><GameScreen /><OutpostScreen /></>;
       case GameState.DIALOGUE:
-        return <DialogueScreen />;
+        return <><GameScreen /><DialogueScreen /></>;
       case GameState.TRADING:
-        return <TradeScreen />;
+        return <><GameScreen /><TradeScreen /></>;
       case GameState.COMBAT:
         return (
           <>
@@ -155,24 +161,21 @@ const App: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-black">
-        <div className="text-center">
-          <p className="text-5xl text-[var(--text-primary)] font-bold animate-pulse mb-4">
-            CARICAMENTO...
-          </p>
-          <p className="text-2xl text-[var(--text-secondary)] opacity-70">
-            Inizializzazione database di gioco
-          </p>
+      <div className="flex h-screen w-screen flex-col items-center justify-center gap-6 bg-bg0">
+        <div className="relative">
+          <Emblem size={84} className="text-ink2 anim-breathe" />
+          <div className="absolute -inset-3 rounded-full border-2 border-transparent border-t-ember/70 anim-spin" />
         </div>
+        <p className="eyebrow">Caricamento</p>
       </div>
     );
   }
 
   return (
-    <div className="w-screen h-screen relative bg-black">
+    <div className="relative h-screen w-screen bg-bg0">
       <div
         id="game-container"
-        className="bg-[var(--bg-primary)] overflow-hidden"
+        className="overflow-hidden"
         style={{
           width: '1920px',
           height: '1080px',

@@ -4,6 +4,8 @@ import { GameState, DeathCause } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { handleLoadGame } from '../services/saveGameService';
 import { lastSaveSlot } from '../utils/saveFormat';
+import KeyArt from './art/KeyArt';
+import KeyHints from './ui/KeyHints';
 
 const DEATH_MESSAGES: Record<DeathCause, string> = {
     COMBAT: "Sconfitto in combattimento. La tua guardia non era abbastanza alta.",
@@ -15,32 +17,7 @@ const DEATH_MESSAGES: Record<DeathCause, string> = {
     UNKNOWN: "La tua avventura è giunta al termine."
 };
 
-const ASCII_SKULL = `
-         █████████████████████████
-      ███████████████████████████████
-    ███████████████████████████████████
-   █████████████████████████████████████
-  ███████████████████████████████████████
- █████████████████████████████████████████
- ████████         █████████         ██████
- ███████           ███████           ██████
- ███████           ███████           ██████
- █████████████████████████████████████████
- █████████████████████████████████████████
- ███████████  █████████████  ████████████
-  ██████████  █████████████  ███████████
-   █████████████████████████████████████
-    ███████████████████████████████████
-      █████████████   ██████████████
-        ███████████   ████████████
-          █████           █████
-`;
-
-/**
- * GameOverScreen component.
- * This component renders the game over screen.
- * @returns {JSX.Element} The rendered GameOverScreen component.
- */
+/** The journey ends: an empty road at night, the cause, and a way back. */
 const GameOverScreen: React.FC = () => {
     const { deathCause, setGameState } = useGameStore();
 
@@ -66,25 +43,32 @@ const GameOverScreen: React.FC = () => {
 
     useKeyboardInput(handlerMap);
 
-    const message = isEasterEgg 
-        ? "Sei morto di... MORTE!" 
+    const message = isEasterEgg
+        ? "Sei morto di... MORTE!"
         : DEATH_MESSAGES[deathCause || 'UNKNOWN'];
 
     return (
-        <div className="absolute inset-0 bg-black flex flex-col items-center justify-center p-8 text-red-500">
-            <pre className="text-sm leading-none text-center" style={{ textShadow: '0 0 8px #ef4444' }}>
-                {ASCII_SKULL}
-            </pre>
-            <h1 className="text-8xl text-center font-black tracking-widest uppercase mt-8" style={{ textShadow: '0 0 8px #ef4444' }}>
-                GAME OVER
-            </h1>
-            <p className="text-3xl text-center mt-4 italic text-gray-300">
-                {message}
-            </p>
-            <div className="flex-shrink-0 text-center text-3xl mt-12 pt-4 text-gray-300 animate-pulse space-y-2">
-                <p>[INVIO] Menu Principale</p>
-                {lastSlot && <p>[C] Carica l'ultimo salvataggio (slot {lastSlot})</p>}
-                {loadError && <p className="text-red-400">Impossibile caricare il salvataggio.</p>}
+        <div className="absolute inset-0 overflow-hidden bg-bg0">
+            <KeyArt variant="night" shade="none" />
+            <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 45%, rgba(10,6,8,0.55), rgba(5,4,6,0.92))' }} />
+            <div className="relative flex h-full flex-col items-center justify-center px-20 text-center">
+                <div className="eyebrow text-danger anim-fade-in" style={{ letterSpacing: '0.5em' }}>Game over</div>
+                <h1 className="title-display mt-6 text-[120px] italic text-ink anim-fade-up" style={{ fontWeight: 500 }}>
+                    Il viaggio finisce qui
+                </h1>
+                <div className="my-10 h-px w-40 bg-danger/60 anim-fade-in" />
+                <p className="prose-story max-w-[1000px] text-[30px] italic text-ink2 anim-fade-up" style={{ animationDelay: '400ms' }}>
+                    {message}
+                </p>
+                <div className="mt-16 anim-fade-in" style={{ animationDelay: '900ms' }}>
+                    <KeyHints
+                        hints={[
+                            { keys: ['INVIO'], label: 'Menu principale' },
+                            ...(lastSlot ? [{ keys: ['C'], label: `Carica l'ultimo salvataggio (slot ${lastSlot})`, active: true }] : []),
+                        ]}
+                    />
+                    {loadError && <p className="mt-4 text-[20px] text-danger">Impossibile caricare il salvataggio.</p>}
+                </div>
             </div>
         </div>
     );

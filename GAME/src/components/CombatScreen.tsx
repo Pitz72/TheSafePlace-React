@@ -4,7 +4,14 @@ import { useKeyboardInput, KeyHandlerMap } from '../hooks/useKeyboardInput';
 import { PlayerCombatActionPayload, SpecialAmmoType, Stat } from '../types';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { useCombatStore, isCombatUsable, SPECIAL_AMMO_ITEMS, SPECIAL_AMMO_NAMES } from '../store/combatStore';
+import { useTimeStore } from '../store/timeStore';
 import { audioManager } from '../utils/audio';
+import { harmonize } from '../utils/palette';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
+import Icon, { IconName } from './ui/Icon';
+import { StatMeter } from './ui/Meter';
+import BiomeScene from './art/BiomeScene';
 
 const getEnemyHealthDescription = (hp: Stat): string => {
     const ratio = hp.current / hp.max;
@@ -15,9 +22,29 @@ const getEnemyHealthDescription = (hp: Stat): string => {
     return 'Sconfitto';
 };
 
+/** How many of the four health segments are still lit (same steps as the description). */
+const enemyHealthSegments = (hp: Stat): number => {
+    const ratio = hp.current / hp.max;
+    if (ratio > 0.9) return 4;
+    if (ratio > 0.6) return 3;
+    if (ratio > 0.3) return 2;
+    if (ratio > 0) return 1;
+    return 0;
+};
+
 type MenuEntry =
     | { kind: 'action'; name: string; payload: PlayerCombatActionPayload }
     | { kind: 'items'; name: string };
+
+const ACTION_ICONS: Record<PlayerCombatActionPayload['type'], IconName> = {
+    attack: 'attack',
+    analyze: 'eye',
+    tactic: 'sparkle',
+    environmental: 'tree',
+    load_special_ammo: 'bolt',
+    use_item: 'flask',
+    flee: 'flee',
+};
 
 const FIREARM_AMMO = new Set(['ammo_9mm', 'ammo_rifle', 'ammo_shotgun']);
 
@@ -27,6 +54,8 @@ const CombatScreen: React.FC = () => {
     const inventory = useCharacterStore(state => state.inventory);
     const equippedWeapon = useCharacterStore(state => state.equippedWeapon);
     const itemDatabase = useItemDatabaseStore(state => state.itemDatabase);
+    const gameTime = useTimeStore(state => state.gameTime);
+    const weather = useTimeStore(state => state.weather);
 
     const [menuIndex, setMenuIndex] = useState(0);
     const [isItemMenuOpen, setIsItemMenuOpen] = useState(false);
@@ -129,78 +158,162 @@ const CombatScreen: React.FC = () => {
 
     if (!activeCombat) return null;
 
+    const hour = gameTime.hour + gameTime.minute / 60;
+
     if (activeCombat.victory) {
         // Everything logged from the killing blow on: XP and loot.
         const summary = activeCombat.log.slice(activeCombat.victoryLogStart ?? Math.max(0, activeCombat.log.length - 4));
         return (
-            <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-                <div className="w-full h-full max-w-7xl border-8 border-double border-[var(--text-danger)]/50 flex flex-col p-6 items-center justify-center">
-                    <h2 className="text-6xl text-[var(--text-accent)] mb-8 animate-pulse">VITTORIA</h2>
-                    <div className="text-3xl text-[var(--text-primary)] space-y-3 mb-12 text-center max-h-[60%] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+            <Modal
+                accent="gold"
+                banner={<BiomeScene biome={activeCombat.biome ?? '.'} hour={hour} weather={weather.type} height={190} />}
+                eyebrow="Combattimento concluso"
+                icon="trophy"
+                title="Vittoria"
+                subtitle={`${activeCombat.enemy.name} non è più una minaccia.`}
+                size="md"
+                hints={[{ keys: ['INVIO'], label: 'Continua', active: true }]}
+            >
+                <div className="scroll-y fade-bottom max-h-[420px] px-12 pb-10">
+                    <div className="hairline mb-6" />
+                    <div className="flex flex-col gap-3">
                         {summary.map((entry, index) => (
-                            <p key={index} style={{ color: entry.color }}>{entry.text}</p>
+                            <p
+                                key={index}
+                                className="prose-story text-[24px] anim-fade-up"
+                                style={{ color: harmonize(entry.color, 'ink'), animationDelay: `${index * 140}ms` }}
+                            >
+                                {entry.text}
+                            </p>
                         ))}
                     </div>
-                    <p className="text-4xl animate-pulse">[INVIO] per continuare</p>
                 </div>
-            </div>
+            </Modal>
         );
     }
 
+    const segments = enemyHealthSegments(activeCombat.enemyHp);
+    const log = activeCombat.log;
+    const hpCritical = hp.current / hp.max <= 0.25;
+
     return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full h-full max-w-7xl border-8 border-double border-[var(--text-danger)]/50 flex flex-col p-6">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-4 text-[var(--text-danger)]" style={{ textShadow: '0 0 8px var(--text-danger)' }}>
-                    ═══ COMBATTIMENTO ═══
-                </h1>
-                <div className="flex-grow flex space-x-6 overflow-hidden">
-                    <div ref={combatLogRef} className="w-3/5 h-full border-2 border-[var(--border-primary)] p-4 bg-black/30 overflow-y-auto text-3xl" style={{ scrollbarWidth: 'none' }}>
-                        {activeCombat.log.map((entry, index) => (
-                            <p key={index} style={{ color: entry.color || 'var(--text-secondary)' }} className="mb-1">{`> ${entry.text}`}</p>
-                        ))}
-                        {!activeCombat.playerTurn && <span className="animate-cursor-blink text-4xl">_</span>}
+        <Modal
+            accent="danger"
+            banner={<BiomeScene biome={activeCombat.biome ?? '.'} hour={hour} weather={weather.type} danger height={160} />}
+            eyebrow="Combattimento"
+            icon="attack"
+            title={activeCombat.enemy.name}
+            size="xl"
+            className="h-full"
+            bodyClassName="flex gap-6 px-12 pb-8"
+            hints={!activeCombat.playerTurn
+                ? [{ keys: ['…'], label: 'Turno del nemico', muted: true }]
+                : isItemMenuOpen
+                    ? [{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Usa' }, { keys: ['ESC'], label: 'Indietro' }]
+                    : [{ keys: ['↑↓'], label: 'Scegli' }, { keys: ['INVIO'], label: 'Conferma' }]}
+        >
+            {/* The fight as it unfolds, newest at the bottom. */}
+            <div className="surface-flat flex min-h-0 w-3/5 flex-col">
+                <div className="eyebrow flex items-center gap-2 px-7 pb-2 pt-5"><Icon name="scroll" size={16} /> Cronaca dello scontro</div>
+                <div ref={combatLogRef} className="scroll-y fade-edges min-h-0 flex-1 px-7 pb-6">
+                    <div className="flex flex-col gap-3 pt-3">
+                        {log.map((entry, index) => {
+                            const age = log.length - 1 - index;
+                            return (
+                                <p
+                                    key={index}
+                                    className={`prose-story text-[22px] leading-[1.5] ${age === 0 ? 'anim-fade-up' : ''}`}
+                                    style={{ color: harmonize(entry.color, 'ink2'), opacity: Math.max(0.45, 1 - age * 0.08) }}
+                                >
+                                    {entry.text}
+                                </p>
+                            );
+                        })}
+                        {!activeCombat.playerTurn && (
+                            <p className="flex items-center gap-2 text-[19px] italic text-ink3">
+                                <span className="anim-breathe">Il nemico si muove</span>
+                                <span className="anim-caret">…</span>
+                            </p>
+                        )}
                     </div>
-                    <div className="w-2/5 h-full flex flex-col border-2 border-[var(--border-primary)] p-4">
-                        <div className="border-b-2 border-[var(--text-danger)]/30 pb-2 mb-2 text-3xl space-y-1">
-                            <div className="flex justify-between"><span>TU:</span> <span className="font-bold">{hp.current}/{hp.max} HP</span></div>
-                            <div className="flex justify-between"><span>{activeCombat.enemy.name}:</span> <span className="font-bold">{getEnemyHealthDescription(activeCombat.enemyHp)}</span></div>
-                            <div className="flex justify-between text-2xl opacity-80">
-                                <span>Arma:</span>
-                                <span>{weaponDetails ? weaponDetails.name : 'A mani nude'}{ammoId ? ` (${ammoCount} colpi)` : ''}</span>
-                            </div>
-                            {activeCombat.specialAmmoActive && (
-                                <div className="text-2xl text-amber-400">Munizioni {SPECIAL_AMMO_NAMES[activeCombat.specialAmmoActive]}: {activeCombat.specialAmmoRounds}</div>
-                            )}
-                            {activeCombat.enemyBurning && <div className="text-2xl text-orange-400">Il nemico brucia ({activeCombat.enemyBurningTurns})</div>}
-                            {(activeCombat.enemyStunnedTurns ?? 0) > 0 && <div className="text-2xl text-cyan-300">Il nemico è bloccato</div>}
-                        </div>
-                        <h2 className="text-3xl mb-2">{isItemMenuOpen ? 'OGGETTI:' : 'AZIONI:'}</h2>
-                        <div className="grid grid-cols-1 gap-y-2 text-3xl mt-auto overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                            {isItemMenuOpen
-                                ? usableItems.map((item, index) => {
-                                    const isSelected = index === itemMenuIndex;
-                                    return (
-                                        <div key={item.itemId} className={`${isSelected ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''} pl-2`}>
-                                            {isSelected ? '> ' : ''}{itemDatabase[item.itemId]?.name ?? item.itemId} x{item.quantity}
-                                        </div>
-                                    );
-                                })
-                                : menu.map((entry, index) => {
-                                    const isSelected = index === menuIndex && activeCombat.playerTurn;
-                                    return (
-                                        <div key={entry.name} className={`${isSelected ? 'bg-[var(--highlight-bg)] text-[var(--highlight-text)]' : ''} ${!activeCombat.playerTurn ? 'text-[var(--text-secondary)]/50' : ''} pl-2`}>
-                                            {isSelected ? '> ' : ''}{entry.name}
-                                        </div>
-                                    );
-                                })}
-                        </div>
-                    </div>
-                </div>
-                <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-[var(--border-primary)] pt-3">
-                    {isItemMenuOpen ? '[↑↓] Seleziona | [INVIO] Usa | [ESC] Indietro' : '[↑↓] Naviga | [INVIO] Conferma'}
                 </div>
             </div>
-        </div>
+
+            <div className="flex min-h-0 w-2/5 flex-col gap-4">
+                {/* You and the enemy. */}
+                <div className="surface-flat flex flex-col gap-4 px-6 py-5">
+                    <StatMeter icon="heart" label="Tu" value={hp.current} max={hp.max} tone="sage" critical={hpCritical} />
+                    <div className="flex items-center gap-2.5 text-[18px] text-ink2">
+                        <Icon name="weapon" size={20} className="text-ink3" />
+                        <span className="min-w-0 flex-1 truncate">{weaponDetails ? weaponDetails.name : 'A mani nude'}</span>
+                        {ammoId && <span className="chip text-ink2">{ammoCount} colpi</span>}
+                    </div>
+                    {(activeCombat.specialAmmoActive || activeCombat.enemyBurning || (activeCombat.enemyStunnedTurns ?? 0) > 0) && (
+                        <div className="flex flex-wrap gap-2">
+                            {activeCombat.specialAmmoActive && (
+                                <span className="chip text-gold">Munizioni {SPECIAL_AMMO_NAMES[activeCombat.specialAmmoActive]}: {activeCombat.specialAmmoRounds}</span>
+                            )}
+                            {activeCombat.enemyBurning && <span className="chip text-ember">Il nemico brucia ({activeCombat.enemyBurningTurns})</span>}
+                            {(activeCombat.enemyStunnedTurns ?? 0) > 0 && <span className="chip text-teal">Il nemico è bloccato</span>}
+                        </div>
+                    )}
+                    <div className="hairline" />
+                    <div>
+                        <div className="mb-2 flex items-center gap-2.5">
+                            <Icon name="skull" size={20} className="text-danger" />
+                            <span className="min-w-0 flex-1 truncate text-[18px] text-ink2">{activeCombat.enemy.name}</span>
+                            <span className="text-[18px] font-semibold text-ink">{getEnemyHealthDescription(activeCombat.enemyHp)}</span>
+                        </div>
+                        <div className="flex gap-1.5">
+                            {[0, 1, 2, 3].map(i => (
+                                <span
+                                    key={i}
+                                    className="h-1.5 flex-1 rounded-full transition-colors duration-500"
+                                    style={{ background: i < segments ? 'rgb(var(--c-danger))' : 'rgb(var(--c-ink4) / 0.35)', boxShadow: i < segments ? '0 0 10px rgb(var(--c-danger) / 0.45)' : undefined }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* What to do. */}
+                <div className="flex min-h-0 flex-1 flex-col">
+                    <div className="eyebrow mb-2 flex items-center gap-2">
+                        {isItemMenuOpen ? <><Icon name="flask" size={16} /> Oggetti</> : <><Icon name="attack" size={16} /> Azioni</>}
+                    </div>
+                    <div className="scroll-y min-h-0 flex-1">
+                        {isItemMenuOpen ? (
+                            <ChoiceList
+                                size="sm"
+                                selected={itemMenuIndex}
+                                active={activeCombat.playerTurn}
+                                items={usableItems.map(item => ({
+                                    id: item.itemId,
+                                    icon: 'flask',
+                                    label: itemDatabase[item.itemId]?.name ?? item.itemId,
+                                    meta: `×${item.quantity}`,
+                                }))}
+                            />
+                        ) : (
+                            <ChoiceList
+                                size="sm"
+                                selected={menuIndex}
+                                active={activeCombat.playerTurn}
+                                items={menu.map(entry => {
+                                    const environmental = entry.kind === 'action' && entry.payload.type === 'environmental';
+                                    return {
+                                        id: entry.name,
+                                        icon: entry.kind === 'items' ? 'flask' : ACTION_ICONS[entry.payload.type],
+                                        label: environmental ? entry.name.replace('[Ambiente] ', '') : entry.name,
+                                        meta: environmental ? 'Ambiente' : undefined,
+                                    };
+                                })}
+                            />
+                        )}
+                    </div>
+                </div>
+            </div>
+        </Modal>
     );
 };
 

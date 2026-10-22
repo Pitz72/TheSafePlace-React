@@ -1,10 +1,12 @@
 # The Safe Place Chronicles: The Echo of the Journey
 
-![version](https://img.shields.io/badge/gioco-v2.1.0-blue.svg)
+![version](https://img.shields.io/badge/gioco-v3.0.0-blue.svg)
 ![platform](https://img.shields.io/badge/desktop-Windows%20%7C%20macOS%20%7C%20Linux-informational.svg)
 ![status](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 
-Un **GDR testuale di sopravvivenza** post-apocalittico in estetica retrocomputazionale anni '80. Il giocatore — *Ultimo* — attraversa una mappa devastata per raggiungere il **Safe Place**, gestendo risorse, incontri, combattimenti e scelte morali, mentre gli "Echi della Memoria" svelano il suo passato fino al confronto finale.
+Un **gioco di ruolo narrativo di sopravvivenza** in un'Europa post-apocalittica. Il giocatore — *Ultimo* — attraversa una mappa devastata per raggiungere il **Safe Place**, gestendo risorse, incontri, combattimenti e scelte morali, mentre gli "Echi della Memoria" svelano il suo passato fino al confronto finale.
+
+Dalla **3.0** il gioco ha un'identità visiva nuova, disegnata da zero: illustrazioni vettoriali al crepuscolo, una mappa del mondo dipinta in tempo reale con luce del giorno e meteo, un'interfaccia da gioco narrativo moderno. Nessun terminale, nessun CRT, nessun pixel.
 
 Progetto di **Simone Pizzi** / **Runtime Radio**, nato come esperimento sul portare in fondo un videogioco non banale con l'aiuto di un LLM.
 
@@ -31,13 +33,13 @@ Gli installer per Windows, macOS e Linux vengono prodotti dalla GitHub Action **
 | [`GAME/`](./GAME) | Il gioco — React 19 + TypeScript + Zustand + Ink, impacchettato come app desktop con Electron |
 | [`SITO/`](./SITO) | Sito web di presentazione (progetto separato) |
 | [`GDD/`](./GDD) | Game Design Document completo e agnostico dal motore — la "bibbia" del design |
-| [`COVER-UFFICIALE/`](./COVER-UFFICIALE) | Immagini di copertina ufficiali |
+| [`COVER-UFFICIALE/`](./COVER-UFFICIALE) | Copertine, poster, key art e icona ufficiali, con la direzione artistica e i prompt per i generatori di immagini |
 
 ---
 
 ## 🎮 Il gioco (`GAME/`)
 
-**Stack**: React 19 · TypeScript 5.8 · Vite 6 · Zustand 5 · [Ink](https://www.inklestudios.com/ink/) (narrativa) · Tailwind CSS · rendering mappa su HTML Canvas · packaging [Electron](https://www.electronjs.org/) + electron-builder.
+**Stack**: React 19 · TypeScript 5.8 · Vite 6 · Zustand 5 · [Ink](https://www.inklestudios.com/ink/) (narrativa) · Tailwind CSS · mappa illustrata su HTML Canvas e grafica vettoriale SVG · packaging [Electron](https://www.electronjs.org/) + electron-builder.
 
 ### Eseguire da sorgente (sviluppo)
 
@@ -82,7 +84,7 @@ Dettagli sull'architettura e su come aggiungere contenuti: [`GAME/README.md`](./
 ## 🤖 CI e release (GitHub Actions)
 
 - [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) gira a ogni push e pull request che tocca `GAME/`: storia Ink compilata e aggiornata, `npm run check` e build.
-- [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=2.1.0`):
+- [`.github/workflows/release.yml`](./.github/workflows/release.yml) si avvia **manualmente** (Actions → *Release (Win/Mac/Linux)* → *Run workflow*, oppure `gh workflow run release.yml -f version=3.0.0`):
   1. verifica che la versione richiesta coincida con `GAME/package.json` ed esegue gli stessi controlli della CI;
   2. builda il gioco su runner **Windows, macOS e Linux** in parallelo e impacchetta gli installer con electron-builder;
   3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.
@@ -98,4 +100,5 @@ La cartella [`GDD/`](./GDD) contiene 10 documenti che coprono ogni aspetto del p
 ## 📜 Crediti & licenza
 
 Progettato e realizzato da **Simone Pizzi**. Produzione **Runtime Radio**.
+Font inclusi nel gioco: Barlow, Barlow Condensed, Cormorant Garamond e Literata (SIL Open Font License, vedi `GAME/src/assets/fonts/OFL.txt`).
 © Runtime Radio 2025 — tutti i diritti riservati. Repository pubblico a scopo dimostrativo e di trasparenza sullo sviluppo.

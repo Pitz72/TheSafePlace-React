@@ -7,30 +7,23 @@ import { Recipe } from '../types';
 import { useInteractionStore } from '../store/interactionStore';
 import { craftingService } from '../services/CraftingService';
 import { SKILL_LABELS } from '../constants';
+import Modal from './ui/Modal';
+import Icon from './ui/Icon';
+import ChoiceList from './ui/ChoiceList';
+import { harmonize } from '../utils/palette';
 
-/**
- * DetailLine component.
- * This component renders a line of detail with a label and a value.
- * @param {object} props - The props for the component.
- * @param {string} props.label - The label for the detail.
- * @param {React.ReactNode} props.value - The value for the detail.
- * @param {string} [props.color] - The color of the value.
- * @returns {JSX.Element} The rendered DetailLine component.
- */
-const DetailLine: React.FC<{ label: string, value: React.ReactNode, color?: string }> = ({ label, value, color }) => (
-    <div className="flex">
-        <span className="w-48 flex-shrink-0 opacity-70">{label}:</span>
-        <span style={{ color }}>{value}</span>
+/** One requirement of the recipe: label on the left, value on the right. */
+const Requirement: React.FC<{ label: string, value: React.ReactNode, icon: 'dice' | 'hourglass' }> = ({ label, value, icon }) => (
+    <div className="flex items-center gap-3 rounded-xl border border-line bg-white/[0.025] px-4 py-3">
+        <Icon name={icon} size={22} className="text-ink3" />
+        <div className="min-w-0">
+            <div className="font-cond text-[15px] font-semibold uppercase tracking-[0.18em] text-ink4">{label}</div>
+            <div className="text-[20px] leading-snug text-ink">{value}</div>
+        </div>
     </div>
 );
 
-/**
- * RecipeDetails component.
- * This component renders the details of a selected recipe.
- * @param {object} props - The props for the component.
- * @param {Recipe | null} props.recipe - The recipe to display details for.
- * @returns {JSX.Element} The rendered RecipeDetails component.
- */
+/** Details of the selected recipe: skill check, time, ingredients and results. */
 const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     const { itemDatabase } = useItemDatabaseStore();
     const inventory = useCharacterStore(state => state.inventory);
@@ -38,44 +31,59 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
 
     if (!recipe) {
         return (
-            <div className="h-full flex items-center justify-center text-green-400/50 text-3xl">
-                Seleziona una ricetta per vederne i dettagli.
+            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+                <Icon name="hammer" size={48} strokeWidth={1.3} className="text-ink4" />
+                <p className="prose-story text-[22px] italic text-ink3">Seleziona una ricetta per vederne i dettagli.</p>
             </div>
         );
     }
 
+    const bonus = useCharacterStore.getState().getSkillBonus(recipe.skill);
+
     return (
-        <div className="space-y-4 text-3xl h-full flex flex-col">
-            <h3 className="text-4xl font-bold mb-2 pb-2 border-b-2 border-green-400/20" style={{ color: '#a78bfa', textShadow: `0 0 8px #a78bfa` }}>
-                {recipe.name}
-            </h3>
-            <p className="text-green-400/80 italic flex-grow h-24 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                {recipe.description}
-            </p>
-            <div className="flex-shrink-0 space-y-3 pt-4 border-t-2 border-green-400/20">
-                <DetailLine label="Abilità Richiesta" value={`${SKILL_LABELS[recipe.skill] ?? recipe.skill} (CD ${recipe.dc}, tuo bonus ${useCharacterStore.getState().getSkillBonus(recipe.skill) >= 0 ? '+' : ''}${useCharacterStore.getState().getSkillBonus(recipe.skill)})`} />
-                <DetailLine label="Tempo Richiesto" value={`${craftingService.getTimeCost(recipe)} minuti`} />
-                <div className="pt-2">
-                    <span className="w-48 flex-shrink-0 opacity-70">Ingredienti:</span>
-                    <ul className="ml-6 space-y-1">
+        <div key={recipe.id} className="flex h-full flex-col anim-fade-in">
+            <h3 className="title-display text-[46px] text-ink">{recipe.name}</h3>
+            <p className="prose-story scroll-y mt-3 max-h-[120px] text-[21px] italic text-ink2">{recipe.description}</p>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+                <Requirement icon="dice" label="Abilità richiesta" value={<>{SKILL_LABELS[recipe.skill] ?? recipe.skill} <span className="text-ink3">· CD {recipe.dc} · tuo bonus {bonus >= 0 ? '+' : ''}{bonus}</span></>} />
+                <Requirement icon="hourglass" label="Tempo richiesto" value={`${craftingService.getTimeCost(recipe)} minuti`} />
+            </div>
+
+            <div className="hairline my-6" />
+
+            <div className="grid min-h-0 flex-1 grid-cols-2 gap-8">
+                <div className="min-h-0">
+                    <div className="eyebrow mb-3">Ingredienti</div>
+                    <ul className="flex flex-col gap-2">
                         {recipe.ingredients.map(ing => {
                             const item = itemDatabase[ing.itemId];
                             const have = owned(ing.itemId);
+                            const enough = have >= ing.quantity;
                             return (
-                                <li key={ing.itemId} style={{ color: have >= ing.quantity ? item?.color : '#ef4444' }}>
-                                    - {item?.name || ing.itemId} x{ing.quantity} <span className="opacity-70">(hai {have})</span>
+                                <li key={ing.itemId} className="flex items-center gap-3 text-[20px]">
+                                    <Icon name={enough ? 'check' : 'close'} size={18} strokeWidth={2.4} className={enough ? 'text-sage' : 'text-danger'} />
+                                    <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ background: harmonize(item?.color) }} />
+                                    <span className={`min-w-0 flex-1 truncate ${enough ? 'text-ink' : 'text-ink3'}`}>{item?.name || ing.itemId}</span>
+                                    <span className={`tnum text-[18px] ${enough ? 'text-ink2' : 'text-danger'}`}>{have}/{ing.quantity}</span>
                                 </li>
                             );
                         })}
                     </ul>
                 </div>
-                <div className="pt-2">
-                    <span className="w-48 flex-shrink-0 opacity-70">Risultato:</span>
-                    <ul className="ml-6 space-y-1">
-                        {recipe.results?.map(result => {
+                <div className="min-h-0">
+                    <div className="eyebrow mb-3">Risultato</div>
+                    <ul className="flex flex-col gap-2">
+                        {recipe.results?.length ? recipe.results.map(result => {
                             const item = itemDatabase[result.itemId];
-                            return <li key={result.itemId} style={{ color: item?.color }}>- {item?.name || result.itemId} x{result.quantity}</li>
-                        }) || <li className="opacity-50">Nessun risultato</li>}
+                            return (
+                                <li key={result.itemId} className="flex items-center gap-3 text-[20px]">
+                                    <Icon name="sparkle" size={18} className="text-ember2" />
+                                    <span className="min-w-0 flex-1 truncate text-ink" style={{ color: harmonize(item?.color, 'ink') }}>{item?.name || result.itemId}</span>
+                                    <span className="tnum text-[18px] text-ink2">×{result.quantity}</span>
+                                </li>
+                            );
+                        }) : <li className="text-[20px] italic text-ink4">Nessun risultato</li>}
                     </ul>
                 </div>
             </div>
@@ -83,12 +91,7 @@ const RecipeDetails: React.FC<{ recipe: Recipe | null }> = ({ recipe }) => {
     );
 };
 
-/**
- * CraftingScreen component.
- * This component renders the crafting screen.
- * @returns {JSX.Element} The rendered CraftingScreen component.
- */
-
+/** The workbench of a refuge: known recipes and what each one needs. */
 const CraftingScreen: React.FC = () => {
     const { toggleCrafting, craftingMenuState, navigateCraftingMenu, performCrafting } = useInteractionStore();
     const { selectedIndex } = craftingMenuState;
@@ -138,45 +141,47 @@ const CraftingScreen: React.FC = () => {
 
     useKeyboardInput(handlerMap);
 
-    return (
-        <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-            <div className="w-full h-full border-8 border-double border-green-400/50 flex flex-col p-6">
-                <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6">═══ BANCO DI LAVORO ═══</h1>
-                <div className="flex-grow flex space-x-6 overflow-hidden">
-                    {/* Recipe List */}
-                    <div className="w-2/5 h-full border-2 border-green-400/30 p-2 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                        {displayableRecipes.length > 0 ? (
-                            <ul className="space-y-2 text-4xl">
-                                {displayableRecipes.map((recipe, index) => {
-                                    const isSelected = index === selectedIndex;
-                                    const isCraftable = craftableStatus[index];
-                                    const color = isCraftable ? '#ffffff' : '#6b7280';
+    const craftableCount = craftableStatus.filter(Boolean).length;
 
-                                    return (
-                                        <li
-                                            key={recipe.id}
-                                            className={`pl-4 py-1 ${isSelected ? 'bg-green-400 text-black' : ''}`}
-                                            style={{ color: isSelected ? undefined : color }}
-                                        >
-                                            {isSelected && '> '}{recipe.name}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        ) : (
-                            <div className="text-green-400/50 text-4xl text-center h-full flex items-center justify-center">-- Nessuna Ricetta Conosciuta --</div>
-                        )}
-                    </div>
-                    {/* Recipe Details */}
-                    <div className="w-3/5 h-full border-2 border-green-400/30 p-4">
-                        <RecipeDetails recipe={selectedRecipe} />
-                    </div>
+    return (
+        <Modal
+            eyebrow="Rifugio"
+            icon="hammer"
+            title="Banco di lavoro"
+            subtitle={displayableRecipes.length > 0 ? `${displayableRecipes.length} ricette conosciute · ${craftableCount} realizzabili ora` : 'Le ricette si imparano leggendo i manuali.'}
+            size="xl"
+            className="h-full"
+            hints={[
+                { keys: ['↑↓'], label: 'Seleziona' },
+                { keys: ['INVIO'], label: 'Crea', muted: !(selectedRecipe && craftableStatus[selectedIndex]) },
+                { keys: ['ESC'], label: 'Chiudi' },
+            ]}
+        >
+            <div className="flex h-full gap-6 px-12 pb-8">
+                <div className="scroll-y fade-edges w-[40%] flex-shrink-0 py-2 pr-1">
+                    {displayableRecipes.length > 0 ? (
+                        <ChoiceList
+                            size="md"
+                            selected={selectedIndex}
+                            items={displayableRecipes.map((recipe, index) => ({
+                                id: recipe.id,
+                                label: <span className={craftableStatus[index] ? '' : 'text-ink3'}>{recipe.name}</span>,
+                                icon: craftableStatus[index] ? 'hammer' : 'lock',
+                                meta: craftableStatus[index] ? <span className="text-sage">Pronta</span> : <span className="text-ink4">Mancano materiali</span>,
+                            }))}
+                        />
+                    ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+                            <Icon name="book" size={44} strokeWidth={1.3} className="text-ink4" />
+                            <p className="prose-story text-[22px] italic text-ink3">Nessuna ricetta conosciuta.</p>
+                        </div>
+                    )}
                 </div>
-                <div className="flex-shrink-0 text-center text-3xl mt-6 border-t-4 border-double border-green-400/50 pt-3">
-                    [W/S / ↑↓] Seleziona | [INVIO] Crea | [ESC] Chiudi
+                <div className="surface-flat min-w-0 flex-1 overflow-hidden px-9 py-8">
+                    <RecipeDetails recipe={selectedRecipe} />
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 };
 

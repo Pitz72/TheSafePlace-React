@@ -3,9 +3,32 @@ import { useNarrativeStore } from '../store/narrativeStore';
 import { useKeyboardInput, KeyHandlerMap } from '../hooks/useKeyboardInput';
 import { narrativeService } from '../services/NarrativeService';
 import { audioManager } from '../utils/audio';
+import { Tone, toneColor } from '../utils/palette';
+import { PORTRAITS } from '../assets/art';
+import Modal from './ui/Modal';
+import ChoiceList from './ui/ChoiceList';
 
 const FALLBACK_SPEAKER = 'Sconosciuto';
 const TYPING_SPEED_MS = 10;
+
+const AVATAR_TONES: Tone[] = ['ember', 'teal', 'sage', 'violet', 'gold', 'lena', 'elian'];
+
+/** The speaker's portrait, or their initial in a colored ring (always the same color for a name). */
+const SpeakerAvatar: React.FC<{ name: string }> = ({ name }) => {
+  const portrait = PORTRAITS[name.toLowerCase()];
+  const tone = AVATAR_TONES[[...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % AVATAR_TONES.length];
+  const color = toneColor(tone);
+  return (
+    <span
+      className="relative flex h-[76px] w-[76px] flex-shrink-0 items-center justify-center overflow-hidden rounded-full"
+      style={{ boxShadow: `0 0 0 2px ${color}, 0 0 0 7px ${toneColor(tone, 0.15)}, 0 12px 30px -10px ${toneColor(tone, 0.7)}`, background: `radial-gradient(circle at 35% 30%, ${toneColor(tone, 0.35)}, rgb(var(--c-bg1)) 75%)` }}
+    >
+      {portrait
+        ? <img src={portrait} alt="" className="h-full w-full object-cover" />
+        : <span className="title-display text-[44px] leading-none" style={{ color }}>{name.charAt(0).toUpperCase()}</span>}
+    </span>
+  );
+};
 
 /** Ink dialogue with an NPC: typewriter text and numbered choices. */
 const DialogueScreen: React.FC = () => {
@@ -67,35 +90,46 @@ const DialogueScreen: React.FC = () => {
 
   useKeyboardInput(handlerMap);
 
+  const speaker = currentSpeaker || FALLBACK_SPEAKER;
+
   return (
-    <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-      <div className="w-full max-w-6xl max-h-full border-8 border-double border-amber-600/50 flex flex-col p-8 bg-black/80">
-        <h1 className="text-center mb-6 text-6xl font-bold tracking-widest uppercase text-amber-500">
-          ═══ {(currentSpeaker || FALLBACK_SPEAKER).toUpperCase()} ═══
-        </h1>
-        <div ref={textRef} className="min-h-[200px] max-h-[440px] overflow-y-auto mb-8 p-6 border-2 border-amber-600/30 bg-amber-950/20" style={{ scrollbarWidth: 'none' }}>
-          <p className="text-3xl text-amber-100 leading-relaxed whitespace-pre-wrap">
-            {currentText.slice(0, shownChars)}
-            {isTyping && <span className="animate-pulse">▮</span>}
-          </p>
-        </div>
-        {!isTyping && (
-          <div className="space-y-3 mb-6">
-            {currentChoices.map((option, index) => (
-              <div key={`${revision}-${index}`} className={`text-3xl pl-4 py-2 border-l-4 ${index === selected ? 'border-amber-500 bg-amber-500/20 text-amber-100' : 'border-transparent text-amber-300'}`}>
-                <span className="text-amber-500 font-bold">[{index + 1}]</span> {option.text}
-              </div>
-            ))}
-            {currentChoices.length === 0 && (
-              <div className="text-3xl text-amber-300/50 italic text-center mt-4">(Premi ESC per chiudere)</div>
-            )}
-          </div>
-        )}
-        <div className="flex-shrink-0 text-center text-2xl mt-auto border-t-4 border-double border-amber-600/50 pt-4 text-amber-400/70">
-          {isTyping ? '[SPAZIO/INVIO] Mostra tutto' : '[1-9] oppure [↑↓] + [INVIO] Scegli'}
-        </div>
+    <Modal
+      backdrop="blur"
+      accent="ember"
+      eyebrow="Dialogo"
+      icon="chat"
+      title={<span className="flex items-center gap-6"><SpeakerAvatar name={speaker} />{speaker}</span>}
+      size="lg"
+      bodyClassName="flex flex-col"
+      hints={isTyping
+        ? [{ keys: ['SPAZIO', 'INVIO'], label: 'Mostra tutto' }]
+        : currentChoices.length > 0
+          ? [{ keys: ['1-9'], label: 'Scegli' }, { keys: ['↑↓'], label: 'Seleziona' }, { keys: ['INVIO'], label: 'Conferma' }]
+          : [{ keys: ['ESC'], label: 'Chiudi' }]}
+    >
+      <div ref={textRef} className="scroll-y fade-edges min-h-[160px] flex-shrink px-12">
+        <div className="hairline mb-6" />
+        <p className="prose-story whitespace-pre-wrap pb-4 text-[26px]">
+          {currentText.slice(0, shownChars)}
+          {isTyping && <span className="anim-caret ml-0.5 inline-block h-[0.9em] w-[3px] translate-y-[0.12em] bg-ember" />}
+        </p>
       </div>
-    </div>
+      <div className="min-h-[72px] flex-shrink-0 px-12 pb-8 pt-3">
+        {!isTyping && (
+          currentChoices.length > 0 ? (
+            <div className="anim-fade-up">
+              <ChoiceList
+                numbered
+                selected={selected}
+                items={currentChoices.map((option, index) => ({ id: `${revision}-${index}`, label: option.text }))}
+              />
+            </div>
+          ) : (
+            <p className="text-center text-[19px] italic text-ink3 anim-fade-in">Il dialogo è finito. Premi ESC per chiudere.</p>
+          )
+        )}
+      </div>
+    </Modal>
   );
 };
 

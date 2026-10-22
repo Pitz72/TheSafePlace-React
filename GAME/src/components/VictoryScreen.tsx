@@ -4,6 +4,12 @@ import { useCharacterStore } from '../store/characterStore';
 import { useTimeStore } from '../store/timeStore';
 import { GameState } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import KeyArt from './art/KeyArt';
+import Logo from './art/Logo';
+import Modal from './ui/Modal';
+import KeyHints from './ui/KeyHints';
+import Icon, { IconName } from './ui/Icon';
+import { TRAVELLER_FIGURE } from '../assets/art';
 
 const ALIGNMENT_THRESHOLD = 5;
 
@@ -73,9 +79,9 @@ const HILL_CHOICE_LINES: Record<string, string> = {
 };
 
 const ALIGNMENT_LABELS: Record<EndingKey, string> = {
-    lena: 'COMPASSIONEVOLE (LENA)',
-    elian: 'PRAGMATICO (ELIAN)',
-    balanced: 'IN EQUILIBRIO',
+    lena: 'Compassionevole (Lena)',
+    elian: 'Pragmatico (Elian)',
+    balanced: 'In equilibrio',
 };
 
 /**
@@ -119,53 +125,68 @@ const VictoryScreen: React.FC = () => {
     const epilogue = EPILOGUES[endingKey];
     const hillLine = Object.keys(HILL_CHOICE_LINES).find(flag => gameFlags.has(flag));
 
+    const paragraphs = epilogue.text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+
     if (phase === 'epilogue') {
         return (
-            <div className="absolute inset-0 bg-black/95 flex items-center justify-center p-8">
-                <div className="w-full max-w-6xl border-8 border-double border-yellow-400/50 flex flex-col p-8">
-                    <h1 className="text-6xl text-center font-bold tracking-widest uppercase mb-6 text-yellow-300" style={{ textShadow: '0 0 8px #facc15' }}>
-                        ═══ Epilogo: {epilogue.title} ═══
-                    </h1>
-                    <div
-                        ref={textRef}
-                        className="w-full h-96 border-2 border-green-400/30 p-4 overflow-y-auto mb-8 text-3xl"
-                        style={{ scrollbarWidth: 'none' }}
-                    >
-                        <pre className="whitespace-pre-wrap leading-relaxed font-[inherit]">{epilogue.text}</pre>
-                        {hillLine && <p className="mt-6 italic text-yellow-200">{HILL_CHOICE_LINES[hillLine]}</p>}
+            <div className="absolute inset-0 overflow-hidden bg-bg0">
+                <KeyArt variant="dawn" shade="none" figure={TRAVELLER_FIGURE} />
+                <Modal
+                    backdrop="soft"
+                    accent="gold"
+                    icon="sun"
+                    eyebrow="Epilogo"
+                    title={epilogue.title}
+                    size="lg"
+                    hints={[{ keys: ['↑↓'], label: 'Scorri' }, { keys: ['INVIO'], label: 'Continua', active: true }]}
+                >
+                    <div ref={textRef} className="scroll-y fade-edges max-h-[620px] px-16 pb-10">
+                        <div className="hairline mb-8" />
+                        {paragraphs.map((paragraph, index) => (
+                            <p
+                                key={index}
+                                className={`prose-story mb-6 text-[27px] anim-fade-up ${paragraph.startsWith("'") ? 'italic text-ember2' : ''}`}
+                                style={{ animationDelay: `${Math.min(index, 10) * 180}ms` }}
+                            >
+                                {paragraph}
+                            </p>
+                        ))}
+                        {hillLine && <p className="prose-story mt-10 border-t border-line pt-8 text-[25px] italic text-gold">{HILL_CHOICE_LINES[hillLine]}</p>}
                     </div>
-                    <div className="flex-shrink-0 text-center text-3xl mt-4 border-t-4 border-double border-green-400/50 pt-4 animate-pulse">
-                        [W/S] Scorri | [INVIO] Continua...
-                    </div>
-                </div>
+                </Modal>
             </div>
         );
     }
 
+    const stats: { icon: IconName; label: string; value: React.ReactNode }[] = [
+        { icon: 'sun', label: 'Giorni di viaggio', value: gameTime.day },
+        { icon: 'footsteps', label: 'Passi compiuti', value: totalSteps },
+        { icon: 'attack', label: 'Combattimenti vinti', value: totalCombatWins },
+        { icon: 'levelUp', label: 'Livello raggiunto', value: level },
+        { icon: 'scroll', label: 'Missioni completate', value: completedQuests.length },
+        { icon: 'compass', label: 'Bussola morale', value: <span className="text-[26px]">{ALIGNMENT_LABELS[endingKey]}</span> },
+    ];
+
     return (
-        <div className="absolute inset-0 bg-black flex flex-col items-center justify-center p-8 text-green-400">
-            <h1 className="text-8xl text-center font-black tracking-widest uppercase" style={{ textShadow: '0 0 8px #4ade80' }}>
-                THE SAFE PLACE
-            </h1>
-            <p className="text-4xl text-center mt-4 italic text-yellow-300" style={{ textShadow: '0 0 8px #facc15' }}>
-                The Echo of the Journey
-            </p>
-
-            <div className="mt-12 text-3xl text-gray-300 space-y-3 text-center">
-                <p>Giorni di viaggio: <span className="text-green-400 font-bold">{gameTime.day}</span></p>
-                <p>Passi compiuti: <span className="text-green-400 font-bold">{totalSteps}</span></p>
-                <p>Combattimenti vinti: <span className="text-green-400 font-bold">{totalCombatWins}</span></p>
-                <p>Livello raggiunto: <span className="text-green-400 font-bold">{level}</span></p>
-                <p>Missioni completate: <span className="text-green-400 font-bold">{completedQuests.length}</span></p>
-                <p>Bussola morale: <span className="text-yellow-300 font-bold">{ALIGNMENT_LABELS[endingKey]}</span></p>
-            </div>
-
-            <h2 className="text-6xl text-center font-bold tracking-widest uppercase mt-16 text-yellow-300" style={{ textShadow: '0 0 8px #facc15' }}>
-                ─ LA FINE ─
-            </h2>
-
-            <div className="flex-shrink-0 text-center text-3xl mt-12 pt-4 text-gray-300 animate-pulse">
-                [INVIO per tornare al Menu Principale]
+        <div className="absolute inset-0 overflow-hidden bg-bg0">
+            <KeyArt variant="dawn" shade="center" figure={TRAVELLER_FIGURE} />
+            <div className="relative flex h-full flex-col items-center justify-center px-20">
+                <Logo align="center" scale={0.95} className="anim-fade-up" />
+                <div className="mt-14 grid w-[1180px] grid-cols-3 gap-4 anim-fade-up" style={{ animationDelay: '300ms' }}>
+                    {stats.map(stat => (
+                        <div key={stat.label} className="surface flex items-center gap-5 px-7 py-5">
+                            <Icon name={stat.icon} size={30} className="text-gold" />
+                            <div>
+                                <div className="eyebrow">{stat.label}</div>
+                                <div className="mt-1 text-[34px] font-semibold leading-tight text-ink tnum">{stat.value}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <h2 className="title-display mt-16 text-[64px] italic text-gold anim-fade-up" style={{ animationDelay: '700ms', fontWeight: 500 }}>Fine</h2>
+                <div className="mt-10 anim-fade-in" style={{ animationDelay: '1200ms' }}>
+                    <KeyHints hints={[{ keys: ['INVIO'], label: 'Torna al menu principale' }]} />
+                </div>
             </div>
         </div>
     );

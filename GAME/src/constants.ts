@@ -36,105 +36,139 @@ export const MENU_ITEMS = [
 // Ogni pagina deve stare nel riquadro senza scorrere anche a 1024x640 (la
 // finestra minima dell'app desktop): massimo 4 punti brevi per pagina.
 // ═══════════════════════════════════════════════════════════════════════════
-export const INSTRUCTIONS_PAGES = [
-  `═══ THE SAFE PLACE CHRONICLES ═══
-GUIDA ALLA SOPRAVVIVENZA
+export interface InstructionsPage {
+  title: string;
+  intro?: string;
+  points?: string[];
+  outro?: string;
+}
 
-Benvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.`,
-
-  `═══ MOVIMENTO ED ESPLORAZIONE ═══
-
-• WASD o FRECCE: muoviti sulla mappa. La 'E' è la tua meta: The Safe Place, a Est.
-• Ogni passo consuma tempo, sazietà e idratazione. Le foreste rallentano.
-• I fiumi si guadano con una prova di Atletica. Le montagne sono invalicabili.
-• La bussola ai bordi della mappa indica missioni (★ principale, ! secondarie) e luoghi noti.`,
-
-  `═══ LUOGHI ═══
-
-• Dialoghi, eventi e trasmissioni radio segnano nuovi luoghi (◆) sulla mappa.
-• Cammina su un luogo per esplorarlo: lì ti aspettano persone, indizi e oggetti delle missioni.
-• Crocevia, Capanna dell'Erborista, Biblioteca e Laboratorio si possono visitare più volte.`,
-
-  `═══ GESTIONE RISORSE ═══
-
-• HP: a zero il viaggio finisce. SAZIETÀ e IDRATAZIONE a zero ti feriscono a ogni ora.
-• FATICA: cresce camminando, cala riposando. Troppa fatica rende le prove più difficili.
-• PESO: oltre il limite ti stanchi il doppio e hai -2 alle prove fisiche.
-• CONDIZIONI (ferito, malato, avvelenato, ipotermia...) si curano con oggetti specifici.`,
-
-  `═══ NOTTE E METEO ═══
-
-• NOTTE (20:00 - 6:00): al buio rischi di inciampare e ferirti a ogni passo.
-• Torcia e torcia elettrica illuminano la strada per alcune ore.
-• Pioggia, nebbia e tempesta rallentano il cammino; pioggia e tempesta possono farti cadere.`,
-
-  `═══ RIFUGI ═══
-
-• I rifugi (R) offrono riparo: aspetta o dormi fino all'alba, cerca nei dintorni, usa il banco di lavoro.
-• Ogni rifugio ti accoglie una sola volta: quando lo lasci resta una rovina.
-• Con una TENDA puoi dormire all'aperto, una volta per notte e con il rischio di visite.`,
-
-  `═══ AZIONI PRINCIPALI ═══
-
-• [I] INVENTARIO e [J] DIARIO MISSIONI (con l'archivio lore).
-• [R] RIPOSO BREVE: un'ora, +20 HP e meno fatica. Una volta ogni 24 ore.
-• [F] RICERCA ATTIVA: 30 minuti e una prova di Sopravvivenza; una volta per zona. Vicino ai fiumi trovi acqua.
-• [L] LEVEL UP quando hai abbastanza XP. [ESC] PAUSA: salva, carica, opzioni.`,
-
-  `═══ INVENTARIO ═══
-
-• [INVIO] su un oggetto mostra cosa puoi farci: usare, equipaggiare, leggere, riparare, smontare.
-• Armi e armature (testa, torso, gambe) si consumano: riparale con i kit o smontale per i materiali.
-• Le armi da fuoco consumano munizioni: senza colpi diventano mazze.
-• Gli zaini aumentano il peso trasportabile. Gli oggetti delle missioni non si gettano né si vendono.`,
-
-  `═══ CRAFTING E COMMERCIO ═══
-
-• Il BANCO DI LAVORO dei rifugi crea armi, armature, medicine e strumenti.
-• Ogni ricetta richiede materiali, tempo e una prova di abilità: se fallisce, perdi metà dei materiali.
-• Le ricette si imparano leggendo i manuali.
-• I mercanti barattano: le loro scorte sono limitate e si rinnovano dopo qualche giorno.`,
-
-  `═══ COMBATTIMENTO ═══
-
-• ATTACCA, ANALIZZA (svela punti deboli e tattiche), USA OGGETTO, FUGGI.
-• Il terreno offre azioni speciali: nasconderti tra gli alberi, cercare copertura in città.
-• Munizioni speciali si caricano solo in un'arma da fuoco. Trappole bloccano il nemico, i fumogeni garantiscono la fuga.
-• La fuga può fallire. Ogni vittoria dona XP.`,
-
-  `═══ CRESCITA DEL PERSONAGGIO ═══
-
-• XP da esplorazione, eventi, missioni e combattimenti.
-• A ogni livello: +1 a un attributo, più HP massimi (5 + modificatore di Costituzione), cure complete.
-• TALENTI: richiedono un livello (2, 5 o 8) e la competenza in un'abilità.
-• Senza talenti disponibili diventi competente in una nuova abilità: +2 alle prove (+3 dal livello 5).`,
-
-  `═══ ALLINEAMENTO MORALE ═══
-
-• Le tue scelte spostano l'ago tra LENA (compassione) ed ELIAN (pragmatismo).
-• Se una delle due prevale di oltre 5 punti: +2 a Persuasione e Intuizione (Lena) o a Sopravvivenza e Intimidire (Elian).
-• L'allineamento decide anche come si chiude il viaggio.`,
-
-  `═══ CONSIGLI DI SOPRAVVIVENZA ═══
-
-• Salva spesso: 5 slot, esportazione e importazione in JSON. "Continua Partita" riprende l'ultimo salvataggio.
-• Viaggia di giorno. Di notte cerca un rifugio, accendi una torcia o monta la tenda.
-• Non tutti i combattimenti vanno affrontati: fuggire è una strategia valida.
-• Cura subito MALATO, AVVELENATO e INFEZIONE.`,
-
-  `═══ ECHI DELLA MEMORIA ═══
-
-• Durante il viaggio vivrai flashback che svelano il passato.
-• Si attivano da soli quando le condizioni sono soddisfatte (passi, giorni, luoghi, rifugi).
-• Non puoi perderli: la tua storia è parte integrante del viaggio.`,
-
-  `═══ SEGRETI E TROFEI ═══
-
-• 50 TROFEI da sbloccare, conservati tra una partita e l'altra.
-• Eventi rarissimi e oggetti unici nascosti nel mondo.
-• La mappa nasconde più di quanto sembri...
-
-Ora vai, viaggiatore. The Safe Place ti aspetta a Est. Sopravvivi. Scopri la verità. E forse, un giorno, capirai.`
+export const INSTRUCTIONS_PAGES: InstructionsPage[] = [
+  {
+    title: 'Guida alla sopravvivenza',
+    intro: "Benvenuto, viaggiatore. Questo mondo non è più quello che era. La Guerra Inespressa ha lasciato solo rovine e silenzio. Ma tu hai gli strumenti per sopravvivere.",
+  },
+  {
+    title: 'Movimento ed esplorazione',
+    points: [
+      "WASD o FRECCE: muoviti sulla mappa. La tua meta è The Safe Place, a Est: la sua luce è segnata sulla mappa.",
+      "Ogni passo consuma tempo, sazietà e idratazione. Le foreste rallentano.",
+      "I fiumi si guadano con una prova di Atletica. Le montagne sono invalicabili.",
+      "Ai bordi della mappa le frecce indicano missioni (stella: principale, punto esclamativo: secondarie) e luoghi noti fuori vista.",
+    ],
+  },
+  {
+    title: 'Luoghi',
+    points: [
+      "Dialoghi, eventi e trasmissioni radio segnano nuovi luoghi (rombo) sulla mappa.",
+      "Cammina su un luogo per esplorarlo: lì ti aspettano persone, indizi e oggetti delle missioni.",
+      "Crocevia, Capanna dell'Erborista, Biblioteca e Laboratorio si possono visitare più volte.",
+    ],
+  },
+  {
+    title: 'Gestione delle risorse',
+    points: [
+      "SALUTE: a zero il viaggio finisce. SAZIETÀ e IDRATAZIONE a zero ti feriscono a ogni ora.",
+      "STANCHEZZA: cresce camminando, cala riposando. Troppa stanchezza rende le prove più difficili.",
+      "PESO: oltre il limite ti stanchi il doppio e hai -2 alle prove fisiche.",
+      "CONDIZIONI (ferito, malato, avvelenato, ipotermia...) si curano con oggetti specifici.",
+    ],
+  },
+  {
+    title: 'Notte e meteo',
+    points: [
+      "NOTTE (20:00 - 6:00): al buio rischi di inciampare e ferirti a ogni passo.",
+      "Torcia e torcia elettrica illuminano la strada per alcune ore.",
+      "Pioggia, nebbia e tempesta rallentano il cammino; pioggia e tempesta possono farti cadere.",
+    ],
+  },
+  {
+    title: 'Rifugi',
+    points: [
+      "I rifugi (le capanne sulla mappa) offrono riparo: aspetta o dormi fino all'alba, cerca nei dintorni, usa il banco di lavoro.",
+      "Ogni rifugio ti accoglie una sola volta: quando lo lasci resta una rovina.",
+      "Con una TENDA puoi dormire all'aperto, una volta per notte e con il rischio di visite.",
+    ],
+  },
+  {
+    title: 'Azioni principali',
+    points: [
+      "[I] ZAINO e [J] DIARIO MISSIONI (con l'archivio lore).",
+      "[R] RIPOSO BREVE: un'ora, +20 HP e meno fatica. Una volta ogni 24 ore.",
+      "[F] RICERCA ATTIVA: 30 minuti e una prova di Sopravvivenza; una volta per zona. Vicino ai fiumi trovi acqua.",
+      "[L] LIVELLO quando hai abbastanza XP. [ESC] PAUSA: salva, carica, opzioni. [+] e [-] avvicinano e allontanano la mappa.",
+    ],
+  },
+  {
+    title: 'Inventario',
+    points: [
+      "[INVIO] su un oggetto mostra cosa puoi farci: usare, equipaggiare, leggere, riparare, smontare.",
+      "Armi e armature (testa, torso, gambe) si consumano: riparale con i kit o smontale per i materiali.",
+      "Le armi da fuoco consumano munizioni: senza colpi diventano mazze.",
+      "Gli zaini aumentano il peso trasportabile. Gli oggetti delle missioni non si gettano né si vendono.",
+    ],
+  },
+  {
+    title: 'Crafting e commercio',
+    points: [
+      "Il BANCO DI LAVORO dei rifugi crea armi, armature, medicine e strumenti.",
+      "Ogni ricetta richiede materiali, tempo e una prova di abilità: se fallisce, perdi metà dei materiali.",
+      "Le ricette si imparano leggendo i manuali.",
+      "I mercanti barattano: le loro scorte sono limitate e si rinnovano dopo qualche giorno.",
+    ],
+  },
+  {
+    title: 'Combattimento',
+    points: [
+      "ATTACCA, ANALIZZA (svela punti deboli e tattiche), USA OGGETTO, FUGGI.",
+      "Il terreno offre azioni speciali: nasconderti tra gli alberi, cercare copertura in città.",
+      "Munizioni speciali si caricano solo in un'arma da fuoco. Trappole bloccano il nemico, i fumogeni garantiscono la fuga.",
+      "La fuga può fallire. Ogni vittoria dona XP.",
+    ],
+  },
+  {
+    title: 'Crescita del personaggio',
+    points: [
+      "XP da esplorazione, eventi, missioni e combattimenti.",
+      "A ogni livello: +1 a un attributo, più HP massimi (5 + modificatore di Costituzione), cure complete.",
+      "TALENTI: richiedono un livello (2, 5 o 8) e la competenza in un'abilità.",
+      "Senza talenti disponibili diventi competente in una nuova abilità: +2 alle prove (+3 dal livello 5).",
+    ],
+  },
+  {
+    title: 'Allineamento morale',
+    points: [
+      "Le tue scelte spostano l'ago tra LENA (compassione) ed ELIAN (pragmatismo).",
+      "Se una delle due prevale di oltre 5 punti: +2 a Persuasione e Intuizione (Lena) o a Sopravvivenza e Intimidire (Elian).",
+      "L'allineamento decide anche come si chiude il viaggio.",
+    ],
+  },
+  {
+    title: 'Consigli di sopravvivenza',
+    points: [
+      'Salva spesso: 5 slot, esportazione e importazione in JSON. "Continua Partita" riprende l\'ultimo salvataggio.',
+      "Viaggia di giorno. Di notte cerca un rifugio, accendi una torcia o monta la tenda.",
+      "Non tutti i combattimenti vanno affrontati: fuggire è una strategia valida.",
+      "Cura subito MALATO, AVVELENATO e INFEZIONE.",
+    ],
+  },
+  {
+    title: 'Echi della memoria',
+    points: [
+      "Durante il viaggio vivrai flashback che svelano il passato.",
+      "Si attivano da soli quando le condizioni sono soddisfatte (passi, giorni, luoghi, rifugi).",
+      "Non puoi perderli: la tua storia è parte integrante del viaggio.",
+    ],
+  },
+  {
+    title: 'Segreti e trofei',
+    points: [
+      "50 TROFEI da sbloccare, conservati tra una partita e l'altra.",
+      "Eventi rarissimi e oggetti unici nascosti nel mondo.",
+      "La mappa nasconde più di quanto sembri...",
+    ],
+    outro: "Ora vai, viaggiatore. The Safe Place ti aspetta a Est. Sopravvivi. Scopri la verità. E forse, un giorno, capirai.",
+  },
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
