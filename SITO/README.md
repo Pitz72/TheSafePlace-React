@@ -39,7 +39,7 @@ color brace, tipografia editoriale. Niente più terminale, fosfori verdi o effet
   cenere nell'aria). Le animazioni si fermano con `prefers-reduced-motion`.
 - **Font** (`public/fonts`, licenza SIL OFL, gli stessi di `GAME/src/assets/fonts`): Cormorant Garamond per i titoli,
   Literata per i testi narrativi, Barlow e Barlow Condensed per l'interfaccia. Sono inclusi nel sito: la pagina non fa
-  richieste esterne (il teaser di YouTube si carica solo quando si preme play).
+  richieste esterne. Il trailer è stato tolto (era un video vecchio).
 - **Logo, emblema e icone** (`src/components/Logo.tsx`, `src/components/Icon.tsx`): ripresi dal gioco.
 - **Immagini** (`public/image`): key art, copertine, poster e immagine Open Graph (1200×630), più le favicon in
   `public/`. Si rigenerano tutte dalla grafica ufficiale con lo script qui sotto.

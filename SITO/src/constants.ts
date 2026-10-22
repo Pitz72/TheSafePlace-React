@@ -9,7 +9,6 @@ const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/down
 export const DOWNLOAD_BASE_URL = RELEASE_BASE;
 
 export const CONTACT_EMAIL = 'runtimeradio@gmail.com';
-export const TRAILER_YOUTUBE_ID = '6PJaJECxwhM';
 
 export const DOWNLOAD_TARGETS: DownloadTarget[] = [
   {

@@ -20,9 +20,9 @@ Il sito è stato ridisegnato con l'identità visiva della versione 3.0 del gioco
     `index.html`), lenta carrellata e cenere nell'aria come nel menu del gioco, logo ed emblema, tagline e pulsanti.
 3.  **Design system:** palette *Crepuscolo*, componenti (vetro, pulsanti, chip) e font del gioco, inclusi in
     `public/fonts` (licenza OFL): nessuna richiesta a Google Fonts o ad altri domini.
-4.  **Sezioni:** tutte quelle di prima (il gioco, caratteristiche, galleria, trailer, download, diario di sviluppo,
+4.  **Sezioni:** tutte quelle di prima (il gioco, caratteristiche, galleria, download, diario di sviluppo,
     prossimi passi, contatti) con testi che descrivono un GDR narrativo moderno; barra di navigazione fissa;
-    galleria con le copertine ufficiali e ingrandimento; il teaser di YouTube si carica solo premendo play.
+    galleria con le copertine ufficiali e ingrandimento.
 5.  **SEO e social:** nuova immagine Open Graph 1200×630 (`public/image/og-preview.jpg`, dalla copertina del gioco),
     favicon nuove (`favicon.ico`, `favicon.svg`, `favicon-48.png`, `apple-touch-icon.png`), meta e dati strutturati
     aggiornati. `robots.txt` e `sitemap.xml` invariati.

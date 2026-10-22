@@ -5,7 +5,6 @@ const LINKS = [
   { href: '#gioco', label: 'Il gioco' },
   { href: '#caratteristiche', label: 'Caratteristiche' },
   { href: '#galleria', label: 'Galleria' },
-  { href: '#trailer', label: 'Trailer' },
   { href: '#sviluppo', label: 'Sviluppo' },
 ];
 

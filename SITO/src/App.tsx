@@ -5,7 +5,6 @@ import Section from './components/Section';
 import Reveal from './components/Reveal';
 import FeatureCard from './components/FeatureCard';
 import Gallery from './components/Gallery';
-import VideoTeaser from './components/VideoTeaser';
 import DownloadSection from './components/DownloadSection';
 import Timeline from './components/Timeline';
 import Button from './components/Button';
@@ -110,12 +109,6 @@ const App: React.FC = () => {
           lead="Copertine, poster e key art ufficiali, disegnati in illustrazione vettoriale dal codice stesso del gioco."
         >
           <Gallery />
-        </Section>
-
-        <Section id="trailer" eyebrow="Trailer" title="Il teaser ufficiale" className="pt-4 sm:pt-8">
-          <Reveal>
-            <VideoTeaser />
-          </Reveal>
         </Section>
 
         <Section
