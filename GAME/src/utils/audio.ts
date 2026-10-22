@@ -1,4 +1,9 @@
 // utils/audio.ts
+import { Ambience, AmbienceScene } from './sound/ambience';
+import { CueState, LULLABY_LENGTH, NO_CUE, SOUNDS, SOUND_ALIASES, arbitrate, playLullaby } from './sound/sfx';
+import { NoiseBank, Synth, createImpulse, createNoiseBank } from './sound/synth';
+
+export type { AmbienceScene };
 
 const AUDIO_SETTINGS_KEY = 'tspc_audio_settings';
 
@@ -7,26 +12,53 @@ const AUDIO_SETTINGS_KEY = 'tspc_audio_settings';
  * @description Represents the audio settings.
  * @property {number} volume - The volume level, from 0 to 10.
  * @property {boolean} isMuted - Whether the audio is muted.
+ * @property {boolean} ambience - Whether the ambience (wind, rain, animals) plays.
  */
 interface AudioSettings {
     volume: number; // Stored as 0-10
     isMuted: boolean;
+    ambience: boolean;
 }
+
+/** The nodes every sound goes through, built with the AudioContext. */
+interface AudioGraph {
+    /** Volume and mute. */
+    master: GainNode;
+    sfx: Synth;
+    reverb: ConvolverNode;
+    bank: NoiseBank;
+    impulse: AudioBuffer;
+}
+
+/** Requests older than this when the context finally runs are dropped, not played late. */
+const STALE_MS = 300;
 
 class AudioManager {
     private audioContext: AudioContext | null = null;
     private audioUnavailable = false;
-    private musicBoxSource: OscillatorNode | null = null;
-    
-    private volume: number; // Stored as 0.0 to 0.2
+    private graph: AudioGraph | null = null;
+
+    private volume: number; // 0-10, as shown in the options
     private isMuted: boolean;
+    private ambienceEnabled: boolean;
+
+    /** Sounds requested in the current instant, played together by flush(). */
+    private pending: string[] = [];
+    private flushQueued = false;
+    private cue: CueState = NO_CUE;
+    private lullaby: GainNode[] = [];
+
+    private scene: AmbienceScene | null = null;
+    private sceneKey = '';
+    private ambience: Ambience | null = null;
 
     constructor() {
         const savedSettings = this.loadSettings();
-        this.volume = this.uiVolumeToGain(savedSettings.volume);
+        this.volume = savedSettings.volume;
         this.isMuted = savedSettings.isMuted;
+        this.ambienceEnabled = savedSettings.ambience;
     }
-    
+
     private loadSettings(): AudioSettings {
         try {
             const settingsStr = localStorage.getItem(AUDIO_SETTINGS_KEY);
@@ -37,20 +69,22 @@ class AudioManager {
                 return {
                     volume: Number.isFinite(volume) ? Math.min(10, Math.max(0, Math.round(volume))) : 7,
                     isMuted: saved?.isMuted === true,
+                    ambience: saved?.ambience !== false,
                 };
             }
         } catch (e) {
             console.error("Failed to parse audio settings from localStorage", e);
         }
         // Default settings
-        return { volume: 7, isMuted: false };
+        return { volume: 7, isMuted: false, ambience: true };
     }
 
     private saveSettings() {
         try {
             const settings: AudioSettings = {
-                volume: this.gainToUiVolume(this.volume),
+                volume: this.volume,
                 isMuted: this.isMuted,
+                ambience: this.ambienceEnabled,
             };
             localStorage.setItem(AUDIO_SETTINGS_KEY, JSON.stringify(settings));
         } catch (e) {
@@ -58,14 +92,14 @@ class AudioManager {
         }
     }
 
-    // Convert UI volume (0-10) to gain value (0.0-0.2)
-    private uiVolumeToGain(uiVolume: number): number {
-        return (uiVolume / 10) * 0.2;
+    /** UI volume (0-10) to gain: squared, so the steps of the slider sound even. */
+    private masterGain(): number {
+        return this.isMuted ? 0 : 1.6 * (this.volume / 10) ** 2;
     }
-    
-    // Convert gain value back to UI volume for saving
-    private gainToUiVolume(gain: number): number {
-        return Math.round((gain / 0.2) * 10);
+
+    private applyMasterGain() {
+        if (!this.audioContext || !this.graph) return;
+        this.graph.master.gain.setTargetAtTime(this.masterGain(), this.audioContext.currentTime, 0.03);
     }
 
     // Public methods for UI control
@@ -74,8 +108,10 @@ class AudioManager {
      * @param {number} uiVolume - The volume level, from 0 to 10.
      */
     public setVolume(uiVolume: number) {
-        this.volume = this.uiVolumeToGain(uiVolume);
+        const volume = Number(uiVolume);
+        this.volume = Number.isFinite(volume) ? Math.min(10, Math.max(0, Math.round(volume))) : this.volume;
         this.saveSettings();
+        this.applyMasterGain();
     }
 
     /**
@@ -85,18 +121,30 @@ class AudioManager {
     public setMuted(muted: boolean) {
         this.isMuted = muted;
         this.saveSettings();
-        if (muted && this.musicBoxSource) {
-            this.musicBoxSource.stop();
-            this.musicBoxSource = null;
+        if (muted) {
+            this.pending = [];
+            this.stopLullaby();
         }
+        this.applyMasterGain();
+        this.syncAmbience();
     }
-    
+
+    /**
+     * Turns the ambience (wind, rain, birds, insects) on or off; effects keep playing.
+     * @param {boolean} enabled - Whether the ambience plays.
+     */
+    public setAmbienceEnabled(enabled: boolean) {
+        this.ambienceEnabled = enabled;
+        this.saveSettings();
+        this.syncAmbience();
+    }
+
     /**
      * Gets the volume for the UI.
      * @returns {number} The volume level, from 0 to 10.
      */
     public getVolumeForUI(): number {
-        return this.gainToUiVolume(this.volume);
+        return this.volume;
     }
 
     /**
@@ -107,6 +155,69 @@ class AudioManager {
         return this.isMuted;
     }
 
+    /**
+     * Gets whether the ambience is on, for the UI.
+     * @returns {boolean} Whether the ambience plays.
+     */
+    public getAmbienceEnabledForUI(): boolean {
+        return this.ambienceEnabled;
+    }
+
+    /**
+     * Sets what the player hears around them; null for silence. Calls with the
+     * same scene are cheap: only a change is passed on to the soundscape.
+     * @param {AmbienceScene | null} scene - Where, when and under which sky.
+     */
+    public setAmbience(scene: AmbienceScene | null) {
+        const key = scene
+            ? [scene.biome, Math.round(scene.hour * 12), scene.weather, (scene.water ?? 0).toFixed(2), scene.sheltered === true, (scene.level ?? 1).toFixed(2)].join('|')
+            : '';
+        if (key === this.sceneKey) return;
+        this.sceneKey = key;
+        this.scene = scene;
+        this.syncAmbience();
+    }
+
+    /** Starts, updates or stops the soundscape. It never creates the context itself:
+     *  browsers only allow that after the player has pressed something. */
+    private syncAmbience() {
+        const context = this.audioContext;
+        const graph = this.graph;
+        if (!context || !graph || !this.scene || !this.ambienceEnabled || this.isMuted) {
+            this.ambience?.dispose();
+            this.ambience = null;
+            return;
+        }
+        if (!this.ambience) this.ambience = new Ambience(context, graph.master, graph.bank, graph.impulse);
+        this.ambience.setScene(this.scene);
+    }
+
+    private buildGraph(context: AudioContext): AudioGraph {
+        // A gentle limiter keeps a storm plus a level-up from ever clipping.
+        const limiter = context.createDynamicsCompressor();
+        limiter.threshold.value = -10;
+        limiter.knee.value = 8;
+        limiter.ratio.value = 8;
+        limiter.attack.value = 0.003;
+        limiter.release.value = 0.25;
+        limiter.connect(context.destination);
+
+        const master = context.createGain();
+        master.gain.value = this.masterGain();
+        master.connect(limiter);
+
+        const bank = createNoiseBank(context);
+        const impulse = createImpulse(context);
+        const reverb = context.createConvolver();
+        reverb.buffer = impulse;
+        const reverbReturn = context.createGain();
+        reverbReturn.gain.value = 0.55;
+        reverb.connect(reverbReturn);
+        reverbReturn.connect(master);
+
+        return { master, reverb, bank, impulse, sfx: { ctx: context, out: master, verb: reverb, noise: bank } };
+    }
+
     private async ensureContext(): Promise<AudioContext | null> {
         if (this.isMuted) return null;
 
@@ -114,181 +225,89 @@ class AudioManager {
             if (this.audioUnavailable) return null;
             try {
                 this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                this.graph = this.buildGraph(this.audioContext);
             } catch {
                 // No Web Audio (old browser, test environment): play silently from now on.
+                this.audioContext = null;
+                this.graph = null;
                 this.audioUnavailable = true;
                 console.warn('Web Audio API non disponibile: il gioco proseguirà senza suoni.');
                 return null;
             }
+            // Minimised or hidden: the soundscape pauses with the game.
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) void this.audioContext?.suspend();
+                else if (!this.isMuted) void this.audioContext?.resume();
+            });
+            // The ambience (and the noise it needs) starts just after this first sound, not before it.
+            setTimeout(() => this.syncAmbience(), 0);
         }
 
-        if (this.audioContext.state === 'suspended') {
+        if (this.audioContext.state === 'suspended' && !document.hidden) {
             await this.audioContext.resume();
         }
 
         return this.audioContext;
     }
 
-    private async playFrequency(freq: number, duration: number, type: OscillatorType = 'square') {
+    /** Plays everything requested in the same instant, after arbitration. */
+    private async flush() {
+        const names = this.pending;
+        this.pending = [];
+        this.flushQueued = false;
+        const requestedAt = performance.now();
         const context = await this.ensureContext();
-        if (!context) return;
-
-        const oscillator = context.createOscillator();
-        const gainNode = context.createGain();
-
-        oscillator.type = type;
-        oscillator.frequency.setValueAtTime(freq, context.currentTime);
-        
-        gainNode.gain.setValueAtTime(this.volume, context.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration / 1000);
-
-        oscillator.connect(gainNode);
-        gainNode.connect(context.destination);
-
-        oscillator.start(context.currentTime);
-        oscillator.stop(context.currentTime + duration / 1000);
+        if (!context || !this.graph || this.isMuted || context.state !== 'running' || performance.now() - requestedAt > STALE_MS) return;
+        const { play, state } = arbitrate(names, context.currentTime, this.cue);
+        this.cue = state;
+        const t = context.currentTime + 0.01;
+        for (const name of play) SOUNDS[name].play(this.graph.sfx, t);
     }
-    
-    private async playSequence(notes: { freq: number, duration: number, type?: OscillatorType }[]) {
-        const context = await this.ensureContext();
-        if (!context) return;
-        
-        let time = context.currentTime;
-        
-        notes.forEach(note => {
-            const oscillator = context!.createOscillator();
-            const gainNode = context!.createGain();
-            
-            oscillator.type = note.type || 'square';
-            oscillator.frequency.setValueAtTime(note.freq, time);
 
-            gainNode.gain.setValueAtTime(this.volume, time);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, time + note.duration / 1000);
-
-            oscillator.connect(gainNode);
-            gainNode.connect(context!.destination);
-
-            oscillator.start(time);
-            oscillator.stop(time + note.duration / 1000);
-            
-            time += note.duration / 1000;
-        });
+    private stopLullaby() {
+        const now = this.audioContext?.currentTime ?? 0;
+        for (const gain of this.lullaby) {
+            gain.gain.cancelScheduledValues(now);
+            gain.gain.setTargetAtTime(0, now, 0.02);
+        }
+        this.lullaby = [];
     }
 
     private async playMusicBox() {
         const context = await this.ensureContext();
-        if (!context) return;
-        
-        if (this.musicBoxSource) {
-            this.musicBoxSource.stop();
-            this.musicBoxSource = null;
+        if (!context || !this.graph) return;
+        this.stopLullaby();
+
+        const t = context.currentTime + 0.05;
+        const dry = context.createGain();
+        dry.connect(this.graph.master);
+        const wet = context.createGain();
+        wet.connect(this.graph.reverb);
+        playLullaby({ ctx: context, out: dry, verb: wet, noise: this.graph.bank }, t);
+        // La melodia si interrompe bruscamente dopo 8 secondi (only the room keeps ringing).
+        for (const gain of [dry, wet]) {
+            gain.gain.setValueAtTime(1, t + LULLABY_LENGTH - 0.015);
+            gain.gain.linearRampToValueAtTime(0, t + LULLABY_LENGTH);
         }
-
-        const melody = [
-            { freq: 523, duration: 250 }, // C5
-            { freq: 523, duration: 250 },
-            { freq: 780, duration: 250 }, // G5 (stonato, dovrebbe essere 784)
-            { freq: 784, duration: 250 },
-            { freq: 880, duration: 250 }, // A5
-            { freq: 880, duration: 250 },
-            { freq: 784, duration: 500 }, // G5
-            { freq: 659, duration: 250 }, // E5
-            { freq: 659, duration: 250 },
-            { freq: 585, duration: 250 }, // D5 (stonato, dovrebbe essere 587)
-            { freq: 587, duration: 250 },
-            { freq: 523, duration: 500 }, // C5
-        ];
-
-        let time = context.currentTime;
-
-        const oscillator = context.createOscillator();
-        const gainNode = context.createGain();
-        oscillator.type = 'triangle';
-        // Use a fraction of the global volume for the music box to keep it subtle
-        gainNode.gain.value = this.volume * 0.8; 
-
-        oscillator.connect(gainNode);
-        gainNode.connect(context.destination);
-        
-        melody.forEach(note => {
-            oscillator.frequency.setValueAtTime(note.freq, time);
-            time += note.duration / 1000;
-        });
-
-        oscillator.start(context.currentTime);
-        // La melodia si interromperà bruscamente dopo 8 secondi
-        oscillator.stop(context.currentTime + 8);
-        this.musicBoxSource = oscillator;
+        this.lullaby = [dry, wet];
     }
 
     /**
      * Plays a sound.
      * @param {string} sound - The name of the sound to play.
      */
-
     public playSound(sound: string) {
-        // v2.0.14: several call sites use sound names that were never added to
-        // the switch (silent no-op). Alias them to the closest existing SFX.
-        const SOUND_ALIASES: Record<string, string> = {
-            'enter_refuge': 'confirm',
-            'item_pickup': 'item_get',
-            'back': 'cancel',
-            'craft_fail': 'error',
-            'craft_success': 'confirm',
-        };
-        sound = SOUND_ALIASES[sound] ?? sound;
-
-        // This is now a fire-and-forget wrapper around the new async methods
-        switch(sound) {
-            case 'navigate':
-                this.playFrequency(880, 50);
-                break;
-            case 'confirm':
-                this.playSequence([{ freq: 523, duration: 70 }, { freq: 659, duration: 70 }]);
-                break;
-            case 'cancel':
-                this.playSequence([{ freq: 659, duration: 70 }, { freq: 523, duration: 70 }]);
-                break;
-            case 'error':
-                this.playFrequency(110, 200);
-                break;
-            case 'item_get':
-                this.playSequence([{ freq: 523, duration: 80 }, { freq: 659, duration: 80 }, { freq: 784, duration: 80 }]);
-                break;
-            case 'xp_gain':
-                this.playFrequency(1200, 100, 'sine');
-                break;
-            case 'level_up':
-                this.playSequence([
-                    { freq: 261, duration: 100 }, { freq: 329, duration: 100 }, 
-                    { freq: 392, duration: 100 }, { freq: 523, duration: 200 }
-                ]);
-                break;
-            case 'combat_start':
-                this.playSequence([{ freq: 110, duration: 150 }, { freq: 98, duration: 300 }]);
-                break;
-            case 'hit_player':
-                this.playFrequency(150, 100);
-                break;
-            case 'hit_enemy':
-                this.playFrequency(300, 80);
-                break;
-            case 'victory':
-                 this.playSequence([
-                    { freq: 392, duration: 100 }, { freq: 523, duration: 100 }, 
-                    { freq: 659, duration: 100 }, { freq: 784, duration: 300 }
-                ]);
-                break;
-            case 'defeat':
-                 this.playSequence([
-                    { freq: 523, duration: 200 }, { freq: 392, duration: 200 }, 
-                    { freq: 329, duration: 200 }, { freq: 261, duration: 400 }
-                ]);
-                break;
-            case 'ash_lullaby':
-                this.playMusicBox();
-                break;
+        const name = SOUND_ALIASES[sound] ?? sound;
+        if (name === 'ash_lullaby') {
+            void this.playMusicBox();
+            return;
         }
+        if (!SOUNDS[name] || this.isMuted || this.audioUnavailable) return;
+        // Fire-and-forget: everything asked for in this instant is played together.
+        this.pending.push(name);
+        if (this.flushQueued) return;
+        this.flushQueued = true;
+        queueMicrotask(() => void this.flush());
     }
 }
 

@@ -14,7 +14,7 @@ Il giocatore veste i panni di "Ultimo", un sopravvissuto che intraprende un viag
 
 ## 1.3 Estetica e Atmosfera
 *   **Visual:** illustrazione vettoriale a strati (riferimenti: *Firewatch*, *Kentucky Route Zero*, *Road 96*), crepuscolo sull'Europa centrale in rovina: autostrade spaccate, palazzi coperti di rampicanti, una sola luce all'orizzonte. Interfaccia in vetro fumé con accento color brace; titoli in Cormorant Garamond, testi narrativi in Literata, interfaccia in Barlow. Nessun richiamo retro (terminali, CRT, pixel). Direzione artistica completa in `COVER-UFFICIALE/README.md`.
-*   **Audio:** Sound design minimale generato proceduralmente con la Web Audio API.
+*   **Audio:** suoni morbidi e tattili (legno, feltro, vetro, carta) e un paesaggio sonoro basso che segue luogo, ora e meteo, al posto di una colonna sonora: il "Grande Silenzio" lo riempie il mondo. Tutto sintetizzato in tempo reale con la Web Audio API, senza file audio (dalla 3.1; vedi `08_Sound_and_Music.md`).
 *   **Tono:** Malinconico, solitario, opprimente ma con sprazzi di speranza. Il "Grande Silenzio" è un tema ricorrente.
 
 ## 1.4 Ciclo di Gioco (Core Loop)

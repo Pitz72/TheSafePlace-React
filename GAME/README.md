@@ -1,6 +1,6 @@
 # The Safe Place Chronicles: The Echo of the Journey — il gioco
 
-![Versione](https://img.shields.io/badge/versione-3.0.0-blue.svg)
+![Versione](https://img.shields.io/badge/versione-3.1.0-blue.svg)
 ![Stato](https://img.shields.io/badge/stato-completabile-brightgreen.svg)
 ![Tech](https://img.shields.io/badge/tech-React%2019%20%7C%20Ink%20%7C%20Electron-purple.svg)
 
@@ -42,6 +42,7 @@ Serve Node.js 20 o superiore.
 | `src/components/ui/` | i mattoni dell'interfaccia: finestre (`Modal`), liste di scelte, tasti, barre, icone |
 | `src/components/art/` | la grafica vettoriale: key art, logo ed emblema, scene dei biomi |
 | `src/components/map/` | la mappa del mondo: terreno disegnato a blocchi, luce del giorno, meteo, segnalini |
+| `src/utils/audio.ts`, `src/utils/sound/` | il suono, tutto sintetizzato in tempo reale: effetti, precedenze, ambiente |
 | `src/assets/fonts/`, `src/assets/art/` | i font (licenza OFL) e le illustrazioni esterne (figure, ritratti) |
 | `src/test/` | test che giocano davvero il gioco (vedi sotto) |
 | `scripts/` | validatore e formattatore dei dati |
@@ -87,6 +88,20 @@ Serve Node.js 20 o superiore.
   (vedi `../COVER-UFFICIALE/README.md`, che contiene anche la direzione artistica e i prompt per i generatori).
 - `preview.html` (solo sviluppo) mostra le illustrazioni a tutta pagina: `/preview.html?art=keyart&variant=dawn`.
 
+## Suono (3.1)
+
+- **Niente file audio**: effetti e ambiente sono sintetizzati in tempo reale con la Web Audio API (`src/utils/sound/`),
+  quindi non c'è nulla da caricare o da licenziare e la Content-Security-Policy dell'app desktop resta `default-src 'self'`.
+- **Effetti** (`sound/sfx.ts`): legno, feltro, vetro e carta al posto dei beep, tutti in Re maggiore. Le ricompense chieste
+  nello stesso istante si contendono la scena (`arbitrate`): salire di livello suona come un livello, non come livello +
+  XP + trofeo.
+- **Ambiente** (`sound/ambience.ts`, `hooks/useAmbience.ts`): vento, foglie, pioggia, tuoni, fiume, uccelli, grilli, gufi,
+  legno e lamiere, fuoco; dipende dal bioma, dall'ora, dal meteo e dal rifugio, e si abbassa sotto menu, dialoghi,
+  combattimenti e cutscene. Si spegne a parte nelle Opzioni (*Ambiente*).
+- `audioManager` (`src/utils/audio.ts`) resta l'unica porta: `playSound(nome)` con gli stessi nomi di prima.
+- `sound.html` (solo sviluppo) fa ascoltare ogni effetto e prova l'ambiente con luogo, ora e meteo regolabili:
+  `npm run dev`, poi `/sound.html`. Dettagli nel GDD, capitolo [`08_Sound_and_Music.md`](../GDD/08_Sound_and_Music.md).
+
 ## Aggiungere o modificare contenuti
 
 1. Modifica i JSON in `public/data` (o i file `.ink` in `src/assets/story/modules`).
@@ -110,7 +125,8 @@ installer.
 
 ## Documentazione
 
-- Novità della versione corrente: [`docs/logs/v3.0.0-nuova-identita-visiva.md`](./docs/logs/v3.0.0-nuova-identita-visiva.md)
+- Novità della versione corrente: [`docs/logs/v3.1.0-paesaggio-sonoro.md`](./docs/logs/v3.1.0-paesaggio-sonoro.md)
+- La nuova identità visiva (3.0.0): [`docs/logs/v3.0.0-nuova-identita-visiva.md`](./docs/logs/v3.0.0-nuova-identita-visiva.md)
 - La revisione completa del gioco (2.1.0): [`docs/logs/v2.1.0-revisione-completa.md`](./docs/logs/v2.1.0-revisione-completa.md)
 - Log delle versioni precedenti: [`docs/logs/`](./docs/logs/)
 - Documenti di design e analisi storiche: [`docs/design/`](./docs/design/), [`docs/technical/`](./docs/technical/)

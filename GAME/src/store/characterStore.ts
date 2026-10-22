@@ -614,7 +614,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     set(state => ({ unlockedTrophies: new Set(state.unlockedTrophies).add(trophyId) }));
     addGlobalTrophy(trophyId);
     if (trophy) {
-      audioManager.playSound('level_up');
+      audioManager.playSound('trophy');
       journal(`Trofeo sbloccato: ${trophy.name}!`, JournalEntryType.TROPHY_UNLOCKED);
     }
   },

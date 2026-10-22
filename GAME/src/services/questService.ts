@@ -21,6 +21,7 @@ import { useGameStore } from '../store/gameStore';
 import { useQuestDatabaseStore } from '../data/questDatabase';
 import { JournalEntryType, Position, Quest, QuestCheckContext, QuestLocation, QuestStage, QuestType } from '../types';
 import { debugLog } from '../utils/logger';
+import { audioManager } from '../utils/audio';
 
 const SIGNAL_TRIGGERS = new Set(['talkToNPC', 'interactWithObject', 'completeEvent']);
 
@@ -137,6 +138,7 @@ export const questService = {
     if (activeQuests[questId] || completedQuests.includes(questId) || failedQuests.includes(questId)) return;
 
     setStage(questId, 1);
+    audioManager.playSound('quest_start');
     const { addJournalEntry, revealPOI } = useGameStore.getState();
     addJournalEntry({ text: `[MISSIONE AVVIATA] ${quest.title}`, type: JournalEntryType.XP_GAIN, color: '#facc15' });
     addJournalEntry({ text: quest.startText, type: JournalEntryType.NARRATIVE });
@@ -160,6 +162,7 @@ export const questService = {
       return;
     }
     setStage(questId, next);
+    audioManager.playSound('quest_update');
     const objective = currentStageOf(quest, next)?.objective;
     useGameStore.getState().addJournalEntry({
       text: `[MISSIONE AGGIORNATA] ${quest.title}${objective ? ` — ${objective}` : ''}`,
@@ -181,6 +184,7 @@ export const questService = {
     delete activeQuests[questId];
     useCharacterStore.setState({ activeQuests, completedQuests: [...character.completedQuests, questId] });
 
+    audioManager.playSound('quest_complete');
     const { addJournalEntry, setFlag } = useGameStore.getState();
     addJournalEntry({ text: `[MISSIONE COMPLETATA] ${quest.title}`, type: JournalEntryType.XP_GAIN, color: '#22c55e' });
 
