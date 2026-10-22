@@ -4,13 +4,11 @@ name: Deploy sito (thesafeplace.runtimeradio.it)
 # Credenziali lette dai GitHub Secrets: SFTP_HOST, SFTP_USER, SFTP_PASSWORD.
 # La cartella remota è fissa (non è un segreto).
 
+# Deploy automatico SOSPESO (decisione di Simone, 2026-10-22): il sito non va
+# pubblicato finche' non lo decide lui. Per riattivarlo ripristinare il trigger
+# `push` su main con paths SITO/** e questo workflow.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'SITO/**'
-      - '.github/workflows/deploy-site.yml'
-  workflow_dispatch: {}   # avvio manuale dalla tab Actions
+  workflow_dispatch: {}   # solo avvio manuale dalla tab Actions
 
 concurrency:
   group: deploy-site
