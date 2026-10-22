@@ -89,7 +89,7 @@ Dettagli sull'architettura e su come aggiungere contenuti: [`GAME/README.md`](./
   1. verifica che la versione richiesta coincida con `GAME/package.json` ed esegue gli stessi controlli della CI;
   2. builda il gioco su runner **Windows e Linux** in parallelo e impacchetta gli installer con electron-builder;
   3. crea una **Release** `vX.Y.Z` nella repo con tutti gli installer allegati.
-- [`.github/workflows/deploy-site.yml`](./.github/workflows/deploy-site.yml) (deploy del sito su DreamHost via SFTP) è **sospeso**: parte solo a mano (*Run workflow*), non più a ogni push su `main`. Il sito in `SITO/` ha già la nuova identità 3.0 ma non è stato ancora pubblicato; i suoi download puntano ancora alla v2.0.17.
+- [`.github/workflows/deploy-site.yml`](./.github/workflows/deploy-site.yml) (deploy del sito su DreamHost via SFTP) è **sospeso**: parte solo a mano (*Run workflow*), non più a ogni push su `main`. Il sito in `SITO/` (nuova identità 3.0, download v3.1.0) è stato pubblicato a mano il 22 ottobre 2026.
 
 ---
 

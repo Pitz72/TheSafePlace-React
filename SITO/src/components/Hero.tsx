@@ -96,7 +96,7 @@ const Hero: React.FC = () => (
           <Button href={REPO_URL} variant="secondary" icon="code" external>Codice sorgente</Button>
         </div>
         <p className="mt-6 text-center font-cond text-[13px] font-semibold uppercase tracking-[0.3em] text-ink2 lg:text-left">
-          <span className="block sm:inline">Windows · macOS · Linux</span>
+          <span className="block sm:inline">Windows · Linux</span>
           <span className="hidden text-ember sm:inline"> · </span>
           <span className="mt-1 block sm:mt-0 sm:inline">Gratuito e open source</span>
         </p>

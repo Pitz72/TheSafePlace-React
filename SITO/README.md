@@ -15,7 +15,7 @@ una vecchia mappa che porta a Est, verso un luogo chiamato The Safe Place.
 
 Nato come esperimento tecnico e narrativo, è stato sviluppato da Simone Pizzi in simbiosi creativa con il supporto di
 modelli linguistici (LLM). Si gioca da tastiera ed è un'applicazione desktop **gratuita e open source** per Windows,
-macOS e Linux (React + Ink + Electron). *Dalla 3.1.0 le release ufficiali includono solo Windows e Linux; i testi del sito vanno allineati alla pubblicazione.*
+macOS e Linux (React + Ink + Electron).
 
 ## Caratteristiche principali del gioco
 

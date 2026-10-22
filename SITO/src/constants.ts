@@ -3,8 +3,8 @@ import { Feature, TimelineEvent, DownloadTarget } from './types';
 // --- Repository e Release pubblica (open source) ---
 export const REPO_URL = 'https://github.com/Pitz72/TheSafePlace-React';
 export const RELEASES_URL = 'https://github.com/Pitz72/TheSafePlace-React/releases';
-export const RELEASE_VERSION = 'v2.0.17';
-const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/download/v2.0.17/';
+export const RELEASE_VERSION = 'v3.1.0';
+const RELEASE_BASE = 'https://github.com/Pitz72/TheSafePlace-React/releases/download/v3.1.0/';
 
 export const DOWNLOAD_BASE_URL = RELEASE_BASE;
 
@@ -16,23 +16,15 @@ export const DOWNLOAD_TARGETS: DownloadTarget[] = [
     os: 'Windows',
     icon: 'windows',
     requirement: 'Windows 10/11 - 64 bit (x64)',
-    primary: { label: 'Installer (.exe)', file: 'TheSafePlace-2.0.17-win-x64.exe', size: '~115 MB' },
+    primary: { label: 'Installer (.exe)', file: 'TheSafePlace-3.1.0-win-x64.exe', size: '~97 MB' },
     notice: 'Windows SmartScreen potrebbe mostrare un avviso ("Windows ha protetto il PC") perché l’eseguibile non è firmato con un certificato commerciale. È normale per un progetto open source: clicca su "Ulteriori informazioni" e poi "Esegui comunque".',
-  },
-  {
-    os: 'macOS',
-    icon: 'macos',
-    requirement: 'macOS su Apple Silicon (arm64) - M1 o superiore',
-    primary: { label: 'Disk Image (.dmg)', file: 'TheSafePlace-2.0.17-mac-arm64.dmg', size: '~154 MB' },
-    secondary: { label: 'Archivio (.zip)', file: 'TheSafePlace-2.0.17-mac-arm64.zip', size: '~147 MB' },
-    notice: 'L’app non è firmata né notarizzata da Apple, quindi Gatekeeper la bloccherà al primo avvio. Fai clic destro sull’app → "Apri", oppure vai in Impostazioni di Sistema → Privacy e sicurezza → "Apri comunque". Disponibile solo per Apple Silicon (arm64).',
   },
   {
     os: 'Linux',
     icon: 'linux',
     requirement: 'Distribuzioni 64 bit (x86_64 / amd64)',
-    primary: { label: 'AppImage', file: 'TheSafePlace-2.0.17-linux-x86_64.AppImage', size: '~150 MB' },
-    secondary: { label: 'Pacchetto Debian (.deb)', file: 'TheSafePlace-2.0.17-linux-amd64.deb', size: '~114 MB' },
+    primary: { label: 'AppImage', file: 'TheSafePlace-3.1.0-linux-x86_64.AppImage', size: '~125 MB' },
+    secondary: { label: 'Pacchetto Debian (.deb)', file: 'TheSafePlace-3.1.0-linux-amd64.deb', size: '~96 MB' },
     notice: 'Per l’AppImage: dopo il download rendila eseguibile (chmod +x) e avviala con un doppio clic. In alternativa usa il pacchetto .deb su Debian/Ubuntu e derivate.',
   },
 ];
@@ -109,7 +101,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
   {
     version: "v2.0.16",
     title: "Rilascio Desktop Open Source",
-    description: "Impacchettamento come applicazione desktop con Electron per Windows, macOS e Linux, con build automatiche via CI. Prima release pubblica scaricabile su GitHub."
+    description: "Impacchettamento come applicazione desktop con Electron per Windows e Linux, con build automatiche via CI. Prima release pubblica scaricabile su GitHub."
   },
   {
     version: "v2.0.17",
@@ -120,12 +112,15 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     version: "v2.1.0",
     title: "Revisione Completa",
     description: "La trama principale arriva sempre fino al finale e tutte le 21 quest si avviano e si completano. Dialoghi, talenti e oggetti fanno quello che promettono, e test automatici giocano davvero il gioco a ogni modifica.",
-    upcoming: true
   },
   {
     version: "v3.0.0",
     title: "Nuova Identità Visiva",
-    description: "Dal terminale al gioco narrativo: interfaccia ridisegnata da zero, nuovo logo, key art e copertine in illustrazione vettoriale, mappa illustrata con la luce dell'ora e il meteo. Regole e salvataggi restano gli stessi.",
-    upcoming: true
+    description: "Dal terminale al gioco narrativo: interfaccia ridisegnata da zero, nuovo logo, key art e copertine in illustrazione vettoriale, mappa illustrata con la luce dell'ora e il meteo. Regole e salvataggi restano gli stessi."
+  },
+  {
+    version: "v3.1.0",
+    title: "Paesaggio Sonoro",
+    description: "Dal beep al mondo che respira: suoni morbidi di legno, feltro e vetro e un ambiente che segue luogo, ora e meteo, con vento, pioggia, uccelli all'alba e grilli di notte. Tutto sintetizzato in tempo reale, anche offline. Da questa versione le release sono per Windows e Linux."
   }
 ];

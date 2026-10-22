@@ -29,14 +29,11 @@ Il sito è stato ridisegnato con l'identità visiva della versione 3.0 del gioco
 6.  **Immagini riproducibili:** `scripts/export-images.mjs` rigenera tutte le immagini dalla grafica ufficiale
     (vedi `README.md`).
 
-**Sito non pubblicato (2026-10-22):** per scelta di Simone il nuovo sito resta fermo; il deploy automatico è sospeso
-(`deploy-site.yml` solo con avvio manuale). La release **v3.1.0** del gioco è già uscita (solo Windows e Linux, senza macOS).
-Al momento della pubblicazione vanno anche tolti i riferimenti a macOS da `src/constants.ts` (scheda macOS e testi),
-`src/App.tsx`, `src/components/Hero.tsx` e `index.html`.
-
-I link di download puntano ancora alla release pubblica **v2.0.17**: quando il sito verrà pubblicato vanno aggiornati in
-`src/constants.ts` (`RELEASE_VERSION`, `RELEASE_BASE`, nomi e dimensioni dei file), insieme a `softwareVersion` in
-`index.html`, ai badge "Prossima release" della timeline e alla riga sulla versione 3.0 nella sezione Scarica (la 3.1.0 è la versione corrente).
+**Sito pubblicato (2026-10-22):** deploy manuale su thesafeplace.runtimeradio.it, allineato alla release **v3.1.0** del gioco
+(download Windows e Linux, nessun macOS, timeline fino alla 3.1.0). `deploy-site.yml` resta in solo `workflow_dispatch`: per
+pubblicare di nuovo si avvia a mano da Actions; per il deploy a ogni push rimettere il trigger `push` su `SITO/**`.
+Ad ogni nuova release vanno aggiornati `src/constants.ts` (`RELEASE_VERSION`, `RELEASE_BASE`, nomi file e dimensioni),
+`softwareVersion` in `index.html` e la timeline.
 
 ### 1.0.0 — Ripristino
 Il progetto è stato ripristinato a uno stato funzionante dopo interventi che avevano corrotto i percorsi delle risorse

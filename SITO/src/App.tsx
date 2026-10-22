@@ -17,8 +17,8 @@ import { imageUrl, srcSet } from './images';
 const NEXT_STEPS: { icon: IconName; title: string; description: string }[] = [
   {
     icon: 'sparkle',
-    title: 'La versione 3.0',
-    description: 'La nuova identità visiva del gioco (interfaccia, mappa illustrata, logo e copertine) arriva con la prossima release.',
+    title: 'Dopo la 3.1',
+    description: 'La nuova identità visiva e il paesaggio sonoro sono usciti con la 3.0 e la 3.1. Prossimi passi: ritratti e illustrazioni dei personaggi, e nuove rifiniture dal playtest.',
   },
   {
     icon: 'code',
@@ -68,7 +68,7 @@ const App: React.FC = () => {
               <p>
                 Nato come esperimento tecnico e narrativo, il gioco è stato sviluppato da Simone Pizzi in simbiosi creativa con il supporto
                 di modelli linguistici (LLM). È completo e giocabile dall’inizio alla fine, si gioca da tastiera ed è
-                un’<strong className="font-semibold text-ink">applicazione desktop gratuita e open source</strong> per Windows, macOS e Linux,
+                un’<strong className="font-semibold text-ink">applicazione desktop gratuita e open source</strong> per Windows e Linux,
                 costruita in React, con la narrativa in Ink, e impacchettata con Electron.
               </p>
             </Reveal>
@@ -121,7 +121,7 @@ const App: React.FC = () => {
         <Section
           id="download"
           eyebrow="Scarica"
-          title="Gratis, per Windows, macOS e Linux"
+          title="Gratis, per Windows e Linux"
           className={`bg-bg1 ${GLOW}`}
           lead={
             <>
@@ -130,9 +130,6 @@ const App: React.FC = () => {
                 l’ultima versione stabile, <strong className="font-semibold text-ink">{RELEASE_VERSION}</strong>, per il tuo sistema
                 operativo direttamente dalla release pubblica su GitHub. Non serve registrarsi e non c’è una versione web: è
                 un’applicazione desktop nativa.
-              </p>
-              <p className="mt-4 text-base">
-                La nuova veste grafica che vedi in queste pagine arriva con la versione 3.0, nella prossima release.
               </p>
             </>
           }
@@ -149,7 +146,7 @@ const App: React.FC = () => {
           eyebrow="Prossimi passi"
           title="Il viaggio continua"
           className={GLOW}
-          lead="Il gioco è completo, giocabile dall’inizio alla fine e distribuito come applicazione desktop open source per Windows, macOS e Linux. Lo sviluppo prosegue in modo aperto, sul repository pubblico."
+          lead="Il gioco è completo, giocabile dall’inizio alla fine e distribuito come applicazione desktop open source per Windows e Linux. Lo sviluppo prosegue in modo aperto, sul repository pubblico."
         >
           <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {NEXT_STEPS.map((step, i) => (
