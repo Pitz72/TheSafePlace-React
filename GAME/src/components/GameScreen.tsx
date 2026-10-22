@@ -17,6 +17,7 @@ import { useCharacterStore } from '../store/characterStore';
 import { GameState, Stat, WeatherType, InventoryItem, IItem, JournalEntryType } from '../types';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import WorldMap from './map/WorldMap';
+import { useMapZoom } from './map/useMapZoom';
 import { useItemDatabaseStore } from '../data/itemDatabase';
 import { WEATHER_DATA } from '../utils/weather';
 import { JOURNAL_ENTRY_COLORS } from '../constants';
@@ -42,6 +43,9 @@ const STATUS_TONES: Record<string, Tone> = {
   INFEZIONE: 'danger',
   SOVRACCARICO: 'gold',
 };
+
+/** Condition chips shown before collapsing the rest into "+N". */
+const MAX_CONDITION_CHIPS = 4;
 
 const BIOME_ICONS: Record<string, IconName> = {
   '.': 'plains', F: 'tree', '~': 'water', M: 'mountain', C: 'city', V: 'house', R: 'tent',
@@ -104,17 +108,15 @@ const TravellerCard: React.FC = () => {
           <div className="title-display text-[46px] text-ember tnum">{level}</div>
         </div>
       </div>
-      <div className="mt-3 flex items-center gap-3">
-        <Meter value={xp.current} max={xp.next} tone="gold" height={4} className="flex-1" />
-        <span className="tnum text-[16px] text-ink3">{xp.current} / {xp.next} XP</span>
+      <div className="mt-3 flex h-7 items-center gap-3">
+        <Meter value={xp.current} max={xp.next} tone={levelUpPending ? 'ember' : 'gold'} height={4} className="flex-1" />
+        <span className={`tnum text-[16px] ${levelUpPending ? 'text-ember2' : 'text-ink3'}`}>{xp.current} / {xp.next} XP</span>
+        {levelUpPending && (
+          <span className="flex items-center gap-1.5 text-[16px] text-ember2 anim-breathe" title="Nuovo livello disponibile: premi L">
+            <Icon name="levelUp" size={16} /> <kbd className="kbd !h-6 !min-w-[26px] !text-[14px]">L</kbd>
+          </span>
+        )}
       </div>
-      {levelUpPending && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-ember/50 bg-ember/10 px-4 py-2.5 text-[18px] text-ember2 anim-glow" style={{ '--accent': 'var(--c-ember)' } as React.CSSProperties}>
-          <Icon name="levelUp" size={20} />
-          <span className="flex-1">Nuovo livello disponibile</span>
-          <kbd className="kbd">L</kbd>
-        </div>
-      )}
 
       <div className="hairline my-4" />
 
@@ -125,11 +127,15 @@ const TravellerCard: React.FC = () => {
         <StatMeter icon="fatigue" label="Stanchezza" value={fatigue.current} max={fatigue.max} tone={fatigue.current / fatigue.max >= 0.75 ? 'gold' : 'violet'} />
       </div>
 
-      <div className="mt-4 flex min-h-[28px] flex-wrap gap-2">
+      {/* Two rows at most: the column must never push the compass off screen. */}
+      <div className="mt-4 flex max-h-[64px] min-h-[28px] flex-wrap gap-2 overflow-hidden" title={conditions.join(', ')}>
         {conditions.length > 0
-          ? conditions.map(condition => (
-            <span key={condition} className="chip" style={{ color: toneColor(STATUS_TONES[condition] ?? 'gold') }}>{condition.toLowerCase()}</span>
-          ))
+          ? <>
+            {conditions.slice(0, conditions.length > MAX_CONDITION_CHIPS ? MAX_CONDITION_CHIPS - 1 : MAX_CONDITION_CHIPS).map(condition => (
+              <span key={condition} className="chip" style={{ color: toneColor(STATUS_TONES[condition] ?? 'gold') }}>{condition.toLowerCase()}</span>
+            ))}
+            {conditions.length > MAX_CONDITION_CHIPS && <span className="chip text-ink2">+{conditions.length - MAX_CONDITION_CHIPS + 1}</span>}
+          </>
           : <span className="flex items-center gap-2 text-[17px] text-ink3"><Icon name="check" size={16} className="text-sage" /> Nessuna condizione</span>}
       </div>
     </section>
@@ -157,7 +163,7 @@ const EquipmentCard: React.FC = () => {
   };
 
   return (
-    <Card title="Equipaggiamento" icon="shield">
+    <Card title="Equipaggiamento" icon="shield" className="min-h-0 overflow-hidden">
       <div className="flex flex-col gap-2">
         {slots.map(slot => {
           const item = slot.index !== null ? inventory[slot.index] ?? null : null;
@@ -168,7 +174,7 @@ const EquipmentCard: React.FC = () => {
                 <Icon name={slot.icon} size={22} />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-cond text-[13px] font-semibold uppercase leading-none tracking-[0.18em] text-ink4">{slot.label}</div>
+                <div className="font-cond text-[15px] font-semibold uppercase leading-none tracking-[0.18em] text-ink3">{slot.label}</div>
                 <div className={`mt-0.5 truncate text-[19px] leading-tight ${info ? (info.broken ? 'text-danger' : 'text-ink') : 'text-ink4'}`}>
                   {info ? `${info.name}${info.broken ? ' · rotto' : ''}` : 'Nessuno'}
                 </div>
@@ -176,7 +182,7 @@ const EquipmentCard: React.FC = () => {
               {info?.durability && !info.broken && (
                 <div className="w-14">
                   <Meter value={info.durability.current} max={info.durability.max} tone={info.durability.current / info.durability.max < 0.3 ? 'danger' : 'ink2'} height={4} />
-                  <div className="mt-1 text-right text-[13px] text-ink4 tnum">{info.durability.current}/{info.durability.max}</div>
+                  <div className="mt-1 text-right text-[15px] text-ink3 tnum">{info.durability.current}/{info.durability.max}</div>
                 </div>
               )}
             </div>
@@ -198,7 +204,7 @@ const AttributesCard: React.FC = () => {
           const mod = getAttributeModifier(key);
           return (
             <div key={key} className="flex items-baseline gap-2 rounded-xl border border-line bg-white/[0.025] px-3 py-1.5">
-              <div className="font-cond text-[14px] font-semibold uppercase tracking-[0.2em] text-ink4">{key}</div>
+              <div className="font-cond text-[15px] font-semibold uppercase tracking-[0.2em] text-ink3">{key}</div>
               <div className="flex flex-1 items-baseline justify-between">
                 <span className="tnum text-[24px] font-semibold text-ink">{attributes[key]}</span>
                 <span className={`tnum text-[16px] ${mod > 0 ? 'text-sage' : mod < 0 ? 'text-danger' : 'text-ink3'}`}>{mod >= 0 ? '+' : ''}{mod}</span>
@@ -236,21 +242,25 @@ const PlaceHeader: React.FC = () => {
 
   return (
     <header className="flex h-[78px] flex-shrink-0 items-center gap-6 px-6">
-      <div className="flex min-w-0 items-center gap-4">
+      <div className="flex flex-shrink-0 items-center gap-4">
         <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-line2 bg-white/[0.04] text-ember2">
           <Icon name={BIOME_ICONS[tileInfo.char] ?? 'pin'} size={24} />
         </div>
         <div className="min-w-0">
-          <div className="title-display truncate text-[34px] text-ink">{tileInfo.name}</div>
-          <div className="tnum font-cond text-[15px] font-semibold tracking-[0.18em] text-ink4">{playerPos.x} · {playerPos.y}</div>
+          <div className="title-display whitespace-nowrap text-[34px] text-ink">{tileInfo.name}</div>
+          <div className="tnum font-cond text-[15px] font-semibold tracking-[0.18em] text-ink3">{playerPos.x} · {playerPos.y}</div>
         </div>
       </div>
       <div className="ml-auto flex items-center gap-6">
-        {effects.map(effect => (
-          <span key={effect.text} className="flex items-center gap-1.5 text-[17px]" style={{ color: toneColor(effect.tone) }}>
-            <Icon name={effect.icon} size={18} /> {effect.text}
-          </span>
-        ))}
+        {effects.length > 0 && (
+          <div className="flex flex-col gap-0.5">
+            {effects.map(effect => (
+              <span key={effect.text} className="flex items-center gap-1.5 whitespace-nowrap text-[15px]" style={{ color: toneColor(effect.tone) }}>
+                <Icon name={effect.icon} size={16} /> {effect.text}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="flex items-center gap-3">
           <Icon name={WEATHER_ICONS[weather.type]} size={28} className="text-ink2" />
           <div>
@@ -273,6 +283,22 @@ const PlaceHeader: React.FC = () => {
 
 // --- Right column ------------------------------------------------------------
 
+/**
+ * Stable keys for journal entries: the store keeps old entries by reference,
+ * so each object gets an id the first time it is drawn and new entries always
+ * mount (and fade in), even when the journal is full at 100.
+ */
+const journalIds = new WeakMap<object, number>();
+let nextJournalId = 0;
+const journalKey = (entry: object) => {
+  let id = journalIds.get(entry);
+  if (id === undefined) {
+    id = nextJournalId++;
+    journalIds.set(entry, id);
+  }
+  return id;
+};
+
 const JournalCard: React.FC = () => {
   const journal = useGameStore((state) => state.journal);
   const journalRef = useRef<HTMLDivElement>(null);
@@ -293,16 +319,16 @@ const JournalCard: React.FC = () => {
               : harmonize(entry.color || JOURNAL_ENTRY_COLORS[entry.type]);
             return (
               <div
-                key={journal.length - index}
+                key={journalKey(entry)}
                 className={`relative border-l pb-3.5 pl-4 ${index === 0 ? 'anim-fade-up' : ''}`}
                 style={{ borderColor: 'var(--line-2)', opacity: Math.max(0.42, 1 - index * 0.045) }}
               >
                 <span className="absolute -left-[4.5px] top-[9px] h-2 w-2 rounded-full" style={{ background: color }} />
                 <div className="mb-0.5 flex items-center gap-2">
-                  <span className="tnum font-cond text-[15px] font-semibold tracking-[0.12em] text-ink4">
+                  <span className="tnum font-cond text-[15px] font-semibold tracking-[0.12em] text-ink3">
                     {String(entry.time.hour).padStart(2, '0')}:{String(entry.time.minute).padStart(2, '0')}
                   </span>
-                  {tag && <span className="font-cond text-[13px] font-semibold uppercase tracking-[0.2em]" style={{ color }}>{tag}</span>}
+                  {tag && <span className="font-cond text-[14px] font-semibold uppercase tracking-[0.2em]" style={{ color }}>{tag}</span>}
                 </div>
                 <p className="font-serif text-[18.5px] leading-[1.5]" style={{ color }}>{body}</p>
               </div>
@@ -351,8 +377,8 @@ const BackpackCard: React.FC = () => {
                 <li key={index} className="flex items-center gap-3 py-[5px] text-[18px]">
                   <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ background: harmonize(itemDetails.color) }} />
                   <span className={`min-w-0 flex-1 truncate ${broken ? 'text-danger' : 'text-ink2'}`}>{itemDetails.name}</span>
-                  {equipped.has(index) && <span className="rounded border border-ember/50 px-1.5 font-cond text-[13px] font-semibold tracking-wider text-ember">E</span>}
-                  {invItem.durability && <span className="tnum text-[14px] text-ink4">{broken ? 'rotto' : `${invItem.durability.current}/${invItem.durability.max}`}</span>}
+                  {equipped.has(index) && <span className="rounded border border-ember/50 px-1.5 font-cond text-[14px] font-semibold tracking-wider text-ember">E</span>}
+                  {invItem.durability && <span className="tnum text-[15px] text-ink3">{broken ? 'rotto' : `${invItem.durability.current}/${invItem.durability.max}`}</span>}
                   {invItem.quantity > 1 && <span className="tnum text-[16px] text-ink3">×{invItem.quantity}</span>}
                 </li>
               );
@@ -378,6 +404,8 @@ const GameScreen: React.FC = () => {
   const { isInventoryOpen, isInRefuge, toggleInventory } = useInteractionStore();
   const gameState = useGameStore((state) => state.gameState);
   const levelUpPending = useCharacterStore((state) => state.levelUpPending);
+  const mapZoom = useMapZoom();
+  const changeZoom = mapZoom.change;
 
   const handleOpenPauseMenu = useCallback(() => {
     setGameState(GameState.PAUSE_MENU);
@@ -441,18 +469,23 @@ const GameScreen: React.FC = () => {
       map['l'] = openLevelUpScreen;
       map['L'] = openLevelUpScreen;
       map['Escape'] = handleOpenPauseMenu;
+      // Map zoom: + closer, - further (with or without shift).
+      map['+'] = () => changeZoom(-1);
+      map['='] = () => changeZoom(-1);
+      map['-'] = () => changeZoom(1);
+      map['_'] = () => changeZoom(1);
     }
     return map;
-  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen]);
+  }, [gameState, toggleInventory, handleOpenQuestLog, handleQuickRest, handleActiveSearch, handleMove, isInventoryOpen, isInRefuge, handleOpenPauseMenu, openLevelUpScreen, changeZoom]);
 
   useKeyboardInput(keyHandlerMap);
 
   return (
     <>
       {import.meta.env.DEV && <DebugPanel />}
-      <div className="flex h-full w-full gap-5 p-6 text-ink">
+      <div className="hud flex h-full w-full gap-5 p-6 text-ink">
         {/* Left column: the traveller. */}
-        <div className="flex w-[400px] flex-shrink-0 flex-col gap-3.5">
+        <div className="flex min-h-0 w-[400px] flex-shrink-0 flex-col gap-3">
           <TravellerCard />
           <EquipmentCard />
           <AttributesCard />
@@ -464,11 +497,13 @@ const GameScreen: React.FC = () => {
           <section className="surface flex min-h-0 flex-1 flex-col overflow-hidden">
             <PlaceHeader />
             <div className="relative min-h-0 flex-1 border-t border-line">
-              <WorldMap />
+              <WorldMap zoom={mapZoom.zoom} paused={gameState !== GameState.IN_GAME || isInventoryOpen || isInRefuge} />
             </div>
           </section>
-          <div className="surface flex h-[64px] flex-shrink-0 items-center justify-center px-6 !rounded-2xl">
+          <div className="surface flex h-[64px] flex-shrink-0 items-center justify-between gap-4 px-6 !rounded-2xl">
             <KeyHints
+              className="!gap-x-4"
+              align="start"
               hints={[
                 { keys: ['WASD'], label: 'Cammina' },
                 { keys: ['I'], label: 'Zaino' },
@@ -479,6 +514,11 @@ const GameScreen: React.FC = () => {
                 { keys: ['ESC'], label: 'Menu' },
               ]}
             />
+            <div className="flex flex-shrink-0 items-center gap-1.5 text-ink2">
+              <button type="button" tabIndex={-1} className="kbd hover:border-line3 disabled:opacity-35" onClick={() => changeZoom(1)} disabled={!mapZoom.canZoomOut} title="Allontana la mappa [-]">−</button>
+              <Icon name="search" size={20} className="mx-1 text-ink3" />
+              <button type="button" tabIndex={-1} className="kbd hover:border-line3 disabled:opacity-35" onClick={() => changeZoom(-1)} disabled={!mapZoom.canZoomIn} title="Avvicina la mappa [+]">+</button>
+            </div>
           </div>
         </div>
 

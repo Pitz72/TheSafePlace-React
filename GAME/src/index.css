@@ -107,7 +107,7 @@
   --c-ink: 237 230 217;
   --c-ink2: 186 177 163;
   --c-ink3: 133 125 114;
-  --c-ink4: 92 87 80;
+  --c-ink4: 120 113 103;
   /* Luce: la brace del tramonto e i colori della strada. */
   --c-ember: 232 137 63;
   --c-ember2: 245 180 108;
@@ -212,6 +212,12 @@ body {
     backdrop-filter: blur(var(--blur)) saturate(1.15);
   }
 
+  /* The HUD cards sit on a static background: blurring it is invisible but
+     costs a full re-blur whenever something inside repaints. */
+  .hud .surface {
+    backdrop-filter: none;
+  }
+
   .surface-flat {
     background: rgba(255, 255, 255, 0.025);
     border: 1px solid var(--line);
@@ -309,9 +315,13 @@ body {
     color: rgb(var(--c-ink4));
   }
 
+  /* High contrast: no filled row (every text inside keeps its own color),
+     just a black row with a thick accent outline. */
   .theme-high_contrast .choice.is-selected {
-    background: rgb(var(--accent));
-    color: #000;
+    background: #000;
+    color: rgb(var(--c-ink));
+    border-color: rgb(var(--accent));
+    box-shadow: 0 0 0 2px rgb(var(--accent));
   }
 
   .chip {
@@ -458,6 +468,11 @@ body {
   transform-box: fill-box;
   transform-origin: center;
   animation: pulse-ring 2.2s ease-out infinite;
+}
+
+/* An overlay is open over the map: nothing moves under its blur. */
+.paused .map-pulse {
+  animation-play-state: paused;
 }
 
 .anim-fade-in { animation: fade-in 500ms ease both; }

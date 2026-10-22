@@ -33,6 +33,10 @@ const splitParagraphs = (text: string) => text.split('\n\n').map(p => p.trim()).
 /** Short lines in quotes are spoken: set apart in italics. */
 const isSpoken = (paragraph: string) => /^["“'«]/.test(paragraph);
 
+/** Pages with this many paragraphs (or characters) use a tighter layout so they fit. */
+const DENSE_PARAGRAPHS = 8;
+const DENSE_CHARACTERS = 1100;
+
 const CutsceneFrame: React.FC<{
     paragraphs: string[];
     visible: number;
@@ -42,9 +46,27 @@ const CutsceneFrame: React.FC<{
     page: unknown;
 }> = ({ paragraphs, visible, choices, selected, hints, page }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const shownBefore = useRef(0);
+    const [overflows, setOverflows] = useState(false);
+    const dense = paragraphs.length > DENSE_PARAGRAPHS || paragraphs.join('').length > DENSE_CHARACTERS;
+
+    // While paragraphs appear one by one, follow the newest; when the whole page
+    // is shown at once, start from the top so nothing is skipped.
     useEffect(() => {
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-    }, [visible, choices.length]);
+        const box = scrollRef.current;
+        if (!box) return;
+        if (visible - shownBefore.current === 1) {
+            box.lastElementChild?.lastElementChild?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+        } else {
+            box.scrollTo({ top: 0 });
+        }
+        shownBefore.current = visible;
+        setOverflows(box.scrollHeight > box.clientHeight + 2);
+    }, [visible, page, choices.length]);
+
+    const scrollBy = useCallback((delta: number) => scrollRef.current?.scrollBy({ top: delta, behavior: 'smooth' }), []);
+    const scrollKeys = useMemo(() => ({ PageUp: () => scrollBy(-300), PageDown: () => scrollBy(300) }), [scrollBy]);
+    useKeyboardInput(scrollKeys);
 
     return (
         <div className="absolute inset-0 overflow-hidden bg-bg0">
@@ -56,11 +78,11 @@ const CutsceneFrame: React.FC<{
 
             <div className="relative flex h-full flex-col items-center px-24 py-[110px]">
                 <div ref={scrollRef} className="scroll-y fade-edges flex w-full max-w-[1080px] flex-1 flex-col">
-                    <div key={String(page)} className="my-auto flex flex-col gap-7 py-10">
+                    <div key={String(page)} className={`my-auto flex flex-col ${dense ? 'gap-5 py-6' : 'gap-7 py-10'}`}>
                         {paragraphs.slice(0, visible).map((paragraph, index) => (
                             <p
                                 key={index}
-                                className={`prose-story whitespace-pre-wrap text-center anim-fade-up ${isSpoken(paragraph) ? 'text-[31px] italic text-ember2' : 'text-[30px] text-ink'}`}
+                                className={`prose-story whitespace-pre-wrap text-center anim-fade-up ${isSpoken(paragraph) ? `${dense ? 'text-[27px]' : 'text-[31px]'} italic text-ember2` : `${dense ? 'text-[26px] !leading-[1.5]' : 'text-[30px]'} text-ink`}`}
                                 style={{ animationDuration: '900ms' }}
                             >
                                 {paragraph}
@@ -74,7 +96,7 @@ const CutsceneFrame: React.FC<{
                     </div>
                 )}
                 <div className="mt-6 flex-shrink-0">
-                    <KeyHints hints={hints} />
+                    <KeyHints hints={overflows ? [{ keys: ['PAG SU', 'PAG GIÙ'], label: 'Scorri' }, ...hints] : hints} />
                 </div>
             </div>
         </div>

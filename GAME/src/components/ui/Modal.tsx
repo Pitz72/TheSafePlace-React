@@ -49,7 +49,8 @@ const Modal: React.FC<ModalProps> = ({
                 background: backdrop === 'scene'
                     ? 'radial-gradient(ellipse at 50% 40%, rgb(var(--c-bg1) / 0.9), rgb(var(--c-bg0) / 0.98))'
                     : backdrop === 'soft' ? 'radial-gradient(ellipse at 50% 50%, rgb(var(--c-bg0) / 0.55), rgb(var(--c-bg0) / 0.25))' : 'var(--backdrop)',
-                backdropFilter: backdrop === 'soft' ? 'blur(3px)' : 'blur(calc(var(--blur) * 0.6))',
+                // The menus' illustration is animated: blurring it would cost every frame.
+                backdropFilter: backdrop === 'soft' ? undefined : 'blur(calc(var(--blur) * 0.6))',
             }}
         />
         <div className={`surface relative flex max-h-full flex-col overflow-hidden anim-scale-in ${WIDTHS[size]} ${className}`} style={{ background: 'var(--glass-strong)' }}>

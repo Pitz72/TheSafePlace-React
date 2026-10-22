@@ -172,17 +172,20 @@ const ItemDetails: React.FC<{ item: IItem | null, invItem: InventoryItem | null,
 const ActionMenu: React.FC = () => {
     const { options, selectedIndex, mode } = useInteractionStore(state => state.actionMenuState);
     return (
-        <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ background: 'rgb(var(--c-bg0) / 0.55)' }}>
-            <div className="surface w-[560px] px-8 py-7 anim-scale-in" style={{ background: 'var(--glass-strong)' }}>
-                <div className="eyebrow mb-4 flex items-center gap-2.5 text-accent">
+        <div className="absolute inset-0 z-10 flex items-center justify-center p-6" style={{ background: 'rgb(var(--c-bg0) / 0.55)' }}>
+            <div className="surface flex max-h-full w-[560px] flex-col px-8 py-7 anim-scale-in" style={{ background: 'var(--glass-strong)' }}>
+                <div className="eyebrow mb-4 flex flex-shrink-0 items-center gap-2.5 text-accent">
                     <Icon name={mode === 'repair' ? 'hammer' : 'sparkle'} size={18} />
                     {mode === 'repair' ? 'Cosa vuoi riparare?' : 'Azioni'}
                 </div>
-                <ChoiceList
-                    size="md"
-                    selected={selectedIndex}
-                    items={options.map((option, index) => ({ id: `${option}-${index}`, label: option, icon: option === 'Annulla' ? 'arrowLeft' : undefined }))}
-                />
+                {/* Long repair lists scroll inside the card: the prompt and "Annulla" stay reachable. */}
+                <div className="scroll-y min-h-0 flex-1">
+                    <ChoiceList
+                        size="md"
+                        selected={selectedIndex}
+                        items={options.map((option, index) => ({ id: `${option}-${index}`, label: option, icon: option === 'Annulla' ? 'arrowLeft' : undefined }))}
+                    />
+                </div>
             </div>
         </div>
     );

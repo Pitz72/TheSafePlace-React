@@ -84,10 +84,19 @@ const GoodsPanel: React.FC<{
 };
 
 /** What one side puts on the table, with its total. */
-const OfferCard: React.FC<{ title: string; items: TradeItem[]; total: number; tone: 'sage' | 'ember'; names: (itemId: string) => string }> = ({ title, items, total, tone, names }) => (
+const OfferCard: React.FC<{ title: string; items: TradeItem[]; total: number; tone: 'sage' | 'ember'; names: (itemId: string) => string }> = ({ title, items, total, tone, names }) => {
+  // The newest item stays in view when the offer is longer than the card.
+  const listRef = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
+  }, [items.length]);
+  return (
   <div className="surface-flat flex min-h-0 flex-1 flex-col px-5 py-4">
-    <div className="eyebrow mb-3">{title}</div>
-    <ul className="scroll-y min-h-0 flex-1">
+    <div className="mb-2 flex items-baseline justify-between gap-3">
+      <span className="eyebrow">{title}{items.length > 0 ? ` · ${items.length}` : ''}</span>
+      <span className={`tnum text-[24px] font-semibold ${tone === 'sage' ? 'text-sage' : 'text-ember2'}`}>{total}v</span>
+    </div>
+    <ul ref={listRef} className="scroll-y fade-bottom min-h-0 flex-1">
       {items.length === 0
         ? <li className="text-[18px] italic text-ink4">Ancora nulla</li>
         : items.map((item, index) => (
@@ -98,12 +107,9 @@ const OfferCard: React.FC<{ title: string; items: TradeItem[]; total: number; to
           </li>
         ))}
     </ul>
-    <div className="mt-2 flex items-baseline justify-between border-t border-line pt-3">
-      <span className="text-[17px] text-ink3">Totale</span>
-      <span className={`tnum text-[26px] font-semibold ${tone === 'sage' ? 'text-sage' : 'text-ember2'}`}>{total}v</span>
-    </div>
   </div>
-);
+  );
+};
 
 /**
  * TradeScreen component (v1.7.0).
@@ -378,23 +384,21 @@ const TradeScreen: React.FC = () => {
 
         <div className="flex w-[420px] flex-shrink-0 flex-col gap-4">
           <OfferCard title="La tua offerta" items={playerOffer} total={playerOfferValue} tone="sage" names={nameOf} />
-          <div className="flex items-center justify-center text-ink4">
-            <Icon name="arrowUp" size={20} />
-            <Icon name="arrowDown" size={20} />
-          </div>
           <OfferCard title={`L'offerta di ${trader.name}`} items={traderOffer} total={Math.round(traderOfferValue * effectiveMarkup)} tone="ember" names={nameOf} />
           <div
-            className="rounded-2xl border px-6 py-5 text-center transition-colors duration-300"
+            className="flex-shrink-0 rounded-2xl border px-5 py-3 transition-colors duration-300"
             style={{
               borderColor: balance >= 0 ? 'rgb(var(--c-sage) / 0.45)' : 'rgb(var(--c-danger) / 0.45)',
               background: balance >= 0 ? 'rgb(var(--c-sage) / 0.08)' : 'rgb(var(--c-danger) / 0.08)',
             }}
           >
-            <div className="eyebrow">Bilancio</div>
-            <div className={`tnum mt-1 text-[44px] font-semibold leading-none ${balance >= 0 ? 'text-sage' : 'text-danger'}`}>
-              {balance >= 0 ? '+' : ''}{balance}
+            <div className="flex items-baseline gap-4">
+              <div className="eyebrow">Bilancio</div>
+              <div className={`tnum text-[32px] font-semibold leading-none ${balance >= 0 ? 'text-sage' : 'text-danger'}`}>
+                {balance >= 0 ? '+' : ''}{balance}
+              </div>
             </div>
-            <div className={`mt-2 text-[18px] ${balance < 0 ? 'text-danger' : canTrade ? 'text-sage' : 'text-ink3'}`}>
+            <div className={`mt-1 text-[17px] ${balance < 0 ? 'text-danger' : canTrade ? 'text-sage' : 'text-ink3'}`}>
               {balance < 0 ? 'Offerta insufficiente' : canTrade ? 'Scambio valido: premi INVIO' : 'Scegli cosa dare e cosa prendere'}
             </div>
           </div>

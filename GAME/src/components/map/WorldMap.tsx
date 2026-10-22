@@ -4,18 +4,17 @@ import { useCharacterStore } from '../../store/characterStore';
 import { useTimeStore } from '../../store/timeStore';
 import { useQuestDatabaseStore } from '../../data/questDatabase';
 import { getActiveQuestMarkers } from '../../services/questService';
-import { GameState, Position, WeatherType } from '../../types';
+import { Position, WeatherType } from '../../types';
 import { toAbsoluteMinutes } from '../../utils/time';
 import { CHUNK, VOID_COLOR, chunkSignature, drawChunk } from './terrain';
 import { lightAt } from './lighting';
 import Icon, { IconName } from '../ui/Icon';
 import { Tone, toneColor } from '../../utils/palette';
+import { createRng } from '../art/scenery';
 
-/** Rows of tiles visible at each zoom level (the middle one is the default). */
-const ZOOM_LEVELS = [17, 25, 35];
-const ZOOM_KEY = 'tspc_map_zoom';
 const MOVE_MS = 150;
-const MAX_CACHED_CHUNKS = 160;
+/** Pixels of cached terrain kept in memory (about 160 MB of RGBA at most). */
+const MAX_CACHED_PIXELS = 40_000_000;
 
 interface Marker {
     id: string;
@@ -35,15 +34,6 @@ const LANDMARKS: Record<string, { name: string; icon: IconName; tone: Tone; prio
     B: { name: 'Biblioteca', icon: 'columns', tone: 'gold', priority: 60 },
     L: { name: 'Laboratorio', icon: 'bolt', tone: 'teal', priority: 60 },
     N: { name: 'Nido della Cenere', icon: 'flame', tone: 'violet', priority: 50 },
-};
-
-const loadZoom = () => {
-    try {
-        const saved = Number(localStorage.getItem(ZOOM_KEY));
-        return ZOOM_LEVELS.includes(saved) ? saved : ZOOM_LEVELS[1];
-    } catch {
-        return ZOOM_LEVELS[1];
-    }
 };
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -68,14 +58,18 @@ const Pin: React.FC<{ marker: Marker }> = ({ marker }) => {
  * that glides after the player, pins for quests and places, edge indicators
  * for what is out of sight, and the light of the hour and the weather.
  */
-const WorldMap: React.FC = () => {
+const WorldMap: React.FC<{
+    /** Rows of tiles visible (see useMapZoom). */
+    zoom: number;
+    /** An overlay is open: animations stop, so nothing repaints under its blur. */
+    paused?: boolean;
+}> = ({ zoom, paused = false }) => {
     const map = useGameStore(state => state.map);
     const playerPos = useGameStore(state => state.playerPos);
     const wanderingTrader = useGameStore(state => state.wanderingTrader);
     const pois = useGameStore(state => state.pois);
     const visitedRefuges = useGameStore(state => state.visitedRefuges);
     const lightUntil = useGameStore(state => state.lightUntil);
-    const gameState = useGameStore(state => state.gameState);
     const activeQuests = useCharacterStore(state => state.activeQuests);
     const quests = useQuestDatabaseStore(state => state.quests);
     const gameTime = useTimeStore(state => state.gameTime);
@@ -89,13 +83,14 @@ const WorldMap: React.FC = () => {
     const lightRef = useRef<HTMLDivElement>(null);
     const chunks = useRef(new Map<string, { canvas: HTMLCanvasElement; tilePx: number; sig: string }>());
     const view = useRef({ x: playerPos.x, y: playerPos.y });
+    /** Last position the player reached: a step is a glide, anything longer a jump. */
+    const lastTarget = useRef({ x: playerPos.x, y: playerPos.y });
     const tween = useRef<{ fromX: number; fromY: number; start: number } | null>(null);
     const facing = useRef(0);
     const frame = useRef(0);
 
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [deviceScale, setDeviceScale] = useState(1);
-    const [zoom, setZoom] = useState(loadZoom);
 
     const usedRefuges = useMemo(() => new Set(visitedRefuges.map(p => `${p.x},${p.y}`)), [visitedRefuges]);
     const mapWidth = useMemo(() => Math.max(0, ...map.map(row => row.length)), [map]);
@@ -149,6 +144,7 @@ const WorldMap: React.FC = () => {
         const lastX = Math.floor((camera.x + camera.cols) / CHUNK);
         const lastY = Math.floor((camera.y + zoom) / CHUNK);
         const cache = chunks.current;
+        const visible = new Set<string>();
         for (let cy = firstY; cy <= lastY; cy++) {
             for (let cx = firstX; cx <= lastX; cx++) {
                 if (cx < 0 || cy < 0 || cx * CHUNK >= mapWidth || cy * CHUNK >= mapHeight) continue;
@@ -169,10 +165,26 @@ const WorldMap: React.FC = () => {
                 // Most recently used last: the oldest chunks are dropped first.
                 cache.delete(key);
                 cache.set(key, entry);
+                visible.add(key);
                 ctx.drawImage(entry.canvas, Math.round((cx * CHUNK - camera.x) * tilePx), Math.round((cy * CHUNK - camera.y) * tilePx));
             }
         }
-        while (cache.size > MAX_CACHED_CHUNKS) cache.delete(cache.keys().next().value!);
+        // Keep the cache within a memory budget: chunks drawn at another size
+        // (zoom, resize) go first, then the least recently used; never the visible ones.
+        for (const [key, entry] of cache) {
+            if (entry.tilePx === tilePx) continue;
+            entry.canvas.width = entry.canvas.height = 0;
+            cache.delete(key);
+        }
+        let pixels = 0;
+        for (const entry of cache.values()) pixels += entry.canvas.width * entry.canvas.height;
+        for (const [key, entry] of cache) {
+            if (pixels <= MAX_CACHED_PIXELS) break;
+            if (visible.has(key)) continue;
+            pixels -= entry.canvas.width * entry.canvas.height;
+            entry.canvas.width = entry.canvas.height = 0;
+            cache.delete(key);
+        }
 
         worldRef.current?.setAttribute('transform', `translate(${-camera.x * tileSize} ${-camera.y * tileSize}) scale(${tileSize})`);
         playerRef.current?.setAttribute('transform', `translate(${view.current.x + 0.5} ${view.current.y + 0.5})`);
@@ -198,8 +210,11 @@ const WorldMap: React.FC = () => {
             facing.current = Math.atan2(dy, dx);
             headingRef.current?.setAttribute('transform', `rotate(${(facing.current * 180) / Math.PI})`);
         }
+        // Decided on the step, not on the camera, which lags behind while gliding.
+        const jumped = Math.hypot(playerPos.x - lastTarget.current.x, playerPos.y - lastTarget.current.y) > 1.5;
+        lastTarget.current = { x: playerPos.x, y: playerPos.y };
         if (dx === 0 && dy === 0) return;
-        if (Math.hypot(dx, dy) > 1.5) {
+        if (jumped) {
             view.current = { x: playerPos.x, y: playerPos.y };
             tween.current = null;
             drawRef.current();
@@ -208,7 +223,8 @@ const WorldMap: React.FC = () => {
         tween.current = { fromX: view.current.x, fromY: view.current.y, start: performance.now() };
         cancelAnimationFrame(frame.current);
         const step = (now: number) => {
-            const t = tween.current ? Math.min(1, (now - tween.current.start) / MOVE_MS) : 1;
+            // A frame can be stamped slightly before the step began: never go backwards.
+            const t = tween.current ? Math.max(0, Math.min(1, (now - tween.current.start) / MOVE_MS)) : 1;
             const k = easeOut(t);
             if (tween.current) {
                 view.current = {
@@ -226,25 +242,6 @@ const WorldMap: React.FC = () => {
     }, [playerPos.x, playerPos.y]);
 
     useEffect(() => { draw(); }, [draw]);
-
-    // Zoom: + and - (or the mouse wheel), remembered between sessions.
-    const changeZoom = useCallback((delta: number) => {
-        setZoom(current => {
-            const index = Math.max(0, Math.min(ZOOM_LEVELS.length - 1, ZOOM_LEVELS.indexOf(current) + delta));
-            const next = ZOOM_LEVELS[index];
-            try { localStorage.setItem(ZOOM_KEY, String(next)); } catch { /* the zoom still applies */ }
-            return next;
-        });
-    }, []);
-    useEffect(() => {
-        if (gameState !== GameState.IN_GAME) return;
-        const onKey = (event: KeyboardEvent) => {
-            if (event.key === '+' || event.key === '=') changeZoom(-1);
-            else if (event.key === '-' || event.key === '_') changeZoom(1);
-        };
-        window.addEventListener('keydown', onKey);
-        return () => window.removeEventListener('keydown', onKey);
-    }, [gameState, changeZoom]);
 
     // --- Markers -------------------------------------------------------------
 
@@ -308,7 +305,7 @@ const WorldMap: React.FC = () => {
     );
 
     return (
-        <div ref={containerRef} className="relative h-full w-full overflow-hidden" style={{ background: VOID_COLOR }}>
+        <div ref={containerRef} className={`relative h-full w-full overflow-hidden ${paused ? 'paused' : ''}`} style={{ background: VOID_COLOR }}>
             <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
             {/* Hour of the day: multiplied over the land, with a pool of light around the player. */}
@@ -355,18 +352,31 @@ const WorldMap: React.FC = () => {
                 </>
             )}
 
-            <div className="absolute bottom-4 right-4 flex flex-col overflow-hidden rounded-xl border border-line2" style={{ background: 'rgb(var(--c-bg1) / 0.8)' }}>
-                <button type="button" tabIndex={-1} onClick={() => changeZoom(-1)} className="flex h-9 w-9 items-center justify-center text-ink2 hover:text-ink disabled:opacity-30" disabled={zoom === ZOOM_LEVELS[0]} title="Avvicina [+]">
-                    <Icon name="plus" size={18} />
-                </button>
-                <div className="h-px bg-line2" />
-                <button type="button" tabIndex={-1} onClick={() => changeZoom(1)} className="flex h-9 w-9 items-center justify-center text-ink2 hover:text-ink disabled:opacity-30" disabled={zoom === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]} title="Allontana [-]">
-                    <Icon name="minus" size={18} />
-                </button>
-            </div>
         </div>
     );
 };
+
+/**
+ * A tile of short slanted rain streaks that repeats without seams: streaks
+ * crossing an edge are drawn again on the opposite side.
+ */
+const rainTile = (width: number, height: number, count: number, length: number, alpha: number, seed: number) => {
+    const rng = createRng(seed);
+    let path = '';
+    for (let i = 0; i < count; i++) {
+        const x = Math.round(rng() * width);
+        const y = Math.round(rng() * height);
+        const len = Math.round(length * (0.6 + rng() * 0.6));
+        for (const ox of [-width, 0, width]) {
+            for (const oy of [-height, 0, height]) path += `M${x + ox} ${y + oy}l${-Math.round(len / 4)} ${len}`;
+        }
+    }
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}'><path d='${path}' stroke='rgba(200,220,235,${alpha})' stroke-width='1.2' stroke-linecap='round'/></svg>`;
+    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+};
+
+const RAIN = `${rainTile(120, 600, 38, 46, 0.24, 7)}, ${rainTile(60, 300, 10, 32, 0.14, 8)}`;
+const STORM = `${rainTile(120, 600, 80, 60, 0.32, 9)}, ${rainTile(60, 300, 16, 40, 0.16, 10)}`;
 
 /** Rain, storm, fog and cloud shadows over the map. */
 const WeatherLayer: React.FC<{ type: WeatherType }> = ({ type }) => {
@@ -380,7 +390,7 @@ const WeatherLayer: React.FC<{ type: WeatherType }> = ({ type }) => {
                     <div
                         className="pointer-events-none absolute inset-0"
                         style={{
-                            backgroundImage: `repeating-linear-gradient(104deg, transparent 0 ${storm ? 9 : 15}px, rgba(200,220,235,${storm ? 0.3 : 0.2}) ${storm ? 9 : 15}px ${storm ? 10 : 16}px), repeating-linear-gradient(100deg, transparent 0 23px, rgba(200,220,235,0.12) 23px 24px)`,
+                            backgroundImage: storm ? STORM : RAIN,
                             backgroundSize: '120px 600px, 60px 300px',
                             animation: `rain-fall ${storm ? 0.35 : 0.6}s linear infinite`,
                         }}

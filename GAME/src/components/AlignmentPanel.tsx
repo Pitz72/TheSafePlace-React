@@ -19,7 +19,7 @@ const AlignmentPanel: React.FC = () => {
     const label = dominant === 'lena' ? 'Compassionevole' : dominant === 'elian' ? 'Pragmatico' : 'In equilibrio';
 
     return (
-        <section className="surface px-6 pb-5 pt-4">
+        <section className="surface flex-shrink-0 px-6 pb-5 pt-4">
             <header className="mb-3 flex items-center gap-2.5">
                 <Icon name="compass" size={18} className="text-ink3" />
                 <h2 className="eyebrow flex-1">Bussola morale</h2>

@@ -21,11 +21,12 @@ try {
 const covers = path.resolve(root, '../COVER-UFFICIALE');
 mkdirSync(covers, { recursive: true });
 
-// [query, CSS width, CSS height, device scale, output]
+// [query, CSS width, CSS height, device scale, output, page zoom]
+// Covers with odd sizes render at their exact pixel size, scaled with CSS zoom.
 const jobs = [
-  ['art=cover-landscape', 1920, 1072, 1.4334, path.join(covers, 'cover-orizzontale-2752x1536.png')],
+  ['art=cover-landscape', 2752, 1536, 1, path.join(covers, 'cover-orizzontale-2752x1536.png'), 2752 / 1920],
   ['art=cover-portrait', 848, 1264, 2, path.join(covers, 'cover-verticale-1696x2528.png')],
-  ['art=poster', 900, 1333.5, 2, path.join(covers, 'poster-27x40-1800x2667.png')],
+  ['art=poster', 1800, 2667, 1, path.join(covers, 'poster-27x40-1800x2667.png'), 2],
   ['art=keyart&animated=0', 1920, 1080, 2, path.join(covers, 'key-art-3840x2160.png')],
   ['art=keyart&animated=0&variant=dawn', 1920, 1080, 1, path.join(covers, 'key-art-alba-1920x1080.png')],
   ['art=keyart&animated=0&variant=night', 1920, 1080, 1, path.join(covers, 'key-art-notte-1920x1080.png')],
@@ -38,8 +39,9 @@ const jobs = [
 ];
 
 const browser = await chromium.launch();
-for (const [query, width, height, scale, out] of jobs) {
-  const page = await browser.newPage({ viewport: { width: Math.round(width), height: Math.round(height) }, deviceScaleFactor: scale });
+for (const [query, width, height, scale, out, zoom] of jobs) {
+  const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+  if (zoom) await page.addInitScript({ content: `document.addEventListener('DOMContentLoaded', () => { document.documentElement.style.zoom = '${zoom}'; });` });
   await page.goto(`${base}/preview.html?${query}`, { waitUntil: 'networkidle' });
   await page.evaluate('document.fonts.ready');
   await page.waitForTimeout(400);

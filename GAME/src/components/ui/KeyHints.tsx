@@ -12,13 +12,15 @@ export interface KeyHint {
 }
 
 const ARROWS: Record<string, IconName> = { '↑': 'arrowUp', '↓': 'arrowDown', '←': 'arrowLeft', '→': 'arrowRight' };
+/** Names read by screen readers for the arrow icons. */
+const ARROW_NAMES: Record<string, string> = { '↑': 'freccia su', '↓': 'freccia giù', '←': 'freccia sinistra', '→': 'freccia destra' };
 
 /** One keycap. Arrow characters become icons. */
 export const Key: React.FC<{ k: string }> = ({ k }) => {
     const arrows = [...k].every(char => ARROWS[char]) ? [...k] : null;
     return (
         <kbd className="kbd">
-            {arrows ? arrows.map((char, index) => <Icon key={index} name={ARROWS[char]} size={15} strokeWidth={2.2} />) : k}
+            {arrows ? arrows.map((char, index) => <Icon key={index} name={ARROWS[char]} size={15} strokeWidth={2.2} title={ARROW_NAMES[char]} />) : k}
         </kbd>
     );
 };

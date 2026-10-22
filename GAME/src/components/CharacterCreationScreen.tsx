@@ -25,8 +25,10 @@ const ATTRIBUTE_HINTS: Record<AttributeName, string> = {
   car: 'Convincere, mercanteggiare, intimidire',
 };
 
+const modifierOf = (value: number) => Math.floor((value - 10) / 2);
+
 const modifier = (value: number) => {
-  const mod = Math.floor((value - 10) / 2);
+  const mod = modifierOf(value);
   return `${mod >= 0 ? '+' : ''}${mod}`;
 };
 
@@ -119,7 +121,7 @@ const CharacterCreationScreen: React.FC = () => {
                     <div className="mt-1 text-[25px] font-medium text-ink">{ATTRIBUTE_LABELS[attr]}</div>
                   </div>
                   {rolled !== undefined && (
-                    <span className="chip text-sage anim-fade-in">{modifier(rolled)}</span>
+                    <span className={`chip anim-fade-in ${modifierOf(rolled) > 0 ? 'text-sage' : modifierOf(rolled) < 0 ? 'text-danger' : 'text-ink3'}`}>{modifier(rolled)}</span>
                   )}
                 </div>
                 <div className={`title-display mt-3 text-[92px] tnum ${rolled !== undefined ? 'text-ink' : isRolling ? 'text-ember' : 'text-ink4'}`}>

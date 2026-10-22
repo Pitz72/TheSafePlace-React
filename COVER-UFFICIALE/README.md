@@ -1,7 +1,7 @@
 # Copertine, poster e direzione artistica (3.0)
 
 Le immagini in questa cartella sono **illustrazioni vettoriali** generate dal codice del gioco
-(`GAME/src/components/art/`, composizioni in `GAME/src/dev/artPreview.tsx`). Si rigenerano con:
+(`GAME/src/components/art/`, composizioni in `GAME/src/dev/compositions.tsx`, mostrate da `GAME/preview.html`). Si rigenerano con:
 
 ```bash
 cd GAME
@@ -150,6 +150,7 @@ Seguito, per ognuno, dalla descrizione:
 | `giona` | wandering traveller in his twenties, wide-brimmed hat, long dusty coat, talkative open expression |
 | `eremita` | old hermit, wild beard, worn blanket over the shoulders, maps and notes behind him out of focus, calm unsurprised gaze |
 
-Facoltativi, per gli Echi della Memoria (tono più freddo e sognante, viola `#a891e0`):
-**Elian** (il padre: uomo sui cinquanta, occhi stanchi, mani salde, giacca militare logora) e
-**Lena** (la madre: donna sui trenta, ricordo sfocato, luce morbida).
+Facoltativi, per materiale promozionale o per un uso futuro (oggi il gioco non li mostra: né i
+dialoghi né gli Echi della Memoria hanno uno spazio per loro), con un tono più freddo e sognante,
+viola `#a891e0`: **Elian** (il padre: uomo sui cinquanta, occhi stanchi, mani salde, giacca militare
+logora) e **Lena** (la madre: donna sui trenta, ricordo sfocato, luce morbida).
