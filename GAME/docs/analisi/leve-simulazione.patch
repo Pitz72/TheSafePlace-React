@@ -1,0 +1,42 @@
+diff --git a/GAME/src/store/characterStore.ts b/GAME/src/store/characterStore.ts
+index f3df1e1..36bcfb6 100644
+--- a/GAME/src/store/characterStore.ts
++++ b/GAME/src/store/characterStore.ts
+@@ -459,7 +459,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
+   /** Satiety/hydration cost of resting for `minutes` (used to warn before sleeping). */
+   calculateSurvivalCost: (minutes) => {
+     const factor = get().hasTalent('veteran_survivor') ? 0.75 : 1;
+-    return { satietyCost: (minutes / 60) * 3.0 * factor, hydrationCost: (minutes / 60) * 4.5 * factor };
++    return { satietyCost: (minutes / 60) * 3.0 * factor, hydrationCost: (minutes / 60) * Number(process.env.SIM_THIRST ?? 4.5) * factor };
+   },
+ 
+   updateSurvivalStats: (minutes, weather) => {
+@@ -467,7 +467,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
+     if (current.hp.current <= 0) return;
+     const factor = current.hasTalent('veteran_survivor') ? 0.75 : 1;
+     const satietyLoss = (minutes / 60) * 3.0 * factor;
+-    const hydrationLoss = (minutes / 60) * 4.5 * factor * (weather === WeatherType.TEMPESTA ? 1.5 : 1);
++    const hydrationLoss = (minutes / 60) * Number(process.env.SIM_THIRST ?? 4.5) * factor * (weather === WeatherType.TEMPESTA ? 1.5 : 1);
+     const newSatiety = Math.max(0, current.satiety.current - satietyLoss);
+     const newHydration = Math.max(0, current.hydration.current - hydrationLoss);
+ 
+diff --git a/GAME/src/store/interactionStore.ts b/GAME/src/store/interactionStore.ts
+index 95a4094..a056dc9 100644
+--- a/GAME/src/store/interactionStore.ts
++++ b/GAME/src/store/interactionStore.ts
+@@ -225,6 +225,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
+             refugeMenuState: { isOpen: true, options: refugeOptions(false), selectedIndex: 0 },
+         });
+         audioManager.playSound('enter_refuge');
++        if (process.env.SIM_REFUGE_WATER) useCharacterStore.getState().addItem('CONS_002', Number(process.env.SIM_REFUGE_WATER));
+         journal('Sei entrato in un rifugio. Sei al sicuro.');
+         // Chapters waiting for the player to walk into a refuge.
+         useGameStore.getState().checkMainStoryTriggers({ refugeEntry: true });
+@@ -326,6 +327,7 @@ export const useInteractionStore = create<InteractionStoreState>((set, get) => (
+                 if (character.hp.current <= 0) return;
+                 if (fed) {
+                     character.heal(character.hp.max);
++                    if (process.env.SIM_SICK_CURE === '1') character.removeStatus('MALATO');
+                     character.rest(50);
+                     set({ refugeActionMessage: "Ti svegli all'alba, rinvigorito." });
+                 } else {

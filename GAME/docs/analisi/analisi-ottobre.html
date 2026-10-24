@@ -103,13 +103,13 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; backgro
 <header class="hero">
   <p class="kicker">The Safe Place · versione 3.1.0 · 24 ottobre 2026</p>
   <h1>Cutscene, musica, ritmo e difficoltà</h1>
-  <p class="lead">Quattro analisi sul gioco com'è oggi. Non ho modificato il gioco: ho costruito un mockup, letto il codice e fatto giocare oltre 180 partite simulate con le regole vere per misurare ritmo e difficoltà.</p>
+  <p class="lead">Quattro analisi sul gioco com'è oggi. Non ho modificato il gioco: ho costruito un mockup, letto il codice e fatto giocare più di mille partite simulate con le regole vere per misurare ritmo e difficoltà.</p>
 
   <div class="cards">
     <div class="card"><h4>1 · Cutscene</h4><p>Il mockup c'è e si prova. <b>La variante A</b> (immagine 21:9 larga, testo a una battuta alla volta) fa stare tutte le 56 battute di due scene di prova; la B scorre 8 volte su 56.</p></div>
     <div class="card"><h4>2 · Musica</h4><p>Il prodotto si chiama <b>Google Flow Music</b> (motore Lyria). Un prompt dà un brano, non cinque. Piano da <b>5 brani</b> intorno al motivo del carillon, con i prompt pronti.</p></div>
-    <div class="card"><h4>3 · Ritmo</h4><p>La storia è schiacciata all'inizio e alla fine: <b>7,2</b> momenti ogni 50 passi all'inizio, <b>3,3</b> a metà. I capitoli arrivano a coppie e dopo il 76% del viaggio non c'è nessun luogo.</p></div>
-    <div class="card"><h4>4 · Sfida</h4><p>Il pericolo vero non sono gli scontri ma <b>l'acqua</b>. Metà delle notti si dorme senza scorte e si prende una malattia che non guarisce da sola.</p></div>
+    <div class="card"><h4>3 · Ritmo</h4><p>La storia è schiacciata all'inizio e alla fine: <b>6,9</b> momenti ogni 50 passi all'inizio, <b>3,4</b> a metà. I capitoli arrivano a coppie e dopo il 76% del viaggio non c'è nessun luogo.</p></div>
+    <div class="card"><h4>4 · Sfida</h4><p>Il pericolo vero non sono gli scontri ma <b>l'acqua</b>. Il 45% delle notti si dorme senza scorte e si prende una malattia che non guarisce da sola.</p></div>
   </div>
 </header>
 
@@ -242,29 +242,29 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; backgro
 <section id="ritmo">
   <p class="num">Analisi 3</p>
   <h2>Come la storia si distribuisce lungo il viaggio</h2>
-  <p>Ho fatto giocare 60 partite simulate con il codice vero del gioco: il giocatore va dal punto di partenza al Safe Place seguendo la strada più corta, mangia, beve, dorme nei rifugi e sceglie a caso negli eventi. La rotta minima è di 290 passi; la mediana delle partite è di circa 330, cioè circa 5 giorni di gioco. Misuro dove cadono capitoli, cutscene ed eventi.</p>
+  <p>Ho fatto giocare 100 partite simulate con il codice vero del gioco: il giocatore va dal punto di partenza al Safe Place seguendo la strada più corta, mangia, beve, dorme nei rifugi e sceglie a caso negli eventi. La rotta minima è di 290 passi; la mediana delle partite è di circa 330, cioè circa 5 giorni di gioco. Misuro dove cadono capitoli, cutscene ed eventi.</p>
 
-  <div class="verdict"><p>La storia non è distribuita in modo uniforme. Si concentra in due punti: i primi 15 passi e gli ultimi 70. In mezzo, tra il passo 80 e il 158, quasi nulla. I capitoli arrivano a coppie e dopo il 76% della rotta non c'è più nessun luogo da visitare.</p></div>
+  <div class="verdict"><p>La storia non è distribuita in modo uniforme. Si concentra in due punti: i primi 15 passi e gli ultimi 70. In mezzo, tra il passo 80 e il 162, quasi nulla. I capitoli arrivano a coppie e dopo il 76% della rotta non c'è più nessun luogo da visitare.</p></div>
 
   <div class="fig">
     <svg id="chTimeline" viewBox="0 0 900 330" role="img" aria-label="Linea dei momenti narrativi lungo i passi, oggi e nella proposta"></svg>
-    <p class="cap">Mediana su 60 partite. Cerchi = capitoli degli Echi della Memoria (numerati), rombi = cutscene. In basso i luoghi fissi sulla mappa convertiti in passi, in un viaggio di 340 passi. Le fasce evidenziano il vuoto e l'affollamento.</p>
+    <p class="cap">Mediana su 100 partite. Cerchi = capitoli degli Echi della Memoria (numerati), rombi = cutscene. In basso i luoghi fissi sulla mappa convertiti in passi, in un viaggio di 340 passi. Le fasce evidenziano il vuoto e l'affollamento.</p>
   </div>
 
   <h3>Cosa si vede</h3>
   <ol>
-    <li><b>Inizio affollato.</b> In 15 passi (circa due ore e mezza di gioco) si sommano apertura, capitolo 1 (passo 10), cutscene del fiume (13) e capitolo 2 (15). Nei primi 50 passi cadono in media 7,2 momenti narrativi, contro 3,3 tra il 100 e il 150.</li>
-    <li><b>Buco a metà.</b> Tra il passo 82 e il 158 non cade nessun capitolo né cutscene: solo eventi casuali, scontri e un livello. È un quarto del viaggio senza un momento di storia.</li>
-    <li><b>Capitoli a coppie.</b> 3 e 4 arrivano insieme a 78 e 79, 5 e 6 a 174 e 175, 7 e 8 a 236 e 237, e 9 e 10 si avvicinano (288 e 304). In 167 transizioni su 454 due capitoli distano 2 passi o meno. Si leggono due flashback di fila e poi un lungo silenzio.</li>
-    <li><b>Metà viaggio in coda.</b> Due cutscene arrivano insieme al giorno 3: «L'ombra che non fa rumore» (159) e «La strada è lunga» (162). Quella che si chiama «metà viaggio» cade al 49%, ma fa coppia con l'altra.</li>
+    <li><b>Inizio affollato.</b> In 15 passi (circa due ore e mezza di gioco) si sommano apertura, capitolo 1 (passo 10), cutscene del fiume (13) e capitolo 2 (15). Nei primi 50 passi cadono in media 6,9 momenti narrativi, contro 3,4 tra il 100 e il 150.</li>
+    <li><b>Buco a metà.</b> Tra il passo 80 e il 162 non cade nessun capitolo né cutscene: solo eventi casuali, scontri e un livello. È un quarto del viaggio senza un momento di storia.</li>
+    <li><b>Capitoli a coppie.</b> 3 e 4 arrivano insieme a 78 e 79, 5 e 6 a 174 e 175, 7 e 8 a 236 e 237, e 9 e 10 si avvicinano (302 e 304). In 307 transizioni su 829 due capitoli distano 2 passi o meno. Si leggono due flashback di fila e poi un lungo silenzio.</li>
+    <li><b>Metà viaggio in coda.</b> Due cutscene arrivano insieme al giorno 3: «L'ombra che non fa rumore» (163) e «La strada è lunga» (164). Quella che si chiama «metà viaggio» cade al 50%, ma fa coppia con l'altra.</li>
     <li><b>Finale in ingorgo.</b> Tra il passo 270 e il 340 ci sono il punto di non ritorno, i capitoli 9, 10, 11 e 12. Il 9 aspetta il giorno 4 e il 10 il passo 200: chi cammina in fretta li trova tutti accumulati all'arrivo.</li>
     <li><b>Ultimo quarto senza luoghi.</b> L'ultimo luogo sulla rotta è la stazione di polizia al 76%. Dopo c'è solo pianura, e anche i rifugi calano da 52 a 13 per decimo di percorso. Chi gioca le quest, nell'ultimo quarto, non ne trova.</li>
-    <li><b>Quest quasi invisibili sulla rotta.</b> Su 20 quest secondarie, un giocatore che segue la strada ne avvia 0,18 a partita. Vivono fuori strada, in eventi casuali e luoghi da cercare. Va bene come scelta, ma se devono dare ritmo a metà gioco non basta.</li>
+    <li><b>Quest quasi invisibili sulla rotta.</b> Su 20 quest secondarie, un giocatore che segue la strada ne avvia 0,26 a partita. Vivono fuori strada, in eventi casuali e luoghi da cercare. Va bene come scelta, ma se devono dare ritmo a metà gioco non basta.</li>
   </ol>
 
   <div class="fig">
     <svg id="chDensity" viewBox="0 0 900 240" role="img" aria-label="Momenti narrativi ogni 50 passi"></svg>
-    <p class="cap">Momenti narrativi (capitoli, cutscene, eventi, scontri, quest avviate) per partita ogni 50 passi. 32 partite sono arrivate a 300 passi.</p>
+    <p class="cap">Momenti narrativi (capitoli, cutscene, eventi, scontri, quest avviate) per partita ogni 50 passi. 54 partite sono arrivate a 300 passi.</p>
   </div>
 
   <h3>Da dove nasce, nel codice</h3>
@@ -282,13 +282,13 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; backgro
     <tr><td>Cap. 2 La Lezione dell'Acqua</td><td class="n">15</td><td class="n">40</td><td>Dopo il fiume, non addosso</td></tr>
     <tr><td>Cap. 3 Il Sapore del Sangue</td><td class="n">78</td><td class="n">66</td><td>Meglio dopo il primo scontro</td></tr>
     <tr><td>Cap. 4 Eco del Crollo</td><td class="n">79</td><td class="n">92</td><td>Il tuono è già di notte: va bene al buio</td></tr>
-    <tr><td>Cutscene L'ombra che non fa rumore</td><td class="n">159</td><td class="n">110</td><td>Spostata prima, riempie il buco</td></tr>
+    <tr><td>Cutscene L'ombra che non fa rumore</td><td class="n">163</td><td class="n">110</td><td>Spostata prima, riempie il buco</td></tr>
     <tr><td>Cap. 5 La Domanda Senza Risposta</td><td class="n">174</td><td class="n">125</td><td>Primo rifugio dopo il passo 110</td></tr>
     <tr><td>Cap. 6 Gli Angeli della Cenere</td><td class="n">175</td><td class="n">150</td><td></td></tr>
-    <tr><td>Cutscene La strada è lunga</td><td class="n">162</td><td class="n">170</td><td>Esattamente a metà e da sola</td></tr>
+    <tr><td>Cutscene La strada è lunga</td><td class="n">164</td><td class="n">170</td><td>Esattamente a metà e da sola</td></tr>
     <tr><td>Cap. 7 Il Fardello della Verità</td><td class="n">236</td><td class="n">195</td><td></td></tr>
     <tr><td>Cap. 8 L'Ultima Lezione</td><td class="n">237</td><td class="n">218</td><td></td></tr>
-    <tr><td>Cap. 9 Il Significato di un Nome</td><td class="n">288</td><td class="n">242</td><td>Legato alla posizione, non al giorno 4</td></tr>
+    <tr><td>Cap. 9 Il Significato di un Nome</td><td class="n">302</td><td class="n">242</td><td>Legato alla posizione, non al giorno 4</td></tr>
     <tr><td>Cap. 10 L'Eco di una Scelta</td><td class="n">304</td><td class="n">266</td><td>Dopo una scelta morale vera</td></tr>
     <tr><td>Cutscene Punto di non ritorno</td><td class="n">272</td><td class="n">288</td><td></td></tr>
     <tr><td>Cap. 11 Il Ricordo Completo</td><td class="n">327</td><td class="n">315</td><td>Vicino alla meta, come oggi</td></tr>
@@ -306,88 +306,17 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; backgro
 <section id="sfida">
   <p class="num">Analisi 4</p>
   <h2>Quanto è difficile, in numeri</h2>
-  <p>Per un gioco narrativo la difficoltà dovrebbe essere un'ombra, non un muro. Ho misurato tre cose: gli scontri (con una simulazione dei tiri di dado), le scorte di acqua e cibo (con il calcolo e con le 180 partite) e la crescita del personaggio.</p>
+  <p>La valutazione completa ha ora una pagina sua: l'anatomia dei quattro sistemi, 100 partite simulate per scenario e le leve di correzione provate una per una. Qui c'è il riassunto.</p>
+  <p><a class="btn" href="https://claude.ai/artifact/W98DQ72biaSSM1fy2ggPLN" target="_blank" rel="noopener">Apri il report sulla difficoltà</a></p>
 
-  <div class="verdict"><p><b>Il problema non è il combattimento. È la sopravvivenza.</b> I giocatori simulati arrivano in fondo il 15%, il 22% e il 32% delle volte, secondo quanto sono attenti, e la causa di morte più frequente è la malattia, non i nemici. Anche tenendo conto dei limiti dei giocatori simulati, il dato strutturale è solido: il fabbisogno di acqua del viaggio (circa 560 punti) è quasi il triplo della scorta iniziale (200).</p></div>
-
-  <h3>A · Il peso delle scorte</h3>
-  <div class="tbl"><table>
-    <tr><th>Voce</th><th class="n">Valore</th></tr>
-    <tr><td>Sete</td><td class="n">4,5 punti per ora di gioco</td></tr>
-    <tr><td>Fame</td><td class="n">3 punti all'ora</td></tr>
-    <tr><td>Una bottiglia d'acqua / una razione</td><td class="n">+25 / +25</td></tr>
-    <tr><td>Fabbisogno di un giorno intero (24 ore)</td><td class="n">108 acqua · 72 cibo</td></tr>
-    <tr><td>Fabbisogno di una notte di sonno (circa 10 ore)</td><td class="n">45 acqua · 30 cibo</td></tr>
-    <tr><td>Viaggio mediano (circa 125 ore di gioco)</td><td class="n">560 acqua · 375 cibo</td></tr>
-    <tr><td>Scorta iniziale (barra a 100 più 4 bottiglie e 5 razioni dall'apertura)</td><td class="n">200 acqua · 225 cibo</td></tr>
-    <tr><td><b>Da trovare nel mondo</b></td><td class="n"><b>circa 14 bottiglie · 6 razioni</b></td></tr>
-  </table></div>
-  <p class="cap">Le scorte si trovano con la ricerca (30 minuti, una per bioma) e vicino al fiume dà 3 acque sporche e 10 punti, ma l'acqua sporca va purificata con uno straccio pulito (ne hai 3).</p>
-
-  <div class="fig">
-    <svg id="chRes" viewBox="0 0 900 290" role="img" aria-label="Salute, sazietà e idratazione medie lungo il viaggio"></svg>
-    <p class="cap">Giocatore simulato «scrupoloso» (cerca ad ogni cambio di bioma e purifica l'acqua). Medie su 60 partite ogni 30 passi. L'idratazione scende sotto 30 a metà viaggio e sotto 20 nell'ultimo terzo.</p>
-  </div>
-
-  <h3>B · La notte che fa ammalare</h3>
-  <p>Nel rifugio di notte il menu offre solo «Dormi fino all'alba» (di giorno offre «Aspetta un'ora»). Il sonno costa circa 45 di acqua e 30 di cibo. Se non li hai, ti sveglia <b>MALATO</b>: perdi 0,5 PV all'ora, cioè 12 al giorno, e la malattia non passa da sola. Guarisce solo con una medicina rara. Il menu non avvisa del costo del sonno prima che tu lo scelga.</p>
-  <div class="fig">
-    <svg id="chSleep" viewBox="0 0 900 150" role="img" aria-label="Notti dormite con e senza scorte sufficienti"></svg>
-    <p class="cap">108 notti dormite in 20 partite (giocatore scrupoloso). Alla prima notte i giocatori sono sempre in regola; dopo, metà delle volte arrivano al rifugio con meno acqua del necessario: alle 20 hanno in mediana 38 di idratazione contro 43 richiesti.</p>
-  </div>
-  <p>Risultato: 54-56 partite su 60 si ammalano, a seconda del giocatore, e fra chi si ammala la morte arriva in mediana tre giorni dopo. Senza questo rischio il viaggio sarebbe quasi sempre completabile.</p>
-
-  <div class="fig">
-    <svg id="chOut" viewBox="0 0 900 190" role="img" aria-label="Esiti per tipo di giocatore simulato"></svg>
-    <p class="cap">Tre giocatori simulati, 60 partite ciascuno. Il «distratto» beve solo quando ha sete e dorme comunque; il «prudente» mangia e beve prima di dormire e usa le medicine; lo «scrupoloso» in più cerca ad ogni bioma e purifica l'acqua.</p>
-  </div>
-  <p><b>Attenzione a come leggere questi numeri.</b> I giocatori simulati non commerciano, non esplorano i luoghi, non riparano e non sanno che ogni fiume dà acqua. Una persona vera morirà molto meno. Valgono come confronto fra scenari e come prova che il sistema è fragile, non come probabilità di morte reale.</p>
-
-  <h3>C · Gli scontri</h3>
-  <p>Il sistema è a dadi: 1d20 + bonus contro Classe Armatura, danno dell'arma + bonus + d4 − 3, critico al 20. Ho ripetuto 4.000 scontri per ogni coppia nemico-equipaggiamento con 100 PV, senza cure, con un personaggio medio (Forza e Destrezza +1).</p>
-  <div class="tbl"><table id="fightTbl">
-    <tr><th>Nemico</th><th class="n">PV</th><th class="n">CA</th><th class="n">Arrugginito</th><th class="n">Coltello + giacca</th><th class="n">Piede di porco + kevlar</th></tr>
-  </table></div>
-  <p class="cap">Percentuale di vittorie. Sotto ogni cifra, i PV persi in media quando si vince. «Arrugginito» = coltello arrugginito (danno 5) e stracci, l'equipaggiamento dopo l'apertura. A mani nude (danno 2) contro un cinghiale si vince il 3% delle volte, contro un predone disperato il 73%.</p>
+  <div class="verdict"><p><b>Il problema non è il combattimento. È la sopravvivenza.</b> Un giocatore simulato attento arriva al Safe Place il 52% delle volte (il 21% se beve solo quando ha sete) e muore soprattutto di malattia, non di nemici.</p></div>
   <ul>
-    <li><b>Una scogliera, non una curva.</b> Con l'equipaggiamento di partenza gli scontri costano 25-48 PV, 65-72 contro cinghiali e bestie mutate, che si perdono una volta su tre. Con un coltello da combattimento e una giacca di cuoio costano 6-28 PV. L'equipaggiamento decide tutto.</li>
-    <li><b>Il coltello iniziale dura 20 colpi</b> (1 durabilità a ogni attacco, a segno o no): circa 2 scontri. Alla fine del viaggio il 72-80% dei giocatori simulati combatte a mani nude, perché trova pochi ricambi.</li>
-    <li><b>I nemici crescono con il livello</b> (solo quelli con XP fino a 70 + 30 × livello): l'orso arriva al livello 3, il capobranco al 5, il capo dei predoni al 6. Non si può restare indietro, ma nemmeno crescere in anticipo.</li>
-    <li><b>Pochi scontri.</b> 3,3-4,5 a partita, circa uno ogni 80 passi. Danno medio da scontri: 105-160 PV in tutto il viaggio, a fronte di una notte che cura tutto. Il combattimento da solo non stanca il giocatore.</li>
+    <li><b>Il fabbisogno d'acqua è fuori scala.</b> Il viaggio chiede circa 560 punti e la scorta iniziale ne dà 200. Il 45% delle notti si dorme senza scorte sufficienti.</li>
+    <li><b>La notte ammala.</b> Nel rifugio resta solo «Dormi»: senza acqua e cibo ti svegli malato, perdi 12 PV al giorno e non guarisci da solo. Il menu non mostra il costo.</li>
+    <li><b>Gli scontri sono pochi, ma c'è una scogliera.</b> Il coltello iniziale dura 20 colpi, e il 70% dei giocatori simulati arriva a mani nude. Con un'arma vera gli scontri costano 6-28 PV.</li>
+    <li><b>Con poco si sistema.</b> Avviso del costo del sonno, malattia che guarisce con una notte nutrita e coltello da 60 colpi portano gli arrivi all'89%. Due bottiglie d'acqua pulita a ogni rifugio, da sole, all'88%.</li>
   </ul>
-
-  <h3>D · Crescita del personaggio</h3>
-  <ul>
-    <li>Ogni passo dà <b>3 XP</b>. Camminare 300 passi fa 900 XP: livello 4. I livelli costano 150, 400, 900, 2.000 XP. Nelle partite simulate si arriva al livello 4 (mediana), mai oltre.</li>
-    <li>Ogni livello dà +1 attributo, 5 + modificatore PV e una cura totale. Le 21 quest valgono 8.350 XP: chi le fa tutte e cammina l'intero viaggio arriva intorno al livello 7.</li>
-    <li>La salita è regolare: la ricompensa maggiore arriva dalle quest, che sulla rotta si incontrano poco (vedi analisi 3).</li>
-  </ul>
-
-  <h3>Metriche che propongo come obiettivo</h3>
-  <div class="tbl"><table>
-    <tr><th>Metrica</th><th>Obiettivo</th><th>Oggi (simulato)</th></tr>
-    <tr><td>Arrivano in fondo i giocatori attenti</td><td>85-90% o più</td><td>22-32%</td></tr>
-    <tr><td>Morte per malattia, fame o sete</td><td>Quasi mai (sotto il 5%)</td><td>55-77%</td></tr>
-    <tr><td>Partite con malattia lunga</td><td>Rara, con cura a portata di mano</td><td>90%</td></tr>
-    <tr><td>Scontri a partita</td><td>3-6</td><td>3,3-4,5</td></tr>
-    <tr><td>PV persi in uno scontro vinto, con equipaggiamento medio</td><td>10-30</td><td>6-28 con coltello e giacca; 25-48 senza</td></tr>
-  </table></div>
-
-  <h3>Leve possibili (nessuna applicata)</h3>
-  <div class="tbl"><table>
-    <tr><th>Leva</th><th>Effetto atteso</th><th>Rischio</th></tr>
-    <tr><td><b>Mostrare il costo del sonno</b> nel menu del rifugio e avvisare se mancano scorte</td><td>Toglie la trappola senza cambiare i numeri</td><td>Quasi nullo</td></tr>
-    <tr><td><b>La malattia passa dopo una notte ben nutrita</b> (o dopo 24 ore)</td><td>Da malattia a fastidio temporaneo</td><td>Meno tensione: da pesare</td></tr>
-    <tr><td>Di notte il rifugio offre anche «Aspetta un'ora» oppure un sonno corto</td><td>Una via d'uscita senza ammalarsi</td><td>Basso</td></tr>
-    <tr><td>Sete da 4,5 a 3 all'ora, oppure bottiglia da 25 a 40</td><td>Il fabbisogno da trovare scende da 14 a circa 7-9 bottiglie</td><td>Medio: ritocca l'economia</td></tr>
-    <tr><td>Una fonte pulita in ogni rifugio, o acqua piovana</td><td>Ricarica regolare, ritmo più dolce</td><td>Medio</td></tr>
-    <tr><td>Arma iniziale più robusta (20 → 60 durabilità) o coltello da combattimento di partenza</td><td>Spazza via la scogliera dei primi scontri</td><td>Basso</td></tr>
-  </table></div>
-  <p>Ordine che consiglio: le prime tre (costano poco e tolgono il difetto strutturale), poi misurare di nuovo con lo stesso test prima di toccare i numeri.</p>
-
-  <details><summary>Come ho misurato</summary>
-    <p>Scontri: simulazione dei dadi con le formule del codice (<code>combatStore.ts</code>), 4.000 prove per riga. Scorte: valori di <code>characterStore.ts</code> e <code>interactionStore.ts</code>. Partite: 180 (3 giocatori × 60) col codice vero. Limiti: non commerciano, non esplorano i luoghi, non riparano, bevono dal fiume solo cercando nel bioma, scelgono a caso nelle scelte degli eventi. Un giocatore vero ha più strumenti: i numeri assoluti sono pessimistici, le differenze fra scenari e i meccanismi no. Script in <code>GAME/docs/analisi/</code>.</p>
-  </details>
+  <p class="cap">Correzione: nella prima versione di questa analisi i numeri erano più bassi (15-32%) per un difetto nel generatore casuale del test. Nel report dedicato sono quelli corretti.</p>
 </section>
 
 <footer>
@@ -412,7 +341,7 @@ function el(tag, attrs, parent, text) {
   const L = 150, R = 880, W = R - L, MAX = 345, x = s => L + (s / MAX) * W;
   const ember = css('--ember'), teal = css('--teal'), danger = css('--danger'), line = css('--line'), ink2 = css('--ink2'), ink3 = css('--ink3');
   // fasce
-  [[80, 158, 'vuoto'], [270, 345, 'ingorgo']].forEach(([a, b, t]) => {
+  [[80, 162, 'vuoto'], [270, 345, 'ingorgo']].forEach(([a, b, t]) => {
     el('rect', { x: x(a), y: 30, width: x(b) - x(a), height: 170, fill: t === 'vuoto' ? 'rgb(108 180 189 / .10)' : 'rgb(226 96 75 / .12)' }, svg);
     el('text', { x: (x(a) + x(b)) / 2, y: 24, 'text-anchor': 'middle', 'font-size': 14, fill: t === 'vuoto' ? teal : danger, style: 'fill:' + (t === 'vuoto' ? teal : danger) }, svg, t === 'vuoto' ? 'quasi nulla' : 'tutto qui');
   });
@@ -423,7 +352,7 @@ function el(tag, attrs, parent, text) {
   }
   el('text', { x: 6, y: 326, 'font-size': 13 }, svg, 'passi');
   const rows = [
-    { y: 70, label: 'Oggi', items: [[10, 1, 'c'], [13, '', 'k'], [15, 2, 'c'], [28, '', 'k'], [78, 3, 'c'], [79, 4, 'c'], [80, '', 'k'], [159, '', 'k'], [162, '', 'k'], [174, 5, 'c'], [175, 6, 'c'], [236, 7, 'c'], [237, 8, 'c'], [272, '', 'k'], [288, 9, 'c'], [304, 10, 'c'], [327, 11, 'c'], [340, 12, 'c']] },
+    { y: 70, label: 'Oggi', items: [[10, 1, 'c'], [13, '', 'k'], [15, 2, 'c'], [26, '', 'k'], [77, '', 'k'], [78, 3, 'c'], [79, 4, 'c'], [163, '', 'k'], [164, '', 'k'], [174, 5, 'c'], [175, 6, 'c'], [236, 7, 'c'], [237, 8, 'c'], [272, '', 'k'], [302, 9, 'c'], [304, 10, 'c'], [329, 11, 'c'], [341, 12, 'c']] },
     { y: 150, label: 'Proposta', items: [[14, 1, 'c'], [40, 2, 'c'], [66, 3, 'c'], [92, 4, 'c'], [110, '', 'k'], [125, 5, 'c'], [150, 6, 'c'], [170, '', 'k'], [195, 7, 'c'], [218, 8, 'c'], [242, 9, 'c'], [266, 10, 'c'], [288, '', 'k'], [315, 11, 'c'], [340, 12, 'c']] }
   ];
   rows.forEach(r => {
@@ -459,7 +388,7 @@ function el(tag, attrs, parent, text) {
 /* ---- Grafico 2: densità ---- */
 (function () {
   const svg = document.getElementById('chDensity');
-  const data = [7.22, 4.75, 3.34, 5.56, 5.0, 4.44], labels = ['0-50', '50-100', '100-150', '150-200', '200-250', '250-300'];
+  const data = [6.91, 4.67, 3.35, 5.81, 5.19, 3.85], labels = ['0-50', '50-100', '100-150', '150-200', '200-250', '250-300'];
   const L = 60, B = 190, H = 150, bw = 90, gap = 30;
   const ember = css('--ember'), teal = css('--teal'), line = css('--line');
   [0, 2, 4, 6, 8].forEach(v => {
@@ -474,99 +403,6 @@ function el(tag, attrs, parent, text) {
     el('text', { x: x + bw / 2, y: B + 20, 'text-anchor': 'middle', 'font-size': 14 }, svg, labels[i]);
   });
   el('text', { x: 880, y: 20, 'text-anchor': 'end', 'font-size': 14 }, svg, 'passi del viaggio');
-})();
-
-/* ---- Grafico 3: risorse ---- */
-(function () {
-  const svg = document.getElementById('chRes');
-  const steps = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
-  const hp = [98, 106, 108, 108, 106, 105, 109, 112, 100, 93, 89, 85];
-  const sat = [93, 75, 57, 56, 52, 53, 55, 61, 55, 49, 49, 34];
-  const hyd = [89, 65, 51, 51, 45, 28, 22, 22, 14, 11, 12, 4];
-  const L = 60, R = 870, T = 20, B = 240, X = s => L + (s / 330) * (R - L - 70), Y = v => B - (v / 120) * (B - T);
-  const line = css('--line'), ember = css('--ember'), sage = css('--sage'), teal = css('--teal'), danger = css('--danger');
-  [0, 20, 40, 60, 80, 100, 120].forEach(v => {
-    el('line', { x1: L, x2: R, y1: Y(v), y2: Y(v), stroke: line }, svg);
-    el('text', { x: L - 8, y: Y(v) + 5, 'text-anchor': 'end', 'font-size': 13 }, svg, v);
-  });
-  el('rect', { x: L, y: Y(20), width: R - L, height: Y(0) - Y(20), fill: 'rgb(226 96 75 / .09)' }, svg);
-  el('text', { x: R - 4, y: Y(20) - 6, 'text-anchor': 'end', 'font-size': 13, style: 'fill:' + danger }, svg, 'sotto 20: disidratato / affamato');
-  steps.forEach(s => el('text', { x: X(s), y: B + 22, 'text-anchor': 'middle', 'font-size': 13 }, svg, s));
-  el('text', { x: R, y: B + 40, 'text-anchor': 'end', 'font-size': 13 }, svg, 'passi');
-  const draw = (arr, color, name, dy) => {
-    el('polyline', { points: arr.map((v, i) => `${X(steps[i])},${Y(v)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
-    const last = arr.length - 1;
-    el('circle', { cx: X(steps[last]), cy: Y(arr[last]), r: 4, fill: color }, svg);
-    el('text', { x: X(steps[last]) + 10, y: Y(arr[last]) + dy, 'font-size': 14, style: 'fill:' + color }, svg, name);
-  };
-  draw(hp, sage, 'salute', 4); draw(sat, ember, 'sazietà', 4); draw(hyd, teal, 'idratazione', 4);
-})();
-
-/* ---- Grafico 4: notti ---- */
-(function () {
-  const svg = document.getElementById('chSleep');
-  const parts = [[53, 'in regola', 'var(--sage)'], [42, 'manca acqua', 'var(--danger)'], [13, 'mancano acqua e cibo', 'var(--ember)']];
-  const L = 20, W = 860, tot = 108; let x = L;
-  parts.forEach(([n, t, c]) => {
-    const w = (n / tot) * W;
-    el('rect', { x, y: 30, width: w - 2, height: 46, fill: css(c.slice(4, -1)) }, svg);
-    el('text', { x: x + 10, y: 59, 'font-size': 20, style: 'fill:#0d0f12;font-weight:600' }, svg, n);
-    el('text', { x: x + 10, y: 104, 'font-size': 15 }, svg, t + ' (' + Math.round(n / tot * 100) + '%)');
-    x += w;
-  });
-  el('text', { x: L, y: 20, 'font-size': 14 }, svg, 'Notti dormite in un rifugio');
-})();
-
-/* ---- Grafico 5: esiti ---- */
-(function () {
-  const svg = document.getElementById('chOut');
-  const rows = [['Distratto', { v: 9, m: 46, c: 2, a: 3 }], ['Prudente', { v: 13, m: 41, c: 3, a: 3 }], ['Scrupoloso', { v: 19, m: 33, c: 7, a: 1 }]];
-  const cols = { v: css('--sage'), m: css('--danger'), c: css('--ember'), a: css('--ink3') };
-  const names = { v: 'arriva in fondo', m: 'malattia', c: 'scontro', a: 'fame, sete, ambiente' };
-  const L = 130, W = 740;
-  rows.forEach(([name, d], i) => {
-    const y = 20 + i * 52; let x = L;
-    el('text', { x: 6, y: y + 28, 'font-size': 18, style: 'fill:' + css('--ink') }, svg, name);
-    ['v', 'm', 'c', 'a'].forEach(k => {
-      const w = (d[k] / 60) * W; if (!w) return;
-      el('rect', { x, y, width: w - 1, height: 40, fill: cols[k] }, svg);
-      if (w > 24) el('text', { x: x + 8, y: y + 27, 'font-size': 17, style: 'fill:#0d0f12;font-weight:600' }, svg, d[k]);
-      x += w;
-    });
-  });
-  let lx = L;
-  ['v', 'm', 'c', 'a'].forEach(k => {
-    el('rect', { x: lx, y: 176, width: 12, height: 12, fill: cols[k] }, svg);
-    el('text', { x: lx + 18, y: 187, 'font-size': 14 }, svg, names[k]);
-    lx += 18 + names[k].length * 7.6 + 24;
-  });
-})();
-
-/* ---- Tabella scontri ---- */
-(function () {
-  const rows = [
-    ['Predone disperato', 30, 12, [99.7, 35.6], [100, 9.8], [100, 1.9]],
-    ['Cane selvatico', 20, 14, [100, 24.7], [100, 6.5], [100, 1.8]],
-    ['Lupo mutato', 25, 13, [96.4, 45.1], [100, 12.5], [100, 2.5]],
-    ['Arciere predone', 28, 13, [98.2, 44.6], [100, 14.1], [100, 2.2]],
-    ['Cacciatore pazzo', 32, 13, [97.7, 47.5], [100, 12.2], [100, 3.2]],
-    ['Cinghiale aggressivo', 40, 11, [76.7, 65.0], [100, 22.0], [100, 4.0]],
-    ['Bestia mutante', 45, 13, [59.0, 71.9], [99.7, 25.8], [100, 4.8]],
-    ['Predone armato', 35, 14, [68.1, 65.4], [99.8, 21.7], [100, 5.5]],
-    ['Guardia impazzita', 40, 15, [57.6, 69.3], [99.5, 27.7], [100, 5.5]],
-    ['Orso mutato', 60, 12, [9.6, 84.3], [95.7, 43.2], [100, 8.2]],
-    ['Capobranco alfa', 55, 14, [12.6, 80.2], [95.8, 43.2], [100, 8.3]],
-    ['Capo dei predoni', 50, 16, [5.4, 82.2], [85.6, 48.8], [99.9, 11.6]]
-  ];
-  const t = document.getElementById('fightTbl');
-  const color = p => { const h = Math.round(p * 1.2); return `hsl(${h} 55% ${p > 60 ? 62 : 58}%)`; };
-  const f = v => String(v).replace('.', ',');
-  rows.forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td>` +
-      [3, 4, 5].map(i => `<td class="heat" style="background:${color(r[i][0])}">${f(r[i][0])}%<br><span style="font-weight:400;font-size:13px">−${f(r[i][1])} PV</span></td>`).join('');
-    t.appendChild(tr);
-  });
 })();
 
 /* ---- Copia prompt ---- */

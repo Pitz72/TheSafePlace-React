@@ -1,0 +1,416 @@
+<title>Difficoltà e leve</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: colonna di lettura stretta con navigazione fissa, grafici a tutta colonna, tabelle che scorrono in orizzontale.
+   Palette Crepuscolo del gioco, un solo aspetto scuro scelto di proposito. */
+:root {
+  --bg0: #090a0d;
+  --bg1: #0e1014;
+  --bg2: #15181e;
+  --line: #262a33;
+  --ink: #ede6d9;
+  --ink2: #bab1a3;
+  --ink3: #8d8579;
+  --ember: #e8893f;
+  --ember2: #f5b46c;
+  --teal: #6cb4bd;
+  --sage: #93b38a;
+  --danger: #e2604b;
+  --violet: #a891e0;
+  --display: 'Cormorant Garamond', Georgia, serif;
+  --body: 'Literata', Georgia, serif;
+  --ui: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg0); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.62;
+  padding-block: 0 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg0); z-index: 20; }
+.col { max-width: 880px; margin: 0 auto; }
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgb(9 10 13 / .94);
+  border-bottom: 1px solid var(--line); margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 10px max(16px, env(safe-area-inset-left, 0px));
+}
+nav.top .col { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; }
+nav.top a { font-family: var(--ui); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); text-decoration: none; }
+nav.top a:hover { color: var(--ember2); }
+nav.top b { font-family: var(--display); font-size: 21px; font-weight: 600; margin-right: auto; color: var(--ink); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--ui); font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--ember2); margin: 0 0 8px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(36px, 7vw, 60px); line-height: 1.04; margin: 0 0 14px; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--ink2); max-width: 62ch; margin: 0 0 14px; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.6vw, 40px); line-height: 1.1; margin: 0 0 8px; text-wrap: balance; scroll-margin-top: 70px; }
+h3 { font-family: var(--ui); font-weight: 600; font-size: 17px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 34px 0 8px; }
+section { padding-top: 56px; }
+.num { font-family: var(--ui); font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin: 0 0 4px; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; max-width: 68ch; }
+li { margin-bottom: 6px; }
+a { color: var(--teal); }
+b { font-weight: 600; }
+.verdict { border-left: 3px solid var(--ember); background: var(--bg1); padding: 14px 18px; margin: 18px 0 22px; max-width: 72ch; }
+.verdict p:last-child { margin-bottom: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 22px; }
+.card { background: var(--bg1); border: 1px solid var(--line); padding: 16px 18px; min-width: 0; }
+.card h4 { font-family: var(--ui); font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 0 0 6px; }
+.card p { font-size: 15.5px; margin: 0; line-height: 1.5; }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 600px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-family: var(--ui); font-weight: 600; font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: var(--bg1); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; }
+.heat { color: #0d0f12; font-weight: 600; text-align: right; }
+.fig { margin: 18px 0 8px; }
+.fig svg { width: 100%; height: auto; display: block; background: var(--bg1); border: 1px solid var(--line); }
+.cap { font-size: 14px; color: var(--ink3); margin: 6px 0 0; max-width: 78ch; line-height: 1.5; }
+svg text { font-family: var(--ui); fill: var(--ink2); }
+.tag { display: inline-block; font-family: var(--ui); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 1px 8px; border: 1px solid var(--line); color: var(--ink2); white-space: nowrap; }
+.tag.ok { color: var(--sage); border-color: rgb(147 179 138 / .5); }
+.tag.part { color: var(--ember2); border-color: rgb(245 180 108 / .5); }
+.tag.no { color: var(--danger); border-color: rgb(226 96 75 / .5); }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: var(--bg2); padding: 1px 5px; }
+details { border-top: 1px solid var(--line); padding: 10px 0; max-width: 72ch; }
+details summary { cursor: pointer; font-family: var(--ui); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: var(--ink2); }
+details[open] summary { color: var(--ember2); }
+.lever { border: 1px solid var(--line); background: var(--bg1); padding: 16px 18px; margin: 16px 0; max-width: 880px; }
+.lever h4 { font-family: var(--display); font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.lever .eff { font-family: var(--ui); letter-spacing: .1em; text-transform: uppercase; font-size: 14px; color: var(--sage); margin: 0 0 8px; }
+.lever p { font-size: 15.5px; max-width: none; margin: 0 0 8px; }
+.lever dl { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; margin: 8px 0 0; font-size: 15px; }
+.lever dt { font-family: var(--ui); letter-spacing: .12em; text-transform: uppercase; font-size: 13px; color: var(--ink3); padding-top: 2px; }
+.lever dd { margin: 0; min-width: 0; }
+footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink3); max-width: 80ch; }
+@media (max-width: 640px) { body { font-size: 16px; } nav.top b { width: 100%; } .lever dl { grid-template-columns: 1fr; } }
+</style>
+
+<nav class="top"><div class="col">
+  <b>Difficoltà e leve</b>
+  <a href="#sintesi">Sintesi</a><a href="#metodo">Metodo</a><a href="#anatomia">Anatomia</a><a href="#risultati">Risultati</a><a href="#leve">Leve</a><a href="#ordine">Ordine</a>
+</div></nav>
+
+<div class="col">
+<header class="hero" id="sintesi">
+  <p class="kicker">The Safe Place · versione 3.1.0 · 24 ottobre 2026</p>
+  <h1>Quanto è difficile il gioco, e come sistemarlo</h1>
+  <p class="lead">Valutazione matematica e logica della sfida, con le cause trovate nel codice e le correzioni provate una per una su 100 partite simulate per scenario. Nessuna modifica al gioco: tutte le leve sono state applicate solo in una copia isolata.</p>
+
+  <div class="verdict">
+    <p><b>Il problema non è il combattimento. È la sopravvivenza.</b> Un giocatore simulato attento arriva al Safe Place il 52% delle volte (21% se beve solo quando ha sete). Muore di malattia, non di nemici: 40% delle partite.</p>
+    <p><b>La causa è una catena.</b> Il viaggio chiede circa 560 punti d’acqua e la scorta iniziale ne dà 200. La notte, nel rifugio, resta solo «Dormi». Se mancano acqua o cibo ti svegli malato, la malattia toglie 12 PV al giorno e non passa da sola. Le medicine esistono, ma sono rare.</p>
+    <p><b>Con poco si sistema.</b> Tre ritocchi (avviso del costo del sonno, malattia che guarisce con una notte nutrita, coltello iniziale più robusto) portano le vittorie al 89%. La leva singola più forte è dare due bottiglie d’acqua pulita a ogni rifugio: da sola porta all’88%, e insieme al coltello robusto al 93%.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h4>Scontri</h4><p>Pochi (circa 4,6 a partita) e poco pericolosi <b>se hai un’arma vera</b>. Il coltello iniziale si rompe dopo 20 colpi: 70% dei giocatori simulati finisce a mani nude.</p></div>
+    <div class="card"><h4>Acqua</h4><p>45% delle notti si dorme senza scorte sufficienti. La prima notte è sempre in regola, dopo non più.</p></div>
+    <div class="card"><h4>Malattia</h4><p>86 partite su 100 si ammalano. Le cure per la malattia stanno in 6 eventi e nel carrello del mercante errante: nessuna nelle tabelle di bottino.</p></div>
+    <div class="card"><h4>Progressione</h4><p>I livelli arrivano a ritmo regolare e si fermano al 4: nell’ultimo terzo di viaggio il personaggio non cresce più.</p></div>
+  </div>
+</header>
+
+<!-- ============ METODO ============ -->
+<section id="metodo">
+  <p class="num">1</p>
+  <h2>Come ho misurato</h2>
+  <p>Per gli scontri ho ripetuto 4.000 volte ogni coppia nemico-equipaggiamento con le formule del codice. Per tutto il resto ho fatto giocare il gioco vero, con i suoi dati e le sue regole, da un giocatore automatico che va dall’inizio al Safe Place: 100 partite per scenario, ogni partita con un personaggio diverso (attributi tirati a 4d6 scartando il più basso, come nella creazione del personaggio).</p>
+  <div class="tbl"><table>
+    <tr><th>Giocatore simulato</th><th>Cosa fa</th></tr>
+    <tr><td><b>Distratto</b></td><td>Segue la strada più corta, mangia e beve quando la barra scende sotto 40, dorme nei rifugi vicini quando è stanco o è notte.</td></tr>
+    <tr><td><b>Prudente</b></td><td>Come il distratto, ma prima di dormire mangia e beve quanto serve e usa le medicine contro le malattie.</td></tr>
+    <tr><td><b>Scrupoloso</b></td><td>Come il prudente, e in più cerca risorse a ogni cambio di bioma e purifica l’acqua al rifugio. Rappresenta un giocatore che ha letto le istruzioni.</td></tr>
+  </table></div>
+  <div class="verdict"><p><b>Una correzione.</b> Nella prima versione dell’analisi (pagina «Analisi di ottobre») avevo un difetto nel generatore casuale del test: i semi consecutivi davano personaggi simili, e le prime 60 partite risultavano più sfortunate del normale. Qui i semi sono mescolati e le partite sono più numerose. I numeri di questa pagina sostituiscono quelli.</p></div>
+  <p><b>Limiti.</b> I giocatori simulati non commerciano, non esplorano i luoghi fuori strada, non riparano e scelgono a caso negli eventi. Una persona vera ha più strumenti e fa meglio. Valgono i confronti fra scenari e i meccanismi, meno i valori assoluti. Con 100 partite l’incertezza di una percentuale è di circa ±9 punti: tra scenari vicini non si possono dire differenze piccole.</p>
+</section>
+
+<!-- ============ ANATOMIA ============ -->
+<section id="anatomia">
+  <p class="num">2</p>
+  <h2>Anatomia della difficoltà</h2>
+
+  <h3>2.1 · Gli scontri</h3>
+  <p>Il sistema è a dadi: 1d20 + bonus contro Classe Armatura, danno = arma + bonus + d4 − 3, critico al 20 naturale. Ogni attacco consuma 1 punto di durabilità dell’arma, a segno o no. I nemici compaiono solo se hanno XP fino a 70 + 30 × livello del giocatore: l’orso dal livello 3, il capobranco dal 5, il capo dei predoni dal 6.</p>
+  <div class="tbl"><table id="fightTbl">
+    <tr><th>Nemico</th><th class="n">PV</th><th class="n">CA</th><th class="n">Coltello arrugginito</th><th class="n">Coltello + giacca</th><th class="n">Piede di porco + kevlar</th></tr>
+  </table></div>
+  <p class="cap">Percentuale di vittorie contro un nemico, 100 PV, senza cure, personaggio medio. Sotto, i PV persi in media se si vince. A mani nude (danno 2) contro il cinghiale si vince il 3%, contro il predone disperato il 73%.</p>
+  <ul>
+    <li><b>Una scogliera, non una curva.</b> Con l’equipaggiamento di partenza uno scontro costa 25-48 PV, 65-72 contro cinghiali e bestie mutate. Con un coltello da combattimento e una giacca di cuoio, 6-28. Il risultato dipende da cosa si trova, non da cosa si sa fare.</li>
+    <li><b>Il coltello iniziale dura 20 colpi:</b> circa 2 scontri. Armi da trovare sul percorso: 14 uscite negli eventi (13 eventi su circa 210) e il 4-5% dei bottini dei nemici forti. Per questo 70% dei giocatori simulati arriva a mani nude all’ultimo scontro.</li>
+    <li><b>Pochi scontri:</b> circa 4,6 a partita, uno ogni 70 passi, per un totale di circa 155 PV di danno nell’intero viaggio. Una notte in rifugio ricarica tutta la salute: il combattimento da solo non stanca.</li>
+  </ul>
+
+  <h3>2.2 · La sopravvivenza</h3>
+  <div class="tbl"><table>
+    <tr><th>Voce</th><th class="n">Valore</th></tr>
+    <tr><td>Sete e fame</td><td class="n">4,5 e 3 punti per ora di gioco</td></tr>
+    <tr><td>Una bottiglia / una razione</td><td class="n">+25 / +25</td></tr>
+    <tr><td>Fabbisogno di un giorno intero</td><td class="n">108 acqua · 72 cibo</td></tr>
+    <tr><td>Fabbisogno di una notte di sonno (circa 10 ore)</td><td class="n">45 acqua · 30 cibo</td></tr>
+    <tr><td>Viaggio mediano (circa 125 ore di gioco)</td><td class="n">560 acqua · 375 cibo</td></tr>
+    <tr><td>Scorta iniziale (barra a 100, 4 bottiglie, 5 razioni)</td><td class="n">200 acqua · 225 cibo</td></tr>
+    <tr><td><b>Da trovare nel mondo</b></td><td class="n"><b>circa 14 bottiglie · 6 razioni</b></td></tr>
+  </table></div>
+  <p>Il cibo è abbondante: 60 uscite di cibo negli eventi, il 23-29% dei bottini di ricerca in pianura, foresta e villaggio. L’acqua pulita no. La ricerca dà acqua <i>sporca</i> (27% in pianura) e vicino a un fiume 3 unità di acqua sporca più 10 punti di idratazione subito, ma una ricerca costa 30 minuti ed è consentita una sola volta per bioma. L’acqua sporca va purificata con la ricetta «Purifica Acqua», che consuma <b>uno straccio pulito</b> per ogni bottiglia. Gli stracci in partenza sono 3. Dopo: 9% dei bottini in pianura, 12% in città, un solo evento, 5 in vendita da Marcus.</p>
+  <div class="fig"><svg id="chRes" viewBox="0 0 900 290" role="img" aria-label="Salute, sazietà e idratazione medie lungo il viaggio"></svg>
+    <p class="cap">Giocatore scrupoloso, media su 100 partite ogni 30 passi. L’idratazione scende sotto 30 a metà viaggio e resta bassa fino alla fine.</p></div>
+
+  <h3>2.3 · La malattia</h3>
+  <p>MALATO toglie 0,5 PV all’ora (12 al giorno) e non ha un recupero naturale. Viene da tre fonti: dormire senza scorte sufficienti, cibo avariato e 8 uscite degli eventi (una a prova fallita). Per guarire servono cinque oggetti: antibiotici, antibiotici scaduti, pillole anti-radiazioni, kit medico avanzato, elisir della tempra.</p>
+  <div class="tbl"><table>
+    <tr><th>Dove si trova una cura per MALATO</th><th class="n">Quanto</th></tr>
+    <tr><td>Tabelle di bottino (ricerca, scontri, rifugi)</td><td class="n">nessuna</td></tr>
+    <tr><td>Eventi</td><td class="n">6 uscite</td></tr>
+    <tr><td>Mercante errante</td><td class="n">2 pillole anti-radiazioni</td></tr>
+    <tr><td>Marcus (avamposto)</td><td class="n">nessuna (vende solo disinfettante)</td></tr>
+  </table></div>
+  <p>Il GDD v3 aveva scritto una regola chiave: <i>«ogni status ha un percorso di cura realizzabile con oggetti presenti nel gioco… entro 2-3 tappe»</i>, per eliminare il difetto degli status incurabili. Per MALATO il gioco di oggi non la rispetta.</p>
+
+  <h3>2.4 · La progressione</h3>
+  <p>Ogni passo dà 3 XP: 300 passi fanno 900 XP, il livello 4. I livelli costano 150, 400, 900, 2.000 XP cumulativi e ogni livello dà un attributo, 5 PV più il modificatore di Costituzione e una cura totale. Nelle partite simulate il livello 2 arriva al passo 34, il 3 al passo 84, il 4 al passo 203, poi nulla fino alla fine (mediana, scrupoloso). Le 21 quest valgono 8.350 XP: ma sul percorso diretto se ne avviano 0,3 a partita.</p>
+</section>
+
+<!-- ============ RISULTATI ============ -->
+<section id="risultati">
+  <p class="num">3</p>
+  <h2>Cosa succede nelle partite simulate</h2>
+  <div class="fig"><svg id="chProf" viewBox="0 0 900 200" role="img" aria-label="Esiti per tipo di giocatore simulato"></svg>
+    <p class="cap">100 partite per giocatore. Verde: arriva in fondo. Rosso: muore di malattia. Ambra: muore in uno scontro. Grigio: altre cause (fame, sete, ambiente).</p></div>
+  <div class="fig"><svg id="chSleep" viewBox="0 0 900 150" role="img" aria-label="Notti dormite con e senza scorte sufficienti"></svg>
+    <p class="cap">550 notti dormite in rifugio dal giocatore scrupoloso. Alla prima notte i personaggi sono sempre in regola: dopo arrivano al rifugio, in mediana, alle 20 con meno acqua del necessario.</p></div>
+  <ul>
+    <li><b>La malattia arriva presto:</b> 86 partite su 100 si ammalano, in mediana al giorno 4 (passo 208).</li>
+    <li><b>Non è subito mortale:</b> dopo il primo MALATO si muore in mediana 3 giorni dopo; 44 partite su 100 si ammalano e arrivano in fondo lo stesso: la malattia pesa, ma una notte ben nutrita in un rifugio restituisce la salute.</li>
+    <li><b>La sete non perdona nessuno:</b> 96 partite su 100 passano per lo stato DISIDRATATO.</li>
+    <li><b>Il personaggio conta molto:</b> le partite più fortunate nei dadi di creazione arrivano in fondo più spesso (vedi l’appendice).</li>
+  </ul>
+
+  <h3>Obiettivi che propongo</h3>
+  <div class="tbl"><table>
+    <tr><th>Metrica</th><th>Obiettivo</th><th>Oggi (scrupoloso)</th></tr>
+    <tr><td>Arrivano in fondo i giocatori attenti</td><td>85-90% o più</td><td>52%</td></tr>
+    <tr><td>Morti per malattia, fame o sete</td><td>Sotto il 5%</td><td>40%</td></tr>
+    <tr><td>Partite con malattia</td><td>Rara e curabile</td><td>86%</td></tr>
+    <tr><td>Notti dormite senza scorte</td><td>Quasi mai, e mai per caso</td><td>45%</td></tr>
+    <tr><td>Scontri a partita</td><td>3-6</td><td>4,6</td></tr>
+    <tr><td>PV persi in uno scontro vinto con equipaggiamento medio</td><td>10-30</td><td>6-28 con coltello e giacca; 25-48 senza</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ LEVE ============ -->
+<section id="leve">
+  <p class="num">4</p>
+  <h2>Le leve, provate una per una</h2>
+  <p>Ogni leva è stata applicata in una copia isolata del gioco e rimisurata con lo stesso giocatore scrupoloso e gli stessi 100 personaggi, quindi le differenze sono confrontabili. Nessuna è nel gioco vero.</p>
+  <div class="fig"><svg id="chLev" viewBox="0 0 900 460" role="img" aria-label="Vittorie per leva con intervallo di confidenza"></svg>
+    <p class="cap">Percentuale di partite che arrivano in fondo, con intervallo di confidenza al 95%. La barra vuota è la situazione di oggi.</p></div>
+  <div class="tbl"><table id="levTbl">
+    <tr><th>Scenario</th><th class="n">Arrivano</th><th class="n">Morti di malattia</th><th class="n">Morti in scontro</th><th class="n">Partite con malattia</th><th class="n">Notti senza scorte</th><th class="n">Finiscono a mani nude</th></tr>
+  </table></div>
+
+  <div class="lever"><h4>A · Avvisare del costo del sonno</h4>
+    <p class="eff">Effetto misurato: 69% arriva in fondo (oggi 52%)</p>
+    <p>Il menu del rifugio mostra «Dormi fino all’alba: costa 45 acqua e 30 cibo (hai 38 e 80)» e segnala quando mancano. Nella simulazione un giocatore avvisato non dorme a secco e riparte o aspetta. È un limite superiore: assume che l’avviso cambi sempre la scelta.</p>
+    <dl><dt>Dove</dt><dd><code>RefugeScreen.tsx</code> e <code>interactionStore.ts</code> (<code>refugeOptions</code>, caso <code>REFUGE_ACTION.SLEEP</code>): una riga di testo e, se non si hanno le scorte, una richiesta di conferma.</dd>
+    <dt>Costo</dt><dd>Piccolo. Nessun numero cambia.</dd>
+    <dt>Rischio</dt><dd>Quasi nullo. Chi non può dormire resta senza una via d’uscita: va abbinato a un’alternativa (leva C).</dd></dl></div>
+
+  <div class="lever"><h4>B · La malattia guarisce con una notte nutrita</h4>
+    <p class="eff">Effetto misurato: 52% arriva in fondo (oggi 52%)</p>
+    <p>Una notte di sonno con acqua e cibo sufficienti toglie MALATO. Da sola cambia poco, perché chi si ammalava lo faceva proprio dormendo a secco: serve insieme all’avviso.</p>
+    <dl><dt>Dove</dt><dd><code>interactionStore.ts</code>, ramo «fed» del sonno: <code>character.removeStatus('MALATO')</code>.</dd>
+    <dt>Costo</dt><dd>Una riga.</dd>
+    <dt>Rischio</dt><dd>La malattia diventa un fastidio temporaneo. Se il gioco vuole che pesi, si può farla passare dopo due notti o con un riposo lungo.</dd></dl></div>
+
+  <div class="lever"><h4>C · Un modo di riposare senza ammalarsi, anche di notte</h4>
+    <p class="eff">Non simulata: dipende dalla forma scelta</p>
+    <p>Di notte il rifugio offre solo «Dormi». Si può rimettere «Aspetta un’ora» anche di notte (recupera 5 PV e riduce la fatica) o offrire un sonno corto che costa meno e cura meno. Così chi non ha scorte ha una scelta vera e non un solo bottone che lo ammala.</p>
+    <dl><dt>Dove</dt><dd><code>interactionStore.ts</code>, funzione <code>refugeOptions</code> (<code>night ? SLEEP : WAIT</code>).</dd>
+    <dt>Costo</dt><dd>Piccolo.</dd>
+    <dt>Rischio</dt><dd>Basso.</dd></dl></div>
+
+  <div class="lever"><h4>D · Meno sete (da 4,5 a 3 punti all’ora)</h4>
+    <p class="eff">Effetto misurato: 72% arriva in fondo; notti senza scorte 17%</p>
+    <p>Porta il fabbisogno del viaggio da circa 560 a circa 375 punti. Cambia l’economia di tutto il gioco, non solo il rifugio.</p>
+    <dl><dt>Dove</dt><dd><code>characterStore.ts</code>: <code>updateSurvivalStats</code> e <code>calculateSurvivalCost</code> (il valore 4,5 compare due volte).</dd>
+    <dt>Costo</dt><dd>Due numeri. Ma va riverificato il resto: oggetti e quest che regalano acqua pesano meno.</dd>
+    <dt>Rischio</dt><dd>Medio: ritocca la tensione di tutto il viaggio.</dd></dl></div>
+
+  <div class="lever"><h4>E · Bottiglie da 40 invece di 25</h4>
+    <p class="eff">Effetto misurato: 71% arriva in fondo; notti senza scorte 23%</p>
+    <p>Stesso effetto di D ma solo sulle bottiglie: l’acqua trovata vale di più, la sete resta uguale.</p>
+    <dl><dt>Dove</dt><dd><code>public/data/items/consumables.json</code>, <code>CONS_002</code>: <code>hydration</code> da 25 a 40.</dd>
+    <dt>Costo</dt><dd>Un dato.</dd>
+    <dt>Rischio</dt><dd>Basso. Si vede nella descrizione dell’oggetto.</dd></dl></div>
+
+  <div class="lever"><h4>F · Due bottiglie pulite a ogni rifugio</h4>
+    <p class="eff">Effetto misurato: 88% arriva in fondo; morti di malattia 3%</p>
+    <p>Entrando in un rifugio si trovano due bottiglie d’acqua pulita (o una fonte). I rifugi sono monouso e ce ne sono circa 300 sulla mappa: ne si incontrano 5-6 a partita. È la leva che pesa di più perché lega l’acqua al posto in cui si dorme, cioè dove oggi si ammala.</p>
+    <dl><dt>Dove</dt><dd><code>interactionStore.ts</code>, <code>enterRefuge</code>, oppure una nuova azione «Riempi le borracce» nel menu del rifugio.</dd>
+    <dt>Costo</dt><dd>Piccolo se fisso; medio se è un’azione con testo.</dd>
+    <dt>Rischio</dt><dd>Medio: toglie parte del senso di scarsità. Si regola con la quantità.</dd></dl></div>
+
+  <div class="lever"><h4>G · Coltello iniziale più robusto (da 20 a 60 colpi)</h4>
+    <p class="eff">Effetto misurato: 64% arriva in fondo; finiscono a mani nude 30% (oggi 70%)</p>
+    <p>Il giocatore resta armato più a lungo e affronta i primi scontri senza la scogliera. Alternative: farlo partire con un coltello da combattimento, o regalare un’arma al primo scontro. Le azioni tattiche del report sul combattimento narrativo (osserva, punto debole, fuga) agiscono nella stessa direzione.</p>
+    <dl><dt>Dove</dt><dd><code>public/data/items/weapons.json</code>, <code>weapon_knife_rusty</code>: <code>durability</code>.</dd>
+    <dt>Costo</dt><dd>Un dato.</dd>
+    <dt>Rischio</dt><dd>Basso.</dd></dl></div>
+
+  <h3>Combinazioni</h3>
+  <div class="lever"><h4>A + B + G · il pacchetto minimo</h4>
+    <p class="eff">Effetto misurato: 89% arriva in fondo; morti di malattia 1%</p>
+    <p>Avviso del sonno, malattia che guarisce con una notte nutrita, coltello da 60 colpi. Non tocca l’economia dell’acqua: toglie la trappola e la scogliera. Raggiunge da solo l’obiettivo di 85-90%.</p></div>
+  <div class="lever"><h4>A + G · senza la leva B</h4>
+    <p class="eff">Effetto misurato: 89% arriva in fondo</p>
+    <p>Mostra quanto vale B quando c’è già l’avviso: senza B la quota è 89%, con B 89%. Nelle partite simulate B cambia l’esito di pochissime partite e non sposta il totale: è un’assicurazione quasi gratuita, non una leva che si veda nei numeri.</p></div>
+  <div class="lever"><h4>F + G · l’acqua nei rifugi e il coltello</h4>
+    <p class="eff">Effetto misurato: 93% arriva in fondo</p>
+    <p>La strada alternativa: invece di avvisare il giocatore si toglie il problema dell’acqua dove si dorme. Non richiede nessuna interfaccia nuova.</p></div>
+  <div class="lever"><h4>A + B + F + G · tutto</h4>
+    <p class="eff">Effetto misurato: 91% arriva in fondo; morti di malattia 1%</p>
+    <p>La differenza con il pacchetto minimo è dentro l’errore di misura: aggiungere F non serve per il traguardo, ma rende il viaggio più morbido per chi non legge l’avviso.</p></div>
+</section>
+
+<!-- ============ ORDINE ============ -->
+<section id="ordine">
+  <p class="num">5</p>
+  <h2>Ordine consigliato e come si verifica</h2>
+  <ol>
+    <li><b>A e B subito.</b> Sono quasi senza costo e tolgono la trappola che fa ammalare senza avviso.</li>
+    <li><b>G</b> perché il coltello che si rompe al secondo scontro è un difetto, non una scelta.</li>
+    <li><b>F, oppure D o E</b>, a seconda di quanto vuoi che l’acqua resti un problema. F la sposta nei rifugi; D e E la alleggeriscono ovunque. Non servono per il traguardo se ci sono A, B e G.</li>
+    <li><b>C</b> se vuoi dare a chi arriva a secco una scelta vera.</li>
+    <li><b>Aggiungere le cure di MALATO ai bottini</b> (antibiotici scaduti o pillole nelle tabelle «uncommon»): onora la regola del GDD e dà una via d’uscita a chi si è già ammalato. Non l’ho simulata.</li>
+  </ol>
+  <p><b>Come verificare:</b> lo script di simulazione è in <code>GAME/docs/analisi/</code>. Rinominarlo <code>.test.ts</code>, copiarlo in <code>GAME/src/test/</code> e lanciarlo con <code>BALANCE_RUNS=100 BOT=diligent BALANCE_OUT=risultati.json npx vitest run src/test/balance-analysis.test.ts</code>. Le leve D, F e B sono interruttori in una piccola patch (<code>leve-simulazione.patch</code>, da applicare a una copia del repository, mai al gioco vero); A, E e G si attivano con variabili d’ambiente dello script (<code>SIM_WARNED</code>, <code>SIM_BOTTLE</code>, <code>SIM_KNIFE_DUR</code>). Per applicare una leva davvero vanno scritte le modifiche nel gioco, poi si rilancia lo script e si confronta.</p>
+
+  <details><summary>Appendice · il personaggio e il caso</summary>
+    <p>Ho diviso le 100 partite del giocatore scrupoloso in terzi secondo la somma di Forza, Destrezza e Costituzione tirate alla creazione: nel terzo più debole arriva in fondo il 39%, nel terzo centrale il 48%, nel terzo più forte il 68%. I dadi 4d6 scartando il più basso decidono molto: un personaggio nato debole ha pochi PV e colpisce poco, e a quel punto ogni scorta mancata pesa di più.</p>
+  </details>
+</section>
+
+<footer>
+  Questa pagina è in <code>GAME/docs/analisi/difficolta-e-leve.html</code>. Le simulazioni sono state fatte in una copia isolata del repository: nulla è stato modificato nel gioco.
+</footer>
+</div>
+
+<script>
+const D = {"profiles": [{"name": "Distratto", "n": 100, "v": 21, "m": 75, "c": 3, "a": 1}, {"name": "Prudente", "n": 100, "v": 27, "m": 68, "c": 3, "a": 2}, {"name": "Scrupoloso", "n": 100, "v": 52, "m": 40, "c": 7, "a": 1}], "sleep": {"ok": 301, "water": 171, "both": 78}, "curves": {"steps": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330], "hp": [100, 107, 109, 109, 106, 108, 106, 107, 101, 98, 91, 93], "sat": [93, 77, 57, 55, 52, 53, 56, 55, 56, 56, 52, 42], "hyd": [90, 65, 51, 50, 45, 35, 31, 28, 23, 16, 15, 17]}, "levers": [{"id": "base", "name": "Oggi", "win": 52, "lo": 42, "hi": 62, "sd": 40, "cd": 7, "sick": 86, "unfed": 45, "unarmed": 70}, {"id": "warn", "name": "A · avviso del sonno", "win": 69, "lo": 59, "hi": 77, "sd": 4, "cd": 13, "sick": 19, "unfed": 0, "unarmed": 68}, {"id": "sick", "name": "B · malattia guarisce", "win": 52, "lo": 42, "hi": 62, "sd": 39, "cd": 8, "sick": 86, "unfed": 45, "unarmed": 71}, {"id": "thirst", "name": "D · sete 3 all’ora", "win": 72, "lo": 63, "hi": 80, "sd": 17, "cd": 8, "sick": 42, "unfed": 17, "unarmed": 69}, {"id": "bottle", "name": "E · bottiglie da 40", "win": 71, "lo": 61, "hi": 79, "sd": 21, "cd": 6, "sick": 56, "unfed": 23, "unarmed": 70}, {"id": "refw", "name": "F · 2 bottiglie ai rifugi", "win": 88, "lo": 80, "hi": 93, "sd": 3, "cd": 9, "sick": 40, "unfed": 12, "unarmed": 62}, {"id": "knife", "name": "G · coltello da 60 colpi", "win": 64, "lo": 54, "hi": 73, "sd": 33, "cd": 3, "sick": 89, "unfed": 42, "unarmed": 30}, {"id": "pkgD", "name": "A + G", "win": 89, "lo": 81, "hi": 94, "sd": 1, "cd": 4, "sick": 14, "unfed": 0, "unarmed": 34}, {"id": "pkgA", "name": "A + B + G", "win": 89, "lo": 81, "hi": 94, "sd": 1, "cd": 4, "sick": 14, "unfed": 0, "unarmed": 34}, {"id": "pkgC", "name": "F + G", "win": 93, "lo": 86, "hi": 97, "sd": 1, "cd": 6, "sick": 36, "unfed": 12, "unarmed": 30}, {"id": "pkgB", "name": "A + B + F + G", "win": 91, "lo": 84, "hi": 95, "sd": 1, "cd": 7, "sick": 10, "unfed": 0, "unarmed": 30}]};
+const NS = 'http://www.w3.org/2000/svg';
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = (tag, a, p, t) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (t !== undefined) e.textContent = t; if (p) p.appendChild(e); return e; };
+const f1 = v => String(v).replace('.', ',');
+
+/* ---- Tabella scontri ---- */
+(function () {
+  const rows = [
+    ['Predone disperato', 30, 12, [99.7, 35.6], [100, 9.8], [100, 1.9]],
+    ['Cane selvatico', 20, 14, [100, 24.7], [100, 6.5], [100, 1.8]],
+    ['Lupo mutato', 25, 13, [96.4, 45.1], [100, 12.5], [100, 2.5]],
+    ['Arciere predone', 28, 13, [98.2, 44.6], [100, 14.1], [100, 2.2]],
+    ['Cacciatore pazzo', 32, 13, [97.7, 47.5], [100, 12.2], [100, 3.2]],
+    ['Cinghiale aggressivo', 40, 11, [76.7, 65.0], [100, 22.0], [100, 4.0]],
+    ['Bestia mutante', 45, 13, [59.0, 71.9], [99.7, 25.8], [100, 4.8]],
+    ['Predone armato', 35, 14, [68.1, 65.4], [99.8, 21.7], [100, 5.5]],
+    ['Guardia impazzita', 40, 15, [57.6, 69.3], [99.5, 27.7], [100, 5.5]],
+    ['Orso mutato', 60, 12, [9.6, 84.3], [95.7, 43.2], [100, 8.2]],
+    ['Capobranco alfa', 55, 14, [12.6, 80.2], [95.8, 43.2], [100, 8.3]],
+    ['Capo dei predoni', 50, 16, [5.4, 82.2], [85.6, 48.8], [99.9, 11.6]]
+  ];
+  const t = document.getElementById('fightTbl');
+  const color = p => `hsl(${Math.round(p * 1.2)} 55% ${p > 60 ? 62 : 58}%)`;
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td>` +
+      [3, 4, 5].map(i => `<td class="heat" style="background:${color(r[i][0])}">${f1(r[i][0])}%<br><span style="font-weight:400;font-size:13px">−${f1(r[i][1])} PV</span></td>`).join('');
+    t.appendChild(tr);
+  });
+})();
+
+/* ---- Risorse nel viaggio ---- */
+(function () {
+  const svg = document.getElementById('chRes'), c = D.curves;
+  const L = 60, R = 870, T = 20, B = 240, X = s => L + (s / 330) * (R - L - 70), Y = v => B - (v / 120) * (B - T);
+  const line = css('--line'), ember = css('--ember'), sage = css('--sage'), teal = css('--teal'), danger = css('--danger');
+  [0, 20, 40, 60, 80, 100, 120].forEach(v => { el('line', { x1: L, x2: R, y1: Y(v), y2: Y(v), stroke: line }, svg); el('text', { x: L - 8, y: Y(v) + 5, 'text-anchor': 'end', 'font-size': 13 }, svg, v); });
+  el('rect', { x: L, y: Y(20), width: R - L, height: Y(0) - Y(20), fill: 'rgb(226 96 75 / .09)' }, svg);
+  el('text', { x: R - 4, y: Y(20) - 6, 'text-anchor': 'end', 'font-size': 13, style: 'fill:' + danger }, svg, 'sotto 20: disidratato / affamato');
+  c.steps.forEach(s => el('text', { x: X(s), y: B + 22, 'text-anchor': 'middle', 'font-size': 13 }, svg, s));
+  el('text', { x: R, y: B + 40, 'text-anchor': 'end', 'font-size': 13 }, svg, 'passi');
+  const draw = (arr, color, name) => {
+    el('polyline', { points: arr.map((v, i) => `${X(c.steps[i])},${Y(v)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+    const last = arr.length - 1; el('circle', { cx: X(c.steps[last]), cy: Y(arr[last]), r: 4, fill: color }, svg);
+    el('text', { x: X(c.steps[last]) + 10, y: Y(arr[last]) + 4, 'font-size': 14, style: 'fill:' + color }, svg, name);
+  };
+  draw(c.hp, sage, 'salute'); draw(c.sat, ember, 'sazietà'); draw(c.hyd, teal, 'idratazione');
+})();
+
+/* ---- Esiti per giocatore ---- */
+(function () {
+  const svg = document.getElementById('chProf');
+  const cols = { v: css('--sage'), m: css('--danger'), c: css('--ember'), a: css('--ink3') };
+  const L = 130, W = 740;
+  D.profiles.forEach((p, i) => {
+    const y = 20 + i * 52; let x = L;
+    el('text', { x: 6, y: y + 28, 'font-size': 18, style: 'fill:' + css('--ink') }, svg, p.name);
+    ['v', 'm', 'c', 'a'].forEach(k => {
+      const w = (p[k] / p.n) * W; if (!w) return;
+      el('rect', { x, y, width: w - 1, height: 40, fill: cols[k] }, svg);
+      if (w > 24) el('text', { x: x + 8, y: y + 27, 'font-size': 17, style: 'fill:#0d0f12;font-weight:600' }, svg, p[k]);
+      x += w;
+    });
+  });
+  const names = { v: 'arriva in fondo', m: 'malattia', c: 'scontro', a: 'altre cause' };
+  let lx = L; ['v', 'm', 'c', 'a'].forEach(k => { el('rect', { x: lx, y: 176, width: 12, height: 12, fill: cols[k] }, svg); el('text', { x: lx + 18, y: 187, 'font-size': 14 }, svg, names[k]); lx += 18 + names[k].length * 7.6 + 24; });
+})();
+
+/* ---- Notti ---- */
+(function () {
+  const svg = document.getElementById('chSleep'), s = D.sleep;
+  const parts = [[s.ok, 'in regola', css('--sage')], [s.water, 'manca acqua', css('--danger')], [s.both, 'mancano acqua e cibo', css('--ember')]];
+  const L = 20, W = 860, tot = s.ok + s.water + s.both; let x = L;
+  el('text', { x: L, y: 20, 'font-size': 14 }, svg, 'Notti dormite in un rifugio');
+  parts.forEach(([n, t, c]) => {
+    const w = (n / tot) * W; if (!n) return;
+    el('rect', { x, y: 30, width: w - 2, height: 46, fill: c }, svg);
+    el('text', { x: x + 10, y: 59, 'font-size': 20, style: 'fill:#0d0f12;font-weight:600' }, svg, n);
+    el('text', { x: x + 10, y: 104, 'font-size': 15 }, svg, t + ' (' + Math.round(n / tot * 100) + '%)');
+    x += w;
+  });
+})();
+
+/* ---- Leve ---- */
+(function () {
+  const svg = document.getElementById('chLev'), rows = D.levers;
+  const L = 250, W = 580, bh = 24, gap = 16, T = 18;
+  [0, 25, 50, 75, 100].forEach(v => {
+    const x = L + v / 100 * W;
+    el('line', { x1: x, x2: x, y1: T - 6, y2: T + rows.length * (bh + gap), stroke: css('--line') }, svg);
+    el('text', { x, y: T + rows.length * (bh + gap) + 14, 'text-anchor': 'middle', 'font-size': 13 }, svg, v + '%');
+  });
+  rows.forEach((r, i) => {
+    const y = T + i * (bh + gap), base = r.id === 'base';
+    el('text', { x: 6, y: y + 17, 'font-size': 16, style: 'fill:' + css('--ink') }, svg, r.name);
+    el('rect', { x: L, y, width: r.win / 100 * W, height: bh, fill: base ? 'none' : css('--ember'), stroke: base ? css('--ink2') : 'none', 'stroke-width': 2, opacity: base ? 1 : .9 }, svg);
+    el('line', { x1: L + r.lo / 100 * W, x2: L + r.hi / 100 * W, y1: y + bh / 2, y2: y + bh / 2, stroke: css('--ink'), 'stroke-width': 2 }, svg);
+    el('line', { x1: L + r.lo / 100 * W, x2: L + r.lo / 100 * W, y1: y + 5, y2: y + bh - 5, stroke: css('--ink'), 'stroke-width': 2 }, svg);
+    el('line', { x1: L + r.hi / 100 * W, x2: L + r.hi / 100 * W, y1: y + 5, y2: y + bh - 5, stroke: css('--ink'), 'stroke-width': 2 }, svg);
+    el('text', { x: L + Math.max(r.hi, r.win) / 100 * W + 8, y: y + 17, 'font-size': 15, style: 'fill:' + css('--ink') }, svg, r.win + '%');
+  });
+  const t = document.getElementById('levTbl');
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.name}</td><td class="n"><b>${r.win}%</b></td><td class="n">${r.sd}%</td><td class="n">${r.cd}%</td><td class="n">${r.sick}%</td><td class="n">${r.unfed}%</td><td class="n">${r.unarmed}%</td>`;
+    t.appendChild(tr);
+  });
+})();
+</script>

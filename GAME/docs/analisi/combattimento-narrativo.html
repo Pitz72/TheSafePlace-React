@@ -1,0 +1,477 @@
+<title>Il combattimento narrativo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: colonna di lettura stretta con navigazione fissa; il banco di prova dei testi sta in fondo.
+   Palette Crepuscolo del gioco, un solo aspetto scuro scelto di proposito. */
+:root {
+  --bg0: #090a0d;
+  --bg1: #0e1014;
+  --bg2: #15181e;
+  --line: #262a33;
+  --ink: #ede6d9;
+  --ink2: #bab1a3;
+  --ink3: #8d8579;
+  --ember: #e8893f;
+  --ember2: #f5b46c;
+  --teal: #6cb4bd;
+  --sage: #93b38a;
+  --danger: #e2604b;
+  --display: 'Cormorant Garamond', Georgia, serif;
+  --body: 'Literata', Georgia, serif;
+  --ui: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg0); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.62;
+  padding-block: 0 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg0); z-index: 20; }
+.col { max-width: 880px; margin: 0 auto; }
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgb(9 10 13 / .94);
+  border-bottom: 1px solid var(--line); margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 10px max(16px, env(safe-area-inset-left, 0px));
+}
+nav.top .col { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; }
+nav.top a { font-family: var(--ui); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); text-decoration: none; }
+nav.top a:hover { color: var(--ember2); }
+nav.top b { font-family: var(--display); font-size: 21px; font-weight: 600; margin-right: auto; color: var(--ink); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--ui); font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--ember2); margin: 0 0 8px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(36px, 7vw, 60px); line-height: 1.04; margin: 0 0 14px; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--ink2); max-width: 62ch; margin: 0 0 14px; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.6vw, 40px); line-height: 1.1; margin: 0 0 8px; text-wrap: balance; scroll-margin-top: 70px; }
+h3 { font-family: var(--ui); font-weight: 600; font-size: 17px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 34px 0 8px; }
+section { padding-top: 56px; }
+.num { font-family: var(--ui); font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin: 0 0 4px; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; max-width: 68ch; }
+li { margin-bottom: 6px; }
+a { color: var(--teal); }
+b { font-weight: 600; }
+.verdict { border-left: 3px solid var(--ember); background: var(--bg1); padding: 14px 18px; margin: 18px 0 22px; max-width: 72ch; }
+.verdict p:last-child { margin-bottom: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 22px; }
+.card { background: var(--bg1); border: 1px solid var(--line); padding: 16px 18px; min-width: 0; }
+.card h4 { font-family: var(--ui); font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 0 0 6px; }
+.card p { font-size: 15.5px; margin: 0; line-height: 1.5; }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 600px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-family: var(--ui); font-weight: 600; font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: var(--bg1); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; }
+.fig { margin: 18px 0 8px; }
+.fig svg { width: 100%; height: auto; display: block; background: var(--bg1); border: 1px solid var(--line); }
+.cap { font-size: 14px; color: var(--ink3); margin: 6px 0 0; max-width: 78ch; line-height: 1.5; }
+svg text { font-family: var(--ui); fill: var(--ink2); }
+.tag { display: inline-block; font-family: var(--ui); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 1px 8px; border: 1px solid var(--line); color: var(--ink2); white-space: nowrap; }
+.tag.ok { color: var(--sage); border-color: rgb(147 179 138 / .5); }
+.tag.part { color: var(--ember2); border-color: rgb(245 180 108 / .5); }
+.tag.no { color: var(--danger); border-color: rgb(226 96 75 / .5); }
+.quote { font-style: italic; color: var(--ink); border-left: 2px solid var(--line); padding: 2px 0 2px 16px; margin: 12px 0; max-width: 62ch; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: var(--bg2); padding: 1px 5px; }
+details { border-top: 1px solid var(--line); padding: 10px 0; max-width: 72ch; }
+details summary { cursor: pointer; font-family: var(--ui); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: var(--ink2); }
+details[open] summary { color: var(--ember2); }
+footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink3); max-width: 80ch; }
+
+/* ---- Banco di prova ---- */
+.lab { background: var(--bg1); border: 1px solid var(--line); padding: 18px; margin: 16px 0; }
+.lab .row { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.lab label { display: flex; flex-direction: column; gap: 4px; font-family: var(--ui); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); min-width: 0; }
+.lab select { font-family: var(--ui); font-size: 16px; letter-spacing: .04em; background: var(--bg2); color: var(--ink); border: 1px solid var(--line); padding: 6px 8px; border-radius: 3px; min-width: 120px; }
+.btn { font-family: var(--ui); font-weight: 600; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; background: var(--ember); color: #1a0f05; padding: 9px 16px; border: 0; border-radius: 3px; cursor: pointer; }
+.btn:hover { background: var(--ember2); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--ember2); outline-offset: 2px; }
+.out { margin-top: 16px; }
+.out .line { font-family: var(--body); font-size: 18px; line-height: 1.6; font-style: italic; border-left: 2px solid var(--ember); padding-left: 16px; margin: 0 0 8px; max-width: 64ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 8px; font-size: 13px; margin: 0 0 6px; }
+.log { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 16px; }
+.log h5 { font-family: var(--ui); font-weight: 600; font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 0 0 8px; }
+.log ol { list-style: none; padding: 0; margin: 0; }
+.log li { margin: 0 0 10px; font-size: 15.5px; line-height: 1.55; }
+.log li b { font-family: var(--ui); font-weight: 600; letter-spacing: .1em; color: var(--ink3); margin-right: 6px; }
+.log .flat li { color: var(--ink2); }
+.stat { font-family: var(--ui); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-top: 10px; }
+@media (max-width: 640px) { body { font-size: 16px; } nav.top b { width: 100%; } }
+</style>
+
+<nav class="top"><div class="col">
+  <b>Il combattimento narrativo</b>
+  <a href="#fonti">Fonti</a><a href="#visione">Visione</a><a href="#oggi">Oggi</a><a href="#come">Come farlo</a><a href="#fasi">Fasi</a><a href="#prova">Provalo</a>
+</div></nav>
+
+<div class="col">
+<header class="hero">
+  <p class="kicker">The Safe Place · 24 ottobre 2026</p>
+  <h1>Il combattimento narrativo</h1>
+  <p class="lead">Il documento che cercavi esiste: è il <b>Sistema 5 del GDD v3</b>, scritto nella sessione di design del 14 maggio 2026. Qui lo ricostruisco, lo confronto con il gioco di oggi (versione 3.1.0) e propongo come realizzarlo, con numeri.</p>
+
+  <div class="verdict">
+    <p><b>L’idea in una frase.</b> Ogni scontro deve essere un racconto e non uno scambio di numeri: il testo cambia con l’arma, il nemico, il punto dello scontro, lo stato di chi combatte e il tempo che fa.</p>
+    <p><b>Dove siamo.</b> Il gioco ha le regole (dadi, tattiche, fuga, munizioni speciali, nemici Elite) ma non il racconto: <b>100 frasi in 7 elenchi, pescate a caso</b>, uguali in ogni scontro. È la parte della visione che manca di più ed è anche la più economica da fare.</p>
+    <p class="cap" style="margin-bottom:0">Nessuna modifica al gioco. In fondo c’è un banco di prova con la logica di scelta del testo, dove puoi vedere la differenza.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h4>Fonti</h4><p>Un documento principale (GDD v3, Sistema 5) e quattro che lo completano. I due file originali sono ora anche in <code>F:\Backup</code>.</p></div>
+    <div class="card"><h4>Mancano</h4><p><b>Testi contestuali, 6 stati del nemico, Difenditi, colpo mirato e disarmante, iniziativa</b> e il combattimento leggero.</p></div>
+    <div class="card"><h4>Costo</h4><p>Il testo contestuale richiede circa <b>400 righe</b> invece di 9.720 combinazioni scritte a mano, grazie a un sistema a specificità.</p></div>
+    <div class="card"><h4>Effetto sul bilanciamento</h4><p>Con il coltello iniziale, osservare e poi colpire il punto debole alza le vittorie di <b>10-30 punti</b> (dal 56-79% al 79-92%); aggiungendo la fuga i morti scendono dal 22-44% all’1-2%.</p></div>
+  </div>
+</header>
+
+<!-- ============ FONTI ============ -->
+<section id="fonti">
+  <p class="num">1</p>
+  <h2>Dove l’ho trovato</h2>
+  <p>Non esiste un file dedicato solo al combattimento. La visione sta dentro il GDD v3, che è stato tolto da <code>main</code> il 7 ottobre (commit <code>dc57e3c</code>) ma resta nella storia di git. Ho controllato anche gli archivi del ramo Godot e le specifiche V.A.T. del 2025: descrivono il sistema vecchio, non un’estensione.</p>
+  <div class="tbl"><table>
+    <tr><th>Documento</th><th>Dove</th><th>Cosa dice</th></tr>
+    <tr><td><b>GDD v3, Sistema 5</b> «Combattimento Narrativo»</td><td><code>GAME/docs/design/GDD-v3-game-design.md</code>, righe 317-437, sessione del 14 maggio 2026, commit <code>2ef3201</code></td><td>La visione completa: sei azioni, sei stati del nemico, testi contestuali, registro come diario.</td></tr>
+    <tr><td>GDD v3, Sistema 2 «Eventi»</td><td>stesso file, righe 55-82</td><td>Distingue il combattimento <i>leggero</i> (prove dentro l’evento) dal <i>narrativo</i> (sistema completo, per banditi e nemici di trama).</td></tr>
+    <tr><td>GDD v3, Sistema 6 «Personaggio»</td><td>stesso file, righe 480-545</td><td>Ramo talenti Combattimento (Lama Precisa, Riflessi, Osservatore Tattico); 25 XP per uno scontro narrativo vinto.</td></tr>
+    <tr><td>Handoff UI del redesign</td><td>archivio zip nello stesso commit, <code>screens/Combat.jsx</code></td><td>Lo schermo: il nemico come nota di campo, il registro a destra, sei carte-azione in basso con il tag meccanico.</td></tr>
+    <tr><td>Versione 0.7.0 (2025)</td><td><code>docs/logs/v0.7.0.md</code></td><td>L’origine: «Sopravvivere, non Vincere», diario di combattimento narrativo, azione Analizza, fuga come tattica valida.</td></tr>
+    <tr><td>Specifica V.A.T. (v0.9.6, 2025)</td><td><code>.kiro/specs/archivio/sistema-combattimento-vat-…</code></td><td>Descrizione narrativa dinamica della scena, nemici multipli con scelta del bersaglio. Il gioco di oggi è sempre uno contro uno.</td></tr>
+    <tr><td>Versione 1.9.1 «Tactical Combat»</td><td><code>docs/logs/v1.9.1.md</code></td><td>Azioni ambientali, munizioni speciali, Elite. Già nel gioco, oltre la visione del GDD.</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ VISIONE ============ -->
+<section id="visione">
+  <p class="num">2</p>
+  <h2>La visione, in dettaglio</h2>
+
+  <h3>Perché</h3>
+  <p>Il GDD lo dice senza giri: il vecchio sistema <i>«falliva non per le regole GDR (buone) ma per la povertà testuale: ogni scontro era identico nel tono, nelle frasi, nella sensazione»</i>. La cura proposta è un sistema a <b>pool di testo contestualizzato</b>: ogni azione pesca da elenchi diversi a seconda di una combinazione di variabili.</p>
+  <p>Regola di fondo: 0 PV significa morte, nessuno stato intermedio. Il registro non scrive «hai inflitto 12 danni» ma prosa breve in prima persona, come una pagina di diario.</p>
+  <div class="quote">«Il fendente taglia l’aria. Mi sfugge il passo — le gambe cedono un attimo. Lui ne approfitta, arretra di un metro, occhi fissi su di me. Ci guardiamo. Stiamo entrambi finendo.»</div>
+  <p class="cap">Esempio dal GDD: attacco con coltello, mancato, nemico bandito ferito, turno 6, giocatore esausto, pioggia di notte.</p>
+
+  <h3>Le sei azioni del giocatore</h3>
+  <div class="tbl"><table>
+    <tr><th>Azione</th><th>Cosa fa</th></tr>
+    <tr><td><b>1 · Attacca</b></td><td>Tre varianti: <i>colpo diretto</i>; <i>colpo mirato</i> (−2 al tiro, +1 dado di danno); <i>colpo disarmante</i> (Atletica contro Forza del nemico: lo disarma per un turno).</td></tr>
+    <tr><td><b>2 · Osserva</b></td><td>Percezione o Investigare, costa il turno. Se riesce rivela CA esatta, fascia di salute, <b>punto debole</b> e comportamento. Se fallisce, solo una di queste cose.</td></tr>
+    <tr><td><b>3 · Colpisci il punto debole</b></td><td>Solo dopo Osserva. +4 al tiro e danno massimo del dado. Ogni nemico ha il suo punto debole, descritto nel testo («fianco sinistro», «ginocchio leso»).</td></tr>
+    <tr><td><b>4 · Difenditi</b></td><td>+3 CA fino al turno dopo. Varianti: <i>copertura</i> (+5 CA, immobile) e <i>parata attiva</i> (+2 CA e riflette 1d4 di danno in mischia).</td></tr>
+    <tr><td><b>5 · Oggetti</b></td><td>Una lista corta di 3-4 slot preparati fuori dallo scontro. Non si fruga nello zaino.</td></tr>
+    <tr><td><b>6 · Fuggi</b></td><td>Atletica. Se riesce, si scappa subendo 1d6 di danno. Se fallisce, il nemico ha un attacco gratuito. Non sempre disponibile (nemico che blocca l’uscita, scontri obbligati dalla trama).</td></tr>
+  </table></div>
+
+  <h3>I sei stati del nemico</h3>
+  <p>Il nemico non «attacca e basta»: ha uno stato che cambia durante lo scontro e ne guida azioni e tono del testo.</p>
+  <div class="tbl"><table>
+    <tr><th>Stato</th><th>Quando</th><th>Meccanica</th></tr>
+    <tr><td><b>Aggressivo</b></td><td>Apertura, stato di partenza</td><td>−2 CA (si espone), attacca spesso</td></tr>
+    <tr><td><b>Difensivo</b></td><td>Dopo aver subito un critico</td><td>+2 CA, attacca meno</td></tr>
+    <tr><td><b>Ferito</b></td><td>Sotto il 50% di PV</td><td>Cambia schema: frenesia (+1 dado di danno) oppure ritirata (tenta la fuga)</td></tr>
+    <tr><td><b>Stordito</b></td><td>Dopo colpo disarmante o critico speciale</td><td>Salta un turno, il giocatore ha +2 a tutti i tiri</td></tr>
+    <tr><td><b>Disarmato</b></td><td>Dopo un colpo disarmante riuscito</td><td>Solo attacchi a mani nude oppure cerca di recuperare l’arma</td></tr>
+    <tr><td><b>Esausto</b></td><td>Scontro lungo, da 6 turni</td><td>−2 a tutte le azioni, −1 PV a turno, anche per il nemico</td></tr>
+  </table></div>
+  <p>Cinque archetipi di nemico con comportamenti di partenza diversi: bandito (fugge sotto il 30%), soldato (difensivo, non fugge), animale piccolo (veloce, CA bassa), animale grande (frenesia sotto il 40%), mutante (variabile).</p>
+
+  <h3>Le sette variabili del testo</h3>
+  <div class="tbl"><table>
+    <tr><th>Variabile</th><th>Valori</th></tr>
+    <tr><td>Arma del giocatore</td><td>mischia (coltello, ascia, mani nude) · a distanza (pistola, fucile) · improvvisata</td></tr>
+    <tr><td>Tipo di nemico</td><td>bandito · soldato · animale piccolo · animale grande · mutante</td></tr>
+    <tr><td>Fase dello scontro</td><td>apertura (turni 1-2) · escalation (3-5) · climax (6 e oltre)</td></tr>
+    <tr><td>Esito</td><td>colpo riuscito · mancato · critico · fallimento drammatico</td></tr>
+    <tr><td>Stato del giocatore</td><td>integro · ferito · esausto · altri stati</td></tr>
+    <tr><td>Stato del nemico</td><td>i sei stati sopra</td></tr>
+    <tr><td>Ora e meteo</td><td>notte · pioggia · tempesta</td></tr>
+  </table></div>
+  <p>Altri tre elementi: il <b>registro come diario</b> (alla fine le ultime 4-6 righe restano nel diario di viaggio come «memoria dello scontro»), il <b>combattimento leggero</b> per gli eventi minori, e il <b>ramo di talenti Combattimento</b> con una componente attiva (Lama Precisa, Riflessi, Osservatore Tattico).</p>
+</section>
+
+<!-- ============ OGGI ============ -->
+<section id="oggi">
+  <p class="num">3</p>
+  <h2>Cosa c’è già nel gioco</h2>
+  <p>Confronto con la versione 3.1.0, leggendo <code>combatStore.ts</code>, <code>CombatScreen.tsx</code>, <code>combatNarrative.ts</code> e i dati dei nemici.</p>
+  <div class="tbl"><table>
+    <tr><th>Elemento della visione</th><th>Oggi</th><th>Stato</th></tr>
+    <tr><td>Testo che cambia con il contesto</td><td>7 elenchi (attacco, colpo, mancato e gli stessi per il nemico, più morte): <b>100 frasi</b> pescate a caso, senza guardare arma, nemico, fase o meteo</td><td><span class="tag no">manca</span></td></tr>
+    <tr><td>Stati del nemico</td><td>Solo effetti temporanei: bruciato, bloccato da trappole, un’abilità una tantum per i 3 Elite</td><td><span class="tag no">manca</span></td></tr>
+    <tr><td>Colpo mirato e disarmante</td><td>Un solo attacco</td><td><span class="tag no">manca</span></td></tr>
+    <tr><td>Iniziativa</td><td>Il giocatore agisce sempre per primo (a parte l’attacco a sorpresa del talento Guerrigliero)</td><td><span class="tag no">manca</span></td></tr>
+    <tr><td>Combattimento leggero</td><td>Ogni scontro casuale è un combattimento completo: succede nel 35% degli incontri casuali</td><td><span class="tag no">manca</span></td></tr>
+    <tr><td>Difenditi</td><td>Non esiste. Ci sono «Nasconditi tra gli alberi» (foresta) e «Cerca copertura» (+4 CA per 2 turni), con prova di abilità</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Osserva</td><td>«Analizza»: prova di Percezione, rivela una debolezza fissa per nemico e sblocca una sola azione tattica. Non rivela CA né fascia di salute</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Colpisci il punto debole</td><td>Tutti i 18 nemici hanno una tattica con un testo e una prova; il danno è fisso a 15</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Fuggi</td><td>Furtività contro CD 12. Se riesce, via senza danno. Se fallisce, il nemico attacca nel suo turno</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Oggetti a slot rapidi</td><td>Un menu con tutto ciò che è utilizzabile in combattimento</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Registro come diario</td><td>Registro che scorre nello scontro e un riepilogo della vittoria; non entra nel diario di viaggio</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Talenti di combattimento</td><td>5 su 10 toccano gli scontri, tutti passivi (Guerrigliero, Cacciatore Esperto, Maestro del Combattimento, Occhio di Falco, Ombra del Crepuscolo)</td><td><span class="tag part">in parte</span></td></tr>
+    <tr><td>Salute del nemico qualitativa</td><td>Quattro fasce: Illeso, Leggermente ferito, Ferito, In fin di vita</td><td><span class="tag ok">fatto</span></td></tr>
+    <tr><td>Munizioni speciali, azioni ambientali, Elite</td><td>Presenti dalla 1.9.1. Non erano nel GDD v3: sono un di più</td><td><span class="tag ok">oltre</span></td></tr>
+  </table></div>
+
+  <h3>Il problema del testo, in numeri</h3>
+  <p>In un viaggio tipico (3-4 scontri) un giocatore mette a segno circa 18 colpi, e ogni colpo pesca una frase da un elenco di 15. In media ne escono <b>11 diverse su 18</b>: quasi una su due è una ripetizione. E le frasi non sanno niente della scena: «Il colpo va a segno!» esce uguale contro un cane selvatico di giorno e contro un razziatore ferito sotto la pioggia.</p>
+</section>
+
+<!-- ============ COME ============ -->
+<section id="come">
+  <p class="num">4</p>
+  <h2>Come realizzarlo</h2>
+
+  <h3>A · Il motore dei testi (la parte che conta di più)</h3>
+  <p>Combinare tutto a mano non si può. Con cinque tipi di nemico le combinazioni sono 4 esiti × 3 armi × 3 fasi × 5 nemici × 6 stati del nemico × 3 stati del giocatore × 3 ambienti = <b>9.720</b>. Anche solo tre righe ciascuna sarebbero 29.000 righe.</p>
+  <p>La soluzione è la <b>specificità</b>. Ogni riga dichiara solo le condizioni che le servono (anche nessuna). A ogni colpo il gioco costruisce il contesto, scarta le righe che lo contraddicono e pesca tra quelle con più condizioni soddisfatte, evitando le ultime già uscite. Una riga generica fa da rete di sicurezza; una riga molto specifica, come l’esempio del GDD, esce solo nella scena giusta.</p>
+  <div class="tbl"><table>
+    <tr><th>Strato di scrittura</th><th class="n">Contesti</th><th class="n">Righe per contesto</th><th class="n">Righe</th></tr>
+    <tr><td>Esito × arma</td><td class="n">12</td><td class="n">3</td><td class="n">36</td></tr>
+    <tr><td>Esito × fase</td><td class="n">12</td><td class="n">3</td><td class="n">36</td></tr>
+    <tr><td>Esito × tipo di nemico</td><td class="n">20</td><td class="n">3</td><td class="n">60</td></tr>
+    <tr><td>Esito × stato del nemico</td><td class="n">24</td><td class="n">2</td><td class="n">48</td></tr>
+    <tr><td>Esito × stato del giocatore</td><td class="n">8</td><td class="n">2</td><td class="n">16</td></tr>
+    <tr><td>Esito × ambiente</td><td class="n">12</td><td class="n">2</td><td class="n">24</td></tr>
+    <tr><td>Righe combinate di alta specificità e di riserva</td><td class="n"></td><td class="n"></td><td class="n">circa 50</td></tr>
+    <tr><td><b>Lato giocatore</b></td><td class="n"></td><td class="n"></td><td class="n"><b>circa 270</b></td></tr>
+    <tr><td>Lato nemico (attacco, colpo, mancato) e nuove azioni</td><td class="n"></td><td class="n"></td><td class="n">circa 130</td></tr>
+    <tr><td><b>Totale stimato</b></td><td class="n"></td><td class="n"></td><td class="n"><b>circa 400</b></td></tr>
+  </table></div>
+  <p class="cap">Oggi sono 100 righe. Il banco di prova qui sotto ne usa 59 e già dà un’idea della differenza.</p>
+  <p><b>Perché non in Ink.</b> Ink è ottimo per i dialoghi, ma qui il problema è la <i>scelta</i> della riga in base a condizioni: in Ink servirebbe un nodo per ogni combinazione. È molto più semplice un file di dati con etichette e una funzione di scelta in TypeScript, testabile senza far girare il gioco. La nota del GDD («probabilmente via Ink») è da rivedere.</p>
+
+  <h3>B · Stati del nemico e archetipi</h3>
+  <p>Una piccola macchina a stati dentro lo scontro (oggi lo stato del nemico è solo PV e qualche effetto). In <code>enemies.json</code> ogni nemico riceve un archetipo (bandito, soldato, animale piccolo, animale grande, mutante) con stato di partenza e soglia di fuga. Le transizioni sono poche regole: critico subito, PV sotto soglia, colpo disarmante, 6 turni. Modifica CA e frequenza degli attacchi, quindi il bilanciamento va rimisurato con le simulazioni già pronte.</p>
+
+  <h3>C · Le azioni nuove, e cosa fanno al bilanciamento</h3>
+  <p>Ho simulato 5.000 scontri per riga con le formule del gioco (100 PV, coltello arrugginito, senza cure). «Osserva» riesce una volta su due circa; il punto debole dà +4 al tiro e danno al massimo del dado; la fuga scatta sotto i 35 PV.</p>
+  <div class="fig"><svg id="chTact" viewBox="0 0 900 360" role="img" aria-label="Esiti degli scontri con tre stili di gioco"></svg>
+  <p class="cap">Verde: vittoria. Ambra: fuga riuscita. Rosso: morte. Per ogni nemico tre stili: solo attacco, osserva e poi punto debole, osserva più punto debole più fuga.</p></div>
+  <ul>
+    <li><b>Osserva e punto debole</b> alzano le vittorie del 10-30 punti: contro la guardia impazzita dal 56% all’86%, contro il predone armato dal 70% al 92%.</li>
+    <li><b>La fuga</b> trasforma le morti in ritirate: con il solo attacco contro la guardia si muore il 44% delle volte, con osserva, punto debole e fuga l’1%.</li>
+    <li><b>Difenditi (+3 CA)</b> non cambia quasi nulla da solo: serve come scelta di stile e di racconto, non come arma per vincere.</li>
+    <li>Contro l’orso resta una scogliera: la tattica porta le vittorie dal 9% al 24% e la fuga lo rende sopravvivibile, ma batterlo con il coltello arrugginito non si può. Qui serve l’equipaggiamento (vedi il report sulla difficoltà).</li>
+  </ul>
+  <p>Quindi la visione non è solo racconto: dà al giocatore strumenti per non morire nella finestra in cui il coltello iniziale si rompe dopo 20 colpi.</p>
+
+  <h3>D · Registro come diario</h3>
+  <p>Alla fine dello scontro le ultime 4-6 righe del registro vengono copiate nel diario di viaggio, come «memoria dello scontro», e vanno nel salvataggio (un campo in più, con lo schema di versione già previsto). È piccolo da fare e dà a ogni scontro una traccia che resta.</p>
+
+  <h3>E · Combattimento leggero</h3>
+  <p>Oggi ogni incontro ostile in strada porta a uno scontro completo. Il GDD riserva quello completo a banditi e nemici di trama, e risolve il resto dentro l’evento con una prova di abilità e un testo. Per un gioco in cui il viaggio dura 300 passi è la leva giusta per tenere gli scontri pochi e significativi: lo stesso <code>eventStore</code> che apre un evento potrebbe risolvere un animale solitario in una scena breve.</p>
+
+  <h3>F · Lo schermo</h3>
+  <p>L’handoff propone sei carte-azione in fila (tasti 1-6) con il tag meccanico di ciascuna («DES contro CA 16», «Inganno CD 16», «+4 CA · 2 turni»), il nemico come nota di campo e il registro a destra. Con il linguaggio visivo della 3.0 si può rifare, ma è la fase meno urgente: il testo e le regole contano prima dello schermo.</p>
+
+  <h3>G · Come si verifica</h3>
+  <ul>
+    <li><b>Test di copertura:</b> ogni contesto possibile deve trovare almeno una riga, e nessuna riga può uscire due volte di fila.</li>
+    <li><b>Test di qualità del testo:</b> controllo automatico di apostrofi, caporali e ellissi, e delle formule logore (elenco in <code>antipattern-llm.md</code>).</li>
+    <li><b>Simulazioni:</b> lo script usato per i report esiste già e si rilancia per ogni fase.</li>
+  </ul>
+</section>
+
+<!-- ============ FASI ============ -->
+<section id="fasi">
+  <p class="num">5</p>
+  <h2>Fasi e decisioni</h2>
+  <div class="tbl"><table>
+    <tr><th>Fase</th><th>Cosa</th><th>File principali</th><th>Dimensione</th><th>Cosa nota il giocatore</th></tr>
+    <tr><td><b>1</b> Testo contestuale</td><td>Motore a specificità, circa 400 righe, test di copertura</td><td><code>combatNarrative.ts</code> → nuovo <code>combatText.ts</code> e un file dati; <code>combatStore.ts</code></td><td>Media</td><td>Ogni scontro suona diverso. Nessuna regola cambia</td></tr>
+    <tr><td><b>2</b> Stati del nemico</td><td>Archetipi e sei stati con le loro regole</td><td><code>enemies.json</code>, <code>combatStore.ts</code>, <code>types.ts</code></td><td>Media</td><td>Il nemico reagisce: si espone, si chiude, fugge</td></tr>
+    <tr><td><b>3</b> Azioni nuove</td><td>Difenditi, Osserva completo, colpo mirato e disarmante, Fuggi con costo</td><td><code>combatStore.ts</code>, <code>CombatScreen.tsx</code>, talenti</td><td>Media</td><td>Più scelte e meno morti nei primi scontri</td></tr>
+    <tr><td><b>4</b> Diario e scontri leggeri</td><td>Memorie dello scontro nel salvataggio, risoluzione breve degli incontri minori</td><td><code>saveGameService.ts</code>, <code>eventStore.ts</code>, dati degli eventi</td><td>Media</td><td>Pochi scontri, più importanti</td></tr>
+    <tr><td><b>5</b> Schermo a carte</td><td>Sei carte con tag, nota di campo, registro</td><td><code>CombatScreen.tsx</code> e componenti</td><td>Grande</td><td>Un combattimento che sembra una scena</td></tr>
+  </table></div>
+  <p>Ordine che consiglio: <b>1, 3, 2, 4, 5</b>. La 1 dà l’effetto maggiore senza toccare il bilanciamento. La 3 corregge la scogliera dell’equipaggiamento. La 2 vuole misure nuove, e la 5 viene per ultima.</p>
+
+  <h3>Decisioni che spettano a te</h3>
+  <ol>
+    <li><b>Voce.</b> Il GDD scrive in prima persona al presente («Affondo il coltello»). Il gioco oggi parla in seconda («Ti lanci in avanti»). Gli esempi qui sotto sono in prima persona, come il GDD.</li>
+    <li><b>Numeri visibili.</b> Oggi il registro mostra i tiri («Tiro per colpire: 14 + 1 = 15 contro CA 13»). Il GDD vuole prosa. Si possono tenere i numeri in un riquadro, solo per chi li vuole.</li>
+    <li><b>Iniziativa.</b> Reintrodurla o lasciare che il giocatore agisca sempre per primo?</li>
+    <li><b>Morte.</b> «0 PV è morte» resta così, oppure si vuole una rete di sicurezza (vedi la difficoltà)?</li>
+    <li><b>Quanto grande.</b> Solo testo (fase 1), testo e tattica (1 e 3), oppure tutto.</li>
+    <li><b>Chi scrive le 400 righe.</b> Si può scrivere con assistenza e revisione tua, con il controllo automatico del testo. La parte creativa resta tua: è il tono del gioco.</li>
+  </ol>
+</section>
+
+<!-- ============ PROVA ============ -->
+<section id="prova">
+  <p class="num">6</p>
+  <h2>Provalo</h2>
+  <p>Qui gira la logica di scelta della fase 1 su <b id="nLines"></b> righe di esempio scritte nel tono del GDD. Servono a vedere il meccanismo, non sono il testo definitivo. Sotto, il confronto con le frasi di oggi.</p>
+
+  <div class="lab">
+    <div class="row">
+      <label>Esito<select id="fEsito"></select></label>
+      <label>Arma<select id="fArma"></select></label>
+      <label>Fase<select id="fFase"></select></label>
+      <label>Nemico<select id="fNemico"></select></label>
+      <label>Stato nemico<select id="fSN"></select></label>
+      <label>Tuo stato<select id="fSP"></select></label>
+      <label>Ambiente<select id="fAmb"></select></label>
+      <button class="btn" id="bPick" type="button">Estrai una riga</button>
+    </div>
+    <div class="out" id="outPick"></div>
+  </div>
+
+  <div class="lab">
+    <div class="row">
+      <label>Arma<select id="sArma"></select></label>
+      <label>Nemico<select id="sNemico"></select></label>
+      <label>Ambiente<select id="sAmb"></select></label>
+      <button class="btn" id="bFight" type="button">Simula uno scontro</button>
+    </div>
+    <div class="log" id="logs"></div>
+    <p class="stat" id="coverage"></p>
+  </div>
+  <p class="cap">A sinistra il registro con la logica a specificità, a destra lo stesso scontro con i testi di oggi (attacco più esito, scelti a caso). Lo scontro è lo stesso: stessi esiti, stesso turno, stesso nemico.</p>
+</section>
+
+<footer>
+  Fonti recuperate e archiviate in <code>F:\Backup\TheSafePlace-GDD-v3-recuperato-2026-10-24</code>. Questa pagina è in <code>GAME/docs/analisi/combattimento-narrativo.html</code>. Nulla è stato inserito nel gioco.
+</footer>
+</div>
+
+<script>
+const POOL = [{"id": 1, "tags": {"esito": "colpo"}, "t": "Lo prendo. Non dove volevo, ma lo prendo."}, {"id": 2, "tags": {"esito": "colpo"}, "t": "Il colpo arriva e si sente: un rumore corto, poi il suo respiro che cambia."}, {"id": 3, "tags": {"esito": "colpo"}, "t": "Si piega appena. Mi basta per sapere che sanguina anche lui."}, {"id": 4, "tags": {"esito": "mancato"}, "t": "Troppo corto. Lui è già fuori portata."}, {"id": 5, "tags": {"esito": "mancato"}, "t": "Il peso mi porta avanti di mezzo passo, e me ne accorgo tardi."}, {"id": 6, "tags": {"esito": "mancato"}, "t": "Niente. Il colpo si perde da qualche parte alle sue spalle."}, {"id": 7, "tags": {"esito": "critico"}, "t": "Un colpo pulito, di quelli che non si ripetono. Lo vedo capire cosa gli è successo con un secondo di ritardo."}, {"id": 8, "tags": {"esito": "critico"}, "t": "Entra tutto. Per un momento nessuno dei due fa rumore."}, {"id": 9, "tags": {"esito": "fallimento"}, "t": "Perdo la presa. Il manico mi scivola via e lo rincorro con le dita, a vuoto."}, {"id": 10, "tags": {"esito": "fallimento"}, "t": "Metto il piede su qualcosa che non avevo visto. Il fianco mi resta scoperto e lui lo sa."}, {"id": 11, "tags": {"esito": "colpo", "arma": "mischia"}, "t": "La lama trova la manica e poi il braccio. Un taglio corto, ma lui lo guarda come se fosse di un altro."}, {"id": 12, "tags": {"esito": "colpo", "arma": "mischia"}, "t": "L’impatto risale dal manico fino al gomito. Qualcosa, là sotto, ha ceduto."}, {"id": 13, "tags": {"esito": "mancato", "arma": "mischia"}, "t": "La lama sfiora il tessuto e basta. Un filo scucito, nient’altro."}, {"id": 14, "tags": {"esito": "critico", "arma": "mischia"}, "t": "La lama scende dove la guardia si è aperta. Quando la tiro indietro pesa di più."}, {"id": 15, "tags": {"esito": "fallimento", "arma": "mischia"}, "t": "Il fendente va troppo largo. L’arma mi porta il braccio fuori linea e resto aperto."}, {"id": 16, "tags": {"esito": "colpo", "arma": "distanza"}, "t": "Lo sparo esce secco e la sua spalla scatta all’indietro. Il rinculo mi lascia il polso a formicolare."}, {"id": 17, "tags": {"esito": "mancato", "arma": "distanza"}, "t": "Il proiettile alza polvere a un metro dalla sua gamba. Ho sbagliato il tiro, non il momento."}, {"id": 18, "tags": {"esito": "critico", "arma": "distanza"}, "t": "Lo prende al centro e lo ferma. Per un po’ il suo piede continua a muoversi da solo."}, {"id": 19, "tags": {"esito": "fallimento", "arma": "distanza"}, "t": "Il percussore scatta a vuoto. Un clic, e lui lo sente quanto me."}, {"id": 20, "tags": {"esito": "colpo", "arma": "improvvisata"}, "t": "Il tubo gli prende la spalla con un suono sordo, da porta sbattuta."}, {"id": 21, "tags": {"esito": "colpo", "arma": "improvvisata"}, "t": "Il pugno si schianta sull’osso. Mi fa male quanto a lui."}, {"id": 22, "tags": {"esito": "mancato", "arma": "improvvisata"}, "t": "Il bastone fischia e affonda nella terra. Lo ritiro con due mani."}, {"id": 23, "tags": {"esito": "fallimento", "arma": "improvvisata"}, "t": "Il tubo mi esce dalle dita e rotola via con un tintinnio che lui segue con gli occhi."}, {"id": 24, "tags": {"esito": "critico", "arma": "improvvisata"}, "t": "Il colpo non ha stile, ma ha tutto il peso del corpo dietro. Lui si siede, più che cadere."}, {"id": 25, "tags": {"esito": "mancato", "fase": "apertura"}, "t": "Il primo colpo è sempre il più sprecato: troppo teso, troppo presto."}, {"id": 26, "tags": {"esito": "colpo", "fase": "apertura"}, "t": "Non si aspettava che partissi io. Il colpo lo trova con la guardia ancora bassa."}, {"id": 27, "tags": {"esito": "colpo", "fase": "escalation"}, "t": "Adesso ci conosciamo. Lui para dove stavo io tre secondi fa e io colpisco dove non guarda."}, {"id": 28, "tags": {"esito": "mancato", "fase": "escalation"}, "t": "Avevo preso il suo ritmo e lui l’ha cambiato. Il colpo cade nel vuoto che ha lasciato."}, {"id": 29, "tags": {"esito": "mancato", "fase": "climax"}, "t": "Il braccio non risponde come dieci minuti fa. Il colpo parte in ritardo e lo sa."}, {"id": 30, "tags": {"esito": "colpo", "fase": "climax"}, "t": "Arriva e basta. Nessuna tecnica, nessun calcolo: due corpi che si sono stancati insieme."}, {"id": 31, "tags": {"esito": "colpo", "nemico": "animale"}, "t": "Il fianco si abbassa sotto il colpo. L’animale emette un verso che non somiglia a nessun verso che conosco."}, {"id": 32, "tags": {"esito": "mancato", "nemico": "animale"}, "t": "Scarta di lato con uno scatto che nessuno insegna. Il mio colpo si ferma dove stava lui."}, {"id": 33, "tags": {"esito": "critico", "nemico": "animale"}, "t": "Il colpo lo ferma a mezz’aria. Ricade con le zampe già molli."}, {"id": 34, "tags": {"esito": "colpo", "nemico": "mutante"}, "t": "La carne cede nel modo sbagliato, troppo morbida. Ritiro l’arma e non guardo cosa viene via con lei."}, {"id": 35, "tags": {"esito": "mancato", "nemico": "mutante"}, "t": "Non indietreggia. Non sembra nemmeno accorgersi che ho colpito a vuoto."}, {"id": 36, "tags": {"esito": "colpo", "nemico": "umano"}, "t": "Impreca tra i denti, in una lingua che conosco. Era uno come me, prima."}, {"id": 37, "tags": {"esito": "mancato", "nemico": "umano"}, "t": "Ha le mani di chi l’ha già fatto. Mi legge prima che io parta."}, {"id": 38, "tags": {"esito": "colpo", "sn": "ferito"}, "t": "Tiene la mano sul fianco e non la toglie nemmeno per parare. Colpirlo lì sarebbe facile, ed è questo che mi rallenta."}, {"id": 39, "tags": {"esito": "colpo", "sn": "difensivo"}, "t": "Si è chiuso dietro il braccio. Il colpo urta la guardia e la sposta di una spanna, non di più."}, {"id": 40, "tags": {"esito": "colpo", "sn": "stordito"}, "t": "Barcolla e non mi segue più con gli occhi. Colpisco mentre il suo peso è ancora altrove."}, {"id": 41, "tags": {"esito": "colpo", "sn": "disarmato"}, "t": "Senza arma dovrebbe scappare. Mi viene addosso a mani nude, e lo fermo a metà strada."}, {"id": 42, "tags": {"esito": "colpo", "sn": "esausto"}, "t": "Respira a bocca aperta. Non para più, aspetta soltanto che finisca."}, {"id": 43, "tags": {"esito": "mancato", "sn": "aggressivo"}, "t": "Si è buttato avanti scoperto, e ho sbagliato lo stesso. Un’occasione così non torna."}, {"id": 44, "tags": {"esito": "mancato", "sn": "ferito"}, "t": "È giù su un ginocchio e mi sfugge lo stesso. Chi ha paura sa spostarsi bene."}, {"id": 45, "tags": {"esito": "mancato", "sp": "ferito"}, "t": "La ferita tira a ogni movimento. Il colpo parte più corto di quanto volessi."}, {"id": 46, "tags": {"esito": "colpo", "sp": "esausto"}, "t": "Il fiato non basta più. Il colpo però arriva, e mi lascia piegato in avanti."}, {"id": 47, "tags": {"esito": "mancato", "sp": "esausto"}, "t": "Le mani non stringono come dovrebbero. L’arma gira un attimo in ritardo."}, {"id": 48, "tags": {"esito": "colpo", "sp": "ferito", "arma": "mischia"}, "t": "Mi reggo con la mano buona. Ma la lama, quella, la porto dove serve."}, {"id": 49, "tags": {"esito": "mancato", "amb": "pioggia"}, "t": "Il manico è bagnato. Il colpo scivola via e lo accompagno con lo sguardo."}, {"id": 50, "tags": {"esito": "colpo", "amb": "pioggia"}, "t": "La pioggia copre il rumore, non il resto. Lo vedo sbilanciarsi e colpisco prima che si riprenda."}, {"id": 51, "tags": {"esito": "colpo", "amb": "notte"}, "t": "Colpisco dove credo che sia. Il suono mi dice che avevo ragione."}, {"id": 52, "tags": {"esito": "mancato", "amb": "notte"}, "t": "Nel buio colpisco il punto in cui lui era un attimo fa."}, {"id": 53, "tags": {"esito": "critico", "amb": "notte"}, "t": "Non vedo dove. Lo sento: un colpo da cieco che trova il posto giusto."}, {"id": 54, "tags": {"esito": "colpo", "arma": "mischia", "fase": "climax", "nemico": "umano", "sn": "ferito", "sp": "esausto", "amb": "pioggia"}, "t": "Affondo il coltello con quello che mi resta di forza. Lui indietreggia, con la mano sulla ferita, la pioggia che gli lava il sangue dagli abiti. Non è finita. Ma lui lo sa quanto me."}, {"id": 55, "tags": {"esito": "mancato", "arma": "mischia", "fase": "climax", "nemico": "umano", "sn": "ferito", "sp": "esausto", "amb": "pioggia"}, "t": "Il fendente taglia l’aria. Mi sfugge il passo — le gambe cedono un attimo. Lui ne approfitta, arretra di un metro, occhi fissi su di me. Ci guardiamo. Stiamo entrambi finendo."}, {"id": 56, "tags": {"esito": "colpo", "arma": "distanza", "amb": "notte", "nemico": "animale"}, "t": "Nel buio c’è solo il lampo dello sparo. Quando torna il nero, il verso è cambiato."}, {"id": 57, "tags": {"esito": "critico", "arma": "mischia", "nemico": "umano", "sn": "difensivo"}, "t": "Si è chiuso troppo, e io vedo il punto dove la guardia non arriva. Entro lì, tutto."}, {"id": 58, "tags": {"esito": "fallimento", "arma": "distanza", "amb": "pioggia"}, "t": "L’acqua è entrata nel meccanismo. Premo, e non succede niente."}, {"id": 59, "tags": {"esito": "critico", "arma": "improvvisata", "nemico": "mutante"}, "t": "Il tubo si storce al centro. La sua sagoma, dopo il colpo, non è più quella di prima."}];
+const OGGI = {"attack": ["Ti lanci in avanti, arma in pugno...", "Con un movimento rapido, tenti di colpire...", "Cerchi un'apertura nella sua difesa...", "Scatti in avanti per un attacco fulmineo...", "Sfrutti un attimo di distrazione per attaccare...", "Colpisci con precisione chirurgica...", "Un affondo disperato ma efficace...", "Sfrutti un'apertura nella guardia...", "Fai roteare l'arma con violenza...", "Ti muovi con agilità felina, cercando il colpo giusto...", "Un attacco calcolato, nulla al caso...", "Sfrutti il terreno a tuo vantaggio...", "Con un grido di battaglia, colpisci...", "Premi l'offensiva senza pietà...", "Ogni fibra del tuo corpo è concentrata sull'attacco..."], "hit": ["Il colpo va a segno!", "Un colpo preciso!", "La tua arma trova un varco!", "Colpito! Il nemico barcolla.", "Un impatto solido!", "La lama affonda nella carne...", "Un colpo devastante che lo fa traballare...", "Il suono dell'impatto è spaventoso!", "Senti la resistenza cedere sotto il colpo...", "Un attacco perfettamente eseguito!", "Il nemico non se lo aspettava!", "Sangue! Il colpo ha fatto male.", "Vedi il dolore nei suoi occhi...", "Un colpo che lascerà il segno!", "La tua arma morde profondo!"], "miss": ["Il nemico schiva all'ultimo istante.", "La tua arma fende l'aria, mancando il bersaglio.", "Il colpo viene parato!", "Un sibilo a vuoto. Mancato.", "Il tuo avversario è troppo veloce.", "Il nemico si sposta all'ultimo istante...", "Il colpo passa a un soffio dal bersaglio...", "Una finta! Hai colpito l'aria...", "L'avversario anticipa la tua mossa...", "Troppo lento! Lui è già altrove.", "Il colpo rimbalza sulla sua armatura...", "Un momento di esitazione... e l'opportunità sfuma.", "La stanchezza ti fa sbagliare il colpo...", "Il terreno sotto i tuoi piedi cede, rovinando il tiro...", "Maledizione! Troppo in alto!"]};
+
+const OPT = {
+  esito: [['colpo', 'colpo riuscito'], ['mancato', 'mancato'], ['critico', 'critico'], ['fallimento', 'fallimento drammatico']],
+  arma: [['mischia', 'mischia'], ['distanza', 'a distanza'], ['improvvisata', 'improvvisata']],
+  fase: [['apertura', 'apertura (1-2)'], ['escalation', 'escalation (3-5)'], ['climax', 'climax (6+)']],
+  nemico: [['umano', 'umano'], ['animale', 'animale'], ['mutante', 'mutante']],
+  sn: [['aggressivo', 'aggressivo'], ['difensivo', 'difensivo'], ['ferito', 'ferito'], ['stordito', 'stordito'], ['disarmato', 'disarmato'], ['esausto', 'esausto']],
+  sp: [['integro', 'integro'], ['ferito', 'ferito'], ['esausto', 'esausto']],
+  amb: [['giorno', 'giorno sereno'], ['notte', 'notte'], ['pioggia', 'pioggia']]
+};
+const LABEL = { esito: 'esito', arma: 'arma', fase: 'fase', nemico: 'tipo', sn: 'stato nemico', sp: 'tuo stato', amb: 'ambiente' };
+const KEYS = ['esito', 'arma', 'fase', 'nemico', 'sn', 'sp', 'amb'];
+/* Valori che le righe possono richiedere: i valori di partenza (aggressivo, integro, giorno) non si dichiarano mai. */
+const BASE = { sn: 'aggressivo', sp: 'integro', amb: 'giorno' };
+
+function candidates(ctx) {
+  let best = -1, list = [];
+  for (const line of POOL) {
+    let ok = true, score = 0;
+    for (const k in line.tags) {
+      if (ctx[k] !== line.tags[k]) { ok = false; break; }
+      score++;
+    }
+    if (!ok) continue;
+    if (score > best) { best = score; list = [line]; } else if (score === best) list.push(line);
+  }
+  return { best, list };
+}
+const recent = [];
+function pick(ctx) {
+  const { best, list } = candidates(ctx);
+  let pool = list.filter(l => !recent.includes(l.id));
+  if (!pool.length) pool = list;
+  const line = pool[Math.floor(Math.random() * pool.length)];
+  recent.push(line.id); if (recent.length > 8) recent.shift();
+  return { line, best, n: list.length };
+}
+function fill(id, items) { const s = document.getElementById(id); items.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); }
+['fEsito', 'fArma', 'fFase', 'fNemico', 'fSN', 'fSP', 'fAmb'].forEach((id, i) => fill(id, OPT[KEYS[i]]));
+fill('sArma', OPT.arma); fill('sNemico', OPT.nemico); fill('sAmb', OPT.amb);
+document.getElementById('nLines').textContent = POOL.length;
+
+function chips(ctx, best) {
+  const used = KEYS.filter(k => ctx[k] !== BASE[k]).map(k => `<span class="tag">${LABEL[k]}: ${ctx[k]}</span>`).join('');
+  return `<div class="meta">${used}<span class="tag ok">${best} condizioni soddisfatte</span></div>`;
+}
+document.getElementById('bPick').addEventListener('click', () => {
+  const ctx = { esito: fEsito.value, arma: fArma.value, fase: fFase.value, nemico: fNemico.value, sn: fSN.value, sp: fSP.value, amb: fAmb.value };
+  const r = pick(ctx);
+  document.getElementById('outPick').innerHTML = chips(ctx, r.best) + `<p class="line">${r.line.t}</p><p class="cap">${r.n === 1 ? 'Una sola riga corrisponde a questo contesto.' : 'Righe a pari merito tra cui sceglie: ' + r.n + '.'}</p>`;
+});
+document.getElementById('bPick').click();
+
+/* ---- Copertura su tutte le combinazioni ---- */
+const COV = (function () {
+  let total = 0, multi = 0;
+  for (const e of OPT.esito) for (const a of OPT.arma) for (const f of OPT.fase) for (const n of OPT.nemico) for (const s of OPT.sn) for (const p of OPT.sp) for (const m of OPT.amb) {
+    total++;
+    if (candidates({ esito: e[0], arma: a[0], fase: f[0], nemico: n[0], sn: s[0], sp: p[0], amb: m[0] }).list.length >= 2) multi++;
+  }
+  return total + ' contesti possibili, tutti con almeno una riga; ' + multi + ' (' + Math.round(multi / total * 100) + '%) con almeno due righe a pari merito.';
+})();
+
+/* ---- Scontro simulato: stessi esiti per le due colonne ---- */
+function oneFight() {
+  const arma = sArma.value, nemico = sNemico.value, amb = sAmb.value;
+  const turns = [];
+  let nemicoColpi = 0, mieiColpi = 0, sn = 'aggressivo';
+  for (let t = 1; t <= 8; t++) {
+    const fase = t <= 2 ? 'apertura' : t <= 5 ? 'escalation' : 'climax';
+    const r = Math.random();
+    const esito = r < 0.07 ? 'critico' : r < 0.52 ? 'colpo' : r < 0.93 ? 'mancato' : 'fallimento';
+    if (esito === 'colpo' || esito === 'critico') nemicoColpi++;
+    if (nemicoColpi >= 3) sn = 'ferito';
+    if (t >= 7 && sn === 'ferito' && Math.random() < 0.5) sn = 'esausto';
+    if (esito === 'critico') sn = 'difensivo';
+    if (Math.random() < 0.4) mieiColpi++;
+    const sp = t >= 7 ? 'esausto' : mieiColpi >= 2 ? 'ferito' : 'integro';
+    turns.push({ t, esito, ctx: { esito, arma, fase, nemico, sn, sp, amb } });
+  }
+  return turns;
+}
+function oggiLine(esito) {
+  const a = OGGI.attack[Math.floor(Math.random() * OGGI.attack.length)];
+  const pool = esito === 'colpo' || esito === 'critico' ? OGGI.hit : OGGI.miss;
+  return a + ' ' + pool[Math.floor(Math.random() * pool.length)];
+}
+document.getElementById('bFight').addEventListener('click', () => {
+  const turns = oneFight();
+  const nuovo = turns.map(x => `<li><b>T${x.t}</b>${pick(x.ctx).line.t}</li>`).join('');
+  const vecchio = turns.map(x => `<li><b>T${x.t}</b>${oggiLine(x.esito)}</li>`).join('');
+  document.getElementById('logs').innerHTML =
+    `<div><h5>Con la logica a specificità</h5><ol>${nuovo}</ol></div><div><h5>Con i testi di oggi</h5><ol class="flat">${vecchio}</ol></div>`;
+  document.getElementById('coverage').textContent = 'Esiti dei turni: ' + turns.map(x => x.esito).join(', ') + '. ' + COV;
+});
+document.getElementById('bFight').click();
+
+/* ---- Grafico: tre stili di gioco ---- */
+(function () {
+  const svg = document.getElementById('chTact');
+  const NS = 'http://www.w3.org/2000/svg';
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const el = (tag, a, p, t) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (t !== undefined) e.textContent = t; if (p) p.appendChild(e); return e; };
+  const rows = [
+    ['Cinghiale aggressivo', [[78.5, 0, 21.5], [89.1, 0, 10.9], [72.8, 25.6, 1.7]]],
+    ['Bestia mutante', [[58.7, 0, 41.3], [79.1, 0, 20.9], [56.7, 41.7, 1.6]]],
+    ['Predone armato', [[69.8, 0, 30.2], [91.8, 0, 8.2], [77.8, 21.4, 0.8]]],
+    ['Guardia impazzita', [[55.9, 0, 44.1], [86.1, 0, 13.9], [66.9, 32.2, 0.8]]]
+  ];
+  const styles = ['solo attacco', 'osserva + punto debole', '+ fuga sotto 35 PV'];
+  const col = [css('--sage'), css('--ember'), css('--danger')];
+  const L = 200, W = 500, bh = 22, gap = 6;
+  rows.forEach(([name, vals], i) => {
+    const y0 = 20 + i * 84;
+    el('text', { x: 6, y: y0 + 38, 'font-size': 17, style: 'fill:' + css('--ink') }, svg, name);
+    vals.forEach((v, j) => {
+      let x = L; const y = y0 + j * (bh + gap);
+      v.forEach((p, k) => {
+        if (!p) return;
+        const w = p / 100 * W;
+        el('rect', { x, y, width: w, height: bh, fill: col[k] }, svg);
+        if (w > 34) el('text', { x: x + 6, y: y + 16, 'font-size': 14, style: 'fill:#0d0f12;font-weight:600' }, svg, Math.round(p) + '%');
+        x += w;
+      });
+      el('text', { x: L + W + 10, y: y + 16, 'font-size': 13 }, svg, styles[j]);
+    });
+  });
+  const lg = [['vittoria', 0], ['fuga riuscita', 1], ['morte', 2]];
+  let lx = L;
+  lg.forEach(([t, k]) => { el('rect', { x: lx, y: 345, width: 12, height: 12, fill: col[k === 0 ? 0 : k === 1 ? 1 : 2] }, svg); el('text', { x: lx + 18, y: 356, 'font-size': 14 }, svg, t); lx += 130; });
+})();
+</script>
