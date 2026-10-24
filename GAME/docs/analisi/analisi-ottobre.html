@@ -1,0 +1,579 @@
+<title>Analisi di ottobre</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: una colonna di lettura stretta, navigazione fissa in alto, grafici a tutta colonna.
+   Palette Crepuscolo del gioco: un solo aspetto scuro scelto di proposito. */
+:root {
+  --bg0: #090a0d;
+  --bg1: #0e1014;
+  --bg2: #15181e;
+  --line: #262a33;
+  --ink: #ede6d9;
+  --ink2: #bab1a3;
+  --ink3: #8d8579;
+  --ember: #e8893f;
+  --ember2: #f5b46c;
+  --teal: #6cb4bd;
+  --sage: #93b38a;
+  --danger: #e2604b;
+  --violet: #a891e0;
+  --display: 'Cormorant Garamond', Georgia, serif;
+  --body: 'Literata', Georgia, serif;
+  --ui: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg0); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.62;
+  padding-block: 0 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg0); z-index: 20; }
+.col { max-width: 880px; margin: 0 auto; }
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgb(9 10 13 / .94);
+  border-bottom: 1px solid var(--line); margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 10px max(16px, env(safe-area-inset-left, 0px));
+}
+nav.top .col { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; }
+nav.top a { font-family: var(--ui); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); text-decoration: none; }
+nav.top a:hover { color: var(--ember2); }
+nav.top b { font-family: var(--display); font-size: 21px; font-weight: 600; letter-spacing: .01em; margin-right: auto; color: var(--ink); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--ui); font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--ember2); margin: 0 0 8px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(36px, 7vw, 60px); line-height: 1.04; margin: 0 0 14px; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--ink2); max-width: 62ch; margin: 0; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.6vw, 40px); line-height: 1.1; margin: 0 0 6px; text-wrap: balance; scroll-margin-top: 70px; }
+h3 { font-family: var(--ui); font-weight: 600; font-size: 17px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 34px 0 8px; }
+section { padding-top: 56px; }
+.num { font-family: var(--ui); font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin: 0 0 4px; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; max-width: 68ch; }
+li { margin-bottom: 6px; }
+a { color: var(--teal); }
+.verdict { border-left: 3px solid var(--ember); background: var(--bg1); padding: 14px 18px; margin: 18px 0 22px; max-width: 72ch; }
+.verdict p:last-child { margin-bottom: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 26px; }
+.card { background: var(--bg1); border: 1px solid var(--line); padding: 16px 18px; min-width: 0; }
+.card h4 { font-family: var(--ui); font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 0 0 6px; }
+.card p { font-size: 15.5px; margin: 0; line-height: 1.5; }
+.card b { color: var(--ink); }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 560px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-family: var(--ui); font-weight: 600; font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: var(--bg1); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; }
+.fig { margin: 18px 0 8px; }
+.fig svg { width: 100%; height: auto; display: block; background: var(--bg1); border: 1px solid var(--line); }
+.cap { font-size: 14px; color: var(--ink3); margin: 6px 0 0; max-width: 78ch; line-height: 1.5; }
+svg text { font-family: var(--ui); fill: var(--ink2); }
+.btn { display: inline-block; font-family: var(--ui); font-weight: 600; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; background: var(--ember); color: #1a0f05; padding: 10px 18px; text-decoration: none; border-radius: 3px; }
+.btn:hover { background: var(--ember2); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); cursor: pointer; font-size: 14px; padding: 6px 12px; }
+.btn.ghost:hover { border-color: var(--ember2); color: var(--ember2); }
+pre { background: var(--bg2); border: 1px solid var(--line); padding: 14px 16px; margin: 0; white-space: pre-wrap; font-family: var(--body); font-size: 14.5px; line-height: 1.55; color: var(--ink); }
+.prompt { margin: 12px 0 20px; }
+.prompt .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; }
+.prompt .bar span { font-family: var(--ui); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
+.tag { display: inline-block; font-family: var(--ui); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 1px 8px; border: 1px solid var(--line); color: var(--ink2); margin-right: 6px; }
+.tag.ok { color: var(--sage); border-color: rgb(147 179 138 / .5); }
+.tag.maybe { color: var(--ember2); border-color: rgb(245 180 108 / .5); }
+.tag.no { color: var(--danger); border-color: rgb(226 96 75 / .5); }
+details { border-top: 1px solid var(--line); padding: 10px 0; max-width: 72ch; }
+details summary { cursor: pointer; font-family: var(--ui); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: var(--ink2); }
+details[open] summary { color: var(--ember2); }
+.src { font-size: 14.5px; }
+.src li { margin-bottom: 3px; }
+footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink3); max-width: 80ch; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: var(--bg2); padding: 1px 5px; }
+.heat { color: #0d0f12; font-weight: 600; text-align: right; }
+@media (max-width: 640px) { body { font-size: 16px; } nav.top b { width: 100%; } }
+</style>
+
+<nav class="top"><div class="col">
+  <b>Analisi di ottobre</b>
+  <a href="#cutscene">1 Cutscene</a><a href="#musica">2 Musica</a><a href="#ritmo">3 Ritmo</a><a href="#sfida">4 Sfida</a>
+</div></nav>
+
+<div class="col">
+<header class="hero">
+  <p class="kicker">The Safe Place · versione 3.1.0 · 24 ottobre 2026</p>
+  <h1>Cutscene, musica, ritmo e difficoltà</h1>
+  <p class="lead">Quattro analisi sul gioco com'è oggi. Non ho modificato il gioco: ho costruito un mockup, letto il codice e fatto giocare oltre 180 partite simulate con le regole vere per misurare ritmo e difficoltà.</p>
+
+  <div class="cards">
+    <div class="card"><h4>1 · Cutscene</h4><p>Il mockup c'è e si prova. <b>La variante A</b> (immagine 21:9 larga, testo a una battuta alla volta) fa stare tutte le 56 battute di due scene di prova; la B scorre 8 volte su 56.</p></div>
+    <div class="card"><h4>2 · Musica</h4><p>Il prodotto si chiama <b>Google Flow Music</b> (motore Lyria). Un prompt dà un brano, non cinque. Piano da <b>5 brani</b> intorno al motivo del carillon, con i prompt pronti.</p></div>
+    <div class="card"><h4>3 · Ritmo</h4><p>La storia è schiacciata all'inizio e alla fine: <b>7,2</b> momenti ogni 50 passi all'inizio, <b>3,3</b> a metà. I capitoli arrivano a coppie e dopo il 76% del viaggio non c'è nessun luogo.</p></div>
+    <div class="card"><h4>4 · Sfida</h4><p>Il pericolo vero non sono gli scontri ma <b>l'acqua</b>. Metà delle notti si dorme senza scorte e si prende una malattia che non guarisce da sola.</p></div>
+  </div>
+</header>
+
+<!-- ============ 1 ============ -->
+<section id="cutscene">
+  <p class="num">Analisi 1</p>
+  <h2>Cutscene a metà tra testo e immagine</h2>
+  <p>Ho costruito un mockup interattivo con immagini segnaposto 21:9 e i testi veri di due cutscene (<i>La Ninnananna della Cenere</i> e <i>La strada è lunga</i>). Si cambia scena, impaginazione e si possono accendere le note di regia, cioè cosa dovrebbe mostrare ogni immagine.</p>
+  <p><a class="btn" href="https://claude.ai/artifact/PvWH8HdWha4Eo75ezR3Uvc" target="_blank" rel="noopener">Apri il mockup</a></p>
+
+  <div class="verdict"><p><b>Consiglio: variante A.</b> Immagine a larghezza piena, testo sotto, una battuta alla volta come un sottotitolo. È la più cinematografica e il testo non si accumula. Costa una cosa sola: i paragrafi lunghi vanno spezzati in battute. Il mockup lo fa da solo per frasi (massimo circa 200 caratteri) e non serve riscrivere i testi.</p></div>
+
+  <h3>Le tre impaginazioni a confronto</h3>
+  <div class="tbl"><table>
+    <tr><th>Variante</th><th>Cosa vedi</th><th>Spazio per il testo</th><th class="n">Battute che entrano</th><th>Immagini</th></tr>
+    <tr><td><b>A</b> Cornice larga</td><td>Immagine 21:9 a tutta larghezza, testo sotto</td><td>circa 255 px su 1080 (3 righe)</td><td class="n">56 / 56</td><td>2560×1097, nessun taglio</td></tr>
+    <tr><td><b>B</b> Cornice centrata</td><td>Immagine al 79% con margine nero, testo impilato come oggi</td><td>circa 310 px</td><td class="n">48 / 56</td><td>2100×900</td></tr>
+    <tr><td><b>C</b> Tutto schermo</td><td>Immagine a pieno schermo, testo sulla sfumatura</td><td>terzo inferiore</td><td class="n">56 / 56</td><td>2560×1097, soggetto nel centro 16:9</td></tr>
+  </table></div>
+  <p class="cap">Prova fatta nel mockup a 1920×1080 su tutte le battute delle due scene. Lo schermo del gioco è 16:9: un'immagine 21:9 a tutta larghezza ne occupa il 76% in altezza (A). Nella C se ne perde circa il 15% ai lati.</p>
+
+  <h3>Quante immagini servono</h3>
+  <div class="tbl"><table>
+    <tr><th>Scenario</th><th class="n">Immagini</th><th>Come</th></tr>
+    <tr><td>Minimo</td><td class="n">24</td><td>Una per cutscene (12) e una per Eco della Memoria (12)</td></tr>
+    <tr><td><b>Consigliato</b></td><td class="n">circa 40</td><td>Una ogni due pagine di cutscene (28) più una per Eco (12)</td></tr>
+    <tr><td>Pieno</td><td class="n">65</td><td>Una per pagina (53 pagine di cutscene) più 12 Echi</td></tr>
+  </table></div>
+  <p class="cap">Le cutscene del gioco sono 12 e hanno 53 pagine in tutto: 12 l'apertura, 7 la Ninnananna, 6 sia Eco di Mamma sia l'Ultima Scelta, 5 la Strada è lunga, le altre 2-4. Gli Echi della Memoria sono 12 testi brevi.</p>
+
+  <h3>Cosa cambierebbe nel codice</h3>
+  <ul>
+    <li><code>CutsceneScreen.tsx</code> ha già due modi (Ink per l'apertura, JSON per le altre): resta un solo componente con il nuovo schermo.</li>
+    <li>Ogni pagina di <code>cutscenes.json</code> guadagna un campo opzionale <code>image</code>, collegato al registro <code>assets/art/index.ts</code> previsto per le illustrazioni esterne. Senza immagine la pagina resta com'è oggi.</li>
+    <li>L'apertura è scritta in Ink (<code>intro.ink</code>): lì l'immagine si lega con un tag come <code>#image:...</code>.</li>
+    <li>Le immagini arrivano come file esterni, con lo stesso metodo delle copertine (prompt in <code>COVER-UFFICIALE/README.md</code>). Il lavoro vero è lì: il viaggiatore e Lena devono sembrare la stessa persona in tutte le immagini.</li>
+  </ul>
+  <p>Le note di regia del mockup (12 immagini descritte) sono già una prima shot list.</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="musica">
+  <p class="num">Analisi 2</p>
+  <h2>Musica con Google Flow Music</h2>
+  <p>Il nome giusto è <b>Google Flow Music</b>. Nasce da ProducerAI, che Google ha acquistato a febbraio 2026, e gira sui modelli Lyria. A luglio 2026 ha sostituito MusicFX e MusicFX DJ, che oggi rimandano a lui. Le fonti non concordano su versione del modello e date: segno le cose per grado di certezza.</p>
+
+  <h3>Cosa si può fare con un prompt</h3>
+  <div class="tbl"><table>
+    <tr><th>Cosa</th><th>Stato</th><th>Dettaglio</th></tr>
+    <tr><td>Brano completo da un testo</td><td><span class="tag ok">documentato</span></td><td>Circa due o tre minuti per brano. La lunghezza si influenza dal prompt.</td></tr>
+    <tr><td>Cosa mettere nel prompt</td><td><span class="tag ok">documentato</span></td><td>Genere, strumenti, umore, tempo, tonalità, struttura. Sezioni con tag <code>[Verse]</code> e tempi come <code>[0:00 - 0:10]</code>.</td></tr>
+    <tr><td>Solo strumentale</td><td><span class="tag ok">documentato</span></td><td>Basta scriverlo: «instrumental only, no vocals».</td></tr>
+    <tr><td>Immagini come ispirazione</td><td><span class="tag ok">documentato</span></td><td>Via API fino a 10 immagini con il testo.</td></tr>
+    <tr><td>Uscita</td><td><span class="tag ok">documentato</span></td><td>MP3 stereo 44,1 kHz. WAV sul modello più recente via API. Filigrana inudibile SynthID su tutto.</td></tr>
+    <tr><td>Stessa richiesta, risultati diversi</td><td><span class="tag ok">documentato</span></td><td>Ogni generazione è a sé: due prompt uguali non danno lo stesso brano.</td></tr>
+    <tr><td><b>Più brani da un solo prompt</b></td><td><span class="tag no">no</span></td><td>Un prompt dà un brano. Fonti non ufficiali dicono che ne escono due versioni.</td></tr>
+    <tr><td>Chat con un «Producer», Extend, Replace, Stem split, Remix di un audio</td><td><span class="tag maybe">da provare</span></td><td>Compaiono sul sito e su fonti non ufficiali, senza dettagli. Non so se accetta un audio di riferimento.</td></tr>
+    <tr><td>Piani e crediti, download in alta qualità, uso commerciale</td><td><span class="tag maybe">da verificare</span></td><td>Crediti giornalieri gratis. I prezzi che circolano sono di fonti secondarie. I termini d'uso cambiano con il piano.</td></tr>
+  </table></div>
+
+  <div class="verdict"><p><b>Risposta alla domanda.</b> Quattro o cinque brani coerenti da un solo prompt non si possono ottenere. Si ottiene la coerenza con una «bibbia di stile» copiata all'inizio di ogni prompt (stessi strumenti, stessa tonalità, stesso motivo) e con le generazioni fatte nella stessa conversazione. Per cinque brani servono circa dieci generazioni, perché ogni prompt dà due varianti e se ne sceglie una.</p></div>
+
+  <h3>Prima di produrre: una scelta di design</h3>
+  <p>Il GDD (capitolo 8) dice «Il Grande Silenzio»: <b>non c'è una colonna sonora continua</b>. Il silenzio lo riempie il mondo. La musica quindi non può essere uno sfondo. Può essere un evento raro: titolo, cutscene chiave, rifugio, finale. È anche la scelta tecnica giusta, perché i brani generati hanno un inizio e una fine e non sono pensati per girare in loop. Se invece vuoi musica continua, cambia la filosofia del suono e lo decidi tu.</p>
+
+  <h3>Il motivo che li lega</h3>
+  <p>L'unico brano del gioco è già la <b>Ninnananna della Cenere</b>, il carillon di Lena. Nel codice (<code>sfx.ts</code>) le note sono Do Do Sol Sol La La Sol, poi Mi Mi Re Re Do. Coincide con le prime due frasi di «Ah! vous dirai-je, Maman» (in italiano «Brilla brilla piccola stella»): è di dominio pubblico e tutti la riconoscono come una ninnananna. Nel gioco è anche il filo della storia: l'Angelo della Cenere bisbiglia «mio sole, devi dormire».</p>
+  <p>Il GDD tiene tutti i segnali in <b>Re maggiore</b>, quindi nei prompt trasporto il motivo: <b>Re Re La La Si Si La, Fa# Fa# Mi Mi Re</b>. Lyria non garantisce di suonare note esatte da un testo. Se il motivo esce storto ci sono due strade: provare se Flow Music accetta un audio di riferimento (il gioco può esportare il carillon con il suo sintetizzatore), oppure far suonare il motivo dal gioco, sopra i brani, con la stessa sintesi del carillon. La seconda lo tiene sempre esatto.</p>
+
+  <h3>I cinque brani</h3>
+  <div class="tbl"><table>
+    <tr><th>Brano</th><th>Dove suona</th><th class="n">BPM</th><th>Tonalità</th><th>Durata</th></tr>
+    <tr><td><b>1 · Carillon</b></td><td>Titolo e menu, crediti</td><td class="n">72</td><td>Re maggiore</td><td>2:30</td></tr>
+    <tr><td><b>2 · Crepuscolo sulla pianura</b></td><td>Cammino all'alba e al tramonto, dopo le cutscene</td><td class="n">60</td><td>Re maggiore (lidio)</td><td>3:00</td></tr>
+    <tr><td><b>3 · Rifugio</b></td><td>Dentro un rifugio, avamposto</td><td class="n">66</td><td>Re maggiore</td><td>2:00</td></tr>
+    <tr><td><b>4 · Cenere</b></td><td>Angeli della Cenere, Nido, cutscene di pericolo</td><td class="n">50</td><td>Re minore</td><td>2:30</td></tr>
+    <tr><td><b>5 · Il Safe Place</b></td><td>Arrivo, epilogo</td><td class="n">76</td><td>Re maggiore</td><td>3:00</td></tr>
+    <tr><td><i>6 · Eco di Lena (facoltativo)</i></td><td>Eco di Mamma, capitolo 11</td><td class="n">58</td><td>Re minore verso maggiore</td><td>2:00</td></tr>
+  </table></div>
+
+  <h3>Prompt pronti</h3>
+  <p>Ogni prompt va incollato <b>dopo</b> la bibbia di stile. Sono in inglese perché i modelli rispondono meglio e non c'è testo cantato.</p>
+
+  <div class="prompt"><div class="bar"><span>Bibbia di stile (da incollare sempre per prima)</span><button class="btn ghost" data-copy="p0">Copia</button></div>
+<pre id="p0">Instrumental only, no vocals, no lyrics. Intimate cinematic score for a quiet post-apocalyptic survival story at dusk, in the spirit of Firewatch and Kentucky Route Zero: warm, fragile, spacious, never epic. Fixed palette for every piece in this series: felted upright piano, music box with slightly detuned tines, warm analog pad, solo cello, nylon-string guitar, soft glass harmonics, a faint air and wind texture. No drums or percussion unless stated, no electric guitar, no synth lead, no choir, no brass, no big hits or risers. Key centre D (major or minor). Recurring motif in every piece: a seven-note lullaby played on the music box, D D A A B B A, followed by F# F# E E D, simple and slightly out of tune, like a music box running down. Wide dynamics, long reverb tails, plenty of silence between phrases. The piece ends by fading to near silence.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>1 · Carillon</span><button class="btn ghost" data-copy="p1">Copia</button></div>
+<pre id="p1">Title piece, 72 BPM, D major, about 2:30. [0:00 - 0:25] The music box alone states the lullaby motif twice, slow, very close and dry. [0:25 - 1:15] A felted piano enters with sparse open chords in D major under the motif, with a faint warm pad underneath. [1:15 - 2:00] The solo cello joins with long notes while the piano plays the motif once, an octave lower. [2:00 - 2:30] Everything thins out until only the music box is left, slowing down, then silence.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>2 · Crepuscolo sulla pianura</span><button class="btn ghost" data-copy="p2">Copia</button></div>
+<pre id="p2">Slow walking piece for dawn and dusk on an empty plain, 60 BPM, D major with a lydian colour (G sharp), about 3:00. Long cello notes over a warm pad, felted piano playing a gently rising broken-chord figure in 6/8. Only the first four notes of the lullaby motif appear, once, around 1:30, on the music box, very far away. No percussion. It ends dissolving into wind.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>3 · Rifugio</span><button class="btn ghost" data-copy="p3">Copia</button></div>
+<pre id="p3">Intimate piece for a shelter with a small fire, 66 BPM, D major, about 2:00. Nylon-string guitar fingerpicked, close and dry, a soft piano doubling the bass notes, a light warm pad. The lullaby motif is played once on guitar harmonics in the middle. A very quiet crackling-fire texture is welcome. It feels safe, tired and tender.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>4 · Cenere</span><button class="btn ghost" data-copy="p4">Copia</button></div>
+<pre id="p4">Dread without violence, 50 BPM, D minor, about 2:30. A low sustained cello drone, bowed glass harmonics, a thin cold pad. The music box plays the lullaby motif detuned and slowing down like a spring running down, and stops abruptly in the middle of a phrase at about 1:40, leaving only room tone. A very soft low pulse like a distant heartbeat appears late. No melody ever resolves.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>5 · Il Safe Place</span><button class="btn ghost" data-copy="p5">Copia</button></div>
+<pre id="p5">Arrival at dawn, 76 BPM, D major, about 3:00. It opens with the music box playing the lullaby motif cleanly and perfectly in tune for the first time. Piano and solo cello enter, then a small chamber string section blooms slowly; the strings carry the motif at the climax, warm and not triumphant. It ends on one long held D major chord that fades away.</pre></div>
+
+  <div class="prompt"><div class="bar"><span>6 · Eco di Lena (facoltativo)</span><button class="btn ghost" data-copy="p6">Copia</button></div>
+<pre id="p6">Memory of a mother, 58 BPM, D minor turning to D major in the last third, about 2:00. Felted piano and music box in unison play the lullaby motif very softly, a solo cello answers. No pad until the turn to major.</pre></div>
+
+  <h3>Cosa fare dopo la generazione</h3>
+  <ul>
+    <li>Pesare il volume: la musica va sotto l'ambiente, che nel gioco ha già i suoi livelli per schermata. Brani in OGG o Opus: circa 2-3 MB l'uno, 15 MB per il set. Il pacchetto desktop resta compatibile con la Content-Security-Policy esistente.</li>
+    <li>Il gioco non ha oggi nessun file audio (tutto è sintetizzato). I brani sarebbero i primi: serve un piccolo caricatore e un canale musica con abbassamento sotto gli effetti.</li>
+    <li>Se un giorno servisse musica che reagisce al gioco (calma, tensione), gli stem separati lo permetterebbero. Non so ancora se Flow Music li esporta.</li>
+  </ul>
+
+  <h3>Diritti e cautele</h3>
+  <ul>
+    <li>Google dichiara di non rivendicare la proprietà di ciò che si genera. I termini d'uso però cambiano con il piano e non ho potuto leggere quelli attuali: vanno letti il giorno in cui si genera.</li>
+    <li>Il diritto d'autore sull'audio generato da IA è incerto in molte giurisdizioni. Per un gioco pubblicato conviene conservare prompt, data, piano usato e una copia dei termini.</li>
+    <li>Una fonte segnala una causa di artisti indipendenti sui dati di addestramento di Lyria (marzo 2026). Non l'ho verificata.</li>
+  </ul>
+
+  <details><summary>Fonti</summary>
+  <ul class="src">
+    <li><a href="https://en.wikipedia.org/wiki/Google_Flow" target="_blank" rel="noopener">Google Flow (Wikipedia)</a></li>
+    <li><a href="https://blog.google/innovation-and-ai/models-and-research/google-labs/believe-flow-music-partnership/" target="_blank" rel="noopener">Google Flow Music e Believe (blog Google)</a></li>
+    <li><a href="https://ai.google.dev/gemini-api/docs/music-generation" target="_blank" rel="noopener">Generazione musicale Lyria, API Gemini (documentazione Google)</a></li>
+    <li><a href="https://flowmusic.app" target="_blank" rel="noopener">flowmusic.app (sito del prodotto)</a></li>
+    <li><a href="https://ai-deck.app/blog/flow-music/" target="_blank" rel="noopener">ai-deck.app (non ufficiale, usato solo per le voci «da provare»)</a></li>
+  </ul></details>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="ritmo">
+  <p class="num">Analisi 3</p>
+  <h2>Come la storia si distribuisce lungo il viaggio</h2>
+  <p>Ho fatto giocare 60 partite simulate con il codice vero del gioco: il giocatore va dal punto di partenza al Safe Place seguendo la strada più corta, mangia, beve, dorme nei rifugi e sceglie a caso negli eventi. La rotta minima è di 290 passi; la mediana delle partite è di circa 330, cioè circa 5 giorni di gioco. Misuro dove cadono capitoli, cutscene ed eventi.</p>
+
+  <div class="verdict"><p>La storia non è distribuita in modo uniforme. Si concentra in due punti: i primi 15 passi e gli ultimi 70. In mezzo, tra il passo 80 e il 158, quasi nulla. I capitoli arrivano a coppie e dopo il 76% della rotta non c'è più nessun luogo da visitare.</p></div>
+
+  <div class="fig">
+    <svg id="chTimeline" viewBox="0 0 900 330" role="img" aria-label="Linea dei momenti narrativi lungo i passi, oggi e nella proposta"></svg>
+    <p class="cap">Mediana su 60 partite. Cerchi = capitoli degli Echi della Memoria (numerati), rombi = cutscene. In basso i luoghi fissi sulla mappa convertiti in passi, in un viaggio di 340 passi. Le fasce evidenziano il vuoto e l'affollamento.</p>
+  </div>
+
+  <h3>Cosa si vede</h3>
+  <ol>
+    <li><b>Inizio affollato.</b> In 15 passi (circa due ore e mezza di gioco) si sommano apertura, capitolo 1 (passo 10), cutscene del fiume (13) e capitolo 2 (15). Nei primi 50 passi cadono in media 7,2 momenti narrativi, contro 3,3 tra il 100 e il 150.</li>
+    <li><b>Buco a metà.</b> Tra il passo 82 e il 158 non cade nessun capitolo né cutscene: solo eventi casuali, scontri e un livello. È un quarto del viaggio senza un momento di storia.</li>
+    <li><b>Capitoli a coppie.</b> 3 e 4 arrivano insieme a 78 e 79, 5 e 6 a 174 e 175, 7 e 8 a 236 e 237, e 9 e 10 si avvicinano (288 e 304). In 167 transizioni su 454 due capitoli distano 2 passi o meno. Si leggono due flashback di fila e poi un lungo silenzio.</li>
+    <li><b>Metà viaggio in coda.</b> Due cutscene arrivano insieme al giorno 3: «L'ombra che non fa rumore» (159) e «La strada è lunga» (162). Quella che si chiama «metà viaggio» cade al 49%, ma fa coppia con l'altra.</li>
+    <li><b>Finale in ingorgo.</b> Tra il passo 270 e il 340 ci sono il punto di non ritorno, i capitoli 9, 10, 11 e 12. Il 9 aspetta il giorno 4 e il 10 il passo 200: chi cammina in fretta li trova tutti accumulati all'arrivo.</li>
+    <li><b>Ultimo quarto senza luoghi.</b> L'ultimo luogo sulla rotta è la stazione di polizia al 76%. Dopo c'è solo pianura, e anche i rifugi calano da 52 a 13 per decimo di percorso. Chi gioca le quest, nell'ultimo quarto, non ne trova.</li>
+    <li><b>Quest quasi invisibili sulla rotta.</b> Su 20 quest secondarie, un giocatore che segue la strada ne avvia 0,18 a partita. Vivono fuori strada, in eventi casuali e luoghi da cercare. Va bene come scelta, ma se devono dare ritmo a metà gioco non basta.</li>
+  </ol>
+
+  <div class="fig">
+    <svg id="chDensity" viewBox="0 0 900 240" role="img" aria-label="Momenti narrativi ogni 50 passi"></svg>
+    <p class="cap">Momenti narrativi (capitoli, cutscene, eventi, scontri, quest avviate) per partita ogni 50 passi. 32 partite sono arrivate a 300 passi.</p>
+  </div>
+
+  <h3>Da dove nasce, nel codice</h3>
+  <ul>
+    <li>I capitoli scattano a passi fissi (10, 15, 30, 80, 120, 160, 200), pensati per un viaggio più corto. Oltre il passo 200 restano solo condizioni di giorno o di vicinanza alla meta.</li>
+    <li>Al massimo due capitoli al giorno (<code>MAX_STORY_EVENTS_PER_DAY = 2</code>) e molti non possono scattare di notte. Dopo il capitolo 2 del primo giorno, il 3 aspetta l'alba del secondo e si porta dietro il 4, che chiede «giorno 2».</li>
+    <li>I capitoli 4 e 9 contano i giorni, non la posizione. La cutscene «metà viaggio» chiede 100 passi e il giorno 3, la «ombra» solo il giorno 3.</li>
+  </ul>
+
+  <h3>Proposta di calendario (nessuna modifica fatta)</h3>
+  <p>Il principio: ancorare i momenti grandi alla <b>posizione lungo la rotta</b> (distanza dalla meta) invece che ai passi o ai giorni, con almeno 15-20 passi (circa 3 ore di gioco) tra due momenti grandi. Con quindici momenti grandi in 340 passi, uno ogni 23 circa, restano abbastanza passi per eventi e scontri tra l'uno e l'altro.</p>
+  <div class="tbl"><table>
+    <tr><th>Momento</th><th class="n">Oggi (passo)</th><th class="n">Proposta (passo)</th><th>Nota</th></tr>
+    <tr><td>Cap. 1 Il Silenzio</td><td class="n">10</td><td class="n">14</td><td>Il gancio resta in apertura</td></tr>
+    <tr><td>Cap. 2 La Lezione dell'Acqua</td><td class="n">15</td><td class="n">40</td><td>Dopo il fiume, non addosso</td></tr>
+    <tr><td>Cap. 3 Il Sapore del Sangue</td><td class="n">78</td><td class="n">66</td><td>Meglio dopo il primo scontro</td></tr>
+    <tr><td>Cap. 4 Eco del Crollo</td><td class="n">79</td><td class="n">92</td><td>Il tuono è già di notte: va bene al buio</td></tr>
+    <tr><td>Cutscene L'ombra che non fa rumore</td><td class="n">159</td><td class="n">110</td><td>Spostata prima, riempie il buco</td></tr>
+    <tr><td>Cap. 5 La Domanda Senza Risposta</td><td class="n">174</td><td class="n">125</td><td>Primo rifugio dopo il passo 110</td></tr>
+    <tr><td>Cap. 6 Gli Angeli della Cenere</td><td class="n">175</td><td class="n">150</td><td></td></tr>
+    <tr><td>Cutscene La strada è lunga</td><td class="n">162</td><td class="n">170</td><td>Esattamente a metà e da sola</td></tr>
+    <tr><td>Cap. 7 Il Fardello della Verità</td><td class="n">236</td><td class="n">195</td><td></td></tr>
+    <tr><td>Cap. 8 L'Ultima Lezione</td><td class="n">237</td><td class="n">218</td><td></td></tr>
+    <tr><td>Cap. 9 Il Significato di un Nome</td><td class="n">288</td><td class="n">242</td><td>Legato alla posizione, non al giorno 4</td></tr>
+    <tr><td>Cap. 10 L'Eco di una Scelta</td><td class="n">304</td><td class="n">266</td><td>Dopo una scelta morale vera</td></tr>
+    <tr><td>Cutscene Punto di non ritorno</td><td class="n">272</td><td class="n">288</td><td></td></tr>
+    <tr><td>Cap. 11 Il Ricordo Completo</td><td class="n">327</td><td class="n">315</td><td>Vicino alla meta, come oggi</td></tr>
+    <tr><td>Cap. 12 La Verità</td><td class="n">340</td><td class="n">340</td><td>Arrivo</td></tr>
+  </table></div>
+  <p class="cap">È una proposta di partenza, non un calcolo esatto: i passi cambiano con le deviazioni. Meccanismi da prevedere: un solo momento grande ogni 15-20 passi, trigger a distanza dalla meta, niente giorni come condizione.</p>
+  <p>Resta da decidere cosa mettere nell'ultimo quarto, ora vuoto: un luogo, un avamposto o due quest che iniziano dopo il 70%.</p>
+
+  <details><summary>Come ho misurato</summary>
+    <p>Un test temporaneo usa i veri store e dati del gioco (lo stesso sistema dei test di simulazione esistenti): 60 giocatori con attributi tirati a caso, stesso seme per ogni partita, che seguono la strada più corta, curano, mangiano e bevono, dormono nei rifugi vicini e scelgono a caso negli eventi. Registro ogni capitolo, cutscene, evento, scontro e quest. Non sono giocatori veri: non esplorano i luoghi, non commerciano, non riparano. I tempi dei momenti vincolati alla storia valgono per un percorso diretto. Lo script è in <code>GAME/docs/analisi/</code>.</p>
+  </details>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="sfida">
+  <p class="num">Analisi 4</p>
+  <h2>Quanto è difficile, in numeri</h2>
+  <p>Per un gioco narrativo la difficoltà dovrebbe essere un'ombra, non un muro. Ho misurato tre cose: gli scontri (con una simulazione dei tiri di dado), le scorte di acqua e cibo (con il calcolo e con le 180 partite) e la crescita del personaggio.</p>
+
+  <div class="verdict"><p><b>Il problema non è il combattimento. È la sopravvivenza.</b> I giocatori simulati arrivano in fondo il 15%, il 22% e il 32% delle volte, secondo quanto sono attenti, e la causa di morte più frequente è la malattia, non i nemici. Anche tenendo conto dei limiti dei giocatori simulati, il dato strutturale è solido: il fabbisogno di acqua del viaggio (circa 560 punti) è quasi il triplo della scorta iniziale (200).</p></div>
+
+  <h3>A · Il peso delle scorte</h3>
+  <div class="tbl"><table>
+    <tr><th>Voce</th><th class="n">Valore</th></tr>
+    <tr><td>Sete</td><td class="n">4,5 punti per ora di gioco</td></tr>
+    <tr><td>Fame</td><td class="n">3 punti all'ora</td></tr>
+    <tr><td>Una bottiglia d'acqua / una razione</td><td class="n">+25 / +25</td></tr>
+    <tr><td>Fabbisogno di un giorno intero (24 ore)</td><td class="n">108 acqua · 72 cibo</td></tr>
+    <tr><td>Fabbisogno di una notte di sonno (circa 10 ore)</td><td class="n">45 acqua · 30 cibo</td></tr>
+    <tr><td>Viaggio mediano (circa 125 ore di gioco)</td><td class="n">560 acqua · 375 cibo</td></tr>
+    <tr><td>Scorta iniziale (barra a 100 più 4 bottiglie e 5 razioni dall'apertura)</td><td class="n">200 acqua · 225 cibo</td></tr>
+    <tr><td><b>Da trovare nel mondo</b></td><td class="n"><b>circa 14 bottiglie · 6 razioni</b></td></tr>
+  </table></div>
+  <p class="cap">Le scorte si trovano con la ricerca (30 minuti, una per bioma) e vicino al fiume dà 3 acque sporche e 10 punti, ma l'acqua sporca va purificata con uno straccio pulito (ne hai 3).</p>
+
+  <div class="fig">
+    <svg id="chRes" viewBox="0 0 900 290" role="img" aria-label="Salute, sazietà e idratazione medie lungo il viaggio"></svg>
+    <p class="cap">Giocatore simulato «scrupoloso» (cerca ad ogni cambio di bioma e purifica l'acqua). Medie su 60 partite ogni 30 passi. L'idratazione scende sotto 30 a metà viaggio e sotto 20 nell'ultimo terzo.</p>
+  </div>
+
+  <h3>B · La notte che fa ammalare</h3>
+  <p>Nel rifugio di notte il menu offre solo «Dormi fino all'alba» (di giorno offre «Aspetta un'ora»). Il sonno costa circa 45 di acqua e 30 di cibo. Se non li hai, ti sveglia <b>MALATO</b>: perdi 0,5 PV all'ora, cioè 12 al giorno, e la malattia non passa da sola. Guarisce solo con una medicina rara. Il menu non avvisa del costo del sonno prima che tu lo scelga.</p>
+  <div class="fig">
+    <svg id="chSleep" viewBox="0 0 900 150" role="img" aria-label="Notti dormite con e senza scorte sufficienti"></svg>
+    <p class="cap">108 notti dormite in 20 partite (giocatore scrupoloso). Alla prima notte i giocatori sono sempre in regola; dopo, metà delle volte arrivano al rifugio con meno acqua del necessario: alle 20 hanno in mediana 38 di idratazione contro 43 richiesti.</p>
+  </div>
+  <p>Risultato: 54-56 partite su 60 si ammalano, a seconda del giocatore, e fra chi si ammala la morte arriva in mediana tre giorni dopo. Senza questo rischio il viaggio sarebbe quasi sempre completabile.</p>
+
+  <div class="fig">
+    <svg id="chOut" viewBox="0 0 900 190" role="img" aria-label="Esiti per tipo di giocatore simulato"></svg>
+    <p class="cap">Tre giocatori simulati, 60 partite ciascuno. Il «distratto» beve solo quando ha sete e dorme comunque; il «prudente» mangia e beve prima di dormire e usa le medicine; lo «scrupoloso» in più cerca ad ogni bioma e purifica l'acqua.</p>
+  </div>
+  <p><b>Attenzione a come leggere questi numeri.</b> I giocatori simulati non commerciano, non esplorano i luoghi, non riparano e non sanno che ogni fiume dà acqua. Una persona vera morirà molto meno. Valgono come confronto fra scenari e come prova che il sistema è fragile, non come probabilità di morte reale.</p>
+
+  <h3>C · Gli scontri</h3>
+  <p>Il sistema è a dadi: 1d20 + bonus contro Classe Armatura, danno dell'arma + bonus + d4 − 3, critico al 20. Ho ripetuto 4.000 scontri per ogni coppia nemico-equipaggiamento con 100 PV, senza cure, con un personaggio medio (Forza e Destrezza +1).</p>
+  <div class="tbl"><table id="fightTbl">
+    <tr><th>Nemico</th><th class="n">PV</th><th class="n">CA</th><th class="n">Arrugginito</th><th class="n">Coltello + giacca</th><th class="n">Piede di porco + kevlar</th></tr>
+  </table></div>
+  <p class="cap">Percentuale di vittorie. Sotto ogni cifra, i PV persi in media quando si vince. «Arrugginito» = coltello arrugginito (danno 5) e stracci, l'equipaggiamento dopo l'apertura. A mani nude (danno 2) contro un cinghiale si vince il 3% delle volte, contro un predone disperato il 73%.</p>
+  <ul>
+    <li><b>Una scogliera, non una curva.</b> Con l'equipaggiamento di partenza gli scontri costano 25-48 PV, 65-72 contro cinghiali e bestie mutate, che si perdono una volta su tre. Con un coltello da combattimento e una giacca di cuoio costano 6-28 PV. L'equipaggiamento decide tutto.</li>
+    <li><b>Il coltello iniziale dura 20 colpi</b> (1 durabilità a ogni attacco, a segno o no): circa 2 scontri. Alla fine del viaggio il 72-80% dei giocatori simulati combatte a mani nude, perché trova pochi ricambi.</li>
+    <li><b>I nemici crescono con il livello</b> (solo quelli con XP fino a 70 + 30 × livello): l'orso arriva al livello 3, il capobranco al 5, il capo dei predoni al 6. Non si può restare indietro, ma nemmeno crescere in anticipo.</li>
+    <li><b>Pochi scontri.</b> 3,3-4,5 a partita, circa uno ogni 80 passi. Danno medio da scontri: 105-160 PV in tutto il viaggio, a fronte di una notte che cura tutto. Il combattimento da solo non stanca il giocatore.</li>
+  </ul>
+
+  <h3>D · Crescita del personaggio</h3>
+  <ul>
+    <li>Ogni passo dà <b>3 XP</b>. Camminare 300 passi fa 900 XP: livello 4. I livelli costano 150, 400, 900, 2.000 XP. Nelle partite simulate si arriva al livello 4 (mediana), mai oltre.</li>
+    <li>Ogni livello dà +1 attributo, 5 + modificatore PV e una cura totale. Le 21 quest valgono 8.350 XP: chi le fa tutte e cammina l'intero viaggio arriva intorno al livello 7.</li>
+    <li>La salita è regolare: la ricompensa maggiore arriva dalle quest, che sulla rotta si incontrano poco (vedi analisi 3).</li>
+  </ul>
+
+  <h3>Metriche che propongo come obiettivo</h3>
+  <div class="tbl"><table>
+    <tr><th>Metrica</th><th>Obiettivo</th><th>Oggi (simulato)</th></tr>
+    <tr><td>Arrivano in fondo i giocatori attenti</td><td>85-90% o più</td><td>22-32%</td></tr>
+    <tr><td>Morte per malattia, fame o sete</td><td>Quasi mai (sotto il 5%)</td><td>55-77%</td></tr>
+    <tr><td>Partite con malattia lunga</td><td>Rara, con cura a portata di mano</td><td>90%</td></tr>
+    <tr><td>Scontri a partita</td><td>3-6</td><td>3,3-4,5</td></tr>
+    <tr><td>PV persi in uno scontro vinto, con equipaggiamento medio</td><td>10-30</td><td>6-28 con coltello e giacca; 25-48 senza</td></tr>
+  </table></div>
+
+  <h3>Leve possibili (nessuna applicata)</h3>
+  <div class="tbl"><table>
+    <tr><th>Leva</th><th>Effetto atteso</th><th>Rischio</th></tr>
+    <tr><td><b>Mostrare il costo del sonno</b> nel menu del rifugio e avvisare se mancano scorte</td><td>Toglie la trappola senza cambiare i numeri</td><td>Quasi nullo</td></tr>
+    <tr><td><b>La malattia passa dopo una notte ben nutrita</b> (o dopo 24 ore)</td><td>Da malattia a fastidio temporaneo</td><td>Meno tensione: da pesare</td></tr>
+    <tr><td>Di notte il rifugio offre anche «Aspetta un'ora» oppure un sonno corto</td><td>Una via d'uscita senza ammalarsi</td><td>Basso</td></tr>
+    <tr><td>Sete da 4,5 a 3 all'ora, oppure bottiglia da 25 a 40</td><td>Il fabbisogno da trovare scende da 14 a circa 7-9 bottiglie</td><td>Medio: ritocca l'economia</td></tr>
+    <tr><td>Una fonte pulita in ogni rifugio, o acqua piovana</td><td>Ricarica regolare, ritmo più dolce</td><td>Medio</td></tr>
+    <tr><td>Arma iniziale più robusta (20 → 60 durabilità) o coltello da combattimento di partenza</td><td>Spazza via la scogliera dei primi scontri</td><td>Basso</td></tr>
+  </table></div>
+  <p>Ordine che consiglio: le prime tre (costano poco e tolgono il difetto strutturale), poi misurare di nuovo con lo stesso test prima di toccare i numeri.</p>
+
+  <details><summary>Come ho misurato</summary>
+    <p>Scontri: simulazione dei dadi con le formule del codice (<code>combatStore.ts</code>), 4.000 prove per riga. Scorte: valori di <code>characterStore.ts</code> e <code>interactionStore.ts</code>. Partite: 180 (3 giocatori × 60) col codice vero. Limiti: non commerciano, non esplorano i luoghi, non riparano, bevono dal fiume solo cercando nel bioma, scelgono a caso nelle scelte degli eventi. Un giocatore vero ha più strumenti: i numeri assoluti sono pessimistici, le differenze fra scenari e i meccanismi no. Script in <code>GAME/docs/analisi/</code>.</p>
+  </details>
+</section>
+
+<footer>
+  File: mockup in <code>GAME/docs/mockup/cutscene-cinematiche.html</code>, script di simulazione in <code>GAME/docs/analisi/</code>, questa pagina in <code>GAME/docs/analisi/analisi-ottobre.html</code>. Nulla è stato inserito nel gioco né inviato su GitHub.
+</footer>
+</div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function el(tag, attrs, parent, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* ---- Grafico 1: linea del tempo ---- */
+(function () {
+  const svg = document.getElementById('chTimeline');
+  const L = 150, R = 880, W = R - L, MAX = 345, x = s => L + (s / MAX) * W;
+  const ember = css('--ember'), teal = css('--teal'), danger = css('--danger'), line = css('--line'), ink2 = css('--ink2'), ink3 = css('--ink3');
+  // fasce
+  [[80, 158, 'vuoto'], [270, 345, 'ingorgo']].forEach(([a, b, t]) => {
+    el('rect', { x: x(a), y: 30, width: x(b) - x(a), height: 170, fill: t === 'vuoto' ? 'rgb(108 180 189 / .10)' : 'rgb(226 96 75 / .12)' }, svg);
+    el('text', { x: (x(a) + x(b)) / 2, y: 24, 'text-anchor': 'middle', 'font-size': 14, fill: t === 'vuoto' ? teal : danger, style: 'fill:' + (t === 'vuoto' ? teal : danger) }, svg, t === 'vuoto' ? 'quasi nulla' : 'tutto qui');
+  });
+  // assi
+  for (let s = 0; s <= 340; s += 50) {
+    el('line', { x1: x(s), x2: x(s), y1: 30, y2: 316, stroke: line, 'stroke-width': 1 }, svg);
+    el('text', { x: x(s), y: 326, 'text-anchor': 'middle', 'font-size': 13 }, svg, s);
+  }
+  el('text', { x: 6, y: 326, 'font-size': 13 }, svg, 'passi');
+  const rows = [
+    { y: 70, label: 'Oggi', items: [[10, 1, 'c'], [13, '', 'k'], [15, 2, 'c'], [28, '', 'k'], [78, 3, 'c'], [79, 4, 'c'], [80, '', 'k'], [159, '', 'k'], [162, '', 'k'], [174, 5, 'c'], [175, 6, 'c'], [236, 7, 'c'], [237, 8, 'c'], [272, '', 'k'], [288, 9, 'c'], [304, 10, 'c'], [327, 11, 'c'], [340, 12, 'c']] },
+    { y: 150, label: 'Proposta', items: [[14, 1, 'c'], [40, 2, 'c'], [66, 3, 'c'], [92, 4, 'c'], [110, '', 'k'], [125, 5, 'c'], [150, 6, 'c'], [170, '', 'k'], [195, 7, 'c'], [218, 8, 'c'], [242, 9, 'c'], [266, 10, 'c'], [288, '', 'k'], [315, 11, 'c'], [340, 12, 'c']] }
+  ];
+  rows.forEach(r => {
+    el('text', { x: 6, y: r.y + 5, 'font-size': 18, style: 'fill:' + css('--ink') }, svg, r.label);
+    el('line', { x1: L, x2: R, y1: r.y, y2: r.y, stroke: line, 'stroke-width': 2 }, svg);
+    const placed = [];
+    r.items.forEach(([s, n, t]) => {
+      const near = placed.filter(p => Math.abs(x(p) - x(s)) < 26).length;
+      const dy = [0, -17, 17, -34][near] || 0;
+      placed.push(s);
+      const cy = r.y + dy;
+      if (dy) el('line', { x1: x(s), x2: x(s), y1: r.y, y2: cy, stroke: line, 'stroke-width': 1 }, svg);
+      if (t === 'c') {
+        el('circle', { cx: x(s), cy, r: 11, fill: ember }, svg);
+        el('text', { x: x(s), y: cy + 5, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 600, style: 'fill:#1a0f05' }, svg, n);
+      } else {
+        el('path', { d: `M${x(s)} ${cy - 10} l10 10 l-10 10 l-10 -10z`, fill: teal }, svg);
+      }
+    });
+  });
+  // luoghi
+  const places = [71, 75, 75, 82, 102, 102, 102, 133, 136, 160, 167, 173, 177, 201, 207, 238, 238, 241, 258];
+  el('text', { x: 6, y: 235, 'font-size': 18, style: 'fill:' + css('--ink') }, svg, 'Luoghi');
+  el('line', { x1: L, x2: R, y1: 230, y2: 230, stroke: line, 'stroke-width': 2 }, svg);
+  places.forEach((s, i) => el('rect', { x: x(s) - 3, y: 222 + (i % 2) * 2, width: 6, height: 16, fill: ink2 }, svg));
+  el('text', { x: x(258) + 14, y: 262, 'font-size': 14, style: 'fill:' + ink3 }, svg, 'ultimo luogo (76%)');
+  el('line', { x1: x(258), x2: x(258), y1: 240, y2: 252, stroke: ink3, 'stroke-width': 1 }, svg);
+  // legenda
+  el('circle', { cx: L, cy: 290, r: 7, fill: ember }, svg); el('text', { x: L + 14, y: 295, 'font-size': 14 }, svg, 'capitolo');
+  el('path', { d: `M${L + 120} 283 l7 7 l-7 7 l-7 -7z`, fill: teal }, svg); el('text', { x: L + 134, y: 295, 'font-size': 14 }, svg, 'cutscene');
+})();
+
+/* ---- Grafico 2: densità ---- */
+(function () {
+  const svg = document.getElementById('chDensity');
+  const data = [7.22, 4.75, 3.34, 5.56, 5.0, 4.44], labels = ['0-50', '50-100', '100-150', '150-200', '200-250', '250-300'];
+  const L = 60, B = 190, H = 150, bw = 90, gap = 30;
+  const ember = css('--ember'), teal = css('--teal'), line = css('--line');
+  [0, 2, 4, 6, 8].forEach(v => {
+    const y = B - (v / 8) * H;
+    el('line', { x1: L, x2: 880, y1: y, y2: y, stroke: line }, svg);
+    el('text', { x: L - 10, y: y + 5, 'text-anchor': 'end', 'font-size': 13 }, svg, v);
+  });
+  data.forEach((v, i) => {
+    const x = L + 30 + i * (bw + gap), h = (v / 8) * H;
+    el('rect', { x, y: B - h, width: bw, height: h, fill: i === 2 ? teal : ember }, svg);
+    el('text', { x: x + bw / 2, y: B - h - 8, 'text-anchor': 'middle', 'font-size': 16, style: 'fill:' + css('--ink') }, svg, String(v).replace('.', ','));
+    el('text', { x: x + bw / 2, y: B + 20, 'text-anchor': 'middle', 'font-size': 14 }, svg, labels[i]);
+  });
+  el('text', { x: 880, y: 20, 'text-anchor': 'end', 'font-size': 14 }, svg, 'passi del viaggio');
+})();
+
+/* ---- Grafico 3: risorse ---- */
+(function () {
+  const svg = document.getElementById('chRes');
+  const steps = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+  const hp = [98, 106, 108, 108, 106, 105, 109, 112, 100, 93, 89, 85];
+  const sat = [93, 75, 57, 56, 52, 53, 55, 61, 55, 49, 49, 34];
+  const hyd = [89, 65, 51, 51, 45, 28, 22, 22, 14, 11, 12, 4];
+  const L = 60, R = 870, T = 20, B = 240, X = s => L + (s / 330) * (R - L - 70), Y = v => B - (v / 120) * (B - T);
+  const line = css('--line'), ember = css('--ember'), sage = css('--sage'), teal = css('--teal'), danger = css('--danger');
+  [0, 20, 40, 60, 80, 100, 120].forEach(v => {
+    el('line', { x1: L, x2: R, y1: Y(v), y2: Y(v), stroke: line }, svg);
+    el('text', { x: L - 8, y: Y(v) + 5, 'text-anchor': 'end', 'font-size': 13 }, svg, v);
+  });
+  el('rect', { x: L, y: Y(20), width: R - L, height: Y(0) - Y(20), fill: 'rgb(226 96 75 / .09)' }, svg);
+  el('text', { x: R - 4, y: Y(20) - 6, 'text-anchor': 'end', 'font-size': 13, style: 'fill:' + danger }, svg, 'sotto 20: disidratato / affamato');
+  steps.forEach(s => el('text', { x: X(s), y: B + 22, 'text-anchor': 'middle', 'font-size': 13 }, svg, s));
+  el('text', { x: R, y: B + 40, 'text-anchor': 'end', 'font-size': 13 }, svg, 'passi');
+  const draw = (arr, color, name, dy) => {
+    el('polyline', { points: arr.map((v, i) => `${X(steps[i])},${Y(v)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+    const last = arr.length - 1;
+    el('circle', { cx: X(steps[last]), cy: Y(arr[last]), r: 4, fill: color }, svg);
+    el('text', { x: X(steps[last]) + 10, y: Y(arr[last]) + dy, 'font-size': 14, style: 'fill:' + color }, svg, name);
+  };
+  draw(hp, sage, 'salute', 4); draw(sat, ember, 'sazietà', 4); draw(hyd, teal, 'idratazione', 4);
+})();
+
+/* ---- Grafico 4: notti ---- */
+(function () {
+  const svg = document.getElementById('chSleep');
+  const parts = [[53, 'in regola', 'var(--sage)'], [42, 'manca acqua', 'var(--danger)'], [13, 'mancano acqua e cibo', 'var(--ember)']];
+  const L = 20, W = 860, tot = 108; let x = L;
+  parts.forEach(([n, t, c]) => {
+    const w = (n / tot) * W;
+    el('rect', { x, y: 30, width: w - 2, height: 46, fill: css(c.slice(4, -1)) }, svg);
+    el('text', { x: x + 10, y: 59, 'font-size': 20, style: 'fill:#0d0f12;font-weight:600' }, svg, n);
+    el('text', { x: x + 10, y: 104, 'font-size': 15 }, svg, t + ' (' + Math.round(n / tot * 100) + '%)');
+    x += w;
+  });
+  el('text', { x: L, y: 20, 'font-size': 14 }, svg, 'Notti dormite in un rifugio');
+})();
+
+/* ---- Grafico 5: esiti ---- */
+(function () {
+  const svg = document.getElementById('chOut');
+  const rows = [['Distratto', { v: 9, m: 46, c: 2, a: 3 }], ['Prudente', { v: 13, m: 41, c: 3, a: 3 }], ['Scrupoloso', { v: 19, m: 33, c: 7, a: 1 }]];
+  const cols = { v: css('--sage'), m: css('--danger'), c: css('--ember'), a: css('--ink3') };
+  const names = { v: 'arriva in fondo', m: 'malattia', c: 'scontro', a: 'fame, sete, ambiente' };
+  const L = 130, W = 740;
+  rows.forEach(([name, d], i) => {
+    const y = 20 + i * 52; let x = L;
+    el('text', { x: 6, y: y + 28, 'font-size': 18, style: 'fill:' + css('--ink') }, svg, name);
+    ['v', 'm', 'c', 'a'].forEach(k => {
+      const w = (d[k] / 60) * W; if (!w) return;
+      el('rect', { x, y, width: w - 1, height: 40, fill: cols[k] }, svg);
+      if (w > 24) el('text', { x: x + 8, y: y + 27, 'font-size': 17, style: 'fill:#0d0f12;font-weight:600' }, svg, d[k]);
+      x += w;
+    });
+  });
+  let lx = L;
+  ['v', 'm', 'c', 'a'].forEach(k => {
+    el('rect', { x: lx, y: 176, width: 12, height: 12, fill: cols[k] }, svg);
+    el('text', { x: lx + 18, y: 187, 'font-size': 14 }, svg, names[k]);
+    lx += 18 + names[k].length * 7.6 + 24;
+  });
+})();
+
+/* ---- Tabella scontri ---- */
+(function () {
+  const rows = [
+    ['Predone disperato', 30, 12, [99.7, 35.6], [100, 9.8], [100, 1.9]],
+    ['Cane selvatico', 20, 14, [100, 24.7], [100, 6.5], [100, 1.8]],
+    ['Lupo mutato', 25, 13, [96.4, 45.1], [100, 12.5], [100, 2.5]],
+    ['Arciere predone', 28, 13, [98.2, 44.6], [100, 14.1], [100, 2.2]],
+    ['Cacciatore pazzo', 32, 13, [97.7, 47.5], [100, 12.2], [100, 3.2]],
+    ['Cinghiale aggressivo', 40, 11, [76.7, 65.0], [100, 22.0], [100, 4.0]],
+    ['Bestia mutante', 45, 13, [59.0, 71.9], [99.7, 25.8], [100, 4.8]],
+    ['Predone armato', 35, 14, [68.1, 65.4], [99.8, 21.7], [100, 5.5]],
+    ['Guardia impazzita', 40, 15, [57.6, 69.3], [99.5, 27.7], [100, 5.5]],
+    ['Orso mutato', 60, 12, [9.6, 84.3], [95.7, 43.2], [100, 8.2]],
+    ['Capobranco alfa', 55, 14, [12.6, 80.2], [95.8, 43.2], [100, 8.3]],
+    ['Capo dei predoni', 50, 16, [5.4, 82.2], [85.6, 48.8], [99.9, 11.6]]
+  ];
+  const t = document.getElementById('fightTbl');
+  const color = p => { const h = Math.round(p * 1.2); return `hsl(${h} 55% ${p > 60 ? 62 : 58}%)`; };
+  const f = v => String(v).replace('.', ',');
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td>` +
+      [3, 4, 5].map(i => `<td class="heat" style="background:${color(r[i][0])}">${f(r[i][0])}%<br><span style="font-weight:400;font-size:13px">−${f(r[i][1])} PV</span></td>`).join('');
+    t.appendChild(tr);
+  });
+})();
+
+/* ---- Copia prompt ---- */
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+  const node = document.getElementById(b.dataset.copy), text = node.textContent;
+  try { await navigator.clipboard.writeText(text); b.textContent = 'Copiato'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(node); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selezionato'; }
+  setTimeout(() => { b.textContent = 'Copia'; }, 1600);
+}));
+</script>
