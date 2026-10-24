@@ -1,0 +1,209 @@
+<title>Verifica dei nomi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: colonna di lettura stretta, tabelle che scorrono in orizzontale, stati come etichette colorate.
+   Palette Crepuscolo del gioco, un solo aspetto scuro scelto di proposito. */
+:root {
+  --bg0: #090a0d; --bg1: #0e1014; --bg2: #15181e; --line: #262a33;
+  --ink: #ede6d9; --ink2: #bab1a3; --ink3: #8d8579;
+  --ember: #e8893f; --ember2: #f5b46c; --teal: #6cb4bd; --sage: #93b38a; --danger: #e2604b;
+  --display: 'Cormorant Garamond', Georgia, serif; --body: 'Literata', Georgia, serif; --ui: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg0); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.62;
+  padding-block: 0 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg0); z-index: 20; }
+.col { max-width: 900px; margin: 0 auto; }
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgb(9 10 13 / .94); border-bottom: 1px solid var(--line);
+  margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 10px max(16px, env(safe-area-inset-left, 0px)); }
+nav.top .col { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; }
+nav.top a { font-family: var(--ui); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); text-decoration: none; }
+nav.top a:hover { color: var(--ember2); }
+nav.top b { font-family: var(--display); font-size: 21px; font-weight: 600; margin-right: auto; color: var(--ink); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--ui); font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--ember2); margin: 0 0 8px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(36px, 7vw, 58px); line-height: 1.04; margin: 0 0 14px; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--ink2); max-width: 64ch; margin: 0 0 14px; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.6vw, 38px); line-height: 1.1; margin: 0 0 8px; text-wrap: balance; scroll-margin-top: 70px; }
+h3 { font-family: var(--ui); font-weight: 600; font-size: 17px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 30px 0 8px; }
+section { padding-top: 52px; }
+.num { font-family: var(--ui); font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin: 0 0 4px; }
+p { margin: 0 0 14px; max-width: 70ch; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; max-width: 70ch; }
+li { margin-bottom: 6px; }
+a { color: var(--teal); }
+b { font-weight: 600; }
+.verdict { border-left: 3px solid var(--ember); background: var(--bg1); padding: 14px 18px; margin: 18px 0 22px; max-width: 74ch; }
+.verdict p:last-child { margin-bottom: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 22px; }
+.card { background: var(--bg1); border: 1px solid var(--line); padding: 16px 18px; min-width: 0; }
+.card h4 { font-family: var(--ui); font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember2); margin: 0 0 6px; }
+.card p { font-size: 15.5px; margin: 0; line-height: 1.5; }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 640px; }
+th, td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-family: var(--ui); font-weight: 600; font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: var(--bg1); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-family: var(--ui); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 1px 8px; border: 1px solid var(--line); color: var(--ink2); white-space: nowrap; }
+.tag.ok { color: var(--sage); border-color: rgb(147 179 138 / .5); }
+.tag.part { color: var(--ember2); border-color: rgb(245 180 108 / .5); }
+.tag.no { color: var(--danger); border-color: rgb(226 96 75 / .5); }
+.cap { font-size: 14px; color: var(--ink3); margin: 6px 0 0; max-width: 80ch; line-height: 1.5; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: var(--bg2); padding: 1px 5px; }
+details { border-top: 1px solid var(--line); padding: 10px 0; max-width: 74ch; }
+details summary { cursor: pointer; font-family: var(--ui); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: var(--ink2); }
+details[open] summary { color: var(--ember2); }
+footer { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink3); max-width: 84ch; }
+@media (max-width: 640px) { body { font-size: 16px; } nav.top b { width: 100%; } }
+</style>
+
+<nav class="top"><div class="col">
+  <b>Verifica dei nomi</b>
+  <a href="#sintesi">Sintesi</a><a href="#storia">Cronologia</a><a href="#matrice">Matrice</a><a href="#esito">Esito</a><a href="#react">The Safe Place</a><a href="#prossimi">Prossimi passi</a>
+</div></nav>
+
+<div class="col">
+<header class="hero" id="sintesi">
+  <p class="kicker">Documentazione di The Safe Place · 25 ottobre 2026</p>
+  <h1>Verifica dei nomi dei personaggi</h1>
+  <p class="lead">Ho cercato la revisione di cui parli, ho controllato che sia stata applicata nei quattro luoghi dove vive la documentazione e ho contato cosa cambierebbe nel gioco. Non ho modificato nessun file del gioco o degli altri progetti.</p>
+
+  <div class="verdict">
+    <p><b>La revisione esiste ed è quella che ricordi.</b> Il 17-18 luglio 2026 in <b>Respiro</b> (documenti <code>06_Revisione_Narrativa_Globale</code> e <code>09_Audit_Nomi</code>) e poi, il 7-8 agosto, in <b>ProgettoRemake</b>, dove le regole sono diventate vincolanti e il nome della madre è cambiato. Lo scopo era togliere i nomi statisticamente tipici dei modelli linguistici.</p>
+    <p><b>Respiro e ProgettoRemake sono coerenti con le proprie decisioni. The Safe Place, il gioco pubblicato, no:</b> la revisione non l’ha mai toccato. Il padre e la madre si chiamano ancora Elian e Lena, e <b>Lena è proprio il nome che l’audit ha dichiarato bruciato</b>.</p>
+    <p><b>Il canone della saga oggi ha due padri e tre madri</b> (tabella sotto). Prima di toccare qualunque file serve una decisione tua.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h4>Respiro</h4><p>Nomi vecchi (Clara, Ismael, Krow) spariti dai documenti, nuovi (Nele, Bruno, Gurschler) al loro posto. Resta Elsa per la madre, superata dal Remake.</p></div>
+    <div class="card"><h4>ProgettoRemake</h4><p>Coerente. Elsa, Lena ed Elian compaiono solo come storia. La madre è Nilde, il padre Konrad. Qualche percorso citato non esiste più.</p></div>
+    <div class="card"><h4>The Safe Place</h4><p>Non toccato. Elian e Lena in circa 280 punti, più Elara, che è nelle liste dei nomi da evitare, e altri nomi mai verificati.</p></div>
+    <div class="card"><h4>Costo del rinomino</h4><p>74 punti di codice, 94 di dati di gioco, 26 del GDD, e il formato dei salvataggi e dei trofei, perché la bussola morale si chiama come i genitori.</p></div>
+  </div>
+</header>
+
+<!-- ============ CRONOLOGIA ============ -->
+<section id="storia">
+  <p class="num">1</p>
+  <h2>La revisione, in ordine di data</h2>
+  <div class="tbl"><table>
+    <tr><th>Quando</th><th>Dove</th><th>Cosa è successo</th></tr>
+    <tr><td>26 set 2025</td><td>The Safe Place (React)</td><td>Versione 0.9.9.5 «Resolution of LLM Aberration»: riguarda il codice e i componenti (26 file), non i nomi. Lo cito perché il titolo ingannerebbe una ricerca.</td></tr>
+    <tr><td><b>17-18 lug 2026</b></td><td>Respiro</td><td><b>Revisione narrativa globale</b> (audit dell’Ink esistente, mappa dei tre atti, scena campione) e <b>audit dei nomi</b> con il catalogo dei nomi tipici dei modelli, le eco di franchise e la coerenza con il setting alpino. Decisioni: Clara → <b>Nele</b>, Ismael → <b>Bruno</b>, Krow → <b>Gurschler</b> (cognome reale della Val Venosta); Konrad e Heinrich tenuti; <b>Elsa tenuta per scelta d’autore</b>, con l’eco di Frozen «accettata».</td></tr>
+    <tr><td>7 ago 2026</td><td>ProgettoRemake</td><td>Letto il romanzo. Il padre vi si chiama Elian e la madre Lena. Deciso: <b>vincono i nomi del canone del Remake, il romanzo verrà riallineato</b>. Scoperto anche che l’audit di Respiro aveva sbagliato la verifica sul romanzo: cercava i nomi nuovi, non trovandoli concluse «nessun conflitto», senza guardare quali nomi c’erano al loro posto.</td></tr>
+    <tr><td><b>8 ago 2026</b></td><td>ProgettoRemake</td><td><b>Lena risulta nella lista dei nomi tipici dei modelli</b>, confermata da più fonti. La madre diventa <b>Nilde</b>, come sua nonna. Il roster di luglio (Ilse, Edith, Vera, Marta) «non ha retto» per vincoli arrivati dopo. Nuova regola: <b>ogni nome porta la data della sua verifica</b>, perché le liste cambiano a ogni versione dei modelli.</td></tr>
+    <tr><td>22 ott 2026</td><td>The Safe Place (React)</td><td>Rilasciata la 3.1.0. Nessuna traccia dell’audit nei documenti del gioco.</td></tr>
+  </table></div>
+  <p class="cap">Fonti: <code>Respiro/02 PRE PRODUZIONE/06_Revisione_Narrativa_Globale.md</code> e <code>09_Audit_Nomi.md</code>; <code>ProgettoRemake/BIBBIA/00-il-mondo.md</code> §13, <code>GDD/INDICE.md</code> (voce dell’8 agosto) e <code>estrazioni/quadro-di-coerenza.md</code> §5.</p>
+</section>
+
+<!-- ============ MATRICE ============ -->
+<section id="matrice">
+  <p class="num">2</p>
+  <h2>Chi si chiama come, progetto per progetto</h2>
+  <div class="tbl"><table>
+    <tr><th>Ruolo</th><th>Romanzo (2025)</th><th>The Safe Place 3.1.0</th><th>Respiro</th><th>ProgettoRemake</th></tr>
+    <tr><td><b>Il figlio</b></td><td>Ultimo</td><td>Ultimo</td><td>Ultimo</td><td>Ultimo <span class="tag ok">intoccabile</span></td></tr>
+    <tr><td><b>Il padre</b></td><td>Elian</td><td>Elian</td><td>Konrad</td><td>Konrad</td></tr>
+    <tr><td><b>La madre</b></td><td>Lena</td><td>Lena</td><td>Elsa</td><td>Nilde <span class="tag ok">8 ago 2026</span></td></tr>
+    <tr><td><b>La ragazza malata</b></td><td>senza nome</td><td>—</td><td>Nele (ex Clara)</td><td>da decidere (Cap. 7)</td></tr>
+    <tr><td><b>Il vecchio viaggiatore</b></td><td>senza nome</td><td>«Eremita»</td><td>Bruno (ex Ismael)</td><td>da decidere (Cap. 7)</td></tr>
+    <tr><td><b>Il capo dei Corvi</b></td><td>—</td><td>—</td><td>Gurschler (ex Krow)</td><td>fazione Corvi Neri ancora da nominare</td></tr>
+    <tr><td><b>L’Ascoltatore</b></td><td>—</td><td>—</td><td>Heinrich</td><td>—</td></tr>
+    <tr><td><b>Gli altri</b></td><td>—</td><td>Marcus, Anya, Silas, Giona, Olivia, Elara, Jonas, Alenko, Vargeon</td><td>—</td><td>—</td></tr>
+  </table></div>
+  <p>Il romanzo dichiara nell’introduzione di essere un esperimento di scrittura assistita dall’IA, e per questo il Remake lo considera lo strato meno verificato. Per i titoli oscilla anche il nome del prequel: «The Bated Breath of the World» (README di Respiro), «Il Respiro Trattenuto del Mondo» (Remake), «RESPIRO — Il fiato sospeso del mondo» (memoria di Respiro, da confermare).</p>
+</section>
+
+<!-- ============ ESITO ============ -->
+<section id="esito">
+  <p class="num">3</p>
+  <h2>Esito della verifica</h2>
+  <div class="tbl"><table>
+    <tr><th>Dove</th><th>Controllo</th><th>Esito</th></tr>
+    <tr><td rowspan="5"><b>Respiro</b></td><td>Clara, Ismael e Krow spariti dai documenti di design</td><td><span class="tag ok">ok</span> restano solo in <code>09_Audit_Nomi.md</code>, nella tabella prima/dopo</td></tr>
+    <tr><td>Nele, Bruno e Gurschler presenti</td><td><span class="tag ok">ok</span> in <code>01_Character</code>, <code>02_Struttura</code>, <code>06_Revisione</code>, <code>10_GDD_Master</code></td></tr>
+    <tr><td>Nomi nel codice e nell’Ink</td><td><span class="tag ok">ok</span> solo Konrad (80 volte) e Ultimo (6): i nuovi nomi vanno propagati quando si scrive l’Atto 1, come l’audit stesso prevedeva</td></tr>
+    <tr><td>La madre</td><td><span class="tag part">da allineare</span> Elsa compare in 9 file, ma dall’8 agosto il Remake la chiama Nilde</td></tr>
+    <tr><td>Il titolo</td><td><span class="tag part">aperto</span> tre titoli diversi (la revisione stessa lo segnalava al punto P8)</td></tr>
+    <tr><td rowspan="4"><b>ProgettoRemake</b></td><td>I nomi vecchi compaiono solo come storia</td><td><span class="tag ok">ok</span> Elsa, Lena, Elian e Clara stanno solo in estrazioni, nel §13.3 della Bibbia e nell’indice</td></tr>
+    <tr><td>Nilde nei documenti in corso</td><td><span class="tag ok">ok</span> Bibbia, <code>02-la-madre</code>, indice, Cap. 3, <code>SCENE/02-l-apertura</code></td></tr>
+    <tr><td>Nomi non ancora decisi (vecchio, ragazza, Corvi)</td><td><span class="tag ok">ok</span> dichiarati aperti e soggetti all’audit con data; nessun nome usato a occhio</td></tr>
+    <tr><td>Percorsi citati che esistono ancora</td><td><span class="tag part">obsoleti</span> <code>GitHub/TheSafePlace-Godot</code> (cartella non più sul disco), <code>ramo-godot-abbandonato</code>, il GDD v3 e <code>The Safe Place cinematica.zip</code> (tolti da <code>main</code> il 7 ottobre). Il GDD v3 è recuperabile dalla storia di git ed è in <code>F:\Backup</code></td></tr>
+    <tr><td rowspan="3"><b>The Safe Place</b></td><td>L’audit è stato applicato?</td><td><span class="tag no">no</span> nessun documento del gioco, del GDD o della memoria lo menziona</td></tr>
+    <tr><td>Nomi dei genitori</td><td><span class="tag no">in conflitto</span> Elian e Lena, quindi diversi dal Remake e uno dei due nella lista</td></tr>
+    <tr><td>Nomi degli altri personaggi</td><td><span class="tag part">non verificati</span> vedi la sezione 4</td></tr>
+    <tr><td><b>Sito personale</b></td><td>Articoli sul gioco</td><td><span class="tag part">allineati al gioco</span> nell’esportazione del 23 settembre ci sono Elian, Lena e il resto del cast, quindi seguirebbero un eventuale rinomino</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ REACT ============ -->
+<section id="react">
+  <p class="num">4</p>
+  <h2>I nomi del gioco secondo le regole dell’audit</h2>
+  <p>Le regole del Remake (Bibbia §13.2) sono quattro: fuori dalle liste dei nomi tipici dei modelli, nessuna eco di franchise, reale o costruito su toponomastica reale, e un carattere che nasce dal suono. Ho ricontrollato quello che si poteva con fonti pubbliche. Dove non ho trovato niente non scrivo «pulito»: scrivo «non verificato».</p>
+  <div class="tbl"><table>
+    <tr><th>Nome</th><th>Chi è</th><th class="n">Usi</th><th>Cosa risulta</th></tr>
+    <tr><td><b>Elara</b></td><td>La ragazzina della scuola in rovina (quest «Il Debito del Sopravvissuto»)</td><td class="n">16</td><td><span class="tag no">in lista</span> Studio dell’università Cornell su 20.000 racconti: tra i nomi più ripetuti, il 13,1% delle storie. Anche nel catalogo del progetto e nell’articolo di Jochen Voss</td></tr>
+    <tr><td><b>Lena</b></td><td>La madre; polo della bussola morale</td><td class="n">145</td><td><span class="tag no">in lista</span> secondo il catalogo del progetto (§13) e il Remake, che cita tre fonti. Nella mia verifica rapida compare solo Elena (articolo di Voss: «Elena Vasquez»), non Lena da sola</td></tr>
+    <tr><td><b>Elian</b></td><td>Il padre; polo della bussola morale</td><td class="n">135</td><td><span class="tag part">sospetto</span> non nelle fonti che ho controllato, ma stessa famiglia fonetica di Elias ed Elara (Elias è il nome più ripetuto nello studio Cornell, 26,5%)</td></tr>
+    <tr><td><b>Marcus</b></td><td>Il mercante del Crocevia</td><td class="n">139</td><td><span class="tag part">sospetto</span> «Marcus Chen» è una delle coppie più ripetute nell’articolo di Voss. Da solo non è nominato, ma è tra i nomi più usati del gioco</td></tr>
+    <tr><td>Anya, Silas, Olivia, Jonas</td><td>La tecnologa e collezionista di Echi, il cacciatore, l’erborista, il fondatore del Clan del Corvo</td><td class="n">105 · 50 · 44 · 24</td><td><span class="tag part">non verificato</span> non compaiono nelle fonti che ho consultato, il che non basta per dichiararli puliti</td></tr>
+    <tr><td>Giona, Alenko, Vargeon, Sant’Ambrogio, Marco</td><td>Il mercante errante, un personaggio di quest, una spada, l’ospedale psichiatrico, un nome su un biglietto da visita</td><td class="n">28 · 12 · 20 · 5 · 5</td><td><span class="tag part">non verificato</span> Giona e Sant’Ambrogio sono italiani e radicati; Alenko e Vargeon vanno controllati</td></tr>
+  </table></div>
+  <p class="cap">Fonti: <a href="https://seehuhn.de/blog/ai-names" target="_blank" rel="noopener">seehuhn.de, «AI names»</a> (18 gen 2026, modello Claude Sonnet 4.5); <a href="https://news.cornell.edu/node/333804" target="_blank" rel="noopener">Cornell, studio su racconti generati dall’IA</a>. Gli usi comprendono documenti e log storici. Le liste cambiano a ogni versione dei modelli: ogni risultato qui vale oggi.</p>
+
+  <h3>Cosa cambierebbe se si rinominassero Lena ed Elian</h3>
+  <p>Non sono solo nomi nei testi: la <b>bussola morale del gioco si chiama come i genitori</b>. L’allineamento è un oggetto con due chiavi, <code>lena</code> ed <code>elian</code>, e ci sono trofei con quei nomi nell’identificatore.</p>
+  <div class="tbl"><table>
+    <tr><th>Area</th><th class="n">Elian</th><th class="n">Lena</th><th>Cosa tocca</th></tr>
+    <tr><td>Codice (<code>GAME/src</code>)</td><td class="n">37</td><td class="n">37</td><td>tipi, store del personaggio, pannello dell’allineamento, schermata della vittoria, palette, <b>formato dei salvataggi</b> e <b>trofei globali</b> (<code>trophy_align_max_lena</code>, <code>…_elian</code>): serve una migrazione</td></tr>
+    <tr><td>Dati di gioco</td><td class="n">44</td><td class="n">50</td><td>eventi che spostano la bussola, capitoli degli Echi, cutscene, archivio dei ricordi, trofei</td></tr>
+    <tr><td>GDD</td><td class="n">17</td><td class="n">9</td><td>capitoli 1, 5, 6, 7 e 9</td></tr>
+    <tr><td>Documenti correnti del gioco</td><td class="n">13</td><td class="n">16</td><td>README e analisi</td></tr>
+    <tr><td>Sito e articoli</td><td class="n">2 + articoli</td><td class="n">2 + articoli</td><td>costanti del sito e testi pubblicati</td></tr>
+    <tr><td>Log storici</td><td class="n">19</td><td class="n">24</td><td>non si toccano: sono la cronaca</td></tr>
+  </table></div>
+  <p class="cap">Conteggio sulla repository al 25 ottobre 2026, con maiuscole e minuscole (le chiavi del codice sono minuscole).</p>
+</section>
+
+<!-- ============ PROSSIMI ============ -->
+<section id="prossimi">
+  <p class="num">5</p>
+  <h2>Decisioni e lavori atomici</h2>
+
+  <h3>Decisioni che spettano a te, in ordine</h3>
+  <ol>
+    <li><b>Il padre della saga si chiama Konrad o Elian?</b> Il Remake dice Konrad e il romanzo da riallineare; il gioco già uscito dice Elian. Da questa risposta dipende tutto il resto.</li>
+    <li><b>La madre: Nilde, e il gioco 3.1.0 si riallinea?</b> Se sì, la bussola Lena/Elian va ribattezzata: con i nomi dei genitori nuovi o con nomi neutri (Madre/Padre, o i due poli con altri nomi).</li>
+    <li><b>Elara e il resto del cast del gioco:</b> si rinominano con un audit datato, oppure si accettano come sono?</li>
+    <li><b>Il romanzo stampato</b> resta con Elian e Lena o si riallinea in una seconda edizione?</li>
+  </ol>
+
+  <h3>Lavori atomici per la prossima sessione</h3>
+  <p>Ognuno si chiude da solo, con una verifica, senza toccare gli altri.</p>
+  <div class="tbl"><table>
+    <tr><th>#</th><th>Lavoro</th><th>Dove</th><th>Come si verifica</th></tr>
+    <tr><td>A1</td><td>Prendere le decisioni 1 e 2, senza toccare file, e scriverle in una pagina sola</td><td>una nota nel GDD del gioco e nella Bibbia del Remake</td><td>la nota esiste e dice la stessa cosa nei due posti</td></tr>
+    <tr><td>A2</td><td>Respiro: sostituire Elsa con Nilde nei 9 file di design, oppure marcarli come superati dal Remake</td><td>Respiro, solo documenti</td><td>conteggio dei file che citano Elsa</td></tr>
+    <tr><td>A3</td><td>Remake: sostituire i percorsi non più esistenti con il commit di git dove i file si recuperano</td><td>estrazioni del Remake</td><td>nessun percorso citato che non si apra</td></tr>
+    <tr><td>A4</td><td>Audit datato dei nomi del gioco con le tre fonti usate dal Remake, in un file nuovo (<code>GDD/11_Audit_Nomi.md</code>)</td><td>The Safe Place, solo documenti</td><td>una riga per nome, con fonte e data</td></tr>
+    <tr><td>A5</td><td>Se deciso il rinomino: prima i dati e il GDD (solo testo), poi il codice con la migrazione dei salvataggi, poi il sito e gli articoli</td><td>The Safe Place</td><td><code>npm run check</code> (66 test) e una partita simulata per ogni passo</td></tr>
+    <tr><td>A6</td><td>Scegliere il titolo del prequel</td><td>Respiro e Remake</td><td>un titolo solo in README, Bibbia e memoria</td></tr>
+  </table></div>
+  <p>Consiglio di partire da <b>A1</b>: costa una conversazione, evita di rinominare due volte e sblocca tutti gli altri.</p>
+
+  <details><summary>Come ho verificato</summary>
+    <p>Ho letto i documenti dell’audit in Respiro e in ProgettoRemake, i verbali del Remake (Bibbia §13, indice del GDD, quadro di coerenza) e le memorie di lavoro dei due progetti. Poi ho cercato 30 nomi in tutti i file di testo di quattro luoghi (The Safe Place, Respiro, ProgettoRemake, il sito personale), escludendo dipendenze e build, e ho contato le occorrenze per area. Per i nomi del gioco ho consultato due fonti pubbliche. Non ho letto il PDF del romanzo: per i suoi nomi mi sono fidato dell’estrazione integrale del Remake (7 agosto). Non ho cercato in altri progetti, come Il Viaggiatore o Il Relitto, che non risultano far parte della saga.</p>
+  </details>
+</section>
+
+<footer>
+  Questa pagina è in <code>GAME/docs/analisi/verifica-nomi.html</code>. Nessun file del gioco, di Respiro o di ProgettoRemake è stato modificato.
+</footer>
+</div>
